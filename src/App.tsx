@@ -19,32 +19,31 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <AuthProvider>
-        <ThemeProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<AboutPage />} />
-              <Route path="/assessment" element={<Assessment />} />
-              <Route path="/career-launch" element={<CareerLaunch />} />
-              <Route path="/cair-assessment" element={<CAIRAssessment />} />
-              <Route path="/communication-assessment" element={<CommunicationAssessment />} />
-              <Route path="/stress-resilience" element={<StressResilience />} />
-              <Route path="/settings" element={<Settings />} />
-              <Route path="/admin" element={<AdminPage />} />
-              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </ThemeProvider>
-      </AuthProvider>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  console.log("App rendering, React:", React);
+  console.log("QueryClient:", queryClient);
+  
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/assessment" element={<Assessment />} />
+            <Route path="/career-launch" element={<CareerLaunch />} />
+            <Route path="/cair-assessment" element={<CAIRAssessment />} />
+            <Route path="/communication-assessment" element={<CommunicationAssessment />} />
+            <Route path="/stress-resilience" element={<StressResilience />} />
+            <Route path="/settings" element={<Settings />} />
+            <Route path="/admin" element={<AdminPage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
