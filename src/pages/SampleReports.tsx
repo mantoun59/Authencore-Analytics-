@@ -17,14 +17,45 @@ import {
   Brain,
   Heart,
   Users,
-  Globe
+  Globe,
+  Sparkles,
+  Bot
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
+import { toast } from "sonner";
 
 const SampleReports = () => {
   const [selectedAssessment, setSelectedAssessment] = useState('leadership');
   const [reportType, setReportType] = useState<'candidate' | 'employer'>('candidate');
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const generateAIReport = async () => {
+    setIsGenerating(true);
+    try {
+      const mockRequest: AIReportRequest = {
+        assessmentResultId: 'mock-assessment-id',
+        reportType: reportType,
+        candidateInfo: {
+          name: 'Sarah Johnson',
+          email: 'sarah.johnson@email.com',
+          experience: '5 years',
+          position: 'Senior Analyst'
+        }
+      };
+      
+      toast.info('Generating AI-powered report... This may take a moment.');
+      const reportContent = await aiReportGenerator.generateReport(mockRequest);
+      await aiReportGenerator.generatePDFReport(reportContent);
+      
+    } catch (error) {
+      console.error('Error generating AI report:', error);
+      toast.error('Failed to generate AI report. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const assessments = {
     leadership: {
@@ -609,10 +640,21 @@ const SampleReports = () => {
                     Assessment ID: {currentReport.candidateInfo.assessmentId}
                   </span>
                 </div>
-                <Button size="sm" variant="outline">
-                  <Download className="h-4 w-4 mr-2" />
-                  Download PDF
-                </Button>
+                <div className="flex gap-2">
+                  <Button size="sm" variant="outline">
+                    <Download className="h-4 w-4 mr-2" />
+                    Download Static PDF
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700"
+                    onClick={() => generateAIReport()}
+                    disabled={isGenerating}
+                  >
+                    <Bot className="h-4 w-4 mr-2" />
+                    {isGenerating ? 'Generating...' : 'Generate AI Report'}
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>

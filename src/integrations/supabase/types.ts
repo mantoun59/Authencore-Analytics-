@@ -14,6 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
+      assessment_results: {
+        Row: {
+          assessment_type: string
+          completed_at: string
+          created_at: string
+          id: string
+          results: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assessment_type: string
+          completed_at?: string
+          created_at?: string
+          id?: string
+          results: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assessment_type?: string
+          completed_at?: string
+          created_at?: string
+          id?: string
+          results?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      generated_reports: {
+        Row: {
+          assessment_result_id: string
+          created_at: string
+          id: string
+          pdf_url: string | null
+          report_data: Json
+          report_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assessment_result_id: string
+          created_at?: string
+          id?: string
+          pdf_url?: string | null
+          report_data: Json
+          report_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assessment_result_id?: string
+          created_at?: string
+          id?: string
+          pdf_url?: string | null
+          report_data?: Json
+          report_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_reports_assessment_result_id_fkey"
+            columns: ["assessment_result_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
