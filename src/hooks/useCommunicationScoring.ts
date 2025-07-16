@@ -218,14 +218,20 @@ export const useCommunicationScoring = () => {
     const moduleScores: Record<string, number[]> = {};
     
     responses.forEach(response => {
-      if (response.response.scores) {
+      if (response.response.scores && typeof response.response.scores === 'object') {
         if (!moduleScores[response.module]) {
           moduleScores[response.module] = [];
         }
         
-        const avgScore = Object.values(response.response.scores).reduce((a: number, b: any) => a + Number(b), 0) / 
-                        Object.values(response.response.scores).length;
-        moduleScores[response.module].push(avgScore);
+        const scores = Object.values(response.response.scores);
+        if (scores.length > 0) {
+          let sum = 0;
+          for (const score of scores) {
+            sum += Number(score);
+          }
+          const avgScore = sum / scores.length;
+          moduleScores[response.module].push(avgScore);
+        }
       }
     });
 
@@ -253,21 +259,27 @@ export const useCommunicationScoring = () => {
     };
 
     responses.forEach(response => {
-      if (response.response.scores) {
-        const avgScore = Object.values(response.response.scores).reduce((a: number, b: any) => a + Number(b), 0) / 
-                        Object.values(response.response.scores).length;
+      if (response.response.scores && typeof response.response.scores === 'object') {
+        const scores = Object.values(response.response.scores);
+        if (scores.length > 0) {
+          let sum = 0;
+          for (const score of scores) {
+            sum += Number(score);
+          }
+          const avgScore = sum / scores.length;
         
-        // Categorize based on question context
-        if (response.questionId.includes('leadership') || response.questionId.includes('proposal')) {
-          contextScores.upward += avgScore;
-        } else if (response.questionId.includes('feedback') || response.questionId.includes('team')) {
-          contextScores.downward += avgScore;
-        } else if (response.questionId.includes('client') || response.questionId.includes('external')) {
-          contextScores.external += avgScore;
-        } else if (response.questionId.includes('conflict')) {
-          contextScores.conflict += avgScore;
-        } else {
-          contextScores.lateral += avgScore;
+          // Categorize based on question context
+          if (response.questionId.includes('leadership') || response.questionId.includes('proposal')) {
+            contextScores.upward += avgScore;
+          } else if (response.questionId.includes('feedback') || response.questionId.includes('team')) {
+            contextScores.downward += avgScore;
+          } else if (response.questionId.includes('client') || response.questionId.includes('external')) {
+            contextScores.external += avgScore;
+          } else if (response.questionId.includes('conflict')) {
+            contextScores.conflict += avgScore;
+          } else {
+            contextScores.lateral += avgScore;
+          }
         }
       }
     });
