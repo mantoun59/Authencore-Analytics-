@@ -21,6 +21,44 @@ const CompliancePage = () => {
 
           <div className="grid gap-8">
             
+            {/* Terms of Service */}
+            <Card id="terms">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <FileText className="h-6 w-6 text-primary" />
+                  Terms of Service
+                </CardTitle>
+                <CardDescription>
+                  Comprehensive terms governing the use of AuthenCore Analytics services
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Service Agreement</h3>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>• <strong>Scope of Services:</strong> Professional psychological assessment and talent evaluation tools</li>
+                    <li>• <strong>User Responsibilities:</strong> Compliance with ethical standards and proper use of assessment results</li>
+                    <li>• <strong>Data Usage:</strong> Authorized use of assessment data for intended business purposes only</li>
+                    <li>• <strong>Intellectual Property:</strong> Protection of proprietary assessment methodologies and content</li>
+                    <li>• <strong>Confidentiality:</strong> Strict protection of assessment taker information and results</li>
+                  </ul>
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <h3 className="text-lg font-semibold mb-3">Usage Guidelines</h3>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>• <strong>Authorized Users:</strong> Only qualified professionals may administer and interpret assessments</li>
+                    <li>• <strong>Prohibited Uses:</strong> No discrimination, unfair bias, or misuse of assessment data</li>
+                    <li>• <strong>Technical Requirements:</strong> Compliance with system requirements and security protocols</li>
+                    <li>• <strong>Support Services:</strong> Access to technical support and professional guidance</li>
+                    <li>• <strong>Updates & Modifications:</strong> Regular updates to terms and service improvements</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+            
             {/* Regulatory Compliance Overview */}
             <Card>
               <CardHeader>
@@ -75,7 +113,7 @@ const CompliancePage = () => {
             </Card>
 
             {/* Data Protection & Privacy */}
-            <Card>
+            <Card id="gdpr">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Lock className="h-6 w-6 text-primary" />
@@ -110,7 +148,7 @@ const CompliancePage = () => {
             </Card>
 
             {/* Security & Infrastructure */}
-            <Card>
+            <Card id="security">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Eye className="h-6 w-6 text-primary" />
@@ -158,7 +196,7 @@ const CompliancePage = () => {
             </Card>
 
             {/* Assessment Ethics & Standards */}
-            <Card>
+            <Card id="ethics">
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-6 w-6 text-primary" />

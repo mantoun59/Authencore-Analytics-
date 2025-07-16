@@ -49,30 +49,30 @@ const Footer = () => {
               >
                 Compliance Documentation
               </Link>
-              <a
-                href="#terms"
+              <Link
+                to="/compliance#terms"
                 className="block text-muted-foreground hover:text-primary transition-colors text-sm"
               >
                 Terms of Service
-              </a>
-              <a
-                href="#gdpr"
+              </Link>
+              <Link
+                to="/compliance#gdpr"
                 className="block text-muted-foreground hover:text-primary transition-colors text-sm"
               >
                 GDPR Compliance
-              </a>
-              <a
-                href="#security"
+              </Link>
+              <Link
+                to="/compliance#security"
                 className="block text-muted-foreground hover:text-primary transition-colors text-sm"
               >
                 Data Security Standards
-              </a>
-              <a
-                href="#ethics"
+              </Link>
+              <Link
+                to="/compliance#ethics"
                 className="block text-muted-foreground hover:text-primary transition-colors text-sm"
               >
                 Assessment Ethics
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -113,7 +113,7 @@ const Footer = () => {
               
               <div className="pt-2">
                 <a
-                  href="#contact"
+                  href="mailto:contact@authencore.com"
                   className="inline-flex items-center text-primary hover:text-primary-glow transition-colors font-medium"
                 >
                   Contact Form
@@ -137,7 +137,7 @@ const Footer = () => {
               <Link to="/compliance" className="text-muted-foreground hover:text-primary transition-colors">
                 Compliance Documentation
               </Link>
-              <a href="#contact" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="mailto:contact@authencore.com" className="text-muted-foreground hover:text-primary transition-colors">
                 Contact
               </a>
             </div>
