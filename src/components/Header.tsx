@@ -28,7 +28,7 @@ const Header = () => {
               <img 
                 src="/lovable-uploads/cc5cdfbf-5b38-4726-9a3c-ba074c16f6de.png" 
                 alt="Authencore Analytics" 
-                className="w-[210px] h-auto"
+                className="w-[168px] h-auto"
               />
             </div>
             <span className="font-bold text-2xl text-foreground">AuthenCore Analytics</span>
