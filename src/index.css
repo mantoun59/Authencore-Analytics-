@@ -320,6 +320,7 @@ All colors MUST be HSL.
     --sidebar-border: 0 0% 13%;
     --sidebar-ring: 0 0% 75%;
   }
+}
 
 @layer base {
   * {
