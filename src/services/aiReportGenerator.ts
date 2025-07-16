@@ -704,7 +704,7 @@ export class AIReportGenerator {
     doc.text('Competency Dimension Scores', margin, yPosition);
     yPosition += 20;
 
-    // Create visual chart with proper spacing
+    // Create visual chart
     Object.entries(dimensionScores).forEach(([key, value]: [string, any]) => {
       const score = typeof value === 'object' && value !== null ? value.score || 0 : value;
       const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
@@ -716,16 +716,15 @@ export class AIReportGenerator {
       
       // Score
       doc.setFont('helvetica', 'bold');
-      doc.text(`${score}/100`, margin + 85, yPosition);
+      doc.text(`${score}/100`, margin + 100, yPosition);
       
-      // Visual bar with proper margins
-      const barWidth = 90;
-      const barHeight = 8;
-      const barStartX = margin + 130;
+      // Visual bar
+      const barWidth = 80;
+      const barHeight = 6;
       
-      // Background bar (light gray)
+      // Background bar
       doc.setFillColor(229, 231, 235);
-      doc.rect(barStartX, yPosition - 5, barWidth, barHeight, 'F');
+      doc.rect(margin + 120, yPosition - 4, barWidth, barHeight, 'F');
       
       // Score bar with color coding
       let barColor = [239, 68, 68]; // Red for low scores
@@ -733,10 +732,9 @@ export class AIReportGenerator {
       else if (score >= 50) barColor = [251, 146, 60]; // Orange for medium scores
       
       doc.setFillColor(barColor[0], barColor[1], barColor[2]);
-      const filledWidth = Math.max(1, (score / 100) * barWidth); // Ensure minimum width
-      doc.rect(barStartX, yPosition - 5, filledWidth, barHeight, 'F');
+      doc.rect(margin + 120, yPosition - 4, (score / 100) * barWidth, barHeight, 'F');
       
-      yPosition += 18;
+      yPosition += 15;
     });
   }
 }
