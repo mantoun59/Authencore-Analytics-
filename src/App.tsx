@@ -10,6 +10,7 @@ import Assessment from "./pages/Assessment";
 import CareerLaunch from "./pages/CareerLaunch";
 import CAIRAssessment from "./pages/CAIRAssessment";
 import StressResilience from "./pages/StressResilience";
+import CulturalIntelligenceAssessment from "./pages/CulturalIntelligenceAssessment";
 import PartnerLogin from "./pages/PartnerLogin";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/career-launch" element={<CareerLaunch />} />
             <Route path="/cair-assessment" element={<CAIRAssessment />} />
             <Route path="/stress-resilience" element={<StressResilience />} />
+            <Route path="/cultural-intelligence" element={<CulturalIntelligenceAssessment />} />
             <Route path="/partner-login" element={<PartnerLogin />} />
             <Route path="/admin" element={<AdminPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

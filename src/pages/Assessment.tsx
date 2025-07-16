@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare } from "lucide-react";
+import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Assessment = () => {
@@ -166,6 +166,52 @@ const Assessment = () => {
                 <Link to="/stress-resilience">
                   <Button className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600">
                     Start Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Cultural Intelligence Assessment */}
+            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-4">
+                  <Globe className="h-8 w-8 text-teal-500" />
+                  <div>
+                    <CardTitle className="text-xl">Cultural Intelligence</CardTitle>
+                    <Badge className="mt-1" variant="secondary">Global</Badge>
+                  </div>
+                </div>
+                <CardDescription className="text-base">
+                  Comprehensive cultural intelligence assessment with real-world scenarios and global business challenges
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">60+ Scenarios</Badge>
+                  <Badge variant="outline">4 CQ Dimensions</Badge>
+                  <Badge variant="outline">Cultural Adaptation</Badge>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Cross-cultural business scenarios
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Email adaptation challenges
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Global meeting scheduling
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Cultural competency mapping
+                  </li>
+                </ul>
+                <Link to="/cultural-intelligence">
+                  <Button className="w-full bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600">
+                    Start Cultural Intelligence <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
               </CardContent>
