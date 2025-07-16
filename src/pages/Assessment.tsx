@@ -263,6 +263,98 @@ const Assessment = () => {
               </CardContent>
             </Card>
 
+            {/* Emotional Intelligence Assessment */}
+            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-4">
+                  <Heart className="h-8 w-8 text-rose-500" />
+                  <div>
+                    <CardTitle className="text-xl">Emotional Intelligence</CardTitle>
+                    <Badge className="mt-1" variant="secondary">EQ Focus</Badge>
+                  </div>
+                </div>
+                <CardDescription className="text-base">
+                  Comprehensive emotional intelligence assessment measuring self-awareness, empathy, and social skills
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">65 Questions</Badge>
+                  <Badge variant="outline">EQ Dimensions</Badge>
+                  <Badge variant="outline">Workplace Applications</Badge>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Self-awareness assessment
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Empathy evaluation
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Social skills analysis
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Emotional regulation
+                  </li>
+                </ul>
+                <Link to="/emotional-intelligence">
+                  <Button className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600">
+                    Start EQ Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
+            {/* Faith & Values Assessment */}
+            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-4">
+                  <Lightbulb className="h-8 w-8 text-amber-500" />
+                  <div>
+                    <CardTitle className="text-xl">Faith & Values</CardTitle>
+                    <Badge className="mt-1" variant="secondary">Values-Based</Badge>
+                  </div>
+                </div>
+                <CardDescription className="text-base">
+                  Comprehensive workplace values assessment with ethical scenarios and cultural fit analysis
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">Values Ranking</Badge>
+                  <Badge variant="outline">Ethical Scenarios</Badge>
+                  <Badge variant="outline">Cultural Fit</Badge>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Universal values framework
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Ethical decision-making
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Workplace culture matching
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Values-based career guidance
+                  </li>
+                </ul>
+                <Link to="/faith-values">
+                  <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
+                    Start Faith & Values Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
           </div>
         </div>
       </section>
