@@ -8,6 +8,7 @@ import AboutPage from "./pages/About";
 import AdminPage from "./pages/Admin";
 import Assessment from "./pages/Assessment";
 import CareerLaunch from "./pages/CareerLaunch";
+import CAIRAssessment from "./pages/CAIRAssessment";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
 
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="/about" element={<AboutPage />} />
             <Route path="/assessment" element={<Assessment />} />
             <Route path="/career-launch" element={<CareerLaunch />} />
+            <Route path="/cair-assessment" element={<CAIRAssessment />} />
             <Route path="/admin" element={<AdminPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
