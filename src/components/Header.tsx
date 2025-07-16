@@ -57,6 +57,11 @@ const Header = () => {
                     <User size={20} />
                     <span className="text-sm">{user.email}</span>
                   </div>
+                  <Link to="/settings">
+                    <Button variant="outline" size="sm">
+                      Settings
+                    </Button>
+                  </Link>
                   <Button
                     variant="outline"
                     onClick={() => signOut()}
@@ -124,6 +129,15 @@ const Header = () => {
                         <User size={20} />
                         <span className="text-sm">{user.email}</span>
                       </div>
+                      <Link to="/settings">
+                        <Button
+                          variant="outline"
+                          onClick={() => setIsMenuOpen(false)}
+                          className="w-full"
+                        >
+                          Settings
+                        </Button>
+                      </Link>
                       <Button
                         variant="outline"
                         onClick={() => {
