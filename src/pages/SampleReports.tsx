@@ -401,15 +401,17 @@ const SampleReports = () => {
         <CardContent>
           <div className="space-y-4">
             {Object.entries(currentReport.dimensionScores).map(([key, dimension]) => (
-              <div key={key} className="border rounded-lg p-4">
-                <div className="flex justify-between items-start mb-2">
+              <div key={key} className="border rounded-lg p-6">
+                <div className="flex justify-between items-start mb-3">
                   <h4 className="font-medium capitalize">{key.replace('_', ' ')}</h4>
                   <Badge variant="outline">{dimension.level}</Badge>
                 </div>
-                <Progress value={dimension.score} className="mb-2 mx-2" />
-                <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>{dimension.score}/100</span>
-                  <span>{dimension.interpretation}</span>
+                <div className="px-4 mb-3">
+                  <Progress value={dimension.score} className="h-3" />
+                </div>
+                <div className="flex justify-between text-sm text-muted-foreground px-2">
+                  <span className="font-medium">{dimension.score}/100</span>
+                  <span className="text-right max-w-xs">{dimension.interpretation}</span>
                 </div>
               </div>
             ))}
@@ -506,27 +508,33 @@ const SampleReports = () => {
             <CardTitle>Organizational Fit Analysis</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-6">
               <div>
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-3">
                   <span className="text-sm font-medium">Cultural Fit</span>
-                  <span className="text-sm text-muted-foreground">{employerReport.fitAnalysis.culturalFit}%</span>
+                  <span className="text-sm text-muted-foreground font-medium">{employerReport.fitAnalysis.culturalFit}%</span>
                 </div>
-                <Progress value={employerReport.fitAnalysis.culturalFit} className="mx-2" />
+                <div className="px-4">
+                  <Progress value={employerReport.fitAnalysis.culturalFit} className="h-3" />
+                </div>
               </div>
               <div>
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-3">
                   <span className="text-sm font-medium">Role Alignment</span>
-                  <span className="text-sm text-muted-foreground">{employerReport.fitAnalysis.roleAlignment}%</span>
+                  <span className="text-sm text-muted-foreground font-medium">{employerReport.fitAnalysis.roleAlignment}%</span>
                 </div>
-                <Progress value={employerReport.fitAnalysis.roleAlignment} className="mx-2" />
+                <div className="px-4">
+                  <Progress value={employerReport.fitAnalysis.roleAlignment} className="h-3" />
+                </div>
               </div>
               <div>
-                <div className="flex justify-between items-center mb-2">
+                <div className="flex justify-between items-center mb-3">
                   <span className="text-sm font-medium">Growth Potential</span>
-                  <span className="text-sm text-muted-foreground">{employerReport.fitAnalysis.growthPotential}%</span>
+                  <span className="text-sm text-muted-foreground font-medium">{employerReport.fitAnalysis.growthPotential}%</span>
                 </div>
-                <Progress value={employerReport.fitAnalysis.growthPotential} className="mx-2" />
+                <div className="px-4">
+                  <Progress value={employerReport.fitAnalysis.growthPotential} className="h-3" />
+                </div>
               </div>
             </div>
           </CardContent>
