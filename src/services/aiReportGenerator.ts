@@ -171,10 +171,12 @@ export class AIReportGenerator {
     doc.setFillColor(15, 23, 42); // Dark blue-gray
     doc.rect(0, 0, pageWidth, 60, 'F');
     
-    // Company logo area (placeholder for actual logo)
+    // Company logo area with circular design
     doc.setFillColor(59, 130, 246); // Blue accent
-    doc.rect(margin, 10, 30, 20, 'F');
-    doc.setTextColor(255, 255, 255);
+    doc.circle(margin + 15, 20, 15, 'F');
+    doc.setFillColor(255, 255, 255);
+    doc.circle(margin + 15, 20, 10, 'F');
+    doc.setTextColor(15, 23, 42);
     doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.text('AC', margin + 10, 22);
@@ -187,7 +189,7 @@ export class AIReportGenerator {
     
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
-    doc.text('Advanced AI-Powered Talent Assessment Solutions', margin + 40, 32);
+    doc.text('Measuring Minds. Shaping Futures.', margin + 40, 32);
     
     // Assessment type
     doc.setTextColor(96, 165, 250); // Light blue
@@ -235,7 +237,7 @@ export class AIReportGenerator {
     
     doc.setTextColor(107, 114, 128);
     doc.setFontSize(8);
-    doc.text('© 2024 Authencore Analytics. All rights reserved.', margin, pageHeight - 15);
+    doc.text('© 2024 Authencore Analytics. All rights reserved. | Measuring Minds. Shaping Futures.', margin, pageHeight - 15);
     doc.text('www.authencore.org', pageWidth - margin, pageHeight - 15, { align: 'right' });
   }
 

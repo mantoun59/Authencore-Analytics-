@@ -10,9 +10,9 @@ const Footer = () => {
           <div className="space-y-6">
             <div className="flex items-center space-x-3 mb-4">
               <img 
-                src="/lovable-uploads/cc5cdfbf-5b38-4726-9a3c-ba074c16f6de.png" 
+                src="/lovable-uploads/5eb5f31e-5eaa-4d7d-a93c-5c9ebf449b63.png" 
                 alt="Authencore Analytics" 
-                className="h-10 w-auto"
+                className="h-12 w-auto"
               />
             </div>
             <p className="text-sm text-muted-foreground mb-4">
@@ -116,7 +116,7 @@ const Footer = () => {
         <div className="border-t border-border pt-8 mt-12">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-muted-foreground text-sm">
-              &copy; 2024 Authencore Analytics. All rights reserved.
+              &copy; 2024 Authencore Analytics. All rights reserved. | Advanced AI-Powered Talent Assessment Solutions
             </p>
             <div className="flex items-center space-x-6 text-sm">
               <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
