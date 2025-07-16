@@ -114,8 +114,11 @@ export class AIReportGenerator {
       const margin = 20;
       let yPosition = margin;
 
+      // Load logo image first
+      const logoBase64 = await this.loadLogoAsBase64();
+      
       // Add professional header with branding
-      this.addProfessionalHeader(doc, reportContent.candidateInfo.assessmentType);
+      this.addProfessionalHeader(doc, reportContent.candidateInfo.assessmentType, logoBase64);
       yPosition = 70;
 
       // Executive Summary Section
@@ -163,7 +166,51 @@ export class AIReportGenerator {
     }
   }
 
-  private addProfessionalHeader(doc: jsPDF, assessmentType: string) {
+  private loadLogoAsBase64(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          reject(new Error('Could not get canvas context'));
+          return;
+        }
+        
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        
+        try {
+          const dataURL = canvas.toDataURL('image/png');
+          resolve(dataURL);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      img.onerror = () => reject(new Error('Failed to load logo image'));
+      img.src = '/lovable-uploads/5eb5f31e-5eaa-4d7d-a93c-5c9ebf449b63.png';
+    });
+  }
+
+  private addLogoPlaceholder(doc: jsPDF, margin: number) {
+    // Create a professional logo placeholder
+    doc.setFillColor(59, 130, 246); // Blue brand color
+    doc.circle(margin + 17.5, 27.5, 15, 'F');
+    
+    // Add inner circle
+    doc.setFillColor(255, 255, 255);
+    doc.circle(margin + 17.5, 27.5, 10, 'F');
+    
+    // Add "AC" text
+    doc.setTextColor(59, 130, 246);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('AC', margin + 13, 30);
+  }
+
+  private addProfessionalHeader(doc: jsPDF, assessmentType: string, logoBase64?: string) {
     const pageWidth = doc.internal.pageSize.width;
     const margin = 20;
     
@@ -171,15 +218,24 @@ export class AIReportGenerator {
     doc.setFillColor(15, 23, 42); // Dark blue-gray
     doc.rect(0, 0, pageWidth, 60, 'F');
     
-    // Company logo area with circular design
-    doc.setFillColor(59, 130, 246); // Blue accent
-    doc.circle(margin + 15, 20, 15, 'F');
+    // Add company logo - white background for logo
     doc.setFillColor(255, 255, 255);
-    doc.circle(margin + 15, 20, 10, 'F');
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.text('AC', margin + 10, 22);
+    doc.rect(margin, 10, 35, 35, 'F');
+    
+    // Add the actual logo image if available
+    if (logoBase64) {
+      try {
+        // Use the actual logo image
+        doc.addImage(logoBase64, 'PNG', margin + 2, 12, 31, 31);
+      } catch (error) {
+        console.error('Error adding logo to PDF:', error);
+        // Fallback to placeholder
+        this.addLogoPlaceholder(doc, margin);
+      }
+    } else {
+      // Fallback to placeholder
+      this.addLogoPlaceholder(doc, margin);
+    }
     
     // Company name and tagline
     doc.setTextColor(255, 255, 255);
