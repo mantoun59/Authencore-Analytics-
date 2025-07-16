@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb } from "lucide-react";
+import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Assessment = () => {
@@ -31,7 +31,7 @@ const Assessment = () => {
       {/* Assessment Options */}
       <section className="py-16 px-4">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             
             {/* CareerLaunch Assessment */}
             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
@@ -171,6 +171,52 @@ const Assessment = () => {
               </CardContent>
             </Card>
 
+            {/* Communication Styles Assessment */}
+            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-4">
+                  <MessageSquare className="h-8 w-8 text-indigo-500" />
+                  <div>
+                    <CardTitle className="text-xl">Communication Styles</CardTitle>
+                    <Badge className="mt-1" variant="secondary">Advanced</Badge>
+                  </div>
+                </div>
+                <CardDescription className="text-base">
+                  Comprehensive communication assessment with linguistic analysis and real-time simulations
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">80 Questions</Badge>
+                  <Badge variant="outline">Linguistic Analysis</Badge>
+                  <Badge variant="outline">Team Compatibility</Badge>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Communication DNA profiling
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Channel effectiveness mapping
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Interactive simulations
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Conflict resolution insights
+                  </li>
+                </ul>
+                <Link to="/communication-assessment">
+                  <Button className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600">
+                    Start Communication Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
           </div>
         </div>
       </section>
@@ -185,7 +231,7 @@ const Assessment = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -228,6 +274,21 @@ const Assessment = () => {
                   Stress Resilience assessment evaluates performance under pressure and burnout risk
                 </p>
                 <Badge className="bg-green-100 text-green-800">Recommended: Stress Resilience</Badge>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-indigo-500" />
+                  For Communication Excellence
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  Communication Styles assessment decodes how you connect, influence, and collaborate
+                </p>
+                <Badge className="bg-indigo-100 text-indigo-800">Recommended: Communication</Badge>
               </CardContent>
             </Card>
           </div>
