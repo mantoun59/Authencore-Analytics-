@@ -1,39 +1,63 @@
-import { useState } from "react";
-import { X, Eye, EyeOff } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useToast } from "@/hooks/use-toast";
+import React, { useState } from 'react';
+import { X, Eye, EyeOff } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface AuthModalProps {
   type: 'login' | 'register' | null;
   onClose: () => void;
 }
 
-const AuthModal = ({ type, onClose }: AuthModalProps) => {
+const AuthModal: React.FC<AuthModalProps> = ({ type, onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const { signUp, signIn } = useAuth();
 
   if (!type) return null;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    toast({
-      title: type === 'login' ? "Welcome back!" : "Account created!",
-      description: type === 'login' 
-        ? "You have been successfully signed in." 
-        : "Your account has been created successfully.",
-    });
-    
-    setIsLoading(false);
-    onClose();
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
+    const fullName = formData.get('fullName') as string;
+
+    try {
+      let result;
+      if (type === 'register') {
+        result = await signUp(email, password, fullName);
+      } else {
+        result = await signIn(email, password);
+      }
+
+      if (result.error) {
+        toast({
+          title: 'Error',
+          description: result.error.message,
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: type === 'login' ? 'Welcome back!' : 'Account created!',
+          description: type === 'login' ? 'You have successfully logged in.' : 'Please check your email to verify your account.',
+        });
+        onClose();
+      }
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Something went wrong',
+        variant: 'destructive',
+      });
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -60,36 +84,37 @@ const AuthModal = ({ type, onClose }: AuthModalProps) => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
+
           {type === 'register' && (
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="fullName">Full Name</Label>
               <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
+                id="fullName"
+                name="fullName"
+                type="text"
+                placeholder="Enter your full name"
                 required
               />
             </div>
           )}
 
           <div className="space-y-2">
-            <Label htmlFor="username">
-              {type === 'login' ? 'Username or Email' : 'Username'}
-            </Label>
-            <Input
-              id="username"
-              type="text"
-              placeholder={type === 'login' ? 'Enter username or email' : 'Choose a username'}
-              required
-            />
-          </div>
-
-          <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <div className="relative">
               <Input
                 id="password"
-                type={showPassword ? "text" : "password"}
+                name="password"
+                type={showPassword ? 'text' : 'password'}
                 placeholder="Enter your password"
                 required
               />
@@ -107,11 +132,12 @@ const AuthModal = ({ type, onClose }: AuthModalProps) => {
 
           {type === 'register' && (
             <div className="space-y-2">
-              <Label htmlFor="confirm-password">Confirm Password</Label>
+              <Label htmlFor="confirmPassword">Confirm Password</Label>
               <div className="relative">
                 <Input
-                  id="confirm-password"
-                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  name="confirmPassword"
+                  type={showPassword ? 'text' : 'password'}
                   placeholder="Confirm your password"
                   required
                 />
@@ -120,9 +146,9 @@ const AuthModal = ({ type, onClose }: AuthModalProps) => {
                   variant="ghost"
                   size="icon"
                   className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8"
-                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  onClick={() => setShowPassword(!showPassword)}
                 >
-                  {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
             </div>
@@ -132,15 +158,15 @@ const AuthModal = ({ type, onClose }: AuthModalProps) => {
             <Button
               type="submit"
               className="flex-1"
-              disabled={isLoading}
+              disabled={loading}
             >
-              {isLoading ? "Processing..." : (type === 'login' ? 'Sign In' : 'Register')}
+              {loading ? "Processing..." : (type === 'login' ? 'Sign In' : 'Register')}
             </Button>
             <Button
               type="button"
               variant="outline"
               onClick={onClose}
-              disabled={isLoading}
+              disabled={loading}
             >
               Cancel
             </Button>
@@ -152,12 +178,7 @@ const AuthModal = ({ type, onClose }: AuthModalProps) => {
           <button
             className="text-primary hover:text-primary-glow font-medium underline"
             onClick={() => {
-              // Switch between login and register
-              const newType = type === 'login' ? 'register' : 'login';
-              onClose();
-              setTimeout(() => {
-                // Re-open with new type (this would need to be handled by parent)
-              }, 100);
+              // This would need to be handled by parent to switch types
             }}
           >
             {type === 'login' ? 'Register here' : 'Sign in here'}
