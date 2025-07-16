@@ -218,19 +218,23 @@ export class AIReportGenerator {
     doc.setFillColor(15, 23, 42); // Dark blue-gray
     doc.rect(0, 0, pageWidth, 60, 'F');
     
-    // Add the actual logo image if available (no white background)
+    // Add white background for logo visibility
+    doc.setFillColor(255, 255, 255);
+    doc.rect(5, 10, 52, 40, 'F');
+    
+    // Add the actual logo image if available
     if (logoBase64) {
       try {
-        // Use the actual logo image stretched 30% rectangularly
-        doc.addImage(logoBase64, 'PNG', margin, 10, 52, 40);
+        // Use the actual logo image stretched 30% rectangularly at left margin
+        doc.addImage(logoBase64, 'PNG', 5, 10, 52, 40);
       } catch (error) {
         console.error('Error adding logo to PDF:', error);
         // Fallback to placeholder
-        this.addLogoPlaceholder(doc, margin);
+        this.addLogoPlaceholder(doc, 5);
       }
     } else {
       // Fallback to placeholder
-      this.addLogoPlaceholder(doc, margin);
+      this.addLogoPlaceholder(doc, 5);
     }
     
     // Company name and tagline
