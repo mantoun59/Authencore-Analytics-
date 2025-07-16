@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Brain, TrendingUp, Shield } from "lucide-react";
-import professionalTeam from "@/assets/professional-team.jpg";
 
 const Hero = () => {
   return (
@@ -53,8 +52,8 @@ const Hero = () => {
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-elegant">
               <img 
-                src={professionalTeam}
-                alt="Professional team collaborating on assessments and analytics"
+                src="/lovable-uploads/d4fbfb7f-31a2-45cd-9d2b-3ecc959732ab.png"
+                alt="Professional team collaborating with AI-powered assessment analytics and brain interface technology"
                 className="w-full h-auto object-cover"
               />
             </div>
