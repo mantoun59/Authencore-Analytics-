@@ -1,629 +1,296 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  MessageSquare, 
-  Users, 
-  Brain, 
-  Zap, 
-  Target, 
-  Clock, 
-  TrendingUp, 
-  Award,
-  ArrowRight,
-  ArrowLeft,
-  Mic,
-  Video,
-  Mail,
-  Phone,
-  CheckCircle,
-  AlertCircle,
-  BarChart3,
-  PieChart,
-  Activity
-} from 'lucide-react';
-import { communicationQuestions, extendedQuestions, communicationProfiles } from '@/data/communicationQuestions';
-import { useCommunicationScoring } from '@/hooks/useCommunicationScoring';
-import { useToast } from '@/hooks/use-toast';
-import { WrittenResponseComponent } from '@/components/WrittenResponseComponent';
-import { SimulationComponent } from '@/components/SimulationComponent';
-import { RankingComponent } from '@/components/RankingComponent';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { MessageSquare, Users, Target, Zap, ArrowRight, ArrowLeft } from "lucide-react";
 
-interface CommunicationAssessmentProps {
-  onComplete?: (results: any) => void;
-}
-
-const CommunicationAssessment: React.FC<CommunicationAssessmentProps> = ({ onComplete }) => {
-  const [currentPhase, setCurrentPhase] = useState<'welcome' | 'assessment' | 'results'>('welcome');
-  const [currentModule, setCurrentModule] = useState<'style_identification' | 'linguistic_analysis' | 'interactive_simulation' | 'adaptive_scenario'>('style_identification');
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [startTime, setStartTime] = useState<number>(0);
-  const [moduleStartTime, setModuleStartTime] = useState<number>(0);
-  const [userProfile, setUserProfile] = useState({
-    name: '',
-    role: '',
-    industry: '',
-    experience: ''
-  });
+const CommunicationAssessment = () => {
+  const navigate = useNavigate();
+  const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [answers, setAnswers] = useState<string[]>([]);
   const [showResults, setShowResults] = useState(false);
-  const [completedModules, setCompletedModules] = useState<Set<string>>(new Set());
-  
-  const scoring = useCommunicationScoring();
-  const { toast } = useToast();
 
-  // Get questions for current module
-  const allQuestions = [...communicationQuestions, ...extendedQuestions];
-  const currentModuleQuestions = allQuestions.filter(q => q.module === currentModule);
-  const currentQuestion = currentModuleQuestions[currentQuestionIndex];
-
-  // Progress tracking
-  const totalQuestions = allQuestions.length;
-  const completedQuestions = scoring.responses.length;
-  const progressPercentage = (completedQuestions / totalQuestions) * 100;
-
-  const modules = [
-    { id: 'style_identification', name: 'Style Identification', icon: Target, duration: 15, questions: 25 },
-    { id: 'linguistic_analysis', name: 'Linguistic Analysis', icon: Brain, duration: 10, questions: 15 },
-    { id: 'interactive_simulation', name: 'Interactive Simulation', icon: Users, duration: 20, questions: 25 },
-    { id: 'adaptive_scenario', name: 'Adaptive Scenarios', icon: Zap, duration: 15, questions: 15 }
+  const questions = [
+    {
+      id: 1,
+      text: "When presenting to a group, I prefer to:",
+      options: [
+        { value: "direct", label: "Get straight to the point with clear facts" },
+        { value: "engaging", label: "Use stories and examples to connect" },
+        { value: "collaborative", label: "Involve the audience in discussions" },
+        { value: "structured", label: "Follow a detailed, logical framework" }
+      ]
+    },
+    {
+      id: 2,
+      text: "In team meetings, I typically:",
+      options: [
+        { value: "lead", label: "Take charge and guide the discussion" },
+        { value: "support", label: "Help facilitate others' contributions" },
+        { value: "analyze", label: "Focus on data and logical analysis" },
+        { value: "harmonize", label: "Work to maintain group harmony" }
+      ]
+    },
+    {
+      id: 3,
+      text: "When giving feedback, I tend to:",
+      options: [
+        { value: "direct", label: "Be straightforward and specific" },
+        { value: "encouraging", label: "Focus on positive reinforcement" },
+        { value: "constructive", label: "Provide detailed improvement suggestions" },
+        { value: "diplomatic", label: "Frame feedback gently and tactfully" }
+      ]
+    },
+    {
+      id: 4,
+      text: "My preferred communication channel is:",
+      options: [
+        { value: "face-to-face", label: "In-person conversations" },
+        { value: "video", label: "Video calls and virtual meetings" },
+        { value: "written", label: "Email and written documentation" },
+        { value: "instant", label: "Chat and instant messaging" }
+      ]
+    },
+    {
+      id: 5,
+      text: "When resolving conflicts, I usually:",
+      options: [
+        { value: "address", label: "Address issues head-on immediately" },
+        { value: "mediate", label: "Help parties find common ground" },
+        { value: "analyze", label: "Gather all facts before acting" },
+        { value: "cool-down", label: "Let emotions settle before discussing" }
+      ]
+    }
   ];
 
-  const currentModuleInfo = modules.find(m => m.id === currentModule);
-
-  useEffect(() => {
-    if (currentPhase === 'assessment' && startTime === 0) {
-      setStartTime(Date.now());
-      setModuleStartTime(Date.now());
-    }
-  }, [currentPhase, startTime]);
-
-  const handleStartAssessment = () => {
-    if (!userProfile.name || !userProfile.role) {
-      toast({
-        title: "Profile Required",
-        description: "Please complete your profile to begin the assessment.",
-        variant: "destructive"
-      });
-      return;
-    }
-    
-    setCurrentPhase('assessment');
-    setStartTime(Date.now());
-    setModuleStartTime(Date.now());
+  const handleAnswer = (value: string) => {
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion] = value;
+    setAnswers(newAnswers);
   };
 
-  const handleResponse = useCallback((response: any) => {
-    const responseTime = Date.now() - moduleStartTime;
-    
-    scoring.processResponse(
-      currentQuestion.id,
-      response,
-      responseTime,
-      currentModule
-    );
-
-    // Move to next question
-    if (currentQuestionIndex < currentModuleQuestions.length - 1) {
-      setCurrentQuestionIndex(prev => prev + 1);
-      setModuleStartTime(Date.now());
+  const handleNext = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion(currentQuestion + 1);
     } else {
-      // Module complete
-      setCompletedModules(prev => new Set([...prev, currentModule]));
-      
-      // Move to next module
-      const currentModuleIndex = modules.findIndex(m => m.id === currentModule);
-      if (currentModuleIndex < modules.length - 1) {
-        const nextModule = modules[currentModuleIndex + 1];
-        setCurrentModule(nextModule.id as any);
-        setCurrentQuestionIndex(0);
-        setModuleStartTime(Date.now());
-        
-        toast({
-          title: "Module Complete!",
-          description: `${currentModuleInfo?.name} completed. Starting ${nextModule.name}...`,
-        });
-      } else {
-        // Assessment complete
-        setCurrentPhase('results');
-        toast({
-          title: "Assessment Complete!",
-          description: "Generating your communication profile...",
-        });
-        
-        if (onComplete) {
-          onComplete(generateResults());
-        }
-      }
+      setShowResults(true);
     }
-  }, [currentQuestion, currentQuestionIndex, currentModuleQuestions, currentModule, moduleStartTime, scoring, modules, currentModuleInfo, onComplete]);
+  };
 
-  const generateResults = () => {
-    const cei = scoring.calculateCEI();
-    const dna = scoring.calculateCommunicationDNA();
-    const primaryProfile = scoring.determinePrimaryProfile();
-    const teamCompatibility = scoring.calculateTeamCompatibility();
-    const successProbabilities = scoring.generateSuccessProbabilities();
-    
-    return {
-      userProfile,
-      primaryProfile,
-      scores: scoring.scores,
-      cei,
-      dna,
-      teamCompatibility,
-      successProbabilities,
-      linguisticAnalysis: scoring.linguisticAnalysis,
-      responses: scoring.responses,
-      completionTime: Date.now() - startTime
+  const handlePrevious = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
+    }
+  };
+
+  const calculateResults = () => {
+    const styles = {
+      direct: 0,
+      collaborative: 0,
+      analytical: 0,
+      supportive: 0
     };
+
+    answers.forEach(answer => {
+      if (['direct', 'lead', 'address'].includes(answer)) {
+        styles.direct++;
+      } else if (['engaging', 'support', 'mediate'].includes(answer)) {
+        styles.collaborative++;
+      } else if (['structured', 'analyze', 'written'].includes(answer)) {
+        styles.analytical++;
+      } else {
+        styles.supportive++;
+      }
+    });
+
+    return styles;
   };
 
-  const renderWelcomeScreen = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 flex items-center justify-center p-4">
-      <Card className="w-full max-w-4xl">
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-6">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-              <MessageSquare className="h-12 w-12 text-white" />
-            </div>
-          </div>
-          <CardTitle className="text-4xl font-bold mb-4">Communication Styles Assessment</CardTitle>
-          <CardDescription className="text-xl text-muted-foreground">
-            Discover how you connect, influence, and collaborate with others
-          </CardDescription>
-        </CardHeader>
-        
-        <CardContent className="space-y-8">
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Profile Information</h3>
-              <div className="space-y-3">
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  value={userProfile.name}
-                  onChange={(e) => setUserProfile(prev => ({ ...prev, name: e.target.value }))}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <input
-                  type="text"
-                  placeholder="Your Role/Title"
-                  value={userProfile.role}
-                  onChange={(e) => setUserProfile(prev => ({ ...prev, role: e.target.value }))}
-                  className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-                <Select value={userProfile.industry} onValueChange={(value) => setUserProfile(prev => ({ ...prev, industry: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Industry" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="technology">Technology</SelectItem>
-                    <SelectItem value="healthcare">Healthcare</SelectItem>
-                    <SelectItem value="finance">Finance</SelectItem>
-                    <SelectItem value="education">Education</SelectItem>
-                    <SelectItem value="consulting">Consulting</SelectItem>
-                    <SelectItem value="retail">Retail</SelectItem>
-                    <SelectItem value="manufacturing">Manufacturing</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Select value={userProfile.experience} onValueChange={(value) => setUserProfile(prev => ({ ...prev, experience: value }))}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Years of Experience" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0-2">0-2 years</SelectItem>
-                    <SelectItem value="3-5">3-5 years</SelectItem>
-                    <SelectItem value="6-10">6-10 years</SelectItem>
-                    <SelectItem value="11-15">11-15 years</SelectItem>
-                    <SelectItem value="16+">16+ years</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            
-            <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Assessment Overview</h3>
-              <div className="space-y-3">
-                {modules.map((module, index) => (
-                  <div key={module.id} className="flex items-center space-x-3 p-3 bg-gray-50 dark:bg-slate-800 rounded-lg">
-                    <module.icon className="h-5 w-5 text-blue-500" />
-                    <div className="flex-1">
-                      <div className="font-medium">{module.name}</div>
-                      <div className="text-sm text-muted-foreground">{module.duration} min • {module.questions} questions</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          
-          <div className="text-center">
-            <Button 
-              onClick={handleStartAssessment}
-              size="lg"
-              className="bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white px-8 py-3"
-            >
-              Start Assessment <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  const renderAssessmentScreen = () => (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 p-4">
-      <div className="max-w-4xl mx-auto">
-        {/* Progress Header */}
-        <div className="mb-8">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-2xl font-bold">{currentModuleInfo?.name}</h2>
-            <div className="flex items-center space-x-4">
-              <Badge variant="outline">{currentModuleInfo?.icon && <currentModuleInfo.icon className="h-4 w-4 mr-1" />}Module {modules.findIndex(m => m.id === currentModule) + 1}/4</Badge>
-              <Badge variant="outline">
-                <Clock className="h-4 w-4 mr-1" />
-                {Math.floor((Date.now() - moduleStartTime) / 1000)}s
-              </Badge>
-            </div>
-          </div>
-          <Progress value={progressPercentage} className="h-2" />
-          <div className="flex justify-between text-sm text-muted-foreground mt-2">
-            <span>Question {currentQuestionIndex + 1} of {currentModuleQuestions.length}</span>
-            <span>{Math.round(progressPercentage)}% Complete</span>
-          </div>
-        </div>
-
-        {/* Question Content */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              {currentQuestion?.type === 'scenario' && <Users className="h-5 w-5" />}
-              {currentQuestion?.type === 'written_response' && <Brain className="h-5 w-5" />}
-              {currentQuestion?.type === 'simulation' && <Zap className="h-5 w-5" />}
-              {currentQuestion?.type === 'multiple_choice' && <Target className="h-5 w-5" />}
-              <span>{currentQuestion?.question}</span>
-            </CardTitle>
-            {currentQuestion?.context && (
-              <CardDescription className="text-base">
-                {currentQuestion.context}
-              </CardDescription>
-            )}
-          </CardHeader>
-          
-          <CardContent>
-            {renderQuestionContent()}
-          </CardContent>
-        </Card>
-
-        {/* Module Navigation */}
-        <div className="flex justify-between items-center">
-          <div className="flex space-x-2">
-            {modules.map((module, index) => (
-              <Badge 
-                key={module.id}
-                variant={module.id === currentModule ? "default" : completedModules.has(module.id) ? "secondary" : "outline"}
-                className="px-3 py-1"
-              >
-                {completedModules.has(module.id) && <CheckCircle className="h-3 w-3 mr-1" />}
-                {module.name}
-              </Badge>
-            ))}
-          </div>
-          
-          <div className="text-sm text-muted-foreground">
-            Total Progress: {completedQuestions}/{totalQuestions} questions
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
-  const renderQuestionContent = () => {
-    if (!currentQuestion) return null;
-
-    switch (currentQuestion.type) {
-      case 'scenario':
-      case 'multiple_choice':
-        return (
-          <div className="space-y-4">
-            {currentQuestion.options?.map((option, index) => (
-              <Button
-                key={option.id}
-                variant="outline"
-                className="w-full p-4 h-auto text-left justify-start hover:bg-blue-50 hover:border-blue-200 dark:hover:bg-slate-800"
-                onClick={() => handleResponse(option)}
-              >
-                <div className="flex items-start space-x-3">
-                  <div className="bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300 rounded-full w-8 h-8 flex items-center justify-center font-semibold">
-                    {option.id}
-                  </div>
-                  <div>{option.text}</div>
-                </div>
-              </Button>
-            ))}
-          </div>
-        );
-      
-      case 'written_response':
-        return <WrittenResponseComponent question={currentQuestion} onResponse={handleResponse} />;
-      
-      case 'simulation':
-        return <SimulationComponent question={currentQuestion} onResponse={handleResponse} />;
-      
-      case 'ranking':
-        return <RankingComponent question={currentQuestion} onResponse={handleResponse} />;
-      
-      default:
-        return <div>Question type not supported</div>;
-    }
+  const getMainStyle = () => {
+    const results = calculateResults();
+    return Object.entries(results).reduce((a, b) => results[a[0]] > results[b[0]] ? a : b)[0];
   };
 
-  const renderResultsScreen = () => {
-    const results = generateResults();
-    const primaryProfile = communicationProfiles.find(p => p.id === results.primaryProfile);
+  const getStyleDescription = (style: string) => {
+    const descriptions = {
+      direct: "You communicate with clarity and decisiveness, preferring straightforward approaches.",
+      collaborative: "You excel at bringing people together and facilitating group discussions.",
+      analytical: "You rely on data and logical frameworks to structure your communications.",
+      supportive: "You prioritize relationships and create comfortable communication environments."
+    };
+    return descriptions[style as keyof typeof descriptions];
+  };
+
+  const progress = ((currentQuestion + 1) / questions.length) * 100;
+
+  if (showResults) {
+    const mainStyle = getMainStyle();
+    const results = calculateResults();
     
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-slate-900 dark:to-slate-800 p-4">
-        <div className="max-w-6xl mx-auto">
+      <div className="min-h-screen bg-background p-4">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
-            <div className="w-24 h-24 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Award className="h-12 w-12 text-white" />
-            </div>
-            <h1 className="text-4xl font-bold mb-2">Assessment Complete!</h1>
-            <p className="text-xl text-muted-foreground">
-              Your communication style has been analyzed across {totalQuestions} questions
+            <Badge className="mb-4 bg-indigo-100 text-indigo-800">
+              Communication Assessment Complete
+            </Badge>
+            <h1 className="text-3xl font-bold mb-4">Your Communication Style</h1>
+            <p className="text-muted-foreground">
+              Understanding how you naturally communicate can help you adapt to different situations
             </p>
           </div>
 
-          <Tabs defaultValue="profile" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
-              <TabsTrigger value="profile">Communication Profile</TabsTrigger>
-              <TabsTrigger value="effectiveness">Effectiveness Index</TabsTrigger>
-              <TabsTrigger value="team">Team Compatibility</TabsTrigger>
-              <TabsTrigger value="development">Development Guide</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="profile" className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <Target className="h-5 w-5" />
-                      <span>Primary Communication Style</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center space-y-4">
-                      <div className="text-3xl font-bold text-blue-600">{primaryProfile?.name}</div>
-                      <p className="text-muted-foreground">{primaryProfile?.description}</p>
-                      <div className="space-y-2">
-                        <h4 className="font-semibold">Key Characteristics:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {primaryProfile?.characteristics.map((char, index) => (
-                            <Badge key={index} variant="secondary">{char}</Badge>
-                          ))}
-                        </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <MessageSquare className="h-5 w-5 text-indigo-500" />
+                  Primary Style: {mainStyle.charAt(0).toUpperCase() + mainStyle.slice(1)}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  {getStyleDescription(mainStyle)}
+                </p>
+                <div className="space-y-3">
+                  {Object.entries(results).map(([style, score]) => (
+                    <div key={style} className="flex justify-between items-center">
+                      <span className="capitalize">{style}</span>
+                      <div className="flex items-center gap-2">
+                        <Progress value={(score / questions.length) * 100} className="w-20" />
+                        <span className="text-sm font-medium">{score}</span>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <BarChart3 className="h-5 w-5" />
-                      <span>Communication DNA</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div className="flex justify-between items-center">
-                        <span>Assertiveness</span>
-                        <span className="font-semibold">{Math.round(results.dna.assertiveness * 100)}%</span>
-                      </div>
-                      <Progress value={results.dna.assertiveness * 100} />
-                      
-                      <div className="flex justify-between items-center">
-                        <span>Responsiveness</span>
-                        <span className="font-semibold">{Math.round(results.dna.responsiveness * 100)}%</span>
-                      </div>
-                      <Progress value={results.dna.responsiveness * 100} />
-                      
-                      <div className="flex justify-between items-center">
-                        <span>Flexibility</span>
-                        <span className="font-semibold">{Math.round(results.dna.flexibilityScore * 100)}%</span>
-                      </div>
-                      <Progress value={results.dna.flexibilityScore * 100} />
-                      
-                      <div className="flex justify-between items-center">
-                        <span>Team Synergy</span>
-                        <span className="font-semibold">{Math.round(results.dna.teamSynergy * 100)}%</span>
-                      </div>
-                      <Progress value={results.dna.teamSynergy * 100} />
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="h-5 w-5 text-green-500" />
+                  Recommendations
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="space-y-2 text-sm">
+                  <li className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <span>Practice adapting your style to your audience</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <span>Consider multiple communication channels</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <span>Build awareness of others' communication preferences</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
+                    <span>Develop flexibility in high-stakes situations</span>
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Activity className="h-5 w-5" />
-                    <span>Channel Effectiveness</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {Object.entries(results.dna.channelMatrix).map(([channel, score]) => (
-                      <div key={channel} className="text-center space-y-2">
-                        <div className="font-medium capitalize">{channel.replace(/([A-Z])/g, ' $1').trim()}</div>
-                        <div className="text-2xl font-bold text-blue-600">{Math.round(score * 100)}%</div>
-                        <Progress value={score * 100} className="h-2" />
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="effectiveness" className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <TrendingUp className="h-5 w-5" />
-                      <span>Communication Effectiveness Index</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center space-y-4">
-                      <div className="text-4xl font-bold text-blue-600">
-                        {Math.round(results.cei.overall * 100)}%
-                      </div>
-                      <p className="text-muted-foreground">Overall Communication Effectiveness</p>
-                      
-                      <div className="space-y-3">
-                        <div className="flex justify-between">
-                          <span>Natural Style</span>
-                          <span>{Math.round(results.cei.breakdown.naturalStyle * 100)}%</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Adaptability</span>
-                          <span>{Math.round(results.cei.breakdown.adaptability * 100)}%</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Channel Mastery</span>
-                          <span>{Math.round(results.cei.breakdown.channelMastery * 100)}%</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span>Difficult Conversations</span>
-                          <span>{Math.round(results.cei.breakdown.difficultConversations * 100)}%</span>
-                        </div>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <Target className="h-5 w-5" />
-                      <span>Success Probabilities</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      {Object.entries(results.successProbabilities).map(([area, probability]) => (
-                        <div key={area} className="space-y-2">
-                          <div className="flex justify-between">
-                            <span className="capitalize">{area.replace(/([A-Z])/g, ' $1').trim()}</span>
-                            <span className="font-semibold">{Math.round(probability * 100)}%</span>
-                          </div>
-                          <Progress value={probability * 100} />
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="team" className="space-y-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center space-x-2">
-                    <Users className="h-5 w-5" />
-                    <span>Team Compatibility Matrix</span>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {Object.entries(results.teamCompatibility).map(([profile, compatibility]) => {
-                      const profileData = communicationProfiles.find(p => p.id === profile);
-                      return (
-                        <div key={profile} className="text-center space-y-3 p-4 border rounded-lg">
-                          <div className="font-medium">{profileData?.name}</div>
-                          <div className="text-2xl font-bold" style={{ color: compatibility > 0.7 ? '#10b981' : compatibility > 0.4 ? '#f59e0b' : '#ef4444' }}>
-                            {Math.round(compatibility * 100)}%
-                          </div>
-                          <Progress value={compatibility * 100} />
-                          <div className="text-sm text-muted-foreground">
-                            {compatibility > 0.7 ? 'Excellent' : compatibility > 0.4 ? 'Good' : 'Challenging'}
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="development" className="space-y-6">
-              <div className="grid md:grid-cols-2 gap-6">
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <CheckCircle className="h-5 w-5 text-green-500" />
-                      <span>Strengths</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {primaryProfile?.strengths.map((strength, index) => (
-                        <div key={index} className="flex items-center space-x-2">
-                          <CheckCircle className="h-4 w-4 text-green-500" />
-                          <span>{strength}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader>
-                    <CardTitle className="flex items-center space-x-2">
-                      <AlertCircle className="h-5 w-5 text-yellow-500" />
-                      <span>Development Areas</span>
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-2">
-                      {primaryProfile?.blindSpots.map((blindSpot, index) => (
-                        <div key={index} className="flex items-center space-x-2">
-                          <AlertCircle className="h-4 w-4 text-yellow-500" />
-                          <span>{blindSpot}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </TabsContent>
-          </Tabs>
+          <div className="mt-8 text-center">
+            <Button 
+              onClick={() => navigate('/assessment')}
+              className="bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600"
+            >
+              Explore Other Assessments
+            </Button>
+          </div>
         </div>
       </div>
     );
-  };
-
-  // Render different screens based on current phase
-  switch (currentPhase) {
-    case 'welcome':
-      return renderWelcomeScreen();
-    case 'assessment':
-      return renderAssessmentScreen();
-    case 'results':
-      return renderResultsScreen();
-    default:
-      return renderWelcomeScreen();
   }
-};
 
+  return (
+    <div className="min-h-screen bg-background p-4">
+      <div className="max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-8">
+          <Badge className="mb-4 bg-indigo-100 text-indigo-800">
+            Communication Assessment
+          </Badge>
+          <h1 className="text-3xl font-bold mb-4">
+            Discover Your Communication Style
+          </h1>
+          <p className="text-muted-foreground">
+            Understanding how you naturally communicate helps you adapt to different situations and audiences
+          </p>
+        </div>
+
+        {/* Progress */}
+        <div className="mb-8">
+          <div className="flex justify-between items-center mb-2">
+            <span className="text-sm font-medium">Progress</span>
+            <span className="text-sm text-muted-foreground">
+              {currentQuestion + 1} of {questions.length}
+            </span>
+          </div>
+          <Progress value={progress} className="w-full" />
+        </div>
+
+        {/* Question Card */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="text-xl">
+              {questions[currentQuestion].text}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <RadioGroup 
+              value={answers[currentQuestion] || ""} 
+              onValueChange={handleAnswer}
+              className="space-y-3"
+            >
+              {questions[currentQuestion].options.map((option) => (
+                <div key={option.value} className="flex items-center space-x-2">
+                  <RadioGroupItem value={option.value} id={option.value} />
+                  <Label 
+                    htmlFor={option.value} 
+                    className="flex-1 cursor-pointer p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                  >
+                    {option.label}
+                  </Label>
+                </div>
+              ))}
+            </RadioGroup>
+          </CardContent>
+        </Card>
+
+        {/* Navigation */}
+        <div className="flex justify-between">
+          <Button 
+            variant="outline" 
+            onClick={handlePrevious}
+            disabled={currentQuestion === 0}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Previous
+          </Button>
+          
+          <Button 
+            onClick={handleNext}
+            disabled={!answers[currentQuestion]}
+            className="bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600"
+          >
+            {currentQuestion === questions.length - 1 ? 'Complete' : 'Next'}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default CommunicationAssessment;
