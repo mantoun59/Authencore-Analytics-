@@ -100,29 +100,29 @@ const PsychometricsInfo = () => {
               <CardDescription>Proven reliability and validity metrics</CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <div className="bg-purple-50 p-4 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-purple-800">Reliability Score</span>
-                    <span className="text-2xl font-bold text-purple-600">95%+</span>
-                  </div>
-                  <p className="text-sm text-purple-700">Consistent results across multiple testing sessions</p>
+            <div className="space-y-4">
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-purple-800">Reliability</span>
+                  <span className="text-lg font-bold text-purple-600">High</span>
                 </div>
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-blue-800">Validity Index</span>
-                    <span className="text-2xl font-bold text-blue-600">92%+</span>
-                  </div>
-                  <p className="text-sm text-blue-700">Measures what it claims to measure accurately</p>
-                </div>
-                <div className="bg-green-50 p-4 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-green-800">Predictive Power</span>
-                    <span className="text-2xl font-bold text-green-600">88%+</span>
-                  </div>
-                  <p className="text-sm text-green-700">Accurately predicts job performance and fit</p>
-                </div>
+                <p className="text-sm text-purple-700">Consistent results across multiple testing sessions</p>
               </div>
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-blue-800">Validity</span>
+                  <span className="text-lg font-bold text-blue-600">Validated</span>
+                </div>
+                <p className="text-sm text-blue-700">Measures what it claims to measure accurately</p>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-semibold text-green-800">Predictive Power</span>
+                  <span className="text-lg font-bold text-green-600">Strong</span>
+                </div>
+                <p className="text-sm text-green-700">Provides meaningful insights for career and personal development</p>
+              </div>
+            </div>
             </CardContent>
           </Card>
         </div>
