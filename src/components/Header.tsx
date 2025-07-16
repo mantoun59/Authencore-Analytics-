@@ -23,15 +23,13 @@ const Header = () => {
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <img 
                 src={logo} 
-                alt="Authencore Analytics" 
-                className="h-8 w-auto"
+                alt="AuthenCore Analytics" 
+                className="w-52 h-auto"
+                style={{ width: '210px' }}
               />
-              <span className="text-xl font-bold bg-gradient-primary bg-clip-text text-transparent">
-                Authencore Analytics
-              </span>
             </div>
 
             {/* Desktop Navigation */}
