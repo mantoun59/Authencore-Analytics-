@@ -413,6 +413,41 @@ export const extendedQuestions: CommunicationQuestion[] = [
   }
 ];
 
+// Linguistic Patterns for Analysis
+export const linguisticPatterns = {
+  formality: {
+    formal: ['therefore', 'however', 'furthermore', 'consequently', 'moreover', 'nevertheless', 'subsequently', 'accordingly', 'nonetheless', 'likewise'],
+    informal: ['yeah', 'ok', 'cool', 'awesome', 'great', 'nice', 'wow', 'hey', 'sure', 'got it']
+  },
+  assertiveness: {
+    high: ['will', 'must', 'should', 'need', 'require', 'expect', 'demand', 'insist', 'determine', 'decide'],
+    low: ['might', 'could', 'perhaps', 'maybe', 'possibly', 'seems', 'appears', 'think', 'feel', 'believe']
+  },
+  emotion: {
+    high: ['excited', 'thrilled', 'passionate', 'love', 'amazing', 'fantastic', 'incredible', 'outstanding', 'brilliant', 'wonderful'],
+    low: ['adequate', 'sufficient', 'acceptable', 'reasonable', 'standard', 'typical', 'normal', 'usual', 'regular', 'basic']
+  },
+  detail: {
+    high: ['specifically', 'precisely', 'exactly', 'detailed', 'comprehensive', 'thorough', 'systematic', 'methodical', 'step-by-step', 'analysis'],
+    low: ['generally', 'overall', 'basically', 'roughly', 'approximately', 'mainly', 'mostly', 'typically', 'usually', 'broadly']
+  }
+};
+
+// Scoring Dimensions
+export const scoringDimensions = [
+  'assertiveness',
+  'expressiveness', 
+  'detail_orientation',
+  'processing_speed',
+  'channel_preference',
+  'formality',
+  'listening',
+  'empathy',
+  'influence',
+  'negotiation',
+  'conflict'
+];
+
 // Communication Profiles
 export interface CommunicationProfile {
   id: string;
@@ -637,38 +672,3 @@ export const communicationProfiles: CommunicationProfile[] = [
     }
   }
 ];
-
-// Scoring dimensions and weights
-export const scoringDimensions = {
-  assertiveness: { weight: 0.15, description: 'Direct vs. indirect communication style' },
-  expressiveness: { weight: 0.15, description: 'Emotional expression and enthusiasm level' },
-  detail_orientation: { weight: 0.10, description: 'Big picture vs. detailed focus' },
-  processing_speed: { weight: 0.10, description: 'Quick vs. contemplative response style' },
-  channel_preference: { weight: 0.15, description: 'Preferred communication medium' },
-  formality: { weight: 0.10, description: 'Professional vs. casual tone' },
-  listening: { weight: 0.10, description: 'Active listening and engagement patterns' },
-  empathy: { weight: 0.10, description: 'Emotional intelligence and perspective-taking' },
-  influence: { weight: 0.10, description: 'Persuasion and influence strategies' },
-  negotiation: { weight: 0.08, description: 'Negotiation and compromise approach' },
-  conflict: { weight: 0.12, description: 'Conflict engagement and resolution style' }
-};
-
-// Linguistic analysis patterns
-export const linguisticPatterns = {
-  formality: {
-    formal: ['please', 'thank you', 'sincerely', 'respectfully', 'kindly'],
-    informal: ['hey', 'thanks', 'sure', 'okay', 'cool', 'awesome']
-  },
-  assertiveness: {
-    high: ['will', 'must', 'should', 'definitely', 'clearly', 'obviously'],
-    low: ['might', 'perhaps', 'possibly', 'maybe', 'seems', 'appears']
-  },
-  emotion: {
-    high: ['excited', 'thrilled', 'amazing', 'fantastic', 'wonderful', 'terrible'],
-    low: ['adequate', 'satisfactory', 'acceptable', 'reasonable', 'appropriate']
-  },
-  detail: {
-    high: ['specifically', 'particularly', 'precisely', 'exactly', 'detailed'],
-    low: ['generally', 'basically', 'overall', 'roughly', 'approximately']
-  }
-};
