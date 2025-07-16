@@ -2,6 +2,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Star } from "lucide-react";
 import modernOffice from "@/assets/modern-office.jpg";
+import professionalMan from "@/assets/professional-man.jpg";
+import professionalWoman from "@/assets/professional-woman.jpg";
+import professionalMan2 from "@/assets/professional-man-2.jpg";
 
 const Testimonials = () => {
   const testimonials = [
@@ -9,21 +12,21 @@ const Testimonials = () => {
       name: "John Smith",
       role: "Company Executive", 
       content: "Authencore Analytics provided us with invaluable insights that helped drive our strategy forward.",
-      avatar: "/placeholder.svg",
+      avatar: professionalMan,
       rating: 5
     },
     {
       name: "Sarah Johnson",
       role: "HR Director",
       content: "The assessment tools are incredibly detailed and helped us make better hiring decisions.",
-      avatar: "/placeholder.svg", 
+      avatar: professionalWoman, 
       rating: 5
     },
     {
       name: "Michael Chen",
       role: "Team Lead",
       content: "Professional, accurate, and actionable insights. Exactly what our team needed for growth.",
-      avatar: "/placeholder.svg",
+      avatar: professionalMan2,
       rating: 5
     }
   ];

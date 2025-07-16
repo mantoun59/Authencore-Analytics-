@@ -1,5 +1,6 @@
 import { BarChart3, Shield, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import professionalMeeting from "@/assets/professional-meeting.jpg";
 
 const WhyChooseUs = () => {
   const features = [
@@ -23,6 +24,15 @@ const WhyChooseUs = () => {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
+        {/* Background Image */}
+        <div className="mb-16">
+          <img 
+            src={professionalMeeting}
+            alt="Professional business meeting and strategic planning"
+            className="w-full h-48 md:h-64 object-cover rounded-2xl shadow-elegant"
+          />
+        </div>
+
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-foreground mb-6">Why Choose Us</h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
