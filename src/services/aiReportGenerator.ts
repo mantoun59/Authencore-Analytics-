@@ -225,8 +225,8 @@ export class AIReportGenerator {
     // Add the actual logo image if available
     if (logoBase64) {
       try {
-        // Use the actual logo image
-        doc.addImage(logoBase64, 'PNG', margin + 2, 12, 31, 31);
+        // Use the actual logo image with proper aspect ratio
+        doc.addImage(logoBase64, 'PNG', margin + 5, 15, 25, 25);
       } catch (error) {
         console.error('Error adding logo to PDF:', error);
         // Fallback to placeholder
@@ -253,18 +253,6 @@ export class AIReportGenerator {
     doc.setFont('helvetica', 'bold');
     const assessmentTitle = assessmentType.replace(/([A-Z])/g, ' $1').trim().toUpperCase();
     doc.text(`${assessmentTitle} ASSESSMENT REPORT`, margin + 40, 45);
-    
-    // Professional report badge
-    doc.setTextColor(255, 255, 255);
-    doc.setFillColor(34, 197, 94); // Green
-    doc.rect(pageWidth - 80, 10, 60, 15, 'F');
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text('AI-POWERED', pageWidth - 75, 20);
-    
-    doc.setFillColor(239, 68, 68); // Red
-    doc.rect(pageWidth - 80, 27, 60, 15, 'F');
-    doc.text('PROFESSIONAL', pageWidth - 78, 37);
   }
 
   private addHeaderFooter(doc: jsPDF, assessmentType: string) {
