@@ -355,6 +355,52 @@ const Assessment = () => {
               </CardContent>
             </Card>
 
+            {/* Digital Wellness Assessment */}
+            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-4">
+                  <Zap className="h-8 w-8 text-cyan-500" />
+                  <div>
+                    <CardTitle className="text-xl">Digital Wellness</CardTitle>
+                    <Badge className="mt-1" variant="secondary">Behavioral</Badge>
+                  </div>
+                </div>
+                <CardDescription className="text-base">
+                  Real-time digital wellness assessment with behavioral tracking and habit analysis
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">Live Tracking</Badge>
+                  <Badge variant="outline">Habit Analysis</Badge>
+                  <Badge variant="outline">Wellness Score</Badge>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Screen time balance
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Digital boundaries
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Mindful usage patterns
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Tech-life integration
+                  </li>
+                </ul>
+                <Link to="/digital-wellness">
+                  <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
+                    Start Digital Wellness <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
             {/* GenZ Workplace Assessment */}
             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
               <CardHeader>
