@@ -4,8 +4,6 @@ import WhyChooseUs from "@/components/WhyChooseUs";
 import PsychometricsInfo from "@/components/PsychometricsInfo";
 import HowItWorks from "@/components/HowItWorks";
 import Gallery from "@/components/Gallery";
-import PricingPlans from "@/components/PricingPlans";
-import Testimonials from "@/components/Testimonials";
 import Features from "@/components/Features";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
@@ -20,8 +18,6 @@ const Index = () => {
       <PsychometricsInfo />
       <HowItWorks />
       <Gallery />
-      <PricingPlans />
-      <Testimonials />
       <Features />
       <CTA />
       <Footer />

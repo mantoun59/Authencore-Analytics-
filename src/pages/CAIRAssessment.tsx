@@ -298,6 +298,15 @@ This report is confidential and intended for development purposes.
   const renderWelcome = () => (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex items-center justify-center p-4">
       <div className="text-center max-w-4xl mx-auto">
+        {/* CAIR+ Logo */}
+        <div className="mb-8">
+          <img 
+            src="/lovable-uploads/b4befcb1-a480-4a36-b95e-796ac890d93e.png" 
+            alt="CAIR+ Cultural Adaptation & Integration Readiness Plus" 
+            className="mx-auto h-32 w-auto mb-6"
+          />
+        </div>
+        
         <div className="text-6xl mb-8">🧠</div>
         <h1 className="text-5xl font-bold text-slate-800 mb-6">
           CAIR+ Personality Assessment

@@ -568,6 +568,15 @@ For detailed analysis and recommendations, contact your career counselor.
   const renderWelcomeScreen = () => (
     <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center p-4">
       <div className="text-center max-w-4xl mx-auto">
+        {/* CareerLaunch Logo */}
+        <div className="mb-8">
+          <img 
+            src="/lovable-uploads/2eb92237-a884-4a9f-a975-0c399195cf27.png" 
+            alt="CareerLaunch - Helping Students Navigate Their Future" 
+            className="mx-auto h-32 w-auto mb-6"
+          />
+        </div>
+        
         <div className="text-8xl mb-8 animate-bounce">🚀</div>
         <h1 className="text-6xl font-bold text-slate-800 mb-6 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
           CareerLaunch Assessment
