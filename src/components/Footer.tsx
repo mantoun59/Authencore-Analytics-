@@ -5,16 +5,8 @@ const Footer = () => {
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Section - Logo and Legal Links */}
+          {/* Left Section - Legal Links */}
           <div className="space-y-6">
-            {/* Logo */}
-            <div className="bg-white p-4 rounded-lg w-fit">
-              <img 
-                src="/lovable-uploads/3e445206-112e-41c0-87c9-28a731c3361f.png" 
-                alt="AuthenCore Analytics" 
-                className="h-16 w-auto"
-              />
-            </div>
             
             {/* Legal Links */}
             <div className="space-y-2">

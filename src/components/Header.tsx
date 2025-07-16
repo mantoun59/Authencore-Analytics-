@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AuthModal from "./AuthModal";
-import logo from "/lovable-uploads/3e445206-112e-41c0-87c9-28a731c3361f.png";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
@@ -22,15 +21,6 @@ const Header = () => {
       <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex items-center space-x-3">
-              <img 
-                src={logo} 
-                alt="AuthenCore Analytics" 
-                className="w-52 h-auto"
-                style={{ width: '210px' }}
-              />
-            </div>
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
