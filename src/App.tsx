@@ -16,11 +16,13 @@ import EmotionalIntelligenceAssessment from "./pages/EmotionalIntelligenceAssess
 import FaithValuesAssessment from "./pages/FaithValuesAssessment";
 import GenZAssessment from "./pages/GenZAssessment";
 import PartnerLogin from "./pages/PartnerLogin";
+import PartnerDashboard from "./pages/PartnerDashboard";
 import LeadershipAssessment from "./pages/LeadershipAssessment";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import SampleReports from "./pages/SampleReports";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { PartnerProvider } from "@/contexts/PartnerContext";
 
 const queryClient = new QueryClient();
 
@@ -28,9 +30,10 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AuthProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
+        <PartnerProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
@@ -44,6 +47,7 @@ const App = () => (
             <Route path="/faith-values" element={<FaithValuesAssessment />} />
             <Route path="/genz-assessment" element={<GenZAssessment />} />
             <Route path="/partner-login" element={<PartnerLogin />} />
+            <Route path="/partner-dashboard" element={<PartnerDashboard />} />
             <Route path="/leadership-assessment" element={<LeadershipAssessment />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/sample-reports" element={<SampleReports />} />
@@ -52,6 +56,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
+        </PartnerProvider>
       </AuthProvider>
     </TooltipProvider>
   </QueryClientProvider>

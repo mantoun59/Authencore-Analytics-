@@ -85,6 +85,118 @@ export type Database = {
           },
         ]
       }
+      partner_access_logs: {
+        Row: {
+          action: string
+          assessment_type: string | null
+          created_at: string
+          id: string
+          ip_address: string | null
+          metadata: Json | null
+          partner_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          action: string
+          assessment_type?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          partner_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          action?: string
+          assessment_type?: string | null
+          created_at?: string
+          id?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          partner_id?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_access_logs_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_access_permissions: {
+        Row: {
+          assessment_type: string
+          can_access: boolean
+          created_at: string
+          id: string
+          partner_id: string
+        }
+        Insert: {
+          assessment_type: string
+          can_access?: boolean
+          created_at?: string
+          id?: string
+          partner_id: string
+        }
+        Update: {
+          assessment_type?: string
+          can_access?: boolean
+          created_at?: string
+          id?: string
+          partner_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_access_permissions_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_accounts: {
+        Row: {
+          access_expires_at: string
+          contact_email: string
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          organization_name: string
+          password_hash: string
+          updated_at: string
+          username: string
+        }
+        Insert: {
+          access_expires_at: string
+          contact_email: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          organization_name: string
+          password_hash: string
+          updated_at?: string
+          username: string
+        }
+        Update: {
+          access_expires_at?: string
+          contact_email?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          organization_name?: string
+          password_hash?: string
+          updated_at?: string
+          username?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -117,7 +229,32 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      authenticate_partner: {
+        Args: { p_username: string; p_password: string }
+        Returns: {
+          partner_id: string
+          username: string
+          organization_name: string
+          access_expires_at: string
+          is_active: boolean
+          is_expired: boolean
+        }[]
+      }
+      check_partner_assessment_access: {
+        Args: { p_partner_id: string; p_assessment_type: string }
+        Returns: boolean
+      }
+      log_partner_activity: {
+        Args: {
+          p_partner_id: string
+          p_action: string
+          p_assessment_type?: string
+          p_ip_address?: string
+          p_user_agent?: string
+          p_metadata?: Json
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

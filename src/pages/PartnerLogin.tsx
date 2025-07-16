@@ -1,21 +1,30 @@
-import React, { useState } from 'react';
-import { Eye, EyeOff, Building2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Eye, EyeOff, Building2, Clock, Users, Shield, CheckCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { useAuth } from '@/contexts/AuthContext';
+import { usePartner } from '@/contexts/PartnerContext';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { format } from 'date-fns';
 
 const PartnerLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
-  const { signIn } = useAuth();
+  const { partner, login, isAuthenticated } = usePartner();
   const navigate = useNavigate();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated && partner) {
+      navigate('/partner-dashboard');
+    }
+  }, [isAuthenticated, partner, navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -26,23 +35,20 @@ const PartnerLogin = () => {
     const password = formData.get('password') as string;
 
     try {
-      // Convert username to email format for Supabase auth
-      const email = username.includes('@') ? username : `${username}@partner.local`;
-      
-      const result = await signIn(email, password);
+      const result = await login(username, password);
 
-      if (result.error) {
-        toast({
-          title: 'Access Denied',
-          description: 'Invalid partner credentials. Please contact support.',
-          variant: 'destructive',
-        });
-      } else {
+      if (result.success) {
         toast({
           title: 'Welcome Partner!',
           description: 'Successfully logged in to partner dashboard.',
         });
-        navigate('/admin'); // Redirect to admin dashboard
+        navigate('/partner-dashboard');
+      } else {
+        toast({
+          title: 'Access Denied',
+          description: result.error || 'Invalid partner credentials. Please contact support.',
+          variant: 'destructive',
+        });
       }
     } catch (error: any) {
       toast({
