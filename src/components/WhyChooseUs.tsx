@@ -2,6 +2,7 @@ import { BarChart3, Shield, Target, Trophy, Users, Zap, Star, Award, TrendingUp,
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 import professionalMeeting from "@/assets/professional-meeting.jpg";
 
 const WhyChooseUs = () => {
@@ -128,9 +129,11 @@ const WhyChooseUs = () => {
                 </CardContent>
               </Card>
               <div className="text-center">
-                <Button size="lg" className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-                  Learn More About Our Process
-                </Button>
+                <Link to="/about">
+                  <Button size="lg" className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+                    Learn More About Our Process
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -146,12 +149,16 @@ const WhyChooseUs = () => {
             and take the first step toward personal and professional growth.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-primary hover:bg-primary/90">
-              Explore Our Assessments
-            </Button>
-            <Button size="lg" variant="outline">
-              Get Started Today
-            </Button>
+            <Link to="/assessment">
+              <Button size="lg" className="bg-primary hover:bg-primary/90">
+                Explore Our Assessments
+              </Button>
+            </Link>
+            <Link to="/assessment">
+              <Button size="lg" variant="outline">
+                Get Started Today
+              </Button>
+            </Link>
           </div>
         </div>
       </div>
