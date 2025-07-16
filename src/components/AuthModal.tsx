@@ -14,6 +14,7 @@ interface AuthModalProps {
 const AuthModal: React.FC<AuthModalProps> = ({ type, onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState('');
   const { toast } = useToast();
   const { signUp, signIn } = useAuth();
 
@@ -21,12 +22,21 @@ const AuthModal: React.FC<AuthModalProps> = ({ type, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setPasswordError('');
     setLoading(true);
 
     const formData = new FormData(e.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+    const confirmPassword = formData.get('confirmPassword') as string;
     const fullName = formData.get('fullName') as string;
+
+    // Validate password confirmation for registration
+    if (type === 'register' && password !== confirmPassword) {
+      setPasswordError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
 
     try {
       let result;
@@ -151,6 +161,9 @@ const AuthModal: React.FC<AuthModalProps> = ({ type, onClose }) => {
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </Button>
               </div>
+              {passwordError && (
+                <p className="text-sm text-destructive mt-1">{passwordError}</p>
+              )}
             </div>
           )}
 
