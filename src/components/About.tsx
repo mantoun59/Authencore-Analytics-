@@ -1,9 +1,18 @@
 import { AlertTriangle, Lightbulb, Sparkles } from "lucide-react";
+import consultationImage from "@/assets/consultation.jpg";
 
 const About = () => {
   return (
     <section id="about" className="py-20 bg-muted/50">
       <div className="container mx-auto px-4">
+        {/* Hero Image */}
+        <div className="mb-16">
+          <img 
+            src={consultationImage}
+            alt="Professional consultation and assessment services"
+            className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-elegant"
+          />
+        </div>
         {/* About Us Header */}
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-4">

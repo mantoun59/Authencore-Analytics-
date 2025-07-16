@@ -1,4 +1,5 @@
 import { MousePointer, FileText, BarChart3 } from "lucide-react";
+import businessAnalytics from "@/assets/business-analytics.jpg";
 
 const HowItWorks = () => {
   const steps = [
@@ -25,6 +26,15 @@ const HowItWorks = () => {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
+        {/* Background Image */}
+        <div className="mb-16">
+          <img 
+            src={businessAnalytics}
+            alt="Business analytics and assessment workflow"
+            className="w-full h-48 md:h-64 object-cover rounded-2xl shadow-elegant opacity-90"
+          />
+        </div>
+
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-foreground mb-4">How It Works</h2>
         </div>
