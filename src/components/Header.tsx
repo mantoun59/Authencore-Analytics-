@@ -2,20 +2,18 @@ import { useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import AuthModal from "./AuthModal";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [authModalType, setAuthModalType] = useState<'login' | 'register' | null>(null);
   const { user, signOut, loading } = useAuth();
 
   const navigation = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
-    { name: "Assessment", href: "/assessment" },
+    { name: "Assessments", href: "/assessment" },
     { name: "Admin", href: "/admin" },
-    { name: "Employer", href: "#employer" },
+    { name: "Partner", href: "/partner-login" },
   ];
 
   return (
@@ -64,21 +62,7 @@ const Header = () => {
                     Sign Out
                   </Button>
                 </div>
-              ) : (
-                <>
-                  <Button
-                    variant="outline"
-                    onClick={() => setAuthModalType('login')}
-                  >
-                    Applicant Sign In
-                  </Button>
-                  <Button
-                    onClick={() => setAuthModalType('register')}
-                  >
-                    Applicant Register
-                  </Button>
-                </>
-              )}
+              ) : null}
             </div>
 
             {/* Mobile menu button */}
@@ -134,27 +118,7 @@ const Header = () => {
                         Sign Out
                       </Button>
                     </>
-                  ) : (
-                    <>
-                      <Button
-                        variant="outline"
-                        onClick={() => {
-                          setAuthModalType('login');
-                          setIsMenuOpen(false);
-                        }}
-                      >
-                        Applicant Sign In
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          setAuthModalType('register');
-                          setIsMenuOpen(false);
-                        }}
-                      >
-                        Applicant Register
-                      </Button>
-                    </>
-                  )}
+                  ) : null}
                 </div>
               </nav>
             </div>
@@ -162,11 +126,7 @@ const Header = () => {
         </div>
       </header>
 
-      <AuthModal
-        type={authModalType}
-        onClose={() => setAuthModalType(null)}
-        onTypeChange={(type) => setAuthModalType(type)}
-      />
+      {/* Removed AuthModal as applicant auth is now handled in assessments */}
     </>
   );
 };

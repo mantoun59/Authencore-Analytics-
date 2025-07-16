@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ApplicantDataForm from "@/components/ApplicantDataForm";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -94,6 +95,7 @@ const CareerLaunch = () => {
   });
 
   const [assessmentData, setAssessmentData] = useState({
+    applicantData: null,
     careerSwipes: [],
     skillsChallenges: [],
     workScenarios: [],
@@ -337,11 +339,22 @@ const CareerLaunch = () => {
     return false;
   };
 
-  const handleRegistration = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (userProfile.name && userProfile.email) {
-      setGamePhase('assessment');
-    }
+  const handleApplicantDataComplete = (data: any) => {
+    // Update user profile with the applicant data
+    setUserProfile(prev => ({
+      ...prev,
+      name: data.fullName,
+      email: data.email,
+      // Map other fields as needed
+    }));
+    
+    // Store applicant data for later use
+    setAssessmentData(prev => ({
+      ...prev,
+      applicantData: data
+    }));
+    
+    setGamePhase('assessment');
   };
 
   const handleCareerSwipe = (direction: 'left' | 'right') => {
@@ -591,95 +604,16 @@ For detailed analysis and recommendations, contact your career counselor.
   );
 
   const renderRegistrationScreen = () => (
-    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl bg-white/80 backdrop-blur-md border-slate-200 shadow-xl">
-        <CardHeader className="text-center">
-          <CardTitle className="text-3xl text-slate-800">Create Your Career Profile</CardTitle>
-          <CardDescription className="text-teal-700">Choose your avatar and tell us about yourself</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="mb-6">
-            <h3 className="text-slate-800 mb-4 font-semibold">Choose Your Avatar:</h3>
-            <div className="grid grid-cols-6 gap-4">
-              {['👨‍💼', '👩‍💼', '🧑‍💻', '👩‍🔬', '👨‍🎨', '👩‍⚕️'].map((avatar, index) => (
-                <button
-                  key={index}
-                  onClick={() => setUserProfile(prev => ({ ...prev, avatar }))}
-                  className={`text-4xl p-4 rounded-full transition-all ${
-                    userProfile.avatar === avatar 
-                      ? 'bg-emerald-500 scale-110 shadow-lg' 
-                      : 'bg-slate-100 hover:bg-slate-200'
-                  }`}
-                >
-                  {avatar}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <form onSubmit={handleRegistration} className="space-y-4">
-            <Input
-              placeholder="Your Name"
-              value={userProfile.name}
-              onChange={(e) => setUserProfile(prev => ({ ...prev, name: e.target.value }))}
-              className="bg-white/50 border-slate-300 text-slate-800 placeholder-slate-500"
-              required
-            />
-            
-            <Input
-              type="email"
-              placeholder="Email Address"
-              value={userProfile.email}
-              onChange={(e) => setUserProfile(prev => ({ ...prev, email: e.target.value }))}
-              className="bg-white/50 border-slate-300 text-slate-800 placeholder-slate-500"
-              required
-            />
-            
-            <Input
-              type="number"
-              placeholder="Age"
-              min={16}
-              max={30}
-              value={userProfile.age}
-              onChange={(e) => setUserProfile(prev => ({ ...prev, age: parseInt(e.target.value) }))}
-              className="bg-white/50 border-slate-300 text-slate-800 placeholder-slate-500"
-              required
-            />
-            
-            <Select value={userProfile.educationLevel} onValueChange={(value) => setUserProfile(prev => ({ ...prev, educationLevel: value }))}>
-              <SelectTrigger className="bg-white/50 border-slate-300 text-slate-800">
-                <SelectValue placeholder="Education Level" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="high_school">High School</SelectItem>
-                <SelectItem value="undergraduate">Undergraduate</SelectItem>
-                <SelectItem value="graduate">Graduate</SelectItem>
-                <SelectItem value="recent_grad">Recent Graduate</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            <Select value={userProfile.fieldOfStudy} onValueChange={(value) => setUserProfile(prev => ({ ...prev, fieldOfStudy: value }))}>
-              <SelectTrigger className="bg-white/50 border-slate-300 text-slate-800">
-                <SelectValue placeholder="Field of Study (Optional)" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="stem">STEM</SelectItem>
-                <SelectItem value="business">Business</SelectItem>
-                <SelectItem value="arts">Arts & Humanities</SelectItem>
-                <SelectItem value="social">Social Sciences</SelectItem>
-                <SelectItem value="other">Other</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            <Button 
-              type="submit" 
-              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-6 text-lg"
-            >
-              Begin Assessment <Play className="ml-2 h-5 w-5" />
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+    <div className="min-h-screen bg-background">
+      <Header />
+      <div className="py-16">
+        <ApplicantDataForm
+          assessmentType="career-launch"
+          assessmentTitle="CareerLaunch Assessment"
+          onComplete={handleApplicantDataComplete}
+        />
+      </div>
+      <Footer />
     </div>
   );
 
