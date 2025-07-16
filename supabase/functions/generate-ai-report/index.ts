@@ -225,26 +225,37 @@ async function generateAIReport(
 
 async function generatePersonalizedInsights(results: any, candidateInfo: any, assessmentType: string) {
   const prompt = `
-    You are a professional psychologist and career counselor analyzing assessment results.
+    You are a world-class industrial psychologist and executive assessment expert with 20+ years of experience. 
+    Analyze this comprehensive assessment data and provide professional-grade insights that would be found in a $5,000 executive assessment report.
     
     Assessment Type: ${assessmentType}
-    Candidate Info: ${JSON.stringify(candidateInfo)}
-    Assessment Results: ${JSON.stringify(results)}
+    Candidate: ${JSON.stringify(candidateInfo)}
+    Results: ${JSON.stringify(results)}
     
-    Please provide personalized insights in the following format:
+    Provide detailed professional insights in JSON format:
     {
-      "keyInsights": ["insight1", "insight2", "insight3"],
-      "detailed": "A detailed paragraph explaining the candidate's psychological profile and capabilities",
-      "behavioralPatterns": ["pattern1", "pattern2", "pattern3"]
+      "executiveSummary": "A 150-word executive summary highlighting the candidate's psychological profile, leadership potential, and key differentiators",
+      "keyInsights": [
+        "Detailed insight about cognitive style and decision-making patterns",
+        "Analysis of interpersonal effectiveness and communication style", 
+        "Assessment of emotional intelligence and self-regulation capabilities",
+        "Evaluation of stress tolerance and resilience under pressure",
+        "Leadership style analysis and team dynamics assessment"
+      ],
+      "detailed": "A comprehensive 200-word analysis of the candidate's psychological profile, including cognitive patterns, motivational drivers, behavioral tendencies, and workplace effectiveness",
+      "behavioralPatterns": [
+        "Specific behavioral pattern with workplace implications",
+        "Communication style and its impact on team dynamics",
+        "Decision-making approach and risk tolerance assessment",
+        "Stress response patterns and coping mechanisms",
+        "Leadership behaviors and influence tactics"
+      ],
+      "cognitiveProfile": "Detailed analysis of thinking style, problem-solving approach, and intellectual capabilities",
+      "motivationalDrivers": "Analysis of what energizes and motivates this individual",
+      "potentialDerailers": "Professional assessment of potential blind spots or development risks"
     }
     
-    Focus on:
-    - Unique personality traits and strengths
-    - Behavioral patterns and tendencies
-    - Workplace compatibility and potential challenges
-    - Growth opportunities and development areas
-    
-    Be specific, professional, and actionable.
+    Be specific, evidence-based, and provide actionable insights that demonstrate deep psychological understanding.
   `;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -279,13 +290,25 @@ async function generatePersonalizedInsights(results: any, candidateInfo: any, as
   const content = data.choices[0].message.content;
   
   try {
-    return JSON.parse(content);
-  } catch (e) {
-    // Fallback if JSON parsing fails
+    const parsedContent = JSON.parse(content);
     return {
-      keyInsights: ["Personalized insights generated based on assessment results"],
+      keyInsights: parsedContent.keyInsights || ["Professional insights based on assessment data"],
+      detailed: parsedContent.detailed || content,
+      behavioralPatterns: parsedContent.behavioralPatterns || ["Behavioral patterns identified"],
+      executiveSummary: parsedContent.executiveSummary || "Executive summary of candidate assessment",
+      cognitiveProfile: parsedContent.cognitiveProfile || "Cognitive profile analysis",
+      motivationalDrivers: parsedContent.motivationalDrivers || "Motivational driver analysis",
+      potentialDerailers: parsedContent.potentialDerailers || "Potential development areas"
+    };
+  } catch (e) {
+    return {
+      keyInsights: ["Professional insights generated from comprehensive assessment analysis"],
       detailed: content,
-      behavioralPatterns: ["Behavioral patterns identified from responses"]
+      behavioralPatterns: ["Behavioral patterns identified from assessment responses"],
+      executiveSummary: "Executive summary based on assessment results",
+      cognitiveProfile: "Cognitive profile derived from assessment data",
+      motivationalDrivers: "Motivational drivers identified through assessment",
+      potentialDerailers: "Areas for continued development and awareness"
     };
   }
 }
