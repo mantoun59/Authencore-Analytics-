@@ -94,21 +94,13 @@ const Footer = () => {
               </div>
               
               <div className="flex items-center space-x-3">
-                <Phone className="w-5 h-5 text-primary flex-shrink-0" />
+                <Mail className="w-5 h-5 text-primary flex-shrink-0" />
                 <a 
-                  href="tel:+15551234567"
+                  href="mailto:contact@authencore.com"
                   className="text-muted-foreground hover:text-primary transition-colors"
                 >
-                  +1 (555) 123-4567
+                  Business Inquiries
                 </a>
-              </div>
-              
-              <div className="flex items-start space-x-3">
-                <MapPin className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
-                <div className="text-muted-foreground">
-                  <div>Professional Services Center</div>
-                  <div>Suite 200, Business District</div>
-                </div>
               </div>
               
               <div className="pt-2">
