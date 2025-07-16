@@ -1,9 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 import jsPDF from 'jspdf';
-import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import { toast } from "sonner";
-
-Chart.register(...registerables);
 
 export interface AIReportRequest {
   assessmentResultId: string;
@@ -117,246 +114,47 @@ export class AIReportGenerator {
       const margin = 20;
       let yPosition = margin;
 
-      // Helper function to add page break if needed
-      const checkPageBreak = (neededHeight: number) => {
-        if (yPosition + neededHeight > pageHeight - margin) {
-          doc.addPage();
-          yPosition = margin;
-        }
-      };
+      // Add professional header with branding
+      this.addProfessionalHeader(doc, reportContent.candidateInfo.assessmentType);
+      yPosition = 70;
 
-      // Helper function to add wrapped text
-      const addWrappedText = (text: string, fontSize: number, isBold: boolean = false) => {
-        doc.setFontSize(fontSize);
-        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
-        
-        const maxWidth = pageWidth - 2 * margin;
-        const lines = doc.splitTextToSize(text, maxWidth);
-        const lineHeight = fontSize * 0.35;
-        
-        checkPageBreak(lines.length * lineHeight + 10);
-        
-        doc.text(lines, margin, yPosition);
-        yPosition += lines.length * lineHeight + 10;
-      };
-
-      // Header
-      doc.setFillColor(41, 128, 185);
-      doc.rect(0, 0, pageWidth, 40, 'F');
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(20);
-      doc.setFont('helvetica', 'bold');
-      doc.text('AI-POWERED ASSESSMENT REPORT', pageWidth / 2, 25, { align: 'center' });
+      // Executive Summary Section
+      this.addExecutiveSummary(doc, reportContent);
       
-      yPosition = 50;
-      doc.setTextColor(0, 0, 0);
-
-      // Candidate Information
-      addWrappedText('CANDIDATE INFORMATION', 16, true);
-      addWrappedText(`Name: ${reportContent.candidateInfo.name}`, 12);
-      addWrappedText(`Email: ${reportContent.candidateInfo.email}`, 12);
-      addWrappedText(`Assessment Type: ${reportContent.candidateInfo.assessmentType}`, 12);
-      addWrappedText(`Completion Date: ${new Date(reportContent.candidateInfo.completionDate).toLocaleDateString()}`, 12);
-      addWrappedText(`Assessment ID: ${reportContent.candidateInfo.assessmentId}`, 12);
-
-      yPosition += 10;
-
-      // Executive Summary
-      addWrappedText('EXECUTIVE SUMMARY', 16, true);
-      
-      // Overall Score visual
-      doc.setFontSize(14);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Overall Score:', margin, yPosition);
-      doc.setFontSize(24);
-      doc.setTextColor(52, 152, 219);
-      doc.text(`${reportContent.executiveSummary.overallScore}/100`, margin + 50, yPosition);
-      yPosition += 20;
-      
-      // Progress bar
-      doc.setFillColor(52, 152, 219);
-      doc.rect(margin, yPosition, (reportContent.executiveSummary.overallScore / 100) * (pageWidth - 2 * margin), 6, 'F');
-      doc.setDrawColor(0, 0, 0);
-      doc.setLineWidth(0.5);
-      doc.rect(margin, yPosition, pageWidth - 2 * margin, 6);
-      yPosition += 20;
-      
-      doc.setTextColor(0, 0, 0);
-
-      // Key Insights
-      addWrappedText('Key Insights:', 14, true);
-      reportContent.executiveSummary.keyInsights.forEach((insight, index) => {
-        addWrappedText(`• ${insight}`, 11);
-      });
-
-      // Top Strengths
-      addWrappedText('Top Strengths:', 14, true);
-      reportContent.executiveSummary.topStrengths.forEach((strength, index) => {
-        addWrappedText(`✓ ${strength}`, 11);
-      });
-
-      // Development Areas
-      addWrappedText('Development Areas:', 14, true);
-      reportContent.executiveSummary.developmentAreas.forEach((area, index) => {
-        addWrappedText(`◦ ${area}`, 11);
-      });
-
-      // New page for detailed analysis
+      // Detailed Analysis Section
       doc.addPage();
-      yPosition = margin;
+      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+      this.addDetailedAnalysis(doc, reportContent);
 
-      // Detailed Analysis
-      addWrappedText('DETAILED ANALYSIS', 16, true);
-      
-      // Dimension Scores
-      addWrappedText('Dimension Scores:', 14, true);
-      if (reportContent.detailedAnalysis.dimensionScores) {
-        Object.entries(reportContent.detailedAnalysis.dimensionScores).forEach(([key, value]) => {
-          const score = typeof value === 'object' && value !== null ? (value as any).score || 0 : value;
-          const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-          addWrappedText(`${label}: ${score}/100`, 11);
-        });
-      }
-
-      // Personalized Insights
-      addWrappedText('Personalized Insights:', 14, true);
-      addWrappedText(reportContent.detailedAnalysis.personalizedInsights, 11);
-
-      // Behavioral Patterns
-      addWrappedText('Behavioral Patterns:', 14, true);
-      reportContent.detailedAnalysis.behavioralPatterns.forEach((pattern, index) => {
-        addWrappedText(`• ${pattern}`, 11);
-      });
-
-      // Action Plan
+      // Behavioral Insights Section
       doc.addPage();
-      yPosition = margin;
-      
-      addWrappedText('ACTION PLAN', 16, true);
-      
-      // Immediate Actions
-      addWrappedText('Immediate Actions (Next 30 Days):', 14, true);
-      reportContent.actionPlan.immediate.forEach((action, index) => {
-        addWrappedText(`${index + 1}. ${action}`, 11);
-      });
+      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+      this.addBehavioralInsights(doc, reportContent);
 
-      // Short-term Actions
-      addWrappedText('Short-term Actions (3-6 Months):', 14, true);
-      reportContent.actionPlan.shortTerm.forEach((action, index) => {
-        addWrappedText(`${index + 1}. ${action}`, 11);
-      });
+      // Action Plan Section
+      doc.addPage();
+      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+      this.addActionPlan(doc, reportContent);
 
-      // Long-term Actions
-      addWrappedText('Long-term Actions (6-18 Months):', 14, true);
-      reportContent.actionPlan.longTerm.forEach((action, index) => {
-        addWrappedText(`${index + 1}. ${action}`, 11);
-      });
-
-      // Career Guidance
-      checkPageBreak(80);
-      addWrappedText('CAREER GUIDANCE', 16, true);
-      
-      addWrappedText('Career Recommendations:', 14, true);
-      reportContent.careerGuidance.recommendations.forEach((rec, index) => {
-        addWrappedText(`• ${rec}`, 11);
-      });
-
-      addWrappedText('Career Pathways:', 14, true);
-      reportContent.careerGuidance.pathways.forEach((pathway, index) => {
-        addWrappedText(`• ${pathway}`, 11);
-      });
-
-      addWrappedText('Skills to Acquire:', 14, true);
-      reportContent.careerGuidance.skills.forEach((skill, index) => {
-        addWrappedText(`• ${skill}`, 11);
-      });
+      // Career Guidance Section
+      doc.addPage();
+      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+      this.addCareerGuidance(doc, reportContent);
 
       // Employer-specific section
       if (reportContent.employerSpecific) {
         doc.addPage();
-        yPosition = margin;
-
-        // Employer header
-        doc.setFillColor(231, 76, 60);
-        doc.rect(0, 0, pageWidth, 40, 'F');
-        doc.setTextColor(255, 255, 255);
-        doc.setFontSize(20);
-        doc.setFont('helvetica', 'bold');
-        doc.text('EMPLOYER ASSESSMENT REPORT', pageWidth / 2, 25, { align: 'center' });
-        
-        yPosition = 50;
-        doc.setTextColor(0, 0, 0);
-
-        // Distortion Scale
-        addWrappedText('DISTORTION SCALE ANALYSIS', 16, true);
-        
-        const distortion = reportContent.employerSpecific.distortionScale;
-        addWrappedText(`Validity Index: ${distortion.validityIndex}/100`, 14, true);
-        
-        addWrappedText(`Social Desirability: ${distortion.socialDesirability.score}/100`, 12);
-        addWrappedText(distortion.socialDesirability.interpretation, 11);
-        
-        addWrappedText(`Response Consistency: ${distortion.responseConsistency.score}/100`, 12);
-        addWrappedText(distortion.responseConsistency.interpretation, 11);
-        
-        addWrappedText(`Extreme Responding: ${distortion.extremeResponding.score}/100`, 12);
-        addWrappedText(distortion.extremeResponding.interpretation, 11);
-
-        // Risk Assessment
-        addWrappedText('RISK ASSESSMENT', 16, true);
-        const risk = reportContent.employerSpecific.riskAssessment;
-        addWrappedText(`Hiring Risk: ${risk.hiringRisk}`, 12);
-        addWrappedText(`Success Probability: ${risk.successProbability}%`, 12);
-        addWrappedText(`Retention Risk: ${risk.retentionRisk}`, 12);
-        addWrappedText(`Ramp-up Time: ${risk.rampUpTime}`, 12);
-
-        // Interview Questions
-        addWrappedText('INTERVIEW QUESTIONS', 16, true);
-        const questions = reportContent.employerSpecific.interviewQuestions;
-        
-        if (questions.behavioralQuestions) {
-          addWrappedText('Behavioral Questions:', 14, true);
-          questions.behavioralQuestions.forEach((q: string, index: number) => {
-            addWrappedText(`${index + 1}. ${q}`, 11);
-          });
-        }
-
-        if (questions.situationalQuestions) {
-          addWrappedText('Situational Questions:', 14, true);
-          questions.situationalQuestions.forEach((q: string, index: number) => {
-            addWrappedText(`${index + 1}. ${q}`, 11);
-          });
-        }
-
-        // Hiring Recommendations
-        addWrappedText('HIRING RECOMMENDATIONS', 16, true);
-        reportContent.employerSpecific.hiringRecommendations.forEach((rec, index) => {
-          addWrappedText(`• ${rec}`, 11);
-        });
-
-        // Onboarding Plan
-        addWrappedText('ONBOARDING PLAN', 16, true);
-        reportContent.employerSpecific.onboardingPlan.forEach((step, index) => {
-          addWrappedText(`${index + 1}. ${step}`, 11);
-        });
+        this.addEmployerSection(doc, reportContent);
       }
 
-      // Footer
-      const totalPages = doc.getNumberOfPages();
-      for (let i = 1; i <= totalPages; i++) {
-        doc.setPage(i);
-        doc.setFontSize(8);
-        doc.setTextColor(128, 128, 128);
-        doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 10, { align: 'right' });
-        doc.text('Generated by Authencore Analytics', margin, pageHeight - 10);
-        doc.text(`Generated on: ${new Date().toLocaleString()}`, pageWidth / 2, pageHeight - 10, { align: 'center' });
-      }
+      // Add final footer with copyright
+      this.addFinalFooter(doc);
 
       // Save the PDF
-      const fileName = `AI_${reportContent.candidateInfo.name.replace(/\s+/g, '_')}_${reportContent.candidateInfo.assessmentType}_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+      const fileName = `Authencore_AI_${reportContent.candidateInfo.name.replace(/\s+/g, '_')}_${reportContent.candidateInfo.assessmentType}_Professional_Report_${new Date().toISOString().split('T')[0]}.pdf`;
       doc.save(fileName);
 
-      toast.success('AI-powered PDF Report downloaded successfully!');
+      toast.success('Professional AI Report generated successfully!');
 
     } catch (error) {
       console.error('Error generating PDF:', error);
@@ -365,35 +163,533 @@ export class AIReportGenerator {
     }
   }
 
-  private async addDimensionScoresChart(doc: jsPDF, dimensionScores: Record<string, any>, yPosition: number) {
-    try {
-      // Simplified chart representation using text
-      doc.setFontSize(14);
+  private addProfessionalHeader(doc: jsPDF, assessmentType: string) {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 20;
+    
+    // Professional gradient header
+    doc.setFillColor(15, 23, 42); // Dark blue-gray
+    doc.rect(0, 0, pageWidth, 60, 'F');
+    
+    // Company logo area (placeholder for actual logo)
+    doc.setFillColor(59, 130, 246); // Blue accent
+    doc.rect(margin, 10, 30, 20, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('AC', margin + 10, 22);
+    
+    // Company name and tagline
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.setFont('helvetica', 'bold');
+    doc.text('AUTHENCORE ANALYTICS', margin + 40, 22);
+    
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    doc.text('Advanced AI-Powered Talent Assessment Solutions', margin + 40, 32);
+    
+    // Assessment type
+    doc.setTextColor(96, 165, 250); // Light blue
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    const assessmentTitle = assessmentType.replace(/([A-Z])/g, ' $1').trim().toUpperCase();
+    doc.text(`${assessmentTitle} ASSESSMENT REPORT`, margin + 40, 45);
+    
+    // Professional report badge
+    doc.setTextColor(255, 255, 255);
+    doc.setFillColor(34, 197, 94); // Green
+    doc.rect(pageWidth - 80, 10, 60, 15, 'F');
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('AI-POWERED', pageWidth - 75, 20);
+    
+    doc.setFillColor(239, 68, 68); // Red
+    doc.rect(pageWidth - 80, 27, 60, 15, 'F');
+    doc.text('PROFESSIONAL', pageWidth - 78, 37);
+  }
+
+  private addHeaderFooter(doc: jsPDF, assessmentType: string) {
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 20;
+    
+    // Header
+    doc.setDrawColor(59, 130, 246);
+    doc.setLineWidth(2);
+    doc.line(0, 35, pageWidth, 35);
+    
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('AUTHENCORE ANALYTICS', margin, 25);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(75, 85, 99);
+    doc.text(`${assessmentType.toUpperCase()} ASSESSMENT`, pageWidth - margin, 25, { align: 'right' });
+    
+    // Footer
+    doc.setDrawColor(229, 231, 235);
+    doc.setLineWidth(1);
+    doc.line(margin, pageHeight - 25, pageWidth - margin, pageHeight - 25);
+    
+    doc.setTextColor(107, 114, 128);
+    doc.setFontSize(8);
+    doc.text('© 2024 Authencore Analytics. All rights reserved.', margin, pageHeight - 15);
+    doc.text('www.authencore.org', pageWidth - margin, pageHeight - 15, { align: 'right' });
+  }
+
+  private addExecutiveSummary(doc: jsPDF, reportContent: AIReportContent) {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 20;
+    let yPosition = 80;
+
+    // Executive Summary Title
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('EXECUTIVE SUMMARY', margin, yPosition);
+    yPosition += 20;
+
+    // Overall Score with visual representation
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Overall Assessment Score:', margin, yPosition);
+    doc.setFontSize(32);
+    doc.setTextColor(59, 130, 246);
+    doc.text(`${reportContent.executiveSummary.overallScore}/100`, margin + 80, yPosition);
+    yPosition += 20;
+
+    // Progress bar
+    doc.setFillColor(59, 130, 246);
+    doc.rect(margin, yPosition, (reportContent.executiveSummary.overallScore / 100) * 120, 8, 'F');
+    doc.setDrawColor(229, 231, 235);
+    doc.setLineWidth(1);
+    doc.rect(margin, yPosition, 120, 8);
+    yPosition += 25;
+
+    // Key Insights
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Key Professional Insights:', margin, yPosition);
+    yPosition += 10;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    reportContent.executiveSummary.keyInsights.forEach((insight, index) => {
+      const lines = doc.splitTextToSize(`• ${insight}`, pageWidth - 2 * margin);
+      doc.text(lines, margin + 5, yPosition);
+      yPosition += lines.length * 5 + 5;
+    });
+
+    yPosition += 10;
+
+    // Two-column layout for strengths and development areas
+    const colWidth = (pageWidth - 3 * margin) / 2;
+    let leftY = yPosition;
+    let rightY = yPosition;
+
+    // Top Strengths (Left Column)
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(34, 197, 94); // Green
+    doc.text('Core Strengths', margin, leftY);
+    leftY += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.executiveSummary.topStrengths.forEach((strength, index) => {
+      const lines = doc.splitTextToSize(`✓ ${strength}`, colWidth);
+      doc.text(lines, margin, leftY);
+      leftY += lines.length * 5 + 3;
+    });
+
+    // Development Areas (Right Column)
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(239, 68, 68); // Red
+    doc.text('Development Opportunities', margin + colWidth + 10, rightY);
+    rightY += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.executiveSummary.developmentAreas.forEach((area, index) => {
+      const lines = doc.splitTextToSize(`◦ ${area}`, colWidth);
+      doc.text(lines, margin + colWidth + 10, rightY);
+      rightY += lines.length * 5 + 3;
+    });
+  }
+
+  private addDetailedAnalysis(doc: jsPDF, reportContent: AIReportContent) {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 20;
+    let yPosition = 50;
+
+    // Section title
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DETAILED PSYCHOLOGICAL ANALYSIS', margin, yPosition);
+    yPosition += 30;
+
+    // Dimension Scores Chart
+    this.addDimensionScoresChart(doc, reportContent.detailedAnalysis.dimensionScores, yPosition);
+    yPosition += 120;
+
+    // Personalized Insights
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Personalized Professional Insights:', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    const insightLines = doc.splitTextToSize(reportContent.detailedAnalysis.personalizedInsights, pageWidth - 2 * margin);
+    doc.text(insightLines, margin, yPosition);
+    yPosition += insightLines.length * 5 + 15;
+
+    // Behavioral Patterns
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Behavioral Patterns & Workplace Implications:', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    reportContent.detailedAnalysis.behavioralPatterns.forEach((pattern, index) => {
+      const lines = doc.splitTextToSize(`${index + 1}. ${pattern}`, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 5 + 8;
+    });
+  }
+
+  private addBehavioralInsights(doc: jsPDF, reportContent: AIReportContent) {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 20;
+    let yPosition = 50;
+
+    // Section title
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('BEHAVIORAL INSIGHTS & WORKPLACE DYNAMICS', margin, yPosition);
+    yPosition += 30;
+
+    // Communication Style
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Communication Style Analysis:', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.text('• Preferred communication channels and effectiveness', margin, yPosition);
+    yPosition += 10;
+    doc.text('• Influence tactics and persuasion style', margin, yPosition);
+    yPosition += 10;
+    doc.text('• Conflict resolution approach and negotiation style', margin, yPosition);
+    yPosition += 20;
+
+    // Leadership Potential
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Leadership Potential Assessment:', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.text('• Natural leadership tendencies and influence capacity', margin, yPosition);
+    yPosition += 10;
+    doc.text('• Team dynamics and collaboration effectiveness', margin, yPosition);
+    yPosition += 10;
+    doc.text('• Decision-making style under pressure', margin, yPosition);
+    yPosition += 20;
+
+    // Motivation & Engagement
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Motivation & Engagement Drivers:', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.text('• Primary motivational factors and engagement triggers', margin, yPosition);
+    yPosition += 10;
+    doc.text('• Work environment preferences and productivity factors', margin, yPosition);
+    yPosition += 10;
+    doc.text('• Recognition and reward responsiveness', margin, yPosition);
+  }
+
+  private addActionPlan(doc: jsPDF, reportContent: AIReportContent) {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 20;
+    let yPosition = 50;
+
+    // Section title
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('PERSONALIZED DEVELOPMENT ACTION PLAN', margin, yPosition);
+    yPosition += 30;
+
+    // Immediate Actions
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(239, 68, 68); // Red for urgency
+    doc.text('Immediate Actions (Next 30 Days):', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.actionPlan.immediate.forEach((action, index) => {
+      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 5 + 8;
+    });
+
+    yPosition += 10;
+
+    // Short-term Actions
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(251, 146, 60); // Orange
+    doc.text('Short-term Development (3-6 Months):', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.actionPlan.shortTerm.forEach((action, index) => {
+      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 5 + 8;
+    });
+
+    yPosition += 10;
+
+    // Long-term Actions
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(34, 197, 94); // Green
+    doc.text('Long-term Strategic Development (6-18 Months):', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.actionPlan.longTerm.forEach((action, index) => {
+      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 5 + 8;
+    });
+  }
+
+  private addCareerGuidance(doc: jsPDF, reportContent: AIReportContent) {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 20;
+    let yPosition = 50;
+
+    // Section title
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(18);
+    doc.setFont('helvetica', 'bold');
+    doc.text('CAREER OPTIMIZATION & STRATEGIC GUIDANCE', margin, yPosition);
+    yPosition += 30;
+
+    // Career Recommendations
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Recommended Career Paths:', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    reportContent.careerGuidance.recommendations.forEach((rec, index) => {
+      const lines = doc.splitTextToSize(`• ${rec}`, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 5 + 8;
+    });
+
+    yPosition += 10;
+
+    // Career Pathways
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Strategic Career Pathways:', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    reportContent.careerGuidance.pathways.forEach((pathway, index) => {
+      const lines = doc.splitTextToSize(`→ ${pathway}`, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 5 + 8;
+    });
+
+    yPosition += 10;
+
+    // Skills to Acquire
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Priority Skills for Acquisition:', margin, yPosition);
+    yPosition += 15;
+
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'normal');
+    reportContent.careerGuidance.skills.forEach((skill, index) => {
+      const lines = doc.splitTextToSize(`▸ ${skill}`, pageWidth - 2 * margin);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 5 + 8;
+    });
+  }
+
+  private addEmployerSection(doc: jsPDF, reportContent: AIReportContent) {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 20;
+    let yPosition = 50;
+
+    // Employer header
+    doc.setFillColor(15, 23, 42);
+    doc.rect(0, 0, pageWidth, 60, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text('EMPLOYER ASSESSMENT REPORT', pageWidth / 2, 25, { align: 'center' });
+    doc.setFontSize(12);
+    doc.text('Comprehensive Hiring Decision Support', pageWidth / 2, 40, { align: 'center' });
+
+    yPosition = 80;
+    doc.setTextColor(15, 23, 42);
+
+    if (reportContent.employerSpecific) {
+      // Risk Assessment
+      doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
-      doc.text('Dimension Scores Overview', 30, yPosition);
+      doc.text('HIRING RISK ASSESSMENT', margin, yPosition);
+      yPosition += 20;
+
+      const risk = reportContent.employerSpecific.riskAssessment;
+      doc.setFontSize(12);
+      doc.text(`Hiring Risk Level: ${risk.hiringRisk}`, margin, yPosition);
+      yPosition += 15;
+      doc.text(`Success Probability: ${risk.successProbability}%`, margin, yPosition);
+      yPosition += 15;
+      doc.text(`Retention Risk: ${risk.retentionRisk}`, margin, yPosition);
+      yPosition += 15;
+      doc.text(`Expected Ramp-up Time: ${risk.rampUpTime}`, margin, yPosition);
+      yPosition += 25;
+
+      // Interview Questions
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('TARGETED INTERVIEW QUESTIONS', margin, yPosition);
+      yPosition += 20;
+
+      const questions = reportContent.employerSpecific.interviewQuestions;
       
-      let textY = yPosition + 20;
-      Object.entries(dimensionScores).forEach(([key, value]: [string, any]) => {
-        const score = typeof value === 'object' && value !== null ? value.score || 0 : value;
-        const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        
-        // Draw a simple bar representation
+      if (questions.behavioralQuestions) {
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Behavioral Questions:', margin, yPosition);
+        yPosition += 15;
+
         doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
-        doc.text(`${label}:`, 30, textY);
-        doc.text(`${score}/100`, 120, textY);
-        
-        // Draw a simple progress bar
-        doc.setDrawColor(200, 200, 200);
-        doc.rect(30, textY + 2, 80, 4);
-        doc.setFillColor(52, 152, 219);
-        doc.rect(30, textY + 2, (score / 100) * 80, 4, 'F');
-        
-        textY += 15;
+        questions.behavioralQuestions.forEach((q: string, index: number) => {
+          const lines = doc.splitTextToSize(`${index + 1}. ${q}`, pageWidth - 2 * margin);
+          doc.text(lines, margin, yPosition);
+          yPosition += lines.length * 5 + 8;
+        });
+      }
+
+      // Hiring Recommendations
+      if (yPosition > 200) {
+        doc.addPage();
+        this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+        yPosition = 50;
+      }
+
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text('HIRING RECOMMENDATIONS', margin, yPosition);
+      yPosition += 20;
+
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      reportContent.employerSpecific.hiringRecommendations.forEach((rec, index) => {
+        const lines = doc.splitTextToSize(`• ${rec}`, pageWidth - 2 * margin);
+        doc.text(lines, margin, yPosition);
+        yPosition += lines.length * 5 + 8;
       });
-    } catch (error) {
-      console.error('Error adding chart to PDF:', error);
     }
+  }
+
+  private addFinalFooter(doc: jsPDF) {
+    const totalPages = doc.getNumberOfPages();
+    const pageWidth = doc.internal.pageSize.width;
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 20;
+
+    for (let i = 1; i <= totalPages; i++) {
+      doc.setPage(i);
+      
+      // Page number
+      doc.setFontSize(8);
+      doc.setTextColor(107, 114, 128);
+      doc.text(`Page ${i} of ${totalPages}`, pageWidth - margin, pageHeight - 5, { align: 'right' });
+      
+      // Copyright and generation info
+      doc.text(`Generated on: ${new Date().toLocaleDateString()}`, pageWidth / 2, pageHeight - 5, { align: 'center' });
+    }
+  }
+
+  private addDimensionScoresChart(doc: jsPDF, dimensionScores: Record<string, any>, yPosition: number) {
+    const margin = 20;
+    const pageWidth = doc.internal.pageSize.width;
+    
+    // Chart title
+    doc.setFontSize(14);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(15, 23, 42);
+    doc.text('Competency Dimension Scores', margin, yPosition);
+    yPosition += 20;
+
+    // Create visual chart
+    Object.entries(dimensionScores).forEach(([key, value]: [string, any]) => {
+      const score = typeof value === 'object' && value !== null ? value.score || 0 : value;
+      const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+      
+      // Label
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      doc.text(label, margin, yPosition);
+      
+      // Score
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${score}/100`, margin + 100, yPosition);
+      
+      // Visual bar
+      const barWidth = 80;
+      const barHeight = 6;
+      
+      // Background bar
+      doc.setFillColor(229, 231, 235);
+      doc.rect(margin + 120, yPosition - 4, barWidth, barHeight, 'F');
+      
+      // Score bar with color coding
+      let barColor = [239, 68, 68]; // Red for low scores
+      if (score >= 70) barColor = [34, 197, 94]; // Green for high scores
+      else if (score >= 50) barColor = [251, 146, 60]; // Orange for medium scores
+      
+      doc.setFillColor(barColor[0], barColor[1], barColor[2]);
+      doc.rect(margin + 120, yPosition - 4, (score / 100) * barWidth, barHeight, 'F');
+      
+      yPosition += 15;
+    });
   }
 }
 
