@@ -1,9 +1,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { X, Cookie } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const CookieBanner = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check if user has already accepted/declined cookies
@@ -28,10 +30,12 @@ const CookieBanner = () => {
   };
 
   const handleManage = () => {
-    // In a real app, this would open a cookie preferences modal
-    alert('Cookie preferences would open here. For now, this just accepts essential cookies.');
     localStorage.setItem('cookieConsent', 'essential');
     setIsVisible(false);
+    toast({
+      title: "Cookie Preferences Updated",
+      description: "Only essential cookies will be used. You can change this anytime in your browser settings.",
+    });
   };
 
   if (!isVisible) return null;

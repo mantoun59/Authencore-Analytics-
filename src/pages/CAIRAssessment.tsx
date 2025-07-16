@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { createAssessmentQuestions, personalityDimensions } from "@/data/cairQuestions";
 import { Shield, Brain, Users, Lightbulb, Heart, Download, Share2, Eye, Clock, CheckCircle } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface UserProfile {
   name: string;
@@ -31,7 +32,8 @@ interface ValidityMetrics {
   responseTimeProfile: 'Normal' | 'Too Fast' | 'Too Slow';
 }
 
-const CAIRAssessment = () => {
+export default function CAIRAssessment() {
+  const { toast } = useToast();
   const [phase, setPhase] = useState<'welcome' | 'registration' | 'instructions' | 'assessment' | 'results'>('welcome');
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: '',
@@ -268,7 +270,7 @@ This report is confidential and intended for development purposes.
     URL.revokeObjectURL(url);
   };
 
-  const shareResults = () => {
+  const shareResults = async () => {
     const scores = calculateScores();
     const topStrength = Object.entries(scores)
       .sort(([,a], [,b]) => b.percentile - a.percentile)[0];
@@ -276,22 +278,46 @@ This report is confidential and intended for development purposes.
     const shareText = `I just completed the CAIR+ Personality Assessment! My top strength: ${personalityDimensions[topStrength[0] as keyof typeof personalityDimensions].name}`;
     
     if (navigator.share) {
-      navigator.share({
-        title: 'My CAIR+ Assessment Results',
-        text: shareText,
-        url: window.location.href
-      });
+      try {
+        await navigator.share({
+          title: 'My CAIR+ Assessment Results',
+          text: shareText,
+          url: window.location.href
+        });
+      } catch (error) {
+        // User cancelled sharing
+      }
     } else {
-      navigator.clipboard.writeText(shareText);
-      alert('Results copied to clipboard!');
+      try {
+        await navigator.clipboard.writeText(shareText);
+        toast({
+          title: "Results Copied!",
+          description: "Your assessment results have been copied to the clipboard.",
+        });
+      } catch (error) {
+        toast({
+          title: "Share Failed",
+          description: "Unable to copy results to clipboard.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
   const handleEmployerAccess = () => {
+    // In a real implementation, this would validate against a secure backend
     if (employerPassword === 'EMPLOYER2024') {
       setShowEmployerView(true);
+      toast({
+        title: "Access Granted",
+        description: "Employer view enabled successfully.",
+      });
     } else {
-      alert('Invalid employer access code');
+      toast({
+        title: "Access Denied",
+        description: "Invalid employer access code. Please try again.",
+        variant: "destructive",
+      });
     }
   };
 
@@ -679,5 +705,3 @@ This report is confidential and intended for development purposes.
 
   return null;
 };
-
-export default CAIRAssessment;

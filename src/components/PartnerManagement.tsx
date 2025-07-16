@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Calendar, CalendarDays, Plus, Edit, Trash2, Eye, Users, Shield, Activity } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
+import { ConfirmDialog } from '@/components/ui/dialog-components';
 import { format } from 'date-fns';
 
 interface Partner {
@@ -57,6 +58,8 @@ export const PartnerManagement = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [loading, setLoading] = useState(true);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [partnerToDelete, setPartnerToDelete] = useState<string | null>(null);
   const { toast } = useToast();
 
   const [formData, setFormData] = useState({
@@ -285,27 +288,33 @@ export const PartnerManagement = () => {
   };
 
   const handleDelete = async (partnerId: string) => {
-    if (!confirm('Are you sure you want to delete this partner?')) return;
+    setPartnerToDelete(partnerId);
+    setShowDeleteDialog(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!partnerToDelete) return;
 
     try {
       const { error } = await supabase
         .from('partner_accounts')
         .delete()
-        .eq('id', partnerId);
+        .eq('id', partnerToDelete);
 
       if (error) throw error;
 
       toast({
         title: 'Success',
-        description: 'Partner deleted successfully'
+        description: 'Partner deleted successfully',
       });
       fetchPartners();
+      setShowDeleteDialog(false);
+      setPartnerToDelete(null);
     } catch (error) {
-      console.error('Error deleting partner:', error);
       toast({
         title: 'Error',
         description: 'Failed to delete partner',
-        variant: 'destructive'
+        variant: 'destructive',
       });
     }
   };
@@ -569,6 +578,20 @@ export const PartnerManagement = () => {
           </Card>
         </TabsContent>
       </Tabs>
+      
+      {/* Delete Confirmation Dialog */}
+      <ConfirmDialog 
+        isOpen={showDeleteDialog}
+        onClose={() => {
+          setShowDeleteDialog(false);
+          setPartnerToDelete(null);
+        }}
+        onConfirm={confirmDelete}
+        title="Delete Partner"
+        description="Are you sure you want to delete this partner? This action cannot be undone."
+        confirmText="Delete"
+        variant="destructive"
+      />
     </div>
   );
 };
