@@ -44,7 +44,7 @@ const CTA = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10 max-w-2xl mx-auto">
             {benefits.map((benefit, index) => (
               <div key={index} className="flex items-center space-x-2 text-white/90">
-                <CheckCircle className="w-4 h-4 text-accent flex-shrink-0" />
+                <CheckCircle className="w-4 h-4 text-primary-glow flex-shrink-0" />
                 <span className="text-sm">{benefit}</span>
               </div>
             ))}
