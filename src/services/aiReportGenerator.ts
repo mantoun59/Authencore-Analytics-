@@ -696,12 +696,13 @@ export class AIReportGenerator {
   private addDimensionScoresChart(doc: jsPDF, dimensionScores: Record<string, any>, yPosition: number) {
     const margin = 20;
     const pageWidth = doc.internal.pageSize.width;
+    const chartPadding = 10; // Additional padding for chart elements
     
     // Chart title
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(15, 23, 42);
-    doc.text('Competency Dimension Scores', margin, yPosition);
+    doc.text('Competency Dimension Scores', margin + chartPadding, yPosition);
     yPosition += 20;
 
     // Create visual chart
@@ -709,30 +710,34 @@ export class AIReportGenerator {
       const score = typeof value === 'object' && value !== null ? value.score || 0 : value;
       const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
       
-      // Label
+      // Add padding around each dimension row
+      yPosition += 5;
+      
+      // Label with proper spacing
       doc.setFontSize(11);
       doc.setFont('helvetica', 'normal');
-      doc.text(label, margin, yPosition);
+      doc.text(label, margin + chartPadding, yPosition);
       
-      // Score
+      // Score with proper spacing
       doc.setFont('helvetica', 'bold');
-      doc.text(`${score}/100`, margin + 100, yPosition);
+      doc.text(`${score}/100`, margin + chartPadding + 100, yPosition);
       
-      // Visual bar
-      const barWidth = 80;
+      // Visual bar with proper margins
+      const barWidth = 70; // Slightly smaller bar width for better spacing
       const barHeight = 6;
+      const barStartX = margin + chartPadding + 130; // More space from text
       
-      // Background bar
+      // Background bar with proper margins
       doc.setFillColor(229, 231, 235);
-      doc.rect(margin + 120, yPosition - 4, barWidth, barHeight, 'F');
+      doc.rect(barStartX, yPosition - 4, barWidth, barHeight, 'F');
       
-      // Score bar with color coding
+      // Score bar with color coding and proper margins
       let barColor = [239, 68, 68]; // Red for low scores
       if (score >= 70) barColor = [34, 197, 94]; // Green for high scores
       else if (score >= 50) barColor = [251, 146, 60]; // Orange for medium scores
       
       doc.setFillColor(barColor[0], barColor[1], barColor[2]);
-      doc.rect(margin + 120, yPosition - 4, (score / 100) * barWidth, barHeight, 'F');
+      doc.rect(barStartX, yPosition - 4, (score / 100) * barWidth, barHeight, 'F');
       
       yPosition += 15;
     });
