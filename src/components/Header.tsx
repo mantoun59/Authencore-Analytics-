@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import AuthModal from "./AuthModal";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -10,8 +11,8 @@ const Header = () => {
   const { user, signOut, loading } = useAuth();
 
   const navigation = [
-    { name: "Home", href: "#home" },
-    { name: "About", href: "#about" },
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
     { name: "Assessments", href: "#assessments" },
     { name: "Employer", href: "#employer" },
   ];
@@ -25,13 +26,23 @@ const Header = () => {
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
               {navigation.map((item) => (
-                <a
-                  key={item.name}
-                  href={item.href}
-                  className="text-foreground hover:text-primary transition-colors font-medium"
-                >
-                  {item.name}
-                </a>
+                item.href.startsWith('#') ? (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="text-foreground hover:text-primary transition-colors font-medium"
+                  >
+                    {item.name}
+                  </a>
+                ) : (
+                  <Link
+                    key={item.name}
+                    to={item.href}
+                    className="text-foreground hover:text-primary transition-colors font-medium"
+                  >
+                    {item.name}
+                  </Link>
+                )
               ))}
             </nav>
 
@@ -85,14 +96,25 @@ const Header = () => {
             <div className="md:hidden py-4 border-t border-border">
               <nav className="flex flex-col space-y-4">
                 {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="text-foreground hover:text-primary transition-colors font-medium"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.name}
-                  </a>
+                  item.href.startsWith('#') ? (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className="text-foreground hover:text-primary transition-colors font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.name}
+                    </a>
+                  ) : (
+                    <Link
+                      key={item.name}
+                      to={item.href}
+                      className="text-foreground hover:text-primary transition-colors font-medium"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
+                  )
                 ))}
                 <div className="flex flex-col space-y-3 pt-4">
                   {user ? (
