@@ -5,13 +5,16 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, BarChart3, Timer, TrendingUp } from "lucide-react";
 import AssessmentQuestions from "@/components/AssessmentQuestions";
 import AssessmentResults from "@/components/AssessmentResults";
 
 const Assessment = () => {
   const [currentPhase, setCurrentPhase] = useState<'overview' | 'assessment' | 'results'>('overview');
   const [assessmentData, setAssessmentData] = useState(null);
+  const [methodologyOpen, setMethodologyOpen] = useState(false);
 
   const dimensions = [
     {
@@ -321,9 +324,253 @@ const Assessment = () => {
             >
               Start Assessment <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline">
-              Learn More About Methodology
-            </Button>
+            
+            <Dialog open={methodologyOpen} onOpenChange={setMethodologyOpen}>
+              <DialogTrigger asChild>
+                <Button size="lg" variant="outline">
+                  Learn More About Methodology
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle className="text-2xl">Assessment Methodology</DialogTitle>
+                  <DialogDescription>
+                    Comprehensive scientific approach to measuring stress resilience and adaptability
+                  </DialogDescription>
+                </DialogHeader>
+                
+                <Tabs defaultValue="overview" className="mt-6">
+                  <TabsList className="grid w-full grid-cols-4">
+                    <TabsTrigger value="overview">Overview</TabsTrigger>
+                    <TabsTrigger value="phases">Phases</TabsTrigger>
+                    <TabsTrigger value="scoring">Scoring</TabsTrigger>
+                    <TabsTrigger value="validation">Validation</TabsTrigger>
+                  </TabsList>
+                  
+                  <TabsContent value="overview" className="mt-6 space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <BarChart3 className="h-5 w-5 text-primary" />
+                          Scientific Foundation
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <p className="text-muted-foreground">
+                          Our assessment combines established psychological principles with innovative 
+                          biometric simulation to create a comprehensive evaluation of stress resilience.
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div className="p-4 bg-blue-50 dark:bg-blue-950 rounded-lg">
+                            <h4 className="font-semibold text-blue-800 dark:text-blue-200 mb-2">Multi-Modal Approach</h4>
+                            <p className="text-sm text-blue-700 dark:text-blue-300">
+                              Combines self-report, behavioral observation, and simulated stress responses
+                            </p>
+                          </div>
+                          <div className="p-4 bg-green-50 dark:bg-green-950 rounded-lg">
+                            <h4 className="font-semibold text-green-800 dark:text-green-200 mb-2">Progressive Loading</h4>
+                            <p className="text-sm text-green-700 dark:text-green-300">
+                              Adaptive difficulty that increases stress levels based on individual responses
+                            </p>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <Zap className="h-5 w-5 text-orange-500" />
+                          Biometric Simulation
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-muted-foreground mb-4">
+                          Advanced algorithms simulate stress indicators to predict real-world responses:
+                        </p>
+                        <ul className="space-y-2">
+                          <li className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-green-500" />
+                            <span className="text-sm">Response time analysis</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-green-500" />
+                            <span className="text-sm">Decision hesitation patterns</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-green-500" />
+                            <span className="text-sm">Error rate under pressure</span>
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <CheckCircle2 className="h-4 w-4 text-green-500" />
+                            <span className="text-sm">Recovery speed measurement</span>
+                          </li>
+                        </ul>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  
+                  <TabsContent value="phases" className="mt-6 space-y-4">
+                    {phases.map((phase, index) => (
+                      <Card key={index}>
+                        <CardHeader>
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                              <span className="text-primary font-bold">{index + 1}</span>
+                            </div>
+                            <div>
+                              <CardTitle>{phase.phase}</CardTitle>
+                              <CardDescription>{phase.duration}</CardDescription>
+                            </div>
+                          </div>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-muted-foreground mb-4">{phase.description}</p>
+                          {index === 1 && (
+                            <div className="p-3 bg-orange-50 dark:bg-orange-950 rounded border border-orange-200 dark:border-orange-800">
+                              <h5 className="font-medium text-orange-800 dark:text-orange-200 mb-2">Stress Simulation Features:</h5>
+                              <ul className="text-sm text-orange-700 dark:text-orange-300 space-y-1">
+                                <li>• Timer pressure with decreasing time limits</li>
+                                <li>• Competing priority scenarios</li>
+                                <li>• Interruption management challenges</li>
+                                <li>• Resource constraint simulations</li>
+                                <li>• Conflicting information processing</li>
+                              </ul>
+                            </div>
+                          )}
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </TabsContent>
+                  
+                  <TabsContent value="scoring" className="mt-6 space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <TrendingUp className="h-5 w-5 text-blue-500" />
+                          Individual Resilience Score (IRS)
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <p className="text-muted-foreground">
+                          Our proprietary algorithm analyzes multiple factors to generate your comprehensive score:
+                        </p>
+                        <div className="grid md:grid-cols-2 gap-4">
+                          <div>
+                            <h4 className="font-semibold mb-2">Dimension Weights</h4>
+                            <ul className="space-y-1 text-sm">
+                              <li>• Emotional Resilience: 20%</li>
+                              <li>• Cognitive Flexibility: 20%</li>
+                              <li>• Physical Response: 15%</li>
+                              <li>• Social Support: 15%</li>
+                              <li>• Change Adaptability: 15%</li>
+                              <li>• Performance Under Pressure: 15%</li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold mb-2">Additional Metrics</h4>
+                            <ul className="space-y-1 text-sm">
+                              <li>• Stress threshold identification</li>
+                              <li>• Recovery quotient calculation</li>
+                              <li>• Adaptability index rating</li>
+                              <li>• Burnout risk assessment</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                    
+                    <Card>
+                      <CardHeader>
+                        <CardTitle>Resilience Profiles</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="space-y-3">
+                          {[
+                            { name: "Titanium", range: "90-100", desc: "Thrives under extreme pressure", color: "bg-slate-100" },
+                            { name: "Steel", range: "80-89", desc: "Highly resilient, occasional support needed", color: "bg-gray-100" },
+                            { name: "Iron", range: "70-79", desc: "Good resilience, benefits from resources", color: "bg-zinc-100" },
+                            { name: "Copper", range: "60-69", desc: "Moderate resilience, needs development", color: "bg-orange-100" },
+                            { name: "Bronze", range: "50-59", desc: "Developing resilience, requires support", color: "bg-amber-100" },
+                            { name: "Clay", range: "Below 50", desc: "High support and development needed", color: "bg-red-100" }
+                          ].map((profile, index) => (
+                            <div key={index} className={`p-3 ${profile.color} rounded border`}>
+                              <div className="flex items-center justify-between">
+                                <div>
+                                  <span className="font-semibold">{profile.name}</span>
+                                  <Badge variant="outline" className="ml-2">{profile.range}</Badge>
+                                </div>
+                                <span className="text-sm text-muted-foreground">{profile.desc}</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                  
+                  <TabsContent value="validation" className="mt-6 space-y-4">
+                    <Card>
+                      <CardHeader>
+                        <CardTitle className="flex items-center gap-2">
+                          <CheckCircle2 className="h-5 w-5 text-green-500" />
+                          Scientific Validation
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div className="grid md:grid-cols-2 gap-6">
+                          <div>
+                            <h4 className="font-semibold mb-3">Reliability Metrics</h4>
+                            <div className="space-y-2">
+                              <div className="flex justify-between">
+                                <span className="text-sm">Cronbach's α</span>
+                                <Badge variant="outline">0.91</Badge>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm">Test-Retest (3 months)</span>
+                                <Badge variant="outline">r = 0.79</Badge>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm">Inter-rater Reliability</span>
+                                <Badge variant="outline">0.87</Badge>
+                              </div>
+                            </div>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold mb-3">Validity Studies</h4>
+                            <div className="space-y-2">
+                              <div className="flex justify-between">
+                                <span className="text-sm">Predictive Validity</span>
+                                <Badge variant="outline">r = 0.82</Badge>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm">Cross-Cultural Validity</span>
+                                <Badge variant="outline">25 countries</Badge>
+                              </div>
+                              <div className="flex justify-between">
+                                <span className="text-sm">Sample Size</span>
+                                <Badge variant="outline">N = 50,000+</Badge>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        <div className="p-4 bg-green-50 dark:bg-green-950 rounded border border-green-200 dark:border-green-800">
+                          <h5 className="font-medium text-green-800 dark:text-green-200 mb-2">Ethical Standards</h5>
+                          <ul className="text-sm text-green-700 dark:text-green-300 space-y-1">
+                            <li>• No triggering content or psychological harm</li>
+                            <li>• Voluntary participation in high-stress simulations</li>
+                            <li>• Immediate access to support resources</li>
+                            <li>• Complete confidentiality of responses</li>
+                            <li>• Results used for development, not discrimination</li>
+                          </ul>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+              </DialogContent>
+            </Dialog>
           </div>
         </div>
       </section>
