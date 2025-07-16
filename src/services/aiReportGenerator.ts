@@ -69,19 +69,26 @@ export class AIReportGenerator {
 
   async generateReport(request: AIReportRequest): Promise<AIReportContent> {
     try {
-      // Get current user session
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      // Check if this is a sample report
+      const isSampleReport = request.assessmentResultId === 'mock-assessment-id';
       
-      if (sessionError || !session) {
-        throw new Error('Authentication required');
+      let headers: any = {};
+      
+      if (!isSampleReport) {
+        // Get current user session for real reports
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        
+        if (sessionError || !session) {
+          throw new Error('Authentication required');
+        }
+        
+        headers.Authorization = `Bearer ${session.access_token}`;
       }
 
       // Call the edge function to generate AI report
       const { data, error } = await supabase.functions.invoke('generate-ai-report', {
         body: request,
-        headers: {
-          Authorization: `Bearer ${session.access_token}`,
-        },
+        headers,
       });
 
       if (error) {

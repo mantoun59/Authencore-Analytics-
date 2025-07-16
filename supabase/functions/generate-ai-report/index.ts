@@ -39,21 +39,52 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl!, supabaseServiceKey!);
     const { assessmentResultId, reportType, candidateInfo }: ReportRequest = await req.json();
 
-    // Get the authorization header
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader) {
-      throw new Error('No authorization header');
-    }
+    // Check if this is a sample report (mock data)
+    const isSampleReport = assessmentResultId === 'mock-assessment-id';
+    
+    let assessmentResult: AssessmentResult;
+    
+    if (isSampleReport) {
+      // Use mock data for sample reports
+      assessmentResult = {
+        id: 'mock-assessment-id',
+        assessment_type: 'leadership',
+        results: {
+          dimensions: {
+            leadership: 85,
+            communication: 78,
+            strategic_thinking: 82,
+            team_building: 88,
+            decision_making: 79,
+            emotional_intelligence: 84
+          },
+          responses: Array.from({ length: 20 }, (_, i) => ({
+            questionId: `q${i + 1}`,
+            response: Math.floor(Math.random() * 5) + 1,
+            responseTime: Math.floor(Math.random() * 10) + 3
+          }))
+        },
+        user_id: 'sample-user'
+      };
+    } else {
+      // Get the authorization header for real reports
+      const authHeader = req.headers.get('authorization');
+      if (!authHeader) {
+        throw new Error('No authorization header');
+      }
 
-    // Fetch assessment result
-    const { data: assessmentResult, error: assessmentError } = await supabase
-      .from('assessment_results')
-      .select('*')
-      .eq('id', assessmentResultId)
-      .single();
+      // Fetch assessment result
+      const { data: fetchedResult, error: assessmentError } = await supabase
+        .from('assessment_results')
+        .select('*')
+        .eq('id', assessmentResultId)
+        .single();
 
-    if (assessmentError || !assessmentResult) {
-      throw new Error('Assessment result not found');
+      if (assessmentError || !fetchedResult) {
+        throw new Error('Assessment result not found');
+      }
+      
+      assessmentResult = fetchedResult;
     }
 
     // Generate AI-powered report content
@@ -63,25 +94,31 @@ serve(async (req) => {
       candidateInfo
     );
 
-    // Store generated report
-    const { data: generatedReport, error: insertError } = await supabase
-      .from('generated_reports')
-      .insert({
-        user_id: assessmentResult.user_id,
-        assessment_result_id: assessmentResultId,
-        report_type: reportType,
-        report_data: reportContent
-      })
-      .select()
-      .single();
+    // Store generated report (skip for sample reports)
+    let generatedReportId = 'sample-report-id';
+    
+    if (!isSampleReport) {
+      const { data: generatedReport, error: insertError } = await supabase
+        .from('generated_reports')
+        .insert({
+          user_id: assessmentResult.user_id,
+          assessment_result_id: assessmentResultId,
+          report_type: reportType,
+          report_data: reportContent
+        })
+        .select()
+        .single();
 
-    if (insertError) {
-      throw new Error('Failed to store generated report');
+      if (insertError) {
+        throw new Error('Failed to store generated report');
+      }
+      
+      generatedReportId = generatedReport.id;
     }
 
     return new Response(JSON.stringify({
       success: true,
-      reportId: generatedReport.id,
+      reportId: generatedReportId,
       reportContent
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
