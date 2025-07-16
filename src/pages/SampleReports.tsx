@@ -74,7 +74,10 @@ const SampleReports = () => {
       toast.success('Sample PDF report generated successfully!');
       
     } catch (error) {
-      console.error('Error generating sample PDF:', error);
+      // Log for debugging in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error generating sample PDF:', error);
+      }
       toast.error('Failed to generate sample PDF. Please try again.');
     } finally {
       setIsGenerating(false);

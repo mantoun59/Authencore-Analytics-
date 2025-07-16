@@ -236,7 +236,10 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       toast.success('AI report generated successfully!');
       
     } catch (error) {
-      console.error('Error generating AI report:', error);
+      // Log for debugging in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error generating AI report:', error);
+      }
       toast.error('Failed to generate AI report. Please try again.');
     } finally {
       setIsGeneratingAI(false);

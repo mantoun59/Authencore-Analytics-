@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Progress } from '@/components/ui/progress';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, ArrowRight, Download, Clock, Users, Target, TrendingUp, Brain, MessageSquare } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Download, Clock, Users, Target, TrendingUp, Brain, MessageSquare, RotateCcw } from 'lucide-react';
 import { useLeadershipScoring } from '@/hooks/useLeadershipScoring';
 import { leadershipTranslations, leadershipQuestions, dimensionOrder } from '@/data/leadershipQuestions';
 import { useToast } from '@/hooks/use-toast';
@@ -47,6 +47,25 @@ const LeadershipAssessment = () => {
   const [elapsedTime, setElapsedTime] = useState(0);
   const { calculateScores, results, isCalculating } = useLeadershipScoring();
   const { toast } = useToast();
+
+  const handleRetake = () => {
+    setCurrentStep('language');
+    setLanguage('en');
+    setUserInfo({
+      fullName: '',
+      age: 0,
+      email: '',
+      gender: '',
+      organization: '',
+      position: '',
+      experience: 0,
+      teamSize: ''
+    });
+    setCurrentQuestion(0);
+    setResponses([]);
+    setStartTime(null);
+    setElapsedTime(0);
+  };
 
   const t = leadershipTranslations[language];
   const allQuestions = dimensionOrder.flatMap(dimension => 
@@ -230,11 +249,21 @@ const LeadershipAssessment = () => {
       </html>
     `;
     
-    const reportWindow = window.open('', '_blank');
-    if (reportWindow) {
-      reportWindow.document.write(reportHTML);
-      reportWindow.document.close();
-    }
+    // Create a downloadable HTML file instead of opening in new window
+    const blob = new Blob([reportHTML], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Leadership_Report_${userInfo.fullName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    
+    toast({
+      title: "Report Generated",
+      description: "Your leadership assessment report has been downloaded.",
+    });
   };
 
   const progress = ((currentQuestion + 1) / allQuestions.length) * 100;
@@ -635,7 +664,8 @@ const LeadershipAssessment = () => {
                 <Button onClick={generateHTMLReport} variant="outline">
                   {t.viewReport}
                 </Button>
-                <Button onClick={() => window.location.reload()} variant="outline">
+                <Button onClick={handleRetake} variant="outline">
+                  <RotateCcw className="h-4 w-4 mr-2" />
                   {t.retake}
                 </Button>
               </div>

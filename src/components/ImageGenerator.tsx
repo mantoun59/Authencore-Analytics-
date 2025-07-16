@@ -44,7 +44,10 @@ const ImageGenerator = () => {
         throw new Error("No image URL received");
       }
     } catch (error: any) {
-      console.error("Error generating image:", error);
+      // Log for debugging in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error("Error generating image:", error);
+      }
       toast({
         title: "Error",
         description: error.message || "Failed to generate image",

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { encryptSession, decryptSession, validateSessionIntegrity, isSessionExpired } from '@/utils/sessionSecurity';
 
 interface PartnerData {
   id: string;
@@ -38,16 +39,20 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const storedPartner = localStorage.getItem('partner_session');
     if (storedPartner) {
       try {
-        const partnerData = JSON.parse(storedPartner);
-        // Check if session is still valid
-        if (new Date(partnerData.access_expires_at) > new Date()) {
+        const partnerData = decryptSession(storedPartner);
+        
+        // Validate session integrity and expiry
+        if (validateSessionIntegrity(partnerData) && !isSessionExpired(partnerData.access_expires_at)) {
           setPartner(partnerData);
           setIsAuthenticated(true);
         } else {
           localStorage.removeItem('partner_session');
         }
       } catch (error) {
-        console.error('Error parsing partner session:', error);
+        // Log for debugging in development only
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error parsing partner session:', error);
+        }
         localStorage.removeItem('partner_session');
       }
     }
@@ -95,8 +100,9 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
         permissions: permissions?.map(p => p.assessment_type) || []
       };
 
-      // Store session
-      localStorage.setItem('partner_session', JSON.stringify(partnerData));
+      // Store encrypted session
+      const encryptedSession = encryptSession(partnerData);
+      localStorage.setItem('partner_session', encryptedSession);
       setPartner(partnerData);
       setIsAuthenticated(true);
 
@@ -110,7 +116,10 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
       return { success: true };
     } catch (error) {
-      console.error('Partner login error:', error);
+      // Log for debugging in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Partner login error:', error);
+      }
       return { success: false, error: error instanceof Error ? error.message : 'Login failed' };
     }
   };
@@ -124,8 +133,8 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const checkAssessmentAccess = (assessmentType: string) => {
     if (!partner || !isAuthenticated) return false;
     
-    // Check if access has expired
-    if (new Date(partner.access_expires_at) <= new Date()) {
+    // Check if access has expired using the security utility
+    if (isSessionExpired(partner.access_expires_at)) {
       logout();
       return false;
     }
@@ -145,7 +154,10 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
         p_user_agent: navigator.userAgent
       });
     } catch (error) {
-      console.error('Error logging partner activity:', error);
+      // Log for debugging in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error logging partner activity:', error);
+      }
     }
   };
 

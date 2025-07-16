@@ -24,13 +24,19 @@ export const useAdminAuth = () => {
           .maybeSingle();
 
         if (error) {
+        // Log for debugging in development only
+        if (process.env.NODE_ENV === 'development') {
           console.error('Error checking admin role:', error);
-          setIsAdmin(false);
+        }
+        setIsAdmin(false);
         } else {
           setIsAdmin(!!data);
         }
       } catch (error) {
-        console.error('Error checking admin role:', error);
+        // Log for debugging in development only
+        if (process.env.NODE_ENV === 'development') {
+          console.error('Error checking admin role:', error);
+        }
         setIsAdmin(false);
       } finally {
         setLoading(false);

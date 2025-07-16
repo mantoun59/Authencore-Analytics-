@@ -103,7 +103,10 @@ export const PartnerManagement = () => {
 
       setPartners(partnersWithPermissions);
     } catch (error) {
-      console.error('Error fetching partners:', error);
+      // Log for debugging in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching partners:', error);
+      }
       toast({
         title: 'Error',
         description: 'Failed to fetch partners',
@@ -140,7 +143,10 @@ export const PartnerManagement = () => {
 
       setAccessLogs(formattedLogs);
     } catch (error) {
-      console.error('Error fetching access logs:', error);
+      // Log for debugging in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error fetching access logs:', error);
+      }
     }
   };
 
@@ -244,7 +250,10 @@ export const PartnerManagement = () => {
             description: 'Partner created and credentials sent via email'
           });
         } catch (emailError) {
-          console.error('Failed to send credentials email:', emailError);
+          // Log for debugging in development only
+          if (process.env.NODE_ENV === 'development') {
+            console.error('Failed to send credentials email:', emailError);
+          }
           toast({
             title: 'Partner Created',
             description: 'Partner created successfully, but failed to send credentials email. Please share credentials manually.',
@@ -265,7 +274,10 @@ export const PartnerManagement = () => {
       });
       fetchPartners();
     } catch (error) {
-      console.error('Error saving partner:', error);
+      // Log for debugging in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error saving partner:', error);
+      }
       toast({
         title: 'Error',
         description: 'Failed to save partner',
@@ -334,7 +346,10 @@ export const PartnerManagement = () => {
       });
       fetchPartners();
     } catch (error) {
-      console.error('Error updating partner status:', error);
+      // Log for debugging in development only
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error updating partner status:', error);
+      }
       toast({
         title: 'Error',
         description: 'Failed to update partner status',
