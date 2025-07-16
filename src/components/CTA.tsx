@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const CTA = () => {
   const benefits = [
@@ -52,13 +53,15 @@ const CTA = () => {
 
           {/* CTA Button */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button 
-              size="xl" 
-              className="bg-white text-primary hover:bg-white/90 hover:scale-110 shadow-glow group font-bold"
-            >
-              Start Assessment
-              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Button>
+            <Link to="/assessment">
+              <Button 
+                size="xl" 
+                className="bg-white text-primary hover:bg-white/90 hover:scale-110 shadow-glow group font-bold"
+              >
+                Start Assessment
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
             <div className="text-white/80 text-sm">
               <span className="block">Professional assessments</span>
               <span className="block">Immediate results</span>
