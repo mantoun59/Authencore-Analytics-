@@ -21,17 +21,17 @@ const Header = () => {
     <>
       <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-20">
+          <div className="flex items-center justify-between h-24">
         <div className="flex items-center">
-          <Link to="/" className="flex items-center space-x-3">
-            <div className="bg-white rounded-lg p-3 shadow-md border border-border">
+          <Link to="/" className="flex items-center space-x-4">
+            <div className="bg-white rounded-md p-1 shadow-md border border-border">
               <img 
                 src="/lovable-uploads/cc5cdfbf-5b38-4726-9a3c-ba074c16f6de.png" 
                 alt="Authencore Analytics" 
-                className="h-16 w-auto"
+                className="w-[210px] h-auto"
               />
             </div>
-            <span className="font-bold text-2xl text-foreground">AuthenCore</span>
+            <span className="font-bold text-2xl text-foreground">AuthenCore Analytics</span>
           </Link>
         </div>
             {/* Desktop Navigation */}
