@@ -4,20 +4,20 @@ const HowItWorks = () => {
   const steps = [
     {
       number: "1",
-      title: "Select an assessment",
-      description: "Choose from our comprehensive range of professional assessments",
+      title: "Select an Assessment",
+      description: "User browses and selects the desired evaluation from our comprehensive range",
       icon: MousePointer
     },
     {
       number: "2", 
-      title: "Complete assessment",
-      description: "Answer questions designed by industry experts",
+      title: "Complete Assessment",
+      description: "Guided process for input and completion with expert-designed questions",
       icon: FileText
     },
     {
       number: "3",
-      title: "View results",
-      description: "Get detailed insights and actionable recommendations",
+      title: "View Results",
+      description: "Instantly access and review the personalized results with detailed insights",
       icon: BarChart3
     }
   ];

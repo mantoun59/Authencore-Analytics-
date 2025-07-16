@@ -6,17 +6,17 @@ const WhyChooseUs = () => {
     {
       icon: BarChart3,
       title: "Expert Analysis",
-      description: "Leverage our in-depth industry knowledge for reliable insights."
+      description: "Leverage our in-depth industry knowledge for reliable insights with professional assessment and analytics."
     },
     {
       icon: Shield,
       title: "Reliable Results", 
-      description: "Trust in our decades assessment discernment, every time."
+      description: "Highlights accuracy and consistency of provided insights you can trust for critical decisions."
     },
     {
       icon: Target,
       title: "Actionable Insights",
-      description: "Transform data into important critical strategy for yours."
+      description: "Focus on data-driven results that transform into strategic decisions for your success."
     }
   ];
 
