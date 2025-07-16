@@ -58,148 +58,123 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
 
   const questionBank = {
     emotional: [
-      {
-        id: "em1",
-        text: "When facing a tight deadline, I typically:",
-        options: [
-          "Remain calm and focused on the task",
-          "Feel energized by the pressure",
-          "Experience some anxiety but push through",
-          "Feel overwhelmed and struggle to concentrate",
-          "Panic and have difficulty functioning"
-        ],
-        phase: 0
-      },
-      {
-        id: "em2", 
-        text: "After a significant setback at work, I usually:",
-        options: [
-          "Quickly bounce back and look for solutions",
-          "Take time to process but recover within a day",
-          "Need several days to fully recover",
-          "Struggle to regain confidence for weeks",
-          "Feel deeply affected for months"
-        ],
-        phase: 0
-      },
-      {
-        id: "em3",
-        text: "URGENT: Your project presentation is in 2 hours and the data is corrupted. Your immediate reaction is:",
-        options: [
-          "Calmly assess backup options",
-          "Feel stressed but start problem-solving",
-          "Experience panic but force myself to act",
-          "Feel paralyzed by the situation",
-          "Blame others for the failure"
-        ],
-        phase: 1
-      }
+      // Phase 0 - Baseline
+      { id: "em1", text: "When facing a tight deadline, I typically:", options: ["Remain calm and focused", "Feel energized by pressure", "Experience some anxiety but push through", "Feel overwhelmed", "Panic and struggle"], phase: 0 },
+      { id: "em2", text: "After a significant setback at work, I usually:", options: ["Quickly bounce back", "Take time but recover within a day", "Need several days to recover", "Struggle for weeks", "Feel affected for months"], phase: 0 },
+      { id: "em3", text: "My emotional response to criticism is:", options: ["Use it constructively", "Initially defensive but then reflect", "Feel hurt but try to learn", "Take it very personally", "Become very upset"], phase: 0 },
+      
+      // Phase 1 - Progressive Stress
+      { id: "em4", text: "URGENT: Project presentation in 2 hours, data corrupted. Your reaction:", options: ["Calmly assess backup options", "Feel stressed but problem-solve", "Panic but force action", "Feel paralyzed", "Blame others"], phase: 1 },
+      { id: "em5", text: "PRESSURE: Multiple urgent requests flooding in. You feel:", options: ["Energized to tackle them", "Focused on prioritizing", "Somewhat overwhelmed but managing", "Very stressed", "Completely overwhelmed"], phase: 1 },
+      { id: "em6", text: "STRESS TEST: Everything going wrong today. Your emotional state:", options: ["Staying positive", "Determined to push through", "Fighting negative thoughts", "Feeling defeated", "Completely demoralized"], phase: 1 },
+      
+      // Phase 2 - Recovery
+      { id: "em7", text: "After that intense period, how do you feel now?", options: ["Energized and proud", "Tired but accomplished", "Drained but relieved", "Exhausted and stressed", "Burned out"], phase: 2 },
+      { id: "em8", text: "Reflecting on your emotional responses:", options: ["Handled it perfectly", "Did well overall", "Had some difficult moments", "Struggled emotionally", "Was overwhelmed"], phase: 2 },
+      
+      // Phase 3 - Adaptability
+      { id: "em9", text: "SURPRISE: Your role just completely changed. Emotional reaction:", options: ["Excited about new challenges", "Curious about possibilities", "Concerned but willing", "Anxious about uncertainty", "Upset and resistant"], phase: 3 },
+      { id: "em10", text: "PIVOT: Everything you've worked on is scrapped. You feel:", options: ["Ready for the new direction", "Disappointed but adaptable", "Frustrated but will adjust", "Very upset about the loss", "Angry and resistant"], phase: 3 }
     ],
+    
     cognitive: [
-      {
-        id: "cg1",
-        text: "When solving complex problems under pressure, I:",
-        options: [
-          "Think more clearly and creatively",
-          "Maintain my usual problem-solving ability",
-          "Notice slight decline in thinking quality",
-          "Struggle to think clearly",
-          "Cannot focus on solutions at all"
-        ],
-        phase: 0
-      },
-      {
-        id: "cg2",
-        text: "BREAKING: New regulations require immediate changes to your process. You have 15 minutes to adapt. Your approach:",
-        options: [
-          "Quickly analyze and implement changes",
-          "Systematically review and adapt",
-          "Feel rushed but manage to adapt",
-          "Struggle with the time pressure",
-          "Cannot process the changes quickly enough"
-        ],
-        phase: 1
-      }
+      // Phase 0 - Baseline
+      { id: "cg1", text: "When solving complex problems under pressure, I:", options: ["Think more clearly", "Maintain usual ability", "Slight decline in quality", "Struggle to think clearly", "Cannot focus"], phase: 0 },
+      { id: "cg2", text: "My approach to learning from failures is:", options: ["Immediately analyze lessons", "Reflect after some time", "Eventually learn from it", "Struggle to see lessons", "Avoid thinking about it"], phase: 0 },
+      { id: "cg3", text: "When facing ambiguous situations, I:", options: ["Thrive in uncertainty", "Adapt quickly", "Take time to adjust", "Feel uncomfortable", "Struggle significantly"], phase: 0 },
+      
+      // Phase 1 - Progressive Stress  
+      { id: "cg4", text: "URGENT: Regulations changed, 15 minutes to adapt. Your approach:", options: ["Quickly analyze and implement", "Systematically review and adapt", "Feel rushed but manage", "Struggle with time pressure", "Cannot process quickly enough"], phase: 1 },
+      { id: "cg5", text: "CONFLICTING INFO: Getting contradictory instructions. You:", options: ["Seek clarification efficiently", "Compare sources systematically", "Feel confused but work through it", "Get paralyzed by confusion", "Make random decisions"], phase: 1 },
+      { id: "cg6", text: "MULTITASKING CRISIS: 5 urgent tasks at once. Your thinking:", options: ["Clear prioritization system", "Good but strained focus", "Scattered but functional", "Very confused", "Complete mental chaos"], phase: 1 },
+      
+      // Phase 2 - Recovery
+      { id: "cg7", text: "Looking back at your problem-solving:", options: ["Was very effective", "Generally good decisions", "Mixed results", "Made poor choices", "Completely ineffective"], phase: 2 },
+      { id: "cg8", text: "Your ability to learn from this experience:", options: ["Extracted clear insights", "Identified key lessons", "Some useful takeaways", "Limited learning", "No useful insights"], phase: 2 },
+      
+      // Phase 3 - Adaptability
+      { id: "cg9", text: "NEW RULES: Everything changes mid-task. Your mental approach:", options: ["Quickly recalibrate thinking", "Systematically adjust approach", "Gradually adapt mindset", "Struggle to switch gears", "Cannot adjust thinking"], phase: 3 },
+      { id: "cg10", text: "INNOVATION NEEDED: Old solutions won't work. You:", options: ["Generate creative alternatives", "Methodically explore options", "Eventually find new approaches", "Struggle to innovate", "Stick to old methods"], phase: 3 }
     ],
+    
     physical: [
-      {
-        id: "ph1",
-        text: "During stressful periods, my sleep patterns:",
-        options: [
-          "Remain consistent and restful",
-          "Slightly affected but manageable",
-          "Noticeably disrupted",
-          "Severely impacted",
-          "Completely disrupted"
-        ],
-        phase: 0
-      },
-      {
-        id: "ph2",
-        text: "Your stress levels are HIGH right now. How is your body responding?",
-        options: [
-          "Feeling energized and alert",
-          "Slight tension but manageable",
-          "Noticeable physical stress symptoms",
-          "Significant physical discomfort",
-          "Overwhelming physical stress response"
-        ],
-        phase: 1
-      }
+      // Phase 0 - Baseline
+      { id: "ph1", text: "During stressful periods, my sleep patterns:", options: ["Remain consistent", "Slightly affected", "Noticeably disrupted", "Severely impacted", "Completely disrupted"], phase: 0 },
+      { id: "ph2", text: "My energy levels under normal stress:", options: ["Actually increase", "Stay stable", "Slightly decrease", "Noticeably drop", "Become exhausted"], phase: 0 },
+      { id: "ph3", text: "Physical stress symptoms I typically experience:", options: ["None", "Very mild", "Some tension", "Noticeable symptoms", "Severe physical stress"], phase: 0 },
+      
+      // Phase 1 - Progressive Stress
+      { id: "ph4", text: "RIGHT NOW: High stress phase. How is your body responding?", options: ["Feeling energized", "Slight tension", "Noticeable stress symptoms", "Significant discomfort", "Overwhelming physical response"], phase: 1 },
+      { id: "ph5", text: "PHYSICAL CHECK: Heart rate, breathing, tension levels:", options: ["All normal", "Slightly elevated", "Noticeably increased", "Significantly stressed", "Physical distress"], phase: 1 },
+      { id: "ph6", text: "ENDURANCE TEST: Can you maintain physical focus?", options: ["Absolutely", "Yes, with effort", "Struggling but managing", "Very difficult", "Cannot maintain"], phase: 1 },
+      
+      // Phase 2 - Recovery
+      { id: "ph7", text: "Physical recovery after stress:", options: ["Immediately back to normal", "Quick recovery", "Taking some time", "Slow to recover", "Still feeling effects"], phase: 2 },
+      { id: "ph8", text: "Your body's stress response patterns:", options: ["Very healthy", "Generally good", "Mixed patterns", "Concerning responses", "Poor stress response"], phase: 2 },
+      
+      // Phase 3 - Adaptability  
+      { id: "ph9", text: "SUDDEN CHANGE: Physical adaptation to new demands:", options: ["Seamlessly adjust", "Quickly adapt", "Gradually adjust", "Struggle to adapt", "Cannot adjust"], phase: 3 },
+      { id: "ph10", text: "STAMINA TEST: Sustained performance during change:", options: ["Excellent endurance", "Good stamina", "Moderate endurance", "Low stamina", "Quickly exhausted"], phase: 3 }
     ],
+    
     social: [
-      {
-        id: "so1", 
-        text: "When overwhelmed at work, I:",
-        options: [
-          "Readily ask colleagues for help",
-          "Eventually reach out for support",
-          "Hesitate but sometimes ask for help",
-          "Rarely ask for assistance",
-          "Never ask for help from others"
-        ],
-        phase: 0
-      }
+      // Phase 0 - Baseline
+      { id: "so1", text: "When overwhelmed at work, I:", options: ["Readily ask for help", "Eventually reach out", "Hesitate but sometimes ask", "Rarely ask for help", "Never ask others"], phase: 0 },
+      { id: "so2", text: "My support network during stress:", options: ["Very strong and active", "Good support available", "Some support", "Limited support", "No real support"], phase: 0 },
+      { id: "so3", text: "Building relationships under pressure:", options: ["Gets easier", "Stays the same", "Becomes harder", "Much more difficult", "Impossible"], phase: 0 },
+      
+      // Phase 1 - Progressive Stress
+      { id: "so4", text: "CRISIS MODE: Need help NOW. Your approach:", options: ["Immediately reach out", "Quickly identify who to ask", "Struggle but eventually ask", "Reluctant to burden others", "Try to handle alone"], phase: 1 },
+      { id: "so5", text: "TEAM PRESSURE: Everyone stressed. Your social behavior:", options: ["Support others too", "Focus on collaboration", "Withdraw slightly", "Become very internal", "Isolate completely"], phase: 1 },
+      { id: "so6", text: "COMMUNICATION UNDER STRESS: Your interaction style:", options: ["Clear and direct", "Generally effective", "Sometimes unclear", "Often miscommunicate", "Poor communication"], phase: 1 },
+      
+      // Phase 2 - Recovery
+      { id: "so7", text: "Reflecting on your help-seeking:", options: ["Used support well", "Got adequate help", "Should have asked more", "Didn't get enough help", "Handled alone poorly"], phase: 2 },
+      { id: "so8", text: "Social connections after stress:", options: ["Stronger than before", "Maintained well", "Somewhat strained", "Damaged relationships", "Isolated"], phase: 2 },
+      
+      // Phase 3 - Adaptability
+      { id: "so9", text: "NEW TEAM: Suddenly working with different people:", options: ["Excited to collaborate", "Adapt quickly to dynamics", "Gradually build rapport", "Struggle with new people", "Prefer working alone"], phase: 3 },
+      { id: "so10", text: "SUPPORT PIVOT: Your usual help sources unavailable:", options: ["Easily find new support", "Actively build new connections", "Eventually find help", "Struggle to find support", "Give up on getting help"], phase: 3 }
     ],
+    
     change: [
-      {
-        id: "ch1",
-        text: "When facing unexpected organizational changes, I:",
-        options: [
-          "Embrace the opportunity for growth",
-          "Adapt quickly with minor adjustment",
-          "Take time but eventually adapt",
-          "Struggle with the uncertainty",
-          "Resist and find it very difficult"
-        ],
-        phase: 0
-      },
-      {
-        id: "ch2",
-        text: "SURPRISE CHANGE: Your role responsibilities just shifted completely. Immediate reaction:",
-        options: [
-          "Excited about new challenges",
-          "Curious about the possibilities", 
-          "Concerned but willing to try",
-          "Anxious about the uncertainty",
-          "Upset and resistant to change"
-        ],
-        phase: 3
-      }
+      // Phase 0 - Baseline
+      { id: "ch1", text: "When facing unexpected organizational changes, I:", options: ["Embrace growth opportunities", "Adapt quickly", "Take time but adapt", "Struggle with uncertainty", "Resist and find difficult"], phase: 0 },
+      { id: "ch2", text: "My comfort level with ambiguity:", options: ["Thrive in uncertainty", "Handle it well", "Manage with effort", "Feel uncomfortable", "Avoid ambiguous situations"], phase: 0 },
+      { id: "ch3", text: "Learning new systems or processes:", options: ["Love the challenge", "Pick up quickly", "Learn steadily", "Find it stressful", "Resist new ways"], phase: 0 },
+      
+      // Phase 1 - Progressive Stress
+      { id: "ch4", text: "URGENT PIVOT: Strategy completely changed. Your response:", options: ["Immediately embrace new direction", "Quickly understand and adapt", "Take time to process", "Feel resistant", "Struggle to accept"], phase: 1 },
+      { id: "ch5", text: "CONSTANT FLUX: Rules keep changing. You:", options: ["Stay flexible and adapt", "Track changes systematically", "Feel frustrated but adapt", "Get confused and stressed", "Cannot keep up"], phase: 1 },
+      { id: "ch6", text: "INNOVATION PRESSURE: Must be creative NOW:", options: ["Thrive under creative pressure", "Generate good ideas", "Struggle but produce something", "Feel blocked", "Cannot be creative"], phase: 1 },
+      
+      // Phase 2 - Recovery  
+      { id: "ch7", text: "Adapting to changes during stress:", options: ["Handled excellently", "Managed well overall", "Had some difficulties", "Struggled significantly", "Could not adapt"], phase: 2 },
+      { id: "ch8", text: "Your change resilience assessment:", options: ["Very adaptable", "Generally flexible", "Moderately adaptable", "Somewhat rigid", "Resist change"], phase: 2 },
+      
+      // Phase 3 - Adaptability
+      { id: "ch9", text: "ROLE SHIFT: Responsibilities completely different:", options: ["Excited about new challenges", "Curious about possibilities", "Concerned but willing", "Anxious about uncertainty", "Upset and resistant"], phase: 3 },
+      { id: "ch10", text: "FUTURE UNKNOWN: Next steps unclear. Your mindset:", options: ["Excited by possibilities", "Comfortable with unknown", "Somewhat anxious", "Very uncomfortable", "Want clear plans"], phase: 3 }
     ],
+    
     performance: [
-      {
-        id: "pf1",
-        text: "Under extreme pressure, my work quality:",
-        options: [
-          "Actually improves",
-          "Remains at the same high level",
-          "Slightly decreases",
-          "Noticeably decreases", 
-          "Significantly decreases"
-        ],
-        phase: 0
-      }
+      // Phase 0 - Baseline
+      { id: "pf1", text: "Under extreme pressure, my work quality:", options: ["Actually improves", "Remains high", "Slightly decreases", "Noticeably decreases", "Significantly decreases"], phase: 0 },
+      { id: "pf2", text: "Meeting deadlines under stress:", options: ["Always meet them", "Usually meet them", "Sometimes struggle", "Often miss them", "Frequently miss"], phase: 0 },
+      { id: "pf3", text: "My leadership during crises:", options: ["Step up naturally", "Lead when needed", "Support others' leadership", "Follow others", "Avoid responsibility"], phase: 0 },
+      
+      // Phase 1 - Progressive Stress
+      { id: "pf4", text: "PERFORMANCE CHECK: Quality under current pressure:", options: ["Excellent work", "Good quality maintained", "Acceptable quality", "Quality suffering", "Poor quality work"], phase: 1 },
+      { id: "pf5", text: "SPEED vs ACCURACY: Current balance:", options: ["Both excellent", "Good balance", "Favoring speed", "Favoring accuracy", "Both suffering"], phase: 1 },
+      { id: "pf6", text: "LEADERSHIP NOW: How are you performing as a leader?", options: ["Strong decisive leadership", "Good guidance", "Adequate direction", "Struggling to lead", "Not leading"], phase: 1 },
+      
+      // Phase 2 - Recovery
+      { id: "pf7", text: "Overall performance during stress:", options: ["Exceeded expectations", "Met expectations", "Mostly met expectations", "Below expectations", "Far below expectations"], phase: 2 },
+      { id: "pf8", text: "Consistency under pressure:", options: ["Very consistent", "Generally consistent", "Some variability", "Quite inconsistent", "Very inconsistent"], phase: 2 },
+      
+      // Phase 3 - Adaptability
+      { id: "pf9", text: "PERFORMANCE PIVOT: New success metrics. You:", options: ["Excel immediately", "Adapt performance well", "Gradually improve", "Struggle to meet new standards", "Cannot adapt performance"], phase: 3 },
+      { id: "pf10", text: "LEADERSHIP SHIFT: Different leadership style needed:", options: ["Seamlessly adjust style", "Adapt leadership approach", "Gradually change style", "Struggle to adjust", "Cannot change approach"], phase: 3 }
     ]
   };
 
