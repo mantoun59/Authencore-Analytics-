@@ -16,6 +16,7 @@ import EmotionalIntelligenceAssessment from "./pages/EmotionalIntelligenceAssess
 import FaithValuesAssessment from "./pages/FaithValuesAssessment";
 import GenZAssessment from "./pages/GenZAssessment";
 import PartnerLogin from "./pages/PartnerLogin";
+import LeadershipAssessment from "./pages/LeadershipAssessment";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
 
@@ -41,6 +42,7 @@ const App = () => (
             <Route path="/faith-values" element={<FaithValuesAssessment />} />
             <Route path="/genz-assessment" element={<GenZAssessment />} />
             <Route path="/partner-login" element={<PartnerLogin />} />
+            <Route path="/leadership-assessment" element={<LeadershipAssessment />} />
             <Route path="/admin" element={<AdminPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

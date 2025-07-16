@@ -401,6 +401,52 @@ const Assessment = () => {
               </CardContent>
             </Card>
 
+            {/* Leadership Assessment */}
+            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-4">
+                  <Users className="h-8 w-8 text-blue-600" />
+                  <div>
+                    <CardTitle className="text-xl">Leadership Assessment</CardTitle>
+                    <Badge className="mt-1" variant="secondary">Professional</Badge>
+                  </div>
+                </div>
+                <CardDescription className="text-base">
+                  Comprehensive leadership effectiveness evaluation across 6 key dimensions with multi-language support
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">60 Questions</Badge>
+                  <Badge variant="outline">6 Dimensions</Badge>
+                  <Badge variant="outline">3 Languages</Badge>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Strategic thinking evaluation
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Emotional intelligence assessment
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Communication & influence analysis
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Team development & change management
+                  </li>
+                </ul>
+                <Link to="/leadership-assessment">
+                  <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900">
+                    Start Leadership Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
             {/* GenZ Workplace Assessment */}
             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
               <CardHeader>
