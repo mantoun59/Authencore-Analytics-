@@ -1,15 +1,48 @@
 import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Section - Legal Links */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left Section - Company Info */}
           <div className="space-y-6">
+            <div className="flex items-center space-x-3 mb-4">
+              <img 
+                src="/lovable-uploads/cc5cdfbf-5b38-4726-9a3c-ba074c16f6de.png" 
+                alt="Authencore Analytics" 
+                className="h-10 w-auto"
+              />
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">
+              Measuring Minds. Shaping Futures.
+            </p>
             
-            {/* Legal Links */}
             <div className="space-y-2">
+              <a
+                href="https://www.authencore.org"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              >
+                www.authencore.org
+              </a>
+            </div>
+          </div>
+
+          {/* Middle Section - Legal Links */}
+          <div className="space-y-6">
+            <h4 className="text-xl font-semibold text-foreground">
+              Legal
+            </h4>
+            <div className="space-y-2">
+              <Link
+                to="/privacy"
+                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              >
+                Privacy Policy
+              </Link>
               <a
                 href="#terms"
                 className="block text-muted-foreground hover:text-primary transition-colors text-sm"
@@ -83,12 +116,12 @@ const Footer = () => {
         <div className="border-t border-border pt-8 mt-12">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-muted-foreground text-sm">
-              &copy; 2024 AuthenCore Analytics. All rights reserved.
+              &copy; 2024 Authencore Analytics. All rights reserved.
             </p>
             <div className="flex items-center space-x-6 text-sm">
-              <a href="#privacy" className="text-muted-foreground hover:text-primary transition-colors">
-                Privacy
-              </a>
+              <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
+                Privacy Policy
+              </Link>
               <a href="#compliance" className="text-muted-foreground hover:text-primary transition-colors">
                 Compliance
               </a>

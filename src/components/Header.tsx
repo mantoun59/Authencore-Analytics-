@@ -21,14 +21,15 @@ const Header = () => {
       <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <Link to="/" className="flex items-center">
-              <img 
-                src="/lovable-uploads/23411b66-e30c-4fd9-8072-5e6c0e1eba60.png" 
-                alt="AuthenCore Analytics" 
-                className="h-12 w-auto"
-              />
-            </Link>
+        <div className="flex items-center">
+          <Link to="/" className="flex items-center space-x-3">
+            <img 
+              src="/lovable-uploads/cc5cdfbf-5b38-4726-9a3c-ba074c16f6de.png" 
+              alt="Authencore Analytics" 
+              className="h-12 w-auto"
+            />
+          </Link>
+        </div>
             {/* Desktop Navigation */}
             <nav className="hidden md:flex space-x-8">
               {navigation.map((item) => (
