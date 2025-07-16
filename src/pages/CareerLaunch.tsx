@@ -351,6 +351,74 @@ const CareerLaunch = () => {
     setGameState(prev => ({ ...prev, score: finalScore }));
   };
 
+  const downloadReport = () => {
+    // Create a simple report with user data
+    const reportData = {
+      name: userProfile.name,
+      email: userProfile.email,
+      score: gameState.score,
+      completionTime: formatTime(timer),
+      achievements: gameState.achievements.filter(a => a.unlocked).length,
+      careerInterests: assessmentData.careerSwipes.filter(s => s.action === 'like').length
+    };
+
+    // Create downloadable text report
+    const reportText = `
+CAREER LAUNCH ASSESSMENT REPORT
+===============================
+
+Student: ${reportData.name}
+Email: ${reportData.email}
+Assessment Date: ${new Date().toLocaleDateString()}
+
+OVERALL PERFORMANCE
+-------------------
+Total Score: ${reportData.score} points
+Completion Time: ${reportData.completionTime}
+Achievements Unlocked: ${reportData.achievements}/5
+
+CAREER INTERESTS
+----------------
+Liked Careers: ${reportData.careerInterests}/${careerCards.length}
+
+PERFORMANCE SUMMARY
+-------------------
+This assessment evaluated career readiness across multiple dimensions including
+career clarity, workplace skills, adaptability, and future planning.
+
+For detailed analysis and recommendations, contact your career counselor.
+    `;
+
+    // Create and download the file
+    const blob = new Blob([reportText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `CareerLaunch_Report_${userProfile.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
+  const shareResults = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: 'My CareerLaunch Assessment Results',
+        text: `I just completed my CareerLaunch Assessment and scored ${gameState.score} points! 🚀`,
+        url: window.location.href
+      }).catch(console.error);
+    } else {
+      // Fallback for browsers that don't support Web Share API
+      const shareText = `I just completed my CareerLaunch Assessment and scored ${gameState.score} points! 🚀 #CareerLaunch`;
+      navigator.clipboard.writeText(shareText).then(() => {
+        alert('Results copied to clipboard! You can now paste and share them.');
+      }).catch(() => {
+        alert('Share functionality not available in this browser.');
+      });
+    }
+  };
+
   const handleSkillsChallenge = () => {
     const challenge = skillsChallenges[currentChallenge];
     
@@ -986,11 +1054,18 @@ const CareerLaunch = () => {
         </div>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Button className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600">
+          <Button 
+            onClick={downloadReport}
+            className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600"
+          >
             <Download className="mr-2 h-5 w-5" />
             Download Report
           </Button>
-          <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">
+          <Button 
+            onClick={shareResults}
+            variant="outline" 
+            className="border-white/20 text-white hover:bg-white/10"
+          >
             <Share2 className="mr-2 h-5 w-5" />
             Share Results
           </Button>
