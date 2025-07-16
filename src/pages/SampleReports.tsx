@@ -47,11 +47,66 @@ const SampleReports = () => {
       
       toast.info('Generating AI-powered report... This may take a moment.');
       const reportContent = await aiReportGenerator.generateReport(mockRequest);
+      
+      // Generate PDF from the AI report content
       await aiReportGenerator.generatePDFReport(reportContent);
+      
+      toast.success('AI report and PDF generated successfully!');
       
     } catch (error) {
       console.error('Error generating AI report:', error);
       toast.error('Failed to generate AI report. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const generateSamplePDF = async () => {
+    setIsGenerating(true);
+    try {
+      const sampleData = getSampleCandidateReport(selectedAssessment);
+      
+      // Convert sample data to AI report format
+      const aiReportFormat = {
+        candidateInfo: {
+          name: sampleData.candidateInfo.name,
+          email: sampleData.candidateInfo.email,
+          completionDate: new Date().toISOString(),
+          assessmentType: selectedAssessment,
+          assessmentId: sampleData.candidateInfo.assessmentId
+        },
+        executiveSummary: {
+          overallScore: sampleData.executiveSummary.overallScore,
+          keyInsights: ["Strong analytical thinking", "Excellent communication skills", "Leadership potential"],
+          topStrengths: sampleData.executiveSummary.topStrengths,
+          developmentAreas: sampleData.executiveSummary.keyDevelopmentAreas,
+          recommendedActions: sampleData.executiveSummary.recommendedNextSteps
+        },
+        detailedAnalysis: {
+          dimensionScores: sampleData.dimensionScores,
+          personalizedInsights: "This candidate demonstrates strong capabilities across multiple dimensions with particular strengths in strategic thinking and communication.",
+          behavioralPatterns: ["Analytical approach to problems", "Collaborative working style", "Goal-oriented mindset"],
+          validityMetrics: {}
+        },
+        actionPlan: {
+          immediate: sampleData.executiveSummary.recommendedNextSteps,
+          shortTerm: ["Develop leadership skills", "Expand technical expertise", "Build professional network"],
+          longTerm: ["Pursue advanced certification", "Take on leadership role", "Mentor others"]
+        },
+        careerGuidance: {
+          recommendations: (sampleData as any).careerRecommendations || ["Leadership roles", "Strategic positions", "Team management"],
+          pathways: ["Individual contributor to team lead", "Specialist to manager", "Cross-functional experience"],
+          skills: ["Project management", "Data analysis", "Strategic thinking", "Team leadership", "Communication skills"]
+        }
+      };
+      
+      toast.info('Generating sample PDF report...');
+      await aiReportGenerator.generatePDFReport(aiReportFormat);
+      toast.success('Sample PDF report generated successfully!');
+      
+    } catch (error) {
+      console.error('Error generating sample PDF:', error);
+      toast.error('Failed to generate sample PDF. Please try again.');
     } finally {
       setIsGenerating(false);
     }
@@ -178,6 +233,11 @@ const SampleReports = () => {
             adaptability: { score: 79, level: 'Good', interpretation: 'Comfortable with change and uncertainty' },
             performance_pressure: { score: 84, level: 'High', interpretation: 'Maintains high performance under deadlines' }
           },
+          careerRecommendations: [
+            'High-stress environment roles',
+            'Crisis management positions',
+            'Emergency response leadership'
+          ],
           riskAssessment: {
             burnoutRisk: 'Low',
             stressThreshold: 'High',
@@ -207,6 +267,11 @@ const SampleReports = () => {
             adaptability: { score: 76, level: 'Good', interpretation: 'Flexible and open to new experiences' },
             leadership_potential: { score: 67, level: 'Moderate', interpretation: 'Emerging leadership capabilities' }
           },
+          careerRecommendations: [
+            'Entry-level business roles',
+            'Marketing and communications',
+            'Project management positions'
+          ],
           careerMatches: [
             { career: 'Digital Marketing Specialist', match: 85, readiness: 'Ready', growth: 'High' },
             { career: 'Business Analyst', match: 78, readiness: 'Nearly Ready', growth: 'Medium' },
@@ -232,7 +297,12 @@ const SampleReports = () => {
             dimension_1: { score: 78, level: 'Good', interpretation: 'Strong performance in this area' },
             dimension_2: { score: 74, level: 'Moderate', interpretation: 'Adequate with room for improvement' },
             dimension_3: { score: 81, level: 'Very Good', interpretation: 'Excellent capabilities demonstrated' }
-          }
+          },
+          careerRecommendations: [
+            'Professional development roles',
+            'Industry-specific positions',
+            'Growth-oriented opportunities'
+          ]
         };
     }
   };
@@ -641,9 +711,14 @@ const SampleReports = () => {
                   </span>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline">
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={generateSamplePDF}
+                    disabled={isGenerating}
+                  >
                     <Download className="h-4 w-4 mr-2" />
-                    Download Static PDF
+                    {isGenerating ? 'Generating...' : 'Download Sample PDF'}
                   </Button>
                   <Button 
                     size="sm" 

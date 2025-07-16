@@ -6,6 +6,18 @@ const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 const supabaseUrl = Deno.env.get('SUPABASE_URL');
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
 
+if (!openAIApiKey) {
+  console.error('OPENAI_API_KEY is not set');
+}
+
+if (!supabaseUrl) {
+  console.error('SUPABASE_URL is not set');
+}
+
+if (!supabaseServiceKey) {
+  console.error('SUPABASE_SERVICE_ROLE_KEY is not set');
+}
+
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
@@ -252,9 +264,15 @@ async function generatePersonalizedInsights(results: any, candidateInfo: any, as
     }),
   });
 
+  if (!response.ok) {
+    console.error('OpenAI API error:', response.status, response.statusText);
+    throw new Error(`OpenAI API error: ${response.status}`);
+  }
+
   const data = await response.json();
   
   if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    console.error('Unexpected OpenAI response format:', data);
     throw new Error('Invalid OpenAI API response format');
   }
   
