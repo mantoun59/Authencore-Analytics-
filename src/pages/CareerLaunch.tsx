@@ -212,6 +212,56 @@ const CareerLaunch = () => {
   ];
 
   const [timelineSlots, setTimelineSlots] = useState<Record<number, any>>({});
+  const [draggedMilestone, setDraggedMilestone] = useState<any>(null);
+
+  // Drag and drop handlers
+  const handleDragStart = (e: React.DragEvent, milestone: any) => {
+    setDraggedMilestone(milestone);
+    e.dataTransfer.effectAllowed = 'move';
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDrop = (e: React.DragEvent, year: number) => {
+    e.preventDefault();
+    if (draggedMilestone) {
+      const milestoneIcon = {
+        'education': '🎓',
+        'career': '💼',
+        'skills': '📚',
+        'leadership': '👑',
+        'entrepreneurship': '🚀',
+        'giving_back': '🤝',
+        'expertise': '🏆',
+        'thought_leadership': '📖',
+        'financial_freedom': '💰',
+        'experience': '🎯'
+      }[draggedMilestone.category] || '🎯';
+
+      setTimelineSlots(prev => ({
+        ...prev,
+        [year]: {
+          ...draggedMilestone,
+          icon: milestoneIcon
+        }
+      }));
+      
+      setAssessmentData(prev => ({
+        ...prev,
+        futureQuest: [...prev.futureQuest, {
+          milestoneId: draggedMilestone.id,
+          year: year,
+          timestamp: Date.now()
+        }]
+      }));
+
+      updateScore(25);
+      setDraggedMilestone(null);
+    }
+  };
 
   useEffect(() => {
     if (gamePhase === 'assessment' && gameState.startTime === 0) {
@@ -877,7 +927,9 @@ For detailed analysis and recommendations, contact your career counselor.
               {[1, 3, 5, 10].map((year) => (
                 <div
                   key={year}
-                  className="relative z-10 min-h-40 border-2 border-dashed border-cyan-400 rounded-lg p-4 bg-white/5 flex flex-col items-center justify-center"
+                  onDragOver={handleDragOver}
+                  onDrop={(e) => handleDrop(e, year)}
+                  className="relative z-10 min-h-40 border-2 border-dashed border-cyan-400 rounded-lg p-4 bg-white/5 flex flex-col items-center justify-center hover:border-cyan-300 hover:bg-white/10 transition-all"
                 >
                   <span className="text-cyan-400 font-bold mb-2">Year {year}</span>
                   {timelineSlots[year] && (
@@ -898,7 +950,8 @@ For detailed analysis and recommendations, contact your career counselor.
                 <div
                   key={milestone.id}
                   draggable
-                  className="bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg p-3 text-white text-center cursor-grab hover:scale-105 transition-transform"
+                  onDragStart={(e) => handleDragStart(e, milestone)}
+                  className="bg-gradient-to-r from-cyan-500 to-purple-500 rounded-lg p-3 text-white text-center cursor-grab hover:scale-105 transition-transform active:cursor-grabbing"
                 >
                   <div className="text-2xl mb-2">
                     {milestone.category === 'education' && '🎓'}
