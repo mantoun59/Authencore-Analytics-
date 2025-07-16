@@ -41,7 +41,7 @@ const Assessment = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             
             {/* CareerLaunch Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
               <CardHeader>
                 <div className="flex items-center gap-3 mb-4">
                   <Rocket className="h-8 w-8 text-blue-500" />
@@ -54,7 +54,7 @@ const Assessment = () => {
                   Gamified career readiness assessment with interactive challenges and real-time feedback
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">5 Levels</Badge>
                   <Badge variant="outline">Career Matching</Badge>
@@ -78,29 +78,30 @@ const Assessment = () => {
                     Future planning timeline
                   </li>
                 </ul>
-                <Link to="/career-launch">
-                  <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                    Start CareerLaunch <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 <div className="flex-grow"></div>
+                 <Link to="/career-launch">
+                   <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
+                     Start CareerLaunch <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
-            {/* CAIR+ Personality Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Brain className="h-8 w-8 text-purple-500" />
-                  <div>
-                    <CardTitle className="text-xl">CAIR+ Personality</CardTitle>
-                    <Badge className="mt-1" variant="secondary">Professional</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Comprehensive personality assessment with advanced validity detection and dual reporting
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+             {/* CAIR+ Personality Assessment */}
+             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+               <CardHeader>
+                 <div className="flex items-center gap-3 mb-4">
+                   <Brain className="h-8 w-8 text-purple-500" />
+                   <div>
+                     <CardTitle className="text-xl">CAIR+ Personality</CardTitle>
+                     <Badge className="mt-1" variant="secondary">Professional</Badge>
+                   </div>
+                 </div>
+                 <CardDescription className="text-base">
+                   Comprehensive personality assessment with advanced validity detection and dual reporting
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">100 Questions</Badge>
                   <Badge variant="outline">Validity Detection</Badge>
@@ -123,30 +124,31 @@ const Assessment = () => {
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Resilience measurement
                   </li>
-                </ul>
-                <Link to="/cair-assessment">
-                  <Button className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600">
-                    Start CAIR+ Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 </ul>
+                 <div className="flex-grow"></div>
+                 <Link to="/cair-assessment">
+                   <Button className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600">
+                     Start CAIR+ Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
-            {/* Stress Resilience Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Shield className="h-8 w-8 text-green-500" />
-                  <div>
-                    <CardTitle className="text-xl">Stress Resilience</CardTitle>
-                    <Badge className="mt-1" variant="secondary">Research-Based</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Advanced stress resilience and adaptability assessment with biometric simulation
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+             {/* Stress Resilience Assessment */}
+             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+               <CardHeader>
+                 <div className="flex items-center gap-3 mb-4">
+                   <Shield className="h-8 w-8 text-green-500" />
+                   <div>
+                     <CardTitle className="text-xl">Stress Resilience</CardTitle>
+                     <Badge className="mt-1" variant="secondary">Research-Based</Badge>
+                   </div>
+                 </div>
+                 <CardDescription className="text-base">
+                   Advanced stress resilience and adaptability assessment with biometric simulation
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">60 Questions</Badge>
                   <Badge variant="outline">Biometric Sim</Badge>
@@ -169,30 +171,31 @@ const Assessment = () => {
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Burnout risk prediction
                   </li>
-                </ul>
-                <Link to="/stress-resilience">
-                  <Button className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600">
-                    Start Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 </ul>
+                 <div className="flex-grow"></div>
+                 <Link to="/stress-resilience">
+                   <Button className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600">
+                     Start Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
-            {/* Cultural Intelligence Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Globe className="h-8 w-8 text-teal-500" />
-                  <div>
-                    <CardTitle className="text-xl">Cultural Intelligence</CardTitle>
-                    <Badge className="mt-1" variant="secondary">Global</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Comprehensive cultural intelligence assessment with real-world scenarios and global business challenges
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+             {/* Cultural Intelligence Assessment */}
+             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+               <CardHeader>
+                 <div className="flex items-center gap-3 mb-4">
+                   <Globe className="h-8 w-8 text-teal-500" />
+                   <div>
+                     <CardTitle className="text-xl">Cultural Intelligence</CardTitle>
+                     <Badge className="mt-1" variant="secondary">Global</Badge>
+                   </div>
+                 </div>
+                 <CardDescription className="text-base">
+                   Comprehensive cultural intelligence assessment with real-world scenarios and global business challenges
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">60+ Scenarios</Badge>
                   <Badge variant="outline">4 CQ Dimensions</Badge>
@@ -215,30 +218,31 @@ const Assessment = () => {
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Cultural competency mapping
                   </li>
-                </ul>
-                <Link to="/cultural-intelligence">
-                  <Button className="w-full bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600">
-                    Start Cultural Intelligence <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 </ul>
+                 <div className="flex-grow"></div>
+                 <Link to="/cultural-intelligence">
+                   <Button className="w-full bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600">
+                     Start Cultural Intelligence <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
-            {/* Communication Styles Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <MessageSquare className="h-8 w-8 text-indigo-500" />
-                  <div>
-                    <CardTitle className="text-xl">Communication Styles</CardTitle>
-                    <Badge className="mt-1" variant="secondary">Advanced</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Comprehensive communication assessment with linguistic analysis and real-time simulations
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+             {/* Communication Styles Assessment */}
+             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+               <CardHeader>
+                 <div className="flex items-center gap-3 mb-4">
+                   <MessageSquare className="h-8 w-8 text-indigo-500" />
+                   <div>
+                     <CardTitle className="text-xl">Communication Styles</CardTitle>
+                     <Badge className="mt-1" variant="secondary">Advanced</Badge>
+                   </div>
+                 </div>
+                 <CardDescription className="text-base">
+                   Comprehensive communication assessment with linguistic analysis and real-time simulations
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">80 Questions</Badge>
                   <Badge variant="outline">Linguistic Analysis</Badge>
@@ -261,30 +265,31 @@ const Assessment = () => {
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Conflict resolution insights
                   </li>
-                </ul>
-                <Link to="/communication-assessment">
-                  <Button className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600">
-                    Start Communication Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 </ul>
+                 <div className="flex-grow"></div>
+                 <Link to="/communication-assessment">
+                   <Button className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600">
+                     Start Communication Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
-            {/* Emotional Intelligence Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Heart className="h-8 w-8 text-rose-500" />
-                  <div>
-                    <CardTitle className="text-xl">Emotional Intelligence</CardTitle>
-                    <Badge className="mt-1" variant="secondary">EQ Focus</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Comprehensive emotional intelligence assessment measuring self-awareness, empathy, and social skills
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+             {/* Emotional Intelligence Assessment */}
+             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+               <CardHeader>
+                 <div className="flex items-center gap-3 mb-4">
+                   <Heart className="h-8 w-8 text-rose-500" />
+                   <div>
+                     <CardTitle className="text-xl">Emotional Intelligence</CardTitle>
+                     <Badge className="mt-1" variant="secondary">EQ Focus</Badge>
+                   </div>
+                 </div>
+                 <CardDescription className="text-base">
+                   Comprehensive emotional intelligence assessment measuring self-awareness, empathy, and social skills
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">65 Questions</Badge>
                   <Badge variant="outline">EQ Dimensions</Badge>
@@ -307,30 +312,31 @@ const Assessment = () => {
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Emotional regulation
                   </li>
-                </ul>
-                <Link to="/emotional-intelligence">
-                  <Button className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600">
-                    Start EQ Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 </ul>
+                 <div className="flex-grow"></div>
+                 <Link to="/emotional-intelligence">
+                   <Button className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600">
+                     Start EQ Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
-            {/* Faith & Values Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Lightbulb className="h-8 w-8 text-amber-500" />
-                  <div>
-                    <CardTitle className="text-xl">Faith & Values</CardTitle>
-                    <Badge className="mt-1" variant="secondary">Values-Based</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Comprehensive workplace values assessment with ethical scenarios and cultural fit analysis
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+             {/* Faith & Values Assessment */}
+             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+               <CardHeader>
+                 <div className="flex items-center gap-3 mb-4">
+                   <Lightbulb className="h-8 w-8 text-amber-500" />
+                   <div>
+                     <CardTitle className="text-xl">Faith & Values</CardTitle>
+                     <Badge className="mt-1" variant="secondary">Values-Based</Badge>
+                   </div>
+                 </div>
+                 <CardDescription className="text-base">
+                   Comprehensive workplace values assessment with ethical scenarios and cultural fit analysis
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">Values Ranking</Badge>
                   <Badge variant="outline">Ethical Scenarios</Badge>
@@ -353,30 +359,31 @@ const Assessment = () => {
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Values-based career guidance
                   </li>
-                </ul>
-                <Link to="/faith-values">
-                  <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
-                    Start Faith & Values Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 </ul>
+                 <div className="flex-grow"></div>
+                 <Link to="/faith-values">
+                   <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
+                     Start Faith & Values Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
-            {/* Digital Wellness Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Zap className="h-8 w-8 text-cyan-500" />
-                  <div>
-                    <CardTitle className="text-xl">Digital Wellness</CardTitle>
-                    <Badge className="mt-1" variant="secondary">Behavioral</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Real-time digital wellness assessment with behavioral tracking and habit analysis
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+             {/* Digital Wellness Assessment */}
+             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+               <CardHeader>
+                 <div className="flex items-center gap-3 mb-4">
+                   <Zap className="h-8 w-8 text-cyan-500" />
+                   <div>
+                     <CardTitle className="text-xl">Digital Wellness</CardTitle>
+                     <Badge className="mt-1" variant="secondary">Behavioral</Badge>
+                   </div>
+                 </div>
+                 <CardDescription className="text-base">
+                   Real-time digital wellness assessment with behavioral tracking and habit analysis
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">Live Tracking</Badge>
                   <Badge variant="outline">Habit Analysis</Badge>
@@ -399,30 +406,31 @@ const Assessment = () => {
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Tech-life integration
                   </li>
-                </ul>
-                <Link to="/digital-wellness">
-                  <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
-                    Start Digital Wellness <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 </ul>
+                 <div className="flex-grow"></div>
+                 <Link to="/digital-wellness">
+                   <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
+                     Start Digital Wellness <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
-            {/* Leadership Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Users className="h-8 w-8 text-blue-600" />
-                  <div>
-                    <CardTitle className="text-xl">Leadership Assessment</CardTitle>
-                    <Badge className="mt-1" variant="secondary">Professional</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Comprehensive leadership effectiveness evaluation across 6 key dimensions with multi-language support
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+             {/* Leadership Assessment */}
+             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+               <CardHeader>
+                 <div className="flex items-center gap-3 mb-4">
+                   <Users className="h-8 w-8 text-blue-600" />
+                   <div>
+                     <CardTitle className="text-xl">Leadership Assessment</CardTitle>
+                     <Badge className="mt-1" variant="secondary">Professional</Badge>
+                   </div>
+                 </div>
+                 <CardDescription className="text-base">
+                   Comprehensive leadership effectiveness evaluation across 6 key dimensions with multi-language support
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">60 Questions</Badge>
                   <Badge variant="outline">6 Dimensions</Badge>
@@ -445,30 +453,31 @@ const Assessment = () => {
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Team development & change management
                   </li>
-                </ul>
-                <Link to="/leadership-assessment">
-                  <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900">
-                    Start Leadership Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 </ul>
+                 <div className="flex-grow"></div>
+                 <Link to="/leadership-assessment">
+                   <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900">
+                     Start Leadership Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
-            {/* GenZ Workplace Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="text-3xl">🚀</div>
-                  <div>
-                    <CardTitle className="text-xl">GenZ Workplace Assessment</CardTitle>
-                    <Badge className="mt-1" variant="secondary">TikTok-Style</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Revolutionary TikTok-style assessment with emoji reactions and swipe interactions for authentic Gen Z workplace insights
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
+             {/* GenZ Workplace Assessment */}
+             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+               <CardHeader>
+                 <div className="flex items-center gap-3 mb-4">
+                   <div className="text-3xl">🚀</div>
+                   <div>
+                     <CardTitle className="text-xl">GenZ Workplace Assessment</CardTitle>
+                     <Badge className="mt-1" variant="secondary">TikTok-Style</Badge>
+                   </div>
+                 </div>
+                 <CardDescription className="text-base">
+                   Revolutionary TikTok-style assessment with emoji reactions and swipe interactions for authentic Gen Z workplace insights
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="flex flex-wrap gap-2">
                   <Badge variant="outline">Emoji Reactions</Badge>
                   <Badge variant="outline">Swipe Interface</Badge>
@@ -491,14 +500,15 @@ const Assessment = () => {
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
                     Authenticity & retention analysis
                   </li>
-                </ul>
-                <Link to="/genz-assessment">
-                  <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
-                    Start GenZ Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
+                 </ul>
+                 <div className="flex-grow"></div>
+                 <Link to="/genz-assessment">
+                   <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+                     Start GenZ Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                   </Button>
+                 </Link>
+               </CardContent>
+             </Card>
 
           </div>
         </div>
