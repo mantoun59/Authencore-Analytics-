@@ -499,27 +499,27 @@ For detailed analysis and recommendations, contact your career counselor.
   };
 
   const renderWelcomeScreen = () => (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center p-4">
       <div className="text-center max-w-4xl mx-auto">
         <div className="text-8xl mb-8 animate-bounce">🚀</div>
-        <h1 className="text-6xl font-bold text-white mb-6 bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
+        <h1 className="text-6xl font-bold text-slate-800 mb-6 bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
           CareerLaunch Assessment
         </h1>
-        <p className="text-2xl text-cyan-300 mb-12">Discover Your Career Superpowers!</p>
+        <p className="text-2xl text-teal-700 mb-12">Discover Your Career Superpowers!</p>
         
         <div className="mb-12">
-          <h3 className="text-xl text-white mb-8">Your Journey Includes:</h3>
+          <h3 className="text-xl text-slate-700 mb-8">Your Journey Includes:</h3>
           <div className="flex flex-wrap justify-center gap-8">
             {[
-              { icon: Target, label: 'Career Interests', color: 'text-red-400' },
-              { icon: Lightbulb, label: 'Skills Challenge', color: 'text-yellow-400' },
-              { icon: Building2, label: 'Work Scenarios', color: 'text-blue-400' },
-              { icon: Gamepad2, label: 'Future Quest', color: 'text-green-400' },
-              { icon: Trophy, label: 'Career Match', color: 'text-purple-400' }
+              { icon: Target, label: 'Career Interests', color: 'text-red-500' },
+              { icon: Lightbulb, label: 'Skills Challenge', color: 'text-amber-500' },
+              { icon: Building2, label: 'Work Scenarios', color: 'text-blue-500' },
+              { icon: Gamepad2, label: 'Future Quest', color: 'text-green-500' },
+              { icon: Trophy, label: 'Career Match', color: 'text-purple-500' }
             ].map((item, index) => (
-              <div key={index} className="flex flex-col items-center p-4 bg-white/10 rounded-2xl backdrop-blur-sm hover:scale-105 transition-transform">
+              <div key={index} className="flex flex-col items-center p-4 bg-white/60 rounded-2xl backdrop-blur-sm hover:scale-105 transition-transform shadow-lg">
                 <item.icon className={`h-12 w-12 ${item.color} mb-2`} />
-                <span className="text-white font-medium">{item.label}</span>
+                <span className="text-slate-700 font-medium">{item.label}</span>
               </div>
             ))}
           </div>
@@ -528,7 +528,7 @@ For detailed analysis and recommendations, contact your career counselor.
         <Button 
           size="lg" 
           onClick={() => setGamePhase('registration')}
-          className="bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white text-xl px-12 py-6 rounded-full shadow-2xl hover:shadow-cyan-500/25 transition-all duration-300"
+          className="bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white text-xl px-12 py-6 rounded-full shadow-2xl hover:shadow-emerald-500/25 transition-all duration-300"
         >
           Start Your Journey <Rocket className="ml-2 h-6 w-6" />
         </Button>
@@ -537,15 +537,15 @@ For detailed analysis and recommendations, contact your career counselor.
   );
 
   const renderRegistrationScreen = () => (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 flex items-center justify-center p-4">
-      <Card className="w-full max-w-2xl bg-white/10 backdrop-blur-md border-white/20">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-2xl bg-white/80 backdrop-blur-md border-slate-200 shadow-xl">
         <CardHeader className="text-center">
-          <CardTitle className="text-3xl text-white">Create Your Career Profile</CardTitle>
-          <CardDescription className="text-cyan-200">Choose your avatar and tell us about yourself</CardDescription>
+          <CardTitle className="text-3xl text-slate-800">Create Your Career Profile</CardTitle>
+          <CardDescription className="text-teal-700">Choose your avatar and tell us about yourself</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="mb-6">
-            <h3 className="text-white mb-4">Choose Your Avatar:</h3>
+            <h3 className="text-slate-800 mb-4 font-semibold">Choose Your Avatar:</h3>
             <div className="grid grid-cols-6 gap-4">
               {['👨‍💼', '👩‍💼', '🧑‍💻', '👩‍🔬', '👨‍🎨', '👩‍⚕️'].map((avatar, index) => (
                 <button
@@ -553,8 +553,8 @@ For detailed analysis and recommendations, contact your career counselor.
                   onClick={() => setUserProfile(prev => ({ ...prev, avatar }))}
                   className={`text-4xl p-4 rounded-full transition-all ${
                     userProfile.avatar === avatar 
-                      ? 'bg-cyan-500 scale-110' 
-                      : 'bg-white/20 hover:bg-white/30'
+                      ? 'bg-emerald-500 scale-110 shadow-lg' 
+                      : 'bg-slate-100 hover:bg-slate-200'
                   }`}
                 >
                   {avatar}
@@ -568,7 +568,7 @@ For detailed analysis and recommendations, contact your career counselor.
               placeholder="Your Name"
               value={userProfile.name}
               onChange={(e) => setUserProfile(prev => ({ ...prev, name: e.target.value }))}
-              className="bg-white/10 border-white/20 text-white placeholder-white/60"
+              className="bg-white/50 border-slate-300 text-slate-800 placeholder-slate-500"
               required
             />
             
@@ -577,7 +577,7 @@ For detailed analysis and recommendations, contact your career counselor.
               placeholder="Email Address"
               value={userProfile.email}
               onChange={(e) => setUserProfile(prev => ({ ...prev, email: e.target.value }))}
-              className="bg-white/10 border-white/20 text-white placeholder-white/60"
+              className="bg-white/50 border-slate-300 text-slate-800 placeholder-slate-500"
               required
             />
             
@@ -588,12 +588,12 @@ For detailed analysis and recommendations, contact your career counselor.
               max={30}
               value={userProfile.age}
               onChange={(e) => setUserProfile(prev => ({ ...prev, age: parseInt(e.target.value) }))}
-              className="bg-white/10 border-white/20 text-white placeholder-white/60"
+              className="bg-white/50 border-slate-300 text-slate-800 placeholder-slate-500"
               required
             />
             
             <Select value={userProfile.educationLevel} onValueChange={(value) => setUserProfile(prev => ({ ...prev, educationLevel: value }))}>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white">
+              <SelectTrigger className="bg-white/50 border-slate-300 text-slate-800">
                 <SelectValue placeholder="Education Level" />
               </SelectTrigger>
               <SelectContent>
@@ -605,7 +605,7 @@ For detailed analysis and recommendations, contact your career counselor.
             </Select>
             
             <Select value={userProfile.fieldOfStudy} onValueChange={(value) => setUserProfile(prev => ({ ...prev, fieldOfStudy: value }))}>
-              <SelectTrigger className="bg-white/10 border-white/20 text-white">
+              <SelectTrigger className="bg-white/50 border-slate-300 text-slate-800">
                 <SelectValue placeholder="Field of Study (Optional)" />
               </SelectTrigger>
               <SelectContent>
@@ -619,7 +619,7 @@ For detailed analysis and recommendations, contact your career counselor.
             
             <Button 
               type="submit" 
-              className="w-full bg-gradient-to-r from-cyan-500 to-purple-500 hover:from-cyan-600 hover:to-purple-600 text-white py-6 text-lg"
+              className="w-full bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white py-6 text-lg"
             >
               Begin Assessment <Play className="ml-2 h-5 w-5" />
             </Button>
