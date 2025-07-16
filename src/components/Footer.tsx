@@ -4,7 +4,7 @@ const Footer = () => {
   const footerSections = [
     {
       title: "About Authencore",
-      content: "Leading provider of AI-powered psychological assessments, helping individuals and organizations unlock their potential through data-driven insights.",
+      content: "Professional psychological assessment platform providing scientifically validated tests for individuals and organizations seeking insights into personality, cognitive abilities, and behavioral patterns.",
       links: []
     },
     {
@@ -29,9 +29,9 @@ const Footer = () => {
       title: "Contact",
       links: [],
       contact: {
-        email: "info@authencore.org",
-        phone: "1-800-AUTHENCORE",
-        address: "123 Innovation Drive\nTech Valley, CA 94000"
+        email: "contact@authencore.com",
+        phone: "+1 (555) 123-4567",
+        address: "Professional Services Center\nSuite 200, Business District"
       }
     }
   ];

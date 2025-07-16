@@ -5,38 +5,38 @@ const Features = () => {
   const features = [
     {
       icon: Brain,
-      title: "AI-Powered Analysis",
-      description: "Advanced machine learning algorithms provide deep insights into personality traits and psychological patterns with unprecedented accuracy.",
+      title: "Comprehensive Assessments",
+      description: "Professional psychological assessments covering personality, cognitive abilities, emotional intelligence, and behavioral patterns.",
       gradient: "from-blue-500 to-purple-600"
     },
     {
       icon: FileText,
-      title: "Comprehensive Assessments",
-      description: "Multiple assessment types including personality, cognitive, emotional intelligence, and behavioral analysis tests.",
+      title: "Detailed Reports",
+      description: "In-depth analysis reports with actionable insights, recommendations, and development opportunities tailored to individual results.",
       gradient: "from-green-500 to-teal-600"
     },
     {
       icon: Shield,
       title: "Secure & Confidential",
-      description: "Your data is encrypted end-to-end and protected with enterprise-grade security measures. HIPAA and GDPR compliant.",
+      description: "Your assessment data is protected with enterprise-grade security. All information remains strictly confidential.",
       gradient: "from-orange-500 to-red-600"
     },
     {
       icon: Zap,
-      title: "Instant Reports",
-      description: "Get detailed, actionable reports immediately after completing your assessment with personalized recommendations.",
+      title: "Instant Results",
+      description: "Receive your comprehensive assessment results immediately upon completion with downloadable PDF reports.",
       gradient: "from-yellow-500 to-orange-600"
     },
     {
       icon: Users,
-      title: "Team Analytics",
-      description: "Advanced team dynamics analysis and organizational psychology insights for better workplace collaboration.",
+      title: "Organization Insights",
+      description: "Team assessment capabilities for organizations looking to understand group dynamics and optimize team performance.",
       gradient: "from-purple-500 to-pink-600"
     },
     {
       icon: Target,
-      title: "Goal Tracking",
-      description: "Track your personal development journey with milestone tracking and progress visualization over time.",
+      title: "Development Tracking",
+      description: "Monitor personal or professional development progress with follow-up assessments and growth tracking tools.",
       gradient: "from-indigo-500 to-blue-600"
     }
   ];
@@ -46,10 +46,10 @@ const Features = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
-            Powerful Features
+            Assessment Features
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Discover the advanced capabilities that make Authencore Analytics the leading platform for psychological assessment and analysis.
+            Professional psychological assessment tools designed to provide accurate insights into personality, behavior, and cognitive abilities.
           </p>
         </div>
 
@@ -79,23 +79,23 @@ const Features = () => {
         {/* Additional stats section */}
         <div className="mt-20 text-center">
           <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-8 shadow-card border border-border/50">
-            <h3 className="text-2xl font-bold mb-8 text-foreground">Trusted by Industry Leaders</h3>
+            <h3 className="text-2xl font-bold mb-8 text-foreground">Assessment Categories</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Fortune 500</div>
-                <div className="text-sm text-muted-foreground">Companies</div>
+                <div className="text-2xl font-bold text-primary mb-1">Personality</div>
+                <div className="text-sm text-muted-foreground">Assessments</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Healthcare</div>
-                <div className="text-sm text-muted-foreground">Institutions</div>
+                <div className="text-2xl font-bold text-primary mb-1">Cognitive</div>
+                <div className="text-sm text-muted-foreground">Testing</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Universities</div>
-                <div className="text-sm text-muted-foreground">Worldwide</div>
+                <div className="text-2xl font-bold text-primary mb-1">Behavioral</div>
+                <div className="text-sm text-muted-foreground">Analysis</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Research</div>
-                <div className="text-sm text-muted-foreground">Centers</div>
+                <div className="text-2xl font-bold text-primary mb-1">Professional</div>
+                <div className="text-sm text-muted-foreground">Development</div>
               </div>
             </div>
           </div>

@@ -14,7 +14,7 @@ const Hero = () => {
           {/* Badge */}
           <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8">
             <Brain className="w-4 h-4 text-primary mr-2" />
-            <span className="text-sm font-medium text-primary">AI-Powered Assessment Platform</span>
+            <span className="text-sm font-medium text-primary">Professional Psychological Assessments</span>
           </div>
 
           {/* Main heading */}
@@ -25,8 +25,8 @@ const Hero = () => {
           
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto leading-relaxed">
-            Your trusted platform for AI-powered psychological assessments. 
-            Discover deep insights into personality traits and unlock your potential.
+            Professional psychological assessment platform offering scientifically validated tests 
+            to help individuals and organizations understand personality, aptitude, and behavioral patterns.
           </p>
 
           {/* Action buttons */}
@@ -43,16 +43,16 @@ const Hero = () => {
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-2xl mx-auto">
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">10,000+</div>
-              <div className="text-sm text-muted-foreground">Assessments Completed</div>
+              <div className="text-3xl font-bold text-primary mb-2">13</div>
+              <div className="text-sm text-muted-foreground">Assessment Types</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">98%</div>
-              <div className="text-sm text-muted-foreground">Accuracy Rate</div>
+              <div className="text-3xl font-bold text-primary mb-2">Validated</div>
+              <div className="text-sm text-muted-foreground">Scientific Methods</div>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-primary mb-2">500+</div>
-              <div className="text-sm text-muted-foreground">Enterprise Clients</div>
+              <div className="text-3xl font-bold text-primary mb-2">Secure</div>
+              <div className="text-sm text-muted-foreground">Data Protection</div>
             </div>
           </div>
         </div>
@@ -62,11 +62,11 @@ const Hero = () => {
       <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
         <div className="flex items-center space-x-2 text-sm text-muted-foreground">
           <Shield className="w-4 h-4" />
-          <span>Enterprise-grade security</span>
+          <span>Confidential & Secure</span>
           <span>•</span>
-          <span>HIPAA Compliant</span>
+          <span>Professional Standards</span>
           <span>•</span>
-          <span>ISO 27001 Certified</span>
+          <span>Validated Assessments</span>
         </div>
       </div>
     </section>
