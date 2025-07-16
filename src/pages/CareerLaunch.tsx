@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ApplicantDataForm from "@/components/ApplicantDataForm";
@@ -66,6 +67,7 @@ interface Achievement {
 }
 
 const CareerLaunch = () => {
+  const { toast } = useToast();
   const [gamePhase, setGamePhase] = useState<'welcome' | 'registration' | 'assessment' | 'results'>('welcome');
   const [currentLevel, setCurrentLevel] = useState(1);
   const [userProfile, setUserProfile] = useState<UserProfile>({
@@ -468,21 +470,33 @@ For detailed analysis and recommendations, contact your career counselor.
     URL.revokeObjectURL(url);
   };
 
-  const shareResults = () => {
+  const shareResults = async () => {
+    const shareText = `I just completed my CareerLaunch Assessment and scored ${gameState.score} points! 🚀 #CareerLaunch`;
+    
     if (navigator.share) {
-      navigator.share({
-        title: 'My CareerLaunch Assessment Results',
-        text: `I just completed my CareerLaunch Assessment and scored ${gameState.score} points! 🚀`,
-        url: window.location.href
-      }).catch(console.error);
+      try {
+        await navigator.share({
+          title: 'My CareerLaunch Assessment Results',
+          text: shareText,
+          url: window.location.href
+        });
+      } catch (error) {
+        // User cancelled sharing
+      }
     } else {
-      // Fallback for browsers that don't support Web Share API
-      const shareText = `I just completed my CareerLaunch Assessment and scored ${gameState.score} points! 🚀 #CareerLaunch`;
-      navigator.clipboard.writeText(shareText).then(() => {
-        alert('Results copied to clipboard! You can now paste and share them.');
-      }).catch(() => {
-        alert('Share functionality not available in this browser.');
-      });
+      try {
+        await navigator.clipboard.writeText(shareText);
+        toast({
+          title: "Results Copied!",
+          description: "Your assessment results have been copied to clipboard.",
+        });
+      } catch (error) {
+        toast({
+          title: "Share Failed",
+          description: "Unable to copy results to clipboard.",
+          variant: "destructive"
+        });
+      }
     }
   };
 

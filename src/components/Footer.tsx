@@ -1,7 +1,15 @@
 import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Footer = () => {
+  const navigate = useNavigate();
+
+  const handleHashNavigation = (hash: string) => {
+    navigate('/compliance');
+    setTimeout(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
   return (
     <footer className="bg-card border-t border-border">
       <div className="container mx-auto px-4 py-12">
@@ -49,30 +57,30 @@ const Footer = () => {
               >
                 Compliance Documentation
               </Link>
-              <Link
-                to="/compliance#terms"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              <button
+                onClick={() => handleHashNavigation('terms')}
+                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
               >
                 Terms of Service
-              </Link>
-              <Link
-                to="/compliance#gdpr"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              </button>
+              <button
+                onClick={() => handleHashNavigation('gdpr')}
+                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
               >
                 GDPR Compliance
-              </Link>
-              <Link
-                to="/compliance#security"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              </button>
+              <button
+                onClick={() => handleHashNavigation('security')}
+                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
               >
                 Data Security Standards
-              </Link>
-              <Link
-                to="/compliance#ethics"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              </button>
+              <button
+                onClick={() => handleHashNavigation('ethics')}
+                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
               >
                 Assessment Ethics
-              </Link>
+              </button>
             </div>
           </div>
 
