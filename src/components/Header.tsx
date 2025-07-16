@@ -24,11 +24,14 @@ const Header = () => {
           <div className="flex items-center justify-between h-16">
         <div className="flex items-center">
           <Link to="/" className="flex items-center space-x-3">
-            <img 
-              src="/lovable-uploads/cc5cdfbf-5b38-4726-9a3c-ba074c16f6de.png" 
-              alt="Authencore Analytics" 
-              className="h-12 w-auto"
-            />
+            <div className="bg-white rounded-lg p-2 shadow-sm border border-border">
+              <img 
+                src="/lovable-uploads/cc5cdfbf-5b38-4726-9a3c-ba074c16f6de.png" 
+                alt="Authencore Analytics" 
+                className="h-10 w-auto"
+              />
+            </div>
+            <span className="font-bold text-xl text-foreground">AuthenCore</span>
           </Link>
         </div>
             {/* Desktop Navigation */}
