@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import WhyChooseUs from "@/components/WhyChooseUs";
-import FeaturedAssessments from "@/components/FeaturedAssessments";
+import PsychometricsInfo from "@/components/PsychometricsInfo";
 import HowItWorks from "@/components/HowItWorks";
 import Gallery from "@/components/Gallery";
 import PricingPlans from "@/components/PricingPlans";
@@ -17,7 +17,7 @@ const Index = () => {
       <Header />
       <Hero />
       <WhyChooseUs />
-      <FeaturedAssessments />
+      <PsychometricsInfo />
       <HowItWorks />
       <Gallery />
       <PricingPlans />
