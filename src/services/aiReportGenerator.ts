@@ -221,8 +221,8 @@ export class AIReportGenerator {
     // Add the actual logo image if available (no white background)
     if (logoBase64) {
       try {
-        // Use the actual logo image with square dimensions and transparent background
-        doc.addImage(logoBase64, 'PNG', margin, 10, 40, 40);
+        // Use the actual logo image stretched 30% rectangularly
+        doc.addImage(logoBase64, 'PNG', margin, 10, 52, 40);
       } catch (error) {
         console.error('Error adding logo to PDF:', error);
         // Fallback to placeholder
