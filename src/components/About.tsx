@@ -8,8 +8,8 @@ const About = () => {
         {/* Hero Image */}
         <div className="mb-16">
           <img 
-            src={consultationImage}
-            alt="Professional consultation and assessment services"
+            src="/lovable-uploads/18674c2c-e70d-4f45-8f89-c4a96e079199.png"
+            alt="Assessment Analytics - Professional team collaboration"
             className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-elegant"
           />
         </div>
