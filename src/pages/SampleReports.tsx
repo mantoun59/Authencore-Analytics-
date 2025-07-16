@@ -406,7 +406,7 @@ const SampleReports = () => {
                   <h4 className="font-medium capitalize">{key.replace('_', ' ')}</h4>
                   <Badge variant="outline">{dimension.level}</Badge>
                 </div>
-                <Progress value={dimension.score} className="mb-2" />
+                <Progress value={dimension.score} className="mb-2 mx-2" />
                 <div className="flex justify-between text-sm text-muted-foreground">
                   <span>{dimension.score}/100</span>
                   <span>{dimension.interpretation}</span>
@@ -512,21 +512,21 @@ const SampleReports = () => {
                   <span className="text-sm font-medium">Cultural Fit</span>
                   <span className="text-sm text-muted-foreground">{employerReport.fitAnalysis.culturalFit}%</span>
                 </div>
-                <Progress value={employerReport.fitAnalysis.culturalFit} />
+                <Progress value={employerReport.fitAnalysis.culturalFit} className="mx-2" />
               </div>
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium">Role Alignment</span>
                   <span className="text-sm text-muted-foreground">{employerReport.fitAnalysis.roleAlignment}%</span>
                 </div>
-                <Progress value={employerReport.fitAnalysis.roleAlignment} />
+                <Progress value={employerReport.fitAnalysis.roleAlignment} className="mx-2" />
               </div>
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium">Growth Potential</span>
                   <span className="text-sm text-muted-foreground">{employerReport.fitAnalysis.growthPotential}%</span>
                 </div>
-                <Progress value={employerReport.fitAnalysis.growthPotential} />
+                <Progress value={employerReport.fitAnalysis.growthPotential} className="mx-2" />
               </div>
             </div>
           </CardContent>
