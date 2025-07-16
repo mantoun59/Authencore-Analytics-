@@ -20,19 +20,33 @@ import {
   RefreshCw,
   AlertTriangle,
   CheckCircle2,
-  BarChart3
+  BarChart3,
+  Sparkles,
+  Building,
+  User
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
+import { toast } from "sonner";
 
 interface AssessmentResultsProps {
   data: any;
+  assessmentType?: string;
+  candidateInfo?: {
+    name: string;
+    email: string;
+    age?: number;
+    experience?: string;
+    position?: string;
+  };
 }
 
-const AssessmentResults = ({ data }: AssessmentResultsProps) => {
+const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: AssessmentResultsProps) => {
   const [overallScore, setOverallScore] = useState(0);
   const [resilienceProfile, setResilienceProfile] = useState("");
   const [dimensionScores, setDimensionScores] = useState<Record<string, number>>({});
+  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
 
   useEffect(() => {
     if (data) {
@@ -182,6 +196,51 @@ const AssessmentResults = ({ data }: AssessmentResultsProps) => {
     
     // Save the PDF
     doc.save(`resilience-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`);
+  };
+
+  const generateAIReport = async (reportType: 'candidate' | 'employer' = 'candidate') => {
+    setIsGeneratingAI(true);
+    try {
+      if (!candidateInfo) {
+        toast.error('Candidate information is required for AI report generation');
+        return;
+      }
+
+      const request: AIReportRequest = {
+        assessmentResultId: data.id || `assessment-${Date.now()}`,
+        reportType,
+        candidateInfo: {
+          name: candidateInfo.name,
+          email: candidateInfo.email,
+          age: candidateInfo.age,
+          experience: candidateInfo.experience,
+          position: candidateInfo.position
+        }
+      };
+
+      // Store assessment result in request for AI processing
+      (request as any).assessmentData = {
+        responses: data.responses || {},
+        dimensions: dimensionScores,
+        overallScore,
+        assessmentType,
+        profile: resilienceProfile
+      };
+
+      toast.info('Generating AI-powered report... This may take a moment.');
+      const reportContent = await aiReportGenerator.generateReport(request);
+      
+      // Generate PDF from the AI report content
+      await aiReportGenerator.generatePDFReport(reportContent);
+      
+      toast.success('AI report generated successfully!');
+      
+    } catch (error) {
+      console.error('Error generating AI report:', error);
+      toast.error('Failed to generate AI report. Please try again.');
+    } finally {
+      setIsGeneratingAI(false);
+    }
   };
 
   const getScoreColor = (score: number) => {
@@ -556,6 +615,32 @@ const AssessmentResults = ({ data }: AssessmentResultsProps) => {
               <Download className="h-4 w-4 mr-2" />
               Download Full Report
             </Button>
+            
+            {candidateInfo && (
+              <>
+                <Button 
+                  size="lg" 
+                  onClick={() => generateAIReport('candidate')}
+                  disabled={isGeneratingAI}
+                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                >
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  {isGeneratingAI ? 'Generating...' : 'Generate AI Report'}
+                </Button>
+                
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  onClick={() => generateAIReport('employer')}
+                  disabled={isGeneratingAI}
+                  className="border-orange-500 text-orange-600 hover:bg-orange-50"
+                >
+                  <Building className="h-4 w-4 mr-2" />
+                  {isGeneratingAI ? 'Generating...' : 'Employer Report'}
+                </Button>
+              </>
+            )}
+            
             <Button size="lg" variant="outline">
               <Share className="h-4 w-4 mr-2" />
               Share Results

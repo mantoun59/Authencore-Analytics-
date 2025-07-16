@@ -126,76 +126,79 @@ export class AIReportGenerator {
       };
 
       // Helper function to add wrapped text
-      const addWrappedText = (text: string, fontSize: number, maxWidth: number, isBold: boolean = false) => {
+      const addWrappedText = (text: string, fontSize: number, isBold: boolean = false) => {
         doc.setFontSize(fontSize);
-        if (isBold) {
-          doc.setFont('helvetica', 'bold');
-        } else {
-          doc.setFont('helvetica', 'normal');
-        }
+        doc.setFont('helvetica', isBold ? 'bold' : 'normal');
         
+        const maxWidth = pageWidth - 2 * margin;
         const lines = doc.splitTextToSize(text, maxWidth);
-        const lineHeight = fontSize * 0.4;
+        const lineHeight = fontSize * 0.35;
         
-        checkPageBreak(lines.length * lineHeight);
+        checkPageBreak(lines.length * lineHeight + 10);
         
         doc.text(lines, margin, yPosition);
-        yPosition += lines.length * lineHeight + 5;
+        yPosition += lines.length * lineHeight + 10;
       };
 
       // Header
       doc.setFillColor(41, 128, 185);
       doc.rect(0, 0, pageWidth, 40, 'F');
       doc.setTextColor(255, 255, 255);
-      doc.setFontSize(24);
+      doc.setFontSize(20);
       doc.setFont('helvetica', 'bold');
-      doc.text('PROFESSIONAL ASSESSMENT REPORT', pageWidth / 2, 25, { align: 'center' });
+      doc.text('AI-POWERED ASSESSMENT REPORT', pageWidth / 2, 25, { align: 'center' });
       
       yPosition = 50;
       doc.setTextColor(0, 0, 0);
 
       // Candidate Information
-      addWrappedText('CANDIDATE INFORMATION', 16, pageWidth - 2 * margin, true);
-      addWrappedText(`Name: ${reportContent.candidateInfo.name}`, 12, pageWidth - 2 * margin);
-      addWrappedText(`Email: ${reportContent.candidateInfo.email}`, 12, pageWidth - 2 * margin);
-      addWrappedText(`Assessment Type: ${reportContent.candidateInfo.assessmentType}`, 12, pageWidth - 2 * margin);
-      addWrappedText(`Completion Date: ${new Date(reportContent.candidateInfo.completionDate).toLocaleDateString()}`, 12, pageWidth - 2 * margin);
-      addWrappedText(`Assessment ID: ${reportContent.candidateInfo.assessmentId}`, 12, pageWidth - 2 * margin);
+      addWrappedText('CANDIDATE INFORMATION', 16, true);
+      addWrappedText(`Name: ${reportContent.candidateInfo.name}`, 12);
+      addWrappedText(`Email: ${reportContent.candidateInfo.email}`, 12);
+      addWrappedText(`Assessment Type: ${reportContent.candidateInfo.assessmentType}`, 12);
+      addWrappedText(`Completion Date: ${new Date(reportContent.candidateInfo.completionDate).toLocaleDateString()}`, 12);
+      addWrappedText(`Assessment ID: ${reportContent.candidateInfo.assessmentId}`, 12);
 
       yPosition += 10;
 
       // Executive Summary
-      addWrappedText('EXECUTIVE SUMMARY', 16, pageWidth - 2 * margin, true);
+      addWrappedText('EXECUTIVE SUMMARY', 16, true);
       
-      // Overall Score with visual representation
+      // Overall Score visual
+      doc.setFontSize(14);
+      doc.setFont('helvetica', 'bold');
+      doc.text('Overall Score:', margin, yPosition);
+      doc.setFontSize(24);
+      doc.setTextColor(52, 152, 219);
+      doc.text(`${reportContent.executiveSummary.overallScore}/100`, margin + 50, yPosition);
+      yPosition += 20;
+      
+      // Progress bar
       doc.setFillColor(52, 152, 219);
-      doc.rect(margin, yPosition, (reportContent.executiveSummary.overallScore / 100) * (pageWidth - 2 * margin), 8, 'F');
+      doc.rect(margin, yPosition, (reportContent.executiveSummary.overallScore / 100) * (pageWidth - 2 * margin), 6, 'F');
       doc.setDrawColor(0, 0, 0);
-      doc.rect(margin, yPosition, pageWidth - 2 * margin, 8);
-      doc.setFontSize(12);
-      doc.text(`Overall Score: ${reportContent.executiveSummary.overallScore}/100`, margin, yPosition + 15);
-      yPosition += 25;
+      doc.setLineWidth(0.5);
+      doc.rect(margin, yPosition, pageWidth - 2 * margin, 6);
+      yPosition += 20;
+      
+      doc.setTextColor(0, 0, 0);
 
       // Key Insights
-      addWrappedText('Key Insights:', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Key Insights:', 14, true);
       reportContent.executiveSummary.keyInsights.forEach((insight, index) => {
-        addWrappedText(`• ${insight}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`• ${insight}`, 11);
       });
-
-      yPosition += 10;
 
       // Top Strengths
-      addWrappedText('Top Strengths:', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Top Strengths:', 14, true);
       reportContent.executiveSummary.topStrengths.forEach((strength, index) => {
-        addWrappedText(`✓ ${strength}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`✓ ${strength}`, 11);
       });
 
-      yPosition += 10;
-
       // Development Areas
-      addWrappedText('Development Areas:', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Development Areas:', 14, true);
       reportContent.executiveSummary.developmentAreas.forEach((area, index) => {
-        addWrappedText(`◦ ${area}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`◦ ${area}`, 11);
       });
 
       // New page for detailed analysis
@@ -203,63 +206,69 @@ export class AIReportGenerator {
       yPosition = margin;
 
       // Detailed Analysis
-      addWrappedText('DETAILED ANALYSIS', 16, pageWidth - 2 * margin, true);
+      addWrappedText('DETAILED ANALYSIS', 16, true);
       
-      // Dimension Scores Chart
+      // Dimension Scores
+      addWrappedText('Dimension Scores:', 14, true);
       if (reportContent.detailedAnalysis.dimensionScores) {
-        await this.addDimensionScoresChart(doc, reportContent.detailedAnalysis.dimensionScores, yPosition);
-        yPosition += 120; // Space for chart
+        Object.entries(reportContent.detailedAnalysis.dimensionScores).forEach(([key, value]) => {
+          const score = typeof value === 'object' && value !== null ? (value as any).score || 0 : value;
+          const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          addWrappedText(`${label}: ${score}/100`, 11);
+        });
       }
 
       // Personalized Insights
-      addWrappedText('Personalized Insights:', 14, pageWidth - 2 * margin, true);
-      addWrappedText(reportContent.detailedAnalysis.personalizedInsights, 11, pageWidth - 2 * margin);
+      addWrappedText('Personalized Insights:', 14, true);
+      addWrappedText(reportContent.detailedAnalysis.personalizedInsights, 11);
 
       // Behavioral Patterns
-      addWrappedText('Behavioral Patterns:', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Behavioral Patterns:', 14, true);
       reportContent.detailedAnalysis.behavioralPatterns.forEach((pattern, index) => {
-        addWrappedText(`• ${pattern}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`• ${pattern}`, 11);
       });
 
       // Action Plan
-      checkPageBreak(100);
-      addWrappedText('ACTION PLAN', 16, pageWidth - 2 * margin, true);
+      doc.addPage();
+      yPosition = margin;
+      
+      addWrappedText('ACTION PLAN', 16, true);
       
       // Immediate Actions
-      addWrappedText('Immediate Actions (Next 30 Days):', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Immediate Actions (Next 30 Days):', 14, true);
       reportContent.actionPlan.immediate.forEach((action, index) => {
-        addWrappedText(`${index + 1}. ${action}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`${index + 1}. ${action}`, 11);
       });
 
       // Short-term Actions
-      addWrappedText('Short-term Actions (3-6 Months):', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Short-term Actions (3-6 Months):', 14, true);
       reportContent.actionPlan.shortTerm.forEach((action, index) => {
-        addWrappedText(`${index + 1}. ${action}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`${index + 1}. ${action}`, 11);
       });
 
       // Long-term Actions
-      addWrappedText('Long-term Actions (6-18 Months):', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Long-term Actions (6-18 Months):', 14, true);
       reportContent.actionPlan.longTerm.forEach((action, index) => {
-        addWrappedText(`${index + 1}. ${action}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`${index + 1}. ${action}`, 11);
       });
 
       // Career Guidance
       checkPageBreak(80);
-      addWrappedText('CAREER GUIDANCE', 16, pageWidth - 2 * margin, true);
+      addWrappedText('CAREER GUIDANCE', 16, true);
       
-      addWrappedText('Career Recommendations:', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Career Recommendations:', 14, true);
       reportContent.careerGuidance.recommendations.forEach((rec, index) => {
-        addWrappedText(`• ${rec}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`• ${rec}`, 11);
       });
 
-      addWrappedText('Career Pathways:', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Career Pathways:', 14, true);
       reportContent.careerGuidance.pathways.forEach((pathway, index) => {
-        addWrappedText(`• ${pathway}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`• ${pathway}`, 11);
       });
 
-      addWrappedText('Skills to Acquire:', 14, pageWidth - 2 * margin, true);
+      addWrappedText('Skills to Acquire:', 14, true);
       reportContent.careerGuidance.skills.forEach((skill, index) => {
-        addWrappedText(`• ${skill}`, 11, pageWidth - 2 * margin - 10);
+        addWrappedText(`• ${skill}`, 11);
       });
 
       // Employer-specific section
@@ -279,56 +288,56 @@ export class AIReportGenerator {
         doc.setTextColor(0, 0, 0);
 
         // Distortion Scale
-        addWrappedText('DISTORTION SCALE ANALYSIS', 16, pageWidth - 2 * margin, true);
+        addWrappedText('DISTORTION SCALE ANALYSIS', 16, true);
         
         const distortion = reportContent.employerSpecific.distortionScale;
-        addWrappedText(`Validity Index: ${distortion.validityIndex}/100`, 14, pageWidth - 2 * margin, true);
+        addWrappedText(`Validity Index: ${distortion.validityIndex}/100`, 14, true);
         
-        addWrappedText(`Social Desirability: ${distortion.socialDesirability.score}/100`, 12, pageWidth - 2 * margin);
-        addWrappedText(distortion.socialDesirability.interpretation, 11, pageWidth - 2 * margin);
+        addWrappedText(`Social Desirability: ${distortion.socialDesirability.score}/100`, 12);
+        addWrappedText(distortion.socialDesirability.interpretation, 11);
         
-        addWrappedText(`Response Consistency: ${distortion.responseConsistency.score}/100`, 12, pageWidth - 2 * margin);
-        addWrappedText(distortion.responseConsistency.interpretation, 11, pageWidth - 2 * margin);
+        addWrappedText(`Response Consistency: ${distortion.responseConsistency.score}/100`, 12);
+        addWrappedText(distortion.responseConsistency.interpretation, 11);
         
-        addWrappedText(`Extreme Responding: ${distortion.extremeResponding.score}/100`, 12, pageWidth - 2 * margin);
-        addWrappedText(distortion.extremeResponding.interpretation, 11, pageWidth - 2 * margin);
+        addWrappedText(`Extreme Responding: ${distortion.extremeResponding.score}/100`, 12);
+        addWrappedText(distortion.extremeResponding.interpretation, 11);
 
         // Risk Assessment
-        addWrappedText('RISK ASSESSMENT', 16, pageWidth - 2 * margin, true);
+        addWrappedText('RISK ASSESSMENT', 16, true);
         const risk = reportContent.employerSpecific.riskAssessment;
-        addWrappedText(`Hiring Risk: ${risk.hiringRisk}`, 12, pageWidth - 2 * margin);
-        addWrappedText(`Success Probability: ${risk.successProbability}%`, 12, pageWidth - 2 * margin);
-        addWrappedText(`Retention Risk: ${risk.retentionRisk}`, 12, pageWidth - 2 * margin);
-        addWrappedText(`Ramp-up Time: ${risk.rampUpTime}`, 12, pageWidth - 2 * margin);
+        addWrappedText(`Hiring Risk: ${risk.hiringRisk}`, 12);
+        addWrappedText(`Success Probability: ${risk.successProbability}%`, 12);
+        addWrappedText(`Retention Risk: ${risk.retentionRisk}`, 12);
+        addWrappedText(`Ramp-up Time: ${risk.rampUpTime}`, 12);
 
         // Interview Questions
-        addWrappedText('INTERVIEW QUESTIONS', 16, pageWidth - 2 * margin, true);
+        addWrappedText('INTERVIEW QUESTIONS', 16, true);
         const questions = reportContent.employerSpecific.interviewQuestions;
         
         if (questions.behavioralQuestions) {
-          addWrappedText('Behavioral Questions:', 14, pageWidth - 2 * margin, true);
+          addWrappedText('Behavioral Questions:', 14, true);
           questions.behavioralQuestions.forEach((q: string, index: number) => {
-            addWrappedText(`${index + 1}. ${q}`, 11, pageWidth - 2 * margin - 10);
+            addWrappedText(`${index + 1}. ${q}`, 11);
           });
         }
 
         if (questions.situationalQuestions) {
-          addWrappedText('Situational Questions:', 14, pageWidth - 2 * margin, true);
+          addWrappedText('Situational Questions:', 14, true);
           questions.situationalQuestions.forEach((q: string, index: number) => {
-            addWrappedText(`${index + 1}. ${q}`, 11, pageWidth - 2 * margin - 10);
+            addWrappedText(`${index + 1}. ${q}`, 11);
           });
         }
 
         // Hiring Recommendations
-        addWrappedText('HIRING RECOMMENDATIONS', 16, pageWidth - 2 * margin, true);
+        addWrappedText('HIRING RECOMMENDATIONS', 16, true);
         reportContent.employerSpecific.hiringRecommendations.forEach((rec, index) => {
-          addWrappedText(`• ${rec}`, 11, pageWidth - 2 * margin - 10);
+          addWrappedText(`• ${rec}`, 11);
         });
 
         // Onboarding Plan
-        addWrappedText('ONBOARDING PLAN', 16, pageWidth - 2 * margin, true);
+        addWrappedText('ONBOARDING PLAN', 16, true);
         reportContent.employerSpecific.onboardingPlan.forEach((step, index) => {
-          addWrappedText(`${index + 1}. ${step}`, 11, pageWidth - 2 * margin - 10);
+          addWrappedText(`${index + 1}. ${step}`, 11);
         });
       }
 
@@ -344,10 +353,10 @@ export class AIReportGenerator {
       }
 
       // Save the PDF
-      const fileName = `${reportContent.candidateInfo.name.replace(/\s+/g, '_')}_${reportContent.candidateInfo.assessmentType}_Report_${new Date().toISOString().split('T')[0]}.pdf`;
+      const fileName = `AI_${reportContent.candidateInfo.name.replace(/\s+/g, '_')}_${reportContent.candidateInfo.assessmentType}_Report_${new Date().toISOString().split('T')[0]}.pdf`;
       doc.save(fileName);
 
-      toast.success('PDF Report downloaded successfully!');
+      toast.success('AI-powered PDF Report downloaded successfully!');
 
     } catch (error) {
       console.error('Error generating PDF:', error);
@@ -358,83 +367,32 @@ export class AIReportGenerator {
 
   private async addDimensionScoresChart(doc: jsPDF, dimensionScores: Record<string, any>, yPosition: number) {
     try {
-      // Create a canvas element for the chart
-      const canvas = document.createElement('canvas');
-      canvas.width = 400;
-      canvas.height = 300;
-      const ctx = canvas.getContext('2d');
-      
-      if (!ctx) return;
-
-      // Prepare data for chart
-      const labels = Object.keys(dimensionScores).map(key => 
-        key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-      );
-      const data = Object.values(dimensionScores).map((dim: any) => dim.score || 0);
-
-      // Create chart
-      const chart = new Chart(ctx, {
-        type: 'radar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Dimension Scores',
-            data: data,
-            fill: true,
-            backgroundColor: 'rgba(54, 162, 235, 0.2)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-            pointBorderColor: '#fff',
-            pointHoverBackgroundColor: '#fff',
-            pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
-          }]
-        },
-        options: {
-          responsive: false,
-          scales: {
-            r: {
-              angleLines: {
-                display: false
-              },
-              suggestedMin: 0,
-              suggestedMax: 100
-            }
-          },
-          plugins: {
-            legend: {
-              display: false
-            }
-          }
-        }
-      });
-
-      // Convert chart to image and add to PDF
-      const chartImage = canvas.toDataURL('image/png');
-      doc.addImage(chartImage, 'PNG', 30, yPosition, 150, 100);
-      
-      // Add title
-      doc.setFontSize(12);
+      // Simplified chart representation using text
+      doc.setFontSize(14);
       doc.setFont('helvetica', 'bold');
-      doc.text('Dimension Scores Overview', 105, yPosition - 5, { align: 'center' });
-
-      // Clean up
-      chart.destroy();
-      canvas.remove();
-
+      doc.text('Dimension Scores Overview', 30, yPosition);
+      
+      let textY = yPosition + 20;
+      Object.entries(dimensionScores).forEach(([key, value]: [string, any]) => {
+        const score = typeof value === 'object' && value !== null ? value.score || 0 : value;
+        const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        
+        // Draw a simple bar representation
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'normal');
+        doc.text(`${label}:`, 30, textY);
+        doc.text(`${score}/100`, 120, textY);
+        
+        // Draw a simple progress bar
+        doc.setDrawColor(200, 200, 200);
+        doc.rect(30, textY + 2, 80, 4);
+        doc.setFillColor(52, 152, 219);
+        doc.rect(30, textY + 2, (score / 100) * 80, 4, 'F');
+        
+        textY += 15;
+      });
     } catch (error) {
       console.error('Error adding chart to PDF:', error);
-      // Fallback to text-based representation
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Dimension Scores:', 30, yPosition);
-      
-      let textY = yPosition + 15;
-      Object.entries(dimensionScores).forEach(([key, value]: [string, any]) => {
-        const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-        doc.setFont('helvetica', 'normal');
-        doc.text(`${label}: ${value.score || 0}/100`, 30, textY);
-        textY += 10;
-      });
     }
   }
 }
