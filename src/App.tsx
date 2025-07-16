@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import AboutPage from "./pages/About";
 import AdminPage from "./pages/Admin";
+import Auth from "./pages/Auth";
 import Assessment from "./pages/Assessment";
 import CareerLaunch from "./pages/CareerLaunch";
 import CAIRAssessment from "./pages/CAIRAssessment";
@@ -38,6 +39,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path="/auth" element={<Auth />} />
             <Route path="/assessment" element={<Assessment />} />
             <Route path="/career-launch" element={<CareerLaunch />} />
             <Route path="/cair-assessment" element={<CAIRAssessment />} />
