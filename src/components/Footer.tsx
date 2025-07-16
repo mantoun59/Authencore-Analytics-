@@ -10,7 +10,7 @@ const Footer = () => {
             {/* Logo */}
             <div className="bg-white p-4 rounded-lg w-fit">
               <img 
-                src="/lovable-uploads/e422854d-e315-4866-9e88-3066bbf7d64b.png" 
+                src="/lovable-uploads/3e445206-112e-41c0-87c9-28a731c3361f.png" 
                 alt="AuthenCore Analytics" 
                 className="h-16 w-auto"
               />
