@@ -122,7 +122,6 @@ All colors MUST be HSL.
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 180 100% 45%;
   }
-  }
 
   /* Corporate Blue Theme */
   .theme-corporate-blue {
@@ -321,7 +320,6 @@ All colors MUST be HSL.
     --sidebar-border: 0 0% 13%;
     --sidebar-ring: 0 0% 75%;
   }
-}
 
 @layer base {
   * {
