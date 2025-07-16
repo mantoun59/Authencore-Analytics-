@@ -24,7 +24,7 @@ const Header = () => {
           <div className="flex items-center justify-between h-24">
         <div className="flex items-center">
           <Link to="/" className="flex items-center space-x-4">
-            <div className="bg-white rounded-md p-1 shadow-md border border-border">
+            <div className="bg-white rounded border border-border inline-flex">
               <img 
                 src="/lovable-uploads/cc5cdfbf-5b38-4726-9a3c-ba074c16f6de.png" 
                 alt="Authencore Analytics" 
