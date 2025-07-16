@@ -222,10 +222,32 @@ export const PartnerManagement = () => {
             .insert(permissionInserts);
         }
 
-        toast({
-          title: 'Success',
-          description: 'Partner created successfully'
-        });
+        // Send credentials email
+        try {
+          await supabase.functions.invoke('send-partner-credentials', {
+            body: {
+              email: formData.contact_email,
+              username: formData.username,
+              password: formData.password,
+              organization: formData.organization_name,
+              expires_at: accessExpiresAt.toISOString(),
+              permissions: formData.permissions,
+              login_url: `${window.location.origin}/partner-login`
+            }
+          });
+
+          toast({
+            title: 'Success',
+            description: 'Partner created and credentials sent via email'
+          });
+        } catch (emailError) {
+          console.error('Failed to send credentials email:', emailError);
+          toast({
+            title: 'Partner Created',
+            description: 'Partner created successfully, but failed to send credentials email. Please share credentials manually.',
+            variant: 'destructive'
+          });
+        }
       }
 
       setIsDialogOpen(false);
