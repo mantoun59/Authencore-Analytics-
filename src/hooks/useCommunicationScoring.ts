@@ -223,10 +223,8 @@ export const useCommunicationScoring = () => {
           moduleScores[response.module] = [];
         }
         
-        const scoreValues = Object.values(response.response.scores as Record<string, number>);
-        const avgScore = scoreValues.length > 0 
-          ? scoreValues.reduce((sum: number, value: number) => sum + (value || 0), 0) / scoreValues.length
-          : 0;
+        const avgScore = Object.values(response.response.scores).reduce((a: number, b: any) => a + Number(b), 0) / 
+                        Object.values(response.response.scores).length;
         moduleScores[response.module].push(avgScore);
       }
     });
@@ -256,10 +254,8 @@ export const useCommunicationScoring = () => {
 
     responses.forEach(response => {
       if (response.response.scores) {
-        const scoreValues = Object.values(response.response.scores as Record<string, number>);
-        const avgScore = scoreValues.length > 0 
-          ? scoreValues.reduce((sum: number, value: number) => sum + (value || 0), 0) / scoreValues.length
-          : 0;
+        const avgScore = Object.values(response.response.scores).reduce((a: number, b: any) => a + Number(b), 0) / 
+                        Object.values(response.response.scores).length;
         
         // Categorize based on question context
         if (response.questionId.includes('leadership') || response.questionId.includes('proposal')) {
