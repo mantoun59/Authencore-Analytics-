@@ -253,6 +253,11 @@ async function generatePersonalizedInsights(results: any, candidateInfo: any, as
   });
 
   const data = await response.json();
+  
+  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    throw new Error('Invalid OpenAI API response format');
+  }
+  
   const content = data.choices[0].message.content;
   
   try {
@@ -305,6 +310,11 @@ async function generateStrengthsAndDevelopment(results: any, assessmentType: str
   });
 
   const data = await response.json();
+  
+  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    throw new Error('Invalid OpenAI API response format');
+  }
+  
   const content = data.choices[0].message.content;
   
   try {
@@ -366,6 +376,11 @@ async function generateActionPlan(results: any, candidateInfo: any, assessmentTy
   });
 
   const data = await response.json();
+  
+  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    throw new Error('Invalid OpenAI API response format');
+  }
+  
   const content = data.choices[0].message.content;
   
   try {
@@ -422,6 +437,11 @@ async function generateInterviewQuestions(results: any, candidateInfo: any, asse
   });
 
   const data = await response.json();
+  
+  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    throw new Error('Invalid OpenAI API response format');
+  }
+  
   const content = data.choices[0].message.content;
   
   try {
@@ -519,6 +539,11 @@ async function generateCareerRecommendations(results: any, candidateInfo: any, a
   });
 
   const data = await response.json();
+  
+  if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+    throw new Error('Invalid OpenAI API response format');
+  }
+  
   const content = data.choices[0].message.content;
   
   try {
