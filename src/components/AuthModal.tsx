@@ -9,9 +9,10 @@ import { useAuth } from '@/contexts/AuthContext';
 interface AuthModalProps {
   type: 'login' | 'register' | null;
   onClose: () => void;
+  onTypeChange: (type: 'login' | 'register') => void;
 }
 
-const AuthModal: React.FC<AuthModalProps> = ({ type, onClose }) => {
+const AuthModal: React.FC<AuthModalProps> = ({ type, onClose, onTypeChange }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [passwordError, setPasswordError] = useState('');
@@ -191,7 +192,7 @@ const AuthModal: React.FC<AuthModalProps> = ({ type, onClose }) => {
           <button
             className="text-primary hover:text-primary-glow font-medium underline"
             onClick={() => {
-              // This would need to be handled by parent to switch types
+              onTypeChange(type === 'login' ? 'register' : 'login');
             }}
           >
             {type === 'login' ? 'Register here' : 'Sign in here'}

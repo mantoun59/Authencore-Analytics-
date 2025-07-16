@@ -142,6 +142,7 @@ const Header = () => {
       <AuthModal
         type={authModalType}
         onClose={() => setAuthModalType(null)}
+        onTypeChange={(type) => setAuthModalType(type)}
       />
     </>
   );
