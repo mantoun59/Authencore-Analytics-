@@ -355,6 +355,52 @@ const Assessment = () => {
               </CardContent>
             </Card>
 
+            {/* GenZ Workplace Assessment */}
+            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2">
+              <CardHeader>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="text-3xl">🚀</div>
+                  <div>
+                    <CardTitle className="text-xl">GenZ Workplace Assessment</CardTitle>
+                    <Badge className="mt-1" variant="secondary">TikTok-Style</Badge>
+                  </div>
+                </div>
+                <CardDescription className="text-base">
+                  Revolutionary TikTok-style assessment with emoji reactions and swipe interactions for authentic Gen Z workplace insights
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline">Emoji Reactions</Badge>
+                  <Badge variant="outline">Swipe Interface</Badge>
+                  <Badge variant="outline">Mobile-First</Badge>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    TikTok-style scenario swiping
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Emoji-based reactions (❤️👍😐👎🚩)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Workplace culture matching
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Authenticity & retention analysis
+                  </li>
+                </ul>
+                <Link to="/genz-assessment">
+                  <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
+                    Start GenZ Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+              </CardContent>
+            </Card>
+
           </div>
         </div>
       </section>

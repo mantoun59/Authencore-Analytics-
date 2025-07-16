@@ -14,6 +14,7 @@ import CulturalIntelligenceAssessment from "./pages/CulturalIntelligenceAssessme
 import CommunicationAssessment from "./pages/CommunicationAssessment";
 import EmotionalIntelligenceAssessment from "./pages/EmotionalIntelligenceAssessment";
 import FaithValuesAssessment from "./pages/FaithValuesAssessment";
+import GenZAssessment from "./pages/GenZAssessment";
 import PartnerLogin from "./pages/PartnerLogin";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
@@ -38,6 +39,7 @@ const App = () => (
             <Route path="/communication-assessment" element={<CommunicationAssessment />} />
             <Route path="/emotional-intelligence" element={<EmotionalIntelligenceAssessment />} />
             <Route path="/faith-values" element={<FaithValuesAssessment />} />
+            <Route path="/genz-assessment" element={<GenZAssessment />} />
             <Route path="/partner-login" element={<PartnerLogin />} />
             <Route path="/admin" element={<AdminPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
