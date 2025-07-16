@@ -218,15 +218,11 @@ export class AIReportGenerator {
     doc.setFillColor(15, 23, 42); // Dark blue-gray
     doc.rect(0, 0, pageWidth, 60, 'F');
     
-    // Add company logo - white background for logo
-    doc.setFillColor(255, 255, 255);
-    doc.rect(margin, 10, 35, 35, 'F');
-    
-    // Add the actual logo image if available
+    // Add the actual logo image if available (no white background)
     if (logoBase64) {
       try {
-        // Use the actual logo image with proper aspect ratio
-        doc.addImage(logoBase64, 'PNG', margin + 5, 15, 25, 25);
+        // Use the actual logo image with square dimensions and transparent background
+        doc.addImage(logoBase64, 'PNG', margin, 10, 40, 40);
       } catch (error) {
         console.error('Error adding logo to PDF:', error);
         // Fallback to placeholder
