@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AuthModal from "./AuthModal";
-import logo from "@/assets/authencore-logo.png";
+import logo from "/lovable-uploads/e422854d-e315-4866-9e88-3066bbf7d64b.png";
 import { useAuth } from "@/contexts/AuthContext";
 
 const Header = () => {
