@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import jsPDF from 'jspdf';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -122,6 +123,66 @@ const AssessmentResults = ({ data }: AssessmentResultsProps) => {
       bgColor: "bg-yellow-50"
     }
   ];
+
+  const downloadReport = () => {
+    const doc = new jsPDF();
+    
+    // Title
+    doc.setFontSize(20);
+    doc.text('Stress Resilience & Adaptability Assessment', 20, 30);
+    
+    // Overall Score
+    doc.setFontSize(16);
+    doc.text('Overall Resilience Score', 20, 50);
+    doc.setFontSize(24);
+    doc.text(`${overallScore}/100`, 20, 65);
+    doc.setFontSize(12);
+    doc.text(`${resilienceProfile} Level - ${getScoreDescription(overallScore)}`, 20, 75);
+    
+    // Dimension Scores
+    doc.setFontSize(16);
+    doc.text('Dimension Scores:', 20, 95);
+    doc.setFontSize(12);
+    
+    let yPos = 110;
+    dimensions.forEach((dimension) => {
+      const score = dimensionScores[dimension.key] || 0;
+      doc.text(`${dimension.title}: ${score}/100 (${getScoreDescription(score)})`, 20, yPos);
+      yPos += 15;
+    });
+    
+    // Key Metrics
+    doc.setFontSize(16);
+    doc.text('Key Metrics:', 20, yPos + 10);
+    doc.setFontSize(12);
+    yPos += 25;
+    doc.text('• Stress Threshold: High', 20, yPos);
+    doc.text('• Recovery Rate: Fast', 20, yPos + 15);
+    doc.text('• Burnout Risk: Low', 20, yPos + 30);
+    
+    // Recommendations (new page)
+    doc.addPage();
+    doc.setFontSize(16);
+    doc.text('Development Recommendations', 20, 30);
+    doc.setFontSize(12);
+    
+    yPos = 50;
+    recommendations.forEach((rec) => {
+      doc.setFontSize(14);
+      doc.text(rec.category, 20, yPos);
+      yPos += 10;
+      rec.items.forEach((item) => {
+        doc.setFontSize(10);
+        const splitText = doc.splitTextToSize(`• ${item}`, 170);
+        doc.text(splitText, 25, yPos);
+        yPos += splitText.length * 5 + 5;
+      });
+      yPos += 10;
+    });
+    
+    // Save the PDF
+    doc.save(`resilience-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`);
+  };
 
   const getScoreColor = (score: number) => {
     if (score >= 85) return "text-green-600";
@@ -487,7 +548,11 @@ const AssessmentResults = ({ data }: AssessmentResultsProps) => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-12">
-            <Button size="lg" className="bg-gradient-primary hover:shadow-glow">
+            <Button 
+              size="lg" 
+              onClick={downloadReport}
+              className="bg-gradient-primary hover:shadow-glow"
+            >
               <Download className="h-4 w-4 mr-2" />
               Download Full Report
             </Button>
