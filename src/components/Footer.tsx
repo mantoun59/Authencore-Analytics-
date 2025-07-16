@@ -31,17 +31,23 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Middle Section - Legal Links */}
+          {/* Middle Section - Legal & Compliance */}
           <div className="space-y-6">
             <h4 className="text-xl font-semibold text-foreground">
-              Legal
+              Legal & Compliance
             </h4>
             <div className="space-y-2">
               <Link
                 to="/privacy"
                 className="block text-muted-foreground hover:text-primary transition-colors text-sm"
               >
-                Privacy Policy
+                Privacy Policy & Literature
+              </Link>
+              <Link
+                to="/compliance"
+                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              >
+                Compliance Documentation
               </Link>
               <a
                 href="#terms"
@@ -59,7 +65,13 @@ const Footer = () => {
                 href="#security"
                 className="block text-muted-foreground hover:text-primary transition-colors text-sm"
               >
-                Data Security
+                Data Security Standards
+              </a>
+              <a
+                href="#ethics"
+                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              >
+                Assessment Ethics
               </a>
             </div>
           </div>
@@ -120,11 +132,11 @@ const Footer = () => {
             </p>
             <div className="flex items-center space-x-6 text-sm">
               <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
-                Privacy Policy
+                Privacy & Literature
               </Link>
-              <a href="#compliance" className="text-muted-foreground hover:text-primary transition-colors">
-                Compliance
-              </a>
+              <Link to="/compliance" className="text-muted-foreground hover:text-primary transition-colors">
+                Compliance Documentation
+              </Link>
               <a href="#contact" className="text-muted-foreground hover:text-primary transition-colors">
                 Contact
               </a>
