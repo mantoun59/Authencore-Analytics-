@@ -4,7 +4,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare, Globe } from "lucide-react";
+import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare, Globe, BarChart3 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Assessment = () => {
@@ -25,6 +25,13 @@ const Assessment = () => {
             Choose from our comprehensive range of professional assessments designed to evaluate skills, 
             personality, career readiness, and workplace performance.
           </p>
+          <Link to="/sample-reports">
+            <Button size="lg" className="mb-8 flex items-center gap-2">
+              <BarChart3 className="h-5 w-5" />
+              View Sample Reports
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Button>
+          </Link>
         </div>
       </section>
 
