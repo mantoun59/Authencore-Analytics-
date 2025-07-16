@@ -163,9 +163,11 @@ const Assessment = () => {
                     Burnout risk prediction
                   </li>
                 </ul>
-                <Button className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600" disabled>
-                  Coming Soon <Clock className="ml-2 h-4 w-4" />
-                </Button>
+                <Link to="/stress-resilience">
+                  <Button className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600">
+                    Start Assessment <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
               </CardContent>
             </Card>
 
