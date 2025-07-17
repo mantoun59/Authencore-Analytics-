@@ -294,124 +294,126 @@ export class AIReportGenerator {
 
     // Executive Summary Title with enhanced styling
     doc.setFillColor(15, 23, 42);
-    doc.rect(margin - 5, yPosition - 15, contentWidth + 10, 25, 'F');
+    doc.rect(margin - 5, yPosition - 12, contentWidth + 10, 20, 'F'); // Reduced height
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(18);
+    doc.setFontSize(16); // Reduced from 18
     doc.setFont('helvetica', 'bold');
     doc.text('EXECUTIVE SUMMARY', margin, yPosition);
-    yPosition += 25;
+    yPosition += 20; // Reduced spacing
 
     // Assessment validity indicator
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(10);
+    doc.setFontSize(8); // Reduced from 10
     doc.setFont('helvetica', 'normal');
-    doc.text('✓ AI-Powered Professional Assessment | Evidence-Based Analysis | Predictive Insights', margin, yPosition);
-    yPosition += 20;
+    doc.text('✓ AI-Powered Professional Assessment | Evidence-Based Analysis', margin, yPosition);
+    yPosition += 15; // Reduced spacing
 
     // Overall Score with enhanced visual representation
-    doc.setFontSize(14);
+    doc.setFontSize(12); // Reduced from 14
     doc.setFont('helvetica', 'bold');
-    doc.text('Overall Competency Score:', margin, yPosition);
+    doc.text('Overall Score:', margin, yPosition);
     
     // Score visualization
     const scoreColor = reportContent.executiveSummary.overallScore >= 80 ? [34, 197, 94] as [number, number, number] : 
                       reportContent.executiveSummary.overallScore >= 60 ? [245, 158, 11] as [number, number, number] : [239, 68, 68] as [number, number, number];
     doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.setFontSize(36);
-    doc.text(`${reportContent.executiveSummary.overallScore}`, margin + 120, yPosition + 5);
-    doc.setFontSize(16);
-    doc.text('/100', margin + 145, yPosition + 5);
+    doc.setFontSize(28); // Reduced from 36
+    doc.text(`${reportContent.executiveSummary.overallScore}`, margin + 80, yPosition + 5);
+    doc.setFontSize(14); // Reduced from 16
+    doc.text('/100', margin + 105, yPosition + 5); // Adjusted position
     
     // Enhanced progress bar with gradient effect
-    const barWidth = 150;
+    const barWidth = 120; // Reduced from 150
     const fillWidth = (reportContent.executiveSummary.overallScore / 100) * barWidth;
     
     // Background bar
     doc.setFillColor(229, 231, 235);
-    doc.rect(margin, yPosition + 10, barWidth, 12, 'F');
+    doc.rect(margin, yPosition + 8, barWidth, 8, 'F'); // Reduced height
     
     // Progress fill
     doc.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.rect(margin, yPosition + 10, fillWidth, 12, 'F');
+    doc.rect(margin, yPosition + 8, fillWidth, 8, 'F');
     
     // Score interpretation
     doc.setTextColor(75, 85, 99);
-    doc.setFontSize(10);
-    const interpretation = reportContent.executiveSummary.overallScore >= 80 ? 'Exceptional Performance' :
-                          reportContent.executiveSummary.overallScore >= 60 ? 'Strong Performance' : 'Development Opportunity';
-    doc.text(interpretation, margin + barWidth + 10, yPosition + 17);
-    yPosition += 35;
+    doc.setFontSize(8); // Reduced from 10
+    const interpretation = reportContent.executiveSummary.overallScore >= 80 ? 'Exceptional' :
+                          reportContent.executiveSummary.overallScore >= 60 ? 'Strong' : 'Developing';
+    doc.text(interpretation, margin + barWidth + 5, yPosition + 12);
+    yPosition += 25; // Reduced spacing
 
     // Key Professional Insights with enhanced formatting
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(14);
+    doc.setFontSize(12); // Reduced from 14
     doc.setFont('helvetica', 'bold');
-    doc.text('Key Professional Insights:', margin, yPosition);
-    yPosition += 15;
+    doc.text('Key Insights:', margin, yPosition);
+    yPosition += 12; // Reduced spacing
 
-    doc.setFontSize(10);
+    doc.setFontSize(9); // Reduced from 10
     doc.setFont('helvetica', 'normal');
-    reportContent.executiveSummary.keyInsights.forEach((insight, index) => {
+    reportContent.executiveSummary.keyInsights.slice(0, 3).forEach((insight, index) => { // Limit to 3 items
       // Add bullet point with enhanced styling
       doc.setFillColor(59, 130, 246);
-      doc.circle(margin + 3, yPosition - 2, 1.5, 'F');
+      doc.circle(margin + 2, yPosition - 1, 1, 'F'); // Smaller bullet
       
-      const lines = doc.splitTextToSize(insight, contentWidth - 15); // Use contentWidth with padding
-      doc.text(lines, margin + 8, yPosition);
-      yPosition += lines.length * 4 + 6;
+      // Truncate insights more aggressively
+      const truncatedInsight = insight.length > 120 ? insight.substring(0, 120) + '...' : insight;
+      const lines = doc.splitTextToSize(truncatedInsight, contentWidth - 10);
+      doc.text(lines, margin + 6, yPosition);
+      yPosition += lines.length * 3.5 + 4; // Reduced line spacing
     });
 
-    yPosition += 15;
+    yPosition += 10;
 
     // Enhanced two-column layout for strengths and development areas
-    const colWidth = (contentWidth - 15) / 2; // Adjusted for better spacing
+    const colWidth = (contentWidth - 10) / 2; // Reduced spacing
     let leftY = yPosition;
     let rightY = yPosition;
 
     // Strengths section with visual enhancement
-    doc.setFillColor(239, 246, 255); // Light blue background
-    doc.rect(margin - 5, leftY - 10, colWidth + 5, 85, 'F');
+    doc.setFillColor(239, 246, 255);
+    doc.rect(margin - 3, leftY - 8, colWidth + 3, 60, 'F'); // Reduced height
     doc.setDrawColor(59, 130, 246);
-    doc.setLineWidth(2);
-    doc.line(margin - 5, leftY - 10, margin - 5, leftY + 75);
+    doc.setLineWidth(1); // Thinner line
+    doc.line(margin - 3, leftY - 8, margin - 3, leftY + 52);
     
-    doc.setFontSize(12);
+    doc.setFontSize(10); // Reduced from 12
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(59, 130, 246);
-    doc.text('🎯 Core Strengths', margin, leftY);
-    leftY += 12;
+    doc.text('Strengths', margin, leftY);
+    leftY += 10;
 
-    doc.setFontSize(9);
+    doc.setFontSize(8); // Reduced from 9
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.executiveSummary.topStrengths.slice(0, 5).forEach((strength, index) => {
-      const cleanStrength = strength.replace(/^[^:]*:\s*/, '').substring(0, 70) + '...'; // Reduced character limit
-      const lines = doc.splitTextToSize(`✓ ${cleanStrength}`, colWidth - 15); // More padding
+    reportContent.executiveSummary.topStrengths.slice(0, 3).forEach((strength, index) => { // Limit to 3
+      const cleanStrength = strength.replace(/^[^:]*:\s*/, '').substring(0, 50) + '...'; // Shorter text
+      const lines = doc.splitTextToSize(`✓ ${cleanStrength}`, colWidth - 8);
       doc.text(lines, margin, leftY);
-      leftY += lines.length * 4 + 3;
+      leftY += lines.length * 3 + 2; // Reduced spacing
     });
 
     // Development Areas section with visual enhancement
-    doc.setFillColor(254, 242, 242); // Light red background
-    doc.rect(margin + colWidth + 5, rightY - 10, colWidth + 5, 85, 'F');
+    doc.setFillColor(254, 242, 242);
+    doc.rect(margin + colWidth + 7, rightY - 8, colWidth + 3, 60, 'F'); // Reduced height
     doc.setDrawColor(239, 68, 68);
-    doc.setLineWidth(2);
-    doc.line(margin + colWidth + 5, rightY - 10, margin + colWidth + 5, rightY + 75);
+    doc.setLineWidth(1);
+    doc.line(margin + colWidth + 7, rightY - 8, margin + colWidth + 7, rightY + 52);
     
-    doc.setFontSize(12);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(239, 68, 68);
-    doc.text('🎯 Development Focus', margin + colWidth + 10, rightY);
-    rightY += 12;
+    doc.text('Development', margin + colWidth + 10, rightY);
+    rightY += 10;
 
-    doc.setFontSize(9);
+    doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.executiveSummary.developmentAreas.slice(0, 4).forEach((area, index) => {
-      const cleanArea = area.replace(/^[^:]*:\s*/, '').substring(0, 70) + '...'; // Reduced character limit
-      const lines = doc.splitTextToSize(`◦ ${cleanArea}`, colWidth - 15); // More padding
-      doc.text(lines, margin + colWidth + 15, rightY); // Adjusted positioning
-      rightY += lines.length * 4 + 3;
+    reportContent.executiveSummary.developmentAreas.slice(0, 3).forEach((area, index) => { // Limit to 3
+      const cleanArea = area.replace(/^[^:]*:\s*/, '').substring(0, 50) + '...'; // Shorter text
+      const lines = doc.splitTextToSize(`◦ ${cleanArea}`, colWidth - 8);
+      doc.text(lines, margin + colWidth + 10, rightY);
+      rightY += lines.length * 3 + 2; // Reduced spacing
     });
   }
 
@@ -423,39 +425,45 @@ export class AIReportGenerator {
 
     // Section title
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(18);
+    doc.setFontSize(16); // Reduced from 18
     doc.setFont('helvetica', 'bold');
-    doc.text('DETAILED PSYCHOLOGICAL ANALYSIS', margin, yPosition);
-    yPosition += 30;
+    doc.text('DETAILED ANALYSIS', margin, yPosition);
+    yPosition += 25; // Reduced spacing
 
     // Dimension Scores Chart
     this.addDimensionScoresChart(doc, reportContent.detailedAnalysis.dimensionScores, yPosition);
-    yPosition += 120;
+    yPosition += 100; // Reduced spacing
 
     // Personalized Insights
-    doc.setFontSize(14);
+    doc.setFontSize(12); // Reduced from 14
     doc.setFont('helvetica', 'bold');
-    doc.text('Personalized Professional Insights:', margin, yPosition);
-    yPosition += 15;
+    doc.text('Professional Insights:', margin, yPosition);
+    yPosition += 12; // Reduced spacing
 
-    doc.setFontSize(11);
+    doc.setFontSize(9); // Reduced from 11
     doc.setFont('helvetica', 'normal');
-    const insightLines = doc.splitTextToSize(reportContent.detailedAnalysis.personalizedInsights, contentWidth);
+    // Truncate insights text for better fit
+    const truncatedInsights = reportContent.detailedAnalysis.personalizedInsights.length > 400 ? 
+      reportContent.detailedAnalysis.personalizedInsights.substring(0, 400) + '...' : 
+      reportContent.detailedAnalysis.personalizedInsights;
+    const insightLines = doc.splitTextToSize(truncatedInsights, contentWidth);
     doc.text(insightLines, margin, yPosition);
-    yPosition += insightLines.length * 5 + 15;
+    yPosition += insightLines.length * 4 + 12; // Reduced spacing
 
     // Behavioral Patterns
-    doc.setFontSize(14);
+    doc.setFontSize(12); // Reduced from 14
     doc.setFont('helvetica', 'bold');
-    doc.text('Behavioral Patterns & Workplace Implications:', margin, yPosition);
-    yPosition += 15;
+    doc.text('Behavioral Patterns:', margin, yPosition);
+    yPosition += 12; // Reduced spacing
 
-    doc.setFontSize(11);
+    doc.setFontSize(9); // Reduced from 11
     doc.setFont('helvetica', 'normal');
-    reportContent.detailedAnalysis.behavioralPatterns.forEach((pattern, index) => {
-      const lines = doc.splitTextToSize(`${index + 1}. ${pattern}`, contentWidth);
+    reportContent.detailedAnalysis.behavioralPatterns.slice(0, 3).forEach((pattern, index) => { // Limit to 3
+      // Truncate patterns for better fit
+      const truncatedPattern = pattern.length > 150 ? pattern.substring(0, 150) + '...' : pattern;
+      const lines = doc.splitTextToSize(`${index + 1}. ${truncatedPattern}`, contentWidth);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 5 + 8;
+      yPosition += lines.length * 4 + 6; // Reduced spacing
     });
   }
 
