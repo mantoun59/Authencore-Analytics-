@@ -225,37 +225,56 @@ async function generateAIReport(
 
 async function generatePersonalizedInsights(results: any, candidateInfo: any, assessmentType: string) {
   const prompt = `
-    You are a world-class industrial psychologist and executive assessment expert with 20+ years of experience. 
-    Analyze this comprehensive assessment data and provide professional-grade insights that would be found in a $5,000 executive assessment report.
+    You are a senior executive psychologist with 25+ years in talent assessment, holding doctoral credentials and specialized expertise in psychometric evaluation. 
     
-    Assessment Type: ${assessmentType}
-    Candidate: ${JSON.stringify(candidateInfo)}
-    Results: ${JSON.stringify(results)}
+    ASSESSMENT CONTEXT:
+    - Assessment Type: ${assessmentType}
+    - Candidate Profile: ${JSON.stringify(candidateInfo)}
+    - Comprehensive Results Data: ${JSON.stringify(results)}
     
-    Provide detailed professional insights in JSON format:
+    ANALYSIS REQUIREMENTS:
+    Conduct a thorough psychological assessment equivalent to executive-level evaluations used by Fortune 500 companies. 
+    
+    Your analysis must include:
+    1. Statistical reliability validation of response patterns
+    2. Cross-dimensional consistency analysis
+    3. Cognitive load and processing style evaluation
+    4. Behavioral prediction modeling
+    5. Leadership readiness assessment
+    6. Risk factor identification
+    7. Cultural fit and adaptability analysis
+    
+    RESPONSE FORMAT (Strict JSON):
     {
-      "executiveSummary": "A 150-word executive summary highlighting the candidate's psychological profile, leadership potential, and key differentiators",
+      "executiveSummary": "Professional 200-word synthesis integrating cognitive assessment, personality dynamics, leadership capacity, and behavioral predictions with specific evidence from the data",
       "keyInsights": [
-        "Detailed insight about cognitive style and decision-making patterns",
-        "Analysis of interpersonal effectiveness and communication style", 
-        "Assessment of emotional intelligence and self-regulation capabilities",
-        "Evaluation of stress tolerance and resilience under pressure",
-        "Leadership style analysis and team dynamics assessment"
+        "Cognitive processing style: [specific pattern] with implications for [workplace scenarios]",
+        "Interpersonal effectiveness: [behavioral evidence] indicating [communication style] with team impact [specific prediction]",
+        "Emotional regulation: [response pattern evidence] suggesting [stress management capability] in [high-pressure scenarios]",
+        "Decision-making framework: [data evidence] revealing [analytical vs intuitive preference] affecting [strategic vs operational effectiveness]",
+        "Leadership emergence: [behavioral indicators] predicting [leadership style] with [team dynamics outcome]",
+        "Adaptability index: [change response patterns] indicating [flexibility level] in [organizational change scenarios]"
       ],
-      "detailed": "A comprehensive 200-word analysis of the candidate's psychological profile, including cognitive patterns, motivational drivers, behavioral tendencies, and workplace effectiveness",
+      "detailed": "Comprehensive 300-word psychological profile synthesizing: (1) Cognitive architecture - information processing style, analytical depth, creative thinking patterns; (2) Motivational ecosystem - intrinsic drivers, recognition needs, autonomy preferences; (3) Behavioral tendencies - communication patterns, conflict approach, collaboration style; (4) Performance predictors - stress response, learning agility, execution consistency; (5) Leadership DNA - influence style, team building capacity, strategic thinking",
       "behavioralPatterns": [
-        "Specific behavioral pattern with workplace implications",
-        "Communication style and its impact on team dynamics",
-        "Decision-making approach and risk tolerance assessment",
-        "Stress response patterns and coping mechanisms",
-        "Leadership behaviors and influence tactics"
+        "Communication effectiveness: [specific pattern from data] predicts [interaction outcome] in [team/client scenarios]",
+        "Stress response architecture: [physiological/cognitive indicators] suggest [coping mechanism] with [performance impact] under pressure",
+        "Decision velocity: [response time patterns] indicate [deliberative vs rapid] style affecting [operational vs strategic] roles",
+        "Influence tactics: [behavioral evidence] reveals [persuasion style] with [team acceptance] probability",
+        "Learning adaptation: [pattern recognition from responses] suggests [knowledge acquisition style] affecting [skill development timeline]",
+        "Conflict navigation: [response patterns] indicate [approach style] with [resolution effectiveness] prediction"
       ],
-      "cognitiveProfile": "Detailed analysis of thinking style, problem-solving approach, and intellectual capabilities",
-      "motivationalDrivers": "Analysis of what energizes and motivates this individual",
-      "potentialDerailers": "Professional assessment of potential blind spots or development risks"
+      "cognitiveProfile": "Detailed cognitive architecture analysis: Processing speed: [evidence-based assessment], Working memory capacity: [pattern indicators], Abstract reasoning: [problem-solving evidence], Pattern recognition: [data synthesis capability], Strategic thinking: [long-term planning indicators], Creative problem-solving: [innovative approach evidence]",
+      "motivationalDrivers": "Motivational ecosystem mapping: Primary drivers: [achievement/affiliation/power evidence], Recognition preferences: [feedback response patterns], Autonomy needs: [independence indicators], Growth orientation: [learning behavior evidence], Risk tolerance: [challenge-seeking patterns], Purpose alignment: [values-based response analysis]",
+      "potentialDerailers": "Risk assessment based on behavioral evidence: [Specific derailer 1] with [probability] in [trigger scenarios], [Derailer 2] with [mitigation strategies], [Blind spot areas] requiring [development focus], [Stress amplifiers] needing [environmental modifications]"
     }
     
-    Be specific, evidence-based, and provide actionable insights that demonstrate deep psychological understanding.
+    CRITICAL REQUIREMENTS:
+    - Base ALL insights on specific evidence from the assessment data
+    - Provide quantitative confidence levels where applicable
+    - Include predictive statements about workplace performance
+    - Identify specific development interventions
+    - Reference psychological research frameworks when relevant
   `;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -315,22 +334,48 @@ async function generatePersonalizedInsights(results: any, candidateInfo: any, as
 
 async function generateStrengthsAndDevelopment(results: any, assessmentType: string) {
   const prompt = `
-    Analyze the following assessment results and identify the top strengths and development areas:
+    You are a senior talent assessment specialist with expertise in competency modeling and behavioral prediction.
+    
+    TASK: Analyze assessment data to identify signature strengths and critical development priorities.
     
     Assessment Type: ${assessmentType}
-    Results: ${JSON.stringify(results)}
+    Comprehensive Assessment Data: ${JSON.stringify(results)}
     
-    Please provide a response in this exact JSON format:
+    ANALYSIS FRAMEWORK:
+    1. Signature Strengths Analysis:
+       - Identify top 20% performance areas with statistical significance
+       - Assess transferability to workplace performance
+       - Evaluate competitive advantage potential
+       - Consider sustainability under stress
+    
+    2. Development Priority Matrix:
+       - High-impact areas with greatest performance leverage
+       - Skills critical for role effectiveness
+       - Competencies affecting team dynamics
+       - Areas limiting career advancement
+    
+    RESPONSE FORMAT (Strict JSON):
     {
-      "topStrengths": ["strength1", "strength2", "strength3", "strength4", "strength5"],
-      "developmentAreas": ["area1", "area2", "area3", "area4"]
+      "topStrengths": [
+        "Analytical Problem-Solving: [specific evidence] with [quantified impact prediction] in [workplace scenarios]",
+        "Interpersonal Influence: [behavioral pattern] predicting [team effectiveness] with [leadership emergence probability]",
+        "Adaptive Learning: [response pattern] indicating [skill acquisition speed] in [changing environments]",
+        "Emotional Regulation: [stress response data] suggesting [performance stability] under [pressure scenarios]",
+        "Strategic Communication: [communication pattern] with [message clarity] affecting [stakeholder engagement]"
+      ],
+      "developmentAreas": [
+        "Technical Acumen: [gap analysis] requiring [specific intervention] for [role effectiveness] improvement",
+        "Delegation Skills: [control tendency] needing [coaching approach] to enhance [team productivity]",
+        "Change Agility: [adaptation patterns] requiring [development focus] for [organizational effectiveness]",
+        "Conflict Resolution: [avoidance tendency] needing [skill building] for [relationship management]"
+      ]
     }
     
-    Focus on:
-    - Evidence-based strengths from the data
-    - Specific, actionable development areas
-    - Professional workplace context
-    - Growth potential and opportunities
+    REQUIREMENTS:
+    - Reference specific data points as evidence
+    - Include quantified confidence levels where possible
+    - Prioritize by workplace impact and development ROI
+    - Ensure actionability and measurability
   `;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -370,33 +415,50 @@ async function generateStrengthsAndDevelopment(results: any, assessmentType: str
 
 async function generateActionPlan(results: any, candidateInfo: any, assessmentType: string) {
   const prompt = `
-    Create a comprehensive action plan based on these assessment results:
+    You are an executive development specialist designing precision-targeted development interventions based on psychometric assessment data.
     
+    DEVELOPMENT CONTEXT:
     Assessment Type: ${assessmentType}
-    Candidate: ${JSON.stringify(candidateInfo)}
-    Results: ${JSON.stringify(results)}
+    Individual Profile: ${JSON.stringify(candidateInfo)}
+    Comprehensive Assessment Results: ${JSON.stringify(results)}
     
-    Please provide a detailed action plan in this JSON format:
+    DEVELOPMENT METHODOLOGY:
+    Create a scientifically-informed, progressive development plan that maximizes ROI on development investment.
+    
+    Plan must address:
+    1. Immediate skill activation (neuroplasticity window)
+    2. Competency building with measurable milestones
+    3. Strategic capability development for long-term effectiveness
+    4. Risk mitigation for identified derailers
+    5. Stretch assignments aligned with growth zones
+    
+    RESPONSE FORMAT (Strict JSON):
     {
-      "immediateActions": ["action1", "action2", "action3", "action4"],
-      "shortTermActions": ["action1", "action2", "action3", "action4"],
-      "longTermActions": ["action1", "action2", "action3"]
+      "immediateActions": [
+        "Complete [specific assessment] to establish baseline for [development area] - Target: [measurable outcome] by [date]",
+        "Initiate [behavioral practice] with [frequency] to strengthen [specific competency] - Success metric: [observable behavior]",
+        "Schedule [feedback session] with [stakeholder] to address [development priority] - Deliverable: [action plan]",
+        "Enroll in [specific resource/training] to accelerate [skill development] - Completion: [timeframe]"
+      ],
+      "shortTermActions": [
+        "Launch [development project] requiring [target competencies] with [success criteria] over [3-6 month timeline]",
+        "Establish [mentoring relationship] with [expertise type] to develop [strategic capability] - Milestone: [specific achievement]",
+        "Complete [certification/program] in [development area] to achieve [competency level] - Validation: [assessment method]",
+        "Lead [stretch assignment] leveraging [strengths] while developing [growth areas] - Outcome: [business impact]"
+      ],
+      "longTermActions": [
+        "Pursue [advanced qualification/role] requiring [capability integration] for [career advancement] - Timeline: [6-18 months]",
+        "Design and execute [significant project/initiative] demonstrating [leadership competencies] - Impact: [organizational benefit]",
+        "Establish [thought leadership platform] in [expertise area] building [influence/network] - Metrics: [recognition indicators]"
+      ]
     }
     
-    Immediate Actions (Next 30 days):
-    - Specific, actionable steps
-    - Skills to develop immediately
-    - Resources to access
-    
-    Short-term Actions (3-6 months):
-    - Skill-building activities
-    - Experience opportunities
-    - Network building
-    
-    Long-term Actions (6-18 months):
-    - Career advancement steps
-    - Major skill developments
-    - Leadership opportunities
+    CRITICAL REQUIREMENTS:
+    - Every action must have measurable success criteria
+    - Link actions to specific assessment findings
+    - Include resource requirements and timelines
+    - Ensure progressive skill building sequence
+    - Address both performance enhancement and derailer mitigation
   `;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -437,27 +499,63 @@ async function generateActionPlan(results: any, candidateInfo: any, assessmentTy
 
 async function generateInterviewQuestions(results: any, candidateInfo: any, assessmentType: string) {
   const prompt = `
-    Generate targeted interview questions based on these assessment results:
+    You are a senior talent acquisition expert specializing in evidence-based interviewing and behavioral prediction.
     
+    INTERVIEW DESIGN CONTEXT:
     Assessment Type: ${assessmentType}
-    Candidate: ${JSON.stringify(candidateInfo)}
-    Results: ${JSON.stringify(results)}
+    Candidate Profile: ${JSON.stringify(candidateInfo)}
+    Assessment Results: ${JSON.stringify(results)}
     
-    Please provide interview questions in this JSON format:
+    OBJECTIVE: Create a strategic interview guide that validates assessment findings and probes critical areas for hiring decisions.
+    
+    INTERVIEW METHODOLOGY:
+    - Behavioral Event Interviewing (BEI) for past performance prediction
+    - Situational Judgment Tests (SJT) for decision-making assessment
+    - Competency-based questions targeting assessment dimensions
+    - Development readiness evaluation
+    - Cultural fit and values alignment probes
+    
+    RESPONSE FORMAT (Strict JSON):
     {
-      "behavioralQuestions": ["question1", "question2", "question3", "question4"],
-      "technicalQuestions": ["question1", "question2", "question3"],
-      "situationalQuestions": ["question1", "question2", "question3"],
-      "developmentQuestions": ["question1", "question2"],
-      "redFlags": ["red flag 1", "red flag 2", "red flag 3"]
+      "behavioralQuestions": [
+        "Tell me about a specific time when [assessment strength area] - what was the situation, your actions, and the measurable results?",
+        "Describe a challenging situation where you had to [development area] - walk me through your thought process and outcome.",
+        "Give me an example of when you [specific competency from assessment] under pressure - what was your approach?",
+        "Share a time when you received feedback about [development area] - how did you respond and what did you learn?"
+      ],
+      "technicalQuestions": [
+        "How would you approach [role-specific scenario] given your [assessment strength]? Walk me through your methodology.",
+        "What tools or frameworks do you use for [relevant skill area]? How do you ensure quality?",
+        "Describe your experience with [technical competency] - what challenges have you encountered and how did you solve them?"
+      ],
+      "situationalQuestions": [
+        "If you had to [challenging scenario relevant to role] with limited resources, how would you prioritize and execute?",
+        "How would you handle a situation where [conflict scenario based on communication style assessment]?",
+        "What would you do if [decision-making scenario] that requires [specific competency from assessment]?"
+      ],
+      "developmentQuestions": [
+        "Based on your self-awareness, what area would you focus on developing next and why?",
+        "How do you typically respond to feedback, especially in areas where you're still growing?"
+      ],
+      "probingQuestions": [
+        "Can you elaborate on [specific assessment finding] - how does this show up in your daily work?",
+        "I noticed [pattern from assessment] - can you give me a concrete example of this?",
+        "Your assessment suggests [strength/challenge] - how has this impacted your team relationships?"
+      ],
+      "redFlags": [
+        "Inconsistency between assessment results and interview responses about [specific area]",
+        "Inability to provide specific examples for claimed [strength area]",
+        "Defensive responses when discussing [development area identified in assessment]",
+        "Lack of self-awareness about [assessment finding]"
+      ]
     }
     
-    Focus on:
-    - Probing areas of strength and weakness identified in the assessment
-    - Behavioral questions that reveal character and work style
-    - Situational questions that test decision-making and problem-solving
-    - Questions that explore development areas
-    - Red flags to watch for during the interview
+    REQUIREMENTS:
+    - Directly reference specific assessment findings
+    - Include follow-up probe questions
+    - Focus on behavioral evidence and specific examples
+    - Target high-impact competencies for the role
+    - Design questions to validate or challenge assessment conclusions
   `;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -500,66 +598,145 @@ async function generateInterviewQuestions(results: any, candidateInfo: any, asse
 
 async function generateRiskAssessment(results: any, candidateInfo: any, assessmentType: string) {
   const overallScore = calculateOverallScore(results);
+  const distortionScale = calculateDistortionScale(results);
   
+  // Advanced risk modeling based on multiple factors
   let hiringRisk = 'Medium';
   let successProbability = 70;
   let retentionRisk = 'Medium';
   let rampUpTime = '3-6 months';
+  let performanceReliability = 'Moderate';
+  let culturalFitRisk = 'Medium';
   
-  if (overallScore >= 80) {
+  // Base assessment on overall competency
+  if (overallScore >= 85) {
+    hiringRisk = 'Very Low';
+    successProbability = 90;
+    retentionRisk = 'Low';
+    rampUpTime = '1-2 months';
+    performanceReliability = 'High';
+    culturalFitRisk = 'Low';
+  } else if (overallScore >= 75) {
     hiringRisk = 'Low';
-    successProbability = 85;
+    successProbability = 80;
     retentionRisk = 'Low';
     rampUpTime = '2-3 months';
+    performanceReliability = 'High';
+    culturalFitRisk = 'Low';
   } else if (overallScore >= 60) {
     hiringRisk = 'Medium';
-    successProbability = 70;
+    successProbability = 65;
     retentionRisk = 'Medium';
     rampUpTime = '3-6 months';
-  } else {
+    performanceReliability = 'Moderate';
+    culturalFitRisk = 'Medium';
+  } else if (overallScore >= 45) {
     hiringRisk = 'High';
-    successProbability = 50;
+    successProbability = 45;
     retentionRisk = 'High';
     rampUpTime = '6-12 months';
+    performanceReliability = 'Low';
+    culturalFitRisk = 'High';
+  } else {
+    hiringRisk = 'Very High';
+    successProbability = 25;
+    retentionRisk = 'Very High';
+    rampUpTime = '12+ months';
+    performanceReliability = 'Very Low';
+    culturalFitRisk = 'Very High';
   }
   
-  // Adjust based on validity metrics
+  // Adjust for response validity and distortion
   if (results.validityMetrics?.validityStatus === 'Invalid') {
-    hiringRisk = 'High';
-    successProbability -= 20;
+    hiringRisk = 'Very High';
+    successProbability = Math.max(20, successProbability - 30);
+    performanceReliability = 'Unreliable';
+  } else if (results.validityMetrics?.validityStatus === 'Questionable') {
+    successProbability = Math.max(30, successProbability - 15);
+    if (performanceReliability === 'High') performanceReliability = 'Moderate';
+  }
+  
+  // Factor in distortion scale
+  if (distortionScale > 0.7) {
+    hiringRisk = hiringRisk === 'Very Low' ? 'Low' : hiringRisk === 'Low' ? 'Medium' : 'High';
+    successProbability = Math.max(25, successProbability - 20);
+    culturalFitRisk = 'High';
+  }
+  
+  // Assess consistency across dimensions
+  const dimensionScores = Object.values(results.dimensions || {}).filter(score => typeof score === 'number');
+  const scoreVariance = dimensionScores.length > 1 ? 
+    Math.sqrt(dimensionScores.reduce((sum, score) => sum + Math.pow(score - overallScore, 2), 0) / dimensionScores.length) : 0;
+  
+  if (scoreVariance > 15) {
+    performanceReliability = performanceReliability === 'High' ? 'Moderate' : 'Low';
   }
   
   return {
     hiringRisk,
-    successProbability: Math.max(0, Math.min(100, successProbability)),
+    successProbability: Math.max(0, Math.min(100, Math.round(successProbability))),
     retentionRisk,
     rampUpTime,
+    performanceReliability,
+    culturalFitRisk,
+    distortionLevel: distortionScale > 0.7 ? 'High' : distortionScale > 0.4 ? 'Moderate' : 'Low',
     keyRiskFactors: identifyRiskFactors(results),
-    mitigationStrategies: generateMitigationStrategies(results)
+    mitigationStrategies: generateMitigationStrategies(results),
+    confidenceLevel: results.validityMetrics?.validityStatus === 'Valid' ? 'High' : 
+                    results.validityMetrics?.validityStatus === 'Questionable' ? 'Moderate' : 'Low'
   };
 }
 
 async function generateCareerRecommendations(results: any, candidateInfo: any, assessmentType: string) {
   const prompt = `
-    Based on these assessment results, provide career recommendations:
+    You are a strategic career architect with expertise in talent optimization and career trajectory modeling.
     
+    CAREER OPTIMIZATION ANALYSIS:
     Assessment Type: ${assessmentType}
-    Candidate: ${JSON.stringify(candidateInfo)}
-    Results: ${JSON.stringify(results)}
+    Individual Profile: ${JSON.stringify(candidateInfo)}
+    Psychometric Assessment Data: ${JSON.stringify(results)}
     
-    Please provide career guidance in this JSON format:
+    ANALYTICAL FRAMEWORK:
+    1. Strength-Role Alignment Analysis
+    2. Growth Potential Mapping
+    3. Industry Fit Assessment
+    4. Leadership Readiness Evaluation
+    5. Risk-Reward Career Modeling
+    
+    Generate evidence-based career guidance with:
+    - Quantified fit probabilities
+    - Market demand analysis
+    - Skill gap identification
+    - Timeline projections
+    - Success probability modeling
+    
+    RESPONSE FORMAT (Strict JSON):
     {
-      "recommendations": ["recommendation1", "recommendation2", "recommendation3"],
-      "pathways": ["pathway1", "pathway2", "pathway3"],
-      "skillsToAcquire": ["skill1", "skill2", "skill3", "skill4", "skill5"]
+      "recommendations": [
+        "Role: [Specific Position] in [Industry/Function] - Fit Score: [85%] based on [strength alignment] with [growth potential] over [timeline]",
+        "Path: [Career Trajectory] leveraging [core competencies] with [development requirements] for [advancement probability]",
+        "Sector: [Industry Domain] aligning with [behavioral preferences] and [skill portfolio] - Market demand: [High/Medium/Low]"
+      ],
+      "pathways": [
+        "Leadership Track: [Current Role] → [Intermediate Role] → [Target Leadership Position] over [2-5 years] with [development milestones]",
+        "Specialist Path: [Technical Direction] → [Expert Role] → [Thought Leader Position] requiring [specific competencies]",
+        "Entrepreneurial Route: [Preparation Phase] → [Venture Launch] → [Scale Phase] based on [innovation capacity] and [risk tolerance]"
+      ],
+      "skillsToAcquire": [
+        "Technical: [Specific Skill] - Priority: [High/Medium] - Timeline: [months] - Impact: [career leverage]",
+        "Leadership: [Management Competency] - Development method: [approach] - Validation: [assessment criteria]",
+        "Strategic: [Business Acumen] - Learning path: [resources/experiences] - Application: [real-world contexts]",
+        "Digital: [Technology Skill] - Relevance: [industry demand] - Proficiency target: [competency level]",
+        "Interpersonal: [Relationship Skill] - Development approach: [methodology] - Success metric: [behavioral indicator]"
+      ]
     }
     
-    Focus on:
-    - Career paths that align with strengths and interests
-    - Specific role recommendations
-    - Industry sectors that would be a good fit
-    - Skills needed for career advancement
-    - Development pathways and progression opportunities
+    REQUIREMENTS:
+    - Base recommendations on assessment evidence
+    - Include market viability analysis
+    - Provide specific skill development roadmaps
+    - Consider individual preferences and constraints
+    - Include risk assessment for each pathway
   `;
 
   const response = await fetch('https://api.openai.com/v1/chat/completions', {
