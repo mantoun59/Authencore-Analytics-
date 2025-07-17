@@ -54,12 +54,16 @@ const Assessment = () => {
                   Gamified career readiness assessment with interactive challenges and real-time feedback
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">5 Levels</Badge>
-                  <Badge variant="outline">Career Matching</Badge>
-                  <Badge variant="outline">Skills Challenges</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$9.99</span>
+                   <Badge className="bg-green-100 text-green-800">Best Value</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">5 Levels</Badge>
+                   <Badge variant="outline">Career Matching</Badge>
+                   <Badge variant="outline">Skills Challenges</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -101,12 +105,16 @@ const Assessment = () => {
                    Comprehensive personality assessment with advanced validity detection and dual reporting
                  </CardDescription>
                </CardHeader>
-               <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">100 Questions</Badge>
-                  <Badge variant="outline">Validity Detection</Badge>
-                  <Badge variant="outline">Percentile Scoring</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$29.99</span>
+                   <Badge className="bg-purple-100 text-purple-800">Premium</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">100 Questions</Badge>
+                   <Badge variant="outline">Validity Detection</Badge>
+                   <Badge variant="outline">Percentile Scoring</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -148,12 +156,16 @@ const Assessment = () => {
                    Advanced stress resilience and adaptability assessment with biometric simulation
                  </CardDescription>
                </CardHeader>
-               <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">60 Questions</Badge>
-                  <Badge variant="outline">Biometric Sim</Badge>
-                  <Badge variant="outline">Progressive Loading</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$19.99</span>
+                   <Badge className="bg-blue-100 text-blue-800">Popular</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">60 Questions</Badge>
+                   <Badge variant="outline">Biometric Sim</Badge>
+                   <Badge variant="outline">Progressive Loading</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -195,12 +207,16 @@ const Assessment = () => {
                    Comprehensive cultural intelligence assessment with real-world scenarios and global business challenges
                  </CardDescription>
                </CardHeader>
-               <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">60+ Scenarios</Badge>
-                  <Badge variant="outline">4 CQ Dimensions</Badge>
-                  <Badge variant="outline">Cultural Adaptation</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$19.99</span>
+                   <Badge className="bg-teal-100 text-teal-800">Global</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">60+ Scenarios</Badge>
+                   <Badge variant="outline">4 CQ Dimensions</Badge>
+                   <Badge variant="outline">Cultural Adaptation</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -242,12 +258,16 @@ const Assessment = () => {
                    Comprehensive communication assessment with linguistic analysis and real-time simulations
                  </CardDescription>
                </CardHeader>
-               <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">80 Questions</Badge>
-                  <Badge variant="outline">Linguistic Analysis</Badge>
-                  <Badge variant="outline">Team Compatibility</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$24.99</span>
+                   <Badge className="bg-indigo-100 text-indigo-800">Advanced</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">80 Questions</Badge>
+                   <Badge variant="outline">Linguistic Analysis</Badge>
+                   <Badge variant="outline">Team Compatibility</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -289,12 +309,16 @@ const Assessment = () => {
                    Comprehensive emotional intelligence assessment measuring self-awareness, empathy, and social skills
                  </CardDescription>
                </CardHeader>
-               <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">65 Questions</Badge>
-                  <Badge variant="outline">EQ Dimensions</Badge>
-                  <Badge variant="outline">Workplace Applications</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$24.99</span>
+                   <Badge className="bg-rose-100 text-rose-800">EQ Focus</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">65 Questions</Badge>
+                   <Badge variant="outline">EQ Dimensions</Badge>
+                   <Badge variant="outline">Workplace Applications</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -336,12 +360,16 @@ const Assessment = () => {
                    Comprehensive workplace values assessment with ethical scenarios and cultural fit analysis
                  </CardDescription>
                </CardHeader>
-               <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">Values Ranking</Badge>
-                  <Badge variant="outline">Ethical Scenarios</Badge>
-                  <Badge variant="outline">Cultural Fit</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$29.99</span>
+                   <Badge className="bg-amber-100 text-amber-800">Values-Based</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">Values Ranking</Badge>
+                   <Badge variant="outline">Ethical Scenarios</Badge>
+                   <Badge variant="outline">Cultural Fit</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -383,12 +411,16 @@ const Assessment = () => {
                    Real-time digital wellness assessment with behavioral tracking and habit analysis
                  </CardDescription>
                </CardHeader>
-               <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">Live Tracking</Badge>
-                  <Badge variant="outline">Habit Analysis</Badge>
-                  <Badge variant="outline">Wellness Score</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$19.99</span>
+                   <Badge className="bg-cyan-100 text-cyan-800">Behavioral</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">Live Tracking</Badge>
+                   <Badge variant="outline">Habit Analysis</Badge>
+                   <Badge variant="outline">Wellness Score</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -430,12 +462,16 @@ const Assessment = () => {
                    Comprehensive leadership effectiveness evaluation across 6 key dimensions with multi-language support
                  </CardDescription>
                </CardHeader>
-               <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">60 Questions</Badge>
-                  <Badge variant="outline">6 Dimensions</Badge>
-                  <Badge variant="outline">3 Languages</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$19.99</span>
+                   <Badge className="bg-blue-100 text-blue-800">Professional</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">60 Questions</Badge>
+                   <Badge variant="outline">6 Dimensions</Badge>
+                   <Badge variant="outline">3 Languages</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
@@ -477,12 +513,16 @@ const Assessment = () => {
                    Revolutionary TikTok-style assessment with emoji reactions and swipe interactions for authentic Gen Z workplace insights
                  </CardDescription>
                </CardHeader>
-               <CardContent className="space-y-4 flex-grow flex flex-col">
-                <div className="flex flex-wrap gap-2">
-                  <Badge variant="outline">Emoji Reactions</Badge>
-                  <Badge variant="outline">Swipe Interface</Badge>
-                  <Badge variant="outline">Mobile-First</Badge>
-                </div>
+                <CardContent className="space-y-4 flex-grow flex flex-col">
+                 <div className="flex items-center justify-between mb-4">
+                   <span className="text-3xl font-bold text-primary">$19.99</span>
+                   <Badge className="bg-purple-100 text-purple-800">TikTok-Style</Badge>
+                 </div>
+                 <div className="flex flex-wrap gap-2">
+                   <Badge variant="outline">Emoji Reactions</Badge>
+                   <Badge variant="outline">Swipe Interface</Badge>
+                   <Badge variant="outline">Mobile-First</Badge>
+                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
