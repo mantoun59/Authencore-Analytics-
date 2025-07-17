@@ -27,6 +27,7 @@ import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { PartnerProvider } from "@/contexts/PartnerContext";
+import AIChat from "@/components/AIChat";
 
 const queryClient = new QueryClient();
 
@@ -67,6 +68,7 @@ const App = () => (
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <AIChat />
         </BrowserRouter>
         </PartnerProvider>
       </AuthProvider>
