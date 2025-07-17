@@ -118,64 +118,226 @@ export class AIReportGenerator {
 
   async generatePDFReport(reportContent: AIReportContent, reportType: 'candidate' | 'employer' = 'candidate'): Promise<void> {
     try {
-      const doc = new jsPDF();
-      const pageWidth = doc.internal.pageSize.width;
-      const margin = 15;
-      let currentY = margin;
+      // Use the new Supabase Edge Function for professional PDF generation
+      await this.generateProfessionalPDF(reportContent, reportType);
+    } catch (error) {
+      console.error('Error generating PDF report:', error);
+      // Fallback to jsPDF if edge function fails
+      await this.generateFallbackPDF(reportContent, reportType);
+    }
+  }
 
-      // Load logo
-      const logoBase64 = await this.loadLogoAsBase64();
+  private async generateProfessionalPDF(reportContent: AIReportContent, reportType: 'candidate' | 'employer'): Promise<void> {
+    try {
+      // Parse scores from the report content
+      const scores = this.parseScoresFromContent(reportContent);
+      const validity = this.parseValidityFromContent(reportContent);
+      const actionPlan = this.parseActionPlanFromContent(reportContent);
+      const interviewQuestions = this.parseInterviewQuestionsFromContent(reportContent);
       
-      if (reportType === 'employer') {
-        // EMPLOYER REPORT STRUCTURE
-        this.addEmployerPDFHeader(doc, reportContent, logoBase64);
-        currentY = 75;
-        
-        // Score Table + Graph
-        currentY = this.addEmployerScoreTable(doc, reportContent, currentY);
-        
-        // Distortion Scale
-        currentY = this.addDistortionSection(doc, reportContent, currentY);
-        
-        // Interview Questions
-        if (reportContent.employerSpecific) {
-          currentY = this.addEmployerInterviewQuestions(doc, reportContent, currentY);
-        }
-        
-        const fileName = `${reportContent.candidateInfo.assessmentType}_Candidate_Report_for_Employers_${reportContent.candidateInfo.name.replace(/\s+/g, '_')}.pdf`;
-        doc.save(fileName);
-        toast.success('Employer PDF Report generated successfully!');
-        
-      } else {
-        // APPLICANT REPORT STRUCTURE  
-        this.addApplicantPDFHeader(doc, reportContent, logoBase64);
-        currentY = 75;
-        
-        // Overview
-        currentY = this.addApplicantOverview(doc, reportContent, currentY);
-        
-        // Score Summary Table
-        currentY = this.addApplicantScoreTable(doc, reportContent, currentY);
-        
-        // Bar Graph
-        currentY = this.addDimensionScoresChart(doc, reportContent.detailedAnalysis.dimensionScores, currentY);
-        
-        // Strengths and Growth sections
-        currentY = this.addApplicantStrengthsAndGrowth(doc, reportContent, currentY);
-        
-        // Action Plan
-        this.addApplicantActionPlan(doc, reportContent, currentY);
-        
-        const fileName = `${reportContent.candidateInfo.assessmentType}_Adaptation_Readiness_Report_${reportContent.candidateInfo.name.replace(/\s+/g, '_')}.pdf`;
-        doc.save(fileName);
-        toast.success('Applicant PDF Report generated successfully!');
+      const candidateData = {
+        name: reportContent.candidateInfo.name,
+        email: reportContent.candidateInfo.email,
+        date: new Date().toLocaleDateString(),
+        position: 'Position Applied For',
+        company: 'Company Name'
+      };
+
+      const reportRequest = {
+        candidateData,
+        scores,
+        validity,
+        actionPlan,
+        interviewQuestions,
+        reportType
+      };
+
+      const { data, error } = await supabase.functions.invoke('generate-pdf-report', {
+        body: reportRequest
+      });
+
+      if (error) {
+        throw new Error(`PDF generation failed: ${error.message}`);
       }
 
+      // Open the HTML in a new window for preview
+      const newWindow = window.open();
+      if (newWindow) {
+        newWindow.document.write(data);
+        newWindow.document.close();
+        newWindow.document.title = `${reportType === 'employer' ? 'Employer' : 'Candidate'} Report - ${candidateData.name}`;
+      }
+
+      toast.success(`Professional ${reportType} PDF report generated successfully!`);
+      
     } catch (error) {
-      console.error('Error generating PDF:', error);
-      toast.error('Failed to generate PDF report');
+      console.error('Error with professional PDF generation:', error);
       throw error;
     }
+  }
+
+  private async generateFallbackPDF(reportContent: AIReportContent, reportType: 'candidate' | 'employer'): Promise<void> {
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 15;
+    let currentY = margin;
+
+    // Load logo
+    const logoBase64 = await this.loadLogoAsBase64();
+    
+    if (reportType === 'employer') {
+      // EMPLOYER REPORT STRUCTURE
+      this.addEmployerPDFHeader(doc, reportContent, logoBase64);
+      currentY = 75;
+      
+      // Score Table + Graph
+      currentY = this.addEmployerScoreTable(doc, reportContent, currentY);
+      
+      // Distortion Scale
+      currentY = this.addDistortionSection(doc, reportContent, currentY);
+      
+      // Interview Questions
+      if (reportContent.employerSpecific) {
+        currentY = this.addEmployerInterviewQuestions(doc, reportContent, currentY);
+      }
+      
+      const fileName = `${reportContent.candidateInfo.assessmentType}_Candidate_Report_for_Employers_${reportContent.candidateInfo.name.replace(/\s+/g, '_')}.pdf`;
+      doc.save(fileName);
+      toast.success('Employer PDF Report generated successfully!');
+      
+    } else {
+      // APPLICANT REPORT STRUCTURE  
+      this.addApplicantPDFHeader(doc, reportContent, logoBase64);
+      currentY = 75;
+      
+      // Overview
+      currentY = this.addApplicantOverview(doc, reportContent, currentY);
+      
+      // Score Summary Table
+      currentY = this.addApplicantScoreTable(doc, reportContent, currentY);
+      
+      // Bar Graph
+      currentY = this.addDimensionScoresChart(doc, reportContent.detailedAnalysis.dimensionScores, currentY);
+      
+      // Strengths and Growth sections
+      currentY = this.addApplicantStrengthsAndGrowth(doc, reportContent, currentY);
+      
+      // Action Plan
+      this.addApplicantActionPlan(doc, reportContent, currentY);
+      
+      const fileName = `${reportContent.candidateInfo.assessmentType}_Adaptation_Readiness_Report_${reportContent.candidateInfo.name.replace(/\s+/g, '_')}.pdf`;
+      doc.save(fileName);
+      toast.success('Applicant PDF Report generated successfully!');
+    }
+  }
+
+  private parseScoresFromContent(reportContent: AIReportContent): Array<{name: string, percentile: number, level: string, description: string}> {
+    const scores: Array<{name: string, percentile: number, level: string, description: string}> = [];
+    
+    Object.entries(reportContent.detailedAnalysis.dimensionScores).forEach(([key, value]: [string, any]) => {
+      const score = typeof value === 'object' ? value.score || 0 : value;
+      const percentile = Math.min(100, Math.max(0, score));
+      
+      let level = 'Average';
+      if (percentile >= 80) level = 'High';
+      else if (percentile >= 60) level = 'Above Average';
+      else if (percentile <= 40) level = 'Below Average';
+      else if (percentile <= 20) level = 'Low';
+      
+      const description = this.getDescriptionForDimension(key, level);
+      
+      scores.push({
+        name: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        percentile,
+        level,
+        description
+      });
+    });
+    
+    return scores;
+  }
+
+  private parseValidityFromContent(reportContent: AIReportContent): any {
+    return {
+      fakeGoodScore: reportContent.distortionAnalysis?.score || 2,
+      fakeBadScore: 1,
+      randomResponseScore: 0,
+      inconsistencyScore: reportContent.distortionAnalysis?.reliability === 'low' ? 3 : 1,
+      responseTimeProfile: 'Normal',
+      overallValidity: reportContent.distortionAnalysis?.reliability === 'high' ? 'Valid' : 
+                      reportContent.distortionAnalysis?.reliability === 'medium' ? 'Questionable' : 'Invalid'
+    };
+  }
+
+  private parseActionPlanFromContent(reportContent: AIReportContent): string[] {
+    const actions: string[] = [];
+    
+    if (reportContent.actionPlan?.immediate) {
+      actions.push(...reportContent.actionPlan.immediate);
+    }
+    if (reportContent.actionPlan?.shortTerm) {
+      actions.push(...reportContent.actionPlan.shortTerm.slice(0, 2));
+    }
+    if (reportContent.executiveSummary?.recommendedActions) {
+      actions.push(...reportContent.executiveSummary.recommendedActions.slice(0, 2));
+    }
+    
+    return actions.length > 0 ? actions : [
+      'Develop time management skills through structured planning',
+      'Practice active listening in team meetings',
+      'Seek feedback regularly to improve performance'
+    ];
+  }
+
+  private parseInterviewQuestionsFromContent(reportContent: AIReportContent): string[] {
+    if (reportContent.employerSpecific?.interviewQuestions) {
+      const questions: string[] = [];
+      
+      if (reportContent.employerSpecific.interviewQuestions.behavioral) {
+        questions.push(...reportContent.employerSpecific.interviewQuestions.behavioral.slice(0, 2));
+      }
+      if (reportContent.employerSpecific.interviewQuestions.clarification) {
+        questions.push(...reportContent.employerSpecific.interviewQuestions.clarification.slice(0, 2));
+      }
+      
+      return questions;
+    }
+    
+    return [
+      'Describe a situation where you had to manage multiple competing priorities.',
+      'Tell me about a time when you had to work with a difficult team member.',
+      'How do you handle stress and pressure in the workplace?',
+      'Give an example of when you had to adapt to significant change.'
+    ];
+  }
+
+  private getDescriptionForDimension(dimension: string, level: string): string {
+    const descriptions: Record<string, Record<string, string>> = {
+      conscientiousness: {
+        'High': 'Highly organized, disciplined, and goal-oriented with strong attention to detail.',
+        'Above Average': 'Generally organized and reliable with good follow-through on commitments.',
+        'Average': 'Moderately organized with balanced approach to planning and spontaneity.',
+        'Below Average': 'Tends to be more flexible and spontaneous, may struggle with detailed planning.',
+        'Low': 'Prefers flexibility and may find rigid structure constraining.'
+      },
+      agreeableness: {
+        'High': 'Very cooperative, empathetic, and focused on maintaining harmony in relationships.',
+        'Above Average': 'Generally cooperative and considerate of others\' needs and feelings.',
+        'Average': 'Balanced approach between cooperation and assertiveness.',
+        'Below Average': 'More direct and competitive, may prioritize results over relationships.',
+        'Low': 'Highly competitive and direct, focuses on outcomes over consensus.'
+      },
+      innovation: {
+        'High': 'Highly creative, enjoys exploring new ideas and approaches to problem-solving.',
+        'Above Average': 'Open to new ideas and comfortable with change and innovation.',
+        'Average': 'Moderately open to new approaches while valuing proven methods.',
+        'Below Average': 'Prefers established methods and may be cautious about new approaches.',
+        'Low': 'Strongly prefers traditional and proven approaches to work and problem-solving.'
+      }
+    };
+    
+    const key = dimension.toLowerCase().replace(/\s+/g, '');
+    return descriptions[key]?.[level] || `${level} level in ${dimension.replace(/_/g, ' ')}.`;
   }
 
   private addEmployerPDFHeader(doc: jsPDF, reportContent: AIReportContent, logoBase64?: string) {
