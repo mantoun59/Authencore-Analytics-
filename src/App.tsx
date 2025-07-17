@@ -23,6 +23,7 @@ import LeadershipAssessment from "./pages/LeadershipAssessment";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import CompliancePage from "./pages/CompliancePage";
 import SampleReports from "./pages/SampleReports";
+import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { PartnerProvider } from "@/contexts/PartnerContext";
@@ -61,6 +62,7 @@ const App = () => (
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/compliance" element={<CompliancePage />} />
             <Route path="/sample-reports" element={<SampleReports />} />
+            <Route path="/security" element={<Security />} />
             <Route path="/admin" element={<AdminPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
