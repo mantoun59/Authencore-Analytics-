@@ -66,6 +66,12 @@ const SampleReports = () => {
           recommendations: (sampleData as any).careerRecommendations || ["Leadership roles", "Strategic positions", "Team management"],
           pathways: ["Individual contributor to team lead", "Specialist to manager", "Cross-functional experience"],
           skills: ["Project management", "Data analysis", "Strategic thinking", "Team leadership", "Communication skills"]
+        },
+        distortionAnalysis: {
+          score: 15,
+          reliability: 'high' as const,
+          consistencyFlags: [],
+          interpretation: 'Responses show high consistency and reliability, indicating authentic assessment completion.'
         }
       };
       

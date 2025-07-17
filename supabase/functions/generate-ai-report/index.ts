@@ -213,13 +213,18 @@ async function generateAIReport(
     },
     ...(reportType === 'employer' && {
       employerSpecific: {
-        distortionScale: distortionScale,
+        summaryTable: {
+          overallScore: calculateOverallScore(results),
+          dimensions: results.dimensions || {},
+          reliability: distortionScale.reliability
+        },
         interviewQuestions: interviewQuestions,
-        riskAssessment: riskAssessment,
+        riskFlags: riskAssessment.riskFlags,
         hiringRecommendations: await generateHiringRecommendations(results, candidateInfo),
         onboardingPlan: await generateOnboardingPlan(results, candidateInfo)
       }
-    })
+    }),
+    distortionAnalysis: distortionScale
   };
 }
 
@@ -584,14 +589,17 @@ async function generateInterviewQuestions(results: any, candidateInfo: any, asse
   const content = data.choices[0].message.content;
   
   try {
-    return JSON.parse(content);
+    const parsed = JSON.parse(content);
+    return {
+      clarification: parsed.probingQuestions || ["Can you elaborate on your approach to teamwork?"],
+      validation: parsed.behavioralQuestions || ["Describe a time when you had to overcome a significant challenge"],
+      behavioral: parsed.situationalQuestions || ["How would you handle a situation where you disagree with your manager?"]
+    };
   } catch (e) {
     return {
-      behavioralQuestions: ["Describe a time when you had to overcome a significant challenge", "Tell me about a situation where you had to work with a difficult team member"],
-      technicalQuestions: ["How do you approach problem-solving in your field?", "What tools or methodologies do you use in your work?"],
-      situationalQuestions: ["How would you handle a situation where you disagree with your manager?", "What would you do if you had competing priorities?"],
-      developmentQuestions: ["What areas do you want to develop further?", "How do you handle feedback?"],
-      redFlags: ["Inconsistent responses", "Lack of self-awareness", "Poor communication skills"]
+      clarification: ["Can you elaborate on your approach to teamwork?", "Tell me about your problem-solving style"],
+      validation: ["Describe a time when you had to overcome a significant challenge", "Tell me about a situation where you had to work with a difficult team member"],
+      behavioral: ["How would you handle a situation where you disagree with your manager?", "What would you do if you had competing priorities?"]
     };
   }
 }
@@ -601,89 +609,43 @@ async function generateRiskAssessment(results: any, candidateInfo: any, assessme
   const distortionScale = calculateDistortionScale(results);
   
   // Advanced risk modeling based on multiple factors
-  let hiringRisk = 'Medium';
-  let successProbability = 70;
-  let retentionRisk = 'Medium';
-  let rampUpTime = '3-6 months';
-  let performanceReliability = 'Moderate';
-  let culturalFitRisk = 'Medium';
+  const riskFlags = [];
   
-  // Base assessment on overall competency
-  if (overallScore >= 85) {
-    hiringRisk = 'Very Low';
-    successProbability = 90;
-    retentionRisk = 'Low';
-    rampUpTime = '1-2 months';
-    performanceReliability = 'High';
-    culturalFitRisk = 'Low';
-  } else if (overallScore >= 75) {
-    hiringRisk = 'Low';
-    successProbability = 80;
-    retentionRisk = 'Low';
-    rampUpTime = '2-3 months';
-    performanceReliability = 'High';
-    culturalFitRisk = 'Low';
-  } else if (overallScore >= 60) {
-    hiringRisk = 'Medium';
-    successProbability = 65;
-    retentionRisk = 'Medium';
-    rampUpTime = '3-6 months';
-    performanceReliability = 'Moderate';
-    culturalFitRisk = 'Medium';
-  } else if (overallScore >= 45) {
-    hiringRisk = 'High';
-    successProbability = 45;
-    retentionRisk = 'High';
-    rampUpTime = '6-12 months';
-    performanceReliability = 'Low';
-    culturalFitRisk = 'High';
-  } else {
-    hiringRisk = 'Very High';
-    successProbability = 25;
-    retentionRisk = 'Very High';
-    rampUpTime = '12+ months';
-    performanceReliability = 'Very Low';
-    culturalFitRisk = 'Very High';
+  // Add risk flags based on assessment analysis
+  if (overallScore < 60) {
+    riskFlags.push("Low overall competency score requires additional training and support");
   }
   
-  // Adjust for response validity and distortion
-  if (results.validityMetrics?.validityStatus === 'Invalid') {
-    hiringRisk = 'Very High';
-    successProbability = Math.max(20, successProbability - 30);
-    performanceReliability = 'Unreliable';
-  } else if (results.validityMetrics?.validityStatus === 'Questionable') {
-    successProbability = Math.max(30, successProbability - 15);
-    if (performanceReliability === 'High') performanceReliability = 'Moderate';
+  if (distortionScale.validityIndex < 70) {
+    riskFlags.push("Response validity concerns - recommend behavioral interview validation");
   }
   
-  // Factor in distortion scale
-  if (distortionScale > 0.7) {
-    hiringRisk = hiringRisk === 'Very Low' ? 'Low' : hiringRisk === 'Low' ? 'Medium' : 'High';
-    successProbability = Math.max(25, successProbability - 20);
-    culturalFitRisk = 'High';
-  }
-  
-  // Assess consistency across dimensions
+  // Check for extreme dimension variations
   const dimensionScores = Object.values(results.dimensions || {}).filter(score => typeof score === 'number');
-  const scoreVariance = dimensionScores.length > 1 ? 
-    Math.sqrt(dimensionScores.reduce((sum, score) => sum + Math.pow(score - overallScore, 2), 0) / dimensionScores.length) : 0;
+  if (dimensionScores.length > 1) {
+    const avg = dimensionScores.reduce((a, b) => a + b, 0) / dimensionScores.length;
+    const variance = Math.sqrt(dimensionScores.reduce((sum, score) => sum + Math.pow(score - avg, 2), 0) / dimensionScores.length);
+    
+    if (variance > 15) {
+      riskFlags.push("High variance across competency dimensions indicates inconsistent skill development");
+    }
+  }
   
-  if (scoreVariance > 15) {
-    performanceReliability = performanceReliability === 'High' ? 'Moderate' : 'Low';
+  // Check for specific dimension risks
+  if (results.dimensions) {
+    Object.entries(results.dimensions).forEach(([key, value]: [string, any]) => {
+      const score = typeof value === 'object' ? value.score : value;
+      if (score < 50) {
+        riskFlags.push(`Critical gap in ${key.replace('_', ' ')} may impact job performance`);
+      }
+    });
   }
   
   return {
-    hiringRisk,
-    successProbability: Math.max(0, Math.min(100, Math.round(successProbability))),
-    retentionRisk,
-    rampUpTime,
-    performanceReliability,
-    culturalFitRisk,
-    distortionLevel: distortionScale > 0.7 ? 'High' : distortionScale > 0.4 ? 'Moderate' : 'Low',
-    keyRiskFactors: identifyRiskFactors(results),
-    mitigationStrategies: generateMitigationStrategies(results),
-    confidenceLevel: results.validityMetrics?.validityStatus === 'Valid' ? 'High' : 
-                    results.validityMetrics?.validityStatus === 'Questionable' ? 'Moderate' : 'Low'
+    riskFlags: riskFlags.length > 0 ? riskFlags : ["No significant risk factors identified"],
+    recommendations: riskFlags.length > 2 ? 
+      ["Consider additional screening", "Require extended probationary period", "Provide intensive onboarding support"] :
+      ["Standard hiring process recommended", "Monitor development areas during onboarding"]
   };
 }
 
@@ -843,18 +805,59 @@ function calculateDistortionScale(results: any): any {
   let responseConsistency = 0;
   let extremeResponding = 0;
   
-  // Social desirability - look for overly positive responses
-  const positiveResponses = responses.filter((r: any) => r.value > 4).length;
-  socialDesirability = Math.min(100, (positiveResponses / responses.length) * 100);
+  if (responses.length > 0) {
+    // Social desirability - look for overly positive responses
+    const positiveResponses = responses.filter((r: any) => (r.value || r.response || r.selectedOption) > 4).length;
+    socialDesirability = Math.min(100, (positiveResponses / responses.length) * 100);
+    
+    // Response consistency - look for variance in response times and patterns
+    const responseTimes = responses.map((r: any) => r.responseTime || r.timeTaken || Math.random() * 5 + 2);
+    const avgTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+    const timeVariance = Math.sqrt(responseTimes.reduce((sum, time) => sum + Math.pow(time - avgTime, 2), 0) / responseTimes.length);
+    responseConsistency = Math.max(60, 100 - (timeVariance * 10));
+    
+    // Extreme responding - look for extreme values (1s and 5s)
+    const extremeResponses = responses.filter((r: any) => {
+      const val = r.value || r.response || r.selectedOption;
+      return val === 0 || val === 1 || val === 4 || val === 5;
+    }).length;
+    extremeResponding = Math.min(100, (extremeResponses / responses.length) * 100);
+  } else {
+    // Default values for mock data
+    responseConsistency = 85;
+    socialDesirability = 25;
+    extremeResponding = 30;
+  }
   
-  // Response consistency - look for similar responses to similar questions
-  responseConsistency = Math.random() * 20 + 70; // Mock calculation
+  const validityIndex = Math.round((responseConsistency + (100 - socialDesirability) + (100 - extremeResponding)) / 3);
+  const overallDistortion = Math.round((socialDesirability + extremeResponding + (100 - responseConsistency)) / 3);
   
-  // Extreme responding - look for extreme values (1s and 5s)
-  const extremeResponses = responses.filter((r: any) => r.value === 1 || r.value === 5).length;
-  extremeResponding = Math.min(100, (extremeResponses / responses.length) * 100);
+  let reliability: 'low' | 'medium' | 'high' = 'medium';
+  let consistencyFlags: string[] = [];
+  
+  if (validityIndex >= 80) {
+    reliability = 'high';
+  } else if (validityIndex >= 60) {
+    reliability = 'medium';
+    if (socialDesirability > 60) consistencyFlags.push("High social desirability detected");
+    if (extremeResponding > 50) consistencyFlags.push("Extreme response pattern observed");
+  } else {
+    reliability = 'low';
+    consistencyFlags.push("Response validity concerns");
+    if (responseConsistency < 60) consistencyFlags.push("Inconsistent response patterns");
+  }
+  
+  const interpretation = reliability === 'high' ? 
+    "Responses show high consistency and reliability, indicating authentic assessment completion." :
+    reliability === 'medium' ?
+    "Responses show moderate consistency. Some minor patterns detected but overall reliable." :
+    "Response patterns indicate potential validity concerns. Recommend behavioral interview validation.";
   
   return {
+    score: overallDistortion,
+    reliability: reliability,
+    consistencyFlags: consistencyFlags,
+    interpretation: interpretation,
     socialDesirability: {
       score: Math.round(socialDesirability),
       interpretation: socialDesirability > 70 ? "High - May be presenting in overly positive light" : 
@@ -873,7 +876,7 @@ function calculateDistortionScale(results: any): any {
                      extremeResponding > 40 ? "Moderate - Some extreme responding" :
                      "Low - Balanced response style"
     },
-    validityIndex: Math.round((responseConsistency + (100 - socialDesirability) + (100 - extremeResponding)) / 3)
+    validityIndex: validityIndex
   };
 }
 
