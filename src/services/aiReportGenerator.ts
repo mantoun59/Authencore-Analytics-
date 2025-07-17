@@ -111,8 +111,9 @@ export class AIReportGenerator {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.width;
       const pageHeight = doc.internal.pageSize.height;
-      const margin = 25; // Increased margin from 20 to 25
+      const margin = 20; // Standard margin
       const contentWidth = pageWidth - 2 * margin; // Available content width
+      const maxContentHeight = pageHeight - 60; // Reserve space for header/footer
       let yPosition = margin;
 
       // Load logo image first
@@ -125,12 +126,24 @@ export class AIReportGenerator {
       // Executive Summary Section
       this.addExecutiveSummary(doc, reportContent);
       
-      // Page 2: Detailed Analysis with compact additional sections
+      // Detailed Analysis Section
       doc.addPage();
       this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
       this.addDetailedAnalysis(doc, reportContent);
+
+      // Behavioral Insights Section
+      doc.addPage();
+      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
       this.addBehavioralInsights(doc, reportContent);
+
+      // Action Plan Section
+      doc.addPage();
+      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
       this.addActionPlan(doc, reportContent);
+
+      // Career Guidance Section
+      doc.addPage();
+      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
       this.addCareerGuidance(doc, reportContent);
 
       // Compact all sections into fewer pages
@@ -280,350 +293,470 @@ export class AIReportGenerator {
 
   private addExecutiveSummary(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 25; // Increased margin
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 20;
     const contentWidth = pageWidth - 2 * margin;
     let yPosition = 80;
 
     // Executive Summary Title with enhanced styling
     doc.setFillColor(15, 23, 42);
-    doc.rect(margin - 5, yPosition - 12, contentWidth + 10, 20, 'F'); // Reduced height
+    doc.rect(margin - 5, yPosition - 15, contentWidth + 10, 25, 'F');
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(14); // Further reduced from 16
+    doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
     doc.text('EXECUTIVE SUMMARY', margin, yPosition);
-    yPosition += 18; // Further reduced spacing
+    yPosition += 25;
 
     // Assessment validity indicator
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(7); // Further reduced from 8
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text('✓ AI-Powered Assessment | Evidence-Based Analysis', margin, yPosition);
-    yPosition += 12; // Further reduced spacing
+    doc.text('✓ AI-Powered Professional Assessment | Evidence-Based Analysis | Predictive Insights', margin, yPosition);
+    yPosition += 20;
 
     // Overall Score with enhanced visual representation
-    doc.setFontSize(10); // Further reduced from 12
+    doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('Overall Score:', margin, yPosition);
+    doc.text('Overall Competency Score:', margin, yPosition);
     
     // Score visualization
     const scoreColor = reportContent.executiveSummary.overallScore >= 80 ? [34, 197, 94] as [number, number, number] : 
                       reportContent.executiveSummary.overallScore >= 60 ? [245, 158, 11] as [number, number, number] : [239, 68, 68] as [number, number, number];
     doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.setFontSize(20); // Further reduced from 28
-    doc.text(`${reportContent.executiveSummary.overallScore}`, margin + 70, yPosition + 4);
-    doc.setFontSize(10); // Further reduced from 14
-    doc.text('/100', margin + 90, yPosition + 4); // Adjusted position
+    doc.setFontSize(32);
+    doc.text(`${reportContent.executiveSummary.overallScore}`, margin + 120, yPosition + 5);
+    doc.setFontSize(16);
+    doc.text('/100', margin + 145, yPosition + 5);
     
     // Enhanced progress bar with gradient effect
-    const barWidth = 120; // Reduced from 150
+    const barWidth = 150;
     const fillWidth = (reportContent.executiveSummary.overallScore / 100) * barWidth;
     
     // Background bar
     doc.setFillColor(229, 231, 235);
-    doc.rect(margin, yPosition + 8, barWidth, 8, 'F'); // Reduced height
+    doc.rect(margin, yPosition + 10, barWidth, 12, 'F');
     
     // Progress fill
     doc.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.rect(margin, yPosition + 8, fillWidth, 8, 'F');
+    doc.rect(margin, yPosition + 10, fillWidth, 12, 'F');
     
     // Score interpretation
     doc.setTextColor(75, 85, 99);
-    doc.setFontSize(8); // Reduced from 10
-    const interpretation = reportContent.executiveSummary.overallScore >= 80 ? 'Exceptional' :
-                          reportContent.executiveSummary.overallScore >= 60 ? 'Strong' : 'Developing';
-    doc.text(interpretation, margin + barWidth + 5, yPosition + 12);
-    yPosition += 20; // Further reduced spacing
+    doc.setFontSize(10);
+    const interpretation = reportContent.executiveSummary.overallScore >= 80 ? 'Exceptional Performance' :
+                          reportContent.executiveSummary.overallScore >= 60 ? 'Strong Performance' : 'Development Opportunity';
+    doc.text(interpretation, margin + barWidth + 10, yPosition + 17);
+    yPosition += 35;
 
     // Key Professional Insights with enhanced formatting
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(10); // Further reduced from 12
+    doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('Key Insights:', margin, yPosition);
-    yPosition += 10; // Further reduced spacing
+    doc.text('Key Professional Insights:', margin, yPosition);
+    yPosition += 15;
 
-    doc.setFontSize(7); // Further reduced from 9
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
-    reportContent.executiveSummary.keyInsights.slice(0, 2).forEach((insight, index) => { // Further limited to 2 items
+    
+    // Check if we need to add a page break for insights
+    const checkPageBreak = (estimatedHeight: number) => {
+      if (yPosition + estimatedHeight > pageHeight - 40) {
+        doc.addPage();
+        this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+        yPosition = 50;
+      }
+    };
+
+    reportContent.executiveSummary.keyInsights.forEach((insight, index) => {
       // Add bullet point with enhanced styling
       doc.setFillColor(59, 130, 246);
-      doc.circle(margin + 2, yPosition - 1, 0.8, 'F'); // Smaller bullet
+      doc.circle(margin + 3, yPosition - 2, 1.5, 'F');
       
-      // Truncate insights more aggressively
-      const truncatedInsight = insight.length > 100 ? insight.substring(0, 100) + '...' : insight;
-      const lines = doc.splitTextToSize(truncatedInsight, contentWidth - 8);
-      doc.text(lines, margin + 5, yPosition);
-      yPosition += lines.length * 3 + 3; // Further reduced line spacing
+      const lines = doc.splitTextToSize(`${insight}`, contentWidth - 15);
+      checkPageBreak(lines.length * 5 + 8);
+      doc.text(lines, margin + 8, yPosition);
+      yPosition += lines.length * 5 + 6;
     });
 
-    yPosition += 8; // Further reduced
+    yPosition += 15;
 
     // Enhanced two-column layout for strengths and development areas
-    const colWidth = (contentWidth - 8) / 2; // Further reduced spacing
+    const colWidth = (contentWidth - 20) / 2;
     let leftY = yPosition;
     let rightY = yPosition;
 
     // Strengths section with visual enhancement
     doc.setFillColor(239, 246, 255);
-    doc.rect(margin - 2, leftY - 6, colWidth + 2, 45, 'F'); // Further reduced height
+    doc.rect(margin - 5, leftY - 10, colWidth + 5, 85, 'F');
     doc.setDrawColor(59, 130, 246);
-    doc.setLineWidth(0.5); // Thinner line
-    doc.line(margin - 2, leftY - 6, margin - 2, leftY + 39);
+    doc.setLineWidth(2);
+    doc.line(margin - 5, leftY - 10, margin - 5, leftY + 75);
     
-    doc.setFontSize(8); // Further reduced from 10
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(59, 130, 246);
-    doc.text('Strengths', margin, leftY);
-    leftY += 8;
+    doc.text('🎯 Core Strengths', margin, leftY);
+    leftY += 12;
 
-    doc.setFontSize(6); // Further reduced from 8
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.executiveSummary.topStrengths.slice(0, 2).forEach((strength, index) => { // Further limited to 2
-      const cleanStrength = strength.replace(/^[^:]*:\s*/, '').substring(0, 40) + '...'; // Shorter text
-      const lines = doc.splitTextToSize(`✓ ${cleanStrength}`, colWidth - 6);
+    reportContent.executiveSummary.topStrengths.forEach((strength, index) => {
+      const lines = doc.splitTextToSize(`✓ ${strength}`, colWidth - 10);
       doc.text(lines, margin, leftY);
-      leftY += lines.length * 2.5 + 1.5; // Further reduced spacing
+      leftY += lines.length * 4 + 3;
     });
 
     // Development Areas section with visual enhancement
     doc.setFillColor(254, 242, 242);
-    doc.rect(margin + colWidth + 6, rightY - 6, colWidth + 2, 45, 'F'); // Further reduced height
+    doc.rect(margin + colWidth + 15, rightY - 10, colWidth + 5, 85, 'F');
     doc.setDrawColor(239, 68, 68);
-    doc.setLineWidth(0.5);
-    doc.line(margin + colWidth + 6, rightY - 6, margin + colWidth + 6, rightY + 39);
+    doc.setLineWidth(2);
+    doc.line(margin + colWidth + 15, rightY - 10, margin + colWidth + 15, rightY + 75);
     
-    doc.setFontSize(8);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(239, 68, 68);
-    doc.text('Development', margin + colWidth + 8, rightY);
-    rightY += 8;
+    doc.text('🎯 Development Focus', margin + colWidth + 20, rightY);
+    rightY += 12;
 
-    doc.setFontSize(6);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.executiveSummary.developmentAreas.slice(0, 2).forEach((area, index) => { // Further limited to 2
-      const cleanArea = area.replace(/^[^:]*:\s*/, '').substring(0, 40) + '...'; // Shorter text
-      const lines = doc.splitTextToSize(`◦ ${cleanArea}`, colWidth - 6);
-      doc.text(lines, margin + colWidth + 8, rightY);
-      rightY += lines.length * 2.5 + 1.5; // Further reduced spacing
+    reportContent.executiveSummary.developmentAreas.forEach((area, index) => {
+      const lines = doc.splitTextToSize(`◦ ${area}`, colWidth - 10);
+      doc.text(lines, margin + colWidth + 20, rightY);
+      rightY += lines.length * 4 + 3;
     });
   }
 
   private addDetailedAnalysis(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 25; // Increased margin
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 20;
     const contentWidth = pageWidth - 2 * margin;
     let yPosition = 50;
 
     // Section title
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(12); // Further reduced from 16
+    doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.text('DETAILED ANALYSIS', margin, yPosition);
-    yPosition += 18; // Further reduced spacing
+    doc.text('DETAILED PSYCHOLOGICAL ANALYSIS', margin, yPosition);
+    yPosition += 25;
+
+    // Page break checker
+    const checkPageBreak = (estimatedHeight: number) => {
+      if (yPosition + estimatedHeight > pageHeight - 40) {
+        doc.addPage();
+        this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+        yPosition = 50;
+      }
+    };
 
     // Dimension Scores Chart
     this.addDimensionScoresChart(doc, reportContent.detailedAnalysis.dimensionScores, yPosition);
-    yPosition += 75; // Further reduced spacing
+    yPosition += 120;
 
     // Personalized Insights
-    doc.setFontSize(10); // Further reduced from 12
+    checkPageBreak(40);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('Insights:', margin, yPosition);
-    yPosition += 10; // Further reduced spacing
+    doc.text('Personalized Professional Insights:', margin, yPosition);
+    yPosition += 12;
 
-    doc.setFontSize(7); // Further reduced from 9
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    // Truncate insights text for better fit
-    const truncatedInsights = reportContent.detailedAnalysis.personalizedInsights.length > 300 ? 
-      reportContent.detailedAnalysis.personalizedInsights.substring(0, 300) + '...' : 
-      reportContent.detailedAnalysis.personalizedInsights;
-    const insightLines = doc.splitTextToSize(truncatedInsights, contentWidth);
-    doc.text(insightLines, margin, yPosition);
-    yPosition += insightLines.length * 3 + 8; // Further reduced spacing
+    const insightLines = doc.splitTextToSize(reportContent.detailedAnalysis.personalizedInsights, contentWidth);
+    
+    // Split insights into chunks to handle page breaks
+    let currentLine = 0;
+    while (currentLine < insightLines.length) {
+      const remainingLines = insightLines.slice(currentLine);
+      const chunkSize = Math.min(remainingLines.length, Math.floor((pageHeight - yPosition - 40) / 4));
+      
+      if (chunkSize <= 0) {
+        checkPageBreak(40);
+        continue;
+      }
+      
+      const chunk = remainingLines.slice(0, chunkSize);
+      doc.text(chunk, margin, yPosition);
+      yPosition += chunk.length * 4 + 8;
+      currentLine += chunkSize;
+      
+      if (currentLine < insightLines.length) {
+        checkPageBreak(40);
+      }
+    }
+
+    yPosition += 10;
 
     // Behavioral Patterns
-    doc.setFontSize(10); // Further reduced from 12
+    checkPageBreak(40);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('Patterns:', margin, yPosition);
-    yPosition += 10; // Further reduced spacing
+    doc.text('Behavioral Patterns & Workplace Implications:', margin, yPosition);
+    yPosition += 12;
 
-    doc.setFontSize(7); // Further reduced from 9
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    reportContent.detailedAnalysis.behavioralPatterns.slice(0, 2).forEach((pattern, index) => { // Further limited to 2
-      // Truncate patterns for better fit
-      const truncatedPattern = pattern.length > 120 ? pattern.substring(0, 120) + '...' : pattern;
-      const lines = doc.splitTextToSize(`${index + 1}. ${truncatedPattern}`, contentWidth);
+    reportContent.detailedAnalysis.behavioralPatterns.forEach((pattern, index) => {
+      const lines = doc.splitTextToSize(`${index + 1}. ${pattern}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 8);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 3 + 4; // Further reduced spacing
+      yPosition += lines.length * 4 + 8;
     });
   }
 
   private addBehavioralInsights(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 25;
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 20;
     const contentWidth = pageWidth - 2 * margin;
     let yPosition = 50;
 
-    // Ultra compact behavioral insights
+    // Section title
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(10);
+    doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.text('BEHAVIORAL INSIGHTS', margin, yPosition);
-    yPosition += 15;
+    doc.text('BEHAVIORAL INSIGHTS & WORKPLACE DYNAMICS', margin, yPosition);
+    yPosition += 25;
 
-    doc.setFontSize(7);
+    // Page break checker
+    const checkPageBreak = (estimatedHeight: number) => {
+      if (yPosition + estimatedHeight > pageHeight - 40) {
+        doc.addPage();
+        this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+        yPosition = 50;
+      }
+    };
+
+    // Communication Style
+    checkPageBreak(50);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Communication Style Analysis:', margin, yPosition);
+    yPosition += 12;
+
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
-    doc.text('• Communication effectiveness and influence style', margin, yPosition);
-    yPosition += 8;
-    doc.text('• Leadership potential and team dynamics', margin, yPosition);
-    yPosition += 8;
-    doc.text('• Motivation drivers and engagement factors', margin, yPosition);
+    const commItems = [
+      'Preferred communication channels and effectiveness patterns',
+      'Influence tactics and persuasion style preferences',
+      'Conflict resolution approach and negotiation capabilities'
+    ];
+    
+    commItems.forEach(item => {
+      const lines = doc.splitTextToSize(`• ${item}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 6);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 4 + 6;
+    });
+
+    yPosition += 10;
+
+    // Leadership Potential
+    checkPageBreak(50);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Leadership Potential Assessment:', margin, yPosition);
+    yPosition += 12;
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    const leadershipItems = [
+      'Natural leadership tendencies and influence capacity evaluation',
+      'Team dynamics and collaboration effectiveness analysis',
+      'Decision-making style under pressure assessment'
+    ];
+    
+    leadershipItems.forEach(item => {
+      const lines = doc.splitTextToSize(`• ${item}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 6);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 4 + 6;
+    });
+
+    yPosition += 10;
+
+    // Motivation & Engagement
+    checkPageBreak(50);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Motivation & Engagement Drivers:', margin, yPosition);
+    yPosition += 12;
+
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    const motivationItems = [
+      'Primary motivational factors and engagement triggers',
+      'Work environment preferences and productivity factors',
+      'Recognition and reward responsiveness patterns'
+    ];
+    
+    motivationItems.forEach(item => {
+      const lines = doc.splitTextToSize(`• ${item}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 6);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 4 + 6;
+    });
   }
 
   private addActionPlan(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 25;
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 20;
     const contentWidth = pageWidth - 2 * margin;
-    let yPosition = 90; // Start lower on the page
+    let yPosition = 50;
 
-    // Ultra compact action plan
+    // Section title
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(10);
+    doc.setFontSize(16);
     doc.setFont('helvetica', 'bold');
-    doc.text('ACTION PLAN', margin, yPosition);
-    yPosition += 15;
+    doc.text('PERSONALIZED DEVELOPMENT ACTION PLAN', margin, yPosition);
+    yPosition += 25;
 
-    // Immediate Actions - ultra compact
-    doc.setFontSize(8);
+    // Page break checker
+    const checkPageBreak = (estimatedHeight: number) => {
+      if (yPosition + estimatedHeight > pageHeight - 40) {
+        doc.addPage();
+        this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+        yPosition = 50;
+      }
+    };
+
+    // Immediate Actions
+    checkPageBreak(40);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(239, 68, 68);
-    doc.text('Immediate (30 days):', margin, yPosition);
-    yPosition += 10;
+    doc.text('Immediate Actions (Next 30 Days):', margin, yPosition);
+    yPosition += 12;
 
-    doc.setFontSize(6);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.actionPlan.immediate.slice(0, 2).forEach((action, index) => {
-      const truncated = action.length > 100 ? action.substring(0, 100) + '...' : action;
-      const lines = doc.splitTextToSize(`${index + 1}. ${truncated}`, contentWidth);
+    reportContent.actionPlan.immediate.forEach((action, index) => {
+      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 8);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 2.5 + 3;
+      yPosition += lines.length * 4 + 8;
     });
 
-    yPosition += 8;
-
-    // Short-term Actions - ultra compact
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(251, 146, 60);
-    doc.text('Short-term (3-6 months):', margin, yPosition);
     yPosition += 10;
 
-    doc.setFontSize(6);
+    // Short-term Actions
+    checkPageBreak(40);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(251, 146, 60);
+    doc.text('Short-term Development (3-6 Months):', margin, yPosition);
+    yPosition += 12;
+
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.actionPlan.shortTerm.slice(0, 2).forEach((action, index) => {
-      const truncated = action.length > 100 ? action.substring(0, 100) + '...' : action;
-      const lines = doc.splitTextToSize(`${index + 1}. ${truncated}`, contentWidth);
+    reportContent.actionPlan.shortTerm.forEach((action, index) => {
+      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 8);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 2.5 + 3;
+      yPosition += lines.length * 4 + 8;
     });
 
     yPosition += 10;
 
     // Long-term Actions
-    doc.setFontSize(14);
+    checkPageBreak(40);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(34, 197, 94); // Green
+    doc.setTextColor(34, 197, 94);
     doc.text('Long-term Strategic Development (6-18 Months):', margin, yPosition);
-    yPosition += 15;
+    yPosition += 12;
 
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
     reportContent.actionPlan.longTerm.forEach((action, index) => {
       const lines = doc.splitTextToSize(`${index + 1}. ${action}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 8);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 5 + 8;
+      yPosition += lines.length * 4 + 8;
     });
   }
 
   private addCareerGuidance(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 25;
+    const pageHeight = doc.internal.pageSize.height;
+    const margin = 20;
     const contentWidth = pageWidth - 2 * margin;
-    let yPosition = 160; // Start even lower on the page
+    let yPosition = 50;
 
-    // Ultra compact career guidance
+    // Section title
     doc.setTextColor(15, 23, 42);
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text('CAREER OPTIMIZATION & STRATEGIC GUIDANCE', margin, yPosition);
+    yPosition += 25;
+
+    // Page break checker
+    const checkPageBreak = (estimatedHeight: number) => {
+      if (yPosition + estimatedHeight > pageHeight - 40) {
+        doc.addPage();
+        this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+        yPosition = 50;
+      }
+    };
+
+    // Career Recommendations
+    checkPageBreak(40);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Recommended Career Paths:', margin, yPosition);
+    yPosition += 12;
+
     doc.setFontSize(10);
-    doc.setFont('helvetica', 'bold');
-    doc.text('CAREER GUIDANCE', margin, yPosition);
-    yPosition += 15;
-
-    // Career Recommendations - ultra compact
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Recommended Paths:', margin, yPosition);
-    yPosition += 10;
-
-    doc.setFontSize(6);
     doc.setFont('helvetica', 'normal');
-    reportContent.careerGuidance.recommendations.slice(0, 2).forEach((rec, index) => {
-      const truncated = rec.length > 80 ? rec.substring(0, 80) + '...' : rec;
-      const lines = doc.splitTextToSize(`• ${truncated}`, contentWidth);
+    reportContent.careerGuidance.recommendations.forEach((rec, index) => {
+      const lines = doc.splitTextToSize(`• ${rec}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 8);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 2.5 + 2;
-    });
-
-    yPosition += 6;
-
-    // Skills - ultra compact
-    doc.setFontSize(8);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Priority Skills:', margin, yPosition);
-    yPosition += 10;
-
-    doc.setFontSize(6);
-    doc.setFont('helvetica', 'normal');
-    reportContent.careerGuidance.skills.slice(0, 3).forEach((skill, index) => {
-      const truncated = skill.length > 60 ? skill.substring(0, 60) + '...' : skill;
-      const lines = doc.splitTextToSize(`▸ ${truncated}`, contentWidth);
-      doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 2.5 + 2;
+      yPosition += lines.length * 4 + 8;
     });
 
     yPosition += 10;
 
-    // Career Pathways
-    doc.setFontSize(14);
+    // Strategic Career Pathways
+    checkPageBreak(40);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.text('Strategic Career Pathways:', margin, yPosition);
-    yPosition += 15;
+    yPosition += 12;
 
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     reportContent.careerGuidance.pathways.forEach((pathway, index) => {
-      const lines = doc.splitTextToSize(`→ ${pathway}`, pageWidth - 2 * margin);
+      const lines = doc.splitTextToSize(`→ ${pathway}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 8);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 5 + 8;
+      yPosition += lines.length * 4 + 8;
     });
 
     yPosition += 10;
 
     // Skills to Acquire
-    doc.setFontSize(14);
+    checkPageBreak(40);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
     doc.text('Priority Skills for Acquisition:', margin, yPosition);
-    yPosition += 15;
+    yPosition += 12;
 
-    doc.setFontSize(11);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     reportContent.careerGuidance.skills.forEach((skill, index) => {
-      const lines = doc.splitTextToSize(`▸ ${skill}`, pageWidth - 2 * margin);
+      const lines = doc.splitTextToSize(`▸ ${skill}`, contentWidth);
+      checkPageBreak(lines.length * 4 + 8);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 5 + 8;
+      yPosition += lines.length * 4 + 8;
     });
   }
 
