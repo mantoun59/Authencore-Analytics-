@@ -111,52 +111,47 @@ export class AIReportGenerator {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.width;
       const pageHeight = doc.internal.pageSize.height;
-      const margin = 20; // Standard margin
-      const contentWidth = pageWidth - 2 * margin; // Available content width
-      const maxContentHeight = pageHeight - 60; // Reserve space for header/footer
-      let yPosition = margin;
+      const margin = 15; // Reduced margin for more content space
+      const contentWidth = pageWidth - 2 * margin;
+      const usableHeight = pageHeight - 70; // Reserve space for header/footer
+      let currentY = margin;
 
       // Load logo image first
       const logoBase64 = await this.loadLogoAsBase64();
       
-      // Add professional header with branding
+      // Page break utility that respects margins
+      const smartPageBreak = (requiredHeight: number): number => {
+        if (currentY + requiredHeight > usableHeight) {
+          doc.addPage();
+          this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
+          return 45; // Start position after header
+        }
+        return currentY;
+      };
+
+      // PAGE 1: Header + Executive Summary
       this.addProfessionalHeader(doc, reportContent.candidateInfo.assessmentType, logoBase64);
-      yPosition = 70;
-
-      // Executive Summary Section
-      this.addExecutiveSummary(doc, reportContent);
+      currentY = 75;
       
-      // Detailed Analysis Section
-      doc.addPage();
-      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
-      this.addDetailedAnalysis(doc, reportContent);
+      currentY = this.addCompactExecutiveSummary(doc, reportContent, currentY, smartPageBreak);
 
-      // Behavioral Insights Section
-      doc.addPage();
-      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
-      this.addBehavioralInsights(doc, reportContent);
+      // PAGE 2: Detailed Analysis + Behavioral Insights
+      currentY = smartPageBreak(40);
+      currentY = this.addCompactDetailedAnalysis(doc, reportContent, currentY, smartPageBreak);
+      currentY = this.addCompactBehavioralInsights(doc, reportContent, currentY, smartPageBreak);
 
-      // Action Plan Section
-      doc.addPage();
-      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
-      this.addActionPlan(doc, reportContent);
+      // PAGE 3: Action Plan + Career Guidance
+      currentY = smartPageBreak(40);
+      currentY = this.addCompactActionPlan(doc, reportContent, currentY, smartPageBreak);
+      currentY = this.addCompactCareerGuidance(doc, reportContent, currentY, smartPageBreak);
 
-      // Career Guidance Section
-      doc.addPage();
-      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
-      this.addCareerGuidance(doc, reportContent);
-
-      // Compact all sections into fewer pages
-      // Remove separate pages for each section to fit into 3 pages
-      // Detailed Analysis combined on page 2
-
-      // Employer-specific section
+      // Employer-specific section (if needed)
       if (reportContent.employerSpecific) {
-        doc.addPage();
-        this.addEmployerSection(doc, reportContent);
+        currentY = smartPageBreak(60);
+        this.addCompactEmployerSection(doc, reportContent, currentY);
       }
 
-      // Add final footer with copyright
+      // Add final footer with page numbers
       this.addFinalFooter(doc);
 
       // Save the PDF
@@ -291,143 +286,104 @@ export class AIReportGenerator {
     doc.text('www.authencore.org', pageWidth - margin, pageHeight - 15, { align: 'right' });
   }
 
-  private addExecutiveSummary(doc: jsPDF, reportContent: AIReportContent) {
+  private addCompactExecutiveSummary(doc: jsPDF, reportContent: AIReportContent, startY: number, pageBreak: Function): number {
     const pageWidth = doc.internal.pageSize.width;
-    const pageHeight = doc.internal.pageSize.height;
-    const margin = 20;
+    const margin = 15;
     const contentWidth = pageWidth - 2 * margin;
-    let yPosition = 80;
+    let yPosition = startY;
 
-    // Executive Summary Title with enhanced styling
+    // Executive Summary Title
     doc.setFillColor(15, 23, 42);
-    doc.rect(margin - 5, yPosition - 15, contentWidth + 10, 25, 'F');
+    doc.rect(margin - 5, yPosition - 8, contentWidth + 10, 16, 'F');
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16);
-    doc.setFont('helvetica', 'bold');
-    doc.text('EXECUTIVE SUMMARY', margin, yPosition);
-    yPosition += 25;
-
-    // Assessment validity indicator
-    doc.setTextColor(15, 23, 42);
-    doc.setFontSize(10);
-    doc.setFont('helvetica', 'normal');
-    doc.text('✓ AI-Powered Professional Assessment | Evidence-Based Analysis | Predictive Insights', margin, yPosition);
-    yPosition += 20;
-
-    // Overall Score with enhanced visual representation
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.text('Overall Competency Score:', margin, yPosition);
+    doc.text('EXECUTIVE SUMMARY', margin, yPosition);
+    yPosition += 20;
+
+    // Overall Score - Compact version
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Overall Score:', margin, yPosition);
     
-    // Score visualization
     const scoreColor = reportContent.executiveSummary.overallScore >= 80 ? [34, 197, 94] as [number, number, number] : 
                       reportContent.executiveSummary.overallScore >= 60 ? [245, 158, 11] as [number, number, number] : [239, 68, 68] as [number, number, number];
     doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.setFontSize(32);
-    doc.text(`${reportContent.executiveSummary.overallScore}`, margin + 120, yPosition + 5);
-    doc.setFontSize(16);
-    doc.text('/100', margin + 145, yPosition + 5);
+    doc.setFontSize(24);
+    doc.text(`${reportContent.executiveSummary.overallScore}/100`, margin + 80, yPosition);
     
-    // Enhanced progress bar with gradient effect
-    const barWidth = 150;
+    // Progress bar
+    const barWidth = 100;
     const fillWidth = (reportContent.executiveSummary.overallScore / 100) * barWidth;
-    
-    // Background bar
     doc.setFillColor(229, 231, 235);
-    doc.rect(margin, yPosition + 10, barWidth, 12, 'F');
-    
-    // Progress fill
+    doc.rect(margin, yPosition + 8, barWidth, 8, 'F');
     doc.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.rect(margin, yPosition + 10, fillWidth, 12, 'F');
-    
-    // Score interpretation
-    doc.setTextColor(75, 85, 99);
-    doc.setFontSize(10);
-    const interpretation = reportContent.executiveSummary.overallScore >= 80 ? 'Exceptional Performance' :
-                          reportContent.executiveSummary.overallScore >= 60 ? 'Strong Performance' : 'Development Opportunity';
-    doc.text(interpretation, margin + barWidth + 10, yPosition + 17);
-    yPosition += 35;
+    doc.rect(margin, yPosition + 8, fillWidth, 8, 'F');
+    yPosition += 25;
 
-    // Key Professional Insights with enhanced formatting
+    // Key Insights - Compact
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(14);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.text('Key Professional Insights:', margin, yPosition);
-    yPosition += 15;
+    doc.text('Key Insights:', margin, yPosition);
+    yPosition += 12;
 
-    doc.setFontSize(11);
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'normal');
-    
-    // Check if we need to add a page break for insights
-    const checkPageBreak = (estimatedHeight: number) => {
-      if (yPosition + estimatedHeight > pageHeight - 40) {
-        doc.addPage();
-        this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
-        yPosition = 50;
+    reportContent.executiveSummary.keyInsights.slice(0, 3).forEach((insight) => {
+      const lines = doc.splitTextToSize(`• ${insight}`, contentWidth - 10);
+      if (yPosition + lines.length * 3.5 > 200) {
+        yPosition = pageBreak(lines.length * 3.5 + 10);
       }
-    };
-
-    reportContent.executiveSummary.keyInsights.forEach((insight, index) => {
-      // Add bullet point with enhanced styling
-      doc.setFillColor(59, 130, 246);
-      doc.circle(margin + 3, yPosition - 2, 1.5, 'F');
-      
-      const lines = doc.splitTextToSize(`${insight}`, contentWidth - 15);
-      checkPageBreak(lines.length * 5 + 8);
-      doc.text(lines, margin + 8, yPosition);
-      yPosition += lines.length * 5 + 6;
+      doc.text(lines, margin + 5, yPosition);
+      yPosition += lines.length * 3.5 + 4;
     });
 
-    yPosition += 15;
+    yPosition += 10;
 
-    // Enhanced two-column layout for strengths and development areas
-    const colWidth = (contentWidth - 20) / 2;
-    let leftY = yPosition;
-    let rightY = yPosition;
+    // Two-column layout for strengths and development - Compact
+    const colWidth = (contentWidth - 10) / 2;
+    const startColumnY = yPosition;
 
-    // Strengths section with visual enhancement
+    // Strengths
     doc.setFillColor(239, 246, 255);
-    doc.rect(margin - 5, leftY - 10, colWidth + 5, 85, 'F');
-    doc.setDrawColor(59, 130, 246);
-    doc.setLineWidth(2);
-    doc.line(margin - 5, leftY - 10, margin - 5, leftY + 75);
-    
-    doc.setFontSize(12);
+    doc.rect(margin - 2, yPosition - 5, colWidth + 2, 50, 'F');
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(59, 130, 246);
-    doc.text('🎯 Core Strengths', margin, leftY);
-    leftY += 12;
+    doc.text('Core Strengths', margin, yPosition);
+    yPosition += 10;
 
-    doc.setFontSize(10);
+    doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.executiveSummary.topStrengths.forEach((strength, index) => {
-      const lines = doc.splitTextToSize(`✓ ${strength}`, colWidth - 10);
-      doc.text(lines, margin, leftY);
-      leftY += lines.length * 4 + 3;
+    reportContent.executiveSummary.topStrengths.slice(0, 3).forEach((strength) => {
+      const lines = doc.splitTextToSize(`✓ ${strength}`, colWidth - 8);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 3 + 2;
     });
 
-    // Development Areas section with visual enhancement
+    // Development Areas
+    let rightY = startColumnY;
     doc.setFillColor(254, 242, 242);
-    doc.rect(margin + colWidth + 15, rightY - 10, colWidth + 5, 85, 'F');
-    doc.setDrawColor(239, 68, 68);
-    doc.setLineWidth(2);
-    doc.line(margin + colWidth + 15, rightY - 10, margin + colWidth + 15, rightY + 75);
-    
-    doc.setFontSize(12);
+    doc.rect(margin + colWidth + 8, rightY - 5, colWidth + 2, 50, 'F');
+    doc.setFontSize(11);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(239, 68, 68);
-    doc.text('🎯 Development Focus', margin + colWidth + 20, rightY);
-    rightY += 12;
+    doc.text('Development Focus', margin + colWidth + 10, rightY);
+    rightY += 10;
 
-    doc.setFontSize(10);
+    doc.setFontSize(8);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.executiveSummary.developmentAreas.forEach((area, index) => {
-      const lines = doc.splitTextToSize(`◦ ${area}`, colWidth - 10);
-      doc.text(lines, margin + colWidth + 20, rightY);
-      rightY += lines.length * 4 + 3;
+    reportContent.executiveSummary.developmentAreas.slice(0, 3).forEach((area) => {
+      const lines = doc.splitTextToSize(`◦ ${area}`, colWidth - 8);
+      doc.text(lines, margin + colWidth + 10, rightY);
+      rightY += lines.length * 3 + 2;
     });
+
+    return Math.max(yPosition, rightY) + 15;
   }
 
   private addDetailedAnalysis(doc: jsPDF, reportContent: AIReportContent) {
@@ -858,6 +814,303 @@ export class AIReportGenerator {
       // Copyright and generation info
       doc.text(`Generated on: ${new Date().toLocaleDateString()}`, pageWidth / 2, pageHeight - 5, { align: 'center' });
     }
+  }
+
+  private addCompactDetailedAnalysis(doc: jsPDF, reportContent: AIReportContent, startY: number, pageBreak: Function): number {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 15;
+    const contentWidth = pageWidth - 2 * margin;
+    let yPosition = startY;
+
+    // Section title
+    doc.setFillColor(15, 23, 42);
+    doc.rect(margin - 5, yPosition - 8, contentWidth + 10, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('DETAILED ANALYSIS', margin, yPosition);
+    yPosition += 20;
+
+    // Compact dimension scores
+    yPosition = this.addCompactDimensionScores(doc, reportContent.detailedAnalysis.dimensionScores, yPosition);
+    yPosition += 15;
+
+    // Personalized insights - truncated
+    if (yPosition + 50 > 250) {
+      yPosition = pageBreak(50);
+    }
+    
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Key Professional Insights:', margin, yPosition);
+    yPosition += 10;
+
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    const truncatedInsights = reportContent.detailedAnalysis.personalizedInsights.substring(0, 300) + "...";
+    const insightLines = doc.splitTextToSize(truncatedInsights, contentWidth);
+    doc.text(insightLines.slice(0, 6), margin, yPosition);
+    yPosition += insightLines.slice(0, 6).length * 3.5 + 10;
+
+    return yPosition;
+  }
+
+  private addCompactBehavioralInsights(doc: jsPDF, reportContent: AIReportContent, startY: number, pageBreak: Function): number {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 15;
+    const contentWidth = pageWidth - 2 * margin;
+    let yPosition = startY;
+
+    if (yPosition + 80 > 250) {
+      yPosition = pageBreak(80);
+    }
+
+    // Section title
+    doc.setFillColor(15, 23, 42);
+    doc.rect(margin - 5, yPosition - 8, contentWidth + 10, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('BEHAVIORAL INSIGHTS', margin, yPosition);
+    yPosition += 20;
+
+    // Compact behavioral patterns
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Key Behavioral Patterns:', margin, yPosition);
+    yPosition += 10;
+
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    reportContent.detailedAnalysis.behavioralPatterns.slice(0, 4).forEach((pattern, index) => {
+      const lines = doc.splitTextToSize(`• ${pattern}`, contentWidth - 10);
+      doc.text(lines.slice(0, 2), margin + 5, yPosition);
+      yPosition += Math.min(lines.length, 2) * 3 + 4;
+    });
+
+    return yPosition + 10;
+  }
+
+  private addCompactActionPlan(doc: jsPDF, reportContent: AIReportContent, startY: number, pageBreak: Function): number {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 15;
+    const contentWidth = pageWidth - 2 * margin;
+    let yPosition = startY;
+
+    // Section title
+    doc.setFillColor(15, 23, 42);
+    doc.rect(margin - 5, yPosition - 8, contentWidth + 10, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('ACTION PLAN', margin, yPosition);
+    yPosition += 20;
+
+    // Three columns for immediate, short-term, long-term
+    const colWidth = (contentWidth - 20) / 3;
+
+    // Immediate Actions
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(239, 68, 68);
+    doc.text('30 Days', margin, yPosition);
+    yPosition += 8;
+
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.actionPlan.immediate.slice(0, 3).forEach((action) => {
+      const lines = doc.splitTextToSize(`• ${action}`, colWidth - 5);
+      doc.text(lines.slice(0, 2), margin, yPosition);
+      yPosition += Math.min(lines.length, 2) * 3 + 2;
+    });
+
+    // Short-term (middle column)
+    let midY = startY + 20;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(251, 146, 60);
+    doc.text('3-6 Months', margin + colWidth + 10, midY);
+    midY += 8;
+
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.actionPlan.shortTerm.slice(0, 3).forEach((action) => {
+      const lines = doc.splitTextToSize(`• ${action}`, colWidth - 5);
+      doc.text(lines.slice(0, 2), margin + colWidth + 10, midY);
+      midY += Math.min(lines.length, 2) * 3 + 2;
+    });
+
+    // Long-term (right column)
+    let rightY = startY + 20;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(34, 197, 94);
+    doc.text('6-18 Months', margin + 2 * colWidth + 20, rightY);
+    rightY += 8;
+
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.actionPlan.longTerm.slice(0, 3).forEach((action) => {
+      const lines = doc.splitTextToSize(`• ${action}`, colWidth - 5);
+      doc.text(lines.slice(0, 2), margin + 2 * colWidth + 20, rightY);
+      rightY += Math.min(lines.length, 2) * 3 + 2;
+    });
+
+    return Math.max(yPosition, midY, rightY) + 15;
+  }
+
+  private addCompactCareerGuidance(doc: jsPDF, reportContent: AIReportContent, startY: number, pageBreak: Function): number {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 15;
+    const contentWidth = pageWidth - 2 * margin;
+    let yPosition = startY;
+
+    if (yPosition + 80 > 250) {
+      yPosition = pageBreak(80);
+    }
+
+    // Section title
+    doc.setFillColor(15, 23, 42);
+    doc.rect(margin - 5, yPosition - 8, contentWidth + 10, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('CAREER GUIDANCE', margin, yPosition);
+    yPosition += 20;
+
+    // Two-column layout
+    const colWidth = (contentWidth - 10) / 2;
+
+    // Recommended paths
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(59, 130, 246);
+    doc.text('Recommended Paths:', margin, yPosition);
+    yPosition += 8;
+
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.careerGuidance.recommendations.slice(0, 3).forEach((rec) => {
+      const lines = doc.splitTextToSize(`• ${rec}`, colWidth - 5);
+      doc.text(lines.slice(0, 2), margin, yPosition);
+      yPosition += Math.min(lines.length, 2) * 3 + 2;
+    });
+
+    // Skills (right column)
+    let rightY = startY + 28;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(34, 197, 94);
+    doc.text('Priority Skills:', margin + colWidth + 10, rightY);
+    rightY += 8;
+
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.careerGuidance.skills.slice(0, 5).forEach((skill) => {
+      const lines = doc.splitTextToSize(`• ${skill}`, colWidth - 5);
+      doc.text(lines.slice(0, 1), margin + colWidth + 10, rightY);
+      rightY += Math.min(lines.length, 1) * 3 + 2;
+    });
+
+    return Math.max(yPosition, rightY) + 15;
+  }
+
+  private addCompactEmployerSection(doc: jsPDF, reportContent: AIReportContent, startY: number): number {
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 15;
+    let yPosition = startY;
+
+    if (!reportContent.employerSpecific) return yPosition;
+
+    // Section title
+    doc.setFillColor(15, 23, 42);
+    doc.rect(margin - 5, yPosition - 8, pageWidth - 2 * margin + 10, 16, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.text('EMPLOYER INSIGHTS', margin, yPosition);
+    yPosition += 25;
+
+    // Risk assessment - compact
+    doc.setTextColor(15, 23, 42);
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Hiring Risk Assessment:', margin, yPosition);
+    yPosition += 10;
+
+    const risk = reportContent.employerSpecific.riskAssessment;
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`Risk Level: ${risk.hiringRisk} | Success Rate: ${risk.successProbability}%`, margin, yPosition);
+    yPosition += 8;
+    doc.text(`Retention Risk: ${risk.retentionRisk} | Ramp-up: ${risk.rampUpTime}`, margin, yPosition);
+
+    return yPosition + 15;
+  }
+
+  private addCompactDimensionScores(doc: jsPDF, dimensionScores: Record<string, any>, yPosition: number): number {
+    const margin = 15;
+    const pageWidth = doc.internal.pageSize.width;
+    const contentWidth = pageWidth - 2 * margin;
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(15, 23, 42);
+    doc.text('Competency Scores:', margin, yPosition);
+    yPosition += 10;
+
+    // Create compact visual chart with smaller bars
+    let currentY = yPosition;
+    const itemsPerRow = 2;
+    let itemsInCurrentRow = 0;
+    const colWidth = contentWidth / itemsPerRow;
+
+    Object.entries(dimensionScores).slice(0, 6).forEach(([key, value]: [string, any]) => {
+      const score = typeof value === 'object' && value !== null ? value.score || 0 : value;
+      const label = key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()).substring(0, 15);
+      
+      const xOffset = (itemsInCurrentRow % itemsPerRow) * colWidth;
+      
+      // Label
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.text(label, margin + xOffset, currentY);
+      
+      // Score
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${score}`, margin + xOffset + 60, currentY);
+      
+      // Mini bar
+      const barWidth = 40;
+      const barHeight = 3;
+      
+      // Background bar
+      doc.setFillColor(229, 231, 235);
+      doc.rect(margin + xOffset + 70, currentY - 2, barWidth, barHeight, 'F');
+      
+      // Score bar
+      const scoreColor = score >= 70 ? [34, 197, 94] : score >= 50 ? [251, 146, 60] : [239, 68, 68];
+      doc.setFillColor(scoreColor[0], scoreColor[1], scoreColor[2]);
+      doc.rect(margin + xOffset + 70, currentY - 2, (score / 100) * barWidth, barHeight, 'F');
+      
+      itemsInCurrentRow++;
+      if (itemsInCurrentRow % itemsPerRow === 0) {
+        currentY += 12;
+      }
+    });
+
+    if (itemsInCurrentRow % itemsPerRow !== 0) {
+      currentY += 12;
+    }
+
+    return currentY;
   }
 
   private addDimensionScoresChart(doc: jsPDF, dimensionScores: Record<string, any>, yPosition: number) {
