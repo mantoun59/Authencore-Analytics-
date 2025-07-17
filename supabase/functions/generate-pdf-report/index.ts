@@ -33,6 +33,23 @@ interface ReportRequest {
   reportType: 'candidate' | 'employer'
 }
 
+// CareerLaunch specific interface
+interface CareerLaunchReportRequest {
+  candidateData: {
+    name: string;
+    email?: string;
+    date: string;
+  };
+  interests: Record<string, number>;
+  aptitudes: Array<{ name: string; score: number }>;
+  personality: Record<string, number>;
+  values: Record<string, number>;
+  flags: { misalignment: string[] };
+  career_fit: { label: string; suggestions: string[] };
+  action_plan: string[];
+  reportType: 'careerlaunch-applicant' | 'careerlaunch-advisor';
+}
+
 const applicantTemplate = (data: ReportRequest) => `
 <!DOCTYPE html>
 <html lang="en">
@@ -294,292 +311,107 @@ const applicantTemplate = (data: ReportRequest) => `
 const employerTemplate = (data: ReportRequest) => `
 <!DOCTYPE html>
 <html lang="en">
+...
+</html>
+`
+
+// CareerLaunch Applicant Template
+const careerLaunchApplicantTemplate = (data: CareerLaunchReportRequest) => `
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>CAIR+ Employer Report</title>
+  <title>CareerLaunch Applicant Report</title>
   <style>
-    @page { 
-      margin: 1in;
-      @top-center {
-        content: "CONFIDENTIAL EMPLOYER REPORT";
-        font-family: 'Segoe UI', sans-serif;
-        font-size: 12px;
-        color: #d32f2f;
-        font-weight: bold;
-      }
-    }
-    body { 
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-      margin: 0; 
-      color: #333; 
-      line-height: 1.6;
-    }
-    .header { 
-      text-align: center; 
-      margin-bottom: 40px; 
-      border-bottom: 3px solid #d32f2f;
-      padding-bottom: 20px;
-    }
-    .logo-placeholder {
-      width: 200px;
-      height: 60px;
-      background: linear-gradient(45deg, #d32f2f, #f44336);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 20px;
-      border-radius: 8px;
-      font-weight: bold;
-    }
-    h1 { 
-      font-size: 32px; 
-      color: #d32f2f; 
-      margin: 0;
-      font-weight: 300;
-    }
-    h2 { 
-      font-size: 24px; 
-      color: #333; 
-      border-bottom: 2px solid #e0e0e0; 
-      padding-bottom: 8px; 
-      margin: 30px 0 20px 0;
-    }
-    .candidate-info {
-      background: #f8f9fa;
-      padding: 15px;
-      border-radius: 8px;
-      margin-bottom: 30px;
-    }
-    .confidential-banner {
-      background: #d32f2f;
-      color: white;
-      padding: 15px;
-      text-align: center;
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 30px;
-    }
-    .section { 
-      margin-bottom: 30px; 
-      page-break-inside: avoid;
-    }
-    .score-table, .validity-table { 
-      width: 100%; 
-      border-collapse: collapse; 
-      margin: 20px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .score-table th, .validity-table th { 
-      background: #d32f2f;
-      color: white;
-      padding: 15px 12px;
-      text-align: left;
-      font-weight: 600;
-    }
-    .score-table td, .validity-table td { 
-      border: 1px solid #e0e0e0; 
-      padding: 12px; 
-      vertical-align: middle;
-    }
-    .score-table tr:nth-child(even), .validity-table tr:nth-child(even) {
-      background: #f8f9fa;
-    }
-    .bar-container {
-      width: 100px;
-      height: 20px;
-      background: #e0e0e0;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    .bar { 
-      height: 100%; 
-      background: linear-gradient(90deg, #1976d2, #2196f3);
-      border-radius: 10px;
-    }
-    .risk-high { color: #d32f2f; font-weight: bold; }
-    .risk-medium { color: #ff9800; font-weight: bold; }
-    .risk-low { color: #4caf50; font-weight: bold; }
-    .validity-summary {
-      background: #fff3e0;
-      padding: 20px;
-      border-radius: 8px;
-      border-left: 5px solid #ff9800;
-      margin: 20px 0;
-    }
-    .recommendation {
-      padding: 20px;
-      border-radius: 8px;
-      margin: 20px 0;
-      font-size: 18px;
-      font-weight: bold;
-      text-align: center;
-    }
-    .recommendation.proceed {
-      background: #e8f5e8;
-      border: 2px solid #4caf50;
-      color: #2e7d32;
-    }
-    .recommendation.caution {
-      background: #fff3e0;
-      border: 2px solid #ff9800;
-      color: #f57c00;
-    }
-    .recommendation.warning {
-      background: #ffebee;
-      border: 2px solid #f44336;
-      color: #d32f2f;
-    }
-    .interview-questions {
-      background: #e3f2fd;
-      padding: 20px;
-      border-radius: 8px;
-      border-left: 5px solid #2196f3;
-    }
-    .question {
-      margin: 15px 0;
-      padding: 12px;
-      background: white;
-      border-radius: 4px;
-      border-left: 3px solid #2196f3;
-    }
-    .footer { 
-      font-size: 12px; 
-      color: #666; 
-      text-align: center; 
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 1px solid #e0e0e0;
-    }
+    body { font-family: 'Segoe UI', sans-serif; margin: 40px; color: #333; }
+    header { text-align: center; margin-bottom: 30px; }
+    h1 { font-size: 26px; color: #004080; }
+    h2 { font-size: 20px; color: #005b96; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin-top: 30px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    .bar { height: 16px; background: #005b96; display: inline-block; }
+    .highlight { background: #e6f7ff; border-left: 4px solid #3399ff; padding: 10px; margin-bottom: 8px; }
+    footer { font-size: 12px; color: #777; text-align: center; margin-top: 40px; }
   </style>
 </head>
 <body>
-  <div class="confidential-banner">
-    🔒 CONFIDENTIAL EMPLOYER REPORT - AUTHORIZED PERSONNEL ONLY
-  </div>
+  <header>
+    <h1>CareerLaunch Report – Applicant Copy</h1>
+    <p><strong>Name:</strong> ${data.candidateData.name} | <strong>Date:</strong> ${data.candidateData.date}</p>
+  </header>
 
-  <div class="header">
-    <div class="logo-placeholder">AuthenCore CAIR+</div>
-    <h1>Employer Assessment Report</h1>
-    <div class="candidate-info">
-      <strong>Candidate:</strong> ${data.candidateData.name}<br>
-      <strong>Position:</strong> ${data.candidateData.position || 'Not specified'}<br>
-      <strong>Assessment Date:</strong> ${data.candidateData.date}
-    </div>
-  </div>
-
-  <div class="section">
-    <h2>📊 Personality Profile Summary</h2>
-    <table class="score-table">
-      <thead>
-        <tr>
-          <th>Dimension</th>
-          <th>Percentile</th>
-          <th>Level</th>
-          <th>Visual</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${data.scores.map(dim => `
-          <tr>
-            <td><strong>${dim.name}</strong></td>
-            <td>${dim.percentile}%</td>
-            <td>${dim.level}</td>
-            <td>
-              <div class="bar-container">
-                <div class="bar" style="width: ${dim.percentile}%"></div>
-              </div>
-            </td>
-          </tr>
-        `).join('')}
-      </tbody>
-    </table>
-  </div>
-
-  <div class="section">
-    <h2>🛡️ Validity & Distortion Analysis</h2>
-    <div class="validity-summary">
-      <strong>Overall Validity Status:</strong> 
-      <span class="${data.validity.overallValidity === 'Valid' ? 'risk-low' : 
-                     data.validity.overallValidity === 'Questionable' ? 'risk-medium' : 'risk-high'}">
-        ${data.validity.overallValidity}
-      </span>
-    </div>
-    
-    <table class="validity-table">
-      <thead>
-        <tr>
-          <th>Validity Metric</th>
-          <th>Score</th>
-          <th>Risk Level</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Fake Good (Social Desirability)</td>
-          <td>${data.validity.fakeGoodScore}</td>
-          <td class="${data.validity.fakeGoodScore > 3 ? 'risk-high' : data.validity.fakeGoodScore > 1 ? 'risk-medium' : 'risk-low'}">
-            ${data.validity.fakeGoodScore > 3 ? 'High Risk' : data.validity.fakeGoodScore > 1 ? 'Medium Risk' : 'Low Risk'}
-          </td>
-        </tr>
-        <tr>
-          <td>Fake Bad (Negative Impression)</td>
-          <td>${data.validity.fakeBadScore}</td>
-          <td class="${data.validity.fakeBadScore > 2 ? 'risk-high' : data.validity.fakeBadScore > 0 ? 'risk-medium' : 'risk-low'}">
-            ${data.validity.fakeBadScore > 2 ? 'High Risk' : data.validity.fakeBadScore > 0 ? 'Medium Risk' : 'Low Risk'}
-          </td>
-        </tr>
-        <tr>
-          <td>Random Response Pattern</td>
-          <td>${data.validity.randomResponseScore}</td>
-          <td class="${data.validity.randomResponseScore > 2 ? 'risk-high' : data.validity.randomResponseScore > 0 ? 'risk-medium' : 'risk-low'}">
-            ${data.validity.randomResponseScore > 2 ? 'High Risk' : data.validity.randomResponseScore > 0 ? 'Medium Risk' : 'Low Risk'}
-          </td>
-        </tr>
-        <tr>
-          <td>Response Inconsistency</td>
-          <td>${data.validity.inconsistencyScore}</td>
-          <td class="${data.validity.inconsistencyScore > 2 ? 'risk-high' : data.validity.inconsistencyScore > 0 ? 'risk-medium' : 'risk-low'}">
-            ${data.validity.inconsistencyScore > 2 ? 'High Risk' : data.validity.inconsistencyScore > 0 ? 'Medium Risk' : 'Low Risk'}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div class="section">
-    <h2>💼 Interview Recommendations</h2>
-    <div class="interview-questions">
-      <p><strong>Suggested Interview Questions Based on Assessment Results:</strong></p>
-      ${data.interviewQuestions.map((question, index) => `
-        <div class="question">
-          <strong>Q${index + 1}:</strong> ${question}
-        </div>
+  <section>
+    <h2>Interest Profile (RIASEC)</h2>
+    <table>
+      <tr><th>Interest Area</th><th>Score</th><th>Bar</th></tr>
+      ${Object.entries(data.interests).map(([interest, score]) => `
+      <tr>
+        <td>${interest.charAt(0).toUpperCase() + interest.slice(1)}</td>
+        <td>${score}%</td>
+        <td><div class="bar" style="width:${Math.min(score as number, 100)}%"></div></td>
+      </tr>
       `).join('')}
-    </div>
-  </div>
+    </table>
+  </section>
 
-  <div class="section">
-    <h2>⚖️ Final Hiring Recommendation</h2>
-    <div class="recommendation ${
-      data.validity.overallValidity === 'Valid' && data.scores.some(s => s.percentile >= 70) ? 'proceed' :
-      data.validity.overallValidity === 'Questionable' ? 'caution' : 'warning'
-    }">
-      ${data.validity.overallValidity === 'Valid' && data.scores.some(s => s.percentile >= 70) 
-        ? '✅ PROCEED WITH CONFIDENCE' :
-        data.validity.overallValidity === 'Questionable' 
-        ? '⚠️ PROCEED WITH CAUTION - Additional Verification Recommended' : 
-        '🚫 EXERCISE EXTREME CAUTION - Consider Alternative Candidates'
-      }
-    </div>
-  </div>
+  <section>
+    <h2>Aptitude Strengths</h2>
+    <ul>
+      ${data.aptitudes.slice(0, 3).map((aptitude) => `
+      <li><strong>${aptitude.name}</strong>: ${aptitude.score}%</li>
+      `).join('')}
+    </ul>
+  </section>
 
-  <div class="footer">
-    <p><strong>AuthenCore Assessment Platform - Confidential Employer Report</strong><br>
-    Generated on ${data.candidateData.date} | For Authorized HR Personnel Only<br>
-    <small>Assessment Integrity: These tools were developed using open-source frameworks, academic research, 
-    and AI insights. All content independently developed by AuthenCore Analytics.</small></p>
-  </div>
+  <section>
+    <h2>Personality Traits</h2>
+    <table>
+      <tr><th>Trait</th><th>Score</th></tr>
+      ${Object.entries(data.personality).map(([trait, value]) => `
+      <tr><td>${trait.charAt(0).toUpperCase() + trait.slice(1)}</td><td>${value}%</td></tr>
+      `).join('')}
+    </table>
+  </section>
+
+  <section>
+    <h2>Top Values</h2>
+    <table>
+      <tr><th>Value</th><th>Score</th></tr>
+      ${Object.entries(data.values).filter(([_, score]) => (score as number) >= 50).map(([value, score]) => `
+      <tr><td>${value.charAt(0).toUpperCase() + value.slice(1)}</td><td>${score}%</td></tr>
+      `).join('')}
+    </table>
+  </section>
+
+  <section>
+    <h2>Career Fit Profile</h2>
+    <div class="highlight">
+      <strong>${data.career_fit.label}</strong><br>
+      Best-fit roles: ${data.career_fit.suggestions.join(', ')}
+    </div>
+  </section>
+
+  ${data.flags.misalignment.length > 0 ? `
+  <section>
+    <h2>Misalignment Flags</h2>
+    ${data.flags.misalignment.map((flag) => `
+    <div class="highlight">${flag}</div>
+    `).join('')}
+  </section>
+  ` : ''}
+
+  <section>
+    <h2>Personal Action Plan</h2>
+    <ul>
+      ${data.action_plan.map((tip) => `
+      <li>${tip}</li>
+      `).join('')}
+    </ul>
+  </section>
+
+  <footer>
+    This report is private and generated by CareerLaunch under AuthenCore Analytics © 2025
+  </footer>
 </body>
 </html>
 `
@@ -591,15 +423,29 @@ serve(async (req) => {
   }
 
   try {
-    const { candidateData, scores, validity, actionPlan, interviewQuestions, reportType }: ReportRequest = await req.json()
+    const requestData = await req.json()
+    let htmlContent: string
 
-    // Select template based on report type
-    const htmlContent = reportType === 'employer' 
-      ? employerTemplate({ candidateData, scores, validity, actionPlan, interviewQuestions, reportType })
-      : applicantTemplate({ candidateData, scores, validity, actionPlan, interviewQuestions, reportType })
+    // Check if it's a CareerLaunch report or CAIR+ report
+    if (requestData.reportType === 'careerlaunch-applicant' || requestData.reportType === 'careerlaunch-advisor') {
+      // CareerLaunch report
+      const careerLaunchData = requestData as CareerLaunchReportRequest
+      
+      if (careerLaunchData.reportType === 'careerlaunch-applicant') {
+        htmlContent = careerLaunchApplicantTemplate(careerLaunchData)
+      } else {
+        // TODO: Add advisor template later
+        htmlContent = careerLaunchApplicantTemplate(careerLaunchData)
+      }
+    } else {
+      // CAIR+ report
+      const cairData = requestData as ReportRequest
+      htmlContent = cairData.reportType === 'employer' 
+        ? employerTemplate(cairData)
+        : applicantTemplate(cairData)
+    }
 
-    // For now, return the HTML content
-    // In production, you would use Puppeteer or similar to convert to PDF
+    // Return the HTML content
     return new Response(htmlContent, {
       headers: { 
         ...corsHeaders, 
