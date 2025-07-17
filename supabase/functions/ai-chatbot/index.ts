@@ -159,16 +159,26 @@ serve(async (req) => {
       const errorData = await response.text();
       console.error(`OpenAI API error: ${response.status} - ${errorData}`);
       
-      if (response.status === 429 && retryCount < maxRetries) {
-        // Wait before retrying (exponential backoff)
-        const waitTime = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
-        console.log(`Rate limited, retrying in ${waitTime}ms...`);
-        await new Promise(resolve => setTimeout(resolve, waitTime));
-        retryCount++;
-        continue;
-      }
-      
+      // Check if it's a quota exceeded error (don't retry these)
       if (response.status === 429) {
+        try {
+          const errorJson = JSON.parse(errorData);
+          if (errorJson.error?.code === 'insufficient_quota') {
+            throw new Error('OpenAI API quota exceeded. Please check your billing and usage limits.');
+          }
+        } catch (parseError) {
+          // If we can't parse, treat as regular rate limit
+        }
+        
+        // Only retry for actual rate limits, not quota issues
+        if (retryCount < maxRetries) {
+          const waitTime = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+          console.log(`Rate limited, retrying in ${waitTime}ms...`);
+          await new Promise(resolve => setTimeout(resolve, waitTime));
+          retryCount++;
+          continue;
+        }
+        
         throw new Error('OpenAI API rate limit exceeded. Please wait a moment and try again.');
       } else if (response.status === 401) {
         throw new Error('OpenAI API key is invalid or expired.');
