@@ -34,36 +34,38 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
     const score = selectedOption === 'A' ? 1 : 0;
     
     // For interests, score the selected dimension
-    // For aptitudes, score based on correct answers (simplified)
+    // For aptitudes, score based on agreement (simplified for self-assessment)
     // For personality/values, score the A option as positive for that dimension
     let actualScore = score;
     
     // Handle scoring logic based on question type
-    if (currentQuestion.category === 'interest') {
+    if (currentQuestion.category === 'Interest') {
       // Option A scores for the primary dimension, Option B scores for contrasting dimension
       if (selectedOption === 'A') {
         actualScore = 1;
       } else {
         actualScore = 0;
       }
-    } else if (currentQuestion.category === 'aptitude') {
-      // Correct answers for aptitude questions
-      const correctAnswers: Record<string, 'A' | 'B'> = {
-        'apt001': 'A', // Persuasive is similar to Eloquent
-        'apt002': 'A', // 12 is correct (15% of 80)
-        'apt003': 'A', // 32 (sequence doubles each time)
-        'apt004': 'A', // Tiger was mentioned last
-      };
-      actualScore = correctAnswers[currentQuestion.id] === selectedOption ? 1 : 0;
+    } else if (currentQuestion.category === 'Aptitude') {
+      // For self-assessment aptitude questions, A = positive agreement
+      actualScore = selectedOption === 'A' ? 1 : 0;
     } else {
       // Personality and values - A option typically indicates higher score
       actualScore = selectedOption === 'A' ? 1 : 0;
     }
 
+    // Map 'Values' to 'value' for consistency
+    const categoryMap: Record<string, 'interest' | 'aptitude' | 'personality' | 'value'> = {
+      'Interest': 'interest',
+      'Aptitude': 'aptitude', 
+      'Personality': 'personality',
+      'Values': 'value'
+    };
+
     const newAnswer = {
       id: currentQuestion.id,
-      category: currentQuestion.category,
-      dimension: currentQuestion.dimension,
+      category: categoryMap[currentQuestion.category],
+      dimension: currentQuestion.dimension.toLowerCase(),
       score: actualScore
     };
 
@@ -120,20 +122,24 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
   };
 
   const getCategoryIcon = (category: string) => {
-    switch (category) {
+    const lowerCategory = category.toLowerCase();
+    switch (lowerCategory) {
       case 'interest': return <Target className="h-5 w-5" />;
       case 'aptitude': return <Brain className="h-5 w-5" />;
       case 'personality': return <Users className="h-5 w-5" />;
+      case 'values':
       case 'value': return <Star className="h-5 w-5" />;
       default: return <Target className="h-5 w-5" />;
     }
   };
 
   const getCategoryColor = (category: string) => {
-    switch (category) {
+    const lowerCategory = category.toLowerCase();
+    switch (lowerCategory) {
       case 'interest': return 'text-blue-600';
       case 'aptitude': return 'text-green-600';
       case 'personality': return 'text-purple-600';
+      case 'values':
       case 'value': return 'text-orange-600';
       default: return 'text-blue-600';
     }

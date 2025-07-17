@@ -1,6 +1,6 @@
 export interface CareerLaunchQuestion {
   id: string;
-  category: 'interest' | 'aptitude' | 'personality' | 'value';
+  category: 'Interest' | 'Aptitude' | 'Personality' | 'Values';
   dimension: string;
   question: string;
   optionA: string;
@@ -10,146 +10,146 @@ export interface CareerLaunchQuestion {
 export const careerLaunchQuestions: CareerLaunchQuestion[] = [
   {
     "id": "int001",
-    "category": "interest",
-    "dimension": "realistic",
-    "question": "Which activity do you prefer?",
-    "optionA": "Fixing a bicycle chain",
-    "optionB": "Writing a short story"
+    "category": "Interest",
+    "dimension": "Realistic",
+    "question": "You enjoy repairing mechanical equipment or using tools.",
+    "optionA": "Strongly Agree",
+    "optionB": "Strongly Disagree"
   },
   {
     "id": "int002",
-    "category": "interest",
-    "dimension": "investigative",
-    "question": "Which activity is more appealing?",
-    "optionA": "Solving a scientific puzzle",
-    "optionB": "Helping someone with a personal issue"
+    "category": "Interest",
+    "dimension": "Investigative",
+    "question": "You like exploring scientific theories and solving complex problems.",
+    "optionA": "Strongly Agree",
+    "optionB": "Strongly Disagree"
   },
   {
     "id": "int003",
-    "category": "interest",
-    "dimension": "artistic",
-    "question": "Choose the activity you would enjoy more:",
-    "optionA": "Designing a poster",
-    "optionB": "Organizing financial records"
+    "category": "Interest",
+    "dimension": "Artistic",
+    "question": "You enjoy creative expression through writing, art, or music.",
+    "optionA": "Strongly Agree",
+    "optionB": "Strongly Disagree"
   },
   {
     "id": "int004",
-    "category": "interest",
-    "dimension": "social",
-    "question": "What would you rather do?",
-    "optionA": "Lead a group discussion",
-    "optionB": "Research in a quiet space"
+    "category": "Interest",
+    "dimension": "Social",
+    "question": "You feel energized when helping others learn or grow.",
+    "optionA": "Strongly Agree",
+    "optionB": "Strongly Disagree"
   },
   {
     "id": "int005",
-    "category": "interest",
-    "dimension": "enterprising",
-    "question": "Which role sounds more exciting?",
-    "optionA": "Convince others to try something new",
-    "optionB": "Record data into spreadsheets"
+    "category": "Interest",
+    "dimension": "Enterprising",
+    "question": "You're motivated to lead projects, pitch ideas, or manage teams.",
+    "optionA": "Strongly Agree",
+    "optionB": "Strongly Disagree"
   },
   {
     "id": "int006",
-    "category": "interest",
-    "dimension": "conventional",
-    "question": "Which task would you prefer?",
-    "optionA": "Sort files in an office",
-    "optionB": "Sketch a creative design"
+    "category": "Interest",
+    "dimension": "Conventional",
+    "question": "You enjoy organizing systems, data, or following structured routines.",
+    "optionA": "Strongly Agree",
+    "optionB": "Strongly Disagree"
   },
   {
     "id": "apt001",
-    "category": "aptitude",
-    "dimension": "verbal",
-    "question": "Which word is most similar in meaning to 'Eloquent'?",
-    "optionA": "Persuasive",
-    "optionB": "Silent"
+    "category": "Aptitude",
+    "dimension": "Numerical Reasoning",
+    "question": "You feel comfortable working with numbers and interpreting data.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "apt002",
-    "category": "aptitude",
-    "dimension": "numerical",
-    "question": "What is 15% of 80?",
-    "optionA": "12",
-    "optionB": "10"
+    "category": "Aptitude",
+    "dimension": "Verbal Reasoning",
+    "question": "You can quickly analyze written content and summarize ideas.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "apt003",
-    "category": "aptitude",
-    "dimension": "abstract",
-    "question": "What comes next in the sequence: 2, 4, 8, 16, ?",
-    "optionA": "32",
-    "optionB": "20"
+    "category": "Aptitude",
+    "dimension": "Spatial Thinking",
+    "question": "You enjoy visualizing 3D objects or navigating spatial environments.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "apt004",
-    "category": "aptitude",
-    "dimension": "memory",
-    "question": "Which of these was mentioned last: Apple, Table, Moon, Tiger?",
-    "optionA": "Tiger",
-    "optionB": "Apple"
+    "category": "Aptitude",
+    "dimension": "Problem Solving",
+    "question": "You often find multiple solutions to complex problems.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "per001",
-    "category": "personality",
-    "dimension": "introversion",
-    "question": "How do you recharge after a busy day?",
-    "optionA": "Spending time alone",
-    "optionB": "Meeting with friends"
+    "category": "Personality",
+    "dimension": "Extraversion",
+    "question": "You prefer working in groups rather than alone.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "per002",
-    "category": "personality",
-    "dimension": "openness",
-    "question": "What appeals more to you?",
-    "optionA": "Trying a new experience",
-    "optionB": "Repeating a familiar routine"
+    "category": "Personality",
+    "dimension": "Conscientiousness",
+    "question": "You stay organized and complete tasks on time.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "per003",
-    "category": "personality",
-    "dimension": "conscientiousness",
-    "question": "What are you more likely to do?",
-    "optionA": "Stick to a schedule",
-    "optionB": "Go with the flow"
+    "category": "Personality",
+    "dimension": "Emotional Stability",
+    "question": "You manage stress well under pressure.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "per004",
-    "category": "personality",
-    "dimension": "adaptability",
-    "question": "How do you react to last-minute changes?",
-    "optionA": "Adjust easily",
-    "optionB": "Feel stressed"
+    "category": "Personality",
+    "dimension": "Openness to Experience",
+    "question": "You enjoy learning new things and exploring new ideas.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "val001",
-    "category": "value",
-    "dimension": "security",
-    "question": "Which matters more to you?",
-    "optionA": "A stable income",
-    "optionB": "Exciting challenges"
+    "category": "Values",
+    "dimension": "Autonomy",
+    "question": "You prefer jobs where you can make independent decisions.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "val002",
-    "category": "value",
-    "dimension": "achievement",
-    "question": "Which motivates you more?",
-    "optionA": "Recognition for success",
-    "optionB": "Harmony in relationships"
+    "category": "Values",
+    "dimension": "Security",
+    "question": "You value long-term stability and predictability in your career.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "val003",
-    "category": "value",
-    "dimension": "creativity",
-    "question": "Which is more important in a job?",
-    "optionA": "Creative freedom",
-    "optionB": "Routine tasks"
+    "category": "Values",
+    "dimension": "Impact",
+    "question": "You want to make a meaningful difference through your work.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   },
   {
     "id": "val004",
-    "category": "value",
-    "dimension": "community",
-    "question": "Which work setting appeals more?",
-    "optionA": "Helping others",
-    "optionB": "Working independently"
+    "category": "Values",
+    "dimension": "Growth",
+    "question": "You seek continuous personal and professional development.",
+    "optionA": "Agree",
+    "optionB": "Disagree"
   }
 ];
