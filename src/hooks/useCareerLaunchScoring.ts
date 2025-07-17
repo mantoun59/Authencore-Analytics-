@@ -86,7 +86,7 @@ export const useCareerLaunchScoring = () => {
       values: { security: 0, achievement: 0, creativity: 0, community: 0 }
     };
 
-    // Process answers
+    // Process answers with error handling
     answers.forEach(answer => {
       if (answer.category === 'interest' && answer.dimension in interestTotals) {
         interestTotals[answer.dimension as keyof typeof interestTotals] += answer.score;
@@ -100,6 +100,8 @@ export const useCareerLaunchScoring = () => {
       } else if (answer.category === 'value' && answer.dimension in valueTotals) {
         valueTotals[answer.dimension as keyof typeof valueTotals] += answer.score;
         counts.values[answer.dimension as keyof typeof counts.values]++;
+      } else {
+        console.warn(`Unmapped dimension: ${answer.dimension} in category: ${answer.category}`);
       }
     });
 

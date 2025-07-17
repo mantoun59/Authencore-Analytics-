@@ -54,7 +54,7 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
       actualScore = selectedOption === 'A' ? 1 : 0;
     }
 
-    // Map 'Values' to 'value' for consistency
+    // Map categories and dimensions to match scoring engine
     const categoryMap: Record<string, 'interest' | 'aptitude' | 'personality' | 'value'> = {
       'Interest': 'interest',
       'Aptitude': 'aptitude', 
@@ -62,10 +62,38 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
       'Values': 'value'
     };
 
+    // Map dimensions to match scoring engine expectations
+    const dimensionMap: Record<string, string> = {
+      // Interest dimensions (already lowercase)
+      'Realistic': 'realistic',
+      'Investigative': 'investigative',
+      'Artistic': 'artistic',
+      'Social': 'social',
+      'Enterprising': 'enterprising',
+      'Conventional': 'conventional',
+      // Aptitude dimensions
+      'Numerical Reasoning': 'numerical',
+      'Verbal Reasoning': 'verbal',
+      'Spatial Thinking': 'abstract',
+      'Problem Solving': 'memory',
+      // Personality dimensions
+      'Extraversion': 'introversion',
+      'Conscientiousness': 'conscientiousness',
+      'Emotional Stability': 'adaptability',
+      'Openness to Experience': 'openness',
+      // Values dimensions
+      'Autonomy': 'creativity',
+      'Security': 'security',
+      'Impact': 'community',
+      'Growth': 'achievement'
+    };
+
+    const mappedDimension = dimensionMap[currentQuestion.dimension] || currentQuestion.dimension.toLowerCase();
+
     const newAnswer = {
       id: currentQuestion.id,
       category: categoryMap[currentQuestion.category],
-      dimension: currentQuestion.dimension.toLowerCase(),
+      dimension: mappedDimension,
       score: actualScore
     };
 
