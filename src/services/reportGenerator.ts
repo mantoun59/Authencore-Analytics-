@@ -139,31 +139,75 @@ const generateNextSteps = (results: AssessmentResults, topMatch?: CareerMatch): 
 const generateBehavioralInsights = (results: AssessmentResults, gameState: any): string[] => {
   const insights: string[] = [];
   
-  // Analyze problem-solving approach
-  if (results.dimensions.problem_solving.score >= 80) {
-    insights.push('Demonstrates strong analytical thinking and systematic problem-solving approach');
-  } else if (results.dimensions.problem_solving.score >= 60) {
-    insights.push('Shows developing problem-solving skills with room for improvement in complex scenarios');
-  } else {
-    insights.push('Would benefit from structured training in problem-solving methodologies');
+  // Generic helper to check dimension scores
+  const getDimensionScore = (key: string) => {
+    return results.dimensions[key as keyof typeof results.dimensions];
+  };
+
+  // Analyze problem-solving approach (try multiple potential dimension names)
+  const problemSolvingDimensions = ['problem_solving', 'numerical', 'investigative', 'memory'];
+  const problemSolvingDim = problemSolvingDimensions.find(dim => getDimensionScore(dim));
+  if (problemSolvingDim) {
+    const score = getDimensionScore(problemSolvingDim).score;
+    if (score >= 80) {
+      insights.push('Demonstrates strong analytical thinking and systematic problem-solving approach');
+    } else if (score >= 60) {
+      insights.push('Shows developing problem-solving skills with room for improvement in complex scenarios');
+    } else {
+      insights.push('Would benefit from structured training in problem-solving methodologies');
+    }
   }
 
   // Analyze communication style
-  if (results.dimensions.communication_skills.score >= 80) {
-    insights.push('Exhibits excellent communication skills and emotional intelligence');
-  } else if (results.dimensions.communication_skills.score >= 60) {
-    insights.push('Has solid communication foundation but could improve in challenging situations');
-  } else {
-    insights.push('Needs development in professional communication and interpersonal skills');
+  const communicationDimensions = ['communication_skills', 'social', 'verbal'];
+  const communicationDim = communicationDimensions.find(dim => getDimensionScore(dim));
+  if (communicationDim) {
+    const score = getDimensionScore(communicationDim).score;
+    if (score >= 80) {
+      insights.push('Exhibits strong interpersonal and communication skills');
+    } else if (score >= 60) {
+      insights.push('Has solid communication foundation but could improve in challenging situations');
+    } else {
+      insights.push('May benefit from development in communication and interpersonal skills');
+    }
   }
 
   // Analyze adaptability
-  if (results.dimensions.adaptability.score >= 80) {
-    insights.push('Highly adaptable and comfortable with change and ambiguity');
-  } else if (results.dimensions.adaptability.score >= 60) {
-    insights.push('Generally adaptable but may need support during major transitions');
-  } else {
-    insights.push('May struggle with change and would benefit from structured transition support');
+  if (getDimensionScore('adaptability')) {
+    const score = getDimensionScore('adaptability').score;
+    if (score >= 80) {
+      insights.push('Highly adaptable and comfortable with change and ambiguity');
+    } else if (score >= 60) {
+      insights.push('Generally adaptable but may need support during major transitions');
+    } else {
+      insights.push('May struggle with change and would benefit from structured transition support');
+    }
+  }
+
+  // Analyze conscientiousness
+  if (getDimensionScore('conscientiousness')) {
+    const score = getDimensionScore('conscientiousness').score;
+    if (score >= 80) {
+      insights.push('Shows high conscientiousness with strong organization and attention to detail');
+    } else if (score >= 60) {
+      insights.push('Demonstrates moderate conscientiousness with room for improvement in planning');
+    } else {
+      insights.push('Would benefit from structure and time management skill development');
+    }
+  }
+
+  // Analyze openness to experience
+  const opennessDimensions = ['openness', 'artistic', 'creativity'];
+  const opennessDim = opennessDimensions.find(dim => getDimensionScore(dim));
+  if (opennessDim) {
+    const score = getDimensionScore(opennessDim).score;
+    if (score >= 80) {
+      insights.push('Highly open to new experiences and creative problem-solving approaches');
+    } else if (score >= 60) {
+      insights.push('Moderately open to new experiences with balanced approach to innovation');
+    } else {
+      insights.push('May prefer traditional approaches and need encouragement to try new methods');
+    }
   }
 
   // Add engagement insights

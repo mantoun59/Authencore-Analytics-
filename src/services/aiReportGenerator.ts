@@ -234,7 +234,11 @@ export class AIReportGenerator {
   private parseScoresFromContent(reportContent: AIReportContent): Array<{name: string, percentile: number, level: string, description: string}> {
     const scores: Array<{name: string, percentile: number, level: string, description: string}> = [];
     
-    Object.entries(reportContent.detailedAnalysis.dimensionScores).forEach(([key, value]: [string, any]) => {
+    // Handle new CareerLaunch assessment structure
+    const dimensionScores = reportContent.detailedAnalysis.dimensionScores;
+    
+    // Process all dimensions including RIASEC, aptitudes, personality, and values
+    Object.entries(dimensionScores).forEach(([key, value]: [string, any]) => {
       const score = typeof value === 'object' ? value.score || 0 : value;
       const percentile = Math.min(100, Math.max(0, score));
       
@@ -247,7 +251,7 @@ export class AIReportGenerator {
       const description = this.getDescriptionForDimension(key, level);
       
       scores.push({
-        name: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+        name: this.formatDimensionName(key),
         percentile,
         level,
         description
@@ -255,6 +259,45 @@ export class AIReportGenerator {
     });
     
     return scores;
+  }
+
+  private formatDimensionName(dimension: string): string {
+    // Handle RIASEC dimensions
+    const riasecMap: Record<string, string> = {
+      'realistic': 'Realistic',
+      'investigative': 'Investigative', 
+      'artistic': 'Artistic',
+      'social': 'Social',
+      'enterprising': 'Enterprising',
+      'conventional': 'Conventional'
+    };
+    
+    // Handle aptitude dimensions
+    const aptitudeMap: Record<string, string> = {
+      'numerical': 'Numerical Reasoning',
+      'verbal': 'Verbal Reasoning',
+      'abstract': 'Abstract Reasoning',
+      'memory': 'Memory & Processing'
+    };
+    
+    // Handle personality dimensions
+    const personalityMap: Record<string, string> = {
+      'introversion': 'Introversion/Extraversion',
+      'conscientiousness': 'Conscientiousness',
+      'adaptability': 'Adaptability',
+      'openness': 'Openness to Experience'
+    };
+    
+    // Handle values dimensions
+    const valuesMap: Record<string, string> = {
+      'creativity': 'Creativity & Innovation',
+      'security': 'Security & Stability',
+      'community': 'Community & Impact',
+      'achievement': 'Achievement & Growth'
+    };
+    
+    return riasecMap[dimension] || aptitudeMap[dimension] || personalityMap[dimension] || valuesMap[dimension] || 
+           dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   }
 
   private parseValidityFromContent(reportContent: AIReportContent): any {

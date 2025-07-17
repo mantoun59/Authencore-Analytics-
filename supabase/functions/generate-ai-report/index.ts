@@ -155,6 +155,9 @@ async function generateAIReport(
 ) {
   const { assessment_type, results } = assessmentResult;
 
+  // Enhanced CareerLaunch assessment handling
+  const isCareerLaunch = assessment_type === 'career_launch' || assessment_type === 'career-launch';
+  
   // Generate personalized insights using OpenAI
   const insights = await generatePersonalizedInsights(results, candidateInfo, assessment_type);
   
@@ -180,6 +183,11 @@ async function generateAIReport(
   // Generate career recommendations
   const careerRecommendations = await generateCareerRecommendations(results, candidateInfo, assessment_type);
 
+  // Handle CareerLaunch specific dimensions
+  const dimensionScores = isCareerLaunch ? 
+    formatCareerLaunchDimensions(results.dimensions || {}) : 
+    results.dimensions || {};
+
   return {
     candidateInfo: {
       name: candidateInfo.name,
@@ -196,7 +204,7 @@ async function generateAIReport(
       recommendedActions: actionPlan.immediateActions.slice(0, 3)
     },
     detailedAnalysis: {
-      dimensionScores: results.dimensions || {},
+      dimensionScores: dimensionScores,
       personalizedInsights: insights.detailed,
       behavioralPatterns: insights.behavioralPatterns,
       validityMetrics: results.validityMetrics || {}
@@ -215,7 +223,7 @@ async function generateAIReport(
       employerSpecific: {
         summaryTable: {
           overallScore: calculateOverallScore(results),
-          dimensions: results.dimensions || {},
+          dimensions: dimensionScores,
           reliability: distortionScale.reliability
         },
         interviewQuestions: interviewQuestions,
@@ -226,6 +234,32 @@ async function generateAIReport(
     }),
     distortionAnalysis: distortionScale
   };
+}
+
+// Helper function to format CareerLaunch dimensions
+function formatCareerLaunchDimensions(dimensions: any) {
+  const formatted: any = {};
+  
+  // Map new dimension structure to expected format
+  Object.entries(dimensions).forEach(([key, value]: [string, any]) => {
+    const score = typeof value === 'object' ? value.score : value;
+    formatted[key] = {
+      score: score,
+      level: getScoreLevel(score),
+      percentile: score // For CareerLaunch, score is already percentile
+    };
+  });
+  
+  return formatted;
+}
+
+// Helper function to get score level
+function getScoreLevel(score: number): string {
+  if (score >= 80) return 'High';
+  if (score >= 60) return 'Above Average';
+  if (score >= 40) return 'Average';
+  if (score >= 20) return 'Below Average';
+  return 'Low';
 }
 
 async function generatePersonalizedInsights(results: any, candidateInfo: any, assessmentType: string) {
