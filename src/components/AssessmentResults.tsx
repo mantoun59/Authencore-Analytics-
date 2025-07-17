@@ -230,8 +230,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       toast.info('Generating AI-powered report... This may take a moment.');
       const reportContent = await aiReportGenerator.generateReport(request);
       
-      // Generate PDF from the AI report content
-      await aiReportGenerator.generatePDFReport(reportContent);
+      // Generate PDF from the AI report content with specified report type
+      await aiReportGenerator.generatePDFReport(reportContent, reportType);
       
       toast.success('AI report generated successfully!');
       

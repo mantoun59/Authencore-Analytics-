@@ -33,7 +33,9 @@ const SampleReports = () => {
   const generateSamplePDF = async () => {
     setIsGenerating(true);
     try {
-      const sampleData = getSampleCandidateReport(selectedAssessment);
+      const sampleData = reportType === 'employer' 
+        ? getSampleEmployerReport(selectedAssessment)
+        : getSampleCandidateReport(selectedAssessment);
       
       // Convert sample data to AI report format
       const aiReportFormat = {
@@ -75,9 +77,9 @@ const SampleReports = () => {
         }
       };
       
-      toast.info('Generating sample PDF report...');
-      await aiReportGenerator.generatePDFReport(aiReportFormat);
-      toast.success('Sample PDF report generated successfully!');
+      toast.info(`Generating sample ${reportType} PDF report...`);
+      await aiReportGenerator.generatePDFReport(aiReportFormat, reportType);
+      toast.success(`Sample ${reportType} PDF report generated successfully!`);
       
     } catch (error) {
       // Log for debugging in development only
