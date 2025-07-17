@@ -125,25 +125,17 @@ export class AIReportGenerator {
       // Executive Summary Section
       this.addExecutiveSummary(doc, reportContent);
       
-      // Detailed Analysis Section
+      // Page 2: Detailed Analysis with compact additional sections
       doc.addPage();
       this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
       this.addDetailedAnalysis(doc, reportContent);
-
-      // Behavioral Insights Section
-      doc.addPage();
-      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
       this.addBehavioralInsights(doc, reportContent);
-
-      // Action Plan Section
-      doc.addPage();
-      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
       this.addActionPlan(doc, reportContent);
-
-      // Career Guidance Section
-      doc.addPage();
-      this.addHeaderFooter(doc, reportContent.candidateInfo.assessmentType);
       this.addCareerGuidance(doc, reportContent);
+
+      // Compact all sections into fewer pages
+      // Remove separate pages for each section to fit into 3 pages
+      // Detailed Analysis combined on page 2
 
       // Employer-specific section
       if (reportContent.employerSpecific) {
@@ -296,20 +288,20 @@ export class AIReportGenerator {
     doc.setFillColor(15, 23, 42);
     doc.rect(margin - 5, yPosition - 12, contentWidth + 10, 20, 'F'); // Reduced height
     doc.setTextColor(255, 255, 255);
-    doc.setFontSize(16); // Reduced from 18
+    doc.setFontSize(14); // Further reduced from 16
     doc.setFont('helvetica', 'bold');
     doc.text('EXECUTIVE SUMMARY', margin, yPosition);
-    yPosition += 20; // Reduced spacing
+    yPosition += 18; // Further reduced spacing
 
     // Assessment validity indicator
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(8); // Reduced from 10
+    doc.setFontSize(7); // Further reduced from 8
     doc.setFont('helvetica', 'normal');
-    doc.text('✓ AI-Powered Professional Assessment | Evidence-Based Analysis', margin, yPosition);
-    yPosition += 15; // Reduced spacing
+    doc.text('✓ AI-Powered Assessment | Evidence-Based Analysis', margin, yPosition);
+    yPosition += 12; // Further reduced spacing
 
     // Overall Score with enhanced visual representation
-    doc.setFontSize(12); // Reduced from 14
+    doc.setFontSize(10); // Further reduced from 12
     doc.setFont('helvetica', 'bold');
     doc.text('Overall Score:', margin, yPosition);
     
@@ -317,10 +309,10 @@ export class AIReportGenerator {
     const scoreColor = reportContent.executiveSummary.overallScore >= 80 ? [34, 197, 94] as [number, number, number] : 
                       reportContent.executiveSummary.overallScore >= 60 ? [245, 158, 11] as [number, number, number] : [239, 68, 68] as [number, number, number];
     doc.setTextColor(scoreColor[0], scoreColor[1], scoreColor[2]);
-    doc.setFontSize(28); // Reduced from 36
-    doc.text(`${reportContent.executiveSummary.overallScore}`, margin + 80, yPosition + 5);
-    doc.setFontSize(14); // Reduced from 16
-    doc.text('/100', margin + 105, yPosition + 5); // Adjusted position
+    doc.setFontSize(20); // Further reduced from 28
+    doc.text(`${reportContent.executiveSummary.overallScore}`, margin + 70, yPosition + 4);
+    doc.setFontSize(10); // Further reduced from 14
+    doc.text('/100', margin + 90, yPosition + 4); // Adjusted position
     
     // Enhanced progress bar with gradient effect
     const barWidth = 120; // Reduced from 150
@@ -340,80 +332,80 @@ export class AIReportGenerator {
     const interpretation = reportContent.executiveSummary.overallScore >= 80 ? 'Exceptional' :
                           reportContent.executiveSummary.overallScore >= 60 ? 'Strong' : 'Developing';
     doc.text(interpretation, margin + barWidth + 5, yPosition + 12);
-    yPosition += 25; // Reduced spacing
+    yPosition += 20; // Further reduced spacing
 
     // Key Professional Insights with enhanced formatting
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(12); // Reduced from 14
+    doc.setFontSize(10); // Further reduced from 12
     doc.setFont('helvetica', 'bold');
     doc.text('Key Insights:', margin, yPosition);
-    yPosition += 12; // Reduced spacing
+    yPosition += 10; // Further reduced spacing
 
-    doc.setFontSize(9); // Reduced from 10
+    doc.setFontSize(7); // Further reduced from 9
     doc.setFont('helvetica', 'normal');
-    reportContent.executiveSummary.keyInsights.slice(0, 3).forEach((insight, index) => { // Limit to 3 items
+    reportContent.executiveSummary.keyInsights.slice(0, 2).forEach((insight, index) => { // Further limited to 2 items
       // Add bullet point with enhanced styling
       doc.setFillColor(59, 130, 246);
-      doc.circle(margin + 2, yPosition - 1, 1, 'F'); // Smaller bullet
+      doc.circle(margin + 2, yPosition - 1, 0.8, 'F'); // Smaller bullet
       
       // Truncate insights more aggressively
-      const truncatedInsight = insight.length > 120 ? insight.substring(0, 120) + '...' : insight;
-      const lines = doc.splitTextToSize(truncatedInsight, contentWidth - 10);
-      doc.text(lines, margin + 6, yPosition);
-      yPosition += lines.length * 3.5 + 4; // Reduced line spacing
+      const truncatedInsight = insight.length > 100 ? insight.substring(0, 100) + '...' : insight;
+      const lines = doc.splitTextToSize(truncatedInsight, contentWidth - 8);
+      doc.text(lines, margin + 5, yPosition);
+      yPosition += lines.length * 3 + 3; // Further reduced line spacing
     });
 
-    yPosition += 10;
+    yPosition += 8; // Further reduced
 
     // Enhanced two-column layout for strengths and development areas
-    const colWidth = (contentWidth - 10) / 2; // Reduced spacing
+    const colWidth = (contentWidth - 8) / 2; // Further reduced spacing
     let leftY = yPosition;
     let rightY = yPosition;
 
     // Strengths section with visual enhancement
     doc.setFillColor(239, 246, 255);
-    doc.rect(margin - 3, leftY - 8, colWidth + 3, 60, 'F'); // Reduced height
+    doc.rect(margin - 2, leftY - 6, colWidth + 2, 45, 'F'); // Further reduced height
     doc.setDrawColor(59, 130, 246);
-    doc.setLineWidth(1); // Thinner line
-    doc.line(margin - 3, leftY - 8, margin - 3, leftY + 52);
+    doc.setLineWidth(0.5); // Thinner line
+    doc.line(margin - 2, leftY - 6, margin - 2, leftY + 39);
     
-    doc.setFontSize(10); // Reduced from 12
+    doc.setFontSize(8); // Further reduced from 10
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(59, 130, 246);
     doc.text('Strengths', margin, leftY);
-    leftY += 10;
+    leftY += 8;
 
-    doc.setFontSize(8); // Reduced from 9
+    doc.setFontSize(6); // Further reduced from 8
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.executiveSummary.topStrengths.slice(0, 3).forEach((strength, index) => { // Limit to 3
-      const cleanStrength = strength.replace(/^[^:]*:\s*/, '').substring(0, 50) + '...'; // Shorter text
-      const lines = doc.splitTextToSize(`✓ ${cleanStrength}`, colWidth - 8);
+    reportContent.executiveSummary.topStrengths.slice(0, 2).forEach((strength, index) => { // Further limited to 2
+      const cleanStrength = strength.replace(/^[^:]*:\s*/, '').substring(0, 40) + '...'; // Shorter text
+      const lines = doc.splitTextToSize(`✓ ${cleanStrength}`, colWidth - 6);
       doc.text(lines, margin, leftY);
-      leftY += lines.length * 3 + 2; // Reduced spacing
+      leftY += lines.length * 2.5 + 1.5; // Further reduced spacing
     });
 
     // Development Areas section with visual enhancement
     doc.setFillColor(254, 242, 242);
-    doc.rect(margin + colWidth + 7, rightY - 8, colWidth + 3, 60, 'F'); // Reduced height
+    doc.rect(margin + colWidth + 6, rightY - 6, colWidth + 2, 45, 'F'); // Further reduced height
     doc.setDrawColor(239, 68, 68);
-    doc.setLineWidth(1);
-    doc.line(margin + colWidth + 7, rightY - 8, margin + colWidth + 7, rightY + 52);
+    doc.setLineWidth(0.5);
+    doc.line(margin + colWidth + 6, rightY - 6, margin + colWidth + 6, rightY + 39);
     
-    doc.setFontSize(10);
+    doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(239, 68, 68);
-    doc.text('Development', margin + colWidth + 10, rightY);
-    rightY += 10;
+    doc.text('Development', margin + colWidth + 8, rightY);
+    rightY += 8;
 
-    doc.setFontSize(8);
+    doc.setFontSize(6);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.executiveSummary.developmentAreas.slice(0, 3).forEach((area, index) => { // Limit to 3
-      const cleanArea = area.replace(/^[^:]*:\s*/, '').substring(0, 50) + '...'; // Shorter text
-      const lines = doc.splitTextToSize(`◦ ${cleanArea}`, colWidth - 8);
-      doc.text(lines, margin + colWidth + 10, rightY);
-      rightY += lines.length * 3 + 2; // Reduced spacing
+    reportContent.executiveSummary.developmentAreas.slice(0, 2).forEach((area, index) => { // Further limited to 2
+      const cleanArea = area.replace(/^[^:]*:\s*/, '').substring(0, 40) + '...'; // Shorter text
+      const lines = doc.splitTextToSize(`◦ ${cleanArea}`, colWidth - 6);
+      doc.text(lines, margin + colWidth + 8, rightY);
+      rightY += lines.length * 2.5 + 1.5; // Further reduced spacing
     });
   }
 
@@ -425,151 +417,117 @@ export class AIReportGenerator {
 
     // Section title
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(16); // Reduced from 18
+    doc.setFontSize(12); // Further reduced from 16
     doc.setFont('helvetica', 'bold');
     doc.text('DETAILED ANALYSIS', margin, yPosition);
-    yPosition += 25; // Reduced spacing
+    yPosition += 18; // Further reduced spacing
 
     // Dimension Scores Chart
     this.addDimensionScoresChart(doc, reportContent.detailedAnalysis.dimensionScores, yPosition);
-    yPosition += 100; // Reduced spacing
+    yPosition += 75; // Further reduced spacing
 
     // Personalized Insights
-    doc.setFontSize(12); // Reduced from 14
+    doc.setFontSize(10); // Further reduced from 12
     doc.setFont('helvetica', 'bold');
-    doc.text('Professional Insights:', margin, yPosition);
-    yPosition += 12; // Reduced spacing
+    doc.text('Insights:', margin, yPosition);
+    yPosition += 10; // Further reduced spacing
 
-    doc.setFontSize(9); // Reduced from 11
+    doc.setFontSize(7); // Further reduced from 9
     doc.setFont('helvetica', 'normal');
     // Truncate insights text for better fit
-    const truncatedInsights = reportContent.detailedAnalysis.personalizedInsights.length > 400 ? 
-      reportContent.detailedAnalysis.personalizedInsights.substring(0, 400) + '...' : 
+    const truncatedInsights = reportContent.detailedAnalysis.personalizedInsights.length > 300 ? 
+      reportContent.detailedAnalysis.personalizedInsights.substring(0, 300) + '...' : 
       reportContent.detailedAnalysis.personalizedInsights;
     const insightLines = doc.splitTextToSize(truncatedInsights, contentWidth);
     doc.text(insightLines, margin, yPosition);
-    yPosition += insightLines.length * 4 + 12; // Reduced spacing
+    yPosition += insightLines.length * 3 + 8; // Further reduced spacing
 
     // Behavioral Patterns
-    doc.setFontSize(12); // Reduced from 14
+    doc.setFontSize(10); // Further reduced from 12
     doc.setFont('helvetica', 'bold');
-    doc.text('Behavioral Patterns:', margin, yPosition);
-    yPosition += 12; // Reduced spacing
+    doc.text('Patterns:', margin, yPosition);
+    yPosition += 10; // Further reduced spacing
 
-    doc.setFontSize(9); // Reduced from 11
+    doc.setFontSize(7); // Further reduced from 9
     doc.setFont('helvetica', 'normal');
-    reportContent.detailedAnalysis.behavioralPatterns.slice(0, 3).forEach((pattern, index) => { // Limit to 3
+    reportContent.detailedAnalysis.behavioralPatterns.slice(0, 2).forEach((pattern, index) => { // Further limited to 2
       // Truncate patterns for better fit
-      const truncatedPattern = pattern.length > 150 ? pattern.substring(0, 150) + '...' : pattern;
+      const truncatedPattern = pattern.length > 120 ? pattern.substring(0, 120) + '...' : pattern;
       const lines = doc.splitTextToSize(`${index + 1}. ${truncatedPattern}`, contentWidth);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 4 + 6; // Reduced spacing
+      yPosition += lines.length * 3 + 4; // Further reduced spacing
     });
   }
 
   private addBehavioralInsights(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 25; // Increased margin
+    const margin = 25;
     const contentWidth = pageWidth - 2 * margin;
     let yPosition = 50;
 
-    // Section title
+    // Ultra compact behavioral insights
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(18);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('BEHAVIORAL INSIGHTS & WORKPLACE DYNAMICS', margin, yPosition);
-    yPosition += 30;
-
-    // Communication Style
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Communication Style Analysis:', margin, yPosition);
+    doc.text('BEHAVIORAL INSIGHTS', margin, yPosition);
     yPosition += 15;
 
-    doc.setFontSize(11);
+    doc.setFontSize(7);
     doc.setFont('helvetica', 'normal');
-    doc.text('• Preferred communication channels and effectiveness', margin, yPosition);
-    yPosition += 10;
-    doc.text('• Influence tactics and persuasion style', margin, yPosition);
-    yPosition += 10;
-    doc.text('• Conflict resolution approach and negotiation style', margin, yPosition);
-    yPosition += 20;
-
-    // Leadership Potential
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Leadership Potential Assessment:', margin, yPosition);
-    yPosition += 15;
-
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
-    doc.text('• Natural leadership tendencies and influence capacity', margin, yPosition);
-    yPosition += 10;
-    doc.text('• Team dynamics and collaboration effectiveness', margin, yPosition);
-    yPosition += 10;
-    doc.text('• Decision-making style under pressure', margin, yPosition);
-    yPosition += 20;
-
-    // Motivation & Engagement
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Motivation & Engagement Drivers:', margin, yPosition);
-    yPosition += 15;
-
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
-    doc.text('• Primary motivational factors and engagement triggers', margin, yPosition);
-    yPosition += 10;
-    doc.text('• Work environment preferences and productivity factors', margin, yPosition);
-    yPosition += 10;
-    doc.text('• Recognition and reward responsiveness', margin, yPosition);
+    doc.text('• Communication effectiveness and influence style', margin, yPosition);
+    yPosition += 8;
+    doc.text('• Leadership potential and team dynamics', margin, yPosition);
+    yPosition += 8;
+    doc.text('• Motivation drivers and engagement factors', margin, yPosition);
   }
 
   private addActionPlan(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 25; // Increased margin
+    const margin = 25;
     const contentWidth = pageWidth - 2 * margin;
-    let yPosition = 50;
+    let yPosition = 90; // Start lower on the page
 
-    // Section title
+    // Ultra compact action plan
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(18);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('PERSONALIZED DEVELOPMENT ACTION PLAN', margin, yPosition);
-    yPosition += 30;
-
-    // Immediate Actions
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(239, 68, 68); // Red for urgency
-    doc.text('Immediate Actions (Next 30 Days):', margin, yPosition);
+    doc.text('ACTION PLAN', margin, yPosition);
     yPosition += 15;
 
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(15, 23, 42);
-    reportContent.actionPlan.immediate.forEach((action, index) => {
-      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, contentWidth);
-      doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 5 + 8;
-    });
-
+    // Immediate Actions - ultra compact
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(239, 68, 68);
+    doc.text('Immediate (30 days):', margin, yPosition);
     yPosition += 10;
 
-    // Short-term Actions
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(251, 146, 60); // Orange
-    doc.text('Short-term Development (3-6 Months):', margin, yPosition);
-    yPosition += 15;
-
-    doc.setFontSize(11);
+    doc.setFontSize(6);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
-    reportContent.actionPlan.shortTerm.forEach((action, index) => {
-      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, contentWidth);
+    reportContent.actionPlan.immediate.slice(0, 2).forEach((action, index) => {
+      const truncated = action.length > 100 ? action.substring(0, 100) + '...' : action;
+      const lines = doc.splitTextToSize(`${index + 1}. ${truncated}`, contentWidth);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 5 + 8;
+      yPosition += lines.length * 2.5 + 3;
+    });
+
+    yPosition += 8;
+
+    // Short-term Actions - ultra compact
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(251, 146, 60);
+    doc.text('Short-term (3-6 months):', margin, yPosition);
+    yPosition += 10;
+
+    doc.setFontSize(6);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(15, 23, 42);
+    reportContent.actionPlan.shortTerm.slice(0, 2).forEach((action, index) => {
+      const truncated = action.length > 100 ? action.substring(0, 100) + '...' : action;
+      const lines = doc.splitTextToSize(`${index + 1}. ${truncated}`, contentWidth);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 2.5 + 3;
     });
 
     yPosition += 10;
@@ -593,29 +551,47 @@ export class AIReportGenerator {
 
   private addCareerGuidance(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 25; // Increased margin
+    const margin = 25;
     const contentWidth = pageWidth - 2 * margin;
-    let yPosition = 50;
+    let yPosition = 160; // Start even lower on the page
 
-    // Section title
+    // Ultra compact career guidance
     doc.setTextColor(15, 23, 42);
-    doc.setFontSize(18);
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.text('CAREER OPTIMIZATION & STRATEGIC GUIDANCE', margin, yPosition);
-    yPosition += 30;
-
-    // Career Recommendations
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.text('Recommended Career Paths:', margin, yPosition);
+    doc.text('CAREER GUIDANCE', margin, yPosition);
     yPosition += 15;
 
-    doc.setFontSize(11);
+    // Career Recommendations - ultra compact
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Recommended Paths:', margin, yPosition);
+    yPosition += 10;
+
+    doc.setFontSize(6);
     doc.setFont('helvetica', 'normal');
-    reportContent.careerGuidance.recommendations.forEach((rec, index) => {
-      const lines = doc.splitTextToSize(`• ${rec}`, pageWidth - 2 * margin);
+    reportContent.careerGuidance.recommendations.slice(0, 2).forEach((rec, index) => {
+      const truncated = rec.length > 80 ? rec.substring(0, 80) + '...' : rec;
+      const lines = doc.splitTextToSize(`• ${truncated}`, contentWidth);
       doc.text(lines, margin, yPosition);
-      yPosition += lines.length * 5 + 8;
+      yPosition += lines.length * 2.5 + 2;
+    });
+
+    yPosition += 6;
+
+    // Skills - ultra compact
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Priority Skills:', margin, yPosition);
+    yPosition += 10;
+
+    doc.setFontSize(6);
+    doc.setFont('helvetica', 'normal');
+    reportContent.careerGuidance.skills.slice(0, 3).forEach((skill, index) => {
+      const truncated = skill.length > 60 ? skill.substring(0, 60) + '...' : skill;
+      const lines = doc.splitTextToSize(`▸ ${truncated}`, contentWidth);
+      doc.text(lines, margin, yPosition);
+      yPosition += lines.length * 2.5 + 2;
     });
 
     yPosition += 10;
