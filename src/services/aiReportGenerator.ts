@@ -111,7 +111,8 @@ export class AIReportGenerator {
       const doc = new jsPDF();
       const pageWidth = doc.internal.pageSize.width;
       const pageHeight = doc.internal.pageSize.height;
-      const margin = 20;
+      const margin = 25; // Increased margin from 20 to 25
+      const contentWidth = pageWidth - 2 * margin; // Available content width
       let yPosition = margin;
 
       // Load logo image first
@@ -287,12 +288,13 @@ export class AIReportGenerator {
 
   private addExecutiveSummary(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 20;
+    const margin = 25; // Increased margin
+    const contentWidth = pageWidth - 2 * margin;
     let yPosition = 80;
 
     // Executive Summary Title with enhanced styling
     doc.setFillColor(15, 23, 42);
-    doc.rect(margin - 5, yPosition - 15, pageWidth - 2 * margin + 10, 25, 'F');
+    doc.rect(margin - 5, yPosition - 15, contentWidth + 10, 25, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(18);
     doc.setFont('helvetica', 'bold');
@@ -354,7 +356,7 @@ export class AIReportGenerator {
       doc.setFillColor(59, 130, 246);
       doc.circle(margin + 3, yPosition - 2, 1.5, 'F');
       
-      const lines = doc.splitTextToSize(insight, pageWidth - 2 * margin - 10);
+      const lines = doc.splitTextToSize(insight, contentWidth - 15); // Use contentWidth with padding
       doc.text(lines, margin + 8, yPosition);
       yPosition += lines.length * 4 + 6;
     });
@@ -362,7 +364,7 @@ export class AIReportGenerator {
     yPosition += 15;
 
     // Enhanced two-column layout for strengths and development areas
-    const colWidth = (pageWidth - 3 * margin) / 2;
+    const colWidth = (contentWidth - 15) / 2; // Adjusted for better spacing
     let leftY = yPosition;
     let rightY = yPosition;
 
@@ -383,8 +385,8 @@ export class AIReportGenerator {
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
     reportContent.executiveSummary.topStrengths.slice(0, 5).forEach((strength, index) => {
-      const cleanStrength = strength.replace(/^[^:]*:\s*/, '').substring(0, 80) + '...';
-      const lines = doc.splitTextToSize(`✓ ${cleanStrength}`, colWidth - 10);
+      const cleanStrength = strength.replace(/^[^:]*:\s*/, '').substring(0, 70) + '...'; // Reduced character limit
+      const lines = doc.splitTextToSize(`✓ ${cleanStrength}`, colWidth - 15); // More padding
       doc.text(lines, margin, leftY);
       leftY += lines.length * 4 + 3;
     });
@@ -406,16 +408,17 @@ export class AIReportGenerator {
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
     reportContent.executiveSummary.developmentAreas.slice(0, 4).forEach((area, index) => {
-      const cleanArea = area.replace(/^[^:]*:\s*/, '').substring(0, 80) + '...';
-      const lines = doc.splitTextToSize(`◦ ${cleanArea}`, colWidth - 10);
-      doc.text(lines, margin + colWidth + 10, rightY);
+      const cleanArea = area.replace(/^[^:]*:\s*/, '').substring(0, 70) + '...'; // Reduced character limit
+      const lines = doc.splitTextToSize(`◦ ${cleanArea}`, colWidth - 15); // More padding
+      doc.text(lines, margin + colWidth + 15, rightY); // Adjusted positioning
       rightY += lines.length * 4 + 3;
     });
   }
 
   private addDetailedAnalysis(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 20;
+    const margin = 25; // Increased margin
+    const contentWidth = pageWidth - 2 * margin;
     let yPosition = 50;
 
     // Section title
@@ -437,7 +440,7 @@ export class AIReportGenerator {
 
     doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
-    const insightLines = doc.splitTextToSize(reportContent.detailedAnalysis.personalizedInsights, pageWidth - 2 * margin);
+    const insightLines = doc.splitTextToSize(reportContent.detailedAnalysis.personalizedInsights, contentWidth);
     doc.text(insightLines, margin, yPosition);
     yPosition += insightLines.length * 5 + 15;
 
@@ -450,7 +453,7 @@ export class AIReportGenerator {
     doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
     reportContent.detailedAnalysis.behavioralPatterns.forEach((pattern, index) => {
-      const lines = doc.splitTextToSize(`${index + 1}. ${pattern}`, pageWidth - 2 * margin);
+      const lines = doc.splitTextToSize(`${index + 1}. ${pattern}`, contentWidth);
       doc.text(lines, margin, yPosition);
       yPosition += lines.length * 5 + 8;
     });
@@ -458,7 +461,8 @@ export class AIReportGenerator {
 
   private addBehavioralInsights(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 20;
+    const margin = 25; // Increased margin
+    const contentWidth = pageWidth - 2 * margin;
     let yPosition = 50;
 
     // Section title
@@ -515,7 +519,8 @@ export class AIReportGenerator {
 
   private addActionPlan(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 20;
+    const margin = 25; // Increased margin
+    const contentWidth = pageWidth - 2 * margin;
     let yPosition = 50;
 
     // Section title
@@ -536,7 +541,7 @@ export class AIReportGenerator {
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
     reportContent.actionPlan.immediate.forEach((action, index) => {
-      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, pageWidth - 2 * margin);
+      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, contentWidth);
       doc.text(lines, margin, yPosition);
       yPosition += lines.length * 5 + 8;
     });
@@ -554,7 +559,7 @@ export class AIReportGenerator {
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
     reportContent.actionPlan.shortTerm.forEach((action, index) => {
-      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, pageWidth - 2 * margin);
+      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, contentWidth);
       doc.text(lines, margin, yPosition);
       yPosition += lines.length * 5 + 8;
     });
@@ -572,7 +577,7 @@ export class AIReportGenerator {
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(15, 23, 42);
     reportContent.actionPlan.longTerm.forEach((action, index) => {
-      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, pageWidth - 2 * margin);
+      const lines = doc.splitTextToSize(`${index + 1}. ${action}`, contentWidth);
       doc.text(lines, margin, yPosition);
       yPosition += lines.length * 5 + 8;
     });
@@ -580,7 +585,8 @@ export class AIReportGenerator {
 
   private addCareerGuidance(doc: jsPDF, reportContent: AIReportContent) {
     const pageWidth = doc.internal.pageSize.width;
-    const margin = 20;
+    const margin = 25; // Increased margin
+    const contentWidth = pageWidth - 2 * margin;
     let yPosition = 50;
 
     // Section title
