@@ -169,36 +169,46 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
         </div>
 
         {/* Question Card */}
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="text-xl text-center">
+        <Card className="mb-6 shadow-lg border-0 bg-card/95 backdrop-blur-sm">
+          <CardHeader className="pb-6">
+            <div className="flex items-center justify-center mb-4">
+              <div className={`p-3 rounded-full bg-gradient-to-br text-white ${
+                currentQuestion.category === 'Interest' ? 'from-blue-500 to-blue-600' :
+                currentQuestion.category === 'Aptitude' ? 'from-green-500 to-green-600' :
+                currentQuestion.category === 'Personality' ? 'from-purple-500 to-purple-600' :
+                'from-orange-500 to-orange-600'
+              }`}>
+                {getCategoryIcon(currentQuestion.category)}
+              </div>
+            </div>
+            <CardTitle className="text-xl text-center leading-relaxed">
               {currentQuestion.question}
             </CardTitle>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 pt-0">
             <Button
               onClick={() => handleAnswer('A')}
               variant="outline"
-              className="w-full p-6 h-auto text-left hover:bg-primary/5 hover:border-primary/50 transition-all"
+              className="w-full p-6 h-auto text-left hover:bg-primary/5 hover:border-primary/50 hover:shadow-md transition-all duration-200 border-2"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center font-semibold text-primary">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/30 flex items-center justify-center font-bold text-primary border-2 border-primary/20">
                   A
                 </div>
-                <span className="text-lg">{currentQuestion.optionA}</span>
+                <span className="text-lg font-medium">{currentQuestion.optionA}</span>
               </div>
             </Button>
 
             <Button
               onClick={() => handleAnswer('B')}
               variant="outline"
-              className="w-full p-6 h-auto text-left hover:bg-secondary/5 hover:border-secondary/50 transition-all"
+              className="w-full p-6 h-auto text-left hover:bg-secondary/5 hover:border-secondary/50 hover:shadow-md transition-all duration-200 border-2"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-secondary/10 flex items-center justify-center font-semibold text-secondary">
+              <div className="flex items-center gap-4">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-secondary/20 to-secondary/30 flex items-center justify-center font-bold text-secondary border-2 border-secondary/20">
                   B
                 </div>
-                <span className="text-lg">{currentQuestion.optionB}</span>
+                <span className="text-lg font-medium">{currentQuestion.optionB}</span>
               </div>
             </Button>
           </CardContent>
