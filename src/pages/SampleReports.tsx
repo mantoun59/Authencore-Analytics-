@@ -108,8 +108,8 @@ const SampleReports = () => {
       bgColor: 'bg-green-50'
     },
     career: {
-      title: 'Career Launch Assessment',
-      description: 'Gamified career readiness assessment with interactive challenges',
+      title: 'CareerLaunch Assessment',
+      description: 'Comprehensive career discovery assessment analyzing interests, aptitudes, personality, and values',
       icon: TrendingUp,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50'

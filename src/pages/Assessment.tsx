@@ -47,11 +47,11 @@ const Assessment = () => {
                   <Rocket className="h-8 w-8 text-blue-500" />
                   <div>
                     <CardTitle className="text-xl">CareerLaunch</CardTitle>
-                    <Badge className="mt-1">Gamified</Badge>
+                    <Badge className="mt-1">Professional</Badge>
                   </div>
                 </div>
                 <CardDescription className="text-base">
-                  Gamified career readiness assessment with interactive challenges and real-time feedback
+                  Comprehensive career discovery assessment analyzing interests, aptitudes, personality, and values with personalized insights
                 </CardDescription>
               </CardHeader>
                 <CardContent className="space-y-4 flex-grow flex flex-col">
@@ -60,26 +60,35 @@ const Assessment = () => {
                    <Badge className="bg-green-100 text-green-800">Best Value</Badge>
                  </div>
                  <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">5 Levels</Badge>
-                   <Badge variant="outline">Career Matching</Badge>
-                   <Badge variant="outline">Skills Challenges</Badge>
+                   <Badge variant="outline">18 Questions</Badge>
+                   <Badge variant="outline">RIASEC Profile</Badge>
+                   <Badge variant="outline">Aptitude Analysis</Badge>
+                   <Badge variant="outline">PDF Reports</Badge>
                  </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Interactive career exploration
+                    Interest profiling using RIASEC model
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Real-world scenarios
+                    Cognitive aptitude assessment
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Achievement system
+                    Personality and work style analysis
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Future planning timeline
+                    Career-value alignment scoring
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Personalized career recommendations
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Professional development action plans
                   </li>
                 </ul>
                  <div className="flex-grow"></div>
