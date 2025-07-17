@@ -24,7 +24,7 @@ const StressResilience = () => {
   const [startTime, setStartTime] = useState<number>(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
-  const { addResponse, calculateResults, currentResults, resetAssessment } = useStressResilienceScoring();
+  const { addResponse, calculateResults, currentResults, resetAssessment, responses } = useStressResilienceScoring();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -149,9 +149,9 @@ const StressResilience = () => {
   // Calculate results when moving to results step
   useEffect(() => {
     if (currentStep === 'results' && !currentResults) {
-      calculateResults([]);
+      calculateResults(responses);
     }
-  }, [currentStep, currentResults, calculateResults]);
+  }, [currentStep, currentResults, calculateResults, responses]);
 
   const dimensions = [
     {
