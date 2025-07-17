@@ -81,6 +81,12 @@ const Footer = () => {
               >
                 Assessment Ethics
               </button>
+              <button
+                onClick={() => handleHashNavigation('assessment-integrity')}
+                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
+              >
+                Assessment Integrity
+              </button>
             </div>
           </div>
 
@@ -134,6 +140,12 @@ const Footer = () => {
               <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
                 Privacy & Literature
               </Link>
+              <button
+                onClick={() => handleHashNavigation('assessment-integrity')}
+                className="text-muted-foreground hover:text-primary transition-colors"
+              >
+                Assessment Integrity
+              </button>
               <Link to="/compliance" className="text-muted-foreground hover:text-primary transition-colors">
                 Compliance Documentation
               </Link>

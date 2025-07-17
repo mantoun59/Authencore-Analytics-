@@ -276,11 +276,16 @@ const applicantTemplate = (data: ReportRequest) => `
   <div class="confidentiality">
     <strong>Confidentiality Notice:</strong> This report contains confidential assessment results. 
     It should only be shared with authorized personnel and used for intended purposes.
+    <br><br>
+    <strong>Assessment Integrity:</strong> These assessments were developed using open-source psychological 
+    frameworks and AI-generated insights. All content was independently developed by AuthenCore Analytics 
+    and is not affiliated with existing commercial tools.
   </div>
 
   <div class="footer">
     <p><strong>AuthenCore Assessment Platform</strong><br>
-    Generated on ${data.candidateData.date} | Professional Personality Assessment</p>
+    Generated on ${data.candidateData.date} | Professional Personality Assessment<br>
+    <small>Developed with open-source frameworks, academic research, and AI insights.</small></p>
   </div>
 </body>
 </html>
@@ -571,7 +576,9 @@ const employerTemplate = (data: ReportRequest) => `
 
   <div class="footer">
     <p><strong>AuthenCore Assessment Platform - Confidential Employer Report</strong><br>
-    Generated on ${data.candidateData.date} | For Authorized HR Personnel Only</p>
+    Generated on ${data.candidateData.date} | For Authorized HR Personnel Only<br>
+    <small>Assessment Integrity: These tools were developed using open-source frameworks, academic research, 
+    and AI insights. All content independently developed by AuthenCore Analytics.</small></p>
   </div>
 </body>
 </html>

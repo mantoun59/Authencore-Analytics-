@@ -120,6 +120,63 @@ const CompliancePage = () => {
               </CardContent>
             </Card>
 
+            {/* Assessment Integrity */}
+            <Card id="assessment-integrity">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Shield className="h-6 w-6 text-primary" />
+                  Assessment Integrity & Design
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="bg-blue-50 dark:bg-blue-950/20 p-4 rounded-lg border border-blue-200 dark:border-blue-800">
+                  <h4 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">
+                    Disclaimer on Assessment Design
+                  </h4>
+                  <p className="text-blue-800 dark:text-blue-200 text-sm leading-relaxed">
+                    The psychometric assessments offered on this platform were developed using a combination of 
+                    open-source psychological frameworks, academic research, and AI-generated insights. While inspired 
+                    by validated constructs (such as RIASEC, Big Five, and others), all item wording, scoring logic, 
+                    and reporting systems were independently developed by the AuthenCore Analytics team and are not 
+                    copied from or affiliated with any existing commercial psychometric tools.
+                  </p>
+                </div>
+                
+                <div className="space-y-3">
+                  <h4 className="font-medium">Our Commitment to Integrity</h4>
+                  <div className="grid md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <h5 className="text-sm font-medium text-primary">Transparent Development</h5>
+                      <div className="space-y-1 text-sm text-muted-foreground">
+                        <p>• Acknowledgment of open-source and AI usage</p>
+                        <p>• No copying of proprietary content</p>
+                        <p>• Independent development approach</p>
+                        <p>• Scientific integrity maintained</p>
+                      </div>
+                    </div>
+                    <div className="space-y-2">
+                      <h5 className="text-sm font-medium text-primary">Quality Assurance</h5>
+                      <div className="space-y-1 text-sm text-muted-foreground">
+                        <p>• Practical and customizable tools</p>
+                        <p>• Accessible assessment design</p>
+                        <p>• Intellectual property compliance</p>
+                        <p>• Continuous improvement process</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="mt-4 p-3 bg-gray-50 dark:bg-gray-900/50 rounded border">
+                  <p className="text-xs text-muted-foreground italic">
+                    These tools are designed to be practical, customizable, and accessible, while respecting 
+                    intellectual property laws and maintaining scientific integrity. Our assessments provide 
+                    valuable insights for personal and professional development while ensuring ethical and 
+                    legal compliance.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Contact Information */}
             <Card>
               <CardHeader>
