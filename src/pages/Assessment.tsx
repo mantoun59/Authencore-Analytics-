@@ -60,9 +60,9 @@ const Assessment = () => {
                    <Badge className="bg-green-100 text-green-800">Best Value</Badge>
                  </div>
                  <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">18 Questions</Badge>
+                   <Badge variant="outline">144 Questions</Badge>
+                   <Badge variant="outline">18 Dimensions</Badge>
                    <Badge variant="outline">RIASEC Profile</Badge>
-                   <Badge variant="outline">Aptitude Analysis</Badge>
                    <Badge variant="outline">PDF Reports</Badge>
                  </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
