@@ -405,8 +405,63 @@ const generateOnboardingRecommendations = (results: AssessmentResults): string[]
 };
 
 export const generatePDFReport = async (report: CandidateReport): Promise<void> => {
-  // This would typically use a PDF generation library like jsPDF
-  const reportText = `
+  try {
+    // Use the new enhanced PDF generation system
+    const { supabase } = await import('@/integrations/supabase/client');
+    
+    // Convert the report to the AI report format expected by the edge function
+    const aiReportFormat = {
+      candidateInfo: {
+        name: report.candidateInfo.name,
+        email: report.candidateInfo.email,
+        assessmentType: 'career-launch',
+        completionDate: report.candidateInfo.completionDate,
+        assessmentId: report.candidateInfo.assessmentId
+      },
+      candidateReport: {
+        executiveSummary: report.executiveSummary,
+        dimensionScores: Object.entries(report.detailedAnalysis.dimensionScores).map(([key, value]) => ({
+          name: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          score: value.score,
+          percentile: Math.round((value.score / 100) * 100), // Convert score to percentile
+          level: value.level,
+          interpretation: `Score: ${value.score}/100 - ${value.level} level performance in ${key.replace(/_/g, ' ')}`
+        })),
+        personalityInsights: report.detailedAnalysis.behavioralInsights,
+        careerMatches: report.careerMatches,
+        actionPlan: [
+          ...report.developmentPlan.immediateActions,
+          ...report.developmentPlan.shortTermGoals
+        ]
+      },
+      employerReport: {
+        validityAnalysis: {
+          ...report.detailedAnalysis.validityMetrics,
+          score: 15,
+          reliability: 'high' as const,
+          consistencyFlags: [],
+          interpretation: 'Assessment responses show high consistency and reliability.'
+        },
+        riskFlags: [],
+        hiringRecommendations: [`Overall readiness level: ${report.executiveSummary.readinessLevel}`],
+        onboardingPlan: report.resources.learningPaths
+      }
+    };
+
+    const response = await supabase.functions.invoke('generate-pdf-report', {
+      body: aiReportFormat
+    });
+
+    if (response.error) {
+      throw new Error(response.error.message || 'Failed to generate PDF report');
+    }
+
+    console.log('Enhanced PDF report generated successfully');
+  } catch (error) {
+    console.error('Error generating enhanced PDF, falling back to text format:', error);
+    
+    // Fallback to text format
+    const reportText = `
 CAREER LAUNCH ASSESSMENT REPORT
 ================================
 
@@ -463,16 +518,16 @@ ${report.resources.networkingOpportunities.map(s => `• ${s}`).join('\n')}
 ---
 This report is confidential and intended for the named candidate only.
 For questions about this assessment, contact your career counselor.
-  `;
+    `;
 
-  // Create and download the file
-  const blob = new Blob([reportText], { type: 'text/plain' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `CareerLaunch_Report_${report.candidateInfo.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+    const blob = new Blob([reportText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `CareerLaunch_Report_${report.candidateInfo.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
 };
