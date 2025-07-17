@@ -39,24 +39,35 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
     let actualScore = score;
     
     // Handle scoring logic based on question type
-    if (currentQuestion.category === 'Interest') {
-      // Option A scores for the primary dimension, Option B scores for contrasting dimension
-      if (selectedOption === 'A') {
-        actualScore = 1;
-      } else {
-        actualScore = 0;
-      }
+    if (currentQuestion.category === 'RIASEC') {
+      // For RIASEC questions, use 5-point scale
+      actualScore = selectedOption === 'A' ? 4 : 0;
     } else if (currentQuestion.category === 'Aptitude') {
-      // For self-assessment aptitude questions, A = positive agreement
-      actualScore = selectedOption === 'A' ? 1 : 0;
+      // For Aptitude questions, use 3-point scale
+      actualScore = selectedOption === 'A' ? 2 : 0;
+    } else if (currentQuestion.category === 'Personality') {
+      // For Personality questions, use 3-point scale
+      actualScore = selectedOption === 'A' ? 2 : 0;
+    } else if (currentQuestion.category === 'Values') {
+      // For Values questions, use 3-point scale
+      actualScore = selectedOption === 'A' ? 2 : 0;
     } else {
-      // Personality and values - A option typically indicates higher score
+      // Default scoring
       actualScore = selectedOption === 'A' ? 1 : 0;
     }
 
+    // Apply reverse scoring if needed
+    if (currentQuestion.isReversed) {
+      const maxScore = currentQuestion.category === 'RIASEC' ? 4 : 2;
+      actualScore = maxScore - actualScore;
+    }
+
+    // Apply scoring weight
+    actualScore = actualScore * currentQuestion.scoringWeight;
+
     // Map categories and dimensions to match scoring engine
     const categoryMap: Record<string, 'interest' | 'aptitude' | 'personality' | 'value'> = {
-      'Interest': 'interest',
+      'RIASEC': 'interest',
       'Aptitude': 'aptitude', 
       'Personality': 'personality',
       'Values': 'value'
@@ -201,7 +212,7 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
           <CardHeader className="pb-6">
             <div className="flex items-center justify-center mb-4">
               <div className={`p-3 rounded-full bg-gradient-to-br text-white ${
-                currentQuestion.category === 'Interest' ? 'from-blue-500 to-blue-600' :
+                currentQuestion.category === 'RIASEC' ? 'from-blue-500 to-blue-600' :
                 currentQuestion.category === 'Aptitude' ? 'from-green-500 to-green-600' :
                 currentQuestion.category === 'Personality' ? 'from-purple-500 to-purple-600' :
                 'from-orange-500 to-orange-600'
