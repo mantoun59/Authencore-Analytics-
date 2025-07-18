@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -6,48 +6,75 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { MessageSquare, Users, Target, Zap, ArrowRight, ArrowLeft, Share2, Download } from "lucide-react";
-import { communicationQuestions } from "@/data/communicationQuestions";
-import { useCommunicationScoring } from "@/hooks/useCommunicationScoring";
-import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "@/components/ui/textarea";
+import { MessageSquare, Users, Target, Zap, ArrowRight, ArrowLeft, Share2, Download, Clock } from "lucide-react";
+import { communicationStylesQuestions } from "@/data/communicationStylesQuestions";
+import { useCommunicationStylesScoring } from "@/hooks/useCommunicationStylesScoring";
+import { generateCommunicationReport } from "@/services/communicationReportGenerator";
+import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 const CommunicationAssessment = () => {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [answers, setAnswers] = useState<Record<string, any>>({});
   const [showResults, setShowResults] = useState(false);
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
-  const { toast } = useToast();
-  const { calculateScores, getMainStyle, getStyleDescription } = useCommunicationScoring();
+  const [startTime] = useState(Date.now());
+  const [responseTimings, setResponseTimings] = useState<Record<string, number>>({});
+  const [writtenResponse, setWrittenResponse] = useState("");
+  const { user } = useAuth();
+  const { calculateResults, results, isProcessing } = useCommunicationStylesScoring();
 
-  const questions = communicationQuestions.slice(0, 20); // Use first 20 questions for core assessment
+  const questions = communicationStylesQuestions;
 
   const handleAnswer = (value: string) => {
+    const questionId = questions[currentQuestion].id;
+    const responseTime = Date.now() - startTime;
+    
     setAnswers(prev => ({
       ...prev,
-      [currentQuestion]: value
+      [questionId]: value
+    }));
+    
+    setResponseTimings(prev => ({
+      ...prev,
+      [questionId]: responseTime
+    }));
+  };
+
+  const handleWrittenResponse = (value: string) => {
+    setWrittenResponse(value);
+    const questionId = questions[currentQuestion].id;
+    const responseTime = Date.now() - startTime;
+    
+    setAnswers(prev => ({
+      ...prev,
+      [questionId]: value
+    }));
+    
+    setResponseTimings(prev => ({
+      ...prev,
+      [questionId]: responseTime
     }));
   };
 
   const handleNext = async () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
+      setWrittenResponse("");
     } else {
-      // Calculate final results and save to database
-      const results = calculateScores(answers);
+      // Calculate final results
+      const finalResults = await calculateResults(answers, startTime, responseTimings);
       
       try {
-        const { data: user } = await supabase.auth.getUser();
-        if (user.user) {
+        if (user) {
           await supabase.from('assessment_results').insert({
-            user_id: user.user.id,
-            assessment_type: 'communication_style',
-            results: {
-              ...results,
-              completedAt: new Date().toISOString(),
-              answersCount: Object.keys(answers).length
-            }
+            user_id: user.id,
+            assessment_type: 'communication_styles',
+            results: JSON.parse(JSON.stringify(finalResults)),
+            completed_at: new Date().toISOString()
           });
         }
       } catch (error) {
@@ -61,19 +88,21 @@ const CommunicationAssessment = () => {
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
+      // Reset written response for previous question
+      const previousQuestionId = questions[currentQuestion - 1].id;
+      setWrittenResponse(answers[previousQuestionId] || "");
     }
   };
 
   const shareResults = async () => {
-    const results = calculateScores(answers);
-    const mainStyle = getMainStyle(results);
+    if (!results) return;
     
-    const shareText = `I just completed the Communication Style Assessment! My primary style: ${mainStyle}`;
+    const shareText = `I completed the Communication Styles Assessment! My profile: ${results.profile.type} - ${results.profile.primary}`;
     
     if (navigator.share) {
       try {
         await navigator.share({
-          title: 'Communication Style Assessment Results',
+          title: 'Communication Styles Assessment Results',
           text: shareText,
           url: window.location.href
         });
@@ -82,20 +111,21 @@ const CommunicationAssessment = () => {
       }
     } else {
       navigator.clipboard.writeText(shareText);
-      toast({
-        title: "Results Copied!",
-        description: "Your results have been copied to clipboard.",
+      toast.success("Results Copied!", {
+        description: "Your results have been copied to clipboard."
       });
     }
   };
 
   const downloadReport = async () => {
+    if (!results || !user) return;
+    
     setIsGeneratingReport(true);
     try {
-      const results = calculateScores(answers);
+      const report = generateCommunicationReport(results, user.email || "User", false);
       const reportData = {
-        assessmentType: 'communication_style',
-        results,
+        assessmentType: 'communication_styles',
+        results: report,
         completedAt: new Date().toISOString(),
       };
 
@@ -108,23 +138,20 @@ const CommunicationAssessment = () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `Communication-Style-Report-${new Date().toISOString().split('T')[0]}.pdf`;
+        a.download = `Communication-Styles-Report-${new Date().toISOString().split('T')[0]}.pdf`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        toast({
-          title: "Report Downloaded",
-          description: "Your communication style report has been downloaded.",
+        toast.success("Report Downloaded", {
+          description: "Your communication styles report has been downloaded."
         });
       }
     } catch (error) {
       console.error('Error generating report:', error);
-      toast({
-        title: "Download Error",
-        description: "Failed to generate report. Please try again.",
-        variant: "destructive"
+      toast.error("Download Error", {
+        description: "Failed to generate report. Please try again."
       });
     } finally {
       setIsGeneratingReport(false);
@@ -132,11 +159,9 @@ const CommunicationAssessment = () => {
   };
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
+  const currentQuestionData = questions[currentQuestion];
 
-  if (showResults) {
-    const results = calculateScores(answers);
-    const mainStyle = getMainStyle(results);
-    
+  if (showResults && results) {
     return (
       <div className="min-h-screen bg-background p-4">
         <div className="max-w-4xl mx-auto">
@@ -144,9 +169,9 @@ const CommunicationAssessment = () => {
             <Badge className="mb-4 bg-indigo-100 text-indigo-800">
               Communication Assessment Complete
             </Badge>
-            <h1 className="text-3xl font-bold mb-4">Your Communication Style</h1>
+            <h1 className="text-3xl font-bold mb-4">Your Communication Profile</h1>
             <p className="text-muted-foreground">
-              Understanding how you naturally communicate can help you adapt to different situations
+              Comprehensive analysis of your communication style and effectiveness
             </p>
           </div>
 
@@ -155,23 +180,35 @@ const CommunicationAssessment = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <MessageSquare className="h-5 w-5 text-indigo-500" />
-                  Primary Style: {mainStyle.charAt(0).toUpperCase() + mainStyle.slice(1)}
+                  {results.profile.type} Style
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground mb-4">
-                  {getStyleDescription(mainStyle)}
+                  {results.profile.primary}
                 </p>
-                <div className="space-y-3">
-                  {Object.entries(results).map(([style, score]) => (
-                    <div key={style} className="flex justify-between items-center">
-                      <span className="capitalize">{style}</span>
-                      <div className="flex items-center gap-2">
-                        <Progress value={Math.min(100, (score / 10) * 100)} className="w-20" />
-                        <span className="text-sm font-medium">{score}</span>
-                      </div>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Overall Score</h4>
+                    <div className="flex items-center gap-2">
+                      <Progress value={results.overallScore} className="flex-1" />
+                      <span className="text-sm font-medium">{Math.round(results.overallScore)}/100</span>
                     </div>
-                  ))}
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Communication Effectiveness</h4>
+                    <div className="flex items-center gap-2">
+                      <Progress value={results.communicationEffectivenessIndex} className="flex-1" />
+                      <span className="text-sm font-medium">{Math.round(results.communicationEffectivenessIndex)}/100</span>
+                    </div>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-2">Adaptability</h4>
+                    <div className="flex items-center gap-2">
+                      <Progress value={results.adaptabilityScore} className="flex-1" />
+                      <span className="text-sm font-medium">{Math.round(results.adaptabilityScore)}/100</span>
+                    </div>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -180,28 +217,48 @@ const CommunicationAssessment = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-green-500" />
-                  Recommendations
+                  Key Insights
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2 text-sm">
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Practice adapting your style to your audience</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Consider multiple communication channels</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Build awareness of others' communication preferences</span>
-                  </li>
-                  <li className="flex items-start gap-2">
-                    <div className="w-2 h-2 bg-indigo-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Develop flexibility in high-stakes situations</span>
-                  </li>
-                </ul>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold text-green-600 mb-2">Strengths</h4>
+                    <p className="text-sm text-muted-foreground">{results.profile.strength}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-orange-600 mb-2">Growth Areas</h4>
+                    <p className="text-sm text-muted-foreground">{results.profile.challenge}</p>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-blue-600 mb-2">Work Style</h4>
+                    <p className="text-sm text-muted-foreground">{results.profile.workStyle}</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-8">
+            <Card>
+              <CardHeader>
+                <CardTitle>Communication Dimensions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-2 gap-4">
+                  {Object.entries(results.dimensions).map(([key, dimension]) => (
+                    <div key={key} className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm font-medium capitalize">
+                          {key.replace(/([A-Z])/g, ' $1').trim()}
+                        </span>
+                        <span className="text-sm text-muted-foreground">{dimension.level}</span>
+                      </div>
+                      <Progress value={dimension.score} className="h-2" />
+                      <p className="text-xs text-muted-foreground">{dimension.description}</p>
+                    </div>
+                  ))}
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -235,13 +292,13 @@ const CommunicationAssessment = () => {
         {/* Header */}
         <div className="text-center mb-8">
           <Badge className="mb-4 bg-indigo-100 text-indigo-800">
-            Communication Assessment
+            Communication Styles Assessment
           </Badge>
           <h1 className="text-3xl font-bold mb-4">
             Discover Your Communication Style
           </h1>
           <p className="text-muted-foreground">
-            Understanding how you naturally communicate helps you adapt to different situations and audiences
+            80 comprehensive questions analyzing your communication patterns across multiple dimensions
           </p>
         </div>
 
@@ -256,36 +313,66 @@ const CommunicationAssessment = () => {
           <Progress value={progress} className="w-full" />
         </div>
 
+        {/* Module Badge */}
+        <div className="mb-4">
+          <Badge variant="outline" className="mb-2">
+            {currentQuestionData.module.charAt(0).toUpperCase() + currentQuestionData.module.slice(1).replace('-', ' ')}
+          </Badge>
+          <Badge variant="secondary">
+            {currentQuestionData.dimension.charAt(0).toUpperCase() + currentQuestionData.dimension.slice(1).replace('-', ' ')}
+          </Badge>
+        </div>
+
         {/* Question Card */}
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="text-xl">
-              {questions[currentQuestion].question}
+              {currentQuestionData.question}
             </CardTitle>
-            {questions[currentQuestion].context && (
+            {currentQuestionData.context && (
               <CardDescription>
-                {questions[currentQuestion].context}
+                {currentQuestionData.context}
               </CardDescription>
+            )}
+            {currentQuestionData.timeLimit && (
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                <Clock className="h-4 w-4" />
+                Time limit: {currentQuestionData.timeLimit / 60} minutes
+              </div>
             )}
           </CardHeader>
           <CardContent>
-            <RadioGroup 
-              value={answers[currentQuestion] || ""} 
-              onValueChange={handleAnswer}
-              className="space-y-3"
-            >
-              {questions[currentQuestion].options?.map((option) => (
-                <div key={option.id} className="flex items-center space-x-2">
-                  <RadioGroupItem value={option.id} id={option.id} />
-                  <Label 
-                    htmlFor={option.id} 
-                    className="flex-1 cursor-pointer p-3 rounded-lg border hover:bg-muted/50 transition-colors"
-                  >
-                    {option.text}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
+            {currentQuestionData.type === 'written-response' ? (
+              <div className="space-y-4">
+                {currentQuestionData.prompt && (
+                  <p className="text-sm text-muted-foreground">{currentQuestionData.prompt}</p>
+                )}
+                <Textarea
+                  value={writtenResponse}
+                  onChange={(e) => handleWrittenResponse(e.target.value)}
+                  placeholder="Enter your response here..."
+                  className="min-h-32"
+                />
+              </div>
+            ) : (
+              <RadioGroup 
+                value={answers[currentQuestionData.id] || ""} 
+                onValueChange={handleAnswer}
+                className="space-y-3"
+              >
+                {currentQuestionData.options?.map((option, index) => (
+                  <div key={index} className="flex items-center space-x-2">
+                    <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                    <Label 
+                      htmlFor={`option-${index}`}
+                      className="flex-1 cursor-pointer p-3 rounded-lg border hover:bg-muted/50 transition-colors"
+                    >
+                      {option}
+                    </Label>
+                  </div>
+                ))}
+              </RadioGroup>
+            )}
           </CardContent>
         </Card>
 
@@ -302,10 +389,11 @@ const CommunicationAssessment = () => {
           
           <Button 
             onClick={handleNext}
-            disabled={!answers[currentQuestion]}
+            disabled={!answers[currentQuestionData.id] || isProcessing}
             className="bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600"
           >
-            {currentQuestion === questions.length - 1 ? 'Complete' : 'Next'}
+            {isProcessing ? 'Processing...' : 
+             currentQuestion === questions.length - 1 ? 'Complete Assessment' : 'Next'}
             <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
