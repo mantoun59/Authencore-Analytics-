@@ -109,14 +109,19 @@ serve(async (req) => {
 
   try {
     const { message, conversationHistory = [] } = await req.json();
+    
+    console.log('Received request with message:', message);
 
     if (!message) {
       throw new Error('Message is required');
     }
 
     if (!openAIApiKey) {
+      console.error('OpenAI API key not found in environment');
       throw new Error('OpenAI API key not configured');
     }
+    
+    console.log('OpenAI API key found, length:', openAIApiKey.length);
 
     // Prepare messages for OpenAI
     const messages = [
