@@ -62,8 +62,17 @@ const CommunicationAssessment = () => {
 
   const handleNext = async () => {
     if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(currentQuestion + 1);
-      setWrittenResponse("");
+      const nextQuestionIndex = currentQuestion + 1;
+      const nextQuestion = questions[nextQuestionIndex];
+      
+      setCurrentQuestion(nextQuestionIndex);
+      
+      // Only set written response if the next question is a written response type
+      if (nextQuestion.type === 'written-response') {
+        setWrittenResponse(answers[nextQuestion.id] || "");
+      } else {
+        setWrittenResponse("");
+      }
     } else {
       // Calculate final results
       const finalResults = await calculateResults(answers, startTime, responseTimings);
@@ -88,9 +97,14 @@ const CommunicationAssessment = () => {
   const handlePrevious = () => {
     if (currentQuestion > 0) {
       setCurrentQuestion(currentQuestion - 1);
-      // Reset written response for previous question
       const previousQuestionId = questions[currentQuestion - 1].id;
-      setWrittenResponse(answers[previousQuestionId] || "");
+      const previousQuestion = questions[currentQuestion - 1];
+      // Only set written response if the previous question is a written response type
+      if (previousQuestion.type === 'written-response') {
+        setWrittenResponse(answers[previousQuestionId] || "");
+      } else {
+        setWrittenResponse("");
+      }
     }
   };
 
