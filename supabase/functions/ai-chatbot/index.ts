@@ -61,7 +61,7 @@ AVAILABLE ASSESSMENTS:
 Please provide helpful, accurate information about our services. Always maintain a professional and supportive tone.`;
 
 serve(async (req) => {
-  console.log('🤖 AI Chatbot function called at:', new Date().toISOString());
+  console.log('🤖 AI Chatbot function v2.0 called at:', new Date().toISOString());
   
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
