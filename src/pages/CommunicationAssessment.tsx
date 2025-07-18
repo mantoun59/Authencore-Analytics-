@@ -6,77 +6,54 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { MessageSquare, Users, Target, Zap, ArrowRight, ArrowLeft } from "lucide-react";
+import { MessageSquare, Users, Target, Zap, ArrowRight, ArrowLeft, Share2, Download } from "lucide-react";
+import { communicationQuestions } from "@/data/communicationQuestions";
+import { useCommunicationScoring } from "@/hooks/useCommunicationScoring";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const CommunicationAssessment = () => {
   const navigate = useNavigate();
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [answers, setAnswers] = useState<string[]>([]);
+  const [answers, setAnswers] = useState<Record<string, string>>({});
   const [showResults, setShowResults] = useState(false);
+  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const { toast } = useToast();
+  const { calculateScores, getMainStyle, getStyleDescription } = useCommunicationScoring();
 
-  const questions = [
-    {
-      id: 1,
-      text: "When presenting to a group, I prefer to:",
-      options: [
-        { value: "direct", label: "Get straight to the point with clear facts" },
-        { value: "engaging", label: "Use stories and examples to connect" },
-        { value: "collaborative", label: "Involve the audience in discussions" },
-        { value: "structured", label: "Follow a detailed, logical framework" }
-      ]
-    },
-    {
-      id: 2,
-      text: "In team meetings, I typically:",
-      options: [
-        { value: "lead", label: "Take charge and guide the discussion" },
-        { value: "support", label: "Help facilitate others' contributions" },
-        { value: "analyze", label: "Focus on data and logical analysis" },
-        { value: "harmonize", label: "Work to maintain group harmony" }
-      ]
-    },
-    {
-      id: 3,
-      text: "When giving feedback, I tend to:",
-      options: [
-        { value: "direct", label: "Be straightforward and specific" },
-        { value: "encouraging", label: "Focus on positive reinforcement" },
-        { value: "constructive", label: "Provide detailed improvement suggestions" },
-        { value: "diplomatic", label: "Frame feedback gently and tactfully" }
-      ]
-    },
-    {
-      id: 4,
-      text: "My preferred communication channel is:",
-      options: [
-        { value: "face-to-face", label: "In-person conversations" },
-        { value: "video", label: "Video calls and virtual meetings" },
-        { value: "written", label: "Email and written documentation" },
-        { value: "instant", label: "Chat and instant messaging" }
-      ]
-    },
-    {
-      id: 5,
-      text: "When resolving conflicts, I usually:",
-      options: [
-        { value: "address", label: "Address issues head-on immediately" },
-        { value: "mediate", label: "Help parties find common ground" },
-        { value: "analyze", label: "Gather all facts before acting" },
-        { value: "cool-down", label: "Let emotions settle before discussing" }
-      ]
-    }
-  ];
+  const questions = communicationQuestions.slice(0, 20); // Use first 20 questions for core assessment
 
   const handleAnswer = (value: string) => {
-    const newAnswers = [...answers];
-    newAnswers[currentQuestion] = value;
-    setAnswers(newAnswers);
+    setAnswers(prev => ({
+      ...prev,
+      [currentQuestion]: value
+    }));
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
+      // Calculate final results and save to database
+      const results = calculateScores(answers);
+      
+      try {
+        const { data: user } = await supabase.auth.getUser();
+        if (user.user) {
+          await supabase.from('assessment_results').insert({
+            user_id: user.user.id,
+            assessment_type: 'communication_style',
+            results: {
+              ...results,
+              completedAt: new Date().toISOString(),
+              answersCount: Object.keys(answers).length
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error saving results:', error);
+      }
+      
       setShowResults(true);
     }
   };
@@ -87,49 +64,78 @@ const CommunicationAssessment = () => {
     }
   };
 
-  const calculateResults = () => {
-    const styles = {
-      direct: 0,
-      collaborative: 0,
-      analytical: 0,
-      supportive: 0
-    };
-
-    answers.forEach(answer => {
-      if (['direct', 'lead', 'address'].includes(answer)) {
-        styles.direct++;
-      } else if (['engaging', 'support', 'mediate'].includes(answer)) {
-        styles.collaborative++;
-      } else if (['structured', 'analyze', 'written'].includes(answer)) {
-        styles.analytical++;
-      } else {
-        styles.supportive++;
+  const shareResults = async () => {
+    const results = calculateScores(answers);
+    const mainStyle = getMainStyle(results);
+    
+    const shareText = `I just completed the Communication Style Assessment! My primary style: ${mainStyle}`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Communication Style Assessment Results',
+          text: shareText,
+          url: window.location.href
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
       }
-    });
-
-    return styles;
+    } else {
+      navigator.clipboard.writeText(shareText);
+      toast({
+        title: "Results Copied!",
+        description: "Your results have been copied to clipboard.",
+      });
+    }
   };
 
-  const getMainStyle = () => {
-    const results = calculateResults();
-    return Object.entries(results).reduce((a, b) => results[a[0]] > results[b[0]] ? a : b)[0];
-  };
+  const downloadReport = async () => {
+    setIsGeneratingReport(true);
+    try {
+      const results = calculateScores(answers);
+      const reportData = {
+        assessmentType: 'communication_style',
+        results,
+        completedAt: new Date().toISOString(),
+      };
 
-  const getStyleDescription = (style: string) => {
-    const descriptions = {
-      direct: "You communicate with clarity and decisiveness, preferring straightforward approaches.",
-      collaborative: "You excel at bringing people together and facilitating group discussions.",
-      analytical: "You rely on data and logical frameworks to structure your communications.",
-      supportive: "You prioritize relationships and create comfortable communication environments."
-    };
-    return descriptions[style as keyof typeof descriptions];
+      const response = await supabase.functions.invoke('generate-pdf-report', {
+        body: reportData
+      });
+
+      if (response.data) {
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Communication-Style-Report-${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        toast({
+          title: "Report Downloaded",
+          description: "Your communication style report has been downloaded.",
+        });
+      }
+    } catch (error) {
+      console.error('Error generating report:', error);
+      toast({
+        title: "Download Error",
+        description: "Failed to generate report. Please try again.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsGeneratingReport(false);
+    }
   };
 
   const progress = ((currentQuestion + 1) / questions.length) * 100;
 
   if (showResults) {
-    const mainStyle = getMainStyle();
-    const results = calculateResults();
+    const results = calculateScores(answers);
+    const mainStyle = getMainStyle(results);
     
     return (
       <div className="min-h-screen bg-background p-4">
@@ -161,7 +167,7 @@ const CommunicationAssessment = () => {
                     <div key={style} className="flex justify-between items-center">
                       <span className="capitalize">{style}</span>
                       <div className="flex items-center gap-2">
-                        <Progress value={(score / questions.length) * 100} className="w-20" />
+                        <Progress value={Math.min(100, (score / 10) * 100)} className="w-20" />
                         <span className="text-sm font-medium">{score}</span>
                       </div>
                     </div>
@@ -200,7 +206,17 @@ const CommunicationAssessment = () => {
             </Card>
           </div>
 
-          <div className="mt-8 text-center">
+          <div className="mt-8 text-center space-y-4">
+            <div className="flex gap-4 justify-center">
+              <Button onClick={shareResults} variant="outline">
+                <Share2 className="h-4 w-4 mr-2" />
+                Share Results
+              </Button>
+              <Button onClick={downloadReport} disabled={isGeneratingReport}>
+                <Download className="h-4 w-4 mr-2" />
+                {isGeneratingReport ? 'Generating...' : 'Download Report'}
+              </Button>
+            </div>
             <Button 
               onClick={() => navigate('/assessment')}
               className="bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600"
@@ -244,8 +260,13 @@ const CommunicationAssessment = () => {
         <Card className="mb-8">
           <CardHeader>
             <CardTitle className="text-xl">
-              {questions[currentQuestion].text}
+              {questions[currentQuestion].question}
             </CardTitle>
+            {questions[currentQuestion].context && (
+              <CardDescription>
+                {questions[currentQuestion].context}
+              </CardDescription>
+            )}
           </CardHeader>
           <CardContent>
             <RadioGroup 
@@ -253,14 +274,14 @@ const CommunicationAssessment = () => {
               onValueChange={handleAnswer}
               className="space-y-3"
             >
-              {questions[currentQuestion].options.map((option) => (
-                <div key={option.value} className="flex items-center space-x-2">
-                  <RadioGroupItem value={option.value} id={option.value} />
+              {questions[currentQuestion].options?.map((option) => (
+                <div key={option.id} className="flex items-center space-x-2">
+                  <RadioGroupItem value={option.id} id={option.id} />
                   <Label 
-                    htmlFor={option.value} 
+                    htmlFor={option.id} 
                     className="flex-1 cursor-pointer p-3 rounded-lg border hover:bg-muted/50 transition-colors"
                   >
-                    {option.label}
+                    {option.text}
                   </Label>
                 </div>
               ))}

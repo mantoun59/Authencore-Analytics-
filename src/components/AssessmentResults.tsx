@@ -198,6 +198,28 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     doc.save(`resilience-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`);
   };
 
+  const shareResults = async () => {
+    const shareText = `I just completed the ${assessmentType || 'Assessment'}! Overall Score: ${overallScore}% - ${resilienceProfile} level`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `${assessmentType || 'Assessment'} Results`,
+          text: shareText,
+          url: window.location.href
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      navigator.clipboard.writeText(shareText);
+      toast({
+        title: "Results Copied!",
+        description: "Your results have been copied to clipboard.",
+      });
+    }
+  };
+
   const generateAIReport = async (reportType: 'candidate' | 'employer' = 'candidate') => {
     setIsGeneratingAI(true);
     try {
@@ -644,7 +666,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
               </>
             )}
             
-            <Button size="lg" variant="outline">
+            <Button size="lg" variant="outline" onClick={shareResults}>
               <Share className="h-4 w-4 mr-2" />
               Share Results
             </Button>

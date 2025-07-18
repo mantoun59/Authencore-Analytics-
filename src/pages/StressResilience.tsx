@@ -11,10 +11,11 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { ArrowRight, Brain, Heart, Zap, Target, CheckCircle2, BarChart3, TrendingUp, Clock, Shield, Lightbulb, ArrowLeft, FileText } from "lucide-react";
+import { ArrowRight, Brain, Heart, Zap, Target, CheckCircle2, BarChart3, TrendingUp, Clock, Shield, Lightbulb, ArrowLeft, FileText, Share2 } from "lucide-react";
 import { stressResilienceQuestions, resilienceProfiles, StressResilienceQuestion } from "@/data/stressResilienceQuestions";
 import { useStressResilienceScoring } from "@/hooks/useStressResilienceScoring";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const StressResilience = () => {
   const [currentStep, setCurrentStep] = useState<'overview' | 'assessment' | 'results'>('overview');
@@ -117,6 +118,68 @@ const StressResilience = () => {
       });
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const shareResults = async () => {
+    const shareText = `I just completed the Stress Resilience Assessment! Overall Score: ${currentResults?.overallScore}% - ${currentResults?.resilienceProfile} level`;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Stress Resilience Assessment Results',
+          text: shareText,
+          url: window.location.href
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      navigator.clipboard.writeText(shareText);
+      toast({
+        title: "Results Copied!",
+        description: "Your results have been copied to clipboard.",
+      });
+    }
+  };
+
+  const downloadReport = async () => {
+    if (!currentResults) return;
+    
+    try {
+      const reportData = {
+        assessmentType: 'stress_resilience',
+        results: currentResults,
+        completedAt: new Date().toISOString(),
+      };
+
+      const response = await supabase.functions.invoke('generate-pdf-report', {
+        body: reportData
+      });
+
+      if (response.data) {
+        const blob = new Blob([response.data], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Stress-Resilience-Report-${new Date().toISOString().split('T')[0]}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        toast({
+          title: "Report Downloaded",
+          description: "Your stress resilience report has been downloaded.",
+        });
+      }
+    } catch (error) {
+      console.error('Error generating report:', error);
+      toast({
+        title: "Download Error",
+        description: "Failed to generate report. Please try again.",
+        variant: "destructive"
+      });
     }
   };
 
@@ -586,9 +649,13 @@ const StressResilience = () => {
               <Button onClick={() => navigate('/assessment')}>
                 Explore Other Assessments
               </Button>
-              <Button>
+              <Button onClick={downloadReport}>
                 <FileText className="mr-2 h-4 w-4" />
                 Download Report
+              </Button>
+              <Button onClick={shareResults} variant="outline">
+                <Share2 className="mr-2 h-4 w-4" />
+                Share Results
               </Button>
             </div>
           </div>
