@@ -175,6 +175,30 @@ const CommunicationAssessment = () => {
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const currentQuestionData = questions[currentQuestion];
 
+  // Safety check - don't render if questions aren't loaded
+  if (!questions || questions.length === 0) {
+    return (
+      <div className="min-h-screen bg-background p-4 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Loading assessment...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Safety check - don't render if current question data is missing
+  if (!currentQuestionData) {
+    return (
+      <div className="min-h-screen bg-background p-4 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">Error: Question data not found</p>
+          <Button onClick={() => window.location.reload()}>Reload Page</Button>
+        </div>
+      </div>
+    );
+  }
+
   if (showResults && results) {
     return (
       <div className="min-h-screen bg-background p-4">
