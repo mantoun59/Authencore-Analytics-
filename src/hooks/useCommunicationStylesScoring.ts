@@ -1,136 +1,691 @@
 import { useState } from 'react';
+import { communicationStylesQuestions } from '../data/communicationStylesQuestions';
+
+export interface CommunicationDimension {
+  score: number;
+  level: 'Low' | 'Moderate' | 'High' | 'Very High';
+  percentile: number;
+  description: string;
+}
+
+export interface CommunicationProfile {
+  type: 'Director' | 'Socializer' | 'Thinker' | 'Supporter' | 'Balanced';
+  primary: string;
+  secondary: string;
+  strength: string;
+  challenge: string;
+  workStyle: string;
+}
+
+export interface DistortionAnalysis {
+  score: number;
+  level: 'Low' | 'Moderate' | 'High' | 'Very High';
+  indicators: string[];
+  reliability: 'High' | 'Moderate' | 'Low' | 'Questionable';
+  recommendations: string[];
+}
 
 export interface CommunicationStylesResults {
-  overall: number;
+  // Core Dimensions
   dimensions: {
-    assertiveness: number;
-    expressiveness: number;
-    informationProcessing: number;
-    channelPreferences: number;
-    listeningPatterns: number;
-    influenceStrategies: number;
-    conflictCommunication: number;
+    assertiveness: CommunicationDimension;
+    expressiveness: CommunicationDimension;
+    informationProcessing: CommunicationDimension;
+    channelPreferences: CommunicationDimension;
+    listeningPatterns: CommunicationDimension;
+    influenceStrategies: CommunicationDimension;
+    conflictCommunication: CommunicationDimension;
   };
-  profile: 'Director' | 'Socializer' | 'Thinker' | 'Supporter';
-  cei: number; // Communication Effectiveness Index
-  adaptability: number;
-  channelMastery: number;
-  conflictResolution: number;
+  
+  // Overall Scores
+  overallScore: number;
+  communicationEffectivenessIndex: number;
+  adaptabilityScore: number;
+  
+  // Profile Analysis
+  profile: CommunicationProfile;
+  
+  // Distortion Analysis (Employer Review)
+  distortionAnalysis: DistortionAnalysis;
+  
+  // Contextual Effectiveness
+  contextualEffectiveness: {
+    leadership: number;
+    teamwork: number;
+    customerService: number;
+    salesNegotiation: number;
+    conflictResolution: number;
+    publicSpeaking: number;
+  };
+  
+  // Development Areas
+  developmentAreas: {
+    priority: string;
+    description: string;
+    actionItems: string[];
+  }[];
+  
+  // Timestamp and metadata
+  completedAt: string;
+  timeSpent: number;
+  responsePattern: string;
 }
 
 export const useCommunicationStylesScoring = () => {
   const [results, setResults] = useState<CommunicationStylesResults | null>(null);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const calculateResults = (answers: Record<string, any>): CommunicationStylesResults => {
-    // Calculate dimension scores
-    const dimensions = {
-      assertiveness: calculateDimensionScore(answers, 'assertiveness'),
-      expressiveness: calculateDimensionScore(answers, 'expressiveness'),
-      informationProcessing: calculateDimensionScore(answers, 'information-processing'),
-      channelPreferences: calculateDimensionScore(answers, 'channel-preferences'),
-      listeningPatterns: calculateDimensionScore(answers, 'listening-patterns'),
-      influenceStrategies: calculateDimensionScore(answers, 'influence-strategies'),
-      conflictCommunication: calculateDimensionScore(answers, 'conflict-communication')
-    };
-
-    // Determine communication profile
-    const profile = determineProfile(dimensions.assertiveness, dimensions.expressiveness);
+  const calculateResults = async (
+    answers: Record<string, any>,
+    startTime: number,
+    responseTimings: Record<string, number>
+  ): Promise<CommunicationStylesResults> => {
+    setIsProcessing(true);
     
-    // Calculate CEI (Communication Effectiveness Index)
-    const cei = calculateCEI(dimensions);
-    
-    // Calculate adaptability score
-    const adaptability = calculateAdaptability(answers);
-    
-    // Calculate channel mastery
-    const channelMastery = dimensions.channelPreferences;
-    
-    // Calculate conflict resolution capability
-    const conflictResolution = dimensions.conflictCommunication;
+    try {
+      const timeSpent = Date.now() - startTime;
+      
+      // Calculate dimension scores
+      const dimensions = {
+        assertiveness: calculateDimensionScore(answers, 'assertiveness', responseTimings),
+        expressiveness: calculateDimensionScore(answers, 'expressiveness', responseTimings),
+        informationProcessing: calculateDimensionScore(answers, 'information-processing', responseTimings),
+        channelPreferences: calculateDimensionScore(answers, 'channel-preferences', responseTimings),
+        listeningPatterns: calculateDimensionScore(answers, 'listening-patterns', responseTimings),
+        influenceStrategies: calculateDimensionScore(answers, 'influence-strategies', responseTimings),
+        conflictCommunication: calculateDimensionScore(answers, 'conflict-communication', responseTimings)
+      };
 
-    const overall = (
-      dimensions.assertiveness * 0.2 +
-      dimensions.expressiveness * 0.2 +
-      dimensions.informationProcessing * 0.15 +
-      dimensions.channelPreferences * 0.15 +
-      dimensions.listeningPatterns * 0.1 +
-      dimensions.influenceStrategies * 0.1 +
-      dimensions.conflictCommunication * 0.1
-    );
+      // Calculate overall effectiveness
+      const overallScore = calculateOverallScore(dimensions);
+      const communicationEffectivenessIndex = calculateCEI(dimensions);
+      const adaptabilityScore = calculateAdaptabilityScore(answers);
 
-    const finalResults: CommunicationStylesResults = {
-      overall,
-      dimensions,
-      profile,
-      cei,
-      adaptability,
-      channelMastery,
-      conflictResolution
-    };
+      // Determine communication profile
+      const profile = determineProfile(dimensions);
 
-    setResults(finalResults);
-    return finalResults;
+      // Analyze distortion patterns
+      const distortionAnalysis = analyzeDistortion(answers, responseTimings, timeSpent);
+
+      // Calculate contextual effectiveness
+      const contextualEffectiveness = calculateContextualEffectiveness(dimensions, answers);
+
+      // Identify development areas
+      const developmentAreas = identifyDevelopmentAreas(dimensions, profile);
+
+      // Analyze response patterns
+      const responsePattern = analyzeResponsePattern(answers, responseTimings);
+
+      const finalResults: CommunicationStylesResults = {
+        dimensions,
+        overallScore,
+        communicationEffectivenessIndex,
+        adaptabilityScore,
+        profile,
+        distortionAnalysis,
+        contextualEffectiveness,
+        developmentAreas,
+        completedAt: new Date().toISOString(),
+        timeSpent,
+        responsePattern
+      };
+
+      setResults(finalResults);
+      return finalResults;
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
-  const calculateDimensionScore = (answers: Record<string, any>, dimension: string): number => {
-    const dimensionAnswers = Object.entries(answers).filter(([key, value]) => 
-      key.includes(dimension) && value !== undefined
+  const calculateDimensionScore = (
+    answers: Record<string, any>,
+    dimension: string,
+    responseTimings: Record<string, number>
+  ): CommunicationDimension => {
+    const dimensionQuestions = communicationStylesQuestions.filter(q => 
+      q.dimension === dimension
     );
-    
-    if (dimensionAnswers.length === 0) return 0;
-    
-    const totalScore = dimensionAnswers.reduce((sum, [key, value]) => {
-      if (typeof value === 'string') {
-        return sum + getOptionScore(value);
+
+    let totalScore = 0;
+    let totalWeight = 0;
+    let validResponses = 0;
+
+    dimensionQuestions.forEach(question => {
+      const answer = answers[question.id];
+      if (answer !== undefined) {
+        const responseScore = calculateResponseScore(answer, question);
+        const weight = question.weight || 1;
+        
+        totalScore += responseScore * weight;
+        totalWeight += weight;
+        validResponses++;
       }
-      return sum + (value || 0);
-    }, 0);
+    });
+
+    if (validResponses === 0) {
+      return createEmptyDimension();
+    }
+
+    const rawScore = (totalScore / totalWeight) * 25;
+    const normalizedScore = Math.min(100, Math.max(0, rawScore));
     
-    return Math.min(100, (totalScore / dimensionAnswers.length) * 25);
+    return {
+      score: normalizedScore,
+      level: getScoreLevel(normalizedScore),
+      percentile: calculatePercentile(normalizedScore, dimension),
+      description: getDimensionDescription(dimension, normalizedScore)
+    };
   };
 
-  const getOptionScore = (option: string): number => {
-    // Score based on option index (0-3 becomes 1-4)
-    const optionIndex = parseInt(option) || 0;
-    return optionIndex + 1;
+  const calculateResponseScore = (answer: any, question: any): number => {
+    if (question.type === 'written-response') {
+      return analyzeWrittenResponse(answer, question);
+    } else if (question.type === 'ranking') {
+      return analyzeRankingResponse(answer);
+    } else {
+      // Multiple choice or scenario
+      const optionIndex = typeof answer === 'string' ? 
+        parseInt(answer) : (answer.selectedOption || 0);
+      return Math.max(1, Math.min(4, optionIndex + 1));
+    }
   };
 
-  const determineProfile = (assertiveness: number, expressiveness: number): 'Director' | 'Socializer' | 'Thinker' | 'Supporter' => {
-    const highAssertive = assertiveness > 50;
-    const highExpressive = expressiveness > 50;
+  const analyzeWrittenResponse = (response: string, question: any): number => {
+    if (!response || response.length < 10) return 1;
     
-    if (highAssertive && !highExpressive) return 'Director';
-    if (highAssertive && highExpressive) return 'Socializer';
-    if (!highAssertive && !highExpressive) return 'Thinker';
-    return 'Supporter';
-  };
-
-  const calculateCEI = (dimensions: any): number => {
-    const clarity = (dimensions.assertiveness + dimensions.informationProcessing) / 2;
-    const empathy = (dimensions.listeningPatterns + dimensions.expressiveness) / 2;
-    const adaptability = dimensions.channelPreferences;
-    const influence = dimensions.influenceStrategies;
+    const wordCount = response.split(/\s+/).length;
+    const sentences = response.split(/[.!?]+/).filter(s => s.trim().length > 0);
     
-    return (clarity * 0.25 + empathy * 0.25 + adaptability * 0.25 + influence * 0.25);
+    let score = 2; // Base score
+    
+    // Length and structure analysis
+    if (wordCount > 30) score += 0.5;
+    if (sentences.length > 2) score += 0.5;
+    
+    // Linguistic markers based on dimension
+    if (question.dimension === 'assertiveness') {
+      if (/\b(will|must|should|need to|required|important|directly|clearly)\b/i.test(response)) {
+        score += 0.5;
+      }
+    } else if (question.dimension === 'expressiveness') {
+      if (/\b(excited|enthusiastic|great|wonderful|amazing|feel|believe)\b/i.test(response)) {
+        score += 0.5;
+      }
+    } else if (question.dimension === 'listening-patterns') {
+      if (/\b(understand|hear|listen|acknowledge|appreciate|perspective)\b/i.test(response)) {
+        score += 0.5;
+      }
+    }
+    
+    // Professional tone
+    if (!/\b(um|uh|like|you know|whatever|kinda|sorta)\b/i.test(response)) {
+      score += 0.25;
+    }
+    
+    return Math.min(4, Math.max(1, score));
   };
 
-  const calculateAdaptability = (answers: Record<string, any>): number => {
-    // Count adaptive scenarios responses
-    const adaptiveAnswers = Object.entries(answers).filter(([key]) => 
-      key.includes('adaptive-scenarios')
+  const analyzeRankingResponse = (ranking: any[]): number => {
+    if (!Array.isArray(ranking) || ranking.length === 0) return 1;
+    
+    // Analyze ranking consistency and logic
+    const hasConsistentPattern = ranking.every((item, index) => 
+      typeof item === 'number' && item >= 1 && item <= ranking.length
     );
     
-    if (adaptiveAnswers.length === 0) return 0;
+    return hasConsistentPattern ? 3.5 : 2.5;
+  };
+
+  const calculateOverallScore = (dimensions: Record<string, CommunicationDimension>): number => {
+    const weights = {
+      assertiveness: 0.20,
+      expressiveness: 0.20,
+      informationProcessing: 0.15,
+      channelPreferences: 0.15,
+      listeningPatterns: 0.10,
+      influenceStrategies: 0.10,
+      conflictCommunication: 0.10
+    };
+
+    let totalScore = 0;
+    Object.entries(dimensions).forEach(([key, dimension]) => {
+      const weight = weights[key as keyof typeof weights] || 0;
+      totalScore += dimension.score * weight;
+    });
+
+    return Math.round(totalScore * 100) / 100;
+  };
+
+  const calculateCEI = (dimensions: Record<string, CommunicationDimension>): number => {
+    const clarity = (dimensions.assertiveness.score + dimensions.informationProcessing.score) / 2;
+    const empathy = (dimensions.listeningPatterns.score + dimensions.expressiveness.score) / 2;
+    const adaptability = dimensions.channelPreferences.score;
+    const influence = dimensions.influenceStrategies.score;
     
-    const adaptabilityScore = adaptiveAnswers.reduce((sum, [key, value]) => {
-      return sum + getOptionScore(value);
-    }, 0);
+    return Math.round(((clarity * 0.25 + empathy * 0.25 + adaptability * 0.25 + influence * 0.25)) * 100) / 100;
+  };
+
+  const calculateAdaptabilityScore = (answers: Record<string, any>): number => {
+    const adaptiveQuestions = communicationStylesQuestions.filter(q => 
+      q.module === 'adaptive-scenarios'
+    );
+
+    let adaptabilityScore = 0;
+    let validResponses = 0;
+
+    adaptiveQuestions.forEach(question => {
+      const answer = answers[question.id];
+      if (answer !== undefined) {
+        const responseScore = calculateResponseScore(answer, question);
+        adaptabilityScore += responseScore;
+        validResponses++;
+      }
+    });
+
+    if (validResponses === 0) return 0;
     
-    return Math.min(100, (adaptabilityScore / adaptiveAnswers.length) * 25);
+    return Math.round(((adaptabilityScore / validResponses) * 25) * 100) / 100;
+  };
+
+  const determineProfile = (dimensions: Record<string, CommunicationDimension>): CommunicationProfile => {
+    const assertiveness = dimensions.assertiveness.score;
+    const expressiveness = dimensions.expressiveness.score;
+    
+    const isHighAssertive = assertiveness > 60;
+    const isHighExpressive = expressiveness > 60;
+    
+    // Determine primary profile
+    let type: CommunicationProfile['type'];
+    let primary: string;
+    let secondary: string;
+    let strength: string;
+    let challenge: string;
+    let workStyle: string;
+    
+    if (isHighAssertive && !isHighExpressive) {
+      type = 'Director';
+      primary = 'Results-focused and direct';
+      secondary = 'Task-oriented with clear expectations';
+      strength = 'Decisive leadership and efficient communication';
+      challenge = 'May appear too blunt or impatient with others';
+      workStyle = 'Prefers fast-paced, goal-oriented environments';
+    } else if (isHighAssertive && isHighExpressive) {
+      type = 'Socializer';
+      primary = 'Enthusiastic and people-focused';
+      secondary = 'Inspiring and relationship-building';
+      strength = 'Motivating others and creating positive energy';
+      challenge = 'May talk too much or lose focus on details';
+      workStyle = 'Thrives in collaborative, creative environments';
+    } else if (!isHighAssertive && !isHighExpressive) {
+      type = 'Thinker';
+      primary = 'Analytical and systematic';
+      secondary = 'Quality-focused and thorough';
+      strength = 'Attention to detail and logical problem-solving';
+      challenge = 'May be slow to decide or overly cautious';
+      workStyle = 'Prefers structured, predictable work environments';
+    } else if (!isHighAssertive && isHighExpressive) {
+      type = 'Supporter';
+      primary = 'Cooperative and steady';
+      secondary = 'Team-oriented and patient';
+      strength = 'Building consensus and maintaining harmony';
+      challenge = 'May avoid conflict or difficult conversations';
+      workStyle = 'Excels in stable, supportive team environments';
+    } else {
+      type = 'Balanced';
+      primary = 'Adaptable communication style';
+      secondary = 'Flexible approach based on situation';
+      strength = 'Versatility across different communication contexts';
+      challenge = 'May lack distinctive communication identity';
+      workStyle = 'Adapts well to various work environments';
+    }
+    
+    return { type, primary, secondary, strength, challenge, workStyle };
+  };
+
+  const analyzeDistortion = (
+    answers: Record<string, any>,
+    responseTimings: Record<string, number>,
+    totalTime: number
+  ): DistortionAnalysis => {
+    const indicators: string[] = [];
+    let distortionScore = 0;
+    
+    // Check for response time patterns
+    const avgResponseTime = totalTime / Object.keys(answers).length;
+    const extremelyFastResponses = Object.values(responseTimings).filter(time => time < 2000).length;
+    const extremelySlowResponses = Object.values(responseTimings).filter(time => time > 60000).length;
+    
+    if (extremelyFastResponses > 10) {
+      distortionScore += 20;
+      indicators.push('Unusually fast response times may indicate rushed or careless responses');
+    }
+    
+    if (extremelySlowResponses > 5) {
+      distortionScore += 10;
+      indicators.push('Some very long response times may indicate overthinking or distraction');
+    }
+    
+    // Check for response patterns
+    const responses = Object.values(answers);
+    const responsePattern = analyzeResponseConsistency(responses);
+    
+    if (responsePattern.includes('extreme')) {
+      distortionScore += 15;
+      indicators.push('Extreme response patterns may indicate social desirability bias');
+    }
+    
+    // Check for contradictory responses
+    const contradictions = findContradictions(answers);
+    if (contradictions > 3) {
+      distortionScore += 25;
+      indicators.push('Contradictory responses across similar questions detected');
+    }
+    
+    // Check written responses for authenticity
+    const writtenResponses = Object.entries(answers).filter(([key, value]) => 
+      typeof value === 'string' && value.length > 10
+    );
+    
+    let genericResponses = 0;
+    writtenResponses.forEach(([key, response]) => {
+      if (isGenericResponse(response)) {
+        genericResponses++;
+      }
+    });
+    
+    if (genericResponses > writtenResponses.length * 0.4) {
+      distortionScore += 20;
+      indicators.push('High frequency of generic or templated responses');
+    }
+    
+    // Determine distortion level and reliability
+    let level: DistortionAnalysis['level'];
+    let reliability: DistortionAnalysis['reliability'];
+    const recommendations: string[] = [];
+    
+    if (distortionScore < 20) {
+      level = 'Low';
+      reliability = 'High';
+      recommendations.push('Results appear authentic and reliable');
+    } else if (distortionScore < 40) {
+      level = 'Moderate';
+      reliability = 'Moderate';
+      recommendations.push('Results are generally reliable with minor concerns');
+      recommendations.push('Consider follow-up interview for clarification');
+    } else if (distortionScore < 70) {
+      level = 'High';
+      reliability = 'Low';
+      recommendations.push('Results may be significantly influenced by response bias');
+      recommendations.push('Recommend behavioral interview and reference checks');
+      recommendations.push('Consider re-administration under different conditions');
+    } else {
+      level = 'Very High';
+      reliability = 'Questionable';
+      recommendations.push('Results are highly questionable and not recommended for decision-making');
+      recommendations.push('Require comprehensive behavioral assessment');
+      recommendations.push('Consider alternative assessment methods');
+    }
+    
+    return {
+      score: distortionScore,
+      level,
+      indicators,
+      reliability,
+      recommendations
+    };
+  };
+
+  const calculateContextualEffectiveness = (
+    dimensions: Record<string, CommunicationDimension>,
+    answers: Record<string, any>
+  ) => {
+    const { assertiveness, expressiveness, informationProcessing, listeningPatterns, influenceStrategies, conflictCommunication } = dimensions;
+    
+    return {
+      leadership: Math.round((assertiveness.score * 0.3 + influenceStrategies.score * 0.3 + conflictCommunication.score * 0.2 + expressiveness.score * 0.2) * 100) / 100,
+      teamwork: Math.round((listeningPatterns.score * 0.3 + expressiveness.score * 0.25 + conflictCommunication.score * 0.25 + assertiveness.score * 0.2) * 100) / 100,
+      customerService: Math.round((listeningPatterns.score * 0.35 + expressiveness.score * 0.25 + conflictCommunication.score * 0.25 + assertiveness.score * 0.15) * 100) / 100,
+      salesNegotiation: Math.round((influenceStrategies.score * 0.35 + assertiveness.score * 0.25 + expressiveness.score * 0.25 + informationProcessing.score * 0.15) * 100) / 100,
+      conflictResolution: Math.round((conflictCommunication.score * 0.4 + listeningPatterns.score * 0.3 + assertiveness.score * 0.2 + informationProcessing.score * 0.1) * 100) / 100,
+      publicSpeaking: Math.round((expressiveness.score * 0.35 + assertiveness.score * 0.25 + informationProcessing.score * 0.25 + influenceStrategies.score * 0.15) * 100) / 100
+    };
+  };
+
+  const identifyDevelopmentAreas = (
+    dimensions: Record<string, CommunicationDimension>,
+    profile: CommunicationProfile
+  ) => {
+    const developmentAreas: { priority: string; description: string; actionItems: string[] }[] = [];
+    
+    // Find lowest scoring dimensions
+    const sortedDimensions = Object.entries(dimensions).sort(([,a], [,b]) => a.score - b.score);
+    
+    sortedDimensions.slice(0, 3).forEach(([key, dimension], index) => {
+      const priority = index === 0 ? 'High' : index === 1 ? 'Medium' : 'Low';
+      const developmentArea = createDevelopmentArea(key, dimension, priority, profile);
+      developmentAreas.push(developmentArea);
+    });
+    
+    return developmentAreas;
+  };
+
+  // Helper functions
+  const createEmptyDimension = (): CommunicationDimension => ({
+    score: 0,
+    level: 'Low',
+    percentile: 0,
+    description: 'Insufficient data to calculate score'
+  });
+
+  const getScoreLevel = (score: number): CommunicationDimension['level'] => {
+    if (score >= 80) return 'Very High';
+    if (score >= 60) return 'High';
+    if (score >= 40) return 'Moderate';
+    return 'Low';
+  };
+
+  const calculatePercentile = (score: number, dimension: string): number => {
+    // Simulate percentile calculation based on normative data
+    const normalizedScore = Math.max(0, Math.min(100, score));
+    return Math.round(normalizedScore * 0.85 + 10); // Adjust for realistic percentile distribution
+  };
+
+  const getDimensionDescription = (dimension: string, score: number): string => {
+    const level = getScoreLevel(score);
+    const descriptions = {
+      'assertiveness': {
+        'Low': 'Prefers indirect communication and may hesitate to express strong opinions',
+        'Moderate': 'Balances directness with diplomacy in most situations',
+        'High': 'Communicates directly and confidently expresses viewpoints',
+        'Very High': 'Very direct and forceful in communication style'
+      },
+      'expressiveness': {
+        'Low': 'Reserved communication style with controlled emotional expression',
+        'Moderate': 'Moderate expressiveness with situational emotional sharing',
+        'High': 'Expressive and animated communication with emotional openness',
+        'Very High': 'Highly expressive with strong emotional communication'
+      },
+      'information-processing': {
+        'Low': 'Prefers quick decisions with limited information processing',
+        'Moderate': 'Balances speed and thoroughness in information processing',
+        'High': 'Systematic and thorough approach to information processing',
+        'Very High': 'Extremely detailed and comprehensive information processing'
+      },
+      'channel-preferences': {
+        'Low': 'Limited comfort with various communication channels',
+        'Moderate': 'Comfortable with most common communication channels',
+        'High': 'Adaptable across multiple communication channels',
+        'Very High': 'Highly versatile across all communication channels'
+      },
+      'listening-patterns': {
+        'Low': 'May struggle with active listening and empathetic responses',
+        'Moderate': 'Generally good listening skills with room for improvement',
+        'High': 'Strong active listening skills with empathetic responses',
+        'Very High': 'Exceptional listening skills with deep empathetic understanding'
+      },
+      'influence-strategies': {
+        'Low': 'Limited use of influence strategies in communication',
+        'Moderate': 'Uses basic influence strategies effectively',
+        'High': 'Skilled at using various influence strategies',
+        'Very High': 'Highly sophisticated influence and persuasion abilities'
+      },
+      'conflict-communication': {
+        'Low': 'May avoid conflict or handle it ineffectively',
+        'Moderate': 'Handles routine conflicts reasonably well',
+        'High': 'Skilled at managing and resolving conflicts',
+        'Very High': 'Exceptional conflict resolution and mediation skills'
+      }
+    };
+    
+    return descriptions[dimension as keyof typeof descriptions]?.[level] || 'Score calculated';
+  };
+
+  const analyzeResponseConsistency = (responses: any[]): string => {
+    // Analyze for patterns like always choosing first option, etc.
+    const stringResponses = responses.filter(r => typeof r === 'string');
+    if (stringResponses.length < 5) return 'normal';
+    
+    const firstOptionCount = stringResponses.filter(r => r === '0').length;
+    const lastOptionCount = stringResponses.filter(r => r === '3').length;
+    
+    if (firstOptionCount > stringResponses.length * 0.7) return 'extreme-first';
+    if (lastOptionCount > stringResponses.length * 0.7) return 'extreme-last';
+    
+    return 'normal';
+  };
+
+  const findContradictions = (answers: Record<string, any>): number => {
+    // Simple contradiction detection logic
+    let contradictions = 0;
+    
+    // Check for contradictory assertiveness patterns
+    const assertiveQuestions = communicationStylesQuestions.filter(q => q.dimension === 'assertiveness');
+    const assertiveAnswers = assertiveQuestions.map(q => answers[q.id]).filter(a => a !== undefined);
+    
+    if (assertiveAnswers.length > 5) {
+      const highAssertive = assertiveAnswers.filter(a => parseInt(a) > 1).length;
+      const lowAssertive = assertiveAnswers.filter(a => parseInt(a) <= 1).length;
+      
+      if (Math.abs(highAssertive - lowAssertive) < assertiveAnswers.length * 0.2) {
+        contradictions++;
+      }
+    }
+    
+    return contradictions;
+  };
+
+  const isGenericResponse = (response: string): boolean => {
+    const genericPhrases = [
+      'i would',
+      'i will',
+      'i think',
+      'in my opinion',
+      'it depends',
+      'i believe',
+      'i feel',
+      'i suppose'
+    ];
+    
+    const lowerResponse = response.toLowerCase();
+    const genericCount = genericPhrases.filter(phrase => lowerResponse.includes(phrase)).length;
+    
+    return genericCount > 2 || response.split(' ').length < 15;
+  };
+
+  const analyzeResponsePattern = (
+    answers: Record<string, any>,
+    responseTimings: Record<string, number>
+  ): string => {
+    const avgTime = Object.values(responseTimings).reduce((sum, time) => sum + time, 0) / Object.keys(responseTimings).length;
+    
+    if (avgTime < 5000) return 'fast-paced';
+    if (avgTime > 30000) return 'deliberate';
+    return 'moderate';
+  };
+
+  const createDevelopmentArea = (
+    dimension: string,
+    dimensionData: CommunicationDimension,
+    priority: string,
+    profile: CommunicationProfile
+  ) => {
+    const developmentTemplates = {
+      'assertiveness': {
+        description: 'Developing stronger assertiveness skills for clear, confident communication',
+        actionItems: [
+          'Practice stating opinions directly and confidently',
+          'Role-play difficult conversations with colleagues',
+          'Set clear boundaries and expectations in team settings',
+          'Use "I" statements to express needs and concerns'
+        ]
+      },
+      'expressiveness': {
+        description: 'Enhancing expressiveness to build stronger interpersonal connections',
+        actionItems: [
+          'Practice varying vocal tone and pace in presentations',
+          'Share appropriate personal experiences to build rapport',
+          'Use storytelling to make messages more engaging',
+          'Develop comfort with emotional expression in professional settings'
+        ]
+      },
+      'information-processing': {
+        description: 'Improving information processing for better decision-making',
+        actionItems: [
+          'Practice active listening techniques in meetings',
+          'Develop structured approaches to complex problem-solving',
+          'Ask clarifying questions before making decisions',
+          'Create mental models for organizing complex information'
+        ]
+      },
+      'channel-preferences': {
+        description: 'Expanding communication channel versatility for broader effectiveness',
+        actionItems: [
+          'Practice video conferencing and virtual presentation skills',
+          'Develop written communication templates for different purposes',
+          'Experiment with different communication tools and platforms',
+          'Adapt communication style to match channel characteristics'
+        ]
+      },
+      'listening-patterns': {
+        description: 'Strengthening listening skills for better understanding and empathy',
+        actionItems: [
+          'Practice paraphrasing and reflecting back what others say',
+          'Focus on understanding before being understood',
+          'Ask open-ended questions to encourage deeper sharing',
+          'Minimize interruptions and give others full attention'
+        ]
+      },
+      'influence-strategies': {
+        description: 'Developing more sophisticated influence and persuasion abilities',
+        actionItems: [
+          'Learn and practice different influence techniques',
+          'Study audience needs and motivations before presenting',
+          'Develop compelling narratives to support key messages',
+          'Practice building coalitions and gaining buy-in'
+        ]
+      },
+      'conflict-communication': {
+        description: 'Building skills for effective conflict resolution and difficult conversations',
+        actionItems: [
+          'Learn structured approaches to conflict resolution',
+          'Practice staying calm and objective during disagreements',
+          'Develop skills for finding win-win solutions',
+          'Practice mediating between different perspectives'
+        ]
+      }
+    };
+    
+    const template = developmentTemplates[dimension as keyof typeof developmentTemplates];
+    return {
+      priority,
+      description: template?.description || 'Development area identified',
+      actionItems: template?.actionItems || ['Practice and develop this communication skill']
+    };
   };
 
   return {
     results,
+    isProcessing,
     calculateResults
   };
 };
