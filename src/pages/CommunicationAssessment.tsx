@@ -148,18 +148,24 @@ const CommunicationAssessment = () => {
       });
 
       if (response.data) {
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Communication-Styles-Report-${new Date().toISOString().split('T')[0]}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        // The response is HTML content, so we need to open it in a new window for printing
+        const htmlContent = response.data;
+        const printWindow = window.open('', '_blank');
+        if (printWindow) {
+          printWindow.document.write(htmlContent);
+          printWindow.document.close();
+          
+          // Wait for content to load then trigger print
+          printWindow.onload = () => {
+            setTimeout(() => {
+              printWindow.print();
+              printWindow.close();
+            }, 500);
+          };
+        }
 
-        toast.success("Report Downloaded", {
-          description: "Your communication styles report has been downloaded."
+        toast.success("Report Generated", {
+          description: "Your communication styles report has been opened for printing. You can save it as PDF using your browser's print function."
         });
       }
     } catch (error) {

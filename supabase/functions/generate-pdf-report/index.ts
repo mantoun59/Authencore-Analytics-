@@ -50,6 +50,58 @@ interface CareerLaunchReportRequest {
   reportType: 'careerlaunch-applicant' | 'careerlaunch-advisor';
 }
 
+// Communication Styles specific interface
+interface CommunicationReportRequest {
+  assessmentType: 'communication_styles';
+  results: {
+    title: string;
+    participantName: string;
+    dateGenerated: string;
+    executiveSummary: {
+      overallScore: number;
+      profileType: string;
+      keyStrengths: string[];
+      primaryChallenges: string[];
+      recommendedActions: string[];
+    };
+    dimensionAnalysis: Array<{
+      dimension: string;
+      score: number;
+      level: string;
+      percentile: number;
+      description: string;
+      interpretation: string;
+      behavioralIndicators: string[];
+      workplaceImplications: string[];
+    }>;
+    profileAnalysis: {
+      primaryType: string;
+      secondaryInfluences: string[];
+      workStyleDescription: string;
+      communicationPreferences: string[];
+      strengthsDescription: string;
+      challengesDescription: string;
+      adaptabilityInsights: string;
+    };
+    contextualAnalysis: Array<{
+      context: string;
+      effectiveness: number;
+      description: string;
+      recommendations: string[];
+    }>;
+    developmentPlan: Array<{
+      priority: string;
+      area: string;
+      currentLevel: string;
+      targetLevel: string;
+      actionItems: string[];
+      timeframe: string;
+      successIndicators: string[];
+    }>;
+  };
+  completedAt: string;
+}
+
 const applicantTemplate = (data: ReportRequest) => `
 <!DOCTYPE html>
 <html lang="en">
@@ -312,6 +364,346 @@ const employerTemplate = (data: ReportRequest) => `
 <!DOCTYPE html>
 <html lang="en">
 ...
+</html>
+`
+
+// Communication Styles Template
+const communicationStylesTemplate = (data: CommunicationReportRequest) => `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Communication Styles Assessment Report</title>
+  <style>
+    @page { 
+      margin: 1in; 
+      @top-center {
+        content: "Communication Styles Assessment Report";
+        font-family: 'Segoe UI', sans-serif;
+        font-size: 12px;
+        color: #666;
+      }
+    }
+    body { 
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+      margin: 0; 
+      color: #333; 
+      line-height: 1.6;
+    }
+    .header { 
+      text-align: center; 
+      margin-bottom: 40px; 
+      border-bottom: 3px solid #4338ca;
+      padding-bottom: 20px;
+    }
+    .logo-placeholder {
+      width: 280px;
+      height: 60px;
+      background: linear-gradient(45deg, #4338ca, #6366f1);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+    h1 { 
+      font-size: 32px; 
+      color: #4338ca; 
+      margin: 0;
+      font-weight: 300;
+    }
+    h2 { 
+      font-size: 24px; 
+      color: #6366f1; 
+      border-bottom: 2px solid #e0e0e0; 
+      padding-bottom: 8px; 
+      margin: 30px 0 20px 0;
+    }
+    .participant-info {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+    .section { 
+      margin-bottom: 30px; 
+      page-break-inside: avoid;
+    }
+    .profile-highlight {
+      background: linear-gradient(135deg, #6366f1, #4338ca);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+      text-align: center;
+    }
+    .score-table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      margin: 20px 0;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .score-table th { 
+      background: #4338ca;
+      color: white;
+      padding: 15px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .score-table td { 
+      border: 1px solid #e0e0e0; 
+      padding: 12px; 
+      vertical-align: middle;
+    }
+    .score-table tr:nth-child(even) {
+      background: #f8f9fa;
+    }
+    .bar-container {
+      width: 100px;
+      height: 20px;
+      background: #e0e0e0;
+      border-radius: 10px;
+      overflow: hidden;
+      display: inline-block;
+    }
+    .bar { 
+      height: 100%; 
+      background: linear-gradient(90deg, #6366f1, #4338ca);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+    .level { 
+      font-weight: bold; 
+      padding: 4px 8px;
+      border-radius: 4px;
+      color: white;
+    }
+    .level.high { background: #4caf50; }
+    .level.moderate { background: #2196f3; }
+    .level.low { background: #ff9800; }
+    .level.very-high { background: #2e7d32; }
+    .strengths {
+      background: #e8f5e8;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 5px solid #4caf50;
+      margin: 20px 0;
+    }
+    .challenges {
+      background: #fff3e0;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 5px solid #ff9800;
+      margin: 20px 0;
+    }
+    .development-plan {
+      background: #f3e5f5;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 5px solid #9c27b0;
+      margin: 20px 0;
+    }
+    .action-item {
+      margin: 10px 0;
+      padding: 10px;
+      background: white;
+      border-radius: 4px;
+      border-left: 3px solid #9c27b0;
+    }
+    .contextual-analysis {
+      background: #e3f2fd;
+      padding: 20px;
+      border-radius: 8px;
+      border-left: 5px solid #2196f3;
+      margin: 20px 0;
+    }
+    .footer { 
+      font-size: 12px; 
+      color: #666; 
+      text-align: center; 
+      margin-top: 50px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo-placeholder">AuthenCore Communication Styles</div>
+    <h1>Communication Styles Assessment Report</h1>
+    <div class="participant-info">
+      <strong>Participant:</strong> ${data.results.participantName}<br>
+      <strong>Assessment Date:</strong> ${data.results.dateGenerated}<br>
+      <strong>Assessment Type:</strong> Communication Styles (80 Questions, 7 Dimensions)
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>📊 Executive Summary</h2>
+    <div class="profile-highlight">
+      <h3>${data.results.executiveSummary.profileType} Communication Style</h3>
+      <p><strong>Overall Score:</strong> ${data.results.executiveSummary.overallScore}/100</p>
+    </div>
+    
+    <div class="strengths">
+      <h4>Key Strengths:</h4>
+      <ul>
+        ${data.results.executiveSummary.keyStrengths.map(strength => `<li>${strength}</li>`).join('')}
+      </ul>
+    </div>
+    
+    <div class="challenges">
+      <h4>Primary Challenges:</h4>
+      <ul>
+        ${data.results.executiveSummary.primaryChallenges.map(challenge => `<li>${challenge}</li>`).join('')}
+      </ul>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Dimension Analysis</h2>
+    <table class="score-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Score</th>
+          <th>Level</th>
+          <th>Percentile</th>
+          <th>Visual</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${data.results.dimensionAnalysis.map(dimension => `
+          <tr>
+            <td><strong>${dimension.dimension}</strong></td>
+            <td>${dimension.score}</td>
+            <td><span class="level ${dimension.level.toLowerCase().replace(' ', '-')}">${dimension.level}</span></td>
+            <td>${dimension.percentile}%</td>
+            <td>
+              <div class="bar-container">
+                <div class="bar" style="width: ${Math.min(dimension.score, 100)}%"></div>
+              </div>
+            </td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section">
+    <h2>🔍 Detailed Dimension Insights</h2>
+    ${data.results.dimensionAnalysis.map(dimension => `
+      <div class="contextual-analysis">
+        <h3>${dimension.dimension} (${dimension.score}/100)</h3>
+        <p><strong>Interpretation:</strong> ${dimension.interpretation}</p>
+        <p><strong>Description:</strong> ${dimension.description}</p>
+        
+        <div style="margin-top: 15px;">
+          <h4>Behavioral Indicators:</h4>
+          <ul>
+            ${dimension.behavioralIndicators.map(indicator => `<li>${indicator}</li>`).join('')}
+          </ul>
+        </div>
+        
+        <div style="margin-top: 15px;">
+          <h4>Workplace Implications:</h4>
+          <ul>
+            ${dimension.workplaceImplications.map(implication => `<li>${implication}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+
+  <div class="section">
+    <h2>💼 Profile Analysis</h2>
+    <div class="contextual-analysis">
+      <h3>Communication Profile: ${data.results.profileAnalysis.primaryType}</h3>
+      <p><strong>Work Style:</strong> ${data.results.profileAnalysis.workStyleDescription}</p>
+      <p><strong>Strengths:</strong> ${data.results.profileAnalysis.strengthsDescription}</p>
+      <p><strong>Challenges:</strong> ${data.results.profileAnalysis.challengesDescription}</p>
+      <p><strong>Adaptability:</strong> ${data.results.profileAnalysis.adaptabilityInsights}</p>
+      
+      <div style="margin-top: 15px;">
+        <h4>Communication Preferences:</h4>
+        <ul>
+          ${data.results.profileAnalysis.communicationPreferences.map(preference => `<li>${preference}</li>`).join('')}
+        </ul>
+      </div>
+      
+      <div style="margin-top: 15px;">
+        <h4>Secondary Influences:</h4>
+        <ul>
+          ${data.results.profileAnalysis.secondaryInfluences.map(influence => `<li>${influence}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Contextual Effectiveness</h2>
+    ${data.results.contextualAnalysis.map(context => `
+      <div class="contextual-analysis">
+        <h3>${context.context} (${context.effectiveness}% effectiveness)</h3>
+        <p>${context.description}</p>
+        
+        <div style="margin-top: 15px;">
+          <h4>Development Recommendations:</h4>
+          <ul>
+            ${context.recommendations.map(rec => `<li>${rec}</li>`).join('')}
+          </ul>
+        </div>
+      </div>
+    `).join('')}
+  </div>
+
+  <div class="section">
+    <h2>📋 Development Plan</h2>
+    <div class="development-plan">
+      ${data.results.developmentPlan.map(plan => `
+        <div class="action-item">
+          <h4>${plan.priority} Priority: ${plan.area}</h4>
+          <p><strong>Current Level:</strong> ${plan.currentLevel} → <strong>Target Level:</strong> ${plan.targetLevel}</p>
+          <p><strong>Timeframe:</strong> ${plan.timeframe}</p>
+          
+          <div style="margin-top: 10px;">
+            <strong>Action Items:</strong>
+            <ul>
+              ${plan.actionItems.map(item => `<li>${item}</li>`).join('')}
+            </ul>
+          </div>
+          
+          <div style="margin-top: 10px;">
+            <strong>Success Indicators:</strong>
+            <ul>
+              ${plan.successIndicators.map(indicator => `<li>${indicator}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>🎯 Recommended Actions</h2>
+    <div class="development-plan">
+      ${data.results.executiveSummary.recommendedActions.map(action => `
+        <div class="action-item">
+          <strong>Action:</strong> ${action}
+        </div>
+      `).join('')}
+    </div>
+  </div>
+
+  <div class="footer">
+    <p><strong>AuthenCore Communication Styles Platform</strong><br>
+    Generated on ${data.results.dateGenerated} | Communication Styles Assessment<br>
+    <small>80 Questions • 7 Dimensions • Professional Communication Analysis</small></p>
+  </div>
+</body>
 </html>
 `
 
@@ -674,8 +1066,12 @@ serve(async (req) => {
     const requestData = await req.json()
     let htmlContent: string
 
-    // Check if it's a CareerLaunch report or CAIR+ report
-    if (requestData.reportType === 'careerlaunch-applicant' || requestData.reportType === 'careerlaunch-advisor') {
+    // Check report type
+    if (requestData.assessmentType === 'communication_styles') {
+      // Communication Styles report
+      const communicationData = requestData as CommunicationReportRequest
+      htmlContent = communicationStylesTemplate(communicationData)
+    } else if (requestData.reportType === 'careerlaunch-applicant' || requestData.reportType === 'careerlaunch-advisor') {
       // CareerLaunch report
       const careerLaunchData = requestData as CareerLaunchReportRequest
       
