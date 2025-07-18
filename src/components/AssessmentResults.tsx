@@ -213,8 +213,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       }
     } else {
       navigator.clipboard.writeText(shareText);
-      toast({
-        title: "Results Copied!",
+      toast.success("Results Copied!", {
         description: "Your results have been copied to clipboard.",
       });
     }
