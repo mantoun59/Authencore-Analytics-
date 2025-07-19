@@ -158,20 +158,39 @@ const StressResilience = () => {
       });
 
       if (response.data) {
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Stress-Resilience-Report-${new Date().toISOString().split('T')[0]}.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        // Open HTML report in new window for PDF printing
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(response.data);
+          newWindow.document.close();
+          
+          // Add print-friendly styles and auto-print
+          setTimeout(() => {
+            newWindow.focus();
+            newWindow.print();
+          }, 1000);
 
-        toast({
-          title: "Report Downloaded",
-          description: "Your stress resilience report has been downloaded.",
-        });
+          toast({
+            title: "Report Generated",
+            description: "Use your browser's Print dialog to save as PDF. Select 'Save as PDF' as destination.",
+          });
+        } else {
+          // Fallback: download as HTML if popup blocked
+          const blob = new Blob([response.data], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Stress-Resilience-Report-${new Date().toISOString().split('T')[0]}.html`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          toast({
+            title: "HTML Report Downloaded",
+            description: "Open the HTML file and use your browser's Print to PDF feature.",
+          });
+        }
       }
     } catch (error) {
       console.error('Error generating report:', error);

@@ -32,6 +32,7 @@ serve(async (req) => {
       case 'career_launch':
         reportHtml = generateCareerLaunchReport(results, userData);
         break;
+      case 'cair_plus':
       case 'cair_personality':
         reportHtml = generateCAIRReport(results, userData);
         break;

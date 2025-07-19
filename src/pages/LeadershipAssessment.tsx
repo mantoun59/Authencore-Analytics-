@@ -12,6 +12,7 @@ import { ArrowLeft, ArrowRight, Download, Clock, Users, Target, TrendingUp, Brai
 import { useLeadershipScoring } from '@/hooks/useLeadershipScoring';
 import { leadershipTranslations, leadershipQuestions, dimensionOrder } from '@/data/leadershipQuestions';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -174,96 +175,73 @@ const LeadershipAssessment = () => {
     }
   };
 
-  const generatePDFReport = () => {
-    // This would integrate with jsPDF for PDF generation
-    toast({
-      title: "PDF Generation",
-      description: "PDF report generation will be implemented with jsPDF integration",
-    });
-  };
-
-  const generateHTMLReport = () => {
+  const generatePDFReport = async () => {
     if (!results) return;
 
-    const reportHTML = `
-      <!DOCTYPE html>
-      <html lang="${language}">
-      <head>
-        <meta charset="UTF-8">
-        <title>Leadership Assessment - ${userInfo.fullName}</title>
-        <style>
-          body { font-family: -apple-system, Arial, sans-serif; max-width: 1200px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%); color: white; padding: 40px; text-align: center; border-radius: 10px; margin-bottom: 30px; }
-          .score-large { font-size: 48px; font-weight: bold; color: #3b82f6; }
-          .dimension-card { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-          .progress-bar { width: 100%; height: 20px; background: #e5e7eb; border-radius: 10px; overflow: hidden; margin: 10px 0; }
-          .progress-fill { height: 100%; transition: width 0.5s ease; }
-          .high { background-color: #10b981; }
-          .medium { background-color: #f59e0b; }
-          .low { background-color: #ef4444; }
-        </style>
-      </head>
-      <body>
-        <div class="header">
-          <h1>Leadership Assessment Report</h1>
-          <h2>${userInfo.fullName}</h2>
-          <p>${userInfo.organization} • ${userInfo.position}</p>
-        </div>
-        
-        <div class="score-large">Overall Score: ${results.overall}%</div>
-        <p><strong>Leadership Profile:</strong> ${results.profile.type}</p>
-        <p>${results.profile.description}</p>
-        
-        <h3>Leadership Dimensions:</h3>
-        ${Object.entries(results.dimensions).map(([dimension, score]) => `
-          <div class="dimension-card">
-            <h4>${t[dimension as keyof typeof t]}</h4>
-            <div class="progress-bar">
-              <div class="progress-fill ${score.percentage >= 80 ? 'high' : score.percentage >= 60 ? 'medium' : 'low'}" 
-                   style="width: ${score.percentage}%"></div>
-            </div>
-            <p><strong>${score.percentage}%</strong> - ${score.level}</p>
-            <p>${score.interpretation}</p>
-          </div>
-        `).join('')}
-        
-        <h3>Development Recommendations:</h3>
-        ${results.recommendations.immediate.length > 0 ? `
-          <h4>Immediate Actions:</h4>
-          <ul>
-            ${results.recommendations.immediate.map(rec => `
-              <li><strong>${t[rec.dimension as keyof typeof t]}:</strong>
-                <ul>${rec.actions.map(action => `<li>${action}</li>`).join('')}</ul>
-              </li>
-            `).join('')}
-          </ul>
-        ` : ''}
-        
-        <h4>Long-term Development:</h4>
-        <ul>
-          ${results.recommendations.longTerm.map(rec => `
-            <li><strong>${rec.title}:</strong> ${rec.description} (${rec.timeline})</li>
-          `).join('')}
-        </ul>
-      </body>
-      </html>
-    `;
-    
-    // Create a downloadable HTML file instead of opening in new window
-    const blob = new Blob([reportHTML], { type: 'text/html' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Leadership_Report_${userInfo.fullName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.html`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    
-    toast({
-      title: "Report Generated",
-      description: "Your leadership assessment report has been downloaded.",
-    });
+    try {
+      const reportData = {
+        assessmentType: 'leadership_assessment',
+        results: results,
+        userData: {
+          name: userInfo.fullName,
+          email: userInfo.email,
+          position: userInfo.position,
+          organization: userInfo.organization,
+          date: new Date().toLocaleDateString()
+        }
+      };
+
+      const response = await supabase.functions.invoke('generate-pdf-report', {
+        body: reportData
+      });
+
+      if (response.data) {
+        // Open HTML report in new window for PDF printing
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(response.data);
+          newWindow.document.close();
+          
+          // Add print-friendly styles and auto-print
+          setTimeout(() => {
+            newWindow.focus();
+            newWindow.print();
+          }, 1000);
+
+          toast({
+            title: "Report Generated",
+            description: "Use your browser's Print dialog to save as PDF. Select 'Save as PDF' as destination.",
+          });
+        } else {
+          // Fallback: download as HTML if popup blocked
+          const blob = new Blob([response.data], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Leadership-Report-${userInfo.fullName.replace(/\s+/g, '-')}.html`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          toast({
+            title: "HTML Report Downloaded",
+            description: "Open the HTML file and use your browser's Print to PDF feature.",
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error generating report:', error);
+      toast({
+        title: "Report Generation Error",
+        description: "Failed to generate report. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const generateHTMLReport = async () => {
+    await generatePDFReport(); // Use the same standardized method
   };
 
   const progress = ((currentQuestion + 1) / allQuestions.length) * 100;
