@@ -39,12 +39,18 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Middle Section - Legal & Compliance */}
+          {/* Middle Section - Quick Links */}
           <div className="space-y-6">
             <h4 className="text-xl font-semibold text-foreground">
-              Legal & Compliance
+              Quick Links
             </h4>
             <div className="space-y-2">
+              <Link
+                to="/"
+                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              >
+                Home
+              </Link>
               <Link
                 to="/privacy"
                 className="block text-muted-foreground hover:text-primary transition-colors text-sm"
