@@ -114,7 +114,7 @@ export const assessmentsData: AssessmentData[] = [
     title: 'Stress Resilience',
     subtitle: 'Adaptability & Stress Management',
     price: '$19.99',
-    duration: '8-12 minutes',
+    duration: '15-20 minutes',
     questions: 20,
     description: 'Advanced stress resilience and adaptability assessment with biometric simulation',
     detailedDescription: 'The Stress Resilience Assessment evaluates your ability to perform under pressure, adapt to change, and maintain effectiveness in challenging environments. Using progressive stress loading and biometric simulation techniques, this assessment provides insights into your stress response patterns and resilience capacity.',
