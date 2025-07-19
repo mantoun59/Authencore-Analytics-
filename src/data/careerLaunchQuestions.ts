@@ -71,6 +71,125 @@ export const careerInterests = [
   }
 ];
 
+export const aptitudeTests = [
+  // Verbal Reasoning Tests
+  {
+    id: "apt_verbal_001",
+    type: "verbal_reasoning",
+    title: "Word Relationships",
+    instruction: "Choose the word that best completes the analogy",
+    question: "Ocean is to Water as Library is to ___",
+    options: [
+      { id: "A", text: "Books", correct: true, dimension: "verbal", score: 1 },
+      { id: "B", text: "Quiet", correct: false, dimension: "verbal", score: 0 },
+      { id: "C", text: "Reading", correct: false, dimension: "verbal", score: 0 },
+      { id: "D", text: "Building", correct: false, dimension: "verbal", score: 0 }
+    ]
+  },
+  {
+    id: "apt_verbal_002",
+    type: "verbal_reasoning",
+    title: "Reading Comprehension",
+    instruction: "Read the passage and answer the question",
+    passage: "Remote work has fundamentally changed how companies operate. While it offers flexibility and reduces commuting costs, it also presents challenges in team collaboration and company culture maintenance.",
+    question: "What is the main challenge of remote work mentioned?",
+    options: [
+      { id: "A", text: "Higher costs", correct: false, dimension: "verbal", score: 0 },
+      { id: "B", text: "Team collaboration difficulties", correct: true, dimension: "verbal", score: 1 },
+      { id: "C", text: "Lack of flexibility", correct: false, dimension: "verbal", score: 0 },
+      { id: "D", text: "Commuting issues", correct: false, dimension: "verbal", score: 0 }
+    ]
+  },
+  
+  // Numerical Reasoning Tests
+  {
+    id: "apt_numerical_001",
+    type: "numerical_reasoning",
+    title: "Data Analysis",
+    instruction: "Study the chart and answer the question",
+    data: { sales: [120, 150, 180, 200], months: ["Jan", "Feb", "Mar", "Apr"] },
+    question: "What is the percentage increase in sales from January to April?",
+    options: [
+      { id: "A", text: "50%", correct: false, dimension: "numerical", score: 0 },
+      { id: "B", text: "66.7%", correct: true, dimension: "numerical", score: 1 },
+      { id: "C", text: "80%", correct: false, dimension: "numerical", score: 0 },
+      { id: "D", text: "100%", correct: false, dimension: "numerical", score: 0 }
+    ]
+  },
+  {
+    id: "apt_numerical_002",
+    type: "numerical_reasoning",
+    title: "Problem Solving",
+    instruction: "Solve the mathematical problem",
+    question: "A company's profit increased by 25% to $75,000. What was the original profit?",
+    options: [
+      { id: "A", text: "$50,000", correct: false, dimension: "numerical", score: 0 },
+      { id: "B", text: "$56,250", correct: false, dimension: "numerical", score: 0 },
+      { id: "C", text: "$60,000", correct: true, dimension: "numerical", score: 1 },
+      { id: "D", text: "$62,500", correct: false, dimension: "numerical", score: 0 }
+    ]
+  },
+  
+  // Abstract Logic Tests
+  {
+    id: "apt_abstract_001",
+    type: "abstract_logic",
+    title: "Pattern Recognition",
+    instruction: "What comes next in this sequence?",
+    sequence: "△, ○, △△, ○○, △△△, ?",
+    question: "What comes next?",
+    options: [
+      { id: "A", text: "○○○", correct: true, dimension: "abstract", score: 1 },
+      { id: "B", text: "△○", correct: false, dimension: "abstract", score: 0 },
+      { id: "C", text: "○△", correct: false, dimension: "abstract", score: 0 },
+      { id: "D", text: "△△△△", correct: false, dimension: "abstract", score: 0 }
+    ]
+  },
+  {
+    id: "apt_abstract_002",
+    type: "abstract_logic",
+    title: "Logical Reasoning",
+    instruction: "If all Bloops are Razzles and all Razzles are Lazzles, then:",
+    question: "Which statement is definitely true?",
+    options: [
+      { id: "A", text: "All Lazzles are Bloops", correct: false, dimension: "abstract", score: 0 },
+      { id: "B", text: "All Bloops are Lazzles", correct: true, dimension: "abstract", score: 1 },
+      { id: "C", text: "Some Lazzles are not Razzles", correct: false, dimension: "abstract", score: 0 },
+      { id: "D", text: "No Bloops are Lazzles", correct: false, dimension: "abstract", score: 0 }
+    ]
+  },
+  
+  // Memory/Attention Tests
+  {
+    id: "apt_memory_001",
+    type: "memory_attention",
+    title: "Pattern Memory",
+    instruction: "Study this sequence for 5 seconds, then reproduce it",
+    sequence: [1, 4, 2, 7, 3, 9, 5],
+    question: "What was the 4th number in the sequence?",
+    options: [
+      { id: "A", text: "2", correct: false, dimension: "memory", score: 0 },
+      { id: "B", text: "7", correct: true, dimension: "memory", score: 1 },
+      { id: "C", text: "3", correct: false, dimension: "memory", score: 0 },
+      { id: "D", text: "4", correct: false, dimension: "memory", score: 0 }
+    ]
+  },
+  {
+    id: "apt_memory_002",
+    type: "memory_attention",
+    title: "Detail Recognition",
+    instruction: "Count how many times the letter 'A' appears in this text",
+    text: "Analytical thinking requires careful attention to patterns and data analysis.",
+    question: "How many times does 'A' appear? (case insensitive)",
+    options: [
+      { id: "A", text: "6", correct: false, dimension: "memory", score: 0 },
+      { id: "B", text: "7", correct: false, dimension: "memory", score: 0 },
+      { id: "C", text: "8", correct: true, dimension: "memory", score: 1 },
+      { id: "D", text: "9", correct: false, dimension: "memory", score: 0 }
+    ]
+  }
+];
+
 export const skillsChallenges = [
   {
     id: "sc_001",
