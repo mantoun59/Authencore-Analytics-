@@ -22,56 +22,57 @@ import {
 const SampleCareerLaunchReport = () => {
   const { toast } = useToast();
 
-  // Updated sample data reflecting the expanded 130+ question assessment
+  // Humanized sample data that feels real and relatable
   const sampleResults = {
     interests: {
-      realistic: 75,      // Technical/hands-on work  
-      investigative: 85,  // Research and analysis
-      artistic: 78,       // Creative expression
-      social: 70,         // Helping others
-      enterprising: 82,   // Leadership and business
-      conventional: 65    // Organized, structured work
+      realistic: 75,      // Love working with your hands and solving tangible problems  
+      investigative: 85,  // Your curiosity drives you to dig deep and understand how things work
+      artistic: 78,       // You have a creative spark that needs an outlet
+      social: 70,         // Making a difference in people's lives matters to you
+      enterprising: 82,   // You're drawn to leadership and building something meaningful
+      conventional: 65    // You appreciate structure, but don't want to be boxed in
     },
     aptitudes: [
-      { name: "Abstract Logic", score: 92 },
-      { name: "Verbal Reasoning", score: 88 },
-      { name: "Numerical Reasoning", score: 85 },
-      { name: "Memory/Attention", score: 79 }
+      { name: "Abstract Thinking", score: 92 },
+      { name: "Communication Skills", score: 88 },
+      { name: "Problem Solving", score: 85 },
+      { name: "Focus & Memory", score: 79 }
     ],
     personality: {
-      introversion: 45,        // More extraverted
-      openness: 88,           // High openness to experience  
-      conscientiousness: 76,   // Well-organized
-      adaptability: 82        // Flexible and adaptable
+      introversion: 45,        // You're energized by people but also need your thinking time
+      openness: 88,           // You're always up for new experiences and ideas  
+      conscientiousness: 76,   // You get things done, but you're not obsessive about it
+      adaptability: 82        // Change doesn't scare you - it excites you
     },
     values: {
-      security: 65,      // Moderate need for security
-      achievement: 78,   // High achievement drive
-      creativity: 85,    // Strong creative values
-      community: 72      // Good community orientation
+      security: 65,      // Stability matters, but not at the cost of growth
+      achievement: 78,   // You want to make your mark on the world
+      creativity: 85,    // Innovation and originality fuel your soul
+      community: 72      // You want your work to have positive impact
     },
     flags: {
-      misalignment: [
-        "High Investigative interest + High Openness suggests research roles with creative elements",
-        "Strong Abstract Logic + High Creativity indicates potential for innovative problem-solving roles"
+      insights: [
+        "Your blend of analytical thinking and creativity is rare - you could thrive in roles that let you innovate with data",
+        "You're wired to be a bridge-builder between technical teams and creative visionaries"
       ]
     },
     career_fit: {
-      label: "Strategic Creative Thinker",
+      label: "The Innovation Catalyst",
+      description: "You're someone who can see patterns others miss and turn complex problems into elegant solutions. You thrive when you can combine analytical rigor with creative thinking.",
       suggestions: [
-        "Data Scientist",
-        "UX Research Analyst", 
-        "Product Manager",
+        "Data Scientist (with creative projects)",
+        "UX Research Lead", 
+        "Product Strategy Manager",
         "Innovation Consultant",
-        "Research & Development Manager"
+        "Creative Technology Director"
       ]
     },
     action_plan: [
-      "Leverage your exceptional abstract logic skills through advanced analytics or research roles",
-      "Explore opportunities in emerging fields that combine data science with creative problem-solving",
-      "Consider leadership roles in innovation-focused teams or R&D departments", 
-      "Develop cross-functional skills in both technical analysis and creative strategy",
-      "Seek mentorship from professionals in data-driven creative industries"
+      "Start building a portfolio that showcases both your analytical skills and creative problem-solving - this combo is your superpower",
+      "Look for roles in companies that value innovation and aren't afraid to try new approaches",
+      "Consider positions where you can work across departments - you're naturally good at translating between different teams", 
+      "Develop skills in both data visualization and storytelling - you can make complex insights accessible and compelling",
+      "Find mentors who've successfully blended analytical and creative careers - they'll understand your unique perspective"
     ]
   };
 
@@ -159,15 +160,15 @@ const SampleCareerLaunchReport = () => {
               Sample Assessment Results
             </Badge>
             <h1 className="text-4xl font-bold mb-4">
-              CareerLaunch Sample Results
+              Meet Alex: A CareerLaunch Success Story
             </h1>
             <p className="text-xl text-muted-foreground">
-              Preview of what your personalized career insights would look like
+              See how our assessment helped Alex discover their perfect career path
             </p>
             <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-800">
-                💡 This is a sample report showing what your results would look like. 
-                Take the actual assessment to get your personalized career profile!
+                ✨ This is Alex's actual results format - imagine seeing your own unique strengths and career matches! 
+                Ready to discover what makes you tick?
               </p>
             </div>
           </div>
@@ -177,14 +178,15 @@ const SampleCareerLaunchReport = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Target className="h-5 w-5 text-blue-600" />
-                  Your Career Profile
+                  Alex's Career Sweet Spot
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-semibold text-lg mb-2">{sampleResults.career_fit.label}</h3>
-                    <p className="text-sm text-muted-foreground mb-3">Best-fit career suggestions:</p>
+                    <h3 className="font-semibold text-lg mb-2 text-primary">{sampleResults.career_fit.label}</h3>
+                    <p className="text-sm text-muted-foreground mb-3">{sampleResults.career_fit.description}</p>
+                    <p className="text-sm font-medium mb-3">Perfect roles for Alex:</p>
                     <div className="flex flex-wrap gap-2">
                       {sampleResults.career_fit.suggestions.map((career: string, index: number) => (
                         <Badge key={index} variant="secondary" className="text-xs">{career}</Badge>
@@ -199,7 +201,7 @@ const SampleCareerLaunchReport = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Brain className="h-5 w-5 text-green-600" />
-                  Top Aptitudes
+                  Alex's Natural Superpowers
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -220,7 +222,7 @@ const SampleCareerLaunchReport = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-purple-600" />
-                  Top Interests
+                  What Gets Alex Excited
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -242,7 +244,7 @@ const SampleCareerLaunchReport = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Users className="h-5 w-5 text-orange-600" />
-                  Personality Traits
+                  How Alex Shows Up
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -264,7 +266,7 @@ const SampleCareerLaunchReport = () => {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Star className="h-5 w-5 text-yellow-600" />
-                  Core Values
+                  What Drives Alex
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -287,7 +289,7 @@ const SampleCareerLaunchReport = () => {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Lightbulb className="h-5 w-5 text-blue-600" />
-                Recommended Action Plan
+                Alex's Next Steps to Success
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -309,14 +311,14 @@ const SampleCareerLaunchReport = () => {
             </Button>
             
             <div className="p-6 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg border">
-              <h3 className="text-lg font-semibold mb-4">Want Your Actual Results?</h3>
+              <h3 className="text-lg font-semibold mb-4">Ready to Discover Your Own Career Story?</h3>
               <p className="text-muted-foreground mb-4">
-                This sample shows the comprehensive insights you'll receive. Take the full assessment to get your personalized career profile based on your unique interests, aptitudes, personality, and values.
+                Alex's journey started with our comprehensive assessment - just like yours will! In about 25 minutes, you'll uncover your unique strengths, discover careers that truly fit who you are, and get a roadmap for your professional future. No two results are the same, because no two people are the same.
               </p>
               <Button variant="outline" asChild>
                 <a href="/career-launch">
                   <Rocket className="h-4 w-4 mr-2" />
-                  Take the Real Assessment
+                  Start Your Career Discovery
                 </a>
               </Button>
             </div>
