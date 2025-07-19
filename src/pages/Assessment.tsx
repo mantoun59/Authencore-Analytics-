@@ -10,6 +10,78 @@ import { assessmentsData } from "@/data/assessmentsData";
 import authencoreLogo from "@/assets/authencore-analytics-logo.png";
 
 const Assessment = () => {
+  const getIconComponent = (iconName: string) => {
+    switch (iconName) {
+      case 'Rocket': return Rocket;
+      case 'Brain': return Brain;
+      case 'Shield': return Shield;
+      case 'Globe': return Globe;
+      case 'MessageSquare': return MessageSquare;
+      case 'Heart': return Heart;
+      case 'Lightbulb': return Lightbulb;
+      case 'Zap': return Zap;
+      case 'Monitor': return Monitor;
+      case 'Users': return Users;
+      default: return Target;
+    }
+  };
+
+  const getColorClasses = (color: string) => {
+    const colorMap: { [key: string]: { icon: string, badge: string, button: string } } = {
+      blue: {
+        icon: 'text-blue-500',
+        badge: 'bg-blue-100 text-blue-800',
+        button: 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
+      },
+      purple: {
+        icon: 'text-purple-500',
+        badge: 'bg-purple-100 text-purple-800',
+        button: 'bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700'
+      },
+      green: {
+        icon: 'text-green-500',
+        badge: 'bg-green-100 text-green-800',
+        button: 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
+      },
+      teal: {
+        icon: 'text-teal-500',
+        badge: 'bg-teal-100 text-teal-800',
+        button: 'bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700'
+      },
+      indigo: {
+        icon: 'text-indigo-500',
+        badge: 'bg-indigo-100 text-indigo-800',
+        button: 'bg-gradient-to-r from-indigo-500 to-indigo-600 hover:from-indigo-600 hover:to-indigo-700'
+      },
+      rose: {
+        icon: 'text-rose-500',
+        badge: 'bg-rose-100 text-rose-800',
+        button: 'bg-gradient-to-r from-rose-500 to-rose-600 hover:from-rose-600 hover:to-rose-700'
+      },
+      amber: {
+        icon: 'text-amber-500',
+        badge: 'bg-amber-100 text-amber-800',
+        button: 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700'
+      },
+      violet: {
+        icon: 'text-violet-500',
+        badge: 'bg-violet-100 text-violet-800',
+        button: 'bg-gradient-to-r from-violet-500 to-violet-600 hover:from-violet-600 hover:to-violet-700'
+      },
+      cyan: {
+        icon: 'text-cyan-500',
+        badge: 'bg-cyan-100 text-cyan-800',
+        button: 'bg-gradient-to-r from-cyan-500 to-cyan-600 hover:from-cyan-600 hover:to-cyan-700'
+      },
+      emerald: {
+        icon: 'text-emerald-500',
+        badge: 'bg-emerald-100 text-emerald-800',
+        button: 'bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700'
+      }
+    };
+    return colorMap[color] || colorMap.blue;
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -32,11 +104,11 @@ const Assessment = () => {
             Professional Assessment Suite
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Choose from our comprehensive range of professional assessments designed to evaluate skills, 
+            Choose from our comprehensive range of {assessmentsData.length} professional assessments designed to evaluate skills, 
             personality, career readiness, and workplace performance.
           </p>
           <Link to="/sample-reports">
-            <Button size="lg" className="mb-8 flex items-center gap-2">
+            <Button size="lg" className="mb-8 flex items-center gap-2 mx-auto">
               <BarChart3 className="h-5 w-5" />
               View Sample Reports
               <ArrowRight className="h-4 w-4 ml-2" />
@@ -47,527 +119,59 @@ const Assessment = () => {
 
       {/* Assessment Options */}
       <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
             
-            {/* CareerLaunch Assessment */}
-            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Rocket className="h-8 w-8 text-blue-500" />
-                  <div>
-                    <CardTitle className="text-xl">CareerLaunch</CardTitle>
-                    <Badge className="mt-1">Professional</Badge>
-                  </div>
-                </div>
-                <CardDescription className="text-base">
-                  Comprehensive career discovery assessment analyzing interests, aptitudes, personality, and values with personalized insights
-                </CardDescription>
-              </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$9.99</span>
-                   <Badge className="bg-green-100 text-green-800">Best Value</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">144 Questions</Badge>
-                   <Badge variant="outline">18 Dimensions</Badge>
-                   <Badge variant="outline">RIASEC Profile</Badge>
-                   <Badge variant="outline">PDF Reports</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Interest profiling using RIASEC model
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Cognitive aptitude assessment
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Personality and work style analysis
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Career-value alignment scoring
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Personalized career recommendations
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Professional development action plans
-                  </li>
-                </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/career-launch">
-                   <Button className="w-full bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600">
-                     Start CareerLaunch <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
-
-             {/* CAIR+ Personality Assessment */}
-             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-               <CardHeader>
-                 <div className="flex items-center gap-3 mb-4">
-                   <Brain className="h-8 w-8 text-purple-500" />
-                   <div>
-                     <CardTitle className="text-xl">CAIR+ Personality</CardTitle>
-                     <Badge className="mt-1" variant="secondary">Professional</Badge>
-                   </div>
-                 </div>
-                 <CardDescription className="text-base">
-                   Comprehensive personality assessment with advanced validity detection and dual reporting
-                 </CardDescription>
-               </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$29.99</span>
-                   <Badge className="bg-purple-100 text-purple-800">Premium</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">100 Questions</Badge>
-                   <Badge variant="outline">Validity Detection</Badge>
-                   <Badge variant="outline">Percentile Scoring</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Conscientiousness evaluation
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Agreeableness assessment
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Innovation & creativity
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Resilience measurement
-                  </li>
-                 </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/cair-assessment">
-                   <Button className="w-full bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600">
-                     Start CAIR+ Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
-
-             {/* Stress Resilience Assessment */}
-             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-               <CardHeader>
-                 <div className="flex items-center gap-3 mb-4">
-                   <Shield className="h-8 w-8 text-green-500" />
-                   <div>
-                     <CardTitle className="text-xl">Stress Resilience</CardTitle>
-                     <Badge className="mt-1" variant="secondary">Research-Based</Badge>
-                   </div>
-                 </div>
-                 <CardDescription className="text-base">
-                   Advanced stress resilience and adaptability assessment with biometric simulation
-                 </CardDescription>
-               </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$19.99</span>
-                   <Badge className="bg-blue-100 text-blue-800">Popular</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">60 Questions</Badge>
-                   <Badge variant="outline">Biometric Sim</Badge>
-                   <Badge variant="outline">Progressive Loading</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Emotional resilience
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Cognitive flexibility
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Performance under pressure
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Burnout risk prediction
-                  </li>
-                 </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/stress-resilience">
-                   <Button className="w-full bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600">
-                     Start Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
-
-             {/* Cultural Intelligence Assessment */}
-             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-               <CardHeader>
-                 <div className="flex items-center gap-3 mb-4">
-                   <Globe className="h-8 w-8 text-teal-500" />
-                   <div>
-                     <CardTitle className="text-xl">Cultural Intelligence</CardTitle>
-                     <Badge className="mt-1" variant="secondary">Global</Badge>
-                   </div>
-                 </div>
-                 <CardDescription className="text-base">
-                   Comprehensive cultural intelligence assessment with real-world scenarios and global business challenges
-                 </CardDescription>
-               </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$19.99</span>
-                   <Badge className="bg-teal-100 text-teal-800">Global</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">60+ Scenarios</Badge>
-                   <Badge variant="outline">4 CQ Dimensions</Badge>
-                   <Badge variant="outline">Cultural Adaptation</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Cross-cultural business scenarios
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Email adaptation challenges
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Global meeting scheduling
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Cultural competency mapping
-                  </li>
-                 </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/cultural-intelligence">
-                   <Button className="w-full bg-gradient-to-r from-teal-500 to-cyan-500 hover:from-teal-600 hover:to-cyan-600">
-                     Start Cultural Intelligence <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
-
-             {/* Communication Styles Assessment */}
-             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-               <CardHeader>
-                 <div className="flex items-center gap-3 mb-4">
-                   <MessageSquare className="h-8 w-8 text-indigo-500" />
-                   <div>
-                     <CardTitle className="text-xl">Communication Styles</CardTitle>
-                     <Badge className="mt-1" variant="secondary">Advanced</Badge>
-                   </div>
-                 </div>
-                 <CardDescription className="text-base">
-                   Comprehensive communication assessment with linguistic analysis and real-time simulations
-                 </CardDescription>
-               </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$24.99</span>
-                   <Badge className="bg-indigo-100 text-indigo-800">Advanced</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">80 Questions</Badge>
-                   <Badge variant="outline">Linguistic Analysis</Badge>
-                   <Badge variant="outline">Team Compatibility</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Communication DNA profiling
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Channel effectiveness mapping
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Interactive simulations
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Conflict resolution insights
-                  </li>
-                 </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/communication-assessment">
-                   <Button className="w-full bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600">
-                     Start Communication Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
-
-             {/* Emotional Intelligence Assessment */}
-             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-               <CardHeader>
-                 <div className="flex items-center gap-3 mb-4">
-                   <Heart className="h-8 w-8 text-rose-500" />
-                   <div>
-                     <CardTitle className="text-xl">Emotional Intelligence</CardTitle>
-                     <Badge className="mt-1" variant="secondary">EQ Focus</Badge>
-                   </div>
-                 </div>
-                 <CardDescription className="text-base">
-                   Comprehensive emotional intelligence assessment measuring self-awareness, empathy, and social skills
-                 </CardDescription>
-               </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$24.99</span>
-                   <Badge className="bg-rose-100 text-rose-800">EQ Focus</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">65 Questions</Badge>
-                   <Badge variant="outline">EQ Dimensions</Badge>
-                   <Badge variant="outline">Workplace Applications</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Self-awareness assessment
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Empathy evaluation
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Social skills analysis
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Emotional regulation
-                  </li>
-                 </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/emotional-intelligence">
-                   <Button className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600">
-                     Start EQ Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
-
-             {/* Faith & Values Assessment */}
-             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-               <CardHeader>
-                 <div className="flex items-center gap-3 mb-4">
-                   <Lightbulb className="h-8 w-8 text-amber-500" />
-                   <div>
-                     <CardTitle className="text-xl">Faith & Values</CardTitle>
-                     <Badge className="mt-1" variant="secondary">Values-Based</Badge>
-                   </div>
-                 </div>
-                 <CardDescription className="text-base">
-                   Comprehensive workplace values assessment with ethical scenarios and cultural fit analysis
-                 </CardDescription>
-               </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$29.99</span>
-                   <Badge className="bg-amber-100 text-amber-800">Values-Based</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">Values Ranking</Badge>
-                   <Badge variant="outline">Ethical Scenarios</Badge>
-                   <Badge variant="outline">Cultural Fit</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Universal values framework
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Ethical decision-making
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Workplace culture matching
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Values-based career guidance
-                  </li>
-                 </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/faith-values">
-                   <Button className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
-                     Start Faith & Values Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
-
-             {/* Digital Wellness Assessment */}
-             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-               <CardHeader>
-                 <div className="flex items-center gap-3 mb-4">
-                   <Zap className="h-8 w-8 text-cyan-500" />
-                   <div>
-                     <CardTitle className="text-xl">Digital Wellness</CardTitle>
-                     <Badge className="mt-1" variant="secondary">Behavioral</Badge>
-                   </div>
-                 </div>
-                 <CardDescription className="text-base">
-                   Real-time digital wellness assessment with behavioral tracking and habit analysis
-                 </CardDescription>
-               </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$19.99</span>
-                   <Badge className="bg-cyan-100 text-cyan-800">Behavioral</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">Live Tracking</Badge>
-                   <Badge variant="outline">Habit Analysis</Badge>
-                   <Badge variant="outline">Wellness Score</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Screen time balance
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Digital boundaries
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Mindful usage patterns
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Tech-life integration
-                  </li>
-                 </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/digital-wellness">
-                   <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600">
-                     Start Digital Wellness <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
-
-             {/* Leadership Assessment */}
-             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-               <CardHeader>
-                 <div className="flex items-center gap-3 mb-4">
-                   <Users className="h-8 w-8 text-blue-600" />
-                   <div>
-                     <CardTitle className="text-xl">Leadership Assessment</CardTitle>
-                     <Badge className="mt-1" variant="secondary">Professional</Badge>
-                   </div>
-                 </div>
-                 <CardDescription className="text-base">
-                   Comprehensive leadership effectiveness evaluation across 6 key dimensions with multi-language support
-                 </CardDescription>
-               </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$19.99</span>
-                   <Badge className="bg-blue-100 text-blue-800">Professional</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">60 Questions</Badge>
-                   <Badge variant="outline">6 Dimensions</Badge>
-                   <Badge variant="outline">3 Languages</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Strategic thinking evaluation
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Emotional intelligence assessment
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Communication & influence analysis
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Team development & change management
-                  </li>
-                 </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/leadership-assessment">
-                   <Button className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900">
-                     Start Leadership Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
-
-             {/* GenZ Workplace Assessment */}
-             <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
-               <CardHeader>
-                 <div className="flex items-center gap-3 mb-4">
-                   <div className="text-3xl">🚀</div>
-                   <div>
-                     <CardTitle className="text-xl">GenZ Workplace Assessment</CardTitle>
-                     <Badge className="mt-1" variant="secondary">TikTok-Style</Badge>
-                   </div>
-                 </div>
-                 <CardDescription className="text-base">
-                   Revolutionary TikTok-style assessment with emoji reactions and swipe interactions for authentic Gen Z workplace insights
-                 </CardDescription>
-               </CardHeader>
-                <CardContent className="space-y-4 flex-grow flex flex-col">
-                 <div className="flex items-center justify-between mb-4">
-                   <span className="text-3xl font-bold text-primary">$19.99</span>
-                   <Badge className="bg-purple-100 text-purple-800">TikTok-Style</Badge>
-                 </div>
-                 <div className="flex flex-wrap gap-2">
-                   <Badge variant="outline">Emoji Reactions</Badge>
-                   <Badge variant="outline">Swipe Interface</Badge>
-                   <Badge variant="outline">Mobile-First</Badge>
-                 </div>
-                <ul className="space-y-2 text-sm text-muted-foreground">
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    TikTok-style scenario swiping
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Emoji-based reactions (❤️👍😐👎🚩)
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Workplace culture matching
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Authenticity & retention analysis
-                  </li>
-                 </ul>
-                 <div className="flex-grow"></div>
-                 <Link to="/genz-assessment">
-                   <Button className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600">
-                     Start GenZ Assessment <ArrowRight className="ml-2 h-4 w-4" />
-                   </Button>
-                 </Link>
-               </CardContent>
-             </Card>
+            {assessmentsData.map((assessment) => {
+              const IconComponent = getIconComponent(assessment.icon);
+              const colorClasses = getColorClasses(assessment.color);
+              
+              return (
+                <Card key={assessment.id} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+                  <CardHeader>
+                    <div className="flex items-center gap-3 mb-4">
+                      <IconComponent className={`h-8 w-8 ${colorClasses.icon}`} />
+                      <div>
+                        <CardTitle className="text-xl">{assessment.title}</CardTitle>
+                        <Badge className="mt-1" variant="secondary">{assessment.badges[0]}</Badge>
+                      </div>
+                    </div>
+                    <CardDescription className="text-base">
+                      {assessment.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4 flex-grow flex flex-col">
+                    <div className="flex items-center justify-between mb-4">
+                      <span className="text-3xl font-bold text-primary">{assessment.price}</span>
+                      <Badge className={colorClasses.badge}>
+                        {assessment.badges[1] || assessment.badges[0]}
+                      </Badge>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <Badge variant="outline">{assessment.questions} Questions</Badge>
+                      <Badge variant="outline">{assessment.duration}</Badge>
+                      {assessment.badges.slice(1, 3).map((badge, index) => (
+                        <Badge key={index} variant="outline">{badge}</Badge>
+                      ))}
+                    </div>
+                    <ul className="space-y-2 text-sm text-muted-foreground">
+                      {assessment.features.slice(0, 4).map((feature, index) => (
+                        <li key={index} className="flex items-center gap-2">
+                          <CheckCircle2 className="h-4 w-4 text-green-500" />
+                          {feature}
+                        </li>
+                      ))}
+                    </ul>
+                    <div className="flex-grow"></div>
+                    <Link to={assessment.route}>
+                      <Button className={`w-full ${colorClasses.button}`}>
+                        Start {assessment.title} <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </Link>
+                  </CardContent>
+                </Card>
+              );
+            })}
 
           </div>
         </div>
@@ -579,7 +183,7 @@ const Assessment = () => {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold mb-4">Choose the Right Assessment</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Each assessment serves different purposes and provides unique insights
+              Each assessment serves different purposes and provides unique insights for career development, hiring, and personal growth.
             </p>
           </div>
 
@@ -617,7 +221,7 @@ const Assessment = () => {
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-green-500" />
+                  <Shield className="h-5 w-5 text-green-500" />
                   For High-Stress Roles
                 </CardTitle>
               </CardHeader>
