@@ -3,7 +3,7 @@ import { Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import authencoreLogo from "@/assets/authencore-logo-transparent.png";
+import authencoreLogo from "@/assets/authencore-analytics-logo.png";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -31,7 +31,7 @@ const Header = () => {
           <Link to="/" className="flex items-center">
             <img 
               src={authencoreLogo} 
-              alt="Authencore Analytics - Unlock Human Potential Through Data" 
+              alt="Authencore Analytics - Comprehensive Cutting-Edge Assessment Tools & Rich Reports" 
               className="h-16 w-auto"
             />
           </Link>
