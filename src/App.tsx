@@ -34,6 +34,7 @@ import SoloAssessment from "./pages/SoloAssessment";
 import AdminAnalytics from "./pages/AdminAnalytics";
 import CandidateTesting from "./pages/CandidateTesting";
 import TestingDashboard from "./pages/TestingDashboard";
+import SampleCareerLaunchReport from "./pages/SampleCareerLaunchReport";
 import AIChat from "@/components/AIChat";
 
 const queryClient = new QueryClient();
@@ -79,6 +80,7 @@ const App = () => (
             <Route path="/admin-analytics" element={<AdminAnalytics />} />
             <Route path="/candidate-testing" element={<CandidateTesting />} />
             <Route path="/testing-dashboard" element={<TestingDashboard />} />
+            <Route path="/sample-career-launch-report" element={<SampleCareerLaunchReport />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
