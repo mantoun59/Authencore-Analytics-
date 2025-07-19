@@ -27,6 +27,11 @@ import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { PartnerProvider } from "@/contexts/PartnerContext";
+import { EmployerProvider } from "@/contexts/EmployerContext";
+import EmployerLogin from "./pages/EmployerLogin";
+import EmployerDashboard from "./pages/EmployerDashboard";
+import SoloAssessment from "./pages/SoloAssessment";
+import AdminAnalytics from "./pages/AdminAnalytics";
 import AIChat from "@/components/AIChat";
 
 const queryClient = new QueryClient();
@@ -36,6 +41,7 @@ const App = () => (
     <TooltipProvider>
       <AuthProvider>
         <PartnerProvider>
+          <EmployerProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -65,11 +71,16 @@ const App = () => (
             <Route path="/sample-reports" element={<SampleReports />} />
             <Route path="/security" element={<Security />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/employer-login" element={<EmployerLogin />} />
+            <Route path="/employer-dashboard" element={<EmployerDashboard />} />
+            <Route path="/solo-assessment/:token" element={<SoloAssessment />} />
+            <Route path="/admin-analytics" element={<AdminAnalytics />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
           <AIChat />
         </BrowserRouter>
+          </EmployerProvider>
         </PartnerProvider>
       </AuthProvider>
     </TooltipProvider>

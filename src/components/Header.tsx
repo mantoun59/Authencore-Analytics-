@@ -15,6 +15,8 @@ const Header = () => {
     { name: "Sample Reports", href: "/sample-reports" },
     { name: "Admin", href: "/admin" },
     { name: "Partner", href: "/partner-login" },
+    { name: "Employer", href: "/employer-login" },
+    { name: "Analytics", href: "/admin-analytics" },
   ];
 
   return (

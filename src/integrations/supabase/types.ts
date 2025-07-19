@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      analytics_events: {
+        Row: {
+          created_at: string | null
+          entity_id: string | null
+          entity_type: string | null
+          event_type: string
+          id: string
+          metadata: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+        }
+        Relationships: []
+      }
       api_rate_limits: {
         Row: {
           blocked_until: string | null
@@ -73,6 +100,104 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      employer_accounts: {
+        Row: {
+          contact_person: string | null
+          created_at: string | null
+          email: string
+          id: string
+          is_active: boolean | null
+          name: string
+          password_hash: string
+          phone: string | null
+          plan_type: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          contact_person?: string | null
+          created_at?: string | null
+          email: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          password_hash: string
+          phone?: string | null
+          plan_type?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          contact_person?: string | null
+          created_at?: string | null
+          email?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          password_hash?: string
+          phone?: string | null
+          plan_type?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      employer_candidates: {
+        Row: {
+          age: number | null
+          assessment_completed: boolean | null
+          completed_at: string | null
+          country: string | null
+          created_at: string | null
+          email: string
+          employer_id: string | null
+          full_name: string | null
+          gender: string | null
+          id: string
+          invited_at: string | null
+          position_applied: string | null
+          report_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          age?: number | null
+          assessment_completed?: boolean | null
+          completed_at?: string | null
+          country?: string | null
+          created_at?: string | null
+          email: string
+          employer_id?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string
+          invited_at?: string | null
+          position_applied?: string | null
+          report_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          age?: number | null
+          assessment_completed?: boolean | null
+          completed_at?: string | null
+          country?: string | null
+          created_at?: string | null
+          email?: string
+          employer_id?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string
+          invited_at?: string | null
+          position_applied?: string | null
+          report_url?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "employer_candidates_employer_id_fkey"
+            columns: ["employer_id"]
+            isOneToOne: false
+            referencedRelation: "employer_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       generated_reports: {
         Row: {
@@ -227,6 +352,48 @@ export type Database = {
         }
         Relationships: []
       }
+      payments: {
+        Row: {
+          amount: number
+          candidate_id: string | null
+          candidate_type: string
+          created_at: string | null
+          currency: string | null
+          id: string
+          metadata: Json | null
+          payment_method: string | null
+          status: string | null
+          stripe_session_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          amount: number
+          candidate_id?: string | null
+          candidate_type: string
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_method?: string | null
+          status?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          amount?: number
+          candidate_id?: string | null
+          candidate_type?: string
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          metadata?: Json | null
+          payment_method?: string | null
+          status?: string | null
+          stripe_session_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
@@ -284,6 +451,54 @@ export type Database = {
           severity?: string
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      solo_candidates: {
+        Row: {
+          access_token: string
+          age: number | null
+          assessment_completed: boolean | null
+          country: string | null
+          created_at: string | null
+          email: string
+          expires_at: string | null
+          full_name: string | null
+          gender: string | null
+          id: string
+          payment_status: string | null
+          report_url: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          access_token: string
+          age?: number | null
+          assessment_completed?: boolean | null
+          country?: string | null
+          created_at?: string | null
+          email: string
+          expires_at?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string
+          payment_status?: string | null
+          report_url?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          access_token?: string
+          age?: number | null
+          assessment_completed?: boolean | null
+          country?: string | null
+          created_at?: string | null
+          email?: string
+          expires_at?: string | null
+          full_name?: string | null
+          gender?: string | null
+          id?: string
+          payment_status?: string | null
+          report_url?: string | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -382,6 +597,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      authenticate_employer: {
+        Args: { p_email: string; p_password: string }
+        Returns: {
+          employer_id: string
+          name: string
+          email: string
+          is_active: boolean
+        }[]
+      }
       authenticate_partner: {
         Args: { p_username: string; p_password: string }
         Returns: {
@@ -429,6 +653,15 @@ export type Database = {
       is_admin: {
         Args: { _user_id: string }
         Returns: boolean
+      }
+      log_analytics_event: {
+        Args: {
+          p_event_type: string
+          p_entity_type?: string
+          p_entity_id?: string
+          p_metadata?: Json
+        }
+        Returns: undefined
       }
       log_partner_activity: {
         Args: {
