@@ -22,49 +22,66 @@ import {
 const SampleCareerLaunchReport = () => {
   const { toast } = useToast();
 
-  // Sample assessment results data
+  // Updated sample data reflecting the expanded 130+ question assessment
   const sampleResults = {
     interests: {
-      investigative: 85,
-      artistic: 78,
-      social: 70,
-      enterprising: 72,
-      realistic: 65,
-      conventional: 60
+      realistic: 75,      // Technical/hands-on work  
+      investigative: 85,  // Research and analysis
+      artistic: 78,       // Creative expression
+      social: 70,         // Helping others
+      enterprising: 82,   // Leadership and business
+      conventional: 65    // Organized, structured work
     },
     aptitudes: [
       { name: "Abstract Logic", score: 92 },
       { name: "Verbal Reasoning", score: 88 },
       { name: "Numerical Reasoning", score: 85 },
-      { name: "Memory/Attention", score: 82 }
+      { name: "Memory/Attention", score: 79 }
     ],
     personality: {
-      openness: 88,
-      conscientiousness: 76,
-      adaptability: 82,
-      introversion: 65
+      introversion: 45,        // More extraverted
+      openness: 88,           // High openness to experience  
+      conscientiousness: 76,   // Well-organized
+      adaptability: 82        // Flexible and adaptable
     },
     values: {
-      creativity: 85,
-      achievement: 78,
-      security: 65,
-      community: 72
+      security: 65,      // Moderate need for security
+      achievement: 78,   // High achievement drive
+      creativity: 85,    // Strong creative values
+      community: 72      // Good community orientation
+    },
+    flags: {
+      misalignment: [
+        "High Investigative interest + High Openness suggests research roles with creative elements",
+        "Strong Abstract Logic + High Creativity indicates potential for innovative problem-solving roles"
+      ]
     },
     career_fit: {
       label: "Strategic Creative Thinker",
-      suggestions: ["Data Scientist", "UX Research Analyst", "Product Manager", "Content Strategist", "Research Analyst"]
+      suggestions: [
+        "Data Scientist",
+        "UX Research Analyst", 
+        "Product Manager",
+        "Innovation Consultant",
+        "Research & Development Manager"
+      ]
     },
     action_plan: [
-      "Leverage your strength in abstract logic through specialized training or certification in data science or analytics.",
-      "Consider internships in creative or analytical industries to explore diverse career paths.",
-      "Seek opportunities with clear advancement paths and performance recognition.",
-      "Explore informational interviews in your areas of interest to gain real-world insights."
+      "Leverage your exceptional abstract logic skills through advanced analytics or research roles",
+      "Explore opportunities in emerging fields that combine data science with creative problem-solving",
+      "Consider leadership roles in innovation-focused teams or R&D departments", 
+      "Develop cross-functional skills in both technical analysis and creative strategy",
+      "Seek mentorship from professionals in data-driven creative industries"
     ]
   };
 
   const sampleUserProfile = {
-    name: "Sample User",
-    email: "sample@example.com"
+    name: "Alex Johnson",
+    email: "alex.johnson@example.com",
+    assessmentDate: "2024-07-19",
+    questionsAnswered: 145,  // Updated to reflect new question count
+    timeSpent: "28 minutes",
+    reliabilityScore: 94     // High reliability due to expanded question set
   };
 
   const downloadReport = async () => {
