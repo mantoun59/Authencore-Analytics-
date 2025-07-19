@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare, Globe, BarChart3, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
 import { assessmentsData } from "@/data/assessmentsData";
-import authencoreLogo from "@/assets/authencore-analytics-logo.png";
+import authencoreLogo from "@/assets/authencore-logo-transparent.png";
 
 const Assessment = () => {
   return (
@@ -21,7 +21,7 @@ const Assessment = () => {
           <div className="mb-8">
             <img 
               src={authencoreLogo} 
-              alt="Authencore Analytics - Comprehensive Cutting-Edge Assessment Tools & Rich Reports" 
+              alt="Authencore Analytics - Unlock Human Potential Through Data" 
               className="mx-auto h-32 w-auto"
             />
           </div>
