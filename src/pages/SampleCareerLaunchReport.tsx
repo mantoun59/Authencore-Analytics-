@@ -92,7 +92,10 @@ const SampleCareerLaunchReport = () => {
         userData: {
           name: sampleUserProfile.name,
           email: sampleUserProfile.email,
-          date: new Date().toLocaleDateString()
+          date: new Date().toLocaleDateString(),
+          questionsAnswered: sampleUserProfile.questionsAnswered,
+          timeSpent: sampleUserProfile.timeSpent,
+          reliabilityScore: sampleUserProfile.reliabilityScore
         }
       };
 
@@ -101,20 +104,39 @@ const SampleCareerLaunchReport = () => {
       });
 
       if (response.data) {
-        const blob = new Blob([response.data], { type: 'text/html' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Sample-CareerLaunch-Report.html`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
+        // Open HTML report in new window for PDF printing
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(response.data);
+          newWindow.document.close();
+          
+          // Add print-friendly styles and auto-print
+          setTimeout(() => {
+            newWindow.focus();
+            newWindow.print();
+          }, 1000);
 
-        toast({
-          title: "Sample Report Downloaded",
-          description: "Your sample CareerLaunch report has been downloaded successfully.",
-        });
+          toast({
+            title: "Report Opened",
+            description: "Use your browser's Print dialog to save as PDF. Select 'Save as PDF' as destination.",
+          });
+        } else {
+          // Fallback: download as HTML if popup blocked
+          const blob = new Blob([response.data], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Sample-CareerLaunch-Report.html`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          toast({
+            title: "HTML Report Downloaded",
+            description: "Open the HTML file and use your browser's Print to PDF feature.",
+          });
+        }
       }
     } catch (error) {
       console.error('Error downloading sample report:', error);
