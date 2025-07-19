@@ -6,6 +6,8 @@ import { Badge } from '@/components/ui/badge';
 import { genZScenarios, genZValues, collaborationScenarios, type GenZScenario, type GenZValue } from '@/data/genZScenarios';
 import { useGenZScoring, type UserData, type ScenarioResponse } from '@/hooks/useGenZScoring';
 import { Heart, ThumbsUp, Minus, ThumbsDown, AlertTriangle, Share2, Download, RotateCcw } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
 
 type AssessmentStep = 'welcome' | 'onboarding' | 'scenarios' | 'values' | 'collaboration' | 'results';
 
@@ -23,6 +25,72 @@ export default function GenZAssessment() {
   const [startTime, setStartTime] = useState<number>(0);
   
   const scoring = useGenZScoring();
+  const { toast } = useToast();
+
+  const downloadReport = async () => {
+    if (!results) return;
+
+    try {
+      const reportData = {
+        assessmentType: 'gen_z',
+        results: results,
+        userData: {
+          name: userData.username,
+          email: 'user@example.com', // GenZ assessment doesn't collect email
+          date: new Date().toLocaleDateString(),
+          birthYear: userData.birthYear,
+          avatar: userData.avatar
+        }
+      };
+
+      const response = await supabase.functions.invoke('generate-pdf-report', {
+        body: reportData
+      });
+
+      if (response.data) {
+        // Open HTML report in new window for PDF printing
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(response.data);
+          newWindow.document.close();
+          
+          // Add print-friendly styles and auto-print
+          setTimeout(() => {
+            newWindow.focus();
+            newWindow.print();
+          }, 1000);
+
+          toast({
+            title: "Report Generated",
+            description: "Use your browser's Print dialog to save as PDF. Select 'Save as PDF' as destination.",
+          });
+        } else {
+          // Fallback: download as HTML if popup blocked
+          const blob = new Blob([response.data], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `GenZ-Assessment-Report-${userData.username}.html`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          toast({
+            title: "HTML Report Downloaded",
+            description: "Open the HTML file and use your browser's Print to PDF feature.",
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error generating report:', error);
+      toast({
+        title: "Report Generation Error",
+        description: "Failed to generate report. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
 
   const handleStartAssessment = () => {
     setStartTime(Date.now());
@@ -282,7 +350,7 @@ export default function GenZAssessment() {
               <Share2 className="h-4 w-4 mr-2" />
               Share Results
             </Button>
-            <Button variant="outline">
+            <Button variant="outline" onClick={downloadReport}>
               <Download className="h-4 w-4 mr-2" />
               Download Report
             </Button>

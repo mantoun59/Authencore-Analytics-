@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 import { Brain, TrendingUp, Shield } from "lucide-react";
 
 const Hero = () => {
@@ -37,13 +38,17 @@ const Hero = () => {
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" className="bg-primary hover:bg-primary/90 group">
-                Start Assessment
-                <TrendingUp className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-              </Button>
-              <Button variant="outline" size="lg">
-                Learn More
-              </Button>
+              <Link to="/assessment">
+                <Button size="lg" className="bg-primary hover:bg-primary/90 group">
+                  Start Assessment
+                  <TrendingUp className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+              <Link to="/about">
+                <Button variant="outline" size="lg">
+                  Learn More
+                </Button>
+              </Link>
             </div>
 
             {/* Trust indicators */}
