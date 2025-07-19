@@ -25,6 +25,7 @@ import Footer from "@/components/Footer";
 import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 const SampleReports = () => {
   const [selectedAssessment, setSelectedAssessment] = useState('leadership');
@@ -79,7 +80,25 @@ const SampleReports = () => {
       };
       
       toast.info(`Generating sample ${reportType} PDF report...`);
-      await aiReportGenerator.generatePDFReport(aiReportFormat, reportType);
+      
+      const response = await supabase.functions.invoke('generate-pdf-report', {
+        body: aiReportFormat
+      });
+
+      if (response.data) {
+        // Open HTML report in new window for PDF printing
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(response.data);
+          newWindow.document.close();
+          
+          setTimeout(() => {
+            newWindow.focus();
+            newWindow.print();
+          }, 1000);
+        }
+      }
+      
       toast.success(`Sample ${reportType} PDF report generated successfully!`);
       
     } catch (error) {
