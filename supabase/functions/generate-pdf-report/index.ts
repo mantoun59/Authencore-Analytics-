@@ -228,9 +228,16 @@ function generateCommunicationReport(results: any, userData: any): string {
 }
 
 function generateCareerLaunchReport(results: any, userData: any): string {
-  const riasecScores = results?.riasecScores || {};
-  const personalityScores = results?.personalityScores || {};
-  const topCareers = results?.topCareers || [];
+  const interests = results?.interests || {};
+  const aptitudes = results?.aptitudes || [];
+  const personality = results?.personality || {};
+  const values = results?.values || {};
+  const careerFit = results?.career_fit || {};
+  const actionPlan = results?.action_plan || [];
+  
+  // Get primary interest area
+  const primaryInterest = Object.entries(interests).reduce((a, b) => a[1] > b[1] ? a : b)[0] || 'investigative';
+  const primaryScore = interests[primaryInterest] || 85;
   
   return `
   <!DOCTYPE html>
@@ -249,47 +256,68 @@ function generateCareerLaunchReport(results: any, userData: any): string {
     <div class="executive-summary">
       <h2>🚀 Executive Summary</h2>
       <div class="summary-box">
-        <p><strong>Primary Interest Area:</strong> ${riasecScores?.primary || 'Investigative'} (${riasecScores?.primaryScore || 85}%)</p>
-        <p><strong>Secondary Interest:</strong> ${riasecScores?.secondary || 'Artistic'} (${riasecScores?.secondaryScore || 78}%)</p>
-        <p><strong>Career Match Score:</strong> ${riasecScores?.matchScore || 88}/100</p>
-        <p><strong>Assessment Validity:</strong> ${riasecScores?.validity || 94}% (${getValidityLevel(riasecScores?.validity || 94)})</p>
+        <p><strong>Career Profile:</strong> ${careerFit?.label || 'Strategic Creative Thinker'}</p>
+        <p><strong>Primary Interest Area:</strong> ${primaryInterest.charAt(0).toUpperCase() + primaryInterest.slice(1)} (${primaryScore}%)</p>
+        <p><strong>Top Aptitude:</strong> ${aptitudes[0]?.name || 'Abstract Logic'} (${aptitudes[0]?.score || 92}%)</p>
+        <p><strong>Questions Answered:</strong> ${userData?.questionsAnswered || 145} questions</p>
+        <p><strong>Assessment Reliability:</strong> ${userData?.reliabilityScore || 94}% (${getValidityLevel(userData?.reliabilityScore || 94)})</p>
+      </div>
+    </div>
+
+    <div class="aptitudes-section">
+      <h2>🧠 Cognitive Aptitudes Analysis</h2>
+      <div class="chart-container">
+        <canvas id="aptitudesChart" width="400" height="300"></canvas>
+      </div>
+      
+      <div class="aptitudes-breakdown">
+        ${aptitudes.map((aptitude: any, index: number) => `
+          <div class="aptitude-item">
+            <h3>${index + 1}. ${aptitude.name} (${aptitude.score}%)</h3>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${aptitude.score}%"></div>
+            </div>
+            <p><strong>Interpretation:</strong> ${getAptitudeInterpretation(aptitude.name, aptitude.score)}</p>
+            <p><strong>Career Applications:</strong> ${getAptitudeApplications(aptitude.name)}</p>
+          </div>
+        `).join('')}
       </div>
     </div>
 
     <div class="riasec-section">
-      <h2>🔬 RIASEC Interest Profile</h2>
+      <h2>🔬 Interest Areas (RIASEC) Profile</h2>
       <div class="chart-container">
         <canvas id="riasecChart" width="400" height="400"></canvas>
       </div>
       
       <div class="riasec-breakdown">
         <div class="riasec-item">
-          <h3>🔧 Realistic (${riasecScores?.realistic || 65}%)</h3>
+          <h3>🔧 Realistic (${interests?.realistic || 65}%)</h3>
           <p><strong>Description:</strong> Interest in hands-on, practical work with tools, machines, and physical materials.</p>
           <p><strong>Career Examples:</strong> Engineer, Technician, Mechanic, Pilot, Architect</p>
         </div>
         <div class="riasec-item">
-          <h3>🔬 Investigative (${riasecScores?.investigative || 85}%)</h3>
+          <h3>🔬 Investigative (${interests?.investigative || 85}%)</h3>
           <p><strong>Description:</strong> Strong analytical thinking and interest in research, problem-solving, and intellectual challenges.</p>
           <p><strong>Career Examples:</strong> Scientist, Researcher, Data Analyst, Doctor, Psychologist</p>
         </div>
         <div class="riasec-item">
-          <h3>🎨 Artistic (${riasecScores?.artistic || 78}%)</h3>
+          <h3>🎨 Artistic (${interests?.artistic || 78}%)</h3>
           <p><strong>Description:</strong> Creative expression and appreciation for aesthetics, innovation, and original thinking.</p>
           <p><strong>Career Examples:</strong> Designer, Writer, Artist, Musician, Marketing Creative</p>
         </div>
         <div class="riasec-item">
-          <h3>👥 Social (${riasecScores?.social || 70}%)</h3>
+          <h3>👥 Social (${interests?.social || 70}%)</h3>
           <p><strong>Description:</strong> Enjoys helping, teaching, and working with people in supportive roles.</p>
           <p><strong>Career Examples:</strong> Teacher, Counselor, Social Worker, Nurse, HR Specialist</p>
         </div>
         <div class="riasec-item">
-          <h3>💼 Enterprising (${riasecScores?.enterprising || 72}%)</h3>
+          <h3>💼 Enterprising (${interests?.enterprising || 72}%)</h3>
           <p><strong>Description:</strong> Leadership, persuasion, and business activities that influence others.</p>
           <p><strong>Career Examples:</strong> Manager, Sales Representative, Entrepreneur, Lawyer, Executive</p>
         </div>
         <div class="riasec-item">
-          <h3>📋 Conventional (${riasecScores?.conventional || 60}%)</h3>
+          <h3>📋 Conventional (${interests?.conventional || 60}%)</h3>
           <p><strong>Description:</strong> Organization, data management, and structured tasks with clear procedures.</p>
           <p><strong>Career Examples:</strong> Accountant, Administrator, Banking Professional, Quality Analyst</p>
         </div>
@@ -299,27 +327,15 @@ function generateCareerLaunchReport(results: any, userData: any): string {
     <div class="career-recommendations">
       <h2>🎯 Top Career Recommendations</h2>
       <div class="career-list">
-        <div class="career-item">
-          <h3>1. Data Scientist</h3>
-          <div class="match-score">Match Score: 92%</div>
-          <p><strong>Why it fits:</strong> Combines your strong Investigative interests with Artistic creativity. Perfect for analytical minds who enjoy solving complex problems and finding patterns in data.</p>
-          <p><strong>Key activities:</strong> Statistical analysis, machine learning, data visualization, research methodology</p>
-          <p><strong>Growth outlook:</strong> High demand, excellent salary potential, diverse industry applications</p>
-        </div>
-        <div class="career-item">
-          <h3>2. UX Research Analyst</h3>
-          <div class="match-score">Match Score: 88%</div>
-          <p><strong>Why it fits:</strong> Perfect blend of research methodology (Investigative) and creative design thinking (Artistic) that matches your profile.</p>
-          <p><strong>Key activities:</strong> User research, usability testing, behavioral analysis, design strategy</p>
-          <p><strong>Growth outlook:</strong> Rapidly growing field, high job satisfaction, creative and analytical balance</p>
-        </div>
-        <div class="career-item">
-          <h3>3. Product Manager</h3>
-          <div class="match-score">Match Score: 85%</div>
-          <p><strong>Why it fits:</strong> Strategic thinking and innovation focus aligns well with your Investigative and Enterprising interests.</p>
-          <p><strong>Key activities:</strong> Product strategy, market research, team coordination, feature prioritization</p>
-          <p><strong>Growth outlook:</strong> High-responsibility role, excellent advancement opportunities, cross-functional impact</p>
-        </div>
+        ${(careerFit?.suggestions || ['Data Scientist', 'UX Research Analyst', 'Product Manager']).map((career: string, index: number) => `
+          <div class="career-item">
+            <h3>${index + 1}. ${career}</h3>
+            <div class="match-score">Match Score: ${92 - (index * 4)}%</div>
+            <p><strong>Why it fits:</strong> ${getCareerFitReason(career, interests, aptitudes)}</p>
+            <p><strong>Key activities:</strong> ${getCareerActivities(career)}</p>
+            <p><strong>Growth outlook:</strong> ${getCareerOutlook(career)}</p>
+          </div>
+        `).slice(0, 3).join('')}
       </div>
     </div>
 
@@ -329,42 +345,76 @@ function generateCareerLaunchReport(results: any, userData: any): string {
         <div class="insight-item">
           <h4>💪 Work Strengths</h4>
           <ul>
-            <li>Analytical problem-solving approach</li>
-            <li>Creative thinking and innovation</li>
-            <li>Detail-oriented and thorough</li>
-            <li>Independent work capability</li>
-            <li>Continuous learning mindset</li>
+            <li>Strong ${aptitudes[0]?.name?.toLowerCase() || 'analytical'} abilities (${aptitudes[0]?.score || 92}%)</li>
+            <li>${personality?.openness > 70 ? 'Highly creative and open to new experiences' : 'Practical and detail-oriented approach'}</li>
+            <li>${personality?.conscientiousness > 70 ? 'Excellent organization and planning skills' : 'Flexible and adaptable work style'}</li>
+            <li>${personality?.adaptability > 70 ? 'Quick to adapt to changing environments' : 'Consistent and reliable performance'}</li>
+            <li>${values?.achievement > 70 ? 'Strong drive for accomplishment and success' : 'Values work-life balance and stability'}</li>
           </ul>
         </div>
         <div class="insight-item">
           <h4>⚡ Ideal Work Environment</h4>
           <ul>
-            <li>Intellectually stimulating challenges</li>
-            <li>Autonomy and flexible work arrangements</li>
-            <li>Access to cutting-edge tools and resources</li>
-            <li>Collaborative but not overly social</li>
-            <li>Opportunities for creative expression</li>
+            <li>${interests?.investigative > 70 ? 'Intellectually stimulating challenges' : 'Practical, hands-on projects'}</li>
+            <li>${personality?.introversion < 50 ? 'Collaborative team environments' : 'Autonomous work with flexible arrangements'}</li>
+            <li>${values?.creativity > 70 ? 'Creative freedom and innovation opportunities' : 'Clear structure and defined processes'}</li>
+            <li>${aptitudes.find((a: any) => a.name.includes('Numerical'))?.score > 80 ? 'Data-driven decision making culture' : 'People-focused collaborative culture'}</li>
+            <li>${values?.community > 70 ? 'Mission-driven organizations with social impact' : 'Results-oriented professional environments'}</li>
           </ul>
         </div>
         <div class="insight-item">
           <h4>🎯 Motivational Factors</h4>
           <ul>
-            <li>Solving complex, meaningful problems</li>
-            <li>Making data-driven discoveries</li>
-            <li>Seeing direct impact of work</li>
-            <li>Continuous skill development</li>
-            <li>Recognition for innovative solutions</li>
+            <li>${interests?.investigative > 70 ? 'Solving complex, meaningful problems' : 'Clear goals and measurable outcomes'}</li>
+            <li>${aptitudes[0]?.name?.includes('Abstract') ? 'Strategic thinking and innovation challenges' : 'Practical skill development opportunities'}</li>
+            <li>${values?.achievement > 70 ? 'Recognition for exceptional performance' : 'Work-life balance and job security'}</li>
+            <li>${personality?.openness > 70 ? 'Continuous learning and growth opportunities' : 'Mastery of specialized skills'}</li>
+            <li>${values?.creativity > 70 ? 'Creative expression and original thinking' : 'Systematic improvement and efficiency'}</li>
           </ul>
         </div>
         <div class="insight-item">
-          <h4>⚠️ Potential Challenges</h4>
+          <h4>⚠️ Development Areas</h4>
           <ul>
-            <li>May prefer working alone over team projects</li>
-            <li>Could struggle with routine, repetitive tasks</li>
-            <li>Might over-analyze decisions</li>
-            <li>May need structure for creative projects</li>
-            <li>Could benefit from stronger networking skills</li>
+            <li>${personality?.introversion > 60 ? 'Building stronger networking and social skills' : 'Developing independent work capabilities'}</li>
+            <li>${personality?.conscientiousness < 60 ? 'Improving organization and time management' : 'Increasing flexibility and adaptability'}</li>
+            <li>${aptitudes.find((a: any) => a.score < 70) ? `Strengthening ${aptitudes.find((a: any) => a.score < 70)?.name?.toLowerCase()} skills` : 'Applying high abilities in practical settings'}</li>
+            <li>${values?.security < 60 ? 'Building confidence in risk-taking situations' : 'Embracing change and uncertainty'}</li>
+            <li>${interests?.social < 60 ? 'Developing interpersonal and communication skills' : 'Balancing people focus with individual productivity'}</li>
           </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="values-section">
+      <h2>⭐ Core Values Assessment</h2>
+      <div class="values-grid">
+        <div class="value-item">
+          <h3>🛡️ Security (${values?.security || 65}%)</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${values?.security || 65}%"></div>
+          </div>
+          <p>${values?.security > 70 ? 'High need for stability and predictable career path' : 'Comfortable with reasonable risk and change'}</p>
+        </div>
+        <div class="value-item">
+          <h3>🏆 Achievement (${values?.achievement || 78}%)</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${values?.achievement || 78}%"></div>
+          </div>
+          <p>${values?.achievement > 70 ? 'Strong drive for success and recognition' : 'Balanced approach to ambition and contentment'}</p>
+        </div>
+        <div class="value-item">
+          <h3>🎨 Creativity (${values?.creativity || 85}%)</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${values?.creativity || 85}%"></div>
+          </div>
+          <p>${values?.creativity > 70 ? 'High value on innovation and creative expression' : 'Appreciates creativity but values practicality'}</p>
+        </div>
+        <div class="value-item">
+          <h3>🤝 Community (${values?.community || 72}%)</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${values?.community || 72}%"></div>
+          </div>
+          <p>${values?.community > 70 ? 'Strong desire to contribute to society and help others' : 'Balanced individual and collective focus'}</p>
         </div>
       </div>
     </div>
@@ -391,7 +441,7 @@ function generateCareerLaunchReport(results: any, userData: any): string {
       "How do you balance the need for thorough analysis with business timelines and practical constraints?"
     ])}
 
-    ${generateDistortionAnalysis(riasecScores?.validity || 94, [
+    ${generateDistortionAnalysis(userData?.reliabilityScore || 94, [
       "RIASEC interest patterns show high internal consistency",
       "Response time analysis indicates thoughtful consideration of preferences",
       "Cross-validation checks confirm authentic interest patterns",
@@ -414,10 +464,14 @@ function generateCareerLaunchReport(results: any, userData: any): string {
     </div>
     
     <script>
+      ${generateChartScript('aptitudesChart', 'Cognitive Aptitudes', 
+        aptitudes.map((apt: any) => apt.name), 
+        aptitudes.map((apt: any) => apt.score)
+      )}
       ${generateRadarChartScript('riasecChart', 'RIASEC Interest Profile', 
         ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'],
-        [riasecScores?.realistic || 65, riasecScores?.investigative || 85, riasecScores?.artistic || 78, 
-         riasecScores?.social || 70, riasecScores?.enterprising || 72, riasecScores?.conventional || 60]
+        [interests?.realistic || 65, interests?.investigative || 85, interests?.artistic || 78, 
+         interests?.social || 70, interests?.enterprising || 72, interests?.conventional || 60]
       )}
     </script>
   </body>
@@ -820,6 +874,60 @@ function generateRadarChartScript(chartId: string, title: string, labels: string
 
 function generateReportId(): string {
   return 'AR-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+}
+
+// Helper functions for CareerLaunch report
+function getAptitudeInterpretation(aptitudeName: string, score: number): string {
+  const interpretations = {
+    'Abstract Logic': score > 85 ? 'Exceptional ability to identify patterns, solve complex problems, and think strategically. Ideal for roles requiring innovation and analytical thinking.' : score > 70 ? 'Good analytical thinking skills with solid pattern recognition abilities.' : 'Developing analytical skills with opportunities to strengthen logical reasoning.',
+    'Verbal Reasoning': score > 85 ? 'Outstanding communication and language skills. Excellent at understanding complex texts, articulating ideas, and verbal problem-solving.' : score > 70 ? 'Strong verbal abilities with good reading comprehension and communication skills.' : 'Solid verbal skills with room for improvement in complex communication scenarios.',
+    'Numerical Reasoning': score > 85 ? 'Excellent mathematical and analytical abilities. Strong capacity for data analysis, financial modeling, and quantitative problem-solving.' : score > 70 ? 'Good numerical skills suitable for most analytical roles.' : 'Basic numerical abilities sufficient for general business applications.',
+    'Memory/Attention': score > 85 ? 'Outstanding working memory and attention to detail. Excellent ability to process multiple information streams simultaneously.' : score > 70 ? 'Good memory and attention skills suitable for detail-oriented work.' : 'Adequate memory abilities with opportunities to improve focus and retention.'
+  };
+  return interpretations[aptitudeName as keyof typeof interpretations] || 'This aptitude shows your cognitive abilities in specialized areas.';
+}
+
+function getAptitudeApplications(aptitudeName: string): string {
+  const applications = {
+    'Abstract Logic': 'Strategy consulting, data science, research and development, systems design, innovation management',
+    'Verbal Reasoning': 'Marketing, communications, law, journalism, training and development, sales',
+    'Numerical Reasoning': 'Finance, accounting, data analysis, operations research, business analytics',
+    'Memory/Attention': 'Project management, quality assurance, research, administrative coordination, process improvement'
+  };
+  return applications[aptitudeName as keyof typeof applications] || 'Various analytical and problem-solving roles';
+}
+
+function getCareerFitReason(career: string, interests: any, aptitudes: any[]): string {
+  const fitReasons = {
+    'Data Scientist': `Perfect match for your ${interests?.investigative > 80 ? 'strong investigative interests' : 'analytical mindset'} and ${aptitudes[0]?.name?.includes('Abstract') ? 'exceptional abstract reasoning' : 'cognitive strengths'}. Combines research with practical problem-solving.`,
+    'UX Research Analyst': `Ideal blend of your ${interests?.investigative > 75 ? 'research orientation' : 'analytical approach'} and ${interests?.artistic > 70 ? 'creative interests' : 'design thinking'}. Perfect for understanding user behavior through data.`,
+    'Product Manager': `Matches your ${interests?.enterprising > 70 ? 'leadership interests' : 'strategic thinking'} and ${aptitudes.find(a => a.name.includes('Verbal'))?.score > 80 ? 'strong communication skills' : 'analytical abilities'}. Requires both technical understanding and business acumen.`,
+    'Innovation Consultant': `Aligns with your ${interests?.investigative > 80 ? 'research interests' : 'analytical mindset'} and ${interests?.artistic > 75 ? 'creative problem-solving' : 'strategic thinking'}. Perfect for driving organizational change.`,
+    'Research & Development Manager': `Combines your ${interests?.investigative > 80 ? 'strong research orientation' : 'analytical interests'} with ${interests?.enterprising > 70 ? 'leadership capabilities' : 'management potential'}. Ideal for leading innovation teams.`
+  };
+  return fitReasons[career as keyof typeof fitReasons] || `Strong alignment with your interests in ${Object.entries(interests).sort(([,a], [,b]) => (b as number) - (a as number))[0][0]} and ${aptitudes[0]?.name?.toLowerCase()} abilities.`;
+}
+
+function getCareerActivities(career: string): string {
+  const activities = {
+    'Data Scientist': 'Statistical modeling, machine learning algorithm development, data visualization, predictive analytics, business intelligence reporting',
+    'UX Research Analyst': 'User interviews, usability testing, behavioral analysis, journey mapping, research synthesis and insights',
+    'Product Manager': 'Market research, feature prioritization, stakeholder management, product roadmap development, cross-functional team leadership',
+    'Innovation Consultant': 'Innovation strategy development, organizational change management, process improvement, technology assessment',
+    'Research & Development Manager': 'Research project oversight, team leadership, innovation pipeline management, technology development, strategic planning'
+  };
+  return activities[career as keyof typeof activities] || 'Strategic analysis, problem-solving, team collaboration, project management, client consultation';
+}
+
+function getCareerOutlook(career: string): string {
+  const outlooks = {
+    'Data Scientist': 'Exceptional growth projected (22% by 2030), high salary potential ($95k-$165k), diverse industry applications',
+    'UX Research Analyst': 'Strong growth in tech sector (13% by 2030), excellent job satisfaction, increasing demand for user-centered design',
+    'Product Manager': 'High-demand role (19% growth), excellent advancement opportunities ($100k-$180k), central to business strategy',
+    'Innovation Consultant': 'Growing field as organizations prioritize innovation, high earning potential, diverse project opportunities',
+    'Research & Development Manager': 'Stable growth (7% by 2030), high responsibility role, excellent for those seeking leadership positions'
+  };
+  return outlooks[career as keyof typeof outlooks] || 'Good growth prospects with opportunities for advancement and competitive compensation';
 }
 
 // Placeholder functions for other assessment types (will enhance these)
