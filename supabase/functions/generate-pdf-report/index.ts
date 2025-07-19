@@ -932,9 +932,6 @@ function getCareerOutlook(career: string): string {
 }
 
 // Placeholder functions for other assessment types (will enhance these)
-function generateCAIRReport(results: any, userData: any): string {
-  return generateCommunicationReport(results, userData); // Enhanced version coming
-}
 
 function generateEQReport(results: any, userData: any): string {
   return generateCommunicationReport(results, userData); // Enhanced version coming

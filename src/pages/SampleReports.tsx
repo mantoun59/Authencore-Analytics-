@@ -24,6 +24,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
 import { toast } from "sonner";
+import { Link } from "react-router-dom";
 
 const SampleReports = () => {
   const [selectedAssessment, setSelectedAssessment] = useState('leadership');
@@ -628,6 +629,20 @@ const SampleReports = () => {
               Explore comprehensive sample reports for both candidates and employers 
               across our complete assessment suite
             </p>
+            
+            {/* Featured Career Sample Report */}
+            <div className="mt-8 p-6 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-lg border border-primary/20">
+              <h2 className="text-2xl font-semibold mb-3 text-primary">Featured: Career Launch Sample Report</h2>
+              <p className="text-muted-foreground mb-4">
+                See a complete sample of our comprehensive CareerLaunch assessment with detailed analysis and insights.
+              </p>
+              <Button asChild variant="default">
+                <Link to="/sample-career-launch-report">
+                  <Sparkles className="h-4 w-4 mr-2" />
+                  View Career Sample Report
+                </Link>
+              </Button>
+            </div>
           </div>
 
           {/* Controls */}
