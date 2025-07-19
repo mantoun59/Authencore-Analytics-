@@ -17,7 +17,8 @@ import {
   Download,
   Zap,
   Brain,
-  Users
+  Users,
+  CheckCircle2
 } from "lucide-react";
 
 interface UserProfile {
@@ -50,13 +51,13 @@ const CareerLaunch = () => {
   const downloadReport = async () => {
     try {
       const reportData = {
-        candidateData: {
+        assessmentType: 'career_launch',
+        results: assessmentResults,
+        userData: {
           name: userProfile.name,
           email: userProfile.email,
           date: new Date().toLocaleDateString()
-        },
-        ...assessmentResults,
-        reportType: 'careerlaunch-applicant'
+        }
       };
 
       const response = await supabase.functions.invoke('generate-pdf-report', {
@@ -231,22 +232,139 @@ const CareerLaunch = () => {
               </p>
             </div>
 
-            <Card className="mb-8">
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5" />
-                  Your Career Profile: {assessmentResults.career_fit?.label}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-lg mb-4">Best-fit career suggestions:</p>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {assessmentResults.career_fit?.suggestions?.map((career: string, index: number) => (
-                    <Badge key={index} variant="secondary">{career}</Badge>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <div className="grid md:grid-cols-2 gap-6 mb-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Target className="h-5 w-5 text-blue-600" />
+                    Your Career Profile
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="font-semibold text-lg mb-2">{assessmentResults.career_fit?.label || 'Career Professional'}</h3>
+                      <p className="text-sm text-muted-foreground mb-3">Best-fit career suggestions:</p>
+                      <div className="flex flex-wrap gap-2">
+                        {assessmentResults.career_fit?.suggestions?.map((career: string, index: number) => (
+                          <Badge key={index} variant="secondary" className="text-xs">{career}</Badge>
+                        )) || <Badge variant="secondary">Analyst</Badge>}
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="h-5 w-5 text-green-600" />
+                    Top Aptitudes
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-3">
+                    {assessmentResults.aptitudes?.slice(0, 3).map((aptitude: any, index: number) => (
+                      <div key={index} className="flex justify-between items-center">
+                        <span className="text-sm font-medium">{aptitude.name}</span>
+                        <Badge variant="outline">{aptitude.score}%</Badge>
+                      </div>
+                    )) || (
+                      <div className="text-sm text-muted-foreground">Aptitude scores calculating...</div>
+                    )}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-6 mb-8">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Zap className="h-5 w-5 text-purple-600" />
+                    Top Interests
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {assessmentResults.interests && Object.entries(assessmentResults.interests)
+                      .sort(([,a], [,b]) => (b as number) - (a as number))
+                      .slice(0, 3)
+                      .map(([interest, score], index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="text-sm capitalize">{interest}</span>
+                          <Badge variant="outline">{String(score)}%</Badge>
+                        </div>
+                      ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Users className="h-5 w-5 text-orange-600" />
+                    Personality Traits
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {assessmentResults.personality && Object.entries(assessmentResults.personality)
+                      .sort(([,a], [,b]) => (b as number) - (a as number))
+                      .slice(0, 3)
+                      .map(([trait, score], index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="text-sm capitalize">{trait}</span>
+                          <Badge variant="outline">{String(score)}%</Badge>
+                        </div>
+                      ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Star className="h-5 w-5 text-yellow-600" />
+                    Core Values
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-2">
+                    {assessmentResults.values && Object.entries(assessmentResults.values)
+                      .sort(([,a], [,b]) => (b as number) - (a as number))
+                      .slice(0, 3)
+                      .map(([value, score], index) => (
+                        <div key={index} className="flex justify-between items-center">
+                          <span className="text-sm capitalize">{value}</span>
+                          <Badge variant="outline">{String(score)}%</Badge>
+                        </div>
+                      ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            {assessmentResults.action_plan && assessmentResults.action_plan.length > 0 && (
+              <Card className="mb-8">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Lightbulb className="h-5 w-5 text-blue-600" />
+                    Recommended Action Plan
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {assessmentResults.action_plan.map((action: string, index: number) => (
+                      <li key={index} className="flex items-start gap-2">
+                        <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
+                        <span className="text-sm">{action}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            )}
 
             <div className="text-center space-y-4">
               <Button onClick={downloadReport} size="lg" className="text-lg px-8 py-6">
