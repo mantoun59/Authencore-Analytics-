@@ -18,7 +18,7 @@ const Hero = () => {
             {/* Company Logo */}
             <div className="flex items-center space-x-4 mb-6">
               <img 
-                src="/lovable-uploads/5eb5f31e-5eaa-4d7d-a93c-5c9ebf449b63.png" 
+                src="/src/assets/authencore-analytics-logo.png" 
                 alt="Authencore Analytics" 
                 className="h-16 w-auto"
               />

@@ -188,7 +188,7 @@ const CareerLaunch = () => {
                 Start Your Career Discovery
               </Button>
               <p className="text-sm text-muted-foreground">
-                Assessment takes approximately 5-10 minutes • Get instant results
+                Assessment takes approximately 30-35 minutes • Get instant results
               </p>
             </div>
           </div>

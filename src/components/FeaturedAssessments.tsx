@@ -1,28 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Users, BarChart3, TrendingUp } from "lucide-react";
+import { Rocket, Brain, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
+import { assessmentsData } from "@/data/assessmentsData";
 
 const FeaturedAssessments = () => {
-  const assessments = [
-    {
-      title: "Leadership Assessment",
-      price: "$49",
-      icon: Users,
-      description: "Comprehensive leadership evaluation"
-    },
-    {
-      title: "Market Analysis",
-      price: "$99", 
-      icon: BarChart3,
-      description: "Deep market insights and trends"
-    },
-    {
-      title: "Risk Management",
-      price: "$129",
-      icon: TrendingUp,
-      description: "Strategic risk assessment tools"
-    }
-  ];
+  // Use real assessment data - featuring the top 3 assessments
+  const featuredAssessments = assessmentsData.slice(0, 3).map(assessment => ({
+    title: assessment.title,
+    price: assessment.price,
+    icon: assessment.id === 'career-launch' ? Rocket : 
+          assessment.id === 'cair-personality' ? Brain : Shield,
+    description: assessment.subtitle,
+    route: assessment.route
+  }));
 
   return (
     <section className="py-20 bg-muted/50">
@@ -32,7 +23,7 @@ const FeaturedAssessments = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {assessments.map((assessment, index) => {
+          {featuredAssessments.map((assessment, index) => {
             const IconComponent = assessment.icon;
             return (
               <Card key={index} className="text-center p-6 hover:shadow-card transition-shadow">
@@ -47,9 +38,11 @@ const FeaturedAssessments = () => {
                   <div className="text-3xl font-bold text-foreground mb-6">
                     {assessment.price}
                   </div>
-                  <Button className="w-full bg-primary hover:bg-primary/90">
-                    Take Assessment
-                  </Button>
+                  <Link to={assessment.route}>
+                    <Button className="w-full bg-primary hover:bg-primary/90">
+                      Take Assessment
+                    </Button>
+                  </Link>
                 </CardContent>
               </Card>
             );

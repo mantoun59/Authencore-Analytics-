@@ -18,7 +18,7 @@ const Footer = () => {
           <div className="space-y-6">
             <div className="flex items-center space-x-3 mb-4">
               <img 
-                src="/lovable-uploads/5eb5f31e-5eaa-4d7d-a93c-5c9ebf449b63.png" 
+                src="/src/assets/authencore-analytics-logo.png" 
                 alt="Authencore Analytics" 
                 className="h-12 w-auto"
               />
