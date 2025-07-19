@@ -52,6 +52,18 @@ const Footer = () => {
                 Home
               </Link>
               <Link
+                to="/candidate-testing"
+                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              >
+                Testing Portal
+              </Link>
+              <Link
+                to="/testing-dashboard"
+                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+              >
+                Testing Dashboard
+              </Link>
+              <Link
                 to="/privacy"
                 className="block text-muted-foreground hover:text-primary transition-colors text-sm"
               >

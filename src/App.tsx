@@ -32,6 +32,8 @@ import EmployerLogin from "./pages/EmployerLogin";
 import EmployerDashboard from "./pages/EmployerDashboard";
 import SoloAssessment from "./pages/SoloAssessment";
 import AdminAnalytics from "./pages/AdminAnalytics";
+import CandidateTesting from "./pages/CandidateTesting";
+import TestingDashboard from "./pages/TestingDashboard";
 import AIChat from "@/components/AIChat";
 
 const queryClient = new QueryClient();
@@ -75,6 +77,8 @@ const App = () => (
             <Route path="/employer-dashboard" element={<EmployerDashboard />} />
             <Route path="/solo-assessment/:token" element={<SoloAssessment />} />
             <Route path="/admin-analytics" element={<AdminAnalytics />} />
+            <Route path="/candidate-testing" element={<CandidateTesting />} />
+            <Route path="/testing-dashboard" element={<TestingDashboard />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
