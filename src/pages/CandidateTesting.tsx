@@ -61,6 +61,34 @@ const CandidateTesting = () => {
       description: "Assess cross-cultural competency",
       duration: "10-15 minutes",
       route: "/cultural-intelligence"
+    },
+    {
+      id: "cair",
+      title: "CAIR Assessment",
+      description: "Comprehensive assessment and intelligence report",
+      duration: "15-25 minutes",
+      route: "/cair"
+    },
+    {
+      id: "genz",
+      title: "Gen Z Assessment",
+      description: "Generation-specific workplace dynamics evaluation",
+      duration: "10-15 minutes",
+      route: "/genz"
+    },
+    {
+      id: "digital-wellness",
+      title: "Digital Wellness Assessment",
+      description: "Evaluate digital habits and well-being",
+      duration: "8-12 minutes",
+      route: "/digital-wellness"
+    },
+    {
+      id: "faith-values",
+      title: "Faith & Values Assessment",
+      description: "Assess personal values and belief systems",
+      duration: "10-15 minutes",
+      route: "/faith-values"
     }
   ];
 

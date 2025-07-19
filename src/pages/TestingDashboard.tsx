@@ -43,6 +43,36 @@ const TestingDashboard = () => {
       description: "Direct link to EQ assessment"
     },
     {
+      title: "Stress & Resilience",
+      url: "/stress-resilience",
+      description: "Direct link to stress management evaluation"
+    },
+    {
+      title: "Cultural Intelligence",
+      url: "/cultural-intelligence",
+      description: "Direct link to cross-cultural competency test"
+    },
+    {
+      title: "CAIR Assessment",
+      url: "/cair",
+      description: "Direct link to comprehensive assessment and intelligence report"
+    },
+    {
+      title: "Gen Z Assessment",
+      url: "/genz",
+      description: "Direct link to generation-specific workplace dynamics evaluation"
+    },
+    {
+      title: "Digital Wellness Assessment",
+      url: "/digital-wellness",
+      description: "Direct link to digital habits and well-being evaluation"
+    },
+    {
+      title: "Faith & Values Assessment",
+      url: "/faith-values",
+      description: "Direct link to personal values and belief systems assessment"
+    },
+    {
       title: "Solo Assessment Portal",
       url: "/solo-assessment/demo-token",
       description: "Demo of solo candidate assessment flow"
