@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare, Globe, BarChart3, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
 import { assessmentsData } from "@/data/assessmentsData";
+import authencoreLogo from "@/assets/authencore-analytics-logo.png";
 
 const Assessment = () => {
   return (
@@ -16,6 +17,14 @@ const Assessment = () => {
       {/* Hero Section */}
       <section className="pt-20 pb-16 px-4">
         <div className="max-w-6xl mx-auto text-center">
+          {/* Display the new logo prominently */}
+          <div className="mb-8">
+            <img 
+              src={authencoreLogo} 
+              alt="Authencore Analytics - Comprehensive Cutting-Edge Assessment Tools & Rich Reports" 
+              className="mx-auto h-32 w-auto"
+            />
+          </div>
           <Badge className="mb-6 bg-primary/10 text-primary hover:bg-primary/20">
             🎯 Assessment Center
           </Badge>
