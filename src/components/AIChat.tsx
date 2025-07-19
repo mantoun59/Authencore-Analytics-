@@ -81,9 +81,21 @@ const AIChat = () => {
       }
     } catch (error) {
       console.error('Error sending message:', error);
+      
+      // Handle specific error types
+      let errorMessage = "Failed to send message. Please try again.";
+      
+      if (error instanceof Error) {
+        if (error.message.includes('quota') || error.message.includes('rate limit')) {
+          errorMessage = "AI service is temporarily unavailable due to high demand. Please try again later.";
+        } else if (error.message.includes('non-2xx status code')) {
+          errorMessage = "AI service is currently experiencing issues. Please try again in a few minutes.";
+        }
+      }
+      
       toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
+        title: "Service Unavailable",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
