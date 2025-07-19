@@ -962,3 +962,173 @@ function generateGenZReport(results: any, userData: any): string {
 function generateDigitalWellnessReport(results: any, userData: any): string {
   return generateCommunicationReport(results, userData); // Enhanced version coming
 }
+
+// CAIR+ Assessment Report Generator
+function generateCAIRReport(results: any, userData: any): string {
+  const candidate = results?.candidate || {};
+  const scores = results?.scores || {};
+  const validity = results?.validity || {};
+  
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>CAIR+ Personality Assessment Report</title>
+    <style>
+      ${getReportStyles()}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    ${generateReportHeader("CAIR+ Personality Assessment", userData)}
+    
+    <div class="executive-summary">
+      <h2>📋 Executive Summary</h2>
+      <div class="summary-box">
+        <p><strong>Candidate:</strong> ${candidate?.name || userData?.name}</p>
+        <p><strong>Position:</strong> ${candidate?.position || 'Not specified'}</p>
+        <p><strong>Company:</strong> ${candidate?.company || 'Not specified'}</p>
+        <p><strong>Assessment Date:</strong> ${candidate?.assessmentDate || userData?.date}</p>
+        <p><strong>Overall Validity:</strong> ${validity?.overallValidity || 'Valid'}</p>
+        <p><strong>Response Pattern:</strong> ${validity?.responseTimeProfile || 'Normal'}</p>
+      </div>
+    </div>
+
+    <div class="personality-profile">
+      <h2>🧠 Personality Profile</h2>
+      <div class="chart-container">
+        <canvas id="personalityChart" width="400" height="200"></canvas>
+      </div>
+      
+      <div class="dimensions-breakdown">
+        ${Object.entries(scores).map(([dimension, data]: [string, any]) => `
+          <div class="dimension-item">
+            <h3>📊 ${dimension.charAt(0).toUpperCase() + dimension.slice(1)} (${data?.percentile || 0}th percentile)</h3>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${data?.percentile || 0}%"></div>
+            </div>
+            <p class="dimension-level"><strong>Level:</strong> ${data?.level || 'Average'}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="insights-section">
+      <h2>💡 Development Insights</h2>
+      
+      <div class="insights-grid">
+        <div class="insight-card strengths">
+          <h3>💪 Strengths</h3>
+          <ul>
+            ${Object.entries(scores)
+              .filter(([, data]: [string, any]) => (data?.percentile || 0) >= 70)
+              .map(([dimension]) => `<li>${dimension.charAt(0).toUpperCase() + dimension.slice(1)}</li>`)
+              .join('') || '<li>Balanced personality profile</li>'}
+          </ul>
+        </div>
+        
+        <div class="insight-card growth-areas">
+          <h3>🎯 Growth Areas</h3>
+          <ul>
+            ${Object.entries(scores)
+              .filter(([, data]: [string, any]) => (data?.percentile || 0) < 50)
+              .map(([dimension]) => `<li>${dimension.charAt(0).toUpperCase() + dimension.slice(1)}</li>`)
+              .join('') || '<li>Continue developing all areas</li>'}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="validity-section">
+      <h2>✅ Response Validity Analysis</h2>
+      <div class="validity-metrics">
+        <div class="validity-item">
+          <h3>Overall Validity</h3>
+          <p class="validity-status ${(validity?.overallValidity || 'Valid').toLowerCase()}">${validity?.overallValidity || 'Valid'}</p>
+        </div>
+        <div class="validity-item">
+          <h3>Response Time Profile</h3>
+          <p>${validity?.responseTimeProfile || 'Normal'}</p>
+        </div>
+        <div class="validity-item">
+          <h3>Fake Good Score</h3>
+          <p>${validity?.fakeGoodScore || 0}</p>
+        </div>
+        <div class="validity-item">
+          <h3>Inconsistency Score</h3>
+          <p>${validity?.inconsistencyScore || 0}</p>
+        </div>
+      </div>
+    </div>
+
+    ${generateActionPlan([
+      "Review and discuss personality assessment results with a qualified professional",
+      "Focus on developing identified growth areas through targeted training",
+      "Leverage natural strengths in current and future role assignments",
+      "Consider personality factors in team composition and project assignments",
+      "Schedule follow-up assessment in 6-12 months to track development"
+    ])}
+
+    <div class="footer">
+      <p>This report is confidential and intended for development purposes.</p>
+      <p>Generated on ${new Date().toLocaleDateString()} • Report ID: ${generateReportId()}</p>
+    </div>
+
+    <script>
+      ${generatePersonalityChartScript(scores)}
+    </script>
+  </body>
+  </html>
+  `;
+}
+
+function generatePersonalityChartScript(scores: any): string {
+  return `
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('personalityChart');
+      if (ctx) {
+        new Chart(ctx, {
+          type: 'radar',
+          data: {
+            labels: [${Object.keys(scores || {}).map(key => `'${key.charAt(0).toUpperCase() + key.slice(1)}'`).join(', ')}],
+            datasets: [{
+              label: 'Personality Profile',
+              data: [${Object.values(scores || {}).map((data: any) => data?.percentile || 0).join(', ')}],
+              backgroundColor: 'rgba(59, 130, 246, 0.1)',
+              borderColor: 'rgba(59, 130, 246, 1)',
+              borderWidth: 2,
+              pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+              pointBorderColor: 'rgba(255, 255, 255, 1)',
+              pointHoverBackgroundColor: 'rgba(255, 255, 255, 1)',
+              pointHoverBorderColor: 'rgba(59, 130, 246, 1)'
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              r: {
+                beginAtZero: true,
+                max: 100,
+                ticks: {
+                  stepSize: 20
+                },
+                grid: {
+                  color: 'rgba(0, 0, 0, 0.1)'
+                },
+                angleLines: {
+                  color: 'rgba(0, 0, 0, 0.1)'
+                }
+              }
+            }
+          }
+        });
+      }
+    });
+  `;
+}
