@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { createAssessmentQuestions, personalityDimensions } from "@/data/cairQuestions";
 import { Shield, Brain, Users, Lightbulb, Heart, Download, Share2, Eye, Clock, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface UserProfile {
   name: string;
@@ -208,66 +209,77 @@ export default function CAIRAssessment() {
     return 'Very Low';
   };
 
-  const generateCandidateReport = () => {
+  const generateCandidateReport = async () => {
     const scores = calculateScores();
     const validity = calculateValidityMetrics();
     
-    const reportData = {
-      candidate: userProfile,
-      assessmentDate: new Date().toLocaleDateString(),
-      scores,
-      validity,
-      totalQuestions: questions.length,
-      completionTime: Math.round((Date.now() - assessmentStartTime) / 60000)
-    };
+    try {
+      const reportData = {
+        assessmentType: 'cair_plus',
+        results: {
+          candidate: userProfile,
+          assessmentDate: new Date().toLocaleDateString(),
+          scores,
+          validity,
+          totalQuestions: questions.length,
+          completionTime: Math.round((Date.now() - assessmentStartTime) / 60000)
+        },
+        userData: {
+          name: userProfile.name,
+          email: userProfile.email,
+          position: userProfile.position,
+          company: userProfile.company,
+          date: new Date().toLocaleDateString()
+        }
+      };
 
-    const reportText = `
-CAIR+ PERSONALITY ASSESSMENT REPORT
-===================================
+      const response = await supabase.functions.invoke('generate-pdf-report', {
+        body: reportData
+      });
 
-Candidate: ${reportData.candidate.name}
-Position: ${reportData.candidate.position}
-Company: ${reportData.candidate.company}
-Assessment Date: ${reportData.assessmentDate}
-Completion Time: ${reportData.completionTime} minutes
+      if (response.data) {
+        // Open HTML report in new window for PDF printing
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(response.data);
+          newWindow.document.close();
+          
+          // Add print-friendly styles and auto-print
+          setTimeout(() => {
+            newWindow.focus();
+            newWindow.print();
+          }, 1000);
 
-PERSONALITY PROFILE
--------------------
-${Object.entries(scores).map(([dimension, data]) => `
-${personalityDimensions[dimension as keyof typeof personalityDimensions].name}: ${data.percentile}th percentile (${data.level})
-`).join('')}
+          toast({
+            title: "Report Generated",
+            description: "Use your browser's Print dialog to save as PDF. Select 'Save as PDF' as destination.",
+          });
+        } else {
+          // Fallback: download as HTML if popup blocked
+          const blob = new Blob([response.data], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `CAIR_Report_${userProfile.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.html`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
 
-DEVELOPMENT INSIGHTS
---------------------
-Strengths:
-${Object.entries(scores)
-  .filter(([, data]) => data.percentile >= 70)
-  .map(([dimension]) => `• ${personalityDimensions[dimension as keyof typeof personalityDimensions].name}`)
-  .join('\n')}
-
-Growth Areas:
-${Object.entries(scores)
-  .filter(([, data]) => data.percentile < 50)
-  .map(([dimension]) => `• ${personalityDimensions[dimension as keyof typeof personalityDimensions].name}`)
-  .join('\n')}
-
-RESPONSE VALIDITY
------------------
-Overall Validity: ${validity.overallValidity}
-Response Pattern: ${validity.responseTimeProfile}
-
-This report is confidential and intended for development purposes.
-`;
-
-    const blob = new Blob([reportText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `CAIR_Report_${userProfile.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+          toast({
+            title: "HTML Report Downloaded",
+            description: "Open the HTML file and use your browser's Print to PDF feature.",
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Error generating report:', error);
+      toast({
+        title: "Report Generation Error",
+        description: "Failed to generate report. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   const shareResults = async () => {

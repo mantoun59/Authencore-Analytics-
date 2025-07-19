@@ -148,25 +148,37 @@ const CommunicationAssessment = () => {
       });
 
       if (response.data) {
-        // The response is HTML content, so we need to open it in a new window for printing
-        const htmlContent = response.data;
-        const printWindow = window.open('', '_blank');
-        if (printWindow) {
-          printWindow.document.write(htmlContent);
-          printWindow.document.close();
+        // Open HTML report in new window for PDF printing
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(response.data);
+          newWindow.document.close();
           
-          // Wait for content to load then trigger print
-          printWindow.onload = () => {
-            setTimeout(() => {
-              printWindow.print();
-              printWindow.close();
-            }, 500);
-          };
-        }
+          // Add print-friendly styles and auto-print
+          setTimeout(() => {
+            newWindow.focus();
+            newWindow.print();
+          }, 1000);
 
-        toast.success("Report Generated", {
-          description: "Your communication styles report has been opened for printing. You can save it as PDF using your browser's print function."
-        });
+          toast.success("Report Generated", {
+            description: "Use your browser's Print dialog to save as PDF. Select 'Save as PDF' as destination."
+          });
+        } else {
+          // Fallback: download as HTML if popup blocked
+          const blob = new Blob([response.data], { type: 'text/html' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Communication-Report.html`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          toast.success("HTML Report Downloaded", {
+            description: "Open the HTML file and use your browser's Print to PDF feature."
+          });
+        }
       }
     } catch (error) {
       console.error('Error generating report:', error);
