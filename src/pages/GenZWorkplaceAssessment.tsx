@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { useGenZScoring, GenZScoringData } from '@/hooks/useGenZScoring';
-import { aiReportGenerator, AIReportRequest } from '@/services/aiReportGenerator';
+import { DetailedGenZReport } from '@/components/DetailedGenZReport';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Progress } from '@/components/ui/progress';
@@ -576,50 +576,16 @@ function ValuesSelection({
 function ResultsDisplay({ results }: { results: any }) {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
+  const [showDetailedReport, setShowDetailedReport] = useState(false);
 
-  const generateDetailedReport = async () => {
-    if (!results) return;
-    
-    setIsGeneratingReport(true);
-    try {
-      const candidateInfo = {
-        name: results.userData?.username || 'Anonymous',
-        email: 'anonymous@genzstudy.com', // Anonymous for this assessment
-        age: new Date().getFullYear() - (results.userData?.birthYear || 2000),
-        experience: 'Entry Level',
-        position: 'Gen Z Professional'
-      };
-
-      const request: AIReportRequest = {
-        assessmentResultId: 'genz-workplace-' + results.sessionId,
-        reportType: 'candidate' as const,
-        candidateInfo
-      };
-
-      toast({
-        title: "Generating Report",
-        description: "Creating your personalized development plan...",
-      });
-
-      const reportContent = await aiReportGenerator.generateReport(request);
-      await aiReportGenerator.generatePDFReport(reportContent, 'candidate');
-      
-      toast({
-        title: "Success!",
-        description: "Your detailed development report has been generated and downloaded.",
-      });
-    } catch (error) {
-      console.error('Error generating detailed report:', error);
-      toast({
-        title: "Error",
-        description: "Failed to generate report. Please try again.",
-        variant: "destructive"
-      });
-    } finally {
-      setIsGeneratingReport(false);
-    }
-  };
+  if (showDetailedReport) {
+    return (
+      <DetailedGenZReport 
+        results={results} 
+        onClose={() => setShowDetailedReport(false)} 
+      />
+    );
+  }
   
   return (
     <div className="min-h-screen p-6 space-y-8">
@@ -695,11 +661,10 @@ function ResultsDisplay({ results }: { results: any }) {
           </CardHeader>
           <CardContent className="space-y-4">
             <Button 
-              onClick={generateDetailedReport}
-              disabled={isGeneratingReport}
+              onClick={() => setShowDetailedReport(true)}
               className="w-full"
             >
-              {isGeneratingReport ? 'Generating Your Report...' : 'Generate Detailed Development Report'}
+              View Detailed Development Report
             </Button>
           </CardContent>
         </Card>

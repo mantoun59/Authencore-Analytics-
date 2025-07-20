@@ -163,3 +163,55 @@ All colors MUST be HSL.
     transform: translate3d(0, -4px, 0);
   }
 }
+
+/* Print Styles for Detailed Reports */
+@media print {
+  .detailed-report-container {
+    @apply text-black bg-white;
+  }
+  
+  .report-content {
+    @apply max-w-none mx-0 p-4;
+  }
+  
+  .print\:hidden {
+    display: none !important;
+  }
+  
+  .print\:block {
+    display: block !important;
+  }
+  
+  .print\:break-before-page {
+    break-before: page;
+  }
+  
+  .print\:break-after-page {
+    break-after: page;
+  }
+  
+  /* Ensure colors show in print */
+  .text-primary {
+    color: hsl(180 100% 35%) !important;
+  }
+  
+  .text-destructive {
+    color: hsl(0 84.2% 60.2%) !important;
+  }
+  
+  .bg-primary\/10 {
+    background-color: hsl(180 100% 35% / 0.1) !important;
+  }
+  
+  .bg-destructive\/5 {
+    background-color: hsl(0 84.2% 60.2% / 0.05) !important;
+  }
+  
+  .border-primary {
+    border-color: hsl(180 100% 35%) !important;
+  }
+  
+  .border-destructive {
+    border-color: hsl(0 84.2% 60.2%) !important;
+  }
+}
