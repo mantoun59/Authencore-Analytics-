@@ -44,8 +44,6 @@ import DigitalWellnessDescription from "./pages/DigitalWellnessDescription";
 import EmotionalIntelligenceDescription from "./pages/EmotionalIntelligenceDescription";
 import FaithValuesDescription from "./pages/FaithValuesDescription";
 import GenZWorkplaceDescription from "./pages/GenZWorkplaceDescription";
-import GenZFutureReadinessDescription from "./pages/GenZFutureReadinessDescription";
-import InnovationMindsetDescription from "./pages/InnovationMindsetDescription";
 import ScrollToTop from "@/components/ScrollToTop";
 import AIChat from "@/components/AIChat";
 
@@ -96,8 +94,6 @@ const App = () => (
             <Route path="/emotional-intelligence-info" element={<EmotionalIntelligenceDescription />} />
             <Route path="/faith-values-info" element={<FaithValuesDescription />} />
             <Route path="/genz-workplace-info" element={<GenZWorkplaceDescription />} />
-            <Route path="/genz-future-readiness-info" element={<GenZFutureReadinessDescription />} />
-            <Route path="/innovation-mindset-info" element={<InnovationMindsetDescription />} />
             <Route path="/security" element={<Security />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/employer-login" element={<EmployerLogin />} />
