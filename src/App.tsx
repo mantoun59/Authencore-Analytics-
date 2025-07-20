@@ -46,6 +46,7 @@ import FaithValuesDescription from "./pages/FaithValuesDescription";
 import GenZWorkplaceDescription from "./pages/GenZWorkplaceDescription";
 import GenZFutureReadinessDescription from "./pages/GenZFutureReadinessDescription";
 import InnovationMindsetDescription from "./pages/InnovationMindsetDescription";
+import ScrollToTop from "@/components/ScrollToTop";
 import AIChat from "@/components/AIChat";
 
 const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ const App = () => (
           <Toaster />
           <Sonner />
           <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/about" element={<AboutPage />} />
