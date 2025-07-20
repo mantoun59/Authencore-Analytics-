@@ -55,7 +55,7 @@ const FaithValuesDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              147 Questions | 7 Dimensions | $14.99
+              45 Questions | 6 Dimensions | $14.99
             </Badge>
           </div>
           
@@ -87,7 +87,7 @@ const FaithValuesDescription = () => {
         {/* Dimensions Section */}
         <Card className="mb-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-primary">7 Dimensions Covered in FVAI</CardTitle>
+            <CardTitle className="text-2xl text-primary">6 Dimensions Covered in FVAI</CardTitle>
             <p className="text-muted-foreground">Explore the multidimensional structure of your faith and values alignment.</p>
           </CardHeader>
           <CardContent>

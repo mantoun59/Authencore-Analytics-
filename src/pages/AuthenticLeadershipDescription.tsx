@@ -50,7 +50,7 @@ const AuthenticLeadershipDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              156 Questions | 6 Dimensions | $34.99
+              120 Questions | 8 Dimensions | $34.99
             </Badge>
           </div>
           
@@ -82,7 +82,7 @@ const AuthenticLeadershipDescription = () => {
         {/* Dimensions Section */}
         <Card className="mb-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-primary">6 Dimensions Covered in Authentic Leadership</CardTitle>
+            <CardTitle className="text-2xl text-primary">8 Dimensions Covered in Authentic Leadership</CardTitle>
             <p className="text-muted-foreground">Explore the core dimensions of authentic leadership assessed.</p>
           </CardHeader>
           <CardContent>

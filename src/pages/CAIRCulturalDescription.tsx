@@ -45,12 +45,12 @@ const CAIRCulturalDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              125 Questions | 5 Dimensions | $29.99
+              100 Questions | 4 Dimensions | $29.99
             </Badge>
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
-            CAIR+ Cultural Adaptability Assessment
+            CAIR+ Personality Assessment
           </h1>
           
           <div className="flex justify-center mb-8">
@@ -65,7 +65,7 @@ const CAIRCulturalDescription = () => {
         {/* About Section */}
         <Card className="mb-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-primary">About CAIR+ Cultural Adaptability Assessment</CardTitle>
+            <CardTitle className="text-2xl text-primary">About CAIR+ Personality Assessment</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-lg text-muted-foreground leading-relaxed">
@@ -77,7 +77,7 @@ const CAIRCulturalDescription = () => {
         {/* Dimensions Section */}
         <Card className="mb-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-primary">5 Dimensions Covered in CAIR+</CardTitle>
+            <CardTitle className="text-2xl text-primary">4 Dimensions Covered in CAIR+</CardTitle>
             <p className="text-muted-foreground">Understand the key cultural adaptability dimensions assessed.</p>
           </CardHeader>
           <CardContent>

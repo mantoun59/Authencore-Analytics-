@@ -50,7 +50,7 @@ const DigitalWellnessDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              98 Questions | 6 Dimensions | $12.99
+              40 Questions | 6 Dimensions | $12.99
             </Badge>
           </div>
           

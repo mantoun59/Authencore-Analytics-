@@ -50,7 +50,7 @@ const GenZWorkplaceDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              45 Questions | Multiple Dimensions | $9.99
+              45 Questions | 6 Dimensions | $9.99
             </Badge>
           </div>
           
