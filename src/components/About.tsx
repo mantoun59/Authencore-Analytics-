@@ -26,7 +26,7 @@ const About = () => {
           {/* Who We Are */}
           <div className="space-y-6">
             <h3 className="text-2xl font-bold text-foreground">Who We Are</h3>
-            <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
+            <div className="space-y-4 text-foreground text-lg leading-relaxed">
               <p>
                 At Authencore Analytics, we're passionate learners, creators, and digital explorers who believe that everyone deserves access to the tools that unlock self-understanding and personal growth.
               </p>
@@ -39,7 +39,7 @@ const About = () => {
           {/* Why We Built This */}
           <div className="space-y-6">
             <h3 className="text-2xl font-bold text-foreground">Why We Built This</h3>
-            <div className="space-y-4 text-muted-foreground text-lg leading-relaxed">
+            <div className="space-y-4 text-foreground text-lg leading-relaxed">
               <p>
                 We know that deep self-insight isn't just for corporate executives or therapy sessions. It's for students finding their path, professionals navigating challenges, and anyone wanting to understand themselves a little better today than yesterday.
               </p>
@@ -53,7 +53,7 @@ const About = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
             <div className="space-y-6">
               <h3 className="text-2xl font-bold text-foreground">Professional Assessment Platform</h3>
-              <p className="text-muted-foreground text-lg leading-relaxed">
+              <p className="text-foreground text-lg leading-relaxed">
                 Our platform combines cutting-edge technology with validated psychological frameworks 
                 to deliver professional-grade assessments that help individuals and organizations 
                 make informed decisions about personal and professional development.
@@ -61,19 +61,19 @@ const About = () => {
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-3">
                   <Brain className="w-6 h-6 text-primary" />
-                  <span className="text-sm font-medium">AI-Powered</span>
+                  <span className="text-sm font-medium text-foreground">AI-Powered</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Shield className="w-6 h-6 text-primary" />
-                  <span className="text-sm font-medium">Secure Platform</span>
+                  <span className="text-sm font-medium text-foreground">Secure Platform</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Users className="w-6 h-6 text-primary" />
-                  <span className="text-sm font-medium">Team Analytics</span>
+                  <span className="text-sm font-medium text-foreground">Team Analytics</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Target className="w-6 h-6 text-primary" />
-                  <span className="text-sm font-medium">Goal-Oriented</span>
+                  <span className="text-sm font-medium text-foreground">Goal-Oriented</span>
                 </div>
               </div>
             </div>
@@ -91,7 +91,7 @@ const About = () => {
           {/* Our Promise */}
           <div className="space-y-6">
             <h3 className="text-2xl font-bold text-foreground">Our Promise</h3>
-            <p className="text-muted-foreground text-lg leading-relaxed">
+            <p className="text-foreground text-lg leading-relaxed">
               We promise to always be honest about what our assessments can and cannot do. We're here to empower your personal development journey, not to diagnose or label you.
             </p>
           </div>
@@ -104,7 +104,7 @@ const About = () => {
             </div>
             <div className="space-y-4">
               <h4 className="text-lg font-semibold text-foreground">Important Note</h4>
-              <div className="space-y-4 text-muted-foreground leading-relaxed">
+              <div className="space-y-4 text-foreground leading-relaxed">
                 <p>
                   The assessments and reports provided by Authencore Analytics are designed for educational and personal development purposes only. They are not clinical tools and should not be used to diagnose, treat, or manage any mental health condition.
                 </p>
@@ -117,7 +117,7 @@ const About = () => {
 
           {/* Footer Add-On */}
           <div className="text-center py-8 border-t border-border">
-            <div className="flex items-center justify-center gap-2 text-muted-foreground">
+            <div className="flex items-center justify-center gap-2 text-foreground">
               <Sparkles className="w-5 h-5 text-primary" />
               <p className="text-lg font-medium">
                 Powered by AI and open-source psychology for human growth and clarity.
