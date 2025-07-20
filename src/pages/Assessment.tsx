@@ -123,7 +123,7 @@ const Assessment = () => {
             Professional Assessment Suite
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Choose from our comprehensive range of {assessmentsData.length} professional assessments designed to evaluate skills, 
+            Choose from our comprehensive range of 10+ professional assessments designed to evaluate skills, 
             personality, career readiness, and workplace performance.
           </p>
         </div>
@@ -209,7 +209,7 @@ const Assessment = () => {
               </CardHeader>
               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="text-center py-4">
-                  <div className="text-2xl font-bold text-primary mb-2">11+ Assessments</div>
+                  <div className="text-2xl font-bold text-primary mb-2">10+ Assessments</div>
                   <div className="text-sm text-muted-foreground">Comprehensive Testing Suite</div>
                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
@@ -227,7 +227,7 @@ const Assessment = () => {
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Enterprise Security
+                    Validity Detection
                   </li>
                 </ul>
                 <div className="flex-grow"></div>
