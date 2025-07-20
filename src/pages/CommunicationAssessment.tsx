@@ -85,26 +85,29 @@ const CommunicationAssessment = () => {
         responseTime: responseTimings[questionId] || 0
       }));
 
-      const scoringResult = calculateResults(responses);
+      const scoringResult = await calculateResults(answers, assessmentStartTime, responseTimings);
       
       // Generate professional report
-      const reportData = await generateProfessionalReport({
+      await generateProfessionalReport({
         assessmentType: 'communication_styles',
+        candidateInfo: {
+          name: userProfile?.name || 'Anonymous',
+          email: userProfile?.email || 'unknown@example.com',
+          date: new Date().toLocaleDateString()
+        },
         results: scoringResult,
-        userProfile,
-        assessmentDate: new Date().toLocaleDateString(),
-        completionTime: Math.round((Date.now() - assessmentStartTime) / 60000)
+        reportType: 'individual'
       });
-
-      const finalResults = { ...scoringResult, reportData };
 
       // Save results to database
-      await supabase.from('assessment_results').insert({
-        user_email: userProfile.email,
-        assessment_type: 'communication_styles',
-        results: finalResults,
-        completed_at: new Date().toISOString()
-      });
+      if (user?.id) {
+        await supabase.from('assessment_results').insert({
+          user_id: user.id,
+          assessment_type: 'communication_styles',
+          results: scoringResult as any,
+          completed_at: new Date().toISOString()
+        });
+      }
 
       setShowResults(true);
       
@@ -282,7 +285,7 @@ const CommunicationAssessment = () => {
             <Card className="mb-8">
               <CardHeader>
                 <div className="flex items-center gap-3 mb-4">
-                  <Badge variant="outline">{currentQuestionData.category}</Badge>
+                  <Badge variant="outline">Communication</Badge>
                   <Badge variant="secondary">Question {currentQuestion + 1}</Badge>
                 </div>
                 <CardTitle className="text-xl leading-relaxed">
@@ -337,7 +340,7 @@ const CommunicationAssessment = () => {
                 onClick={nextQuestion}
                 disabled={
                   (currentQuestionData.type === 'multiple-choice' && !answers[currentQuestionData.id]) ||
-                  (currentQuestionData.type === 'text' && !writtenResponse.trim()) ||
+                  (currentQuestionData.type === 'written-response' && !writtenResponse.trim()) ||
                   isGeneratingReport
                 }
                 className="bg-indigo-600 hover:bg-indigo-700"

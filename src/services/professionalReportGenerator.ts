@@ -408,3 +408,8 @@ export class ProfessionalReportGenerator {
 }
 
 export const professionalReportGenerator = ProfessionalReportGenerator.getInstance();
+
+// Export convenience function
+export const generateProfessionalReport = async (config: ProfessionalReportConfig): Promise<void> => {
+  return professionalReportGenerator.generateReport(config);
+};

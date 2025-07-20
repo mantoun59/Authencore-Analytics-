@@ -12,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { ArrowRight, Brain, Heart, Zap, Target, CheckCircle2, BarChart3, TrendingUp, Clock, Shield, Lightbulb, ArrowLeft, FileText, Share2, RotateCcw, Users } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 import { burnoutPreventionQuestions } from "@/data/burnoutPreventionQuestions";
 import { useStressResilienceScoring } from "@/hooks/useStressResilienceScoring";
 import { generateProfessionalReport } from "@/services/professionalReportGenerator";
@@ -35,6 +36,8 @@ const StressResilience = () => {
   const { addResponse, calculateResults, currentResults, resetAssessment, responses } = useStressResilienceScoring();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const [results, setResults] = useState(null);
 
   const currentQuestion = burnoutPreventionQuestions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / burnoutPreventionQuestions.length) * 100;
@@ -63,7 +66,13 @@ const StressResilience = () => {
       return;
     }
 
-    addResponse(currentQuestionIndex, selectedOption, confidence[0]);
+    addResponse({
+      questionId: currentQuestion.id,
+      selectedOption,
+      score: selectedOption,
+      timeTaken: Date.now() - startTime,
+      confidence: confidence[0]
+    });
     
     if (currentQuestionIndex < burnoutPreventionQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -77,28 +86,32 @@ const StressResilience = () => {
   const completeAssessment = async () => {
     setIsSubmitting(true);
     try {
-      const results = calculateResults();
+      const results = calculateResults(responses);
       const completionTime = Math.round((Date.now() - startTime) / 60000);
       
       // Generate professional report
-      const reportData = await generateProfessionalReport({
+      await generateProfessionalReport({
         assessmentType: 'burnout_prevention',
-        results: {
-          ...results,
-          completion_time: completionTime
+        candidateInfo: {
+          name: userProfile?.name || 'Anonymous',
+          email: userProfile?.email || 'unknown@example.com',
+          date: new Date().toLocaleDateString()
         },
-        userProfile,
-        assessmentDate: new Date().toLocaleDateString(),
-        completionTime
+        results: results,
+        reportType: 'individual'
       });
 
       // Save to database
-      await supabase.from('assessment_results').insert({
-        user_email: userProfile.email,
-        assessment_type: 'burnout_prevention',
-        results: { ...results, reportData },
-        completed_at: new Date().toISOString()
-      });
+      if (user?.id) {
+        await supabase.from('assessment_results').insert({
+          user_id: user.id,
+          assessment_type: 'burnout_prevention',
+          results: results as any,
+          completed_at: new Date().toISOString()
+        });
+      }
+      
+      setResults(results);
 
       setCurrentStep('results');
       
@@ -318,7 +331,7 @@ const StressResilience = () => {
                   <Badge variant="secondary">Question {currentQuestionIndex + 1}</Badge>
                 </div>
                 <CardTitle className="text-xl leading-relaxed">
-                  {currentQuestion.text}
+                  {currentQuestion.question}
                 </CardTitle>
               </CardHeader>
               <CardContent>
@@ -331,7 +344,7 @@ const StressResilience = () => {
                     <div key={index} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
                       <RadioGroupItem value={index.toString()} id={`option-${index}`} />
                       <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
-                        {option}
+                        {typeof option === 'string' ? option : option.text}
                       </Label>
                     </div>
                   ))}
@@ -425,29 +438,29 @@ const StressResilience = () => {
                   {currentResults.overallScore}%
                 </div>
                 <Badge 
-                  variant={currentResults.riskLevel === 'Low' ? 'default' : 
-                           currentResults.riskLevel === 'Moderate' ? 'secondary' : 'destructive'}
+                  variant={currentResults.burnoutRisk === 'low' ? 'default' : 
+                           currentResults.burnoutRisk === 'medium' ? 'secondary' : 'destructive'}
                   className="text-lg px-4 py-2"
                 >
-                  {currentResults.riskLevel} Risk
+                  {currentResults.burnoutRisk} Risk
                 </Badge>
               </CardContent>
             </Card>
 
             {/* Dimension Scores */}
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {Object.entries(currentResults.dimensionScores || {}).map(([dimension, score]) => (
-                <Card key={dimension} className="text-center">
+              {currentResults.dimensionScores?.map((dimension, index) => (
+                <Card key={index} className="text-center">
                   <CardHeader>
                     <CardTitle className="text-lg capitalize">
-                      {dimension.replace('_', ' ')}
+                      {dimension.dimension}
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="text-3xl font-bold text-blue-600 mb-2">
-                      {score}%
+                      {Math.round(dimension.score || dimension.percentage)}%
                     </div>
-                    <Progress value={score} className="h-2" />
+                    <Progress value={dimension.score || dimension.percentage} className="h-2" />
                   </CardContent>
                 </Card>
               ))}
