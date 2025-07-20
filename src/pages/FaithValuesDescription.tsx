@@ -145,6 +145,50 @@ const FaithValuesDescription = () => {
           </CardContent>
         </Card>
 
+        {/* Sample Reports Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <h2 className="text-2xl font-bold text-primary">Sample Reports</h2>
+            <p className="text-muted-foreground">See what you'll receive with your assessment</p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="p-4 border rounded-lg">
+                  <h3 className="font-semibold text-lg mb-2">📊 Individual Report</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Personal faith and values alignment analysis with spiritual growth recommendations.
+                  </p>
+                  <Link to="/sample-reports" className="text-primary hover:underline text-sm font-medium">
+                    View Sample Faith Values Report →
+                  </Link>
+                </div>
+                <div className="p-4 border rounded-lg">
+                  <h3 className="font-semibold text-lg mb-2">🏢 Coaching Report</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Advanced insights for faith-based leadership development and spiritual mentoring.
+                  </p>
+                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="p-4 bg-primary/10 rounded-lg">
+                  <h4 className="font-semibold mb-2">🕊️ Spiritual Insights</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Faith-based guidance for personal growth and values-driven leadership.
+                  </p>
+                </div>
+                <div className="p-4 bg-primary/10 rounded-lg">
+                  <h4 className="font-semibold mb-2">🕊️ Spiritual Insights</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Practical recommendations for living out faith values in professional contexts.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* CTA Section */}
         <Card className="text-center">
           <CardContent className="py-12">
