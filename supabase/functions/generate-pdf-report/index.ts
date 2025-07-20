@@ -482,6 +482,10 @@ function generateCareerLaunchReport(results: any, userData: any): string {
 // Helper Functions
 function getReportStyles(): string {
   return `
+    @page { margin: 0.5in; }
+    @page :first { margin: 1.5in; }
+    @page :nth(2) { margin: 1.25in; }
+    @page :nth(3) { margin: 1in; }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
