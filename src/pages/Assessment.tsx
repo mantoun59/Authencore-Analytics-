@@ -107,13 +107,6 @@ const Assessment = () => {
             Choose from our comprehensive range of {assessmentsData.length} professional assessments designed to evaluate skills, 
             personality, career readiness, and workplace performance.
           </p>
-          <Link to="/sample-reports">
-            <Button size="lg" className="mb-8 flex items-center gap-2 mx-auto">
-              <BarChart3 className="h-5 w-5" />
-              View Sample Reports
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Button>
-          </Link>
         </div>
       </section>
 
