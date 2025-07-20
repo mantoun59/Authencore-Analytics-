@@ -35,6 +35,17 @@ import AdminAnalytics from "./pages/AdminAnalytics";
 import CandidateTesting from "./pages/CandidateTesting";
 import TestingDashboard from "./pages/TestingDashboard";
 import SampleCareerLaunchReport from "./pages/SampleCareerLaunchReport";
+import AuthenticLeadershipDescription from "./pages/AuthenticLeadershipDescription";
+import BurnoutPreventionDescription from "./pages/BurnoutPreventionDescription";
+import CAIRCulturalDescription from "./pages/CAIRCulturalDescription";
+import CareerLaunchDescription from "./pages/CareerLaunchDescription";
+import CommunicationStyleDescription from "./pages/CommunicationStyleDescription";
+import DigitalWellnessDescription from "./pages/DigitalWellnessDescription";
+import EmotionalIntelligenceDescription from "./pages/EmotionalIntelligenceDescription";
+import FaithValuesDescription from "./pages/FaithValuesDescription";
+import GenZWorkplaceDescription from "./pages/GenZWorkplaceDescription";
+import GenZFutureReadinessDescription from "./pages/GenZFutureReadinessDescription";
+import InnovationMindsetDescription from "./pages/InnovationMindsetDescription";
 import AIChat from "@/components/AIChat";
 
 const queryClient = new QueryClient();
@@ -73,6 +84,18 @@ const App = () => (
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/compliance" element={<CompliancePage />} />
             <Route path="/sample-reports" element={<SampleReports />} />
+            {/* Assessment Description Pages */}
+            <Route path="/authentic-leadership-info" element={<AuthenticLeadershipDescription />} />
+            <Route path="/burnout-prevention-info" element={<BurnoutPreventionDescription />} />
+            <Route path="/cair-cultural-info" element={<CAIRCulturalDescription />} />
+            <Route path="/career-launch-info" element={<CareerLaunchDescription />} />
+            <Route path="/communication-style-info" element={<CommunicationStyleDescription />} />
+            <Route path="/digital-wellness-info" element={<DigitalWellnessDescription />} />
+            <Route path="/emotional-intelligence-info" element={<EmotionalIntelligenceDescription />} />
+            <Route path="/faith-values-info" element={<FaithValuesDescription />} />
+            <Route path="/genz-workplace-info" element={<GenZWorkplaceDescription />} />
+            <Route path="/genz-future-readiness-info" element={<GenZFutureReadinessDescription />} />
+            <Route path="/innovation-mindset-info" element={<InnovationMindsetDescription />} />
             <Route path="/security" element={<Security />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/employer-login" element={<EmployerLogin />} />
