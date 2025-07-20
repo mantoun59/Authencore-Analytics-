@@ -18,800 +18,1545 @@ export const burnoutPreventionQuestions: BurnoutPreventionQuestion[] = [
     id: "bp001",
     category: "workload",
     dimension: "Task Prioritization",
-    question: "When facing multiple urgent deadlines, how do you handle the situation?",
+    question: "How often do you feel overwhelmed by your workload?",
     options: [
-      { text: "I feel completely overwhelmed and don't know where to start", score: 1 },
-      { text: "I try to do everything but struggle to prioritize effectively", score: 2 },
-      { text: "I create a list and tackle tasks based on urgency and importance", score: 3 },
-      { text: "I systematically assess deadlines, delegate when possible, and manage expectations", score: 4 },
-      { text: "I efficiently prioritize, negotiate timelines, and maintain quality standards", score: 5 }
+      { text: "Never", score: 5, explanation: "Excellent workload management" },
+      { text: "Rarely", score: 4, explanation: "Good workload balance" },
+      { text: "Sometimes", score: 3, explanation: "Moderate workload stress" },
+      { text: "Often", score: 2, explanation: "High workload stress" },
+      { text: "Always", score: 1, explanation: "Critical workload overload" }
     ],
     priority: "high"
   },
   {
     id: "bp002",
     category: "workload",
-    dimension: "Delegation Skills",
-    question: "How comfortable are you with delegating tasks to others?",
+    dimension: "Time Management",
+    question: "How effectively do you manage your time at work?",
     options: [
-      { text: "I never delegate - it's faster to do everything myself", score: 1 },
-      { text: "I rarely delegate because I worry about quality", score: 2 },
-      { text: "I delegate sometimes but only simple tasks", score: 3 },
-      { text: "I delegate regularly and provide clear instructions", score: 4 },
-      { text: "I effectively delegate, empower others, and follow up appropriately", score: 5 }
+      { text: "Very effectively", score: 5 },
+      { text: "Effectively", score: 4 },
+      { text: "Moderately", score: 3 },
+      { text: "Poorly", score: 2 },
+      { text: "Very poorly", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp003",
     category: "workload",
-    dimension: "Time Management",
-    question: "How well do you manage your time throughout the workday?",
+    dimension: "Deadline Pressure",
+    question: "How often do you work under unrealistic deadlines?",
     options: [
-      { text: "I constantly feel behind and struggle to complete tasks", score: 1 },
-      { text: "I often run late and feel stressed about deadlines", score: 2 },
-      { text: "I manage my time adequately but could be more efficient", score: 3 },
-      { text: "I use time management techniques and stay mostly on schedule", score: 4 },
-      { text: "I excel at time management and consistently meet deadlines with quality work", score: 5 }
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Always", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp004",
     category: "workload",
-    dimension: "Boundary Setting",
-    question: "How effectively do you set boundaries around your workload?",
+    dimension: "Task Clarity",
+    question: "How clear are your job responsibilities and expectations?",
     options: [
-      { text: "I say yes to everything and never set limits", score: 1 },
-      { text: "I struggle to say no even when overwhelmed", score: 2 },
-      { text: "I sometimes set boundaries but feel guilty about it", score: 3 },
-      { text: "I set clear boundaries and communicate my limits professionally", score: 4 },
-      { text: "I proactively manage my workload and help others understand healthy boundaries", score: 5 }
+      { text: "Very clear", score: 5 },
+      { text: "Clear", score: 4 },
+      { text: "Somewhat clear", score: 3 },
+      { text: "Unclear", score: 2 },
+      { text: "Very unclear", score: 1 }
     ],
-    priority: "high"
+    priority: "medium"
   },
   {
     id: "bp005",
     category: "workload",
-    dimension: "Resource Management",
-    question: "When you lack the resources needed to complete a task, what do you do?",
+    dimension: "Work Volume",
+    question: "How manageable is your daily work volume?",
     options: [
-      { text: "I try to do it anyway and often produce poor quality work", score: 1 },
-      { text: "I struggle through and feel frustrated about the limitations", score: 2 },
-      { text: "I mention the resource gap but don't actively seek solutions", score: 3 },
-      { text: "I proactively communicate resource needs and propose solutions", score: 4 },
-      { text: "I systematically identify resource gaps early and create contingency plans", score: 5 }
+      { text: "Very manageable", score: 5 },
+      { text: "Manageable", score: 4 },
+      { text: "Somewhat manageable", score: 3 },
+      { text: "Unmanageable", score: 2 },
+      { text: "Completely unmanageable", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp006",
+    category: "workload",
+    dimension: "Resource Availability",
+    question: "How adequate are the resources provided to complete your work?",
+    options: [
+      { text: "Very adequate", score: 5 },
+      { text: "Adequate", score: 4 },
+      { text: "Somewhat adequate", score: 3 },
+      { text: "Inadequate", score: 2 },
+      { text: "Very inadequate", score: 1 }
     ],
     priority: "medium"
   },
-
-  // EMOTIONAL EXHAUSTION (15 questions)
-  {
-    id: "bp006",
-    category: "emotional",
-    dimension: "Energy Depletion",
-    question: "How often do you feel emotionally drained at the end of your workday?",
-    options: [
-      { text: "Almost every day - I feel completely depleted", score: 1 },
-      { text: "Most days I feel very tired and emotionally spent", score: 2 },
-      { text: "Some days are draining, others are manageable", score: 3 },
-      { text: "I occasionally feel tired but usually maintain energy", score: 4 },
-      { text: "I rarely feel emotionally drained and maintain consistent energy", score: 5 }
-    ],
-    priority: "high"
-  },
   {
     id: "bp007",
-    category: "emotional",
-    dimension: "Cynicism",
-    question: "How do you view your work and its meaningfulness?",
+    category: "workload",
+    dimension: "Multi-tasking",
+    question: "How often are you required to juggle multiple high-priority tasks?",
     options: [
-      { text: "I feel like my work is pointless and question why I bother", score: 1 },
-      { text: "I often feel disconnected from the purpose of my work", score: 2 },
-      { text: "I have mixed feelings about the value of my work", score: 3 },
-      { text: "I generally find meaning in my work despite challenges", score: 4 },
-      { text: "I consistently find my work meaningful and engaging", score: 5 }
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Always", score: 1 }
     ],
-    priority: "high"
+    priority: "medium"
   },
   {
     id: "bp008",
-    category: "emotional",
-    dimension: "Detachment",
-    question: "How connected do you feel to your colleagues and work environment?",
+    category: "workload",
+    dimension: "Interruptions",
+    question: "How often do interruptions disrupt your workflow?",
     options: [
-      { text: "I feel completely isolated and disconnected", score: 1 },
-      { text: "I often feel like an outsider at work", score: 2 },
-      { text: "I have some connections but often feel distant", score: 3 },
-      { text: "I feel generally connected with occasional periods of distance", score: 4 },
-      { text: "I maintain strong, positive connections with colleagues", score: 5 }
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Constantly", score: 1 }
     ],
-    priority: "high"
+    priority: "medium"
   },
   {
     id: "bp009",
-    category: "emotional",
-    dimension: "Irritability",
-    question: "How often do you feel irritated or impatient at work?",
+    category: "workload",
+    dimension: "Work Planning",
+    question: "How well can you plan and organize your work schedule?",
     options: [
-      { text: "Almost constantly - everything bothers me", score: 1 },
-      { text: "Frequently - I have little patience for interruptions or requests", score: 2 },
-      { text: "Sometimes - certain situations trigger irritation", score: 3 },
-      { text: "Occasionally - mostly when under high stress", score: 4 },
-      { text: "Rarely - I maintain patience even under pressure", score: 5 }
+      { text: "Very well", score: 5 },
+      { text: "Well", score: 4 },
+      { text: "Moderately well", score: 3 },
+      { text: "Poorly", score: 2 },
+      { text: "Very poorly", score: 1 }
     ],
     priority: "medium"
   },
   {
     id: "bp010",
-    category: "emotional",
-    dimension: "Sleep Impact",
-    question: "How does work stress affect your sleep patterns?",
+    category: "workload",
+    dimension: "Skill Match",
+    question: "How well do your skills match your job requirements?",
     options: [
-      { text: "I have severe insomnia and racing thoughts about work", score: 1 },
-      { text: "I frequently have trouble falling asleep due to work worries", score: 2 },
-      { text: "I sometimes have sleep issues when work is particularly stressful", score: 3 },
-      { text: "My sleep is occasionally affected but generally stable", score: 4 },
-      { text: "Work stress rarely affects my sleep quality", score: 5 }
+      { text: "Perfect match", score: 5 },
+      { text: "Good match", score: 4 },
+      { text: "Adequate match", score: 3 },
+      { text: "Poor match", score: 2 },
+      { text: "No match", score: 1 }
     ],
-    priority: "medium"
+    priority: "high"
   },
-
-  // PERSONAL EFFICACY (15 questions)
   {
     id: "bp011",
-    category: "efficacy",
-    dimension: "Confidence in Abilities",
-    question: "How confident are you in your ability to handle job demands?",
+    category: "workload",
+    dimension: "Overtime Frequency",
+    question: "How often do you work overtime or extra hours?",
     options: [
-      { text: "I feel completely incompetent and doubt my abilities", score: 1 },
-      { text: "I often question whether I can handle my responsibilities", score: 2 },
-      { text: "I have mixed confidence depending on the task", score: 3 },
-      { text: "I generally feel confident but have occasional doubts", score: 4 },
-      { text: "I consistently feel capable and confident in my abilities", score: 5 }
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Always", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp012",
-    category: "efficacy",
-    dimension: "Problem-Solving Confidence",
-    question: "When facing complex work challenges, how do you feel?",
+    category: "workload",
+    dimension: "Priority Changes",
+    question: "How often do your work priorities change unexpectedly?",
     options: [
-      { text: "Completely overwhelmed and unable to find solutions", score: 1 },
-      { text: "Anxious and uncertain about my problem-solving abilities", score: 2 },
-      { text: "Cautious but willing to work through challenges", score: 3 },
-      { text: "Confident that I can find effective solutions", score: 4 },
-      { text: "Energized by challenges and confident in my problem-solving skills", score: 5 }
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Constantly", score: 1 }
     ],
-    priority: "high"
+    priority: "medium"
   },
   {
     id: "bp013",
-    category: "efficacy",
-    dimension: "Achievement Satisfaction",
-    question: "How satisfied are you with your accomplishments at work?",
+    category: "workload",
+    dimension: "Break Time",
+    question: "How often do you take scheduled breaks during your workday?",
     options: [
-      { text: "I feel like I never accomplish anything meaningful", score: 1 },
-      { text: "I rarely feel satisfied with what I achieve", score: 2 },
-      { text: "I sometimes feel accomplished but it doesn't last", score: 3 },
-      { text: "I regularly feel satisfied with my contributions", score: 4 },
-      { text: "I consistently feel proud of my achievements and impact", score: 5 }
+      { text: "Always", score: 5 },
+      { text: "Often", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Rarely", score: 2 },
+      { text: "Never", score: 1 }
     ],
     priority: "medium"
   },
   {
     id: "bp014",
-    category: "efficacy",
-    dimension: "Growth Mindset",
-    question: "How do you view opportunities to learn new skills or take on new challenges?",
+    category: "workload",
+    dimension: "Task Variety",
+    question: "How varied and stimulating are your daily work tasks?",
     options: [
-      { text: "I avoid them because I fear failure and exposure of my inadequacies", score: 1 },
-      { text: "I'm hesitant because I doubt my ability to succeed", score: 2 },
-      { text: "I'm interested but worry about my capacity to handle more", score: 3 },
-      { text: "I welcome most opportunities and see them as growth experiences", score: 4 },
-      { text: "I actively seek challenges and view them as exciting opportunities", score: 5 }
-    ],
-    priority: "medium"
-  },
-  {
-    id: "bp015",
-    category: "efficacy",
-    dimension: "Impact Awareness",
-    question: "How aware are you of the positive impact you have at work?",
-    options: [
-      { text: "I don't think I have any positive impact", score: 1 },
-      { text: "I rarely notice or acknowledge my contributions", score: 2 },
-      { text: "I sometimes recognize my impact but downplay it", score: 3 },
-      { text: "I regularly notice and value my contributions", score: 4 },
-      { text: "I clearly see and appreciate the positive difference I make", score: 5 }
+      { text: "Very varied and stimulating", score: 5 },
+      { text: "Varied and stimulating", score: 4 },
+      { text: "Somewhat varied", score: 3 },
+      { text: "Repetitive", score: 2 },
+      { text: "Very repetitive and boring", score: 1 }
     ],
     priority: "low"
   },
+  {
+    id: "bp015",
+    category: "workload",
+    dimension: "Workload Control",
+    question: "How much control do you have over your workload and pace?",
+    options: [
+      { text: "Complete control", score: 5 },
+      { text: "Good control", score: 4 },
+      { text: "Some control", score: 3 },
+      { text: "Little control", score: 2 },
+      { text: "No control", score: 1 }
+    ],
+    priority: "high"
+  },
 
-  // SUPPORT SYSTEMS (15 questions)
+  // EMOTIONAL EXHAUSTION (15 questions)
   {
     id: "bp016",
-    category: "support",
-    dimension: "Manager Support",
-    question: "How supportive is your direct manager when you face challenges?",
+    category: "emotional",
+    dimension: "Energy Levels",
+    question: "How energetic do you feel at the start of your workday?",
     options: [
-      { text: "My manager is unavailable and unhelpful when I need support", score: 1 },
-      { text: "My manager provides minimal support and seems too busy", score: 2 },
-      { text: "My manager provides adequate support when directly asked", score: 3 },
-      { text: "My manager is generally supportive and checks in regularly", score: 4 },
-      { text: "My manager is highly supportive and proactively offers help", score: 5 }
+      { text: "Very energetic", score: 5 },
+      { text: "Energetic", score: 4 },
+      { text: "Moderately energetic", score: 3 },
+      { text: "Low energy", score: 2 },
+      { text: "Completely drained", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp017",
-    category: "support",
-    dimension: "Colleague Collaboration",
-    question: "How supportive are your colleagues when you need assistance?",
+    category: "emotional",
+    dimension: "Work Motivation",
+    question: "How motivated do you feel about going to work?",
     options: [
-      { text: "Colleagues are competitive and rarely help each other", score: 1 },
-      { text: "Colleagues help occasionally but seem reluctant", score: 2 },
-      { text: "Colleagues provide reasonable support when asked", score: 3 },
-      { text: "Colleagues are generally collaborative and helpful", score: 4 },
-      { text: "Colleagues consistently support each other and work as a team", score: 5 }
+      { text: "Very motivated", score: 5 },
+      { text: "Motivated", score: 4 },
+      { text: "Somewhat motivated", score: 3 },
+      { text: "Unmotivated", score: 2 },
+      { text: "Completely unmotivated", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp018",
-    category: "support",
-    dimension: "Organizational Resources",
-    question: "How accessible are organizational resources (HR, EAP, training) when needed?",
+    category: "emotional",
+    dimension: "Emotional Drain",
+    question: "How emotionally draining do you find your work?",
     options: [
-      { text: "Resources are non-existent or completely inaccessible", score: 1 },
-      { text: "Resources exist but are difficult to access or poor quality", score: 2 },
-      { text: "Resources are available but require significant effort to access", score: 3 },
-      { text: "Resources are generally accessible and reasonably helpful", score: 4 },
-      { text: "Resources are easily accessible, high-quality, and well-communicated", score: 5 }
+      { text: "Not at all draining", score: 5 },
+      { text: "Slightly draining", score: 4 },
+      { text: "Moderately draining", score: 3 },
+      { text: "Very draining", score: 2 },
+      { text: "Extremely draining", score: 1 }
     ],
-    priority: "medium"
+    priority: "high"
   },
   {
     id: "bp019",
-    category: "support",
-    dimension: "Personal Network",
-    question: "How strong is your personal support network outside of work?",
+    category: "emotional",
+    dimension: "Work Satisfaction",
+    question: "How satisfied are you with your current job?",
     options: [
-      { text: "I have no one to talk to about work stress", score: 1 },
-      { text: "I have limited support and feel isolated", score: 2 },
-      { text: "I have some support but don't always feel comfortable sharing", score: 3 },
-      { text: "I have good support from friends or family", score: 4 },
-      { text: "I have strong, reliable support from multiple sources", score: 5 }
+      { text: "Very satisfied", score: 5 },
+      { text: "Satisfied", score: 4 },
+      { text: "Neutral", score: 3 },
+      { text: "Dissatisfied", score: 2 },
+      { text: "Very dissatisfied", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp020",
+    category: "emotional",
+    dimension: "Emotional Recovery",
+    question: "How quickly do you recover emotionally after a challenging workday?",
+    options: [
+      { text: "Very quickly", score: 5 },
+      { text: "Quickly", score: 4 },
+      { text: "Moderately", score: 3 },
+      { text: "Slowly", score: 2 },
+      { text: "I don't recover", score: 1 }
     ],
     priority: "medium"
   },
   {
-    id: "bp020",
-    category: "support",
-    dimension: "Professional Networks",
-    question: "How connected are you to professional networks or mentors?",
-    options: [
-      { text: "I have no professional connections or mentors", score: 1 },
-      { text: "I have minimal professional connections", score: 2 },
-      { text: "I have some professional contacts but limited engagement", score: 3 },
-      { text: "I maintain good professional relationships and some mentoring", score: 4 },
-      { text: "I have strong professional networks and active mentoring relationships", score: 5 }
-    ],
-    priority: "low"
-  },
-
-  // WORK-LIFE INTEGRATION (15 questions)
-  {
     id: "bp021",
-    category: "worklife",
-    dimension: "Boundary Management",
-    question: "How well do you maintain boundaries between work and personal time?",
+    category: "emotional",
+    dimension: "Stress Response",
+    question: "How well do you handle work-related stress?",
     options: [
-      { text: "Work completely dominates my personal time", score: 1 },
-      { text: "I struggle to disconnect from work during personal time", score: 2 },
-      { text: "I sometimes maintain boundaries but often blur the lines", score: 3 },
-      { text: "I generally maintain good work-life boundaries", score: 4 },
-      { text: "I consistently maintain healthy boundaries and protect personal time", score: 5 }
+      { text: "Very well", score: 5 },
+      { text: "Well", score: 4 },
+      { text: "Moderately well", score: 3 },
+      { text: "Poorly", score: 2 },
+      { text: "Very poorly", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp022",
-    category: "worklife",
-    dimension: "Time for Relationships",
-    question: "How much quality time do you have for important relationships?",
+    category: "emotional",
+    dimension: "Cynicism",
+    question: "How cynical do you feel about your work and workplace?",
     options: [
-      { text: "Work prevents me from maintaining any meaningful relationships", score: 1 },
-      { text: "I have very limited time for family and friends", score: 2 },
-      { text: "I sometimes make time but often cancel due to work", score: 3 },
-      { text: "I generally balance work with relationship time", score: 4 },
-      { text: "I consistently prioritize and protect time for important relationships", score: 5 }
+      { text: "Not at all cynical", score: 5 },
+      { text: "Slightly cynical", score: 4 },
+      { text: "Moderately cynical", score: 3 },
+      { text: "Very cynical", score: 2 },
+      { text: "Extremely cynical", score: 1 }
     ],
-    priority: "high"
+    priority: "medium"
   },
   {
     id: "bp023",
-    category: "worklife",
-    dimension: "Personal Interests",
-    question: "How much time do you have for hobbies and personal interests?",
+    category: "emotional",
+    dimension: "Work Enthusiasm",
+    question: "How enthusiastic do you feel about your work tasks?",
     options: [
-      { text: "I have no time for personal interests or hobbies", score: 1 },
-      { text: "I rarely engage in activities I enjoy", score: 2 },
-      { text: "I occasionally make time for personal interests", score: 3 },
-      { text: "I regularly engage in hobbies and personal activities", score: 4 },
-      { text: "I consistently maintain a rich personal life with varied interests", score: 5 }
+      { text: "Very enthusiastic", score: 5 },
+      { text: "Enthusiastic", score: 4 },
+      { text: "Moderately enthusiastic", score: 3 },
+      { text: "Unenthusiastic", score: 2 },
+      { text: "Completely apathetic", score: 1 }
     ],
     priority: "medium"
   },
   {
     id: "bp024",
-    category: "worklife",
-    dimension: "Flexibility",
-    question: "How flexible is your work arrangement to accommodate personal needs?",
+    category: "emotional",
+    dimension: "Emotional Numbness",
+    question: "How often do you feel emotionally numb or detached at work?",
     options: [
-      { text: "My work is completely inflexible and rigid", score: 1 },
-      { text: "There's minimal flexibility for personal needs", score: 2 },
-      { text: "Some flexibility exists but requires significant negotiation", score: 3 },
-      { text: "My work offers reasonable flexibility for personal needs", score: 4 },
-      { text: "My work provides excellent flexibility and accommodates personal priorities", score: 5 }
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Always", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp025",
+    category: "emotional",
+    dimension: "Irritability",
+    question: "How irritable or short-tempered are you at work?",
+    options: [
+      { text: "Never irritable", score: 5 },
+      { text: "Rarely irritable", score: 4 },
+      { text: "Sometimes irritable", score: 3 },
+      { text: "Often irritable", score: 2 },
+      { text: "Always irritable", score: 1 }
     ],
     priority: "medium"
   },
   {
-    id: "bp025",
-    category: "worklife",
-    dimension: "Recovery Time",
-    question: "How effectively do you recover and recharge during non-work time?",
-    options: [
-      { text: "I never feel rested or recharged", score: 1 },
-      { text: "I rarely feel refreshed even after time off", score: 2 },
-      { text: "I sometimes feel refreshed but it doesn't last long", score: 3 },
-      { text: "I generally recover well during breaks and weekends", score: 4 },
-      { text: "I consistently feel refreshed and energized after personal time", score: 5 }
-    ],
-    priority: "high"
-  },
-
-  // COPING STRATEGIES (15 questions)
-  {
     id: "bp026",
-    category: "coping",
-    dimension: "Stress Management Techniques",
-    question: "What stress management techniques do you actively use?",
+    category: "emotional",
+    dimension: "Work Dread",
+    question: "How often do you dread going to work?",
     options: [
-      { text: "I have no effective strategies for managing stress", score: 1 },
-      { text: "I try unhealthy coping mechanisms that often backfire", score: 2 },
-      { text: "I have some strategies but use them inconsistently", score: 3 },
-      { text: "I regularly use effective stress management techniques", score: 4 },
-      { text: "I have multiple proven strategies and use them proactively", score: 5 }
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Always", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp027",
-    category: "coping",
-    dimension: "Problem-Focused Coping",
-    question: "When facing work stressors, how do you typically respond?",
+    category: "emotional",
+    dimension: "Emotional Investment",
+    question: "How emotionally invested are you in your work outcomes?",
     options: [
-      { text: "I avoid problems and hope they go away", score: 1 },
-      { text: "I worry about problems but struggle to take action", score: 2 },
-      { text: "I sometimes address problems directly, sometimes avoid them", score: 3 },
-      { text: "I usually take direct action to solve problems", score: 4 },
-      { text: "I consistently address problems proactively with effective solutions", score: 5 }
+      { text: "Very invested", score: 5 },
+      { text: "Invested", score: 4 },
+      { text: "Moderately invested", score: 3 },
+      { text: "Barely invested", score: 2 },
+      { text: "Not invested at all", score: 1 }
     ],
-    priority: "high"
+    priority: "medium"
   },
   {
     id: "bp028",
-    category: "coping",
-    dimension: "Emotional Regulation",
-    question: "How well do you manage your emotional responses to work stress?",
+    category: "emotional",
+    dimension: "Emotional Overflow",
+    question: "How often do work emotions spill over into your personal life?",
     options: [
-      { text: "My emotions are completely out of control when stressed", score: 1 },
-      { text: "I struggle to manage my emotional reactions", score: 2 },
-      { text: "I have some control over my emotions but it's inconsistent", score: 3 },
-      { text: "I generally manage my emotions well under stress", score: 4 },
-      { text: "I consistently maintain emotional balance even under high stress", score: 5 }
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Always", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp029",
-    category: "coping",
-    dimension: "Help-Seeking Behavior",
-    question: "How comfortable are you seeking help when overwhelmed?",
+    category: "emotional",
+    dimension: "Emotional Resilience",
+    question: "How resilient are you when facing work setbacks?",
     options: [
-      { text: "I never ask for help and struggle alone", score: 1 },
-      { text: "I'm very reluctant to ask for help even when needed", score: 2 },
-      { text: "I sometimes ask for help but feel uncomfortable doing so", score: 3 },
-      { text: "I'm generally comfortable seeking help when needed", score: 4 },
-      { text: "I proactively seek help and support when facing challenges", score: 5 }
+      { text: "Very resilient", score: 5 },
+      { text: "Resilient", score: 4 },
+      { text: "Moderately resilient", score: 3 },
+      { text: "Not very resilient", score: 2 },
+      { text: "Not resilient at all", score: 1 }
     ],
     priority: "medium"
   },
   {
     id: "bp030",
-    category: "coping",
-    dimension: "Perspective Taking",
-    question: "How effectively do you maintain perspective during stressful periods?",
+    category: "emotional",
+    dimension: "Passion Loss",
+    question: "How much passion do you still have for your field/profession?",
     options: [
-      { text: "I catastrophize and see everything as a crisis", score: 1 },
-      { text: "I often lose perspective and magnify problems", score: 2 },
-      { text: "I sometimes maintain perspective but often get caught up in stress", score: 3 },
-      { text: "I generally keep a balanced perspective on work challenges", score: 4 },
-      { text: "I consistently maintain a healthy perspective and see the bigger picture", score: 5 }
+      { text: "Strong passion", score: 5 },
+      { text: "Good passion", score: 4 },
+      { text: "Some passion", score: 3 },
+      { text: "Little passion", score: 2 },
+      { text: "No passion left", score: 1 }
     ],
-    priority: "medium"
+    priority: "high"
   },
 
-  // WELLBEING PRACTICES (17 questions to reach 102 total)
+  // PERSONAL EFFICACY (15 questions) 
   {
     id: "bp031",
-    category: "wellbeing",
-    dimension: "Physical Self-Care",
-    question: "How consistently do you engage in physical self-care activities?",
+    category: "efficacy",
+    dimension: "Accomplishment Sense",
+    question: "How accomplished do you feel in your current role?",
     options: [
-      { text: "I neglect all physical self-care and feel constantly run down", score: 1 },
-      { text: "I rarely engage in physical self-care activities", score: 2 },
-      { text: "I occasionally exercise or engage in physical activities", score: 3 },
-      { text: "I regularly engage in physical activities and maintain my health", score: 4 },
-      { text: "I consistently prioritize physical self-care and maintain excellent health habits", score: 5 }
+      { text: "Very accomplished", score: 5 },
+      { text: "Accomplished", score: 4 },
+      { text: "Moderately accomplished", score: 3 },
+      { text: "Unaccomplished", score: 2 },
+      { text: "Completely unaccomplished", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp032",
-    category: "wellbeing",
-    dimension: "Mental Health Practices",
-    question: "How actively do you engage in mental health and mindfulness practices?",
+    category: "efficacy",
+    dimension: "Skill Confidence",
+    question: "How confident are you in your professional abilities?",
     options: [
-      { text: "I never engage in mental health practices", score: 1 },
-      { text: "I rarely think about or practice mental health strategies", score: 2 },
-      { text: "I occasionally practice mindfulness or mental health activities", score: 3 },
-      { text: "I regularly engage in mental health practices", score: 4 },
-      { text: "I consistently prioritize mental health through multiple proven practices", score: 5 }
+      { text: "Very confident", score: 5 },
+      { text: "Confident", score: 4 },
+      { text: "Moderately confident", score: 3 },
+      { text: "Not confident", score: 2 },
+      { text: "Completely lacking confidence", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp033",
-    category: "wellbeing",
-    dimension: "Nutrition and Energy",
-    question: "How well do you maintain healthy eating habits to support your energy levels?",
+    category: "efficacy",
+    dimension: "Problem Solving",
+    question: "How effectively do you solve work-related problems?",
     options: [
-      { text: "My eating habits are very poor and affect my energy and mood", score: 1 },
-      { text: "I often skip meals or eat unhealthy foods due to work demands", score: 2 },
-      { text: "My eating habits are inconsistent but adequate", score: 3 },
-      { text: "I generally maintain healthy eating habits", score: 4 },
-      { text: "I consistently maintain excellent nutrition to support my wellbeing", score: 5 }
+      { text: "Very effectively", score: 5 },
+      { text: "Effectively", score: 4 },
+      { text: "Moderately effectively", score: 3 },
+      { text: "Ineffectively", score: 2 },
+      { text: "Very ineffectively", score: 1 }
     ],
     priority: "medium"
   },
   {
     id: "bp034",
-    category: "wellbeing",
-    dimension: "Sleep Hygiene",
-    question: "How would you rate your sleep quality and hygiene practices?",
+    category: "efficacy",
+    dimension: "Goal Achievement",
+    question: "How often do you achieve your work goals?",
     options: [
-      { text: "My sleep is severely disrupted and I have poor sleep habits", score: 1 },
-      { text: "I frequently have poor sleep and inconsistent sleep patterns", score: 2 },
-      { text: "My sleep is adequate but could be more consistent", score: 3 },
-      { text: "I generally maintain good sleep habits and quality", score: 4 },
-      { text: "I consistently maintain excellent sleep hygiene and quality rest", score: 5 }
+      { text: "Always", score: 5 },
+      { text: "Often", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Rarely", score: 2 },
+      { text: "Never", score: 1 }
     ],
     priority: "high"
   },
   {
     id: "bp035",
-    category: "wellbeing",
-    dimension: "Social Connections",
-    question: "How actively do you maintain and nurture social connections?",
+    category: "efficacy",
+    dimension: "Competence Growth",
+    question: "How much are you growing professionally in your current role?",
     options: [
-      { text: "I'm socially isolated and don't maintain relationships", score: 1 },
-      { text: "I have minimal social connections and rarely engage with others", score: 2 },
-      { text: "I maintain some social connections but could be more active", score: 3 },
-      { text: "I regularly maintain and enjoy social connections", score: 4 },
-      { text: "I actively nurture rich social connections that support my wellbeing", score: 5 }
+      { text: "Growing significantly", score: 5 },
+      { text: "Growing well", score: 4 },
+      { text: "Growing moderately", score: 3 },
+      { text: "Barely growing", score: 2 },
+      { text: "Not growing at all", score: 1 }
     ],
     priority: "medium"
   },
   {
     id: "bp036",
-    category: "wellbeing",
-    dimension: "Recreation and Fun",
-    question: "How often do you engage in activities purely for enjoyment and recreation?",
+    category: "efficacy",
+    dimension: "Recognition",
+    question: "How recognized are your contributions at work?",
     options: [
-      { text: "I never have fun or engage in recreational activities", score: 1 },
-      { text: "I rarely do things just for enjoyment", score: 2 },
-      { text: "I occasionally engage in fun activities", score: 3 },
-      { text: "I regularly make time for enjoyable recreational activities", score: 4 },
-      { text: "I consistently prioritize fun and recreation as essential to my wellbeing", score: 5 }
+      { text: "Highly recognized", score: 5 },
+      { text: "Well recognized", score: 4 },
+      { text: "Moderately recognized", score: 3 },
+      { text: "Barely recognized", score: 2 },
+      { text: "Not recognized at all", score: 1 }
     ],
     priority: "medium"
   },
   {
     id: "bp037",
-    category: "wellbeing",
-    dimension: "Purpose and Meaning",
-    question: "How connected do you feel to a sense of purpose beyond work?",
+    category: "efficacy",
+    dimension: "Meaningful Impact",
+    question: "How meaningful is the impact of your work?",
     options: [
-      { text: "I feel no sense of purpose or meaning in life", score: 1 },
-      { text: "I rarely feel connected to any greater purpose", score: 2 },
-      { text: "I sometimes feel connected to purpose but it's inconsistent", score: 3 },
-      { text: "I generally feel connected to meaningful purposes in life", score: 4 },
-      { text: "I consistently feel deeply connected to purpose and meaning beyond work", score: 5 }
+      { text: "Very meaningful", score: 5 },
+      { text: "Meaningful", score: 4 },
+      { text: "Somewhat meaningful", score: 3 },
+      { text: "Not very meaningful", score: 2 },
+      { text: "Completely meaningless", score: 1 }
     ],
-    priority: "low"
+    priority: "high"
   },
   {
     id: "bp038",
-    category: "wellbeing",
-    dimension: "Learning and Growth",
-    question: "How actively do you pursue personal learning and growth outside of work?",
+    category: "efficacy",
+    dimension: "Learning Opportunities",
+    question: "How many learning and development opportunities do you have?",
     options: [
-      { text: "I never engage in personal learning or growth activities", score: 1 },
-      { text: "I rarely pursue learning outside of work requirements", score: 2 },
-      { text: "I occasionally engage in personal development activities", score: 3 },
-      { text: "I regularly pursue personal learning and growth", score: 4 },
-      { text: "I consistently prioritize personal development and lifelong learning", score: 5 }
-    ],
-    priority: "low"
-  },
-  {
-    id: "bp039",
-    category: "wellbeing",
-    dimension: "Financial Wellness",
-    question: "How well do you manage financial stress and maintain financial wellbeing?",
-    options: [
-      { text: "Financial stress dominates my life and causes constant worry", score: 1 },
-      { text: "I frequently worry about finances and feel financially unstable", score: 2 },
-      { text: "I have some financial stress but manage reasonably well", score: 3 },
-      { text: "I generally manage finances well with minimal stress", score: 4 },
-      { text: "I maintain excellent financial wellbeing and rarely worry about money", score: 5 }
+      { text: "Many opportunities", score: 5 },
+      { text: "Good opportunities", score: 4 },
+      { text: "Some opportunities", score: 3 },
+      { text: "Few opportunities", score: 2 },
+      { text: "No opportunities", score: 1 }
     ],
     priority: "medium"
   },
   {
-    id: "bp040",
-    category: "wellbeing",
-    dimension: "Environmental Wellness",
-    question: "How satisfied are you with your physical environment (home, workspace)?",
+    id: "bp039",
+    category: "efficacy",
+    dimension: "Value Contribution",
+    question: "How valuable do you feel your contributions are to the organization?",
     options: [
-      { text: "My environment is chaotic and negatively impacts my wellbeing", score: 1 },
-      { text: "My environment often feels stressful or uncomfortable", score: 2 },
-      { text: "My environment is adequate but could be more supportive", score: 3 },
-      { text: "I generally maintain a supportive and comfortable environment", score: 4 },
-      { text: "My environment consistently supports and enhances my wellbeing", score: 5 }
+      { text: "Very valuable", score: 5 },
+      { text: "Valuable", score: 4 },
+      { text: "Moderately valuable", score: 3 },
+      { text: "Not very valuable", score: 2 },
+      { text: "Worthless", score: 1 }
     ],
-    priority: "low"
+    priority: "high"
+  },
+  {
+    id: "bp040",
+    category: "efficacy",
+    dimension: "Professional Pride",
+    question: "How proud are you of your professional work?",
+    options: [
+      { text: "Very proud", score: 5 },
+      { text: "Proud", score: 4 },
+      { text: "Moderately proud", score: 3 },
+      { text: "Not proud", score: 2 },
+      { text: "Ashamed", score: 1 }
+    ],
+    priority: "medium"
   },
   {
     id: "bp041",
-    category: "wellbeing",
-    dimension: "Creative Expression",
-    question: "How often do you engage in creative activities or hobbies?",
+    category: "efficacy",
+    dimension: "Innovation Ability",
+    question: "How innovative are you in your approach to work challenges?",
     options: [
-      { text: "I never engage in creative activities", score: 1 },
-      { text: "I rarely have time or energy for creative pursuits", score: 2 },
-      { text: "I occasionally engage in creative activities", score: 3 },
-      { text: "I regularly make time for creative expression", score: 4 },
-      { text: "I consistently prioritize and enjoy creative activities as essential to my wellbeing", score: 5 }
+      { text: "Very innovative", score: 5 },
+      { text: "Innovative", score: 4 },
+      { text: "Moderately innovative", score: 3 },
+      { text: "Not innovative", score: 2 },
+      { text: "Completely uncreative", score: 1 }
     ],
     priority: "low"
   },
   {
     id: "bp042",
-    category: "wellbeing",
-    dimension: "Spiritual Wellness",
-    question: "How connected do you feel to spiritual or philosophical practices that ground you?",
+    category: "efficacy",
+    dimension: "Expertise Development",
+    question: "How well are you developing expertise in your field?",
     options: [
-      { text: "I feel completely disconnected from any spiritual grounding", score: 1 },
-      { text: "I rarely feel spiritually grounded or connected", score: 2 },
-      { text: "I sometimes feel connected to spiritual or philosophical practices", score: 3 },
-      { text: "I regularly engage in spiritual or philosophical practices that ground me", score: 4 },
-      { text: "I consistently maintain deep spiritual or philosophical connections that support my wellbeing", score: 5 }
+      { text: "Excellent development", score: 5 },
+      { text: "Good development", score: 4 },
+      { text: "Moderate development", score: 3 },
+      { text: "Poor development", score: 2 },
+      { text: "No development", score: 1 }
     ],
-    priority: "low"
+    priority: "medium"
   },
-
-  // Additional questions to reach 102
   {
     id: "bp043",
-    category: "workload",
-    dimension: "Workload Assessment",
-    question: "How would you describe your current workload compared to your capacity?",
+    category: "efficacy",
+    dimension: "Task Mastery",
+    question: "How well do you master new tasks and responsibilities?",
     options: [
-      { text: "Severely overwhelming - far beyond my capacity", score: 1 },
-      { text: "Consistently overwhelming - difficult to manage", score: 2 },
-      { text: "Sometimes overwhelming but usually manageable", score: 3 },
-      { text: "Generally appropriate for my skills and capacity", score: 4 },
-      { text: "Well-matched to my capacity with room for growth", score: 5 }
+      { text: "Master very well", score: 5 },
+      { text: "Master well", score: 4 },
+      { text: "Master moderately", score: 3 },
+      { text: "Struggle to master", score: 2 },
+      { text: "Cannot master new tasks", score: 1 }
     ],
-    priority: "high"
+    priority: "medium"
   },
   {
     id: "bp044",
-    category: "emotional",
-    dimension: "Emotional Awareness",
-    question: "How aware are you of your emotional state throughout the workday?",
+    category: "efficacy",
+    dimension: "Influence Ability",
+    question: "How much positive influence do you have in your workplace?",
     options: [
-      { text: "I'm completely unaware of my emotions until they overwhelm me", score: 1 },
-      { text: "I rarely notice my emotional state until it's too late", score: 2 },
-      { text: "I sometimes notice my emotions but don't always respond well", score: 3 },
-      { text: "I regularly check in with my emotions and respond appropriately", score: 4 },
-      { text: "I consistently maintain high emotional awareness and self-regulation", score: 5 }
+      { text: "Significant influence", score: 5 },
+      { text: "Good influence", score: 4 },
+      { text: "Some influence", score: 3 },
+      { text: "Little influence", score: 2 },
+      { text: "No influence", score: 1 }
     ],
-    priority: "medium"
+    priority: "low"
   },
   {
     id: "bp045",
     category: "efficacy",
-    dimension: "Skill Development",
-    question: "How confident are you in your ability to develop new skills needed for your role?",
+    dimension: "Career Progress",
+    question: "How satisfied are you with your career progression?",
     options: [
-      { text: "I feel unable to learn new skills and fear being left behind", score: 1 },
-      { text: "I doubt my ability to keep up with changing skill requirements", score: 2 },
-      { text: "I'm somewhat confident but worry about my learning speed", score: 3 },
-      { text: "I'm generally confident in my ability to learn and adapt", score: 4 },
-      { text: "I'm highly confident and excited about continuous skill development", score: 5 }
+      { text: "Very satisfied", score: 5 },
+      { text: "Satisfied", score: 4 },
+      { text: "Moderately satisfied", score: 3 },
+      { text: "Dissatisfied", score: 2 },
+      { text: "Very dissatisfied", score: 1 }
     ],
-    priority: "medium"
+    priority: "high"
   },
+
+  // SOCIAL SUPPORT (15 questions)
   {
     id: "bp046",
     category: "support",
-    dimension: "Communication Quality",
-    question: "How effectively do you communicate your needs and concerns at work?",
+    dimension: "Manager Support",
+    question: "How supportive is your direct manager?",
     options: [
-      { text: "I never communicate my needs and suffer in silence", score: 1 },
-      { text: "I struggle to communicate my needs effectively", score: 2 },
-      { text: "I sometimes communicate my needs but not always clearly", score: 3 },
-      { text: "I generally communicate my needs and concerns well", score: 4 },
-      { text: "I consistently communicate needs clearly and get appropriate support", score: 5 }
+      { text: "Very supportive", score: 5 },
+      { text: "Supportive", score: 4 },
+      { text: "Moderately supportive", score: 3 },
+      { text: "Unsupportive", score: 2 },
+      { text: "Very unsupportive", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp047",
+    category: "support",
+    dimension: "Colleague Support",
+    question: "How supportive are your colleagues and teammates?",
+    options: [
+      { text: "Very supportive", score: 5 },
+      { text: "Supportive", score: 4 },
+      { text: "Moderately supportive", score: 3 },
+      { text: "Unsupportive", score: 2 },
+      { text: "Very unsupportive", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp048",
+    category: "support",
+    dimension: "Organizational Support",
+    question: "How much does your organization support employee wellbeing?",
+    options: [
+      { text: "Strong support", score: 5 },
+      { text: "Good support", score: 4 },
+      { text: "Moderate support", score: 3 },
+      { text: "Little support", score: 2 },
+      { text: "No support", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp049",
+    category: "support",
+    dimension: "Communication Quality",
+    question: "How effective is communication in your workplace?",
+    options: [
+      { text: "Very effective", score: 5 },
+      { text: "Effective", score: 4 },
+      { text: "Moderately effective", score: 3 },
+      { text: "Ineffective", score: 2 },
+      { text: "Very ineffective", score: 1 }
     ],
     priority: "medium"
   },
   {
-    id: "bp047",
-    category: "worklife",
-    dimension: "Energy Management",
-    question: "How well do you manage your energy levels throughout the week?",
+    id: "bp050",
+    category: "support",
+    dimension: "Team Cohesion",
+    question: "How cohesive and united is your work team?",
     options: [
-      { text: "My energy is completely depleted and never recovers", score: 1 },
-      { text: "I consistently feel low energy and struggle to recharge", score: 2 },
-      { text: "My energy fluctuates but I sometimes feel energized", score: 3 },
-      { text: "I generally manage my energy well with regular renewal", score: 4 },
-      { text: "I consistently maintain high energy through effective energy management", score: 5 }
+      { text: "Very cohesive", score: 5 },
+      { text: "Cohesive", score: 4 },
+      { text: "Moderately cohesive", score: 3 },
+      { text: "Not cohesive", score: 2 },
+      { text: "Completely fragmented", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp051",
+    category: "support",
+    dimension: "Mentorship Access",
+    question: "How available is mentorship and guidance in your workplace?",
+    options: [
+      { text: "Readily available", score: 5 },
+      { text: "Available", score: 4 },
+      { text: "Somewhat available", score: 3 },
+      { text: "Rarely available", score: 2 },
+      { text: "Not available", score: 1 }
+    ],
+    priority: "low"
+  },
+  {
+    id: "bp052",
+    category: "support",
+    dimension: "Conflict Resolution",
+    question: "How well are workplace conflicts resolved?",
+    options: [
+      { text: "Very well", score: 5 },
+      { text: "Well", score: 4 },
+      { text: "Moderately well", score: 3 },
+      { text: "Poorly", score: 2 },
+      { text: "Very poorly", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp053",
+    category: "support",
+    dimension: "Trust Level",
+    question: "How much do you trust your colleagues and management?",
+    options: [
+      { text: "Complete trust", score: 5 },
+      { text: "High trust", score: 4 },
+      { text: "Moderate trust", score: 3 },
+      { text: "Low trust", score: 2 },
+      { text: "No trust", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp054",
+    category: "support",
+    dimension: "Feedback Quality",
+    question: "How constructive and helpful is the feedback you receive?",
+    options: [
+      { text: "Very constructive", score: 5 },
+      { text: "Constructive", score: 4 },
+      { text: "Somewhat constructive", score: 3 },
+      { text: "Unconstructive", score: 2 },
+      { text: "Destructive", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp055",
+    category: "support",
+    dimension: "Social Connection",
+    question: "How connected do you feel to your workplace community?",
+    options: [
+      { text: "Very connected", score: 5 },
+      { text: "Connected", score: 4 },
+      { text: "Moderately connected", score: 3 },
+      { text: "Disconnected", score: 2 },
+      { text: "Completely isolated", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp056",
+    category: "support",
+    dimension: "Resource Access",
+    question: "How easily can you access help and resources when needed?",
+    options: [
+      { text: "Very easily", score: 5 },
+      { text: "Easily", score: 4 },
+      { text: "Moderately easily", score: 3 },
+      { text: "With difficulty", score: 2 },
+      { text: "Cannot access", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp057",
+    category: "support",
+    dimension: "Psychological Safety",
+    question: "How psychologically safe do you feel in your workplace?",
+    options: [
+      { text: "Very safe", score: 5 },
+      { text: "Safe", score: 4 },
+      { text: "Moderately safe", score: 3 },
+      { text: "Unsafe", score: 2 },
+      { text: "Very unsafe", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp058",
+    category: "support",
+    dimension: "Appreciation",
+    question: "How appreciated do you feel by your supervisors and peers?",
+    options: [
+      { text: "Very appreciated", score: 5 },
+      { text: "Appreciated", score: 4 },
+      { text: "Somewhat appreciated", score: 3 },
+      { text: "Unappreciated", score: 2 },
+      { text: "Completely unappreciated", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp059",
+    category: "support",
+    dimension: "Inclusion Level",
+    question: "How included do you feel in workplace decisions and activities?",
+    options: [
+      { text: "Fully included", score: 5 },
+      { text: "Included", score: 4 },
+      { text: "Moderately included", score: 3 },
+      { text: "Excluded", score: 2 },
+      { text: "Completely excluded", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp060",
+    category: "support",
+    dimension: "Advocacy",
+    question: "How much do you feel your manager advocates for you?",
+    options: [
+      { text: "Strong advocacy", score: 5 },
+      { text: "Good advocacy", score: 4 },
+      { text: "Some advocacy", score: 3 },
+      { text: "Little advocacy", score: 2 },
+      { text: "No advocacy", score: 1 }
+    ],
+    priority: "medium"
+  },
+
+  // WORK-LIFE BALANCE (15 questions)
+  {
+    id: "bp061",
+    category: "worklife",
+    dimension: "Boundary Setting",
+    question: "How well do you maintain boundaries between work and personal life?",
+    options: [
+      { text: "Very well", score: 5 },
+      { text: "Well", score: 4 },
+      { text: "Moderately well", score: 3 },
+      { text: "Poorly", score: 2 },
+      { text: "Very poorly", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp062",
+    category: "worklife",
+    dimension: "Personal Time",
+    question: "How much quality personal time do you have outside of work?",
+    options: [
+      { text: "Plenty of time", score: 5 },
+      { text: "Adequate time", score: 4 },
+      { text: "Some time", score: 3 },
+      { text: "Little time", score: 2 },
+      { text: "No personal time", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp063",
+    category: "worklife",
+    dimension: "Family Relationships",
+    question: "How has your work affected your family relationships?",
+    options: [
+      { text: "Positive impact", score: 5 },
+      { text: "No impact", score: 4 },
+      { text: "Slight negative impact", score: 3 },
+      { text: "Negative impact", score: 2 },
+      { text: "Very negative impact", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp064",
+    category: "worklife",
+    dimension: "After-Hours Work",
+    question: "How often do you work or think about work outside of office hours?",
+    options: [
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Constantly", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp065",
+    category: "worklife",
+    dimension: "Vacation Time",
+    question: "How well do you utilize your vacation and time off?",
+    options: [
+      { text: "Use all vacation time", score: 5 },
+      { text: "Use most vacation time", score: 4 },
+      { text: "Use some vacation time", score: 3 },
+      { text: "Rarely use vacation", score: 2 },
+      { text: "Never use vacation", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp066",
+    category: "worklife",
+    dimension: "Hobby Engagement",
+    question: "How engaged are you in hobbies and personal interests?",
+    options: [
+      { text: "Very engaged", score: 5 },
+      { text: "Engaged", score: 4 },
+      { text: "Moderately engaged", score: 3 },
+      { text: "Barely engaged", score: 2 },
+      { text: "Not engaged at all", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp067",
+    category: "worklife",
+    dimension: "Sleep Quality",
+    question: "How has work stress affected your sleep quality?",
+    options: [
+      { text: "No impact on sleep", score: 5 },
+      { text: "Minor impact", score: 4 },
+      { text: "Moderate impact", score: 3 },
+      { text: "Significant impact", score: 2 },
+      { text: "Severe impact", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp068",
+    category: "worklife",
+    dimension: "Social Life",
+    question: "How has your work schedule affected your social life?",
+    options: [
+      { text: "Positive impact", score: 5 },
+      { text: "No impact", score: 4 },
+      { text: "Slight negative impact", score: 3 },
+      { text: "Negative impact", score: 2 },
+      { text: "Very negative impact", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp069",
+    category: "worklife",
+    dimension: "Physical Health",
+    question: "How has work stress affected your physical health?",
+    options: [
+      { text: "No impact", score: 5 },
+      { text: "Minor impact", score: 4 },
+      { text: "Moderate impact", score: 3 },
+      { text: "Significant impact", score: 2 },
+      { text: "Severe impact", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp070",
+    category: "worklife",
+    dimension: "Flexibility",
+    question: "How flexible is your work schedule for personal needs?",
+    options: [
+      { text: "Very flexible", score: 5 },
+      { text: "Flexible", score: 4 },
+      { text: "Moderately flexible", score: 3 },
+      { text: "Inflexible", score: 2 },
+      { text: "Very inflexible", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp071",
+    category: "worklife",
+    dimension: "Commute Impact",
+    question: "How does your commute affect your work-life balance?",
+    options: [
+      { text: "No negative impact", score: 5 },
+      { text: "Minor impact", score: 4 },
+      { text: "Moderate impact", score: 3 },
+      { text: "Significant impact", score: 2 },
+      { text: "Major impact", score: 1 }
+    ],
+    priority: "low"
+  },
+  {
+    id: "bp072",
+    category: "worklife",
+    dimension: "Remote Work",
+    question: "How well does your workplace support work-life balance through remote options?",
+    options: [
+      { text: "Excellent support", score: 5 },
+      { text: "Good support", score: 4 },
+      { text: "Moderate support", score: 3 },
+      { text: "Poor support", score: 2 },
+      { text: "No support", score: 1 }
+    ],
+    priority: "low"
+  },
+  {
+    id: "bp073",
+    category: "worklife",
+    dimension: "Emergency Coverage",
+    question: "How often are you required to be available for work emergencies?",
+    options: [
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Always", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp074",
+    category: "worklife",
+    dimension: "Recovery Time",
+    question: "How much time do you need to recover after intensive work periods?",
+    options: [
+      { text: "No recovery needed", score: 5 },
+      { text: "Minimal recovery", score: 4 },
+      { text: "Moderate recovery", score: 3 },
+      { text: "Significant recovery", score: 2 },
+      { text: "Long recovery period", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp075",
+    category: "worklife",
+    dimension: "Personal Growth",
+    question: "How much time do you have for personal development outside work?",
+    options: [
+      { text: "Plenty of time", score: 5 },
+      { text: "Adequate time", score: 4 },
+      { text: "Some time", score: 3 },
+      { text: "Little time", score: 2 },
+      { text: "No time", score: 1 }
+    ],
+    priority: "low"
+  },
+
+  // COPING STRATEGIES (15 questions)
+  {
+    id: "bp076",
+    category: "coping",
+    dimension: "Stress Management",
+    question: "How effectively do you manage stress in healthy ways?",
+    options: [
+      { text: "Very effectively", score: 5 },
+      { text: "Effectively", score: 4 },
+      { text: "Moderately effectively", score: 3 },
+      { text: "Ineffectively", score: 2 },
+      { text: "Very ineffectively", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp077",
+    category: "coping",
+    dimension: "Exercise Habits",
+    question: "How regularly do you engage in physical exercise?",
+    options: [
+      { text: "Daily", score: 5 },
+      { text: "Several times per week", score: 4 },
+      { text: "Weekly", score: 3 },
+      { text: "Occasionally", score: 2 },
+      { text: "Never", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp078",
+    category: "coping",
+    dimension: "Mindfulness Practice",
+    question: "How often do you practice mindfulness, meditation, or relaxation techniques?",
+    options: [
+      { text: "Daily", score: 5 },
+      { text: "Several times per week", score: 4 },
+      { text: "Weekly", score: 3 },
+      { text: "Occasionally", score: 2 },
+      { text: "Never", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp079",
+    category: "coping",
+    dimension: "Professional Help",
+    question: "How comfortable are you seeking professional help for stress or mental health?",
+    options: [
+      { text: "Very comfortable", score: 5 },
+      { text: "Comfortable", score: 4 },
+      { text: "Somewhat comfortable", score: 3 },
+      { text: "Uncomfortable", score: 2 },
+      { text: "Very uncomfortable", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp080",
+    category: "coping",
+    dimension: "Support Network",
+    question: "How strong is your personal support network outside of work?",
+    options: [
+      { text: "Very strong", score: 5 },
+      { text: "Strong", score: 4 },
+      { text: "Moderate", score: 3 },
+      { text: "Weak", score: 2 },
+      { text: "Very weak", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp081",
+    category: "coping",
+    dimension: "Healthy Outlets",
+    question: "How many healthy outlets do you have for releasing stress?",
+    options: [
+      { text: "Many outlets", score: 5 },
+      { text: "Several outlets", score: 4 },
+      { text: "Some outlets", score: 3 },
+      { text: "Few outlets", score: 2 },
+      { text: "No healthy outlets", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp082",
+    category: "coping",
+    dimension: "Self-Awareness",
+    question: "How aware are you of your stress signals and triggers?",
+    options: [
+      { text: "Very aware", score: 5 },
+      { text: "Aware", score: 4 },
+      { text: "Moderately aware", score: 3 },
+      { text: "Slightly aware", score: 2 },
+      { text: "Not aware", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp083",
+    category: "coping",
+    dimension: "Substance Use",
+    question: "How often do you use alcohol, drugs, or other substances to cope with work stress?",
+    options: [
+      { text: "Never", score: 5 },
+      { text: "Rarely", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Often", score: 2 },
+      { text: "Always", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp084",
+    category: "coping",
+    dimension: "Problem-Focused Coping",
+    question: "How often do you address the source of stress rather than just the symptoms?",
+    options: [
+      { text: "Always", score: 5 },
+      { text: "Often", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Rarely", score: 2 },
+      { text: "Never", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp085",
+    category: "coping",
+    dimension: "Emotional Regulation",
+    question: "How well do you regulate your emotions during stressful situations?",
+    options: [
+      { text: "Very well", score: 5 },
+      { text: "Well", score: 4 },
+      { text: "Moderately well", score: 3 },
+      { text: "Poorly", score: 2 },
+      { text: "Very poorly", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp086",
+    category: "coping",
+    dimension: "Perspective Taking",
+    question: "How well do you maintain perspective during challenging times?",
+    options: [
+      { text: "Very well", score: 5 },
+      { text: "Well", score: 4 },
+      { text: "Moderately well", score: 3 },
+      { text: "Poorly", score: 2 },
+      { text: "Very poorly", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp087",
+    category: "coping",
+    dimension: "Relaxation Skills",
+    question: "How skilled are you at relaxing and unwinding from work stress?",
+    options: [
+      { text: "Very skilled", score: 5 },
+      { text: "Skilled", score: 4 },
+      { text: "Moderately skilled", score: 3 },
+      { text: "Not skilled", score: 2 },
+      { text: "Cannot relax", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp088",
+    category: "coping",
+    dimension: "Creative Expression",
+    question: "How often do you engage in creative activities for stress relief?",
+    options: [
+      { text: "Daily", score: 5 },
+      { text: "Several times per week", score: 4 },
+      { text: "Weekly", score: 3 },
+      { text: "Occasionally", score: 2 },
+      { text: "Never", score: 1 }
+    ],
+    priority: "low"
+  },
+  {
+    id: "bp089",
+    category: "coping",
+    dimension: "Time Management",
+    question: "How well do you manage your personal time to reduce stress?",
+    options: [
+      { text: "Very well", score: 5 },
+      { text: "Well", score: 4 },
+      { text: "Moderately well", score: 3 },
+      { text: "Poorly", score: 2 },
+      { text: "Very poorly", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp090",
+    category: "coping",
+    dimension: "Adaptability",
+    question: "How adaptable are you when facing unexpected changes or setbacks?",
+    options: [
+      { text: "Very adaptable", score: 5 },
+      { text: "Adaptable", score: 4 },
+      { text: "Moderately adaptable", score: 3 },
+      { text: "Not very adaptable", score: 2 },
+      { text: "Not adaptable at all", score: 1 }
+    ],
+    priority: "medium"
+  },
+
+  // OVERALL WELLBEING (12 questions)
+  {
+    id: "bp091",
+    category: "wellbeing",
+    dimension: "Life Satisfaction",
+    question: "How satisfied are you with your overall quality of life?",
+    options: [
+      { text: "Very satisfied", score: 5 },
+      { text: "Satisfied", score: 4 },
+      { text: "Neutral", score: 3 },
+      { text: "Dissatisfied", score: 2 },
+      { text: "Very dissatisfied", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp092",
+    category: "wellbeing",
+    dimension: "Energy Levels",
+    question: "How would you rate your overall energy levels?",
+    options: [
+      { text: "Very high energy", score: 5 },
+      { text: "High energy", score: 4 },
+      { text: "Moderate energy", score: 3 },
+      { text: "Low energy", score: 2 },
+      { text: "Very low energy", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp093",
+    category: "wellbeing",
+    dimension: "Mental Health",
+    question: "How would you rate your current mental health?",
+    options: [
+      { text: "Excellent", score: 5 },
+      { text: "Good", score: 4 },
+      { text: "Fair", score: 3 },
+      { text: "Poor", score: 2 },
+      { text: "Very poor", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp094",
+    category: "wellbeing",
+    dimension: "Optimism",
+    question: "How optimistic do you feel about your future?",
+    options: [
+      { text: "Very optimistic", score: 5 },
+      { text: "Optimistic", score: 4 },
+      { text: "Neutral", score: 3 },
+      { text: "Pessimistic", score: 2 },
+      { text: "Very pessimistic", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp095",
+    category: "wellbeing",
+    dimension: "Purpose Sense",
+    question: "How strong is your sense of purpose and meaning in life?",
+    options: [
+      { text: "Very strong", score: 5 },
+      { text: "Strong", score: 4 },
+      { text: "Moderate", score: 3 },
+      { text: "Weak", score: 2 },
+      { text: "Very weak", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp096",
+    category: "wellbeing",
+    dimension: "Self-Efficacy",
+    question: "How confident are you in your ability to handle life's challenges?",
+    options: [
+      { text: "Very confident", score: 5 },
+      { text: "Confident", score: 4 },
+      { text: "Moderately confident", score: 3 },
+      { text: "Not confident", score: 2 },
+      { text: "Not confident at all", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp097",
+    category: "wellbeing",
+    dimension: "Happiness",
+    question: "How often do you feel genuinely happy?",
+    options: [
+      { text: "Very often", score: 5 },
+      { text: "Often", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Rarely", score: 2 },
+      { text: "Never", score: 1 }
+    ],
+    priority: "high"
+  },
+  {
+    id: "bp098",
+    category: "wellbeing",
+    dimension: "Peace of Mind",
+    question: "How often do you feel at peace and content?",
+    options: [
+      { text: "Very often", score: 5 },
+      { text: "Often", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Rarely", score: 2 },
+      { text: "Never", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp099",
+    category: "wellbeing",
+    dimension: "Fulfillment",
+    question: "How fulfilled do you feel with your life choices?",
+    options: [
+      { text: "Very fulfilled", score: 5 },
+      { text: "Fulfilled", score: 4 },
+      { text: "Moderately fulfilled", score: 3 },
+      { text: "Unfulfilled", score: 2 },
+      { text: "Very unfulfilled", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp100",
+    category: "wellbeing",
+    dimension: "Future Outlook",
+    question: "How positive is your outlook for the next 12 months?",
+    options: [
+      { text: "Very positive", score: 5 },
+      { text: "Positive", score: 4 },
+      { text: "Neutral", score: 3 },
+      { text: "Negative", score: 2 },
+      { text: "Very negative", score: 1 }
+    ],
+    priority: "medium"
+  },
+  {
+    id: "bp101",
+    category: "wellbeing",
+    dimension: "Gratitude",
+    question: "How often do you feel grateful and appreciative?",
+    options: [
+      { text: "Very often", score: 5 },
+      { text: "Often", score: 4 },
+      { text: "Sometimes", score: 3 },
+      { text: "Rarely", score: 2 },
+      { text: "Never", score: 1 }
+    ],
+    priority: "low"
+  },
+  {
+    id: "bp102",
+    category: "wellbeing",
+    dimension: "Life Control",
+    question: "How much control do you feel you have over your life direction?",
+    options: [
+      { text: "Complete control", score: 5 },
+      { text: "Good control", score: 4 },
+      { text: "Some control", score: 3 },
+      { text: "Little control", score: 2 },
+      { text: "No control", score: 1 }
     ],
     priority: "high"
   }
 ];
 
-export const burnoutDimensions = {
-  workload: {
-    name: "Workload Management",
-    description: "Ability to prioritise, delegate, and manage tasks effectively",
-    weight: 0.20
-  },
-  emotional: {
-    name: "Emotional Exhaustion",
-    description: "Current levels of emotional depletion and fatigue",
-    weight: 0.20
-  },
-  efficacy: {
-    name: "Personal Efficacy",
-    description: "Belief in your capability to handle job demands",
-    weight: 0.15
-  },
-  support: {
-    name: "Support Systems",
-    description: "Strength and accessibility of social and professional support",
-    weight: 0.15
-  },
-  worklife: {
-    name: "Work-Life Integration",
-    description: "Balance and harmony between personal and professional life",
-    weight: 0.15
-  },
-  coping: {
-    name: "Coping Strategies",
-    description: "Healthy responses to stress and adversity",
-    weight: 0.10
-  },
-  wellbeing: {
-    name: "Wellbeing Practices",
-    description: "Routines promoting physical, mental, and emotional wellbeing",
-    weight: 0.05
-  }
-};
-
-export const burnoutRiskProfiles = [
+// Risk levels for scoring interpretation
+export const burnoutRiskLevels = [
   {
     name: "Optimal Wellbeing",
-    range: { min: 90, max: 100 },
-    description: "Exceptional burnout prevention - thriving with sustainable practices",
+    range: { min: 400, max: 510 },
+    description: "Excellent burnout resilience with strong protective factors",
     characteristics: [
-      "Excellent workload management and boundary setting",
-      "High energy levels and emotional resilience",
-      "Strong support systems and effective coping strategies",
-      "Integrated wellbeing practices and work-life balance"
+      "Manageable workload with clear priorities",
+      "High energy and motivation",
+      "Strong sense of accomplishment",
+      "Excellent social support systems",
+      "Healthy work-life balance",
+      "Effective coping strategies",
+      "High overall wellbeing"
     ],
     developmentAreas: [
-      "Continue modeling healthy practices for others",
-      "Share strategies and mentor colleagues",
+      "Maintain current positive practices",
+      "Continue regular self-assessment",
+      "Consider mentoring others",
       "Stay vigilant for early warning signs"
     ],
     color: "bg-green-600"
   },
   {
-    name: "Low Risk",
-    range: { min: 75, max: 89 },
-    description: "Good burnout prevention - maintaining healthy practices",
+    name: "Good Resilience",
+    range: { min: 325, max: 399 },
+    description: "Good burnout protection with minor areas for improvement",
     characteristics: [
-      "Generally effective workload management",
-      "Good emotional regulation and energy levels",
-      "Adequate support systems and coping strategies",
-      "Mostly balanced work-life integration"
+      "Generally manageable workload",
+      "Good energy levels most days",
+      "Adequate social support",
+      "Reasonable work-life balance",
+      "Some effective coping strategies"
     ],
     developmentAreas: [
-      "Strengthen specific areas showing lower scores",
-      "Build additional coping strategies",
-      "Enhance support network connections"
+      "Strengthen weakest protective factors",
+      "Enhance stress management skills",
+      "Build stronger support networks",
+      "Improve work-life boundaries"
     ],
-    color: "bg-blue-600"
+    color: "bg-blue-500"
   },
   {
     name: "Moderate Risk",
-    range: { min: 60, max: 74 },
-    description: "Some burnout risk - needs attention and improvement",
+    range: { min: 250, max: 324 },
+    description: "Some burnout vulnerability - prevention strategies needed",
     characteristics: [
-      "Inconsistent workload management",
-      "Occasional emotional exhaustion",
-      "Limited support systems or coping strategies",
-      "Work-life balance challenges"
+      "Occasionally overwhelming workload",
+      "Variable energy levels",
+      "Mixed sense of accomplishment",
+      "Adequate but inconsistent support",
+      "Some work-life balance challenges"
     ],
     developmentAreas: [
-      "Develop stronger workload management skills",
-      "Build more effective coping strategies",
-      "Strengthen support networks",
-      "Improve work-life boundaries"
+      "Develop better workload management",
+      "Strengthen coping strategies",
+      "Improve social support systems",
+      "Focus on self-care practices",
+      "Consider professional guidance"
     ],
-    color: "bg-yellow-600"
+    color: "bg-yellow-500"
   },
   {
     name: "High Risk",
-    range: { min: 45, max: 59 },
-    description: "Significant burnout risk - requires immediate attention",
+    range: { min: 175, max: 249 },
+    description: "Significant burnout risk - intervention recommended",
     characteristics: [
-      "Poor workload management and boundary setting",
-      "Regular emotional exhaustion",
-      "Weak support systems",
-      "Poor work-life integration"
+      "Frequently overwhelming workload",
+      "Low energy and motivation",
+      "Diminished sense of accomplishment",
+      "Limited social support",
+      "Poor work-life balance",
+      "Ineffective coping strategies"
     ],
     developmentAreas: [
-      "Urgent workload assessment and reduction",
-      "Professional support and counseling",
-      "Immediate stress management intervention",
-      "Boundary setting training"
+      "Immediate workload assessment and adjustment",
+      "Professional stress management support",
+      "Strengthen support networks",
+      "Establish better boundaries",
+      "Consider role or environment changes"
     ],
-    color: "bg-orange-600"
+    color: "bg-orange-500"
   },
   {
     name: "Critical Risk",
-    range: { min: 0, max: 44 },
-    description: "Severe burnout risk - requires immediate professional intervention",
+    range: { min: 102, max: 174 },
+    description: "Severe burnout risk - immediate intervention required",
     characteristics: [
       "Severe workload overwhelm",
       "Chronic emotional exhaustion",
-      "Minimal support systems",
-      "Complete work-life imbalance"
+      "Minimal sense of accomplishment",
+      "Poor social support systems",
+      "Complete work-life imbalance",
+      "Maladaptive coping strategies"
     ],
     developmentAreas: [
       "Immediate professional mental health support",
       "Workplace accommodation or leave consideration",
       "Comprehensive lifestyle and work changes",
-      "Medical evaluation if needed"
+      "Medical evaluation if needed",
+      "Crisis intervention resources"
     ],
     color: "bg-red-600"
   }

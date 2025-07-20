@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
-import { genZScenarios, genZValues, collaborationScenarios, type GenZScenario, type GenZValue } from '@/data/genZScenarios';
+import { genZScenarios, genZValues, collaborationScenarios, type GenZScenario, type GenZValue } from '@/data/genZScenariosFixed';
 import { useGenZScoring, type UserData, type ScenarioResponse } from '@/hooks/useGenZScoring';
 import { Heart, ThumbsUp, Minus, ThumbsDown, AlertTriangle, Share2, Download, RotateCcw } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';

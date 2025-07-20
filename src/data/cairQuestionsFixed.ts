@@ -18,63 +18,63 @@ export const cairQuestions: CAIRQuestion[] = [
     type: 'forced_choice',
     questionText: 'When planning projects, I prefer to:',
     optionA: 'Create detailed timelines and stick to them',
-    optionB: 'Keep flexible and adapt as needed',
+    optionB: 'Set general goals and adapt as needed',
     dimension: 'conscientiousness',
-    subdimension: 'organization'
+    subdimension: 'planning'
   },
   {
     id: 'c002',
     type: 'forced_choice',
     questionText: 'My workspace is typically:',
-    optionA: 'Very organized and clean',
-    optionB: 'Creative chaos that works for me',
+    optionA: 'Highly organized with everything in its place',
+    optionB: 'Lived-in with some controlled chaos',
     dimension: 'conscientiousness',
     subdimension: 'organization'
   },
   {
     id: 'c003',
     type: 'forced_choice',
-    questionText: 'When I commit to something, I:',
-    optionA: 'Always follow through completely',
-    optionB: 'Do my best but circumstances change',
+    questionText: 'When facing deadlines, I:',
+    optionA: 'Complete tasks well ahead of schedule',
+    optionB: 'Work efficiently under time pressure',
     dimension: 'conscientiousness',
-    subdimension: 'reliability'
+    subdimension: 'time_management'
   },
   {
     id: 'c004',
     type: 'forced_choice',
-    questionText: 'I prefer to complete tasks:',
-    optionA: 'Well before the deadline',
-    optionB: 'Right when they\'re due',
+    questionText: 'I approach quality standards by:',
+    optionA: 'Striving for perfection in every detail',
+    optionB: 'Balancing quality with practical constraints',
     dimension: 'conscientiousness',
-    subdimension: 'reliability'
+    subdimension: 'quality_focus'
   },
   {
     id: 'c005',
     type: 'forced_choice',
-    questionText: 'When setting goals, I:',
-    optionA: 'Break them into specific, measurable steps',
-    optionB: 'Keep them flexible and aspirational',
+    questionText: 'When given multiple tasks, I:',
+    optionA: 'Prioritize systematically and work sequentially',
+    optionB: 'Switch between tasks based on energy and interest',
     dimension: 'conscientiousness',
-    subdimension: 'goal_orientation'
+    subdimension: 'task_management'
   },
   {
     id: 'c006',
     type: 'forced_choice',
-    questionText: 'I pay attention to details:',
-    optionA: 'Meticulously - every detail matters',
-    optionB: 'Enough to get the big picture right',
+    questionText: 'My approach to following rules is:',
+    optionA: 'Rules exist for good reasons and should be followed',
+    optionB: 'Rules are guidelines that may need interpretation',
     dimension: 'conscientiousness',
-    subdimension: 'attention_to_detail'
+    subdimension: 'rule_following'
   },
   {
     id: 'c007',
     type: 'forced_choice',
-    questionText: 'My approach to rules is:',
-    optionA: 'Rules exist for good reasons and should be followed',
-    optionB: 'Rules are guidelines that can be adapted',
+    questionText: 'When learning new skills, I prefer to:',
+    optionA: 'Master fundamentals thoroughly before advancing',
+    optionB: 'Jump in and learn through trial and error',
     dimension: 'conscientiousness',
-    subdimension: 'rule_following'
+    subdimension: 'learning_approach'
   },
   {
     id: 'c008',
@@ -119,1035 +119,986 @@ export const cairQuestions: CAIRQuestion[] = [
     optionA: 'Complete it thoroughly regardless of boredom',
     optionB: 'Find ways to make it more interesting or efficient',
     dimension: 'conscientiousness',
-    subdimension: 'perseverance'
+    subdimension: 'persistence'
   },
   {
     id: 'c013',
     type: 'forced_choice',
-    questionText: 'My approach to quality is:',
-    optionA: 'Perfection in every detail is the standard',
-    optionB: 'Good enough to meet objectives is sufficient',
+    questionText: 'My commitment to goals is best described as:',
+    optionA: 'Unwavering once I decide on something',
+    optionB: 'Flexible and willing to pivot when needed',
     dimension: 'conscientiousness',
-    subdimension: 'perfectionism'
+    subdimension: 'goal_commitment'
   },
   {
     id: 'c014',
     type: 'forced_choice',
-    questionText: 'I prefer instructions that are:',
-    optionA: 'Detailed and comprehensive',
-    optionB: 'Brief and leave room for interpretation',
-    dimension: 'conscientiousness',
-    subdimension: 'structure_preference'
-  },
-  {
-    id: 'c015',
-    type: 'forced_choice',
     questionText: 'When others depend on my work, I:',
-    optionA: 'Feel extra pressure to deliver flawlessly',
-    optionB: 'Work normally but communicate any issues early',
+    optionA: 'Feel extra pressure to deliver perfectly',
+    optionB: 'Focus on meeting their actual needs',
     dimension: 'conscientiousness',
     subdimension: 'responsibility'
   },
   {
+    id: 'c015',
+    type: 'forced_choice',
+    questionText: 'I prefer work environments that are:',
+    optionA: 'Structured with clear expectations',
+    optionB: 'Flexible with room for creativity',
+    dimension: 'conscientiousness',
+    subdimension: 'structure_preference'
+  },
+  {
     id: 'c016',
     type: 'forced_choice',
-    questionText: 'I manage my time by:',
-    optionA: 'Using detailed calendars and scheduling systems',
-    optionB: 'Keeping mental notes and going with the flow',
+    questionText: 'When managing resources, I:',
+    optionA: 'Plan carefully to avoid waste',
+    optionB: 'Use what I need to get results',
     dimension: 'conscientiousness',
-    subdimension: 'time_management'
+    subdimension: 'resource_management'
   },
   {
     id: 'c017',
     type: 'forced_choice',
-    questionText: 'When reviewing my work, I:',
-    optionA: 'Check multiple times for any possible errors',
-    optionB: 'Review once to catch major issues',
+    questionText: 'My approach to documentation is:',
+    optionA: 'Detailed records are essential',
+    optionB: 'Document what\'s necessary for others',
     dimension: 'conscientiousness',
-    subdimension: 'quality_control'
+    subdimension: 'documentation'
   },
   {
     id: 'c018',
     type: 'forced_choice',
-    questionText: 'I approach deadlines by:',
-    optionA: 'Building in buffer time for unexpected issues',
-    optionB: 'Using all available time to maximize quality',
-    dimension: 'conscientiousness',
-    subdimension: 'planning'
-  },
-  {
-    id: 'c019',
-    type: 'forced_choice',
-    questionText: 'My filing and documentation system is:',
-    optionA: 'Meticulously organized and easily searchable',
-    optionB: 'Functional but somewhat informal',
-    dimension: 'conscientiousness',
-    subdimension: 'organization'
-  },
-  {
-    id: 'c020',
-    type: 'forced_choice',
-    questionText: 'When I say I\'ll do something, others can:',
-    optionA: 'Count on it happening exactly as promised',
-    optionB: 'Expect a good faith effort with possible changes',
+    questionText: 'When I commit to something, others can expect:',
+    optionA: 'Exactly what I promised, when I promised',
+    optionB: 'Good faith effort with honest communication',
     dimension: 'conscientiousness',
     subdimension: 'reliability'
   },
   {
+    id: 'c019',
+    type: 'forced_choice',
+    questionText: 'I handle interruptions by:',
+    optionA: 'Minimizing them to maintain focus',
+    optionB: 'Adapting my workflow to accommodate them',
+    dimension: 'conscientiousness',
+    subdimension: 'focus_management'
+  },
+  {
+    id: 'c020',
+    type: 'forced_choice',
+    questionText: 'When evaluating my work, I focus on:',
+    optionA: 'Areas where I could have done better',
+    optionB: 'Whether I achieved the intended outcome',
+    dimension: 'conscientiousness',
+    subdimension: 'self_evaluation'
+  },
+  {
     id: 'c021',
     type: 'forced_choice',
-    questionText: 'I handle routine tasks by:',
-    optionA: 'Following established procedures consistently',
-    optionB: 'Looking for ways to improve or streamline them',
+    questionText: 'My personal standards are:',
+    optionA: 'Higher than most people would expect',
+    optionB: 'Appropriate for the situation',
     dimension: 'conscientiousness',
-    subdimension: 'routine_compliance'
+    subdimension: 'standards'
   },
   {
     id: 'c022',
     type: 'forced_choice',
-    questionText: 'My approach to personal development is:',
-    optionA: 'Systematic with clear goals and metrics',
-    optionB: 'Organic based on interests and opportunities',
+    questionText: 'When building habits, I:',
+    optionA: 'Create detailed systems and track progress',
+    optionB: 'Start simple and build naturally over time',
     dimension: 'conscientiousness',
-    subdimension: 'self_discipline'
+    subdimension: 'habit_formation'
   },
   {
     id: 'c023',
     type: 'forced_choice',
-    questionText: 'When starting a complex project, I:',
-    optionA: 'Map out all steps before beginning',
-    optionB: 'Start with what I know and figure out the rest',
+    questionText: 'I approach long-term projects by:',
+    optionA: 'Breaking them into detailed phases',
+    optionB: 'Setting milestones and adjusting along the way',
     dimension: 'conscientiousness',
-    subdimension: 'planning'
+    subdimension: 'project_management'
   },
   {
     id: 'c024',
     type: 'forced_choice',
-    questionText: 'I maintain professional standards by:',
-    optionA: 'Consistently adhering to established best practices',
-    optionB: 'Adapting standards to fit specific situations',
+    questionText: 'When others are less organized than me, I:',
+    optionA: 'Feel frustrated by their lack of structure',
+    optionB: 'Appreciate different working styles',
     dimension: 'conscientiousness',
-    subdimension: 'professionalism'
+    subdimension: 'tolerance'
   },
   {
     id: 'c025',
     type: 'forced_choice',
-    questionText: 'My work environment functions best when:',
-    optionA: 'Everything has a designated place and process',
-    optionB: 'There\'s flexibility for spontaneous collaboration',
+    questionText: 'My relationship with time is best described as:',
+    optionA: 'Time is precious and should be optimized',
+    optionB: 'Time is a resource to be used wisely',
     dimension: 'conscientiousness',
-    subdimension: 'environmental_order'
+    subdimension: 'time_orientation'
   },
 
   // AGREEABLENESS (25 questions)
   {
     id: 'a001',
     type: 'forced_choice',
-    questionText: 'In team conflicts, I typically:',
-    optionA: 'Try to find solutions that work for everyone',
-    optionB: 'Focus on what\'s best for the project',
+    questionText: 'When conflicts arise, I typically:',
+    optionA: 'Seek harmony and compromise',
+    optionB: 'Address issues directly and honestly',
     dimension: 'agreeableness',
-    subdimension: 'cooperation'
+    subdimension: 'conflict_approach'
   },
   {
     id: 'a002',
     type: 'forced_choice',
-    questionText: 'When someone asks for help, I:',
-    optionA: 'Always try to assist if I can',
-    optionB: 'Help if it fits my schedule',
-    dimension: 'agreeableness',
-    subdimension: 'helpfulness'
-  },
-  {
-    id: 'a003',
-    type: 'forced_choice',
     questionText: 'I believe most people are:',
     optionA: 'Fundamentally good and trustworthy',
-    optionB: 'Generally okay but you need to be careful',
+    optionB: 'Mixed, requiring careful judgment',
     dimension: 'agreeableness',
     subdimension: 'trust'
   },
   {
+    id: 'a003',
+    type: 'forced_choice',
+    questionText: 'When someone asks for help, I:',
+    optionA: 'Almost always say yes if I can',
+    optionB: 'Consider my capacity and priorities first',
+    dimension: 'agreeableness',
+    subdimension: 'helpfulness'
+  },
+  {
     id: 'a004',
     type: 'forced_choice',
-    questionText: 'When giving feedback, I:',
-    optionA: 'Focus on being gentle and supportive',
-    optionB: 'Focus on being direct and honest',
+    questionText: 'In group decisions, I prefer to:',
+    optionA: 'Build consensus even if it takes longer',
+    optionB: 'Make efficient decisions with key input',
     dimension: 'agreeableness',
-    subdimension: 'compassion'
+    subdimension: 'cooperation'
   },
   {
     id: 'a005',
     type: 'forced_choice',
-    questionText: 'In negotiations, I prefer to:',
-    optionA: 'Find win-win solutions for all parties',
-    optionB: 'Achieve the best outcome for my side',
-    dimension: 'agreeableness',
-    subdimension: 'cooperation'
-  },
-  {
-    id: 'a006',
-    type: 'forced_choice',
-    questionText: 'When someone is upset, I:',
-    optionA: 'Feel their emotions and want to comfort them',
-    optionB: 'Stay calm and offer practical solutions',
+    questionText: 'When someone is struggling, my instinct is to:',
+    optionA: 'Offer emotional support and encouragement',
+    optionB: 'Help them find practical solutions',
     dimension: 'agreeableness',
     subdimension: 'empathy'
   },
   {
-    id: 'a007',
+    id: 'a006',
     type: 'forced_choice',
     questionText: 'I handle criticism by:',
-    optionA: 'Listening carefully and looking for truth in it',
-    optionB: 'Evaluating if the critic has valid expertise',
+    optionA: 'Considering how it might be true',
+    optionB: 'Evaluating its validity and source',
     dimension: 'agreeableness',
-    subdimension: 'modesty'
+    subdimension: 'receptivity'
   },
   {
-    id: 'a008',
+    id: 'a007',
     type: 'forced_choice',
-    questionText: 'My communication style is:',
-    optionA: 'Warm and personal',
-    optionB: 'Professional and efficient',
-    dimension: 'agreeableness',
-    subdimension: 'interpersonal_warmth'
-  },
-  {
-    id: 'a009',
-    type: 'forced_choice',
-    questionText: 'When leading a team, I:',
-    optionA: 'Build consensus and ensure everyone feels heard',
-    optionB: 'Make decisions efficiently and communicate clearly',
-    dimension: 'agreeableness',
-    subdimension: 'consensus_building'
-  },
-  {
-    id: 'a010',
-    type: 'forced_choice',
-    questionText: 'I prefer workplace environments that are:',
-    optionA: 'Collaborative and relationship-focused',
-    optionB: 'Results-oriented and performance-focused',
-    dimension: 'agreeableness',
-    subdimension: 'cooperation'
-  },
-  {
-    id: 'a011',
-    type: 'forced_choice',
-    questionText: 'When someone disagrees with me, I:',
-    optionA: 'Try to understand their perspective first',
-    optionB: 'Present stronger evidence for my position',
-    dimension: 'agreeableness',
-    subdimension: 'perspective_taking'
-  },
-  {
-    id: 'a012',
-    type: 'forced_choice',
-    questionText: 'My approach to workplace politics is:',
-    optionA: 'Focus on maintaining positive relationships',
-    optionB: 'Stay focused on work and avoid office politics',
-    dimension: 'agreeableness',
-    subdimension: 'harmony_seeking'
-  },
-  {
-    id: 'a013',
-    type: 'forced_choice',
-    questionText: 'When allocating resources, I consider:',
-    optionA: 'What\'s fair and equitable for everyone involved',
-    optionB: 'What will produce the best overall results',
-    dimension: 'agreeableness',
-    subdimension: 'fairness'
-  },
-  {
-    id: 'a014',
-    type: 'forced_choice',
-    questionText: 'I respond to others\' mistakes by:',
-    optionA: 'Focusing on learning and improvement',
-    optionB: 'Analyzing what went wrong and preventing recurrence',
+    questionText: 'When others make mistakes, I:',
+    optionA: 'Focus on understanding why it happened',
+    optionB: 'Address what needs to be corrected',
     dimension: 'agreeableness',
     subdimension: 'forgiveness'
   },
   {
+    id: 'a008',
+    type: 'forced_choice',
+    questionText: 'My communication style tends to be:',
+    optionA: 'Gentle and considerate of feelings',
+    optionB: 'Clear and straightforward',
+    dimension: 'agreeableness',
+    subdimension: 'communication'
+  },
+  {
+    id: 'a009',
+    type: 'forced_choice',
+    questionText: 'When negotiating, I:',
+    optionA: 'Look for win-win solutions',
+    optionB: 'Aim for the best outcome for my side',
+    dimension: 'agreeableness',
+    subdimension: 'negotiation'
+  },
+  {
+    id: 'a010',
+    type: 'forced_choice',
+    questionText: 'I express disagreement by:',
+    optionA: 'Softening my words to avoid offense',
+    optionB: 'Being direct while remaining respectful',
+    dimension: 'agreeableness',
+    subdimension: 'assertiveness'
+  },
+  {
+    id: 'a011',
+    type: 'forced_choice',
+    questionText: 'When leading teams, I:',
+    optionA: 'Emphasize collaboration and team harmony',
+    optionB: 'Focus on clear goals and accountability',
+    dimension: 'agreeableness',
+    subdimension: 'leadership_style'
+  },
+  {
+    id: 'a012',
+    type: 'forced_choice',
+    questionText: 'I tend to assume others\' motives are:',
+    optionA: 'Generally positive until proven otherwise',
+    optionB: 'Mixed and require observation',
+    dimension: 'agreeableness',
+    subdimension: 'assumption_of_intent'
+  },
+  {
+    id: 'a013',
+    type: 'forced_choice',
+    questionText: 'When someone is upset with me, I:',
+    optionA: 'Feel bad and want to make things right',
+    optionB: 'Try to understand what happened objectively',
+    dimension: 'agreeableness',
+    subdimension: 'emotional_response'
+  },
+  {
+    id: 'a014',
+    type: 'forced_choice',
+    questionText: 'My approach to giving feedback is:',
+    optionA: 'Emphasize positives and soften critiques',
+    optionB: 'Balance honest assessment with encouragement',
+    dimension: 'agreeableness',
+    subdimension: 'feedback_style'
+  },
+  {
     id: 'a015',
     type: 'forced_choice',
-    questionText: 'My leadership style emphasizes:',
-    optionA: 'Supporting and developing team members',
-    optionB: 'Setting clear expectations and driving results',
+    questionText: 'When others are in pain, I:',
+    optionA: 'Feel their pain almost as if it were my own',
+    optionB: 'Feel concerned and want to help if I can',
     dimension: 'agreeableness',
-    subdimension: 'nurturing'
+    subdimension: 'emotional_sensitivity'
   },
   {
     id: 'a016',
     type: 'forced_choice',
-    questionText: 'When someone is struggling at work, I:',
-    optionA: 'Offer assistance and emotional support',
-    optionB: 'Suggest resources or training they might need',
+    questionText: 'I prefer workplace cultures that are:',
+    optionA: 'Warm and supportive of everyone',
+    optionB: 'Professional and results-oriented',
     dimension: 'agreeableness',
-    subdimension: 'altruism'
+    subdimension: 'culture_preference'
   },
   {
     id: 'a017',
     type: 'forced_choice',
-    questionText: 'In competitive situations, I:',
-    optionA: 'Prefer collaboration over competition',
-    optionB: 'Enjoy the challenge and strive to win',
+    questionText: 'When allocating limited resources, I:',
+    optionA: 'Consider everyone\'s needs fairly',
+    optionB: 'Prioritize based on strategic importance',
     dimension: 'agreeableness',
-    subdimension: 'competitiveness',
-    reverse: true
+    subdimension: 'fairness'
   },
   {
     id: 'a018',
     type: 'forced_choice',
-    questionText: 'My decision-making process includes:',
-    optionA: 'Considering impact on all stakeholders',
-    optionB: 'Focusing on efficiency and optimal outcomes',
+    questionText: 'My tolerance for difficult people is:',
+    optionA: 'High - everyone has their reasons',
+    optionB: 'Moderate - depends on the impact',
     dimension: 'agreeableness',
-    subdimension: 'consideration'
+    subdimension: 'tolerance'
   },
   {
     id: 'a019',
     type: 'forced_choice',
-    questionText: 'When someone interrupts my work, I:',
-    optionA: 'Welcome the interaction and try to help',
-    optionB: 'Politely redirect them to respect my time',
+    questionText: 'When making tough decisions, I:',
+    optionA: 'Consider how it will affect everyone involved',
+    optionB: 'Focus on what\'s best for the organization',
     dimension: 'agreeableness',
-    subdimension: 'accommodation'
+    subdimension: 'decision_making'
   },
   {
     id: 'a020',
     type: 'forced_choice',
-    questionText: 'I build professional relationships by:',
-    optionA: 'Being genuinely interested in others as people',
-    optionB: 'Focusing on shared work goals and objectives',
+    questionText: 'I build relationships by:',
+    optionA: 'Being genuinely interested in others',
+    optionB: 'Finding common ground and shared goals',
     dimension: 'agreeableness',
-    subdimension: 'social_interest'
+    subdimension: 'relationship_building'
   },
   {
     id: 'a021',
     type: 'forced_choice',
-    questionText: 'When someone takes credit for my work, I:',
-    optionA: 'Address it diplomatically to maintain the relationship',
-    optionB: 'Firmly correct the record to protect my reputation',
+    questionText: 'When someone betrays my trust, I:',
+    optionA: 'Eventually forgive and give second chances',
+    optionB: 'Become much more cautious with them',
     dimension: 'agreeableness',
-    subdimension: 'conflict_avoidance'
+    subdimension: 'forgiveness'
   },
   {
     id: 'a022',
     type: 'forced_choice',
-    questionText: 'My approach to team recognition is:',
-    optionA: 'Highlight everyone\'s contributions equally',
-    optionB: 'Recognize individual achievements based on merit',
+    questionText: 'I handle competitive situations by:',
+    optionA: 'Focusing on everyone doing their best',
+    optionB: 'Playing to win while staying fair',
     dimension: 'agreeableness',
-    subdimension: 'egalitarianism'
+    subdimension: 'competitiveness'
   },
   {
     id: 'a023',
     type: 'forced_choice',
-    questionText: 'When setting team goals, I:',
-    optionA: 'Ensure they\'re achievable for all team members',
-    optionB: 'Set challenging targets to drive high performance',
+    questionText: 'When others succeed, I typically feel:',
+    optionA: 'Genuinely happy for their achievement',
+    optionB: 'Pleased and perhaps motivated to excel myself',
     dimension: 'agreeableness',
-    subdimension: 'consideration'
+    subdimension: 'supportiveness'
   },
   {
     id: 'a024',
     type: 'forced_choice',
-    questionText: 'I handle diverse opinions by:',
-    optionA: 'Finding common ground and building bridges',
-    optionB: 'Evaluating which perspective is most logical',
+    questionText: 'My approach to team conflicts is:',
+    optionA: 'Mediate to restore harmony',
+    optionB: 'Address the root issue directly',
     dimension: 'agreeableness',
-    subdimension: 'harmony_seeking'
+    subdimension: 'conflict_resolution'
   },
   {
     id: 'a025',
     type: 'forced_choice',
-    questionText: 'My networking approach focuses on:',
-    optionA: 'Building genuine friendships and connections',
-    optionB: 'Developing strategic professional relationships',
+    questionText: 'I show care for others by:',
+    optionA: 'Being emotionally available and supportive',
+    optionB: 'Helping them achieve their goals',
     dimension: 'agreeableness',
-    subdimension: 'relationship_orientation'
+    subdimension: 'caring_expression'
   },
 
   // INNOVATION (25 questions)
   {
     id: 'i001',
     type: 'forced_choice',
-    questionText: 'When facing a problem, I:',
-    optionA: 'Look for creative, unconventional solutions',
-    optionB: 'Use proven methods that have worked before',
+    questionText: 'When facing new challenges, I prefer to:',
+    optionA: 'Explore creative and unconventional solutions',
+    optionB: 'Build on proven methods and best practices',
     dimension: 'innovation',
-    subdimension: 'creativity'
+    subdimension: 'problem_solving'
   },
   {
     id: 'i002',
     type: 'forced_choice',
-    questionText: 'I\'m energized by:',
-    optionA: 'Exploring new ideas and possibilities',
-    optionB: 'Perfecting existing systems and processes',
+    questionText: 'I am most energized by:',
+    optionA: 'Possibilities and future potential',
+    optionB: 'Current realities and concrete progress',
     dimension: 'innovation',
-    subdimension: 'openness_to_change'
+    subdimension: 'orientation'
   },
   {
     id: 'i003',
     type: 'forced_choice',
-    questionText: 'When learning new skills, I prefer:',
-    optionA: 'Experimenting and discovering on my own',
-    optionB: 'Following established training programs',
+    questionText: 'When learning new concepts, I:',
+    optionA: 'Make connections to unrelated ideas',
+    optionB: 'Focus on understanding the fundamentals',
     dimension: 'innovation',
     subdimension: 'learning_style'
   },
   {
     id: 'i004',
     type: 'forced_choice',
-    questionText: 'In brainstorming sessions, I:',
-    optionA: 'Generate lots of wild, creative ideas',
-    optionB: 'Focus on practical, implementable solutions',
+    questionText: 'My approach to brainstorming is:',
+    optionA: 'Generate many ideas without immediate judgment',
+    optionB: 'Focus on feasible and practical solutions',
     dimension: 'innovation',
     subdimension: 'ideation'
   },
   {
     id: 'i005',
     type: 'forced_choice',
-    questionText: 'I approach change as:',
-    optionA: 'An exciting opportunity for improvement',
-    optionB: 'A necessary challenge to manage carefully',
+    questionText: 'I prefer projects that:',
+    optionA: 'Break new ground or explore uncharted territory',
+    optionB: 'Improve existing systems or processes',
     dimension: 'innovation',
-    subdimension: 'change_tolerance'
+    subdimension: 'project_preference'
   },
   {
     id: 'i006',
     type: 'forced_choice',
-    questionText: 'My ideal project involves:',
-    optionA: 'Building something completely new',
-    optionB: 'Improving something that already exists',
+    questionText: 'When rules seem limiting, I:',
+    optionA: 'Look for creative ways to work around them',
+    optionB: 'Work within constraints to find solutions',
     dimension: 'innovation',
-    subdimension: 'innovation_preference'
+    subdimension: 'rule_orientation'
   },
   {
     id: 'i007',
     type: 'forced_choice',
-    questionText: 'When I see inefficiencies, I:',
-    optionA: 'Immediately start thinking of better ways',
-    optionB: 'Document the issue and work within the system',
+    questionText: 'I am drawn to ideas that are:',
+    optionA: 'Novel and potentially game-changing',
+    optionB: 'Practical and immediately implementable',
     dimension: 'innovation',
-    subdimension: 'improvement_orientation'
+    subdimension: 'idea_preference'
   },
   {
     id: 'i008',
     type: 'forced_choice',
-    questionText: 'I\'m most comfortable with:',
-    optionA: 'Ambiguous situations where I can be flexible',
-    optionB: 'Clear expectations and defined processes',
+    questionText: 'When planning, I focus on:',
+    optionA: 'Vision and big picture possibilities',
+    optionB: 'Concrete steps and deliverables',
     dimension: 'innovation',
-    subdimension: 'ambiguity_tolerance'
+    subdimension: 'planning_style'
   },
   {
     id: 'i009',
     type: 'forced_choice',
-    questionText: 'My thinking style is:',
-    optionA: 'Abstract and conceptual',
-    optionB: 'Concrete and practical',
+    questionText: 'I handle uncertainty by:',
+    optionA: 'Embracing it as an opportunity',
+    optionB: 'Seeking information to reduce it',
     dimension: 'innovation',
-    subdimension: 'abstract_thinking'
+    subdimension: 'uncertainty_tolerance'
   },
   {
     id: 'i010',
     type: 'forced_choice',
-    questionText: 'When taking risks, I:',
-    optionA: 'Trust my intuition and go for it',
-    optionB: 'Carefully analyze potential outcomes first',
+    questionText: 'My thinking style is more:',
+    optionA: 'Intuitive and pattern-based',
+    optionB: 'Logical and sequential',
     dimension: 'innovation',
-    subdimension: 'risk_taking'
+    subdimension: 'thinking_style'
   },
   {
     id: 'i011',
     type: 'forced_choice',
-    questionText: 'I prefer work environments that:',
-    optionA: 'Encourage experimentation and new approaches',
-    optionB: 'Have established procedures and best practices',
+    questionText: 'When improving processes, I:',
+    optionA: 'Question fundamental assumptions',
+    optionB: 'Optimize current approaches',
     dimension: 'innovation',
-    subdimension: 'innovation_culture'
+    subdimension: 'improvement_approach'
   },
   {
     id: 'i012',
     type: 'forced_choice',
-    questionText: 'When solving complex problems, I:',
-    optionA: 'Look for patterns and novel connections',
-    optionB: 'Break them down systematically step by step',
+    questionText: 'I prefer work that:',
+    optionA: 'Varies significantly from day to day',
+    optionB: 'Has consistent patterns and expectations',
     dimension: 'innovation',
-    subdimension: 'pattern_recognition'
+    subdimension: 'variety_preference'
   },
   {
     id: 'i013',
     type: 'forced_choice',
-    questionText: 'My approach to established processes is:',
-    optionA: 'Question them and seek improvements',
-    optionB: 'Follow them unless there\'s a clear problem',
+    questionText: 'When others propose new ideas, I:',
+    optionA: 'Build on them with additional possibilities',
+    optionB: 'Evaluate their practical feasibility',
     dimension: 'innovation',
-    subdimension: 'process_questioning'
+    subdimension: 'idea_response'
   },
   {
     id: 'i014',
     type: 'forced_choice',
-    questionText: 'I get inspiration from:',
-    optionA: 'Diverse sources and unexpected connections',
-    optionB: 'Expert knowledge and proven techniques',
+    questionText: 'I am most comfortable with:',
+    optionA: 'Ambiguous situations requiring creativity',
+    optionB: 'Clear situations with defined parameters',
     dimension: 'innovation',
-    subdimension: 'inspiration_sources'
+    subdimension: 'comfort_zone'
   },
   {
     id: 'i015',
     type: 'forced_choice',
-    questionText: 'When facing constraints, I:',
-    optionA: 'See them as creative challenges to overcome',
-    optionB: 'Work efficiently within the given limitations',
+    questionText: 'My communication often includes:',
+    optionA: 'Metaphors and analogies',
+    optionB: 'Facts and specific examples',
     dimension: 'innovation',
-    subdimension: 'constraint_response'
+    subdimension: 'communication_style'
   },
   {
     id: 'i016',
     type: 'forced_choice',
-    questionText: 'My idea evaluation process emphasizes:',
-    optionA: 'Potential and possibility',
-    optionB: 'Feasibility and practicality',
+    questionText: 'When researching topics, I:',
+    optionA: 'Explore tangential and related areas',
+    optionB: 'Focus deeply on the core subject',
     dimension: 'innovation',
-    subdimension: 'idea_evaluation'
+    subdimension: 'research_style'
   },
   {
     id: 'i017',
     type: 'forced_choice',
-    questionText: 'I prefer projects that:',
-    optionA: 'Push boundaries and explore new territory',
-    optionB: 'Build upon proven foundations',
+    questionText: 'I generate my best ideas when:',
+    optionA: 'My mind is free to wander and connect',
+    optionB: 'I focus intently on the specific problem',
     dimension: 'innovation',
-    subdimension: 'boundary_pushing'
+    subdimension: 'creativity_process'
   },
   {
     id: 'i018',
     type: 'forced_choice',
-    questionText: 'When collaborating, I contribute:',
-    optionA: 'Original perspectives and creative alternatives',
-    optionB: 'Practical insights and implementation expertise',
+    questionText: 'I prefer feedback that:',
+    optionA: 'Encourages exploration of new directions',
+    optionB: 'Helps refine and perfect current work',
     dimension: 'innovation',
-    subdimension: 'collaboration_style'
+    subdimension: 'feedback_preference'
   },
   {
     id: 'i019',
     type: 'forced_choice',
-    questionText: 'My learning preference is:',
-    optionA: 'Exploring multiple approaches simultaneously',
-    optionB: 'Mastering one approach thoroughly',
+    questionText: 'When starting new projects, I:',
+    optionA: 'Begin with broad exploration',
+    optionB: 'Start with clear objectives',
     dimension: 'innovation',
-    subdimension: 'learning_breadth'
+    subdimension: 'project_initiation'
   },
   {
     id: 'i020',
     type: 'forced_choice',
-    questionText: 'I respond to failure by:',
-    optionA: 'Seeing it as data for the next iteration',
-    optionB: 'Analyzing what went wrong to avoid repetition',
+    questionText: 'I am energized by:',
+    optionA: 'Theoretical discussions and conceptual debates',
+    optionB: 'Practical applications and real-world results',
     dimension: 'innovation',
-    subdimension: 'failure_response'
+    subdimension: 'energy_source'
   },
   {
     id: 'i021',
     type: 'forced_choice',
-    questionText: 'My work style involves:',
-    optionA: 'Rapid prototyping and testing ideas',
-    optionB: 'Careful planning before implementation',
+    questionText: 'My workspace reflects:',
+    optionA: 'Creative inspiration and visual stimulation',
+    optionB: 'Functional organization and efficiency',
     dimension: 'innovation',
-    subdimension: 'work_methodology'
+    subdimension: 'environment_preference'
   },
   {
     id: 'i022',
     type: 'forced_choice',
-    questionText: 'I find routine work:',
-    optionA: 'Boring and seek ways to make it more interesting',
-    optionB: 'Satisfying when done efficiently and well',
+    questionText: 'When solving problems, I:',
+    optionA: 'Start with the ideal solution and work backward',
+    optionB: 'Start with current constraints and work forward',
     dimension: 'innovation',
-    subdimension: 'routine_tolerance',
-    reverse: true
+    subdimension: 'solution_approach'
   },
   {
     id: 'i023',
     type: 'forced_choice',
-    questionText: 'When presenting ideas, I focus on:',
-    optionA: 'Vision and transformative potential',
-    optionB: 'Evidence and practical benefits',
+    questionText: 'I prefer meetings that:',
+    optionA: 'Allow for open-ended discussion and exploration',
+    optionB: 'Have clear agendas and defined outcomes',
     dimension: 'innovation',
-    subdimension: 'presentation_focus'
+    subdimension: 'meeting_preference'
   },
   {
     id: 'i024',
     type: 'forced_choice',
-    questionText: 'My professional development emphasizes:',
-    optionA: 'Exploring emerging trends and technologies',
-    optionB: 'Deepening expertise in core competencies',
+    questionText: 'When evaluating ideas, I focus on:',
+    optionA: 'Their transformational potential',
+    optionB: 'Their implementation feasibility',
     dimension: 'innovation',
-    subdimension: 'development_focus'
+    subdimension: 'evaluation_criteria'
   },
   {
     id: 'i025',
     type: 'forced_choice',
-    questionText: 'I measure success by:',
-    optionA: 'How much I\'ve innovated and created',
-    optionB: 'How well I\'ve executed and delivered',
+    questionText: 'I find inspiration in:',
+    optionA: 'Cross-industry examples and diverse fields',
+    optionB: 'Best practices within my domain',
     dimension: 'innovation',
-    subdimension: 'success_metrics'
+    subdimension: 'inspiration_source'
   },
 
   // RESILIENCE (25 questions)
   {
     id: 'r001',
     type: 'forced_choice',
-    questionText: 'When facing setbacks, I:',
-    optionA: 'Bounce back quickly and keep moving forward',
-    optionB: 'Take time to process before moving on',
+    questionText: 'When facing significant setbacks, I:',
+    optionA: 'Quickly bounce back and refocus on solutions',
+    optionB: 'Take time to process before moving forward',
     dimension: 'resilience',
     subdimension: 'recovery_speed'
   },
   {
     id: 'r002',
     type: 'forced_choice',
-    questionText: 'Under pressure, I:',
-    optionA: 'Stay calm and think clearly',
-    optionB: 'Feel the stress but push through it',
+    questionText: 'I view failure as:',
+    optionA: 'Valuable learning opportunity',
+    optionB: 'Temporary obstacle to overcome',
     dimension: 'resilience',
-    subdimension: 'stress_tolerance'
+    subdimension: 'failure_mindset'
   },
   {
     id: 'r003',
     type: 'forced_choice',
-    questionText: 'When things go wrong, I typically think:',
-    optionA: 'This is temporary and I can handle it',
-    optionB: 'This is really challenging and concerning',
+    questionText: 'Under pressure, I tend to:',
+    optionA: 'Maintain calm and think clearly',
+    optionB: 'Feel stressed but push through',
     dimension: 'resilience',
-    subdimension: 'optimism'
+    subdimension: 'pressure_response'
   },
   {
     id: 'r004',
     type: 'forced_choice',
-    questionText: 'My energy level throughout the day is:',
-    optionA: 'Consistently high and steady',
-    optionB: 'Variable depending on circumstances',
-    dimension: 'resilience',
-    subdimension: 'energy_management'
-  },
-  {
-    id: 'r005',
-    type: 'forced_choice',
-    questionText: 'When criticized unfairly, I:',
-    optionA: 'Don\'t let it affect my confidence',
-    optionB: 'Feel hurt but work through it',
-    dimension: 'resilience',
-    subdimension: 'emotional_stability'
-  },
-  {
-    id: 'r006',
-    type: 'forced_choice',
-    questionText: 'In high-stress situations, I:',
-    optionA: 'Perform at my best',
-    optionB: 'Do well but feel the strain',
-    dimension: 'resilience',
-    subdimension: 'pressure_performance'
-  },
-  {
-    id: 'r007',
-    type: 'forced_choice',
-    questionText: 'When facing multiple deadlines, I:',
-    optionA: 'Stay organized and handle them systematically',
-    optionB: 'Feel overwhelmed but manage to get through',
-    dimension: 'resilience',
-    subdimension: 'workload_management'
-  },
-  {
-    id: 'r008',
-    type: 'forced_choice',
-    questionText: 'My overall outlook on life is:',
-    optionA: 'Very positive - things usually work out',
-    optionB: 'Realistic - life has ups and downs',
-    dimension: 'resilience',
-    subdimension: 'life_perspective'
-  },
-  {
-    id: 'r009',
-    type: 'forced_choice',
-    questionText: 'When learning new skills, I:',
-    optionA: 'Persist through difficulties without getting discouraged',
-    optionB: 'Sometimes get frustrated but keep trying',
-    dimension: 'resilience',
-    subdimension: 'persistence'
-  },
-  {
-    id: 'r010',
-    type: 'forced_choice',
-    questionText: 'After a difficult day at work, I:',
-    optionA: 'Quickly shift gears and enjoy my personal time',
-    optionB: 'Need some time to decompress and reset',
-    dimension: 'resilience',
-    subdimension: 'work_recovery'
-  },
-  {
-    id: 'r011',
-    type: 'forced_choice',
-    questionText: 'When plans don\'t work out, I:',
-    optionA: 'Quickly adapt and find alternative approaches',
-    optionB: 'Feel disappointed but eventually adjust',
+    questionText: 'When plans fall apart, I:',
+    optionA: 'Adapt quickly and find alternative paths',
+    optionB: 'Regroup and create new structured plans',
     dimension: 'resilience',
     subdimension: 'adaptability'
   },
   {
+    id: 'r005',
+    type: 'forced_choice',
+    questionText: 'I handle criticism by:',
+    optionA: 'Extracting useful insights and moving on',
+    optionB: 'Reflecting carefully on its validity',
+    dimension: 'resilience',
+    subdimension: 'feedback_processing'
+  },
+  {
+    id: 'r006',
+    type: 'forced_choice',
+    questionText: 'During difficult times, my energy:',
+    optionA: 'Remains relatively stable',
+    optionB: 'Fluctuates but eventually stabilizes',
+    dimension: 'resilience',
+    subdimension: 'energy_management'
+  },
+  {
+    id: 'r007',
+    type: 'forced_choice',
+    questionText: 'I cope with stress by:',
+    optionA: 'Maintaining perspective and staying grounded',
+    optionB: 'Working harder to regain control',
+    dimension: 'resilience',
+    subdimension: 'stress_coping'
+  },
+  {
+    id: 'r008',
+    type: 'forced_choice',
+    questionText: 'When facing uncertainty, I:',
+    optionA: 'Stay flexible and see what unfolds',
+    optionB: 'Seek information to reduce uncertainty',
+    dimension: 'resilience',
+    subdimension: 'uncertainty_management'
+  },
+  {
+    id: 'r009',
+    type: 'forced_choice',
+    questionText: 'My support system is:',
+    optionA: 'Strong and readily available',
+    optionB: 'Present but I prefer self-reliance',
+    dimension: 'resilience',
+    subdimension: 'social_support'
+  },
+  {
+    id: 'r010',
+    type: 'forced_choice',
+    questionText: 'When overwhelmed, I:',
+    optionA: 'Break things down into manageable pieces',
+    optionB: 'Take a step back to regain perspective',
+    dimension: 'resilience',
+    subdimension: 'overwhelm_management'
+  },
+  {
+    id: 'r011',
+    type: 'forced_choice',
+    questionText: 'I maintain motivation by:',
+    optionA: 'Connecting work to larger purpose',
+    optionB: 'Setting and achieving concrete goals',
+    dimension: 'resilience',
+    subdimension: 'motivation_maintenance'
+  },
+  {
     id: 'r012',
     type: 'forced_choice',
-    questionText: 'My confidence in handling challenges is:',
-    optionA: 'High - I believe I can overcome most obstacles',
-    optionB: 'Moderate - depends on the specific challenge',
+    questionText: 'During conflicts, I:',
+    optionA: 'Stay centered and focus on resolution',
+    optionB: 'Feel tension but work through it',
     dimension: 'resilience',
-    subdimension: 'self_efficacy'
+    subdimension: 'conflict_management'
   },
   {
     id: 'r013',
     type: 'forced_choice',
-    questionText: 'When facing uncertainty, I:',
-    optionA: 'Stay calm and focus on what I can control',
-    optionB: 'Feel anxious but try to manage it',
+    questionText: 'I recharge my energy by:',
+    optionA: 'Taking regular breaks and maintaining balance',
+    optionB: 'Completing tasks and seeing progress',
     dimension: 'resilience',
-    subdimension: 'uncertainty_tolerance'
+    subdimension: 'energy_restoration'
   },
   {
     id: 'r014',
     type: 'forced_choice',
-    questionText: 'My approach to obstacles is:',
-    optionA: 'See them as challenges to overcome',
-    optionB: 'Recognize them as serious problems to solve',
+    questionText: 'When things go wrong, I:',
+    optionA: 'Focus on what I can control and influence',
+    optionB: 'Analyze what happened and plan prevention',
     dimension: 'resilience',
-    subdimension: 'challenge_appraisal'
+    subdimension: 'control_focus'
   },
   {
     id: 'r015',
     type: 'forced_choice',
-    questionText: 'When others doubt my abilities, I:',
-    optionA: 'Stay focused on my goals regardless',
-    optionB: 'Feel motivated to prove them wrong',
+    questionText: 'My emotional stability is:',
+    optionA: 'Consistently steady across situations',
+    optionB: 'Generally stable with occasional fluctuations',
     dimension: 'resilience',
-    subdimension: 'self_confidence'
+    subdimension: 'emotional_stability'
   },
   {
     id: 'r016',
     type: 'forced_choice',
-    questionText: 'I handle workplace stress by:',
-    optionA: 'Maintaining perspective and staying balanced',
-    optionB: 'Working through it but feeling the impact',
+    questionText: 'I handle change by:',
+    optionA: 'Embracing it as natural and inevitable',
+    optionB: 'Managing the transition carefully',
     dimension: 'resilience',
-    subdimension: 'stress_management'
+    subdimension: 'change_management'
   },
   {
     id: 'r017',
     type: 'forced_choice',
-    questionText: 'When projects face unexpected problems, I:',
-    optionA: 'See opportunities within the challenges',
-    optionB: 'Focus on minimizing damage and finding solutions',
+    questionText: 'When projects are cancelled, I:',
+    optionA: 'Quickly redirect energy to new opportunities',
+    optionB: 'Learn from the experience before moving on',
     dimension: 'resilience',
-    subdimension: 'problem_reframing'
+    subdimension: 'redirection_ability'
   },
   {
     id: 'r018',
     type: 'forced_choice',
-    questionText: 'My emotional response to failure is:',
-    optionA: 'Brief disappointment followed by renewed determination',
-    optionB: 'Significant impact that takes time to process',
+    questionText: 'I maintain optimism by:',
+    optionA: 'Naturally seeing possibilities in situations',
+    optionB: 'Choosing to focus on positive aspects',
     dimension: 'resilience',
-    subdimension: 'emotional_regulation'
+    subdimension: 'optimism_source'
   },
   {
     id: 'r019',
     type: 'forced_choice',
-    questionText: 'When facing competing priorities, I:',
-    optionA: 'Stay calm and work through them systematically',
-    optionB: 'Feel the pressure but manage to handle them',
+    questionText: 'During busy periods, I:',
+    optionA: 'Maintain steady performance',
+    optionB: 'Rise to meet increased demands',
     dimension: 'resilience',
-    subdimension: 'priority_management'
+    subdimension: 'workload_management'
   },
   {
     id: 'r020',
     type: 'forced_choice',
-    questionText: 'My sleep quality during stressful periods is:',
-    optionA: 'Generally unaffected - I sleep well regardless',
-    optionB: 'Sometimes disrupted but manageable',
+    questionText: 'I handle disappointment by:',
+    optionA: 'Processing it quickly and moving forward',
+    optionB: 'Understanding its impact before progressing',
     dimension: 'resilience',
-    subdimension: 'sleep_resilience'
+    subdimension: 'disappointment_processing'
   },
   {
     id: 'r021',
     type: 'forced_choice',
-    questionText: 'When receiving negative feedback, I:',
-    optionA: 'Focus on the learning opportunity',
-    optionB: 'Feel hurt initially but work to improve',
+    questionText: 'My confidence in difficult situations:',
+    optionA: 'Remains strong and unwavering',
+    optionB: 'May dip but recovers quickly',
     dimension: 'resilience',
-    subdimension: 'feedback_resilience'
+    subdimension: 'confidence_stability'
   },
   {
     id: 'r022',
     type: 'forced_choice',
-    questionText: 'During busy periods, my work quality:',
-    optionA: 'Remains consistently high',
-    optionB: 'Sometimes suffers but I recover quickly',
+    questionText: 'I learn from mistakes by:',
+    optionA: 'Integrating lessons without dwelling',
+    optionB: 'Thoroughly analyzing what went wrong',
     dimension: 'resilience',
-    subdimension: 'performance_consistency'
+    subdimension: 'learning_integration'
   },
   {
     id: 'r023',
     type: 'forced_choice',
-    questionText: 'My support network during tough times:',
-    optionA: 'I actively use it and find it very helpful',
-    optionB: 'I sometimes reach out but prefer to handle things alone',
+    questionText: 'When resources are limited, I:',
+    optionA: 'Find creative ways to work within constraints',
+    optionB: 'Prioritize and focus on essentials',
     dimension: 'resilience',
-    subdimension: 'social_support_utilization'
+    subdimension: 'resource_management'
   },
   {
     id: 'r024',
     type: 'forced_choice',
-    questionText: 'When deadlines are moved up unexpectedly, I:',
-    optionA: 'Adapt quickly and find ways to meet them',
-    optionB: 'Feel stressed but work extra hard to deliver',
+    questionText: 'I maintain perspective by:',
+    optionA: 'Naturally seeing the bigger picture',
+    optionB: 'Deliberately stepping back to gain clarity',
     dimension: 'resilience',
-    subdimension: 'deadline_flexibility'
+    subdimension: 'perspective_maintenance'
   },
   {
     id: 'r025',
     type: 'forced_choice',
-    questionText: 'My overall resilience in professional settings is:',
-    optionA: 'Very high - I thrive despite challenges',
-    optionB: 'Good - I manage well with some effort',
+    questionText: 'My approach to recovery after setbacks is:',
+    optionA: 'Trust the natural healing process',
+    optionB: 'Take active steps to rebuild',
     dimension: 'resilience',
-    subdimension: 'overall_resilience'
+    subdimension: 'recovery_approach'
   },
 
-  // DISTORTION SCALE (20 questions)
-  // Fake-good detection (10 questions)
+  // DISTORTION DETECTION QUESTIONS (20 questions)
   {
-    id: 'fg001',
+    id: 'd001',
     type: 'distortion',
-    questionText: 'I have never told a lie, even a small one.',
-    optionA: 'True - I\'ve never lied',
-    optionB: 'False - I\'ve told small lies',
+    questionText: 'I am the most capable person in every team I join.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
     distortionType: 'fake_good'
   },
   {
-    id: 'fg002',
+    id: 'd002',
     type: 'distortion',
-    questionText: 'I always arrive exactly on time for every appointment.',
-    optionA: 'True - Always exactly on time',
-    optionB: 'False - Sometimes early or late',
+    questionText: 'I have never told even a small lie.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
     distortionType: 'fake_good'
   },
   {
-    id: 'fg003',
+    id: 'd003',
     type: 'distortion',
-    questionText: 'I have never felt angry or irritated at work.',
-    optionA: 'True - Never felt anger at work',
-    optionB: 'False - I\'ve felt frustrated at times',
-    dimension: 'validity',
-    distortionType: 'fake_good'
-  },
-  {
-    id: 'fg004',
-    type: 'distortion',
-    questionText: 'I always remember everyone\'s name after meeting them once.',
-    optionA: 'True - Perfect memory for names',
-    optionB: 'False - Sometimes forget names',
-    dimension: 'validity',
-    distortionType: 'fake_good'
-  },
-  {
-    id: 'fg005',
-    type: 'distortion',
-    questionText: 'I never procrastinate on any task, no matter how small.',
-    optionA: 'True - Never procrastinate',
-    optionB: 'False - Sometimes delay tasks',
-    dimension: 'validity',
-    distortionType: 'fake_good'
-  },
-  {
-    id: 'fg006',
-    type: 'distortion',
-    questionText: 'I have never had a negative thought about a coworker.',
-    optionA: 'True - Always positive thoughts',
-    optionB: 'False - Had occasional negative thoughts',
-    dimension: 'validity',
-    distortionType: 'fake_good'
-  },
-  {
-    id: 'fg007',
-    type: 'distortion',
-    questionText: 'I always read every word of every document I sign.',
-    optionA: 'True - Read everything completely',
-    optionB: 'False - Sometimes skim documents',
-    dimension: 'validity',
-    distortionType: 'fake_good'
-  },
-  {
-    id: 'fg008',
-    type: 'distortion',
-    questionText: 'I have never made any mistakes in my work.',
-    optionA: 'True - Never made mistakes',
-    optionB: 'False - Made some mistakes',
-    dimension: 'validity',
-    distortionType: 'fake_good'
-  },
-  {
-    id: 'fg009',
-    type: 'distortion',
-    questionText: 'I never feel stressed or overwhelmed at work.',
-    optionA: 'True - Never feel stressed',
-    optionB: 'False - Sometimes feel stress',
-    dimension: 'validity',
-    distortionType: 'fake_good'
-  },
-  {
-    id: 'fg010',
-    type: 'distortion',
-    questionText: 'I always complete every task perfectly on the first try.',
-    optionA: 'True - Always perfect first attempt',
-    optionB: 'False - Sometimes need revisions',
-    dimension: 'validity',
-    distortionType: 'fake_good'
-  },
-
-  // Fake-bad detection (5 questions)
-  {
-    id: 'fb001',
-    type: 'distortion',
-    questionText: 'I am completely incompetent at everything I do.',
-    optionA: 'True - Completely incompetent',
-    optionB: 'False - Have some competencies',
+    questionText: 'I am terrible at everything I attempt.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
     distortionType: 'fake_bad'
   },
   {
-    id: 'fb002',
+    id: 'd004',
     type: 'distortion',
-    questionText: 'I never contribute anything valuable to team projects.',
-    optionA: 'True - Never contribute value',
-    optionB: 'False - Sometimes contribute',
+    questionText: 'I never have any positive thoughts.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
     distortionType: 'fake_bad'
   },
   {
-    id: 'fb003',
+    id: 'd005',
     type: 'distortion',
-    questionText: 'I would never be able to learn any new skills.',
-    optionA: 'True - Cannot learn new skills',
-    optionB: 'False - Can learn some things',
+    questionText: 'I am perfect in every way imaginable.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
+    dimension: 'validity',
+    distortionType: 'fake_good'
+  },
+  {
+    id: 'd006',
+    type: 'distortion',
+    questionText: 'Everyone always loves everything about me.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
+    dimension: 'validity',
+    distortionType: 'fake_good'
+  },
+  {
+    id: 'd007',
+    type: 'distortion',
+    questionText: 'I have never experienced any negative emotion.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
+    dimension: 'validity',
+    distortionType: 'fake_good'
+  },
+  {
+    id: 'd008',
+    type: 'distortion',
+    questionText: 'I constantly fail at everything.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
     distortionType: 'fake_bad'
   },
   {
-    id: 'fb004',
+    id: 'd009',
     type: 'distortion',
-    questionText: 'I have absolutely no positive qualities as a person.',
-    optionA: 'True - No positive qualities',
-    optionB: 'False - Have some positive traits',
+    questionText: 'Blue is the same color as seven.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
+    dimension: 'validity',
+    distortionType: 'random_check'
+  },
+  {
+    id: 'd010',
+    type: 'distortion',
+    questionText: 'I always make the right decision in every situation.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
+    dimension: 'validity',
+    distortionType: 'fake_good'
+  },
+  {
+    id: 'd011',
+    type: 'distortion',
+    questionText: 'Nothing I do ever works out well.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
     distortionType: 'fake_bad'
   },
   {
-    id: 'fb005',
+    id: 'd012',
     type: 'distortion',
-    questionText: 'I always make the worst possible decisions.',
-    optionA: 'True - Always worst decisions',
-    optionB: 'False - Sometimes make good decisions',
+    questionText: 'I have never made any mistakes in my entire life.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
+    dimension: 'validity',
+    distortionType: 'fake_good'
+  },
+  {
+    id: 'd013',
+    type: 'distortion',
+    questionText: 'Cars typically drive on the ceiling.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
+    dimension: 'validity',
+    distortionType: 'random_check'
+  },
+  {
+    id: 'd014',
+    type: 'distortion',
+    questionText: 'I am completely worthless as a person.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
     distortionType: 'fake_bad'
   },
-
-  // Inconsistency checks (5 questions - pairs)
   {
-    id: 'ic001',
+    id: 'd015',
     type: 'distortion',
-    questionText: 'I prefer working in teams rather than alone.',
-    optionA: 'True - Prefer teamwork',
-    optionB: 'False - Prefer working alone',
+    questionText: 'I never experience any stress or challenges.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
-    distortionType: 'inconsistency'
+    distortionType: 'fake_good'
   },
   {
-    id: 'ic002',
+    id: 'd016',
     type: 'distortion',
-    questionText: 'I work better independently than in group settings.',
-    optionA: 'True - Better independently',
-    optionB: 'False - Better in groups',
+    questionText: 'Water flows upward naturally.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
-    distortionType: 'inconsistency'
+    distortionType: 'random_check'
   },
   {
-    id: 'ic003',
+    id: 'd017',
     type: 'distortion',
-    questionText: 'I am very detail-oriented in my work.',
-    optionA: 'True - Very detail-oriented',
-    optionB: 'False - Focus on big picture',
+    questionText: 'I am incapable of learning anything new.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
-    distortionType: 'inconsistency'
+    distortionType: 'fake_bad'
   },
   {
-    id: 'ic004',
+    id: 'd018',
     type: 'distortion',
-    questionText: 'I prefer to focus on the overall vision rather than small details.',
-    optionA: 'True - Prefer big picture',
-    optionB: 'False - Focus on details',
+    questionText: 'I have never had a negative thought about anyone.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
-    distortionType: 'inconsistency'
+    distortionType: 'fake_good'
   },
   {
-    id: 'ic005',
+    id: 'd019',
     type: 'distortion',
-    questionText: 'I rarely pay attention to minor details in projects.',
-    optionA: 'True - Don\'t focus on details',
-    optionB: 'False - Pay attention to details',
+    questionText: 'Everyone dislikes me intensely.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
     dimension: 'validity',
-    distortionType: 'inconsistency'
+    distortionType: 'fake_bad'
+  },
+  {
+    id: 'd020',
+    type: 'distortion',
+    questionText: 'I am loved by every single person I meet.',
+    optionA: 'Completely true',
+    optionB: 'Mostly false',
+    dimension: 'validity',
+    distortionType: 'fake_good'
   }
 ];
-
-export const cairDimensions = {
-  conscientiousness: {
-    name: "Conscientiousness",
-    description: "Tendency toward organization, persistence, and goal achievement",
-    subdimensions: [
-      "Organization", "Reliability", "Goal Orientation", "Attention to Detail", 
-      "Rule Following", "Self Improvement", "Planning", "Quality Control"
-    ]
-  },
-  agreeableness: {
-    name: "Agreeableness", 
-    description: "Tendency toward cooperation, trust, and interpersonal harmony",
-    subdimensions: [
-      "Cooperation", "Helpfulness", "Trust", "Compassion", "Empathy",
-      "Modesty", "Interpersonal Warmth", "Consensus Building"
-    ]
-  },
-  innovation: {
-    name: "Innovation",
-    description: "Tendency toward creativity, openness to change, and novel thinking",
-    subdimensions: [
-      "Creativity", "Openness to Change", "Learning Style", "Ideation",
-      "Change Tolerance", "Innovation Preference", "Abstract Thinking", "Risk Taking"
-    ]
-  },
-  resilience: {
-    name: "Resilience",
-    description: "Ability to bounce back from setbacks and maintain performance under pressure",
-    subdimensions: [
-      "Recovery Speed", "Stress Tolerance", "Optimism", "Energy Management",
-      "Emotional Stability", "Pressure Performance", "Adaptability", "Persistence"
-    ]
-  },
-  validity: {
-    name: "Response Validity",
-    description: "Measures of response consistency and social desirability",
-    subdimensions: [
-      "Fake Good", "Fake Bad", "Inconsistency", "Random Responding"
-    ]
-  }
-};

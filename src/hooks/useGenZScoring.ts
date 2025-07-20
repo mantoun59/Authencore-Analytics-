@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { GenZScenario, GenZValue, companyProfiles } from '../data/genZScenarios';
+import { GenZScenario, GenZValue, companyProfiles } from '../data/genZScenariosFixed';
 
 export interface GenZDimensions {
   flexibility: { score: number; weight: number };
@@ -153,7 +153,7 @@ export const useGenZScoring = () => {
   const [validityCheck, setValidityCheck] = useState<ValidityCheck | null>(null);
 
   const processReaction = useCallback((scenario: GenZScenario, reaction: 'love' | 'good' | 'neutral' | 'bad' | 'toxic') => {
-    const scores = scenario.responses[reaction];
+    const scores = scenario.reactions[reaction];
     if (!scores) return;
 
     // Update dimensions
@@ -161,7 +161,7 @@ export const useGenZScoring = () => {
       const newDimensions = { ...prev };
       Object.entries(scores).forEach(([trait, value]) => {
         if (newDimensions[trait as keyof GenZDimensions]) {
-          newDimensions[trait as keyof GenZDimensions].score += value;
+          newDimensions[trait as keyof GenZDimensions].score += (value as number);
         }
       });
       return newDimensions;
@@ -172,7 +172,7 @@ export const useGenZScoring = () => {
       const newTraits = { ...prev };
       Object.entries(scores).forEach(([trait, value]) => {
         if (newTraits[trait as keyof GenZTraits] !== undefined) {
-          newTraits[trait as keyof GenZTraits] += value;
+          newTraits[trait as keyof GenZTraits] += (value as number);
         }
       });
       return newTraits;
@@ -185,17 +185,17 @@ export const useGenZScoring = () => {
         Object.entries(scores).forEach(([trait, value]) => {
           switch(trait) {
             case 'flexibility':
-              newPrefs.remote_hybrid += value;
-              newPrefs.flexible_hours += value;
+              newPrefs.remote_hybrid += (value as number);
+              newPrefs.flexible_hours += (value as number);
               break;
             case 'innovation':
-              newPrefs.tech_forward += value;
+              newPrefs.tech_forward += (value as number);
               break;
             case 'growth_mindset':
-              newPrefs.quick_feedback += value;
+              newPrefs.quick_feedback += (value as number);
               break;
             case 'authenticity':
-              newPrefs.casual_culture += value;
+              newPrefs.casual_culture += (value as number);
               break;
           }
         });
