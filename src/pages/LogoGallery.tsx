@@ -15,6 +15,9 @@ import logoOption7 from "@/assets/logo-option-7.png";
 import logoOption8 from "@/assets/logo-option-8.png";
 import logoOption9 from "@/assets/logo-option-9.png";
 import logoOption10 from "@/assets/logo-option-10.png";
+import logoUpdated from "@/assets/authencore-logo-updated.png";
+import logoVariant2 from "@/assets/authencore-logo-variant-2.png";
+import logoVariant3 from "@/assets/authencore-logo-variant-3.png";
 
 const logoOptions = [
   {
@@ -77,6 +80,24 @@ const logoOptions = [
     description: "Folded paper geometry with coral to navy gradient",
     image: logoOption10,
   },
+  {
+    id: 11,
+    name: "Navy & Gold Classic",
+    description: "Interlocking geometric design in navy blue and gold",
+    image: logoUpdated,
+  },
+  {
+    id: 12,
+    name: "Purple & Silver Elite",
+    description: "Sophisticated geometric shapes in purple and metallic silver",
+    image: logoVariant2,
+  },
+  {
+    id: 13,
+    name: "Teal & Coral Modern",
+    description: "Contemporary interlocking design in teal and coral orange",
+    image: logoVariant3,
+  },
 ];
 
 export default function LogoGallery() {
@@ -101,7 +122,7 @@ export default function LogoGallery() {
             <div>
             <h1 className="text-3xl font-bold text-foreground">AuthenCore Logo Gallery</h1>
             <p className="text-foreground mt-1">
-              10 cutting-edge logo designs - Choose your preferred style
+              13 cutting-edge logo designs - Choose your preferred style
               </p>
             </div>
           </div>
