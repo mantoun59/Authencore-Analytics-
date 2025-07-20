@@ -15,7 +15,7 @@ import CulturalIntelligenceAssessment from "./pages/CulturalIntelligenceAssessme
 import CommunicationAssessment from "./pages/CommunicationAssessment";
 import EmotionalIntelligenceAssessment from "./pages/EmotionalIntelligenceAssessment";
 import FaithValuesAssessment from "./pages/FaithValuesAssessment";
-import GenZAssessment from "./pages/GenZAssessment";
+import GenZWorkplaceAssessment from "./pages/GenZWorkplaceAssessment";
 import DigitalWellnessAssessment from "./pages/DigitalWellnessAssessment";
 import PartnerLogin from "./pages/PartnerLogin";
 import PartnerDashboard from "./pages/PartnerDashboard";
@@ -62,8 +62,9 @@ const App = () => (
             <Route path="/communication" element={<CommunicationAssessment />} />
             <Route path="/emotional-intelligence" element={<EmotionalIntelligenceAssessment />} />
             <Route path="/faith-values" element={<FaithValuesAssessment />} />
-            <Route path="/genz-assessment" element={<GenZAssessment />} />
-            <Route path="/genz" element={<GenZAssessment />} />
+            <Route path="/genz-assessment" element={<GenZWorkplaceAssessment />} />
+            <Route path="/genz" element={<GenZWorkplaceAssessment />} />
+            <Route path="/genz-workplace" element={<GenZWorkplaceAssessment />} />
             <Route path="/digital-wellness" element={<DigitalWellnessAssessment />} />
             <Route path="/partner-login" element={<PartnerLogin />} />
             <Route path="/partner-dashboard" element={<PartnerDashboard />} />

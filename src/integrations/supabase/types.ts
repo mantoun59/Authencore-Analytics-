@@ -240,6 +240,197 @@ export type Database = {
           },
         ]
       }
+      genz_assessment_responses: {
+        Row: {
+          created_at: string | null
+          id: string
+          response_time: number | null
+          response_type: string
+          scenario_id: string | null
+          session_id: string
+          swipe_data: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          response_time?: number | null
+          response_type: string
+          scenario_id?: string | null
+          session_id: string
+          swipe_data?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          response_time?: number | null
+          response_type?: string
+          scenario_id?: string | null
+          session_id?: string
+          swipe_data?: Json | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "genz_assessment_responses_scenario_id_fkey"
+            columns: ["scenario_id"]
+            isOneToOne: false
+            referencedRelation: "genz_assessment_scenarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      genz_assessment_results: {
+        Row: {
+          avatar_emoji: string | null
+          birth_year: number | null
+          company_matches: Json
+          completed_at: string | null
+          created_at: string | null
+          dimensions: Json
+          employer_insights: Json | null
+          id: string
+          red_flags: Json
+          session_id: string
+          traits: Json
+          updated_at: string | null
+          user_id: string | null
+          username: string
+          validity_metrics: Json | null
+          workplace_preferences: Json
+          workplace_profile: Json
+        }
+        Insert: {
+          avatar_emoji?: string | null
+          birth_year?: number | null
+          company_matches: Json
+          completed_at?: string | null
+          created_at?: string | null
+          dimensions: Json
+          employer_insights?: Json | null
+          id?: string
+          red_flags: Json
+          session_id: string
+          traits: Json
+          updated_at?: string | null
+          user_id?: string | null
+          username: string
+          validity_metrics?: Json | null
+          workplace_preferences: Json
+          workplace_profile: Json
+        }
+        Update: {
+          avatar_emoji?: string | null
+          birth_year?: number | null
+          company_matches?: Json
+          completed_at?: string | null
+          created_at?: string | null
+          dimensions?: Json
+          employer_insights?: Json | null
+          id?: string
+          red_flags?: Json
+          session_id?: string
+          traits?: Json
+          updated_at?: string | null
+          user_id?: string | null
+          username?: string
+          validity_metrics?: Json | null
+          workplace_preferences?: Json
+          workplace_profile?: Json
+        }
+        Relationships: []
+      }
+      genz_assessment_scenarios: {
+        Row: {
+          category: string
+          context: string | null
+          created_at: string | null
+          emoji: string | null
+          id: string
+          responses: Json
+          text: string
+          type: string
+        }
+        Insert: {
+          category: string
+          context?: string | null
+          created_at?: string | null
+          emoji?: string | null
+          id?: string
+          responses: Json
+          text: string
+          type: string
+        }
+        Update: {
+          category?: string
+          context?: string | null
+          created_at?: string | null
+          emoji?: string | null
+          id?: string
+          responses?: Json
+          text?: string
+          type?: string
+        }
+        Relationships: []
+      }
+      genz_collaboration_responses: {
+        Row: {
+          created_at: string | null
+          id: string
+          option_scores: Json
+          scenario_id: string
+          selected_option: string
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          option_scores: Json
+          scenario_id: string
+          selected_option: string
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          option_scores?: Json
+          scenario_id?: string
+          selected_option?: string
+          session_id?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      genz_values_responses: {
+        Row: {
+          created_at: string | null
+          id: string
+          rank: number
+          session_id: string
+          user_id: string | null
+          value_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          rank: number
+          session_id: string
+          user_id?: string | null
+          value_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          rank?: number
+          session_id?: string
+          user_id?: string | null
+          value_id?: string
+        }
+        Relationships: []
+      }
       partner_access_logs: {
         Row: {
           action: string
