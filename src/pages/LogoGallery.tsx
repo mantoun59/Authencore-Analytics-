@@ -23,6 +23,11 @@ import logoVariant5 from "@/assets/authencore-logo-variant-5.png";
 import logoVariant6 from "@/assets/authencore-logo-variant-6.png";
 import logoVariant7 from "@/assets/authencore-logo-variant-7.png";
 import logoVariant8 from "@/assets/authencore-logo-variant-8.png";
+import exactShape1 from "@/assets/authencore-exact-shape-1.png";
+import exactShape2 from "@/assets/authencore-exact-shape-2.png";
+import exactShape3 from "@/assets/authencore-exact-shape-3.png";
+import exactShape4 from "@/assets/authencore-exact-shape-4.png";
+import exactShape5 from "@/assets/authencore-exact-shape-5.png";
 
 const logoOptions = [
   {
@@ -133,6 +138,36 @@ const logoOptions = [
     description: "Tech-modern interlocking shapes in midnight blue and copper orange",
     image: logoVariant8,
   },
+  {
+    id: 19,
+    name: "Exact Shape - Navy & Gold",
+    description: "Your exact geometric shape design in navy blue and gold",
+    image: exactShape1,
+  },
+  {
+    id: 20,
+    name: "Exact Shape - Purple & Silver",
+    description: "Your exact geometric shape design in purple and silver",
+    image: exactShape2,
+  },
+  {
+    id: 21,
+    name: "Exact Shape - Black & Blue",
+    description: "Your exact geometric shape design in black and electric blue",
+    image: exactShape3,
+  },
+  {
+    id: 22,
+    name: "Exact Shape - Green & Copper",
+    description: "Your exact geometric shape design in forest green and copper",
+    image: exactShape4,
+  },
+  {
+    id: 23,
+    name: "Exact Shape - Burgundy & Gray",
+    description: "Your exact geometric shape design in burgundy and charcoal",
+    image: exactShape5,
+  },
 ];
 
 export default function LogoGallery() {
@@ -157,7 +192,7 @@ export default function LogoGallery() {
             <div>
             <h1 className="text-3xl font-bold text-foreground">AuthenCore Logo Gallery</h1>
             <p className="text-foreground mt-1">
-              18 cutting-edge logo designs - Choose your preferred style
+              23 cutting-edge logo designs - Choose your preferred style
               </p>
             </div>
           </div>
