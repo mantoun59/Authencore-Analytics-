@@ -166,9 +166,9 @@ const AuthenticLeadershipDescription = () => {
               </div>
               <div className="space-y-4">
                 <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🌍 Multilingual Support</h4>
+                  <h4 className="font-semibold mb-2">👥 Leadership Development</h4>
                   <p className="text-sm text-muted-foreground">
-                    Available in 12+ languages including Spanish, French, German, Chinese, Japanese, and more.
+                    Evidence-based strategies for developing authentic leadership capabilities and team effectiveness.
                   </p>
                 </div>
                 <div className="p-4 bg-primary/10 rounded-lg">
