@@ -156,9 +156,9 @@ const Assessment = () => {
                       ))}
                     </ul>
                     <div className="flex-grow"></div>
-                    <Link to={assessment.route}>
+                    <Link to={`${assessment.route.replace('/', '/')}-info`}>
                       <Button className={`w-full ${colorClasses.button}`}>
-                        Start {assessment.title} <ArrowRight className="ml-2 h-4 w-4" />
+                        Learn More <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>
                     </Link>
                   </CardContent>
