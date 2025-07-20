@@ -60,7 +60,7 @@ const CareerLaunchDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              165 Questions | 8 Dimensions | $59.99
+              165 Questions | 8 Dimensions | $9.99
             </Badge>
           </div>
           
@@ -146,6 +146,50 @@ const CareerLaunchDescription = () => {
               <p className="text-sm text-muted-foreground">
                 Both reports are delivered instantly in PDF format post payment and assessment completion.
               </p>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Sample Reports Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <h2 className="text-2xl font-bold text-primary">Sample Reports</h2>
+            <p className="text-muted-foreground">See what you'll receive with your assessment</p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="p-4 border rounded-lg">
+                  <h3 className="font-semibold text-lg mb-2">📊 Candidate Report</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Detailed personal insights including RIASEC profile, career recommendations, and development action plans.
+                  </p>
+                  <Link to="/sample-career-launch-report" className="text-primary hover:underline text-sm font-medium">
+                    View Sample Candidate Report →
+                  </Link>
+                </div>
+                <div className="p-4 border rounded-lg">
+                  <h3 className="font-semibold text-lg mb-2">🏢 Employer Report</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Comprehensive analysis for hiring decisions, including personality fit and team dynamics.
+                  </p>
+                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="p-4 bg-primary/10 rounded-lg">
+                  <h4 className="font-semibold mb-2">🌍 Multilingual Support</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Available in 12+ languages including Spanish, French, German, Chinese, Japanese, and more.
+                  </p>
+                </div>
+                <div className="p-4 bg-primary/10 rounded-lg">
+                  <h4 className="font-semibold mb-2">🎯 Instant Results</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Receive your comprehensive PDF reports immediately upon completion.
+                  </p>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>

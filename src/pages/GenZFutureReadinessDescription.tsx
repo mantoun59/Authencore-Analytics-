@@ -60,7 +60,7 @@ const GenZFutureReadinessDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              134 Questions | 8 Dimensions | $52.99
+              134 Questions | 8 Dimensions | $9.99
             </Badge>
           </div>
           

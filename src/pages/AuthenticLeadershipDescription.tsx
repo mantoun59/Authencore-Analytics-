@@ -50,7 +50,7 @@ const AuthenticLeadershipDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              156 Questions | 6 Dimensions | $64.99
+              156 Questions | 6 Dimensions | $34.99
             </Badge>
           </div>
           

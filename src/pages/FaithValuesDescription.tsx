@@ -55,7 +55,7 @@ const FaithValuesDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              147 Questions | 7 Dimensions | $49.99
+              147 Questions | 7 Dimensions | $14.99
             </Badge>
           </div>
           

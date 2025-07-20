@@ -45,7 +45,7 @@ const CAIRCulturalDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              125 Questions | 5 Dimensions | $54.99
+              125 Questions | 5 Dimensions | $29.99
             </Badge>
           </div>
           

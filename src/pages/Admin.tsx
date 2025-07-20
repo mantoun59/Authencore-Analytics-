@@ -15,18 +15,52 @@ const AdminPage = () => {
             <div className="text-center mb-12">
               <h1 className="text-4xl font-bold text-foreground mb-4">Site Administration</h1>
               <p className="text-lg text-muted-foreground">
-                Manage partner access and generate custom AI images
+                Comprehensive administrative dashboard for managing partners, testing, analytics, and content generation
               </p>
             </div>
 
             <Tabs defaultValue="partners" className="w-full">
-              <TabsList className="grid w-full grid-cols-2">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="partners">Partner Management</TabsTrigger>
+                <TabsTrigger value="testing">Testing Portal</TabsTrigger>
+                <TabsTrigger value="analytics">Analytics</TabsTrigger>
                 <TabsTrigger value="images">Image Generator</TabsTrigger>
               </TabsList>
               
               <TabsContent value="partners" className="mt-6">
                 <PartnerManagement />
+              </TabsContent>
+              
+              <TabsContent value="testing" className="mt-6">
+                <div className="space-y-6">
+                  <div className="p-6 bg-card rounded-lg border">
+                    <h3 className="text-lg font-semibold mb-4">Testing Portal Management</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <a href="/candidate-testing" className="p-4 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors">
+                        <h4 className="font-medium">Candidate Testing Portal</h4>
+                        <p className="text-sm text-muted-foreground">Direct access for candidates to take assessments</p>
+                      </a>
+                      <a href="/testing-dashboard" className="p-4 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors">
+                        <h4 className="font-medium">Testing Dashboard</h4>
+                        <p className="text-sm text-muted-foreground">Monitor and manage ongoing assessments</p>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="analytics" className="mt-6">
+                <div className="space-y-6">
+                  <div className="p-6 bg-card rounded-lg border">
+                    <h3 className="text-lg font-semibold mb-4">Analytics Dashboard</h3>
+                    <div className="grid grid-cols-1 gap-4">
+                      <a href="/admin-analytics" className="p-4 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors">
+                        <h4 className="font-medium">Comprehensive Analytics</h4>
+                        <p className="text-sm text-muted-foreground">View detailed analytics and reports across all assessments</p>
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </TabsContent>
               
               <TabsContent value="images" className="mt-6">
