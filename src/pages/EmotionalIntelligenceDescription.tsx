@@ -63,7 +63,7 @@ const EmotionalIntelligenceDescription = () => {
             <CardTitle className="text-2xl text-primary">About Emotional Intelligence Profiler Assessment</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground leading-relaxed">
               The Emotional Intelligence Profiler assessment evaluates your capacity to perceive, understand, manage, and use emotions effectively. Covering 4 dimensions, it empowers you to build emotional strength, resilience, and social intelligence for personal and professional success.
             </p>
           </CardContent>

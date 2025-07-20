@@ -73,7 +73,7 @@ const AuthenticLeadershipDescription = () => {
             <CardTitle className="text-2xl text-primary">About Authentic Leadership Assessment</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground leading-relaxed">
               The Authentic Leadership Assessment evaluates your leadership style, integrity, and effectiveness in inspiring and guiding others. Covering 6 dimensions, it empowers leaders and organisations to nurture authentic, ethical, and high-impact leadership.
             </p>
           </CardContent>

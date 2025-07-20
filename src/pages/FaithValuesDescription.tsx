@@ -78,7 +78,7 @@ const FaithValuesDescription = () => {
             <CardTitle className="text-2xl text-primary">About FVAI Faith & Values Alignment Index</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground leading-relaxed">
               The Faith & Values Alignment Index (FVAI) is a deeply reflective assessment designed to help individuals understand how their daily thoughts, decisions, and behaviours align with their core faith-based values. Covering 7 key dimensions, FVAI empowers personal growth, spiritual coaching, and faith-based leadership development by providing clarity, confidence, and purpose-driven insights.
             </p>
           </CardContent>

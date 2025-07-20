@@ -73,7 +73,7 @@ const DigitalWellnessDescription = () => {
             <CardTitle className="text-2xl text-primary">About Digital Wellness Quotient Assessment</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground leading-relaxed">
               The Digital Wellness Quotient assessment helps you understand your relationship with digital technology and its impact on your mental health, productivity, and overall life balance. Covering 6 dimensions, it empowers you to build healthy digital habits, improve focus, and enhance wellbeing in an increasingly connected world.
             </p>
           </CardContent>

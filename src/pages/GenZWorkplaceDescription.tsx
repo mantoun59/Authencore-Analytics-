@@ -73,7 +73,7 @@ const GenZWorkplaceDescription = () => {
             <CardTitle className="text-2xl text-primary">About Gen Z Workplace Assessment</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground leading-relaxed">
               The Gen Z Workplace Assessment evaluates workplace preferences, values, and career expectations specific to Gen Z professionals. Covering multiple dimensions with a digital-first approach, it empowers individuals and organizations to understand and optimize Gen Z workplace experiences for maximum engagement and success.
             </p>
           </CardContent>

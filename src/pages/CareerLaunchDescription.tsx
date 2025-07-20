@@ -83,7 +83,7 @@ const CareerLaunchDescription = () => {
             <CardTitle className="text-2xl text-primary">About CareerLaunch Student Career Guidance</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground leading-relaxed">
               The CareerLaunch Student Career Guidance assessment helps students discover their strengths, preferences, and potential career paths with clarity and confidence. Covering 8 dimensions, it empowers students and graduates to make informed academic and career decisions aligned with their unique talents and goals.
             </p>
           </CardContent>

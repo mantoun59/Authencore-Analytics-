@@ -49,7 +49,7 @@ const Features = () => {
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
             Assessment Features
           </h2>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-xl text-foreground max-w-2xl mx-auto">
             Professional psychological assessment tools designed to provide accurate insights into personality, behavior, and cognitive abilities.
           </p>
         </div>
@@ -69,7 +69,7 @@ const Features = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-muted-foreground leading-relaxed">
+                <CardDescription className="text-foreground leading-relaxed">
                   {feature.description}
                 </CardDescription>
               </CardContent>
@@ -84,7 +84,7 @@ const Features = () => {
               <h3 className="text-3xl font-bold mb-6 text-foreground">
                 Professional Analytics Dashboard
               </h3>
-              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+              <p className="text-lg text-foreground mb-6 leading-relaxed">
                 Access comprehensive assessment analytics through our professional dashboard. 
                 Monitor progress, track development, and gain deep insights into assessment results 
                 with advanced data visualization tools.
@@ -92,11 +92,11 @@ const Features = () => {
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center space-x-2">
                   <BarChart3 className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-muted-foreground">Real-time Analytics</span>
+                  <span className="text-sm text-foreground">Real-time Analytics</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Award className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-muted-foreground">Professional Reports</span>
+                  <span className="text-sm text-foreground">Professional Reports</span>
                 </div>
               </div>
             </div>
@@ -119,19 +119,19 @@ const Features = () => {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary mb-1">Personality</div>
-                <div className="text-sm text-muted-foreground">Assessments</div>
+                <div className="text-sm text-foreground">Assessments</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary mb-1">Cognitive</div>
-                <div className="text-sm text-muted-foreground">Testing</div>
+                <div className="text-sm text-foreground">Testing</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary mb-1">Behavioral</div>
-                <div className="text-sm text-muted-foreground">Analysis</div>
+                <div className="text-sm text-foreground">Analysis</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-primary mb-1">Professional</div>
-                <div className="text-sm text-muted-foreground">Development</div>
+                <div className="text-sm text-foreground">Development</div>
               </div>
             </div>
           </div>

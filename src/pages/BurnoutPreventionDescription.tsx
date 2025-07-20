@@ -78,7 +78,7 @@ const BurnoutPreventionDescription = () => {
             <CardTitle className="text-2xl text-primary">About Burnout Prevention Index</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground leading-relaxed">
               The Burnout Prevention Index assessment evaluates your current stress levels, risk factors, and resilience capabilities to prevent burnout proactively. Covering 7 dimensions, it empowers you to maintain high performance with optimal health and wellbeing.
             </p>
           </CardContent>

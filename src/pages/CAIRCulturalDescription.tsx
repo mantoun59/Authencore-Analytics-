@@ -68,7 +68,7 @@ const CAIRCulturalDescription = () => {
             <CardTitle className="text-2xl text-primary">About CAIR+ Personality Assessment</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground leading-relaxed">
               The Cultural Adaptability and Integration Readiness Plus (CAIR+) assessment evaluates how effectively you can adapt, integrate, and thrive in diverse cultural environments. Covering 5 key dimensions, CAIR+ empowers expatriates, international students, and global professionals to enhance their intercultural confidence and success.
             </p>
           </CardContent>

@@ -73,7 +73,7 @@ const CommunicationStyleDescription = () => {
             <CardTitle className="text-2xl text-primary">About Communication Style Profiler Assessment</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-muted-foreground leading-relaxed">
+            <p className="text-lg text-foreground leading-relaxed">
               The Communication Style Profiler assessment evaluates your natural communication preferences, strengths, and growth areas. Covering 6 dimensions, it empowers you to communicate with clarity, empathy, and impact in personal and professional settings.
             </p>
           </CardContent>

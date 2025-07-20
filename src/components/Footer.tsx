@@ -23,7 +23,7 @@ const Footer = () => {
                 className="h-12 w-auto"
               />
             </div>
-            <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-foreground mb-4">
               Measuring Minds. Shaping Futures.
             </p>
             
@@ -32,7 +32,7 @@ const Footer = () => {
                 href="https://www.authencore.org"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-foreground hover:text-primary transition-colors text-sm"
               >
                 www.authencore.org
               </a>
@@ -47,61 +47,61 @@ const Footer = () => {
             <div className="space-y-2">
               <Link
                 to="/"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-foreground hover:text-primary transition-colors text-sm"
               >
                 Home
               </Link>
               <Link
                 to="/candidate-testing"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-foreground hover:text-primary transition-colors text-sm"
               >
                 Testing Portal
               </Link>
               <Link
                 to="/testing-dashboard"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-foreground hover:text-primary transition-colors text-sm"
               >
                 Testing Dashboard
               </Link>
               <Link
                 to="/privacy"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-foreground hover:text-primary transition-colors text-sm"
               >
                 Privacy Policy & Literature
               </Link>
               <Link
                 to="/compliance"
-                className="block text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-foreground hover:text-primary transition-colors text-sm"
               >
                 Compliance Documentation
               </Link>
               <button
                 onClick={() => handleHashNavigation('terms')}
-                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
               >
                 Terms of Service
               </button>
               <button
                 onClick={() => handleHashNavigation('gdpr')}
-                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
               >
                 GDPR Compliance
               </button>
               <button
                 onClick={() => handleHashNavigation('security')}
-                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
               >
                 Data Security Standards
               </button>
               <button
                 onClick={() => handleHashNavigation('ethics')}
-                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
               >
                 Assessment Ethics
               </button>
               <button
                 onClick={() => handleHashNavigation('assessment-integrity')}
-                className="block text-left text-muted-foreground hover:text-primary transition-colors text-sm"
+                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
               >
                 Assessment Integrity
               </button>
@@ -119,7 +119,7 @@ const Footer = () => {
                 <Mail className="w-5 h-5 text-primary flex-shrink-0" />
                 <a 
                   href="mailto:contact@authencore.com"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors"
                 >
                   contact@authencore.com
                 </a>
@@ -129,7 +129,7 @@ const Footer = () => {
                 <Mail className="w-5 h-5 text-primary flex-shrink-0" />
                 <a 
                   href="mailto:contact@authencore.com"
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-foreground hover:text-primary transition-colors"
                 >
                   Business Inquiries
                 </a>
@@ -151,23 +151,23 @@ const Footer = () => {
         {/* Bottom bar */}
         <div className="border-t border-border pt-8 mt-12">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-muted-foreground text-sm">
+            <p className="text-foreground text-sm">
               &copy; 2024 Authencore Analytics. All rights reserved. | Advanced AI-Powered Talent Assessment Solutions
             </p>
             <div className="flex items-center space-x-6 text-sm">
-              <Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/privacy" className="text-foreground hover:text-primary transition-colors">
                 Privacy & Literature
               </Link>
               <button
                 onClick={() => handleHashNavigation('assessment-integrity')}
-                className="text-muted-foreground hover:text-primary transition-colors"
+                className="text-foreground hover:text-primary transition-colors"
               >
                 Assessment Integrity
               </button>
-              <Link to="/compliance" className="text-muted-foreground hover:text-primary transition-colors">
+              <Link to="/compliance" className="text-foreground hover:text-primary transition-colors">
                 Compliance Documentation
               </Link>
-              <a href="mailto:contact@authencore.com" className="text-muted-foreground hover:text-primary transition-colors">
+              <a href="mailto:contact@authencore.com" className="text-foreground hover:text-primary transition-colors">
                 Contact
               </a>
             </div>
