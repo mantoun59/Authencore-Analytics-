@@ -1,5 +1,6 @@
-import { AlertTriangle, Lightbulb, Sparkles } from "lucide-react";
-import consultationImage from "@/assets/consultation.jpg";
+import { AlertTriangle, Lightbulb, Sparkles, Users, Target, Brain, Shield } from "lucide-react";
+import businessPresentationImage from "@/assets/business-presentation.jpg";
+import professionalAssessmentImage from "@/assets/professional-assessment.jpg";
 
 const About = () => {
   return (
@@ -8,8 +9,8 @@ const About = () => {
         {/* Hero Image */}
         <div className="mb-16">
           <img 
-            src="/lovable-uploads/18674c2c-e70d-4f45-8f89-c4a96e079199.png"
-            alt="Assessment Analytics - Professional team collaboration"
+            src={businessPresentationImage}
+            alt="Professional business presentation showing assessment analytics and team collaboration"
             className="w-full h-64 md:h-80 object-cover rounded-2xl shadow-elegant"
           />
         </div>
@@ -48,6 +49,45 @@ const About = () => {
             </div>
           </div>
 
+          {/* Visual Features Section */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-bold text-foreground">Professional Assessment Platform</h3>
+              <p className="text-muted-foreground text-lg leading-relaxed">
+                Our platform combines cutting-edge technology with validated psychological frameworks 
+                to deliver professional-grade assessments that help individuals and organizations 
+                make informed decisions about personal and professional development.
+              </p>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="flex items-center space-x-3">
+                  <Brain className="w-6 h-6 text-primary" />
+                  <span className="text-sm font-medium">AI-Powered</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Shield className="w-6 h-6 text-primary" />
+                  <span className="text-sm font-medium">Secure Platform</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Users className="w-6 h-6 text-primary" />
+                  <span className="text-sm font-medium">Team Analytics</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Target className="w-6 h-6 text-primary" />
+                  <span className="text-sm font-medium">Goal-Oriented</span>
+                </div>
+              </div>
+            </div>
+            <div className="rounded-2xl overflow-hidden shadow-elegant">
+              <img 
+                src={professionalAssessmentImage}
+                alt="Professional using assessment analytics for business decision making"
+                className="w-full h-auto object-cover"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="max-w-4xl mx-auto space-y-16">
           {/* Our Promise */}
           <div className="space-y-6">
             <h3 className="text-2xl font-bold text-foreground">Our Promise</h3>

@@ -1,11 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Brain, TrendingUp, Shield } from "lucide-react";
+import { Brain, TrendingUp, Shield, Users, BarChart3, Award } from "lucide-react";
+import businessTeamImage from "@/assets/business-team-analytics.jpg";
+import professionalAssessmentImage from "@/assets/professional-assessment.jpg";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center bg-background">
-      <div className="container mx-auto px-4">
+    <section className="relative min-h-screen flex items-center bg-gradient-to-br from-background via-background to-primary/5">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Left column - Content */}
           <div className="space-y-8">
@@ -66,8 +71,8 @@ const Hero = () => {
           <div className="relative">
             <div className="rounded-2xl overflow-hidden shadow-elegant">
               <img 
-                src="/lovable-uploads/d4fbfb7f-31a2-45cd-9d2b-3ecc959732ab.png"
-                alt="Professional team collaborating with AI-powered assessment analytics and brain interface technology"
+                src={businessTeamImage}
+                alt="Professional team collaborating with business analytics and assessment data in modern office"
                 className="w-full h-auto object-cover"
               />
             </div>

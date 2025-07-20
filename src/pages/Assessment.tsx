@@ -103,7 +103,9 @@ const Assessment = () => {
       <Header />
       
       {/* Hero Section */}
-      <section className="pt-20 pb-16 px-4">
+      <section className="pt-20 pb-16 px-4 relative overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 bg-dot-pattern opacity-5"></div>
         <div className="max-w-6xl mx-auto text-center">
           {/* Display the new logo prominently */}
           <div className="mb-8">

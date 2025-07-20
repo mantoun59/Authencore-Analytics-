@@ -1,5 +1,6 @@
-import { Brain, FileText, Shield, Zap, Users, Target } from "lucide-react";
+import { Brain, FileText, Shield, Zap, Users, Target, BarChart3, Award } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import analyticsWorkspaceImage from "@/assets/analytics-workspace.jpg";
 
 const Features = () => {
   const features = [
@@ -74,6 +75,41 @@ const Features = () => {
               </CardContent>
             </Card>
           ))}
+        </div>
+
+        {/* Business Analytics Showcase */}
+        <div className="mt-20">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div className="order-2 lg:order-1">
+              <h3 className="text-3xl font-bold mb-6 text-foreground">
+                Professional Analytics Dashboard
+              </h3>
+              <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
+                Access comprehensive assessment analytics through our professional dashboard. 
+                Monitor progress, track development, and gain deep insights into assessment results 
+                with advanced data visualization tools.
+              </p>
+              <div className="flex flex-wrap gap-4">
+                <div className="flex items-center space-x-2">
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                  <span className="text-sm text-muted-foreground">Real-time Analytics</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Award className="w-5 h-5 text-primary" />
+                  <span className="text-sm text-muted-foreground">Professional Reports</span>
+                </div>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2">
+              <div className="rounded-2xl overflow-hidden shadow-elegant">
+                <img 
+                  src={analyticsWorkspaceImage}
+                  alt="Professional analytics dashboard showing assessment data and business intelligence"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Additional stats section */}

@@ -1,23 +1,29 @@
-import teamCollaboration from "@/assets/team-collaboration.jpg";
-import officeWorkspace from "@/assets/office-workspace.jpg";
-import businessPresentation from "@/assets/business-presentation.jpg";
+import businessTeamImage from "@/assets/business-team-analytics.jpg";
+import analyticsWorkspaceImage from "@/assets/analytics-workspace.jpg";
+import businessPresentationImage from "@/assets/business-presentation.jpg";
+import professionalAssessmentImage from "@/assets/professional-assessment.jpg";
 
 const Gallery = () => {
   const images = [
     {
-      src: teamCollaboration,
-      alt: "Professional team collaboration in modern office",
-      title: "Team Collaboration"
+      src: businessTeamImage,
+      alt: "Professional business team analyzing data and assessment reports",
+      title: "Business Analytics Team"
     },
     {
-      src: officeWorkspace,
-      alt: "Modern office workspace with professional environment",
+      src: analyticsWorkspaceImage,
+      alt: "Modern analytics workspace with assessment dashboards",
       title: "Professional Workspace"
     },
     {
-      src: businessPresentation,
-      alt: "Business presentation and analytics review",
-      title: "Strategic Presentations"
+      src: businessPresentationImage,
+      alt: "Business presentation showing assessment results and insights",
+      title: "Assessment Presentations"
+    },
+    {
+      src: professionalAssessmentImage,
+      alt: "Professional conducting psychological assessment evaluation",
+      title: "Assessment Process"
     }
   ];
 
@@ -31,7 +37,7 @@ const Gallery = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-7xl mx-auto">
           {images.map((image, index) => (
             <div 
               key={index}
