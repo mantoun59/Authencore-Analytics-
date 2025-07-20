@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { careerLaunchQuestions } from "@/data/careerLaunchQuestionsFixed";
+import { careerLaunchQuestions } from "@/data/careerLaunchQuestionsNew";
 import { useCareerLaunchScoring } from "@/hooks/useCareerLaunchScoring";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
