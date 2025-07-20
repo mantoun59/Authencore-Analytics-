@@ -10,6 +10,11 @@ import logoOption2 from "@/assets/logo-option-2.png";
 import logoOption3 from "@/assets/logo-option-3.png";
 import logoOption4 from "@/assets/logo-option-4.png";
 import logoOption5 from "@/assets/logo-option-5.png";
+import logoOption6 from "@/assets/logo-option-6.png";
+import logoOption7 from "@/assets/logo-option-7.png";
+import logoOption8 from "@/assets/logo-option-8.png";
+import logoOption9 from "@/assets/logo-option-9.png";
+import logoOption10 from "@/assets/logo-option-10.png";
 
 const logoOptions = [
   {
@@ -42,6 +47,36 @@ const logoOptions = [
     description: "3D isometric cube with neon cyan and magenta glow",
     image: logoOption5,
   },
+  {
+    id: 6,
+    name: "Infinite Flow",
+    description: "Metallic infinity symbol representing continuous assessment",
+    image: logoOption6,
+  },
+  {
+    id: 7,
+    name: "DNA Spiral",
+    description: "Geometric helix design with teal and orange gradients",
+    image: logoOption7,
+  },
+  {
+    id: 8,
+    name: "Wave Pattern",
+    description: "Layered sound waves in purple and emerald visualization",
+    image: logoOption8,
+  },
+  {
+    id: 9,
+    name: "Quantum Particles",
+    description: "Glowing orbs with energy trails in electric blue",
+    image: logoOption9,
+  },
+  {
+    id: 10,
+    name: "Origami Precision",
+    description: "Folded paper geometry with coral to navy gradient",
+    image: logoOption10,
+  },
 ];
 
 export default function LogoGallery() {
@@ -64,9 +99,9 @@ export default function LogoGallery() {
               Back to Home
             </Button>
             <div>
-              <h1 className="text-3xl font-bold text-foreground">AuthenCore Logo Options</h1>
-              <p className="text-foreground mt-1">
-                Choose your preferred cutting-edge logo design
+            <h1 className="text-3xl font-bold text-foreground">AuthenCore Logo Gallery</h1>
+            <p className="text-foreground mt-1">
+              10 cutting-edge logo designs - Choose your preferred style
               </p>
             </div>
           </div>
