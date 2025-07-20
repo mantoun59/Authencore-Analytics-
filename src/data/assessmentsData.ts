@@ -324,7 +324,7 @@ export const assessmentsData: AssessmentData[] = [
     subtitle: 'Generational Workplace Assessment',
     price: '$16.99',
     duration: '14-18 minutes',
-    questions: 55,
+    questions: 45,
     description: 'Specialized assessment for Gen Z workplace preferences, values, and career expectations',
     detailedDescription: 'The Gen Z Workplace Assessment is specifically designed to understand the unique workplace preferences, communication styles, and career expectations of Generation Z professionals. This assessment provides insights into how Gen Z individuals thrive in modern workplace environments.',
     whatItMeasures: [
