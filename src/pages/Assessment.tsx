@@ -8,6 +8,7 @@ import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rock
 import { Link } from "react-router-dom";
 import { assessmentsData } from "@/data/assessmentsData";
 import authencoreLogo from "@/assets/authencore-analytics-logo.png";
+import assessmentConceptImage from "@/assets/assessment-concept.jpg";
 
 const Assessment = () => {
   const getInfoRoute = (assessmentId: string) => {
@@ -183,6 +184,63 @@ const Assessment = () => {
                 </Card>
               );
             })}
+
+            {/* Professional Assessment Showcase Card */}
+            <Card className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col bg-gradient-to-br from-primary/10 via-background to-accent/10 border-primary/20">
+              <CardHeader className="pb-0">
+                <div className="relative rounded-lg overflow-hidden mb-4">
+                  <img 
+                    src={assessmentConceptImage}
+                    alt="Professional psychological assessment tools and analytics"
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-4 right-4">
+                    <Badge className="bg-primary text-primary-foreground">
+                      Professional
+                    </Badge>
+                  </div>
+                </div>
+                <CardTitle className="text-xl text-center">
+                  Professional Assessment Platform
+                </CardTitle>
+                <CardDescription className="text-base text-center">
+                  Advanced psychological evaluation tools powered by AI and validated frameworks
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4 flex-grow flex flex-col">
+                <div className="text-center py-4">
+                  <div className="text-2xl font-bold text-primary mb-2">11+ Assessments</div>
+                  <div className="text-sm text-muted-foreground">Comprehensive Testing Suite</div>
+                </div>
+                <ul className="space-y-2 text-sm text-muted-foreground">
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    AI-Powered Analysis
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Instant PDF Reports
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Multilingual Support
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-green-500" />
+                    Enterprise Security
+                  </li>
+                </ul>
+                <div className="flex-grow"></div>
+                <div className="text-center">
+                  <div className="text-lg font-semibold text-primary mb-2">
+                    Starting from $9.99
+                  </div>
+                  <div className="text-xs text-muted-foreground">
+                    Professional-grade assessments for everyone
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
           </div>
         </div>
