@@ -10,6 +10,22 @@ import { assessmentsData } from "@/data/assessmentsData";
 import authencoreLogo from "@/assets/authencore-analytics-logo.png";
 
 const Assessment = () => {
+  const getInfoRoute = (assessmentId: string) => {
+    const routeMap: { [key: string]: string } = {
+      'career-launch': '/career-launch-info',
+      'cair-personality': '/cair-cultural-info',
+      'stress-resilience': '/burnout-prevention-info',
+      'cultural-intelligence': '/cair-cultural-info',
+      'communication-styles': '/communication-style-info',
+      'emotional-intelligence': '/emotional-intelligence-info',
+      'faith-values': '/faith-values-info',
+      'genz-assessment': '/genz-workplace-info',
+      'digital-wellness': '/digital-wellness-info',
+      'leadership-assessment': '/authentic-leadership-info',
+      'innovation-mindset': '/innovation-mindset-info'
+    };
+    return routeMap[assessmentId] || '/assessment';
+  };
   const getIconComponent = (iconName: string) => {
     switch (iconName) {
       case 'Rocket': return Rocket;
@@ -156,7 +172,7 @@ const Assessment = () => {
                       ))}
                     </ul>
                     <div className="flex-grow"></div>
-                    <Link to={`${assessment.route.replace('/', '/')}-info`}>
+                    <Link to={getInfoRoute(assessment.id)}>
                       <Button className={`w-full ${colorClasses.button}`}>
                         Learn More <ArrowRight className="ml-2 h-4 w-4" />
                       </Button>

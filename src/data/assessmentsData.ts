@@ -113,7 +113,7 @@ export const assessmentsData: AssessmentData[] = [
     id: 'stress-resilience',
     title: 'Burnout Prevention Index',
     subtitle: 'Proactive Burnout Prevention Assessment',
-    price: '$29.99',
+    price: '$47.99',
     duration: '25-30 minutes',
     questions: 102,
     description: 'Comprehensive burnout prevention assessment evaluating stress levels, risk factors, and resilience capabilities across 7 dimensions',
