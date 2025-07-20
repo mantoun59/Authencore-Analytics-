@@ -35,6 +35,7 @@ import AdminAnalytics from "./pages/AdminAnalytics";
 import CandidateTesting from "./pages/CandidateTesting";
 import TestingDashboard from "./pages/TestingDashboard";
 import SampleCareerLaunchReport from "./pages/SampleCareerLaunchReport";
+import LogoGallery from "./pages/LogoGallery";
 import AuthenticLeadershipDescription from "./pages/AuthenticLeadershipDescription";
 import BurnoutPreventionDescription from "./pages/BurnoutPreventionDescription";
 import CAIRCulturalDescription from "./pages/CAIRCulturalDescription";
@@ -103,6 +104,7 @@ const App = () => (
             <Route path="/candidate-testing" element={<CandidateTesting />} />
             <Route path="/testing-dashboard" element={<TestingDashboard />} />
             <Route path="/sample-career-launch-report" element={<SampleCareerLaunchReport />} />
+            <Route path="/logo-gallery" element={<LogoGallery />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
