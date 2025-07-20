@@ -389,14 +389,14 @@ export const useGenZScoring = () => {
   const generateCompanyMatches = useCallback((): CompanyMatch[] => {
     const matches: CompanyMatch[] = [];
     
-    companyProfiles.forEach(company => {
+    Object.entries(companyProfiles).forEach(([companyKey, company]) => {
       let matchScore = 0;
       const matchReasons: string[] = [];
       
-      // Calculate match based on dimensions
-      Object.entries(company.matchFactors).forEach(([factor, weight]) => {
+      // Calculate match based on dimensions using company scores
+      Object.entries(company.scores).forEach(([factor, companyScore]) => {
         const dimScore = dimensions[factor as keyof GenZDimensions]?.score || 0;
-        const contribution = (dimScore / 100) * weight * 100;
+        const contribution = (dimScore / 100) * (companyScore as number) * 10;
         matchScore += contribution;
         
         if (contribution > 15) {
@@ -404,19 +404,19 @@ export const useGenZScoring = () => {
         }
       });
       
-      // Adjust for red flags
-      if (company.culture.includes('startup') && redFlags.rigid_structure > 5) {
+      // Adjust for red flags based on company characteristics
+      if (company.characteristics.some(char => char.includes('startup')) && redFlags.rigid_structure > 5) {
         matchScore -= 10;
       }
-      if (company.culture.includes('flexible') && redFlags.micromanagement > 5) {
+      if (company.characteristics.some(char => char.includes('flexible')) && redFlags.micromanagement > 5) {
         matchScore -= 15;
       }
       
       matches.push({
-        id: company.id,
+        id: companyKey,
         name: company.name,
         score: Math.round(Math.max(0, Math.min(100, matchScore))),
-        tags: company.tags,
+        tags: company.characteristics,
         matchReasons
       });
     });
