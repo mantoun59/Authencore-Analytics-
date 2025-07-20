@@ -18,6 +18,11 @@ import logoOption10 from "@/assets/logo-option-10.png";
 import logoUpdated from "@/assets/authencore-logo-updated.png";
 import logoVariant2 from "@/assets/authencore-logo-variant-2.png";
 import logoVariant3 from "@/assets/authencore-logo-variant-3.png";
+import logoVariant4 from "@/assets/authencore-logo-variant-4.png";
+import logoVariant5 from "@/assets/authencore-logo-variant-5.png";
+import logoVariant6 from "@/assets/authencore-logo-variant-6.png";
+import logoVariant7 from "@/assets/authencore-logo-variant-7.png";
+import logoVariant8 from "@/assets/authencore-logo-variant-8.png";
 
 const logoOptions = [
   {
@@ -98,6 +103,36 @@ const logoOptions = [
     description: "Contemporary interlocking design in teal and coral orange",
     image: logoVariant3,
   },
+  {
+    id: 14,
+    name: "Black & Electric Blue",
+    description: "Bold interlocking design in black and electric blue",
+    image: logoVariant4,
+  },
+  {
+    id: 15,
+    name: "Forest & Gold Luxury",
+    description: "Premium geometric shapes in forest green and warm gold",
+    image: logoVariant5,
+  },
+  {
+    id: 16,
+    name: "Burgundy & Charcoal",
+    description: "Corporate interlocking design in burgundy red and charcoal gray",
+    image: logoVariant6,
+  },
+  {
+    id: 17,
+    name: "Emerald & Rose Gold",
+    description: "Sophisticated geometric design in deep emerald and rose gold",
+    image: logoVariant7,
+  },
+  {
+    id: 18,
+    name: "Midnight & Copper",
+    description: "Tech-modern interlocking shapes in midnight blue and copper orange",
+    image: logoVariant8,
+  },
 ];
 
 export default function LogoGallery() {
@@ -122,7 +157,7 @@ export default function LogoGallery() {
             <div>
             <h1 className="text-3xl font-bold text-foreground">AuthenCore Logo Gallery</h1>
             <p className="text-foreground mt-1">
-              13 cutting-edge logo designs - Choose your preferred style
+              18 cutting-edge logo designs - Choose your preferred style
               </p>
             </div>
           </div>
