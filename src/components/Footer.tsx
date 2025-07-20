@@ -18,10 +18,13 @@ const Footer = () => {
           <div className="space-y-6">
             <div className="flex items-center space-x-3 mb-4">
               <img 
-                src="/src/assets/authencore-analytics-logo.png" 
+                src="/src/assets/authencore-logo-variant-3.png" 
                 alt="Authencore Analytics" 
                 className="h-12 w-auto"
               />
+              <div>
+                <p className="text-xs text-muted-foreground italic">Reading minds, shaping future</p>
+              </div>
             </div>
             <p className="text-sm text-foreground mb-4">
               Measuring Minds. Shaping Futures.
