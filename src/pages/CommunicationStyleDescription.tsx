@@ -140,6 +140,48 @@ const CommunicationStyleDescription = () => {
           </CardContent>
         </Card>
 
+        {/* Sample Reports Section */}
+        <Card className="mb-8">
+          <CardHeader>
+            <h2 className="text-2xl font-bold text-primary">Sample Reports</h2>
+            <p className="text-muted-foreground">See what you'll receive with your assessment</p>
+          </CardHeader>
+          <CardContent>
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <div className="p-4 border rounded-lg">
+                  <h3 className="font-semibold text-lg mb-2">📊 Candidate Report</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Communication DNA profile with style analysis, channel effectiveness, and professional development recommendations.
+                  </p>
+                  <span className="text-primary text-sm font-medium">Sample report available on request</span>
+                </div>
+                <div className="p-4 border rounded-lg">
+                  <h3 className="font-semibold text-lg mb-2">🏢 Employer Report</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Team compatibility insights, communication coaching recommendations, and collaboration strategies.
+                  </p>
+                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="p-4 bg-primary/10 rounded-lg">
+                  <h4 className="font-semibold mb-2">🌍 Multilingual Support</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Available in 12+ languages including Spanish, French, German, Chinese, Japanese, and more.
+                  </p>
+                </div>
+                <div className="p-4 bg-primary/10 rounded-lg">
+                  <h4 className="font-semibold mb-2">🎯 Interactive Simulations</h4>
+                  <p className="text-sm text-muted-foreground">
+                    Real-world communication scenarios and linguistic pattern analysis.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* CTA Section */}
         <Card className="text-center">
           <CardContent className="py-12">
