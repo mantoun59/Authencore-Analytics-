@@ -10,6 +10,12 @@ import logo3 from '../assets/logo-generated-3.png';
 import logo4 from '../assets/logo-generated-4.png';
 import logo5 from '../assets/logo-generated-5.png';
 import logo6 from '../assets/logo-generated-6.png';
+import logo7 from '../assets/logo-generated-7.png';
+import logo8 from '../assets/logo-generated-8.png';
+import logo9 from '../assets/logo-generated-9.png';
+import logo10 from '../assets/logo-generated-10.png';
+import logo11 from '../assets/logo-generated-11.png';
+import logo12 from '../assets/logo-generated-12.png';
 
 interface LogoOption {
   id: string;
@@ -54,6 +60,42 @@ const logoOptions: LogoOption[] = [
     name: 'Clean Typography',
     style: 'Elegant wordmark with accent',
     image: logo6
+  },
+  {
+    id: 'gen-7',
+    name: 'Shield Security',
+    style: 'Protective shield with analytics symbols',
+    image: logo7
+  },
+  {
+    id: 'gen-8',
+    name: 'DNA Spiral',
+    style: 'Double helix representing authenticity',
+    image: logo8
+  },
+  {
+    id: 'gen-9',
+    name: 'Crystalline Gem',
+    style: 'Faceted diamond symbolizing clarity',
+    image: logo9
+  },
+  {
+    id: 'gen-10',
+    name: 'Neural Networks',
+    style: 'Human profile with brain connections',
+    image: logo10
+  },
+  {
+    id: 'gen-11',
+    name: 'Infinity Flow',
+    style: 'Continuous analysis and potential',
+    image: logo11
+  },
+  {
+    id: 'gen-12',
+    name: 'Compass Navigation',
+    style: 'Guidance and directional leadership',
+    image: logo12
   }
 ];
 
