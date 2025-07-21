@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLogo } from '@/contexts/LogoContext';
-import TextLogo from './TextLogo';
 
 interface LogoDisplayProps {
   size?: 'sm' | 'md' | 'lg';
@@ -13,12 +12,7 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
   showTagline = true, 
   className = '' 
 }) => {
-  const { selectedLogo, useTextLogo } = useLogo();
-
-  // If using text logo or no logo selected, show text logo
-  if (useTextLogo || !selectedLogo) {
-    return <TextLogo size={size} showTagline={showTagline} className={className} />;
-  }
+  const { selectedLogo } = useLogo();
 
   // Size mapping for images - navbar optimized
   const sizeClasses = {

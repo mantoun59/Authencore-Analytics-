@@ -734,7 +734,7 @@ export class AIReportGenerator {
         }
       };
       img.onerror = () => reject(new Error('Failed to load logo image'));
-      img.src = '/src/assets/authencore-logo-variant-3.png';
+      img.src = '/src/assets/final-logo.png';
     });
   }
 

@@ -1,26 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-// Import all logo options
-import logo1 from '../assets/logo-generated-1.png';
-import logo2 from '../assets/logo-generated-2.png';
-import logo3 from '../assets/logo-generated-3.png';
-import logo4 from '../assets/logo-generated-4.png';
-import logo5 from '../assets/logo-generated-5.png';
-import logo6 from '../assets/logo-generated-6.png';
-import logo7 from '../assets/logo-generated-7.png';
-import logo8 from '../assets/logo-generated-8.png';
-import logo9 from '../assets/logo-generated-9.png';
-import logo10 from '../assets/logo-generated-10.png';
-import logo11 from '../assets/logo-generated-11.png';
-import logo12 from '../assets/logo-generated-12.png';
-import logo13 from '../assets/logo-generated-13.png';
-import logo14 from '../assets/logo-generated-14.png';
-import logo15 from '../assets/logo-generated-15.png';
-import logo16 from '../assets/logo-generated-16.png';
-import logo17 from '../assets/logo-generated-17.png';
-import logo18 from '../assets/logo-generated-18.png';
-import exactShape3 from '../assets/authencore-exact-shape-3.png';
-import customLogoNew from '../assets/custom-logo-new.png';
+import React, { createContext, useContext } from 'react';
+import finalLogo from '../assets/final-logo.png';
 
 export interface LogoOption {
   id: string;
@@ -29,176 +8,44 @@ export interface LogoOption {
   image: string;
 }
 
+// Single final logo option
 export const logoOptions: LogoOption[] = [
   {
-    id: 'custom-new',
-    name: 'AuthenCore Analytics Latest',
-    style: 'Latest custom logo design',
-    image: customLogoNew
-  },
-  {
-    id: 'option-21',
-    name: 'Exact Shape - Black & Blue',
-    style: 'Your exact geometric shape design in black and electric blue',
-    image: exactShape3
-  },
-  {
-    id: 'custom-main',
-    name: 'AuthenCore Analytics Official',
-    style: 'Official brand logo with tagline',
-    image: '/lovable-uploads/3d190ec3-d9ff-4d6f-802d-dbf60e262f52.png'
-  },
-  {
-    id: 'gen-1',
-    name: 'Minimalist Geometric',
-    style: 'Modern minimalist with navy and gold',
-    image: logo1
-  },
-  {
-    id: 'gen-2',
-    name: 'Professional Corporate',
-    style: 'Elegant typography with brain symbol',
-    image: logo2
-  },
-  {
-    id: 'gen-3',
-    name: 'Tech Circuit',
-    style: 'Tech-focused with circuit patterns',
-    image: logo3
-  },
-  {
-    id: 'gen-4',
-    name: 'Data Visualization',
-    style: 'Analytics dashboard inspired',
-    image: logo4
-  },
-  {
-    id: 'gen-5',
-    name: 'Geometric Abstract',
-    style: 'Interlocking hexagonal shapes',
-    image: logo5
-  },
-  {
-    id: 'gen-6',
-    name: 'Clean Typography',
-    style: 'Elegant wordmark with accent',
-    image: logo6
-  },
-  {
-    id: 'gen-7',
-    name: 'Shield Security',
-    style: 'Protective shield with analytics symbols',
-    image: logo7
-  },
-  {
-    id: 'gen-8',
-    name: 'DNA Spiral',
-    style: 'Double helix representing authenticity',
-    image: logo8
-  },
-  {
-    id: 'gen-9',
-    name: 'Crystalline Gem',
-    style: 'Faceted diamond symbolizing clarity',
-    image: logo9
-  },
-  {
-    id: 'gen-10',
-    name: 'Neural Networks',
-    style: 'Human profile with brain connections',
-    image: logo10
-  },
-  {
-    id: 'gen-11',
-    name: 'Infinity Flow',
-    style: 'Continuous analysis and potential',
-    image: logo11
-  },
-  {
-    id: 'gen-12',
-    name: 'Compass Navigation',
-    style: 'Guidance and directional leadership',
-    image: logo12
-  },
-  {
-    id: 'gen-13',
-    name: 'Ribbon Wave',
-    style: 'Flowing ribbon forming AC initials',
-    image: logo13
-  },
-  {
-    id: 'gen-14',
-    name: 'Keyhole Security',
-    style: 'Key and lock with data streams',
-    image: logo14
-  },
-  {
-    id: 'gen-15',
-    name: 'Mountain Peak',
-    style: 'Peak performance and insights',
-    image: logo15
-  },
-  {
-    id: 'gen-16',
-    name: 'Network Nodes',
-    style: 'Connected web pattern analysis',
-    image: logo16
-  },
-  {
-    id: 'gen-17',
-    name: 'Origami Fold',
-    style: 'Geometric layered insights design',
-    image: logo17
-  },
-  {
-    id: 'gen-18',
-    name: 'Phoenix Rising',
-    style: 'Transformation and renewal theme',
-    image: logo18
+    id: 'final-logo',
+    name: 'AuthenCore Analytics Final',
+    style: 'Final approved brand logo',
+    image: finalLogo
   }
 ];
 
 interface LogoContextType {
-  selectedLogoId: string | null;
-  selectedLogo: LogoOption | null;
+  selectedLogoId: string;
+  selectedLogo: LogoOption;
   setSelectedLogo: (logoId: string) => void;
-  useTextLogo: boolean;
+  useTextLogo: false;
   setUseTextLogo: (useText: boolean) => void;
 }
 
 const LogoContext = createContext<LogoContextType | undefined>(undefined);
 
 export const LogoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [selectedLogoId, setSelectedLogoId] = useState<string | null>('custom-new');
-  const [useTextLogo, setUseTextLogo] = useState<boolean>(false);
+  const selectedLogoId = 'final-logo';
+  const selectedLogo = logoOptions[0];
 
-  // Load saved logo preference from localStorage
-  useEffect(() => {
-    // Clear any existing saved logo to force new default
-    localStorage.removeItem('selectedLogo');
-    localStorage.removeItem('useTextLogo');
-    // Set the new default
-    localStorage.setItem('selectedLogo', 'custom-new');
-    localStorage.setItem('useTextLogo', 'false');
-  }, []);
-
-  const setSelectedLogo = (logoId: string) => {
-    setSelectedLogoId(logoId);
-    setUseTextLogo(false);
-    localStorage.setItem('selectedLogo', logoId);
-    localStorage.setItem('useTextLogo', 'false');
+  const setSelectedLogo = () => {
+    // No-op since we only have one logo now
   };
 
-  const selectedLogo = selectedLogoId 
-    ? logoOptions.find(logo => logo.id === selectedLogoId) || null
-    : null;
+  const setUseTextLogo = () => {
+    // No-op since we always use the final logo
+  };
 
   return (
     <LogoContext.Provider value={{
       selectedLogoId,
       selectedLogo,
       setSelectedLogo,
-      useTextLogo,
+      useTextLogo: false,
       setUseTextLogo
     }}>
       {children}
