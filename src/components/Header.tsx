@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
-import TextLogo from "@/components/TextLogo";
+import LogoDisplay from "@/components/LogoDisplay";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Header = () => {
@@ -27,8 +27,8 @@ const Header = () => {
           <div className="flex items-center justify-between h-24">
         <div className="flex items-center">
           <Link to="/" className="flex items-center">
-            <TextLogo size="md" showTagline={false} className="hidden md:block" />
-            <TextLogo size="sm" showTagline={false} className="md:hidden" />
+            <LogoDisplay size="md" showTagline={false} className="hidden md:block" />
+            <LogoDisplay size="sm" showTagline={false} className="md:hidden" />
           </Link>
         </div>
             {/* Desktop Navigation */}

@@ -27,6 +27,7 @@ import Security from "./pages/Security";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { PartnerProvider } from "@/contexts/PartnerContext";
+import { LogoProvider } from "@/contexts/LogoContext";
 import { EmployerProvider } from "@/contexts/EmployerContext";
 import EmployerLogin from "./pages/EmployerLogin";
 import EmployerDashboard from "./pages/EmployerDashboard";
@@ -54,9 +55,10 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
-      <AuthProvider>
-        <PartnerProvider>
-          <EmployerProvider>
+      <LogoProvider>
+        <AuthProvider>
+          <PartnerProvider>
+            <EmployerProvider>
           <Toaster />
           <Sonner />
           <BrowserRouter>
@@ -115,6 +117,7 @@ const App = () => (
           </EmployerProvider>
         </PartnerProvider>
       </AuthProvider>
+      </LogoProvider>
     </TooltipProvider>
   </QueryClientProvider>
 );

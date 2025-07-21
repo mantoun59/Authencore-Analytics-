@@ -2,147 +2,26 @@ import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
-
-// Import generated logos
-import logo1 from '../assets/logo-generated-1.png';
-import logo2 from '../assets/logo-generated-2.png';
-import logo3 from '../assets/logo-generated-3.png';
-import logo4 from '../assets/logo-generated-4.png';
-import logo5 from '../assets/logo-generated-5.png';
-import logo6 from '../assets/logo-generated-6.png';
-import logo7 from '../assets/logo-generated-7.png';
-import logo8 from '../assets/logo-generated-8.png';
-import logo9 from '../assets/logo-generated-9.png';
-import logo10 from '../assets/logo-generated-10.png';
-import logo11 from '../assets/logo-generated-11.png';
-import logo12 from '../assets/logo-generated-12.png';
-import logo13 from '../assets/logo-generated-13.png';
-import logo14 from '../assets/logo-generated-14.png';
-import logo15 from '../assets/logo-generated-15.png';
-import logo16 from '../assets/logo-generated-16.png';
-import logo17 from '../assets/logo-generated-17.png';
-import logo18 from '../assets/logo-generated-18.png';
-
-interface LogoOption {
-  id: string;
-  name: string;
-  style: string;
-  image: string;
-}
-
-const logoOptions: LogoOption[] = [
-  {
-    id: 'gen-1',
-    name: 'Minimalist Geometric',
-    style: 'Modern minimalist with navy and gold',
-    image: logo1
-  },
-  {
-    id: 'gen-2',
-    name: 'Professional Corporate',
-    style: 'Elegant typography with brain symbol',
-    image: logo2
-  },
-  {
-    id: 'gen-3',
-    name: 'Tech Circuit',
-    style: 'Tech-focused with circuit patterns',
-    image: logo3
-  },
-  {
-    id: 'gen-4',
-    name: 'Data Visualization',
-    style: 'Analytics dashboard inspired',
-    image: logo4
-  },
-  {
-    id: 'gen-5',
-    name: 'Geometric Abstract',
-    style: 'Interlocking hexagonal shapes',
-    image: logo5
-  },
-  {
-    id: 'gen-6',
-    name: 'Clean Typography',
-    style: 'Elegant wordmark with accent',
-    image: logo6
-  },
-  {
-    id: 'gen-7',
-    name: 'Shield Security',
-    style: 'Protective shield with analytics symbols',
-    image: logo7
-  },
-  {
-    id: 'gen-8',
-    name: 'DNA Spiral',
-    style: 'Double helix representing authenticity',
-    image: logo8
-  },
-  {
-    id: 'gen-9',
-    name: 'Crystalline Gem',
-    style: 'Faceted diamond symbolizing clarity',
-    image: logo9
-  },
-  {
-    id: 'gen-10',
-    name: 'Neural Networks',
-    style: 'Human profile with brain connections',
-    image: logo10
-  },
-  {
-    id: 'gen-11',
-    name: 'Infinity Flow',
-    style: 'Continuous analysis and potential',
-    image: logo11
-  },
-  {
-    id: 'gen-12',
-    name: 'Compass Navigation',
-    style: 'Guidance and directional leadership',
-    image: logo12
-  },
-  {
-    id: 'gen-13',
-    name: 'Ribbon Wave',
-    style: 'Flowing ribbon forming AC initials',
-    image: logo13
-  },
-  {
-    id: 'gen-14',
-    name: 'Keyhole Security',
-    style: 'Key and lock with data streams',
-    image: logo14
-  },
-  {
-    id: 'gen-15',
-    name: 'Mountain Peak',
-    style: 'Peak performance and insights',
-    image: logo15
-  },
-  {
-    id: 'gen-16',
-    name: 'Network Nodes',
-    style: 'Connected web pattern analysis',
-    image: logo16
-  },
-  {
-    id: 'gen-17',
-    name: 'Origami Fold',
-    style: 'Geometric layered insights design',
-    image: logo17
-  },
-  {
-    id: 'gen-18',
-    name: 'Phoenix Rising',
-    style: 'Transformation and renewal theme',
-    image: logo18
-  }
-];
+import { useLogo, logoOptions } from '@/contexts/LogoContext';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const LogoSelection: React.FC = () => {
-  const [selectedLogo, setSelectedLogo] = useState<string>('');
+  const [localSelectedLogo, setLocalSelectedLogo] = useState<string>('');
+  const { setSelectedLogo, selectedLogoId } = useLogo();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const handleUseSelectedLogo = () => {
+    if (localSelectedLogo) {
+      setSelectedLogo(localSelectedLogo);
+      toast({
+        title: "Logo Updated!",
+        description: `Your logo has been updated to ${logoOptions.find(l => l.id === localSelectedLogo)?.name}`,
+      });
+      navigate('/');
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto p-6">
@@ -155,10 +34,10 @@ const LogoSelection: React.FC = () => {
         {logoOptions.map((logo) => (
           <Card 
             key={logo.id}
-            className={`cursor-pointer transition-all hover:shadow-lg ${
-              selectedLogo === logo.id ? 'ring-2 ring-primary' : ''
-            }`}
-            onClick={() => setSelectedLogo(logo.id)}
+            className={`cursor-pointer transition-all hover:shadow-lg hover-scale ${
+              localSelectedLogo === logo.id ? 'ring-2 ring-primary' : ''
+            } ${selectedLogoId === logo.id ? 'ring-2 ring-green-500' : ''}`}
+            onClick={() => setLocalSelectedLogo(logo.id)}
           >
             <CardContent className="p-6">
               <div className="aspect-square bg-white rounded-lg mb-4 flex items-center justify-center border">
@@ -171,9 +50,14 @@ const LogoSelection: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <h3 className="font-semibold">{logo.name}</h3>
-                  {selectedLogo === logo.id && (
-                    <Badge variant="default">Selected</Badge>
-                  )}
+                  <div className="flex gap-2">
+                    {localSelectedLogo === logo.id && (
+                      <Badge variant="default">Selected</Badge>
+                    )}
+                    {selectedLogoId === logo.id && (
+                      <Badge variant="secondary">Current</Badge>
+                    )}
+                  </div>
                 </div>
                 <p className="text-sm text-muted-foreground">{logo.style}</p>
               </div>
@@ -182,13 +66,21 @@ const LogoSelection: React.FC = () => {
         ))}
       </div>
 
-      {selectedLogo && (
+      {localSelectedLogo && (
         <div className="mt-8 text-center">
-          <Button size="lg">
+          <Button size="lg" onClick={handleUseSelectedLogo} className="animate-scale-in">
             Use Selected Logo
           </Button>
           <p className="text-sm text-muted-foreground mt-2">
-            Selected: {logoOptions.find(l => l.id === selectedLogo)?.name}
+            Selected: {logoOptions.find(l => l.id === localSelectedLogo)?.name}
+          </p>
+        </div>
+      )}
+
+      {selectedLogoId && (
+        <div className="mt-4 text-center">
+          <p className="text-sm text-muted-foreground">
+            Currently using: {logoOptions.find(l => l.id === selectedLogoId)?.name}
           </p>
         </div>
       )}
