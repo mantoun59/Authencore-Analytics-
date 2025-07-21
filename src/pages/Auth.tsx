@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -6,16 +6,23 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
 const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const [isLogin, setIsLogin] = useState(true);
+  const { signIn, signUp, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,23 +31,34 @@ const Auth = () => {
     const formData = new FormData(e.currentTarget);
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
+    const fullName = formData.get('fullName') as string;
 
     try {
-      const result = await signIn(email, password);
+      let result;
+      
+      if (isLogin) {
+        result = await signIn(email, password);
+      } else {
+        result = await signUp(email, password, fullName);
+      }
 
       if (result.error) {
         toast({
           title: "Error",
-          description: result.error.message || 'Login failed',
+          description: result.error.message || `${isLogin ? 'Login' : 'Registration'} failed`,
           variant: "destructive",
         });
       } else {
         toast({
           title: "Success",
-          description: 'Successfully logged in!',
+          description: isLogin 
+            ? 'Successfully logged in!' 
+            : 'Account created! Please check your email to verify your account.',
         });
         
-        navigate('/admin');
+        if (isLogin) {
+          navigate('/');
+        }
       }
     } catch (error) {
       toast({
@@ -60,13 +78,32 @@ const Auth = () => {
         <div className="max-w-md mx-auto">
           <Card>
             <CardHeader>
-              <CardTitle className="text-center">Admin Login</CardTitle>
+              <CardTitle className="text-center">
+                {isLogin ? 'Welcome Back' : 'Create Account'}
+              </CardTitle>
               <CardDescription className="text-center">
-                Sign in to access the admin panel
+                {isLogin ? 'Sign in to your account' : 'Sign up for a new account'}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">
+                {!isLogin && (
+                  <div className="space-y-2">
+                    <Label htmlFor="fullName">Full Name</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="fullName"
+                        name="fullName"
+                        type="text"
+                        placeholder="Enter your full name"
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+                )}
+                
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
@@ -105,9 +142,22 @@ const Auth = () => {
                 </div>
                 
                 <Button type="submit" className="w-full" disabled={loading}>
-                  {loading ? "Signing In..." : "Sign In"}
+                  {loading ? (isLogin ? "Signing In..." : "Creating Account...") : (isLogin ? "Sign In" : "Sign Up")}
                 </Button>
               </form>
+
+              <div className="mt-6 text-center">
+                <p className="text-sm text-muted-foreground">
+                  {isLogin ? "Don't have an account?" : "Already have an account?"}
+                  <Button
+                    variant="link"
+                    className="ml-1 p-0 h-auto font-semibold"
+                    onClick={() => setIsLogin(!isLogin)}
+                  >
+                    {isLogin ? "Sign up" : "Sign in"}
+                  </Button>
+                </p>
+              </div>
             </CardContent>
           </Card>
         </div>
