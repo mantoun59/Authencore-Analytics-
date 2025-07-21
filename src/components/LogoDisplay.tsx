@@ -16,9 +16,9 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
 
   // Size mapping for images - updated for header
   const sizeClasses = {
-    sm: 'h-8',
-    md: 'h-14 w-auto max-w-[180px]',
-    lg: 'w-[180px] h-auto'
+    sm: 'h-12 w-auto max-w-[120px]',
+    md: 'w-[180px] h-auto',
+    lg: 'w-[200px] h-auto'
   };
 
   return (
