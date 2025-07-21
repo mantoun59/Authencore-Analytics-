@@ -1,5 +1,6 @@
 import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import TextLogo from "@/components/TextLogo";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -16,15 +17,8 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Left Section - Company Info */}
           <div className="space-y-6">
-            <div className="flex items-center space-x-3 mb-4">
-              <img 
-                src="/src/assets/authencore-logo-variant-3.png" 
-                alt="Authencore Analytics" 
-                className="h-12 w-auto"
-              />
-              <div>
-                <p className="text-xs text-muted-foreground italic">Reading minds, shaping future</p>
-              </div>
+            <div className="mb-4">
+              <TextLogo size="sm" showTagline={true} />
             </div>
             <p className="text-sm text-foreground mb-4">
               Measuring Minds. Shaping Futures.

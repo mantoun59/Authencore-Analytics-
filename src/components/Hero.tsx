@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Brain, TrendingUp, Shield, Users, BarChart3, Award } from "lucide-react";
 import businessTeamImage from "@/assets/business-team-analytics.jpg";
 import professionalAssessmentImage from "@/assets/professional-assessment.jpg";
+import TextLogo from "@/components/TextLogo";
 
 const Hero = () => {
   return (
@@ -21,15 +22,8 @@ const Hero = () => {
             </div>
 
             {/* Company Logo */}
-            <div className="flex items-center space-x-4 mb-6">
-              <img 
-                src="/src/assets/authencore-logo-variant-3.png" 
-                alt="Authencore Analytics" 
-                className="h-16 w-auto"
-              />
-              <div className="text-center">
-                <p className="text-sm text-muted-foreground italic">Reading minds, shaping future</p>
-              </div>
+            <div className="flex justify-center mb-6">
+              <TextLogo size="lg" showTagline={true} className="text-center" />
             </div>
 
             {/* Main heading */}

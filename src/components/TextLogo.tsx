@@ -1,0 +1,40 @@
+import React from 'react';
+
+interface TextLogoProps {
+  size?: 'sm' | 'md' | 'lg';
+  showTagline?: boolean;
+  className?: string;
+}
+
+const TextLogo: React.FC<TextLogoProps> = ({ 
+  size = 'md', 
+  showTagline = true, 
+  className = '' 
+}) => {
+  const sizeClasses = {
+    sm: 'text-xl',
+    md: 'text-2xl',
+    lg: 'text-4xl'
+  };
+
+  const taglineSizes = {
+    sm: 'text-xs',
+    md: 'text-sm', 
+    lg: 'text-base'
+  };
+
+  return (
+    <div className={`flex flex-col ${className}`}>
+      <div className={`font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent ${sizeClasses[size]}`}>
+        Authen<span className="text-secondary">Core</span> Analytics
+      </div>
+      {showTagline && (
+        <p className={`text-muted-foreground italic ${taglineSizes[size]} mt-1`}>
+          Reading minds, shaping future
+        </p>
+      )}
+    </div>
+  );
+};
+
+export default TextLogo;
