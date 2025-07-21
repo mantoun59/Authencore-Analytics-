@@ -38,6 +38,7 @@ import TestingDashboard from "./pages/TestingDashboard";
 import SampleCareerLaunchReport from "./pages/SampleCareerLaunchReport";
 import LogoSelectionPage from "./pages/LogoSelectionPage";
 import LogoGallery from "./pages/LogoGallery";
+import MarketingMaterials from "./pages/MarketingMaterials";
 import AuthenticLeadershipDescription from "./pages/AuthenticLeadershipDescription";
 import BurnoutPreventionDescription from "./pages/BurnoutPreventionDescription";
 import CAIRCulturalDescription from "./pages/CAIRCulturalDescription";
@@ -109,6 +110,7 @@ const App = () => (
             <Route path="/sample-career-launch-report" element={<SampleCareerLaunchReport />} />
             <Route path="/logo-selection" element={<LogoSelectionPage />} />
             <Route path="/logo-gallery" element={<LogoGallery />} />
+            <Route path="/marketing-materials" element={<MarketingMaterials />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -61,6 +61,12 @@ const Footer = () => {
                 Testing Dashboard
               </Link>
               <Link
+                to="/marketing-materials"
+                className="block text-foreground hover:text-primary transition-colors text-sm"
+              >
+                Marketing Materials
+              </Link>
+              <Link
                 to="/privacy"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
