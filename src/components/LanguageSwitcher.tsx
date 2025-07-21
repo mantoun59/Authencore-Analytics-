@@ -13,7 +13,6 @@ const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
   { code: 'fr', name: 'Français', flag: '🇫🇷' },
   { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
 ];
 
 const LanguageSwitcher: React.FC = () => {
@@ -25,22 +24,12 @@ const LanguageSwitcher: React.FC = () => {
   };
 
   const updateDocumentLanguage = (languageCode: string) => {
-    const isRTL = languageCode === 'ar';
-    
-    // Set document direction and language
-    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    // Set document language
     document.documentElement.lang = languageCode;
     
     // Add language class to body for additional styling
     document.body.className = document.body.className.replace(/\blang-\w+\b/g, '');
     document.body.classList.add(`lang-${languageCode}`);
-    
-    // Add Arabic-specific class for enhanced styling
-    if (isRTL) {
-      document.body.classList.add('rtl');
-    } else {
-      document.body.classList.remove('rtl');
-    }
   };
 
   // Initialize language settings on mount
