@@ -16,6 +16,12 @@ import logo9 from '../assets/logo-generated-9.png';
 import logo10 from '../assets/logo-generated-10.png';
 import logo11 from '../assets/logo-generated-11.png';
 import logo12 from '../assets/logo-generated-12.png';
+import logo13 from '../assets/logo-generated-13.png';
+import logo14 from '../assets/logo-generated-14.png';
+import logo15 from '../assets/logo-generated-15.png';
+import logo16 from '../assets/logo-generated-16.png';
+import logo17 from '../assets/logo-generated-17.png';
+import logo18 from '../assets/logo-generated-18.png';
 
 interface LogoOption {
   id: string;
@@ -96,6 +102,42 @@ const logoOptions: LogoOption[] = [
     name: 'Compass Navigation',
     style: 'Guidance and directional leadership',
     image: logo12
+  },
+  {
+    id: 'gen-13',
+    name: 'Ribbon Wave',
+    style: 'Flowing ribbon forming AC initials',
+    image: logo13
+  },
+  {
+    id: 'gen-14',
+    name: 'Keyhole Security',
+    style: 'Key and lock with data streams',
+    image: logo14
+  },
+  {
+    id: 'gen-15',
+    name: 'Mountain Peak',
+    style: 'Peak performance and insights',
+    image: logo15
+  },
+  {
+    id: 'gen-16',
+    name: 'Network Nodes',
+    style: 'Connected web pattern analysis',
+    image: logo16
+  },
+  {
+    id: 'gen-17',
+    name: 'Origami Fold',
+    style: 'Geometric layered insights design',
+    image: logo17
+  },
+  {
+    id: 'gen-18',
+    name: 'Phoenix Rising',
+    style: 'Transformation and renewal theme',
+    image: logo18
   }
 ];
 
