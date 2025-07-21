@@ -29,7 +29,7 @@ const TextLogo: React.FC<TextLogoProps> = ({
         Authen<span className="text-secondary">Core</span> Analytics
       </div>
       {showTagline && (
-        <p className={`text-muted-foreground italic ${taglineSizes[size]} mt-1`}>
+        <p className={`text-foreground/70 italic ${taglineSizes[size]} mt-1`}>
           Reading minds, shaping future
         </p>
       )}

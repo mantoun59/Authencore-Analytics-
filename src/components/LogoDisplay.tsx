@@ -20,11 +20,11 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
     return <TextLogo size={size} showTagline={showTagline} className={className} />;
   }
 
-  // Size mapping for images
+  // Size mapping for images - making main logo 200px
   const sizeClasses = {
     sm: 'h-8',
-    md: 'h-12',
-    lg: 'h-16'
+    md: 'w-[200px] h-auto',
+    lg: 'w-[250px] h-auto'
   };
 
   return (
@@ -35,7 +35,7 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
         className={`${sizeClasses[size]} object-contain`}
       />
       {showTagline && (
-        <p className={`text-muted-foreground italic text-xs mt-1 ${size === 'lg' ? 'text-sm' : ''}`}>
+        <p className={`text-foreground/70 italic text-xs mt-1 ${size === 'lg' ? 'text-sm' : ''}`}>
           Reading minds, shaping future
         </p>
       )}

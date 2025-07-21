@@ -45,7 +45,7 @@ All colors MUST be HSL.
     --secondary-foreground: 222.2 84% 4.9%;
 
     --muted: 210 40% 96%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 215.4 16.3% 26.9%;
 
     /* Teal accent matching primary */
     --accent: 180 100% 25%;
@@ -106,7 +106,7 @@ All colors MUST be HSL.
     --secondary-foreground: 0 0% 98%;
 
     --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted-foreground: 240 5% 74.9%;
 
     --accent: 180 100% 35%;
     --accent-foreground: 240 5.9% 10%;
