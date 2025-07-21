@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
 import ApplicantDataForm from '@/components/ApplicantDataForm';
-import { faithValuesData } from '@/data/faithValuesQuestions';
+import { complete90FaithValuesQuestions } from '@/data/complete90FaithValuesQuestions';
 import { useFaithValuesScoring } from '@/hooks/useFaithValuesScoring';
 import { ChevronLeft, ChevronRight, GripVertical, Download, RotateCcw } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -44,7 +44,16 @@ const FaithValuesAssessment = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [currentScenario, setCurrentScenario] = useState(0);
   const [rankedValues, setRankedValues] = useState<string[]>([]);
-  const [availableValues, setAvailableValues] = useState(faithValuesData.universal_values);
+  const [availableValues, setAvailableValues] = useState([
+    { id: "achievement", name: "Achievement", description: "Accomplishment and success", icon: "🏆" },
+    { id: "justice", name: "Justice", description: "Fairness and moral rightness", icon: "⚖️" },
+    { id: "compassion", name: "Compassion", description: "Caring for others' wellbeing", icon: "❤️" },
+    { id: "wisdom", name: "Wisdom", description: "Deep understanding and insight", icon: "🧠" },
+    { id: "integrity", name: "Integrity", description: "Honesty and moral principles", icon: "🛡️" },
+    { id: "service", name: "Service", description: "Helping and serving others", icon: "🤝" },
+    { id: "gratitude", name: "Gratitude", description: "Thankfulness and appreciation", icon: "🙏" },
+    { id: "perseverance", name: "Perseverance", description: "Persistence through challenges", icon: "💪" }
+  ]);
   const [responses, setResponses] = useState<Array<{ scenarioId: string; selectedOption: number; responseTime: number }>>([]);
   const [currentResponse, setCurrentResponse] = useState<string>('');
   const [reflectionData, setReflectionData] = useState<ReflectionData>({
@@ -56,8 +65,9 @@ const FaithValuesAssessment = () => {
   const { toast } = useToast();
   const { result, isCalculating, calculateScores, reset } = useFaithValuesScoring();
 
-  const progress = ((currentScenario + 1) / faithValuesData.scenarios.length) * 100;
-  const currentScenarioData = faithValuesData.scenarios[currentScenario];
+  const questions = complete90FaithValuesQuestions;
+  const progress = ((currentScenario + 1) / questions.length) * 100;
+  const currentScenarioData = questions[currentScenario];
 
   useEffect(() => {
     if (currentScenarioData) {
@@ -100,7 +110,7 @@ const FaithValuesAssessment = () => {
     } else if (result.source.droppableId === 'ranked' && result.destination.droppableId === 'available') {
       // Moving from ranked to available
       const valueId = rankedValues[sourceIndex];
-      const value = faithValuesData.universal_values.find(v => v.id === valueId);
+      const value = availableValues.find(v => v.id === valueId);
       
       if (value) {
         const newRanked = [...rankedValues];
@@ -158,7 +168,7 @@ const FaithValuesAssessment = () => {
     newResponses[currentScenario] = newResponse;
     setResponses(newResponses);
 
-    if (currentScenario < faithValuesData.scenarios.length - 1) {
+    if (currentScenario < questions.length - 1) {
       setCurrentScenario(currentScenario + 1);
     } else {
       setCurrentStep('reflection');
@@ -187,7 +197,7 @@ const FaithValuesAssessment = () => {
     newResponses[currentScenario] = newResponse;
     setResponses(newResponses);
 
-    if (currentScenario < faithValuesData.scenarios.length - 1) {
+    if (currentScenario < questions.length - 1) {
       setCurrentScenario(currentScenario + 1);
     } else {
       setCurrentStep('reflection');
@@ -204,7 +214,16 @@ const FaithValuesAssessment = () => {
     setUserData(null);
     setCurrentScenario(0);
     setRankedValues([]);
-    setAvailableValues(faithValuesData.universal_values);
+    setAvailableValues([
+      { id: "achievement", name: "Achievement", description: "Accomplishment and success", icon: "🏆" },
+      { id: "justice", name: "Justice", description: "Fairness and moral rightness", icon: "⚖️" },
+      { id: "compassion", name: "Compassion", description: "Caring for others' wellbeing", icon: "❤️" },
+      { id: "wisdom", name: "Wisdom", description: "Deep understanding and insight", icon: "🧠" },
+      { id: "integrity", name: "Integrity", description: "Honesty and moral principles", icon: "🛡️" },
+      { id: "service", name: "Service", description: "Helping and serving others", icon: "🤝" },
+      { id: "gratitude", name: "Gratitude", description: "Thankfulness and appreciation", icon: "🙏" },
+      { id: "perseverance", name: "Perseverance", description: "Persistence through challenges", icon: "💪" }
+    ]);
     setResponses([]);
     setCurrentResponse('');
     setReflectionData({
@@ -216,7 +235,7 @@ const FaithValuesAssessment = () => {
   };
 
   const getValueById = (id: string) => {
-    return faithValuesData.universal_values.find(v => v.id === id);
+    return availableValues.find(v => v.id === id);
   };
 
   if (currentStep === 'info') {
@@ -229,40 +248,40 @@ const FaithValuesAssessment = () => {
               <CardHeader className="text-center">
                 <div className="text-6xl mb-4">🌟</div>
                 <CardTitle className="text-3xl font-bold text-primary mb-2">
-                  Values & Culture Alignment Assessment
+                  Faith & Values Alignment Index (FVAI)
                 </CardTitle>
                 <p className="text-lg text-muted-foreground mb-4">
-                  Discover workplaces that align with what matters most to you
+                  Comprehensive 90-question assessment across 42 dimensions
                 </p>
               </CardHeader>
               <CardContent>
                 <div className="bg-slate-50 rounded-lg p-6 mb-6">
                   <p className="text-center text-lg mb-4">
-                    This assessment helps match your personal values and ethical principles with organizational cultures where you'll thrive.
+                    This comprehensive assessment uses validated psychological instruments to analyze how your faith-based values align with your professional life across spiritual foundations, moral values, workplace ethics, and life integration.
                   </p>
                   <p className="text-center text-muted-foreground">
-                    There are no right or wrong answers - only what feels authentic to you.
+                    Using multiple assessment techniques including Likert scales, ranking, scenarios, and semantic differentials.
                   </p>
                 </div>
                 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                   <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
                     <span className="text-2xl">⏱️</span>
-                    <span className="text-sm">15-20 minutes</span>
+                    <span className="text-sm">25-30 minutes</span>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                    <span className="text-2xl">🔒</span>
-                    <span className="text-sm">Completely confidential</span>
+                    <span className="text-2xl">📊</span>
+                    <span className="text-sm">90 Questions | 42 Dimensions</span>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
-                    <span className="text-2xl">🌍</span>
-                    <span className="text-sm">Inclusive of all beliefs</span>
+                    <span className="text-2xl">🔬</span>
+                    <span className="text-sm">Validated Instruments</span>
                   </div>
                 </div>
                 
                 <ApplicantDataForm 
                   assessmentType="faith-values"
-                  assessmentTitle="Values & Culture Alignment Assessment"
+                  assessmentTitle="Faith & Values Alignment Index (FVAI)"
                   onComplete={handleUserDataSubmit} 
                 />
               </CardContent>
@@ -370,7 +389,7 @@ const FaithValuesAssessment = () => {
                           disabled={rankedValues.length < 8}
                           className="w-full"
                         >
-                          Continue to Scenarios
+                          Continue to Questions
                         </Button>
                       </div>
                     </div>
@@ -394,7 +413,7 @@ const FaithValuesAssessment = () => {
               <CardHeader>
                 <div className="flex justify-between items-center mb-4">
                   <Badge variant="outline">
-                    Question {currentScenario + 1} of {faithValuesData.scenarios.length}
+                    Question {currentScenario + 1} of {questions.length}
                   </Badge>
                   <Badge variant="secondary">
                     {currentScenarioData.category.replace('_', ' ')}
@@ -403,28 +422,67 @@ const FaithValuesAssessment = () => {
                 <Progress value={progress} className="mb-4" />
                 <div className="text-center">
                   <h3 className="text-lg font-semibold text-muted-foreground mb-2">
-                    {currentScenarioData.context}
+                    {currentScenarioData.type === 'likert' ? 'Rate your agreement' : 
+                     currentScenarioData.type === 'scenario' ? 'Choose your response' :
+                     currentScenarioData.type === 'ranking' ? 'Rank in order' :
+                     currentScenarioData.type === 'forced_choice' ? 'Choose one' :
+                     'Select your response'}
                   </h3>
                   <p className="text-xl leading-relaxed">
-                    {currentScenarioData.scenario}
+                    {currentScenarioData.question}
                   </p>
                 </div>
               </CardHeader>
               <CardContent>
                 <RadioGroup value={currentResponse} onValueChange={handleResponseChange}>
-                  <div className="space-y-3">
-                    {currentScenarioData.options.map((option, index) => (
-                      <div key={index} className="flex items-center space-x-2">
-                        <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                        <Label 
-                          htmlFor={`option-${index}`} 
-                          className="cursor-pointer flex-1 p-3 rounded-lg hover:bg-slate-50 transition-colors"
-                        >
-                          {option.text}
-                        </Label>
+                      <div className="space-y-3">
+                        {currentScenarioData.scale ? (
+                          // Likert scale questions
+                          Array.from({ length: currentScenarioData.scale.max - currentScenarioData.scale.min + 1 }, (_, i) => {
+                            const value = currentScenarioData.scale.min + i;
+                            const label = i === 0 ? currentScenarioData.scale.minLabel : 
+                                          i === currentScenarioData.scale.max - currentScenarioData.scale.min ? currentScenarioData.scale.maxLabel :
+                                          value.toString();
+                            return (
+                              <div key={value} className="flex items-center space-x-2">
+                                <RadioGroupItem value={value.toString()} id={`option-${value}`} />
+                                <Label 
+                                  htmlFor={`option-${value}`} 
+                                  className="cursor-pointer flex-1 p-3 rounded-lg hover:bg-slate-50 transition-colors"
+                                >
+                                  {label}
+                                </Label>
+                              </div>
+                            );
+                          })
+                        ) : currentScenarioData.options ? (
+                          // Multiple choice questions  
+                          currentScenarioData.options.map((option: any, index: number) => (
+                            <div key={index} className="flex items-center space-x-2">
+                              <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                              <Label 
+                                htmlFor={`option-${index}`} 
+                                className="cursor-pointer flex-1 p-3 rounded-lg hover:bg-slate-50 transition-colors"
+                              >
+                                {typeof option === 'string' ? option : option.text || JSON.stringify(option)}
+                              </Label>
+                            </div>
+                          ))
+                        ) : (
+                          // Default options for questions without defined options
+                          ['Strongly Disagree', 'Disagree', 'Somewhat Disagree', 'Neutral', 'Somewhat Agree', 'Agree', 'Strongly Agree'].map((option, index) => (
+                            <div key={index} className="flex items-center space-x-2">
+                              <RadioGroupItem value={(index + 1).toString()} id={`option-${index}`} />
+                              <Label 
+                                htmlFor={`option-${index}`} 
+                                className="cursor-pointer flex-1 p-3 rounded-lg hover:bg-slate-50 transition-colors"
+                              >
+                                {option}
+                              </Label>
+                            </div>
+                          ))
+                        )}
                       </div>
-                    ))}
-                  </div>
                 </RadioGroup>
                 
                 <div className="flex justify-between items-center mt-8">
@@ -450,7 +508,7 @@ const FaithValuesAssessment = () => {
                     onClick={handleNext}
                     className="flex items-center gap-2"
                   >
-                    {currentScenario === faithValuesData.scenarios.length - 1 ? 'Continue' : 'Next'}
+                    {currentScenario === questions.length - 1 ? 'Continue' : 'Next'}
                     <ChevronRight size={16} />
                   </Button>
                 </div>

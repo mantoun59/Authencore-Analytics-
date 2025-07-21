@@ -10,38 +10,33 @@ import { Link } from 'react-router-dom';
 const FaithValuesDescription = () => {
   const dimensions = [
     {
-      title: "Spiritual Cognition",
-      description: "Understanding and internalisation of spiritual concepts.",
+      title: "Spiritual/Faith Foundations",
+      description: "Core spiritual beliefs, practices, and relationship with the divine (12 dimensions).",
       icon: Brain
     },
     {
-      title: "Moral Reasoning", 
-      description: "Decision-making based on ethical and faith principles.",
+      title: "Universal Human Values", 
+      description: "Fundamental values that guide decision-making and behavior (8 dimensions).",
       icon: Scale
     },
     {
-      title: "Behaviour Consistency",
-      description: "Alignment of actions with professed values.",
+      title: "Moral Foundations",
+      description: "Ethical principles and moral reasoning frameworks (6 dimensions).",
       icon: User
     },
     {
-      title: "Emotional Integrity",
-      description: "Emotions grounded in faith and values.",
+      title: "Workplace Values & Ethics",
+      description: "Professional integrity and faith-based workplace behavior (8 dimensions).",
       icon: Heart
     },
     {
-      title: "Relational Ethics",
-      description: "Values reflected in interpersonal relationships.",
+      title: "Work-Life Integration",
+      description: "Balance between spiritual calling and professional responsibilities (4 dimensions).",
       icon: Users
     },
     {
-      title: "Cultural Faith Expression",
-      description: "Manifestation of faith values in cultural contexts.",
-      icon: Globe
-    },
-    {
-      title: "Life Congruence",
-      description: "Overall harmony between beliefs and daily living.",
+      title: "Validity & Response Quality",
+      description: "Assessment integrity and response authenticity measures (4 dimensions).",
       icon: CheckSquare
     }
   ];
@@ -55,7 +50,7 @@ const FaithValuesDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              45 Questions | 6 Dimensions | $14.99
+              90 Questions | 42 Dimensions | $19.99
             </Badge>
           </div>
           
@@ -79,7 +74,7 @@ const FaithValuesDescription = () => {
           </CardHeader>
           <CardContent>
             <p className="text-lg text-foreground leading-relaxed">
-              The Faith & Values Alignment Index (FVAI) is a deeply reflective assessment designed to help individuals understand how their daily thoughts, decisions, and behaviours align with their core faith-based values. Covering 7 key dimensions, FVAI empowers personal growth, spiritual coaching, and faith-based leadership development by providing clarity, confidence, and purpose-driven insights.
+              The Faith & Values Alignment Index (FVAI) is a comprehensive 90-question assessment using validated instruments to understand how your daily thoughts, decisions, and behaviours align with your core faith-based values. Covering 42 detailed dimensions across spiritual foundations, moral values, workplace ethics, and life integration, FVAI empowers personal growth, spiritual coaching, and faith-based leadership development through evidence-based insights.
             </p>
           </CardContent>
         </Card>
@@ -87,8 +82,8 @@ const FaithValuesDescription = () => {
         {/* Dimensions Section */}
         <Card className="mb-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-primary">6 Dimensions Covered in FVAI</CardTitle>
-            <p className="text-muted-foreground">Explore the multidimensional structure of your faith and values alignment.</p>
+            <CardTitle className="text-2xl text-primary">42 Dimensions Across 6 Core Areas</CardTitle>
+            <p className="text-muted-foreground">Comprehensive analysis using validated psychological instruments and multiple assessment techniques.</p>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
