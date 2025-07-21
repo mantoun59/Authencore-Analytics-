@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { 
   Rocket, 
@@ -16,8 +17,49 @@ import {
   Zap,
   Brain,
   Users,
-  CheckCircle2
+  CheckCircle2,
+  TrendingUp,
+  MessageSquare
 } from "lucide-react";
+
+// Enhanced AI Sample Data
+const enhancedAIFeatures = {
+  distortionAnalysis: {
+    score: 2,
+    reliability: 'high',
+    confidenceLevel: 94,
+    responsePatterns: {
+      fakeGood: 1,
+      fakeBad: 0,
+      random: 1,
+      inconsistency: 2
+    },
+    interpretation: 'Assessment shows excellent validity with consistent response patterns and high reliability.'
+  },
+  cognitiveProfile: {
+    processingStyle: 'Analytical-Creative Hybrid',
+    learningPreferences: ['Visual Learning', 'Hands-on Experience', 'Collaborative Problem Solving'],
+    decisionMakingApproach: 'Data-informed with intuitive validation',
+    problemSolvingStrategy: 'Systematic analysis followed by creative synthesis'
+  },
+  behavioralPredictions: {
+    workplacePerformance: {
+      predictedEffectiveness: 87,
+      performanceIndicators: ['High innovation potential', 'Strong team collaboration', 'Effective under pressure']
+    },
+    teamDynamics: {
+      collaborationStyle: 'Collaborative leader with mentoring tendencies',
+      leadershipPotential: 82,
+      influenceStyle: 'Inspirational and consultative'
+    }
+  },
+  enhancedInterviewQuestions: [
+    'Describe a time when you had to balance analytical thinking with creative problem-solving.',
+    'How do you approach learning new technologies or methodologies?',
+    'Tell me about a situation where you led a team through an innovative project.',
+    'How do you validate your creative ideas with data or feedback?'
+  ]
+};
 
 const SampleCareerLaunchReport = () => {
   const { toast } = useToast();
@@ -303,6 +345,156 @@ const SampleCareerLaunchReport = () => {
               </ul>
             </CardContent>
           </Card>
+
+          {/* Enhanced AI Features Section */}
+          <div className="space-y-6 mb-8">
+            <div className="text-center">
+              <Badge variant="default" className="mb-4">
+                <Brain className="h-4 w-4 mr-2" />
+                Enhanced AI Analysis
+              </Badge>
+              <h2 className="text-2xl font-bold mb-2">AI-Powered Insights</h2>
+              <p className="text-muted-foreground">
+                Advanced AI engine provides deeper cognitive profiling and behavioral predictions
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-6">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Target className="h-5 w-5 text-blue-600" />
+                    Validity & Distortion Analysis
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Assessment Reliability:</span>
+                    <Badge variant="default" className="bg-green-600">
+                      {enhancedAIFeatures.distortionAnalysis.reliability.toUpperCase()}
+                    </Badge>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">AI Confidence Level:</span>
+                    <span className="text-sm font-bold text-primary">
+                      {enhancedAIFeatures.distortionAnalysis.confidenceLevel}%
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">Distortion Score:</span>
+                    <Badge variant="secondary">
+                      {enhancedAIFeatures.distortionAnalysis.score}/10
+                    </Badge>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {enhancedAIFeatures.distortionAnalysis.interpretation}
+                  </p>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <Brain className="h-5 w-5 text-purple-600" />
+                    Cognitive Profile
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div>
+                    <span className="font-medium text-sm">Processing Style:</span>
+                    <p className="text-sm text-muted-foreground">
+                      {enhancedAIFeatures.cognitiveProfile.processingStyle}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-sm">Decision Making:</span>
+                    <p className="text-sm text-muted-foreground">
+                      {enhancedAIFeatures.cognitiveProfile.decisionMakingApproach}
+                    </p>
+                  </div>
+                  <div>
+                    <span className="font-medium text-sm">Learning Preferences:</span>
+                    <div className="flex flex-wrap gap-1 mt-1">
+                      {enhancedAIFeatures.cognitiveProfile.learningPreferences.map((pref, index) => (
+                        <Badge key={index} variant="outline" className="text-xs">
+                          {pref}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <TrendingUp className="h-5 w-5 text-green-600" />
+                  AI-Predicted Workplace Performance
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="font-medium">Predicted Effectiveness:</span>
+                  <div className="flex items-center gap-2">
+                    <Progress value={enhancedAIFeatures.behavioralPredictions.workplacePerformance.predictedEffectiveness} className="w-24" />
+                    <span className="text-sm font-bold">
+                      {enhancedAIFeatures.behavioralPredictions.workplacePerformance.predictedEffectiveness}%
+                    </span>
+                  </div>
+                </div>
+                <div>
+                  <span className="font-medium text-sm">Key Performance Indicators:</span>
+                  <div className="mt-2 space-y-1">
+                    {enhancedAIFeatures.behavioralPredictions.workplacePerformance.performanceIndicators.map((indicator, index) => (
+                      <div key={index} className="flex items-center gap-2">
+                        <CheckCircle2 className="h-3 w-3 text-green-600" />
+                        <span className="text-xs text-muted-foreground">{indicator}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="bg-blue-50 p-3 rounded-lg">
+                  <span className="font-medium text-sm text-blue-800">Leadership Potential:</span>
+                  <div className="flex items-center gap-2 mt-1">
+                    <Progress value={enhancedAIFeatures.behavioralPredictions.teamDynamics.leadershipPotential} className="w-32" />
+                    <span className="text-sm font-bold text-blue-800">
+                      {enhancedAIFeatures.behavioralPredictions.teamDynamics.leadershipPotential}%
+                    </span>
+                  </div>
+                  <p className="text-xs text-blue-700 mt-1">
+                    {enhancedAIFeatures.behavioralPredictions.teamDynamics.collaborationStyle}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <MessageSquare className="h-5 w-5 text-orange-600" />
+                  AI-Generated Interview Questions
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Smart interview questions tailored to Alex's assessment results:
+                </p>
+                <div className="space-y-2">
+                  {enhancedAIFeatures.enhancedInterviewQuestions.map((question, index) => (
+                    <div key={index} className="p-3 bg-orange-50 rounded-lg border-l-4 border-orange-300">
+                      <p className="text-sm">{question}</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 p-3 bg-gradient-to-r from-orange-100 to-red-100 rounded-lg">
+                  <p className="text-xs text-orange-800 font-medium">
+                    💡 These questions are specifically designed to validate Alex's assessment results and explore their unique cognitive patterns and behavioral tendencies.
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
           <div className="text-center space-y-6">
             <Button onClick={downloadReport} size="lg" className="text-lg px-8 py-6">
