@@ -469,31 +469,6 @@ const SampleCareerLaunchReport = () => {
               </CardContent>
             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <MessageSquare className="h-5 w-5 text-orange-600" />
-                  AI-Generated Interview Questions
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
-                  Smart interview questions tailored to Alex's assessment results:
-                </p>
-                <div className="space-y-2">
-                  {enhancedAIFeatures.enhancedInterviewQuestions.map((question, index) => (
-                    <div key={index} className="p-3 bg-orange-50 rounded-lg border-l-4 border-orange-300">
-                      <p className="text-sm">{question}</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="mt-4 p-3 bg-gradient-to-r from-orange-100 to-red-100 rounded-lg">
-                  <p className="text-xs text-orange-800 font-medium">
-                    💡 These questions are specifically designed to validate Alex's assessment results and explore their unique cognitive patterns and behavioral tendencies.
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
           </div>
 
           <div className="text-center space-y-6">
