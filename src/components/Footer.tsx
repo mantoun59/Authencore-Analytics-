@@ -64,7 +64,7 @@ const Footer = () => {
                 to="/marketing-materials"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                Marketing Materials
+                Downloads
               </Link>
               <Link
                 to="/privacy"

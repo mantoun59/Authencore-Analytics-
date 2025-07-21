@@ -16,7 +16,7 @@ const Header = () => {
     { name: t("navigation.home"), href: "/" },
     { name: t("navigation.about"), href: "/about" },
     { name: t("navigation.assessments"), href: "/assessment" },
-    { name: "Marketing Materials", href: "/marketing-materials" },
+    { name: "Downloads", href: "/marketing-materials" },
     { name: t("navigation.partnerEmployer"), href: "/partner-login" },
     { name: t("navigation.admin"), href: "/admin" },
   ];
