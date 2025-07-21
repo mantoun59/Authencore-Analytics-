@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ImageGenerator from "@/components/ImageGenerator";
 import { PartnerManagement } from "@/components/PartnerManagement";
+import { EnhancedAIControls } from "@/components/EnhancedAIControls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProtectedAdminRoute from "@/components/ProtectedAdminRoute";
 
@@ -20,9 +21,10 @@ const AdminPage = () => {
             </div>
 
             <Tabs defaultValue="partners" className="w-full">
-              <TabsList className="grid w-full grid-cols-4">
+              <TabsList className="grid w-full grid-cols-5">
                 <TabsTrigger value="partners">Partner Management</TabsTrigger>
                 <TabsTrigger value="testing">Testing Portal</TabsTrigger>
+                <TabsTrigger value="ai-engine">AI Engine</TabsTrigger>
                 <TabsTrigger value="analytics">Analytics</TabsTrigger>
                 <TabsTrigger value="images">Image Generator</TabsTrigger>
               </TabsList>
@@ -45,6 +47,19 @@ const AdminPage = () => {
                         <p className="text-sm text-muted-foreground">Monitor and manage ongoing assessments</p>
                       </a>
                     </div>
+                  </div>
+                </div>
+              </TabsContent>
+
+              <TabsContent value="ai-engine" className="mt-6">
+                <div className="space-y-6">
+                  <div className="p-6 bg-card rounded-lg border">
+                    <h3 className="text-lg font-semibold mb-4">Enhanced AI Analysis Engine</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Configure and manage the advanced AI engine for enhanced report generation, 
+                      intelligent interview questions, and sophisticated distortion scale analysis.
+                    </p>
+                    <EnhancedAIControls />
                   </div>
                 </div>
               </TabsContent>

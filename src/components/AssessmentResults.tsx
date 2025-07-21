@@ -28,6 +28,7 @@ import {
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
+import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
 import { toast } from "sonner";
 
 interface AssessmentResultsProps {

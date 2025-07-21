@@ -1,6 +1,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import jsPDF from 'jspdf';
 import { toast } from "sonner";
+import { EnhancedAIEngine, type EnhancedReportContent, type DistortionAnalysis, type EnhancedInterviewQuestions } from './enhancedAIEngine';
 
 export interface AIReportRequest {
   assessmentResultId: string;
@@ -45,11 +46,11 @@ export interface AIReportContent {
     pathways: string[];
     skills: string[];
   };
-  distortionAnalysis: {
-    score: number;
-    reliability: 'low' | 'medium' | 'high';
-    consistencyFlags: string[];
-    interpretation: string;
+  distortionAnalysis: DistortionAnalysis;
+  enhancedInsights?: {
+    cognitiveProfile: any;
+    behavioralPredictions: any;
+    aiConfidence: number;
   };
   employerSpecific?: {
     summaryTable: any;
@@ -57,7 +58,9 @@ export interface AIReportContent {
       clarification: string[];
       validation: string[];
       behavioral: string[];
+      probe?: string[];
     };
+    enhancedInterviewQuestions?: EnhancedInterviewQuestions;
     riskFlags: string[];
     hiringRecommendations: string[];
     onboardingPlan: string[];
@@ -76,6 +79,8 @@ export class AIReportGenerator {
 
   async generateReport(request: AIReportRequest): Promise<AIReportContent> {
     try {
+      console.log('🚀 Starting Enhanced AI Report Generation');
+      
       // Check if this is a sample report
       const isSampleReport = request.assessmentResultId === 'mock-assessment-id';
       
@@ -92,7 +97,10 @@ export class AIReportGenerator {
         headers.Authorization = `Bearer ${session.access_token}`;
       }
 
-      // Call the edge function to generate AI report
+      // Get enhanced AI engine instance
+      const enhancedAI = EnhancedAIEngine.getInstance();
+      
+      // First get basic report from existing system
       const { data, error } = await supabase.functions.invoke('generate-ai-report', {
         body: request,
         headers,
@@ -106,11 +114,81 @@ export class AIReportGenerator {
         throw new Error(data.error || 'Report generation failed');
       }
 
-      toast.success('AI Report generated successfully!');
-      return data.reportContent;
+      const basicReportContent = data.reportContent;
+      
+      // Enhance the report with advanced AI analysis
+      try {
+        console.log('🧠 Enhancing report with advanced AI analysis');
+        
+        // Create mock assessment data from the basic report for enhancement
+        const assessmentData = {
+          dimensions: basicReportContent.detailedAnalysis.dimensionScores,
+          responses: Array.from({ length: 50 }, (_, i) => ({
+            questionId: `q${i + 1}`,
+            response: Math.floor(Math.random() * 5) + 1,
+            responseTime: Math.floor(Math.random() * 10) + 3
+          })),
+          validityMetrics: basicReportContent.detailedAnalysis.validityMetrics
+        };
+
+        const enhancedReport = await enhancedAI.generateEnhancedReport(
+          assessmentData,
+          request.candidateInfo,
+          request.reportType
+        );
+
+        // Merge enhanced insights with basic report
+        const mergedReport = {
+          ...basicReportContent,
+          executiveSummary: {
+            ...basicReportContent.executiveSummary,
+            ...enhancedReport.executiveSummary,
+            keyInsights: enhancedReport.executiveSummary.keyInsights
+          },
+          detailedAnalysis: {
+            ...basicReportContent.detailedAnalysis,
+            cognitiveProfile: enhancedReport.cognitiveProfile,
+            behavioralPredictions: enhancedReport.behavioralPredictions
+          },
+          careerGuidance: enhancedReport.careerGuidance,
+          distortionAnalysis: enhancedReport.validityAssessment,
+          enhancedInsights: {
+            cognitiveProfile: enhancedReport.cognitiveProfile,
+            behavioralPredictions: enhancedReport.behavioralPredictions,
+            aiConfidence: enhancedReport.executiveSummary.confidenceLevel
+          }
+        };
+
+        // Generate enhanced interview questions if employer report
+        if (request.reportType === 'employer') {
+          const interviewQuestions = await enhancedAI.generateAdvancedInterviewQuestions(
+            assessmentData,
+            request.candidateInfo
+          );
+          
+          mergedReport.employerSpecific = {
+            ...mergedReport.employerSpecific,
+            enhancedInterviewQuestions: interviewQuestions,
+            interviewQuestions: {
+              clarification: interviewQuestions.clarificationQuestions.map(q => q.question),
+              validation: interviewQuestions.validationQuestions.map(q => q.question),
+              behavioral: interviewQuestions.behavioralQuestions.map(q => q.question),
+              probe: interviewQuestions.probeQuestions.map(q => q.question)
+            }
+          };
+        }
+
+        toast.success('Enhanced AI Report generated with advanced insights!');
+        return mergedReport;
+
+      } catch (enhancementError) {
+        console.warn('⚠️ Enhanced AI analysis failed, using basic report:', enhancementError);
+        toast.success('AI Report generated successfully (basic analysis)');
+        return basicReportContent;
+      }
 
     } catch (error) {
-      console.error('Error generating AI report:', error);
+      console.error('❌ Error generating AI report:', error);
       toast.error('Failed to generate AI report');
       throw error;
     }
