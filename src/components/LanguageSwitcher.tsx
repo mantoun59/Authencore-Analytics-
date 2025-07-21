@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Globe } from 'lucide-react';
 import {
@@ -21,16 +21,32 @@ const LanguageSwitcher: React.FC = () => {
 
   const changeLanguage = (languageCode: string) => {
     i18n.changeLanguage(languageCode);
+    updateDocumentLanguage(languageCode);
+  };
+
+  const updateDocumentLanguage = (languageCode: string) => {
+    const isRTL = languageCode === 'ar';
     
-    // Handle RTL for Arabic
-    if (languageCode === 'ar') {
-      document.documentElement.setAttribute('dir', 'rtl');
-      document.documentElement.setAttribute('lang', 'ar');
+    // Set document direction and language
+    document.documentElement.dir = isRTL ? 'rtl' : 'ltr';
+    document.documentElement.lang = languageCode;
+    
+    // Add language class to body for additional styling
+    document.body.className = document.body.className.replace(/\blang-\w+\b/g, '');
+    document.body.classList.add(`lang-${languageCode}`);
+    
+    // Add Arabic-specific class for enhanced styling
+    if (isRTL) {
+      document.body.classList.add('rtl');
     } else {
-      document.documentElement.setAttribute('dir', 'ltr');
-      document.documentElement.setAttribute('lang', languageCode);
+      document.body.classList.remove('rtl');
     }
   };
+
+  // Initialize language settings on mount
+  useEffect(() => {
+    updateDocumentLanguage(i18n.language);
+  }, [i18n.language]);
 
   const currentLanguage = languages.find(lang => lang.code === i18n.language) || languages[0];
 
