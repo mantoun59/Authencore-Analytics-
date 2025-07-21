@@ -184,9 +184,9 @@ const CareerLaunchDescription = () => {
                   </p>
                 </div>
                 <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🎯 Instant Results</h4>
+                  <h4 className="font-semibold mb-2">🚀 Career Breakthrough</h4>
                   <p className="text-sm text-muted-foreground">
-                    Receive your comprehensive PDF reports immediately upon completion.
+                    Unlock your potential with personalized career pathways and actionable insights.
                   </p>
                 </div>
               </div>

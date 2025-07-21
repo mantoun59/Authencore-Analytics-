@@ -179,9 +179,9 @@ const BurnoutPreventionDescription = () => {
                   </p>
                 </div>
                 <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">⚡ Instant Results</h4>
+                  <h4 className="font-semibold mb-2">🛡️ Proactive Protection</h4>
                   <p className="text-sm text-muted-foreground">
-                    Receive actionable insights and prevention strategies immediately upon completion.
+                    Build resilience before burnout strikes with personalized prevention strategies.
                   </p>
                 </div>
               </div>
