@@ -1,0 +1,167 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "submit": "Enviar",
+    "cancel": "Cancelar",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "save": "Guardar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "yes": "Sí",
+    "no": "No",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "phone": "Teléfono",
+    "address": "Dirección",
+    "age": "Edad",
+    "gender": "Género",
+    "male": "Masculino",
+    "female": "Femenino",
+    "other": "Otro",
+    "selectLanguage": "Seleccionar idioma"
+  },
+  "navigation": {
+    "home": "Inicio",
+    "about": "Acerca de",
+    "assessments": "Evaluaciones",
+    "partnerEmployer": "Socio/Empleador",
+    "admin": "Administrador",
+    "signIn": "Iniciar sesión",
+    "signUp": "Registrarse",
+    "signOut": "Cerrar sesión",
+    "dashboard": "Panel de control"
+  },
+  "hero": {
+    "title": "Psicometría Avanzada Impulsada por IA",
+    "subtitle": "Evaluaciones profesionales de clase mundial con análisis profundo e informes instantáneos",
+    "getStarted": "Comenzar",
+    "learnMore": "Saber más",
+    "tagline": "Leyendo mentes, moldeando el futuro"
+  },
+  "features": {
+    "title": "Características Principales",
+    "subtitle": "Herramientas de evaluación integral para el desarrollo profesional moderno",
+    "aiPowered": {
+      "title": "Análisis Impulsado por IA",
+      "description": "Algoritmos avanzados de aprendizaje automático proporcionan insights profundos y recomendaciones personalizadas."
+    },
+    "realTime": {
+      "title": "Informes en Tiempo Real",
+      "description": "Informes instantáneos y detallados generados inmediatamente después de completar la evaluación."
+    },
+    "comprehensive": {
+      "title": "Evaluaciones Integrales",
+      "description": "Amplia gama de evaluaciones psicométricas validadas científicamente para diversos propósitos."
+    },
+    "secure": {
+      "title": "Seguro y Privado",
+      "description": "Cifrado de nivel empresarial y estrictas políticas de privacidad protegen todos los datos del usuario."
+    }
+  },
+  "assessments": {
+    "title": "Nuestras Evaluaciones",
+    "subtitle": "Evaluaciones psicométricas validadas científicamente",
+    "takeAssessment": "Tomar Evaluación",
+    "learnMore": "Saber más",
+    "duration": "Duración",
+    "minutes": "minutos",
+    "careerLaunch": {
+      "title": "Lanzamiento de Carrera",
+      "description": "Evaluación integral para profesionales jóvenes que ingresan al mercado laboral.",
+      "duration": "25-30"
+    },
+    "culturalIntelligence": {
+      "title": "Inteligencia Cultural (CAIR)",
+      "description": "Evalúa la capacidad de trabajar efectivamente en entornos culturalmente diversos.",
+      "duration": "20-25"
+    },
+    "communication": {
+      "title": "Estilos de Comunicación",
+      "description": "Identifica patrones de comunicación y preferencias de estilo personal.",
+      "duration": "15-20"
+    },
+    "emotionalIntelligence": {
+      "title": "Inteligencia Emocional",
+      "description": "Mide la capacidad de entender y gestionar emociones efectivamente.",
+      "duration": "20-25"
+    },
+    "leadership": {
+      "title": "Liderazgo Auténtico",
+      "description": "Evalúa el potencial y estilo de liderazgo auténtico.",
+      "duration": "25-30"
+    },
+    "stressResilience": {
+      "title": "Resistencia al Estrés",
+      "description": "Evalúa la capacidad de manejar el estrés y la resiliencia en el lugar de trabajo.",
+      "duration": "15-20"
+    },
+    "genZ": {
+      "title": "Lugar de Trabajo Gen Z",
+      "description": "Evaluación especializada para entender las preferencias laborales de la Generación Z.",
+      "duration": "20-25"
+    },
+    "digitalWellness": {
+      "title": "Bienestar Digital",
+      "description": "Evalúa los hábitos digitales y el equilibrio vida-trabajo en la era digital.",
+      "duration": "15-20"
+    },
+    "faithValues": {
+      "title": "Fe y Valores",
+      "description": "Explora la alineación entre valores personales y fe en el contexto profesional.",
+      "duration": "30-35"
+    }
+  },
+  "about": {
+    "title": "Acerca de AuthenCore Analytics",
+    "subtitle": "Pioneros en evaluación psicométrica moderna",
+    "mission": "Nuestra Misión",
+    "missionText": "Revolucionar la evaluación del talento a través de la ciencia psicométrica avanzada y la inteligencia artificial.",
+    "vision": "Nuestra Visión",
+    "visionText": "Un mundo donde cada individuo alcance su máximo potencial a través de insights precisos y desarrollo personalizado.",
+    "values": "Nuestros Valores",
+    "valuesText": "Integridad científica, innovación, privacidad del usuario y desarrollo ético del talento."
+  },
+  "footer": {
+    "company": "Empresa",
+    "about": "Acerca de",
+    "careers": "Carreras",
+    "contact": "Contacto",
+    "resources": "Recursos",
+    "documentation": "Documentación",
+    "support": "Soporte",
+    "community": "Comunidad",
+    "legal": "Legal",
+    "privacy": "Privacidad",
+    "terms": "Términos",
+    "cookies": "Cookies",
+    "rightsReserved": "Todos los derechos reservados.",
+    "tagline": "Evaluaciones psicométricas de próxima generación impulsadas por IA"
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "confirmPassword": "Confirmar Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "noAccount": "¿No tienes cuenta?",
+    "hasAccount": "¿Ya tienes cuenta?",
+    "signInWithGoogle": "Iniciar sesión con Google",
+    "signUpWithGoogle": "Registrarse con Google"
+  },
+  "errors": {
+    "generic": "Algo salió mal. Por favor, inténtalo de nuevo.",
+    "network": "Error de red. Verifica tu conexión.",
+    "validation": "Por favor, completa todos los campos requeridos.",
+    "authentication": "Error de autenticación. Verifica tus credenciales."
+  },
+  "success": {
+    "saved": "Guardado exitosamente",
+    "submitted": "Enviado exitosamente",
+    "updated": "Actualizado exitosamente",
+    "deleted": "Eliminado exitosamente"
+  }
+}

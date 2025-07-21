@@ -1,11 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Brain, TrendingUp, Shield, Users, BarChart3, Award } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import businessTeamImage from "@/assets/business-team-analytics.jpg";
 import professionalAssessmentImage from "@/assets/professional-assessment.jpg";
 import TextLogo from "@/components/TextLogo";
 
 const Hero = () => {
+  const { t } = useTranslation();
+
   return (
     <section className="relative min-h-screen flex items-center bg-gradient-to-br from-background via-background to-primary/5">
       {/* Background Pattern */}
@@ -18,7 +21,7 @@ const Hero = () => {
             {/* Badge */}
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
               <Brain className="w-4 h-4 text-primary mr-2" />
-              <span className="text-sm font-medium text-primary">Professional Psychological Assessments</span>
+              <span className="text-sm font-medium text-primary">{t("hero.title")}</span>
             </div>
 
             {/* Company Logo */}
@@ -28,27 +31,25 @@ const Hero = () => {
 
             {/* Main heading */}
             <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-              Welcome to<br />
-              <span className="text-primary">Authencore Analytics</span>
+              {t("hero.title")}
             </h1>
             
             {/* Subtitle */}
             <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
-              Professional psychological assessment platform offering scientifically validated tests 
-              to help individuals and organizations understand personality, aptitude, and behavioral patterns.
+              {t("hero.subtitle")}
             </p>
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/assessment">
                 <Button size="lg" className="bg-primary hover:bg-primary/90 group">
-                  Start Assessment
+                  {t("hero.getStarted")}
                   <TrendingUp className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link to="/about">
                 <Button variant="outline" size="lg">
-                  Learn More
+                  {t("hero.learnMore")}
                 </Button>
               </Link>
             </div>

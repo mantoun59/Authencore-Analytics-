@@ -3,18 +3,21 @@ import { Menu, X, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useTranslation } from "react-i18next";
 import TextLogo from "@/components/TextLogo";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { user, signOut, loading } = useAuth();
+  const { t } = useTranslation();
 
   const navigation = [
-    { name: "Home", href: "/" },
-    { name: "About", href: "/about" },
-    { name: "Assessments", href: "/assessment" },
-    { name: "Partner/Employer", href: "/partner-login" },
-    { name: "Admin", href: "/admin" },
+    { name: t("navigation.home"), href: "/" },
+    { name: t("navigation.about"), href: "/about" },
+    { name: t("navigation.assessments"), href: "/assessment" },
+    { name: t("navigation.partnerEmployer"), href: "/partner-login" },
+    { name: t("navigation.admin"), href: "/admin" },
   ];
 
   return (
@@ -52,7 +55,8 @@ const Header = () => {
             </nav>
 
             {/* Desktop Actions */}
-            <div className="hidden md:flex space-x-3">
+            <div className="hidden md:flex items-center space-x-3">
+              <LanguageSwitcher />
               {loading ? (
                 <div className="w-32 h-8 bg-muted animate-pulse rounded"></div>
               ) : user ? (
@@ -65,7 +69,7 @@ const Header = () => {
                     variant="outline"
                     onClick={() => signOut()}
                   >
-                    Sign Out
+                    {t("navigation.signOut")}
                   </Button>
                 </div>
               ) : null}
@@ -108,6 +112,9 @@ const Header = () => {
                   )
                 ))}
                 <div className="flex flex-col space-y-3 pt-4">
+                  <div className="px-3">
+                    <LanguageSwitcher />
+                  </div>
                   {user ? (
                     <>
                       <div className="flex items-center space-x-2 text-foreground px-3 py-2">
@@ -121,7 +128,7 @@ const Header = () => {
                           setIsMenuOpen(false);
                         }}
                       >
-                        Sign Out
+                        {t("navigation.signOut")}
                       </Button>
                     </>
                   ) : null}
