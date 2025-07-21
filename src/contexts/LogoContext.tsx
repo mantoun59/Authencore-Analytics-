@@ -174,13 +174,12 @@ export const LogoProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   // Load saved logo preference from localStorage
   useEffect(() => {
-    const savedLogoId = localStorage.getItem('selectedLogo');
-    const savedUseTextLogo = localStorage.getItem('useTextLogo');
-    
-    if (savedLogoId && logoOptions.find(logo => logo.id === savedLogoId)) {
-      setSelectedLogoId(savedLogoId);
-      setUseTextLogo(savedUseTextLogo === 'true');
-    }
+    // Clear any existing saved logo to force new default
+    localStorage.removeItem('selectedLogo');
+    localStorage.removeItem('useTextLogo');
+    // Set the new default
+    localStorage.setItem('selectedLogo', 'custom-new');
+    localStorage.setItem('useTextLogo', 'false');
   }, []);
 
   const setSelectedLogo = (logoId: string) => {

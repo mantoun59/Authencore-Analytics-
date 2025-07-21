@@ -4,7 +4,7 @@ import { Brain, TrendingUp, Shield, Users, BarChart3, Award } from "lucide-react
 import { useTranslation } from "react-i18next";
 import businessTeamImage from "@/assets/business-team-analytics.jpg";
 import professionalAssessmentImage from "@/assets/professional-assessment.jpg";
-import TextLogo from "@/components/TextLogo";
+import LogoDisplay from "@/components/LogoDisplay";
 
 const Hero = () => {
   const { t } = useTranslation();
@@ -26,7 +26,7 @@ const Hero = () => {
 
             {/* Company Logo */}
             <div className="flex justify-center mb-6">
-              <TextLogo size="lg" showTagline={true} className="text-center" />
+              <LogoDisplay size="lg" showTagline={true} className="text-center" />
             </div>
 
             {/* Main heading */}

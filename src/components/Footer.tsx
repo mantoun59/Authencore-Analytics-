@@ -1,6 +1,6 @@
 import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import TextLogo from "@/components/TextLogo";
+import LogoDisplay from "@/components/LogoDisplay";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Footer = () => {
           {/* Left Section - Company Info */}
           <div className="space-y-6">
             <div className="mb-4">
-              <TextLogo size="sm" showTagline={true} />
+              <LogoDisplay size="sm" showTagline={true} />
             </div>
             <p className="text-sm text-foreground mb-4">
               Measuring Minds. Shaping Futures.
