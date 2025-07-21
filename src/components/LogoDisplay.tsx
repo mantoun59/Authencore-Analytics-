@@ -14,22 +14,22 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
 }) => {
   const { selectedLogo } = useLogo();
 
-  // Size mapping for images - navbar optimized
+  // Size mapping for images - updated for header
   const sizeClasses = {
     sm: 'h-8',
-    md: 'w-[180px] h-auto',
+    md: 'h-14 w-auto max-w-[180px]',
     lg: 'w-[180px] h-auto'
   };
 
   return (
-    <div className={`flex flex-col items-start ${className}`}>
+    <div className={`flex items-center ${className}`}>
       <img 
         src={selectedLogo.image} 
         alt="AuthenCore Analytics"
         className={`${sizeClasses[size]} object-contain`}
       />
       {showTagline && (
-        <p className={`text-foreground/70 italic mt-1 ${
+        <p className={`text-foreground/70 italic mt-1 ml-2 ${
           size === 'lg' ? 'text-lg' : 
           size === 'md' ? 'text-base' : 
           'text-sm'
