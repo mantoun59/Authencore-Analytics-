@@ -29,6 +29,12 @@ export interface LogoOption {
 
 export const logoOptions: LogoOption[] = [
   {
+    id: 'custom-main',
+    name: 'AuthenCore Analytics Official',
+    style: 'Official brand logo with tagline',
+    image: '/lovable-uploads/3d190ec3-d9ff-4d6f-802d-dbf60e262f52.png'
+  },
+  {
     id: 'gen-1',
     name: 'Minimalist Geometric',
     style: 'Modern minimalist with navy and gold',
@@ -149,8 +155,8 @@ interface LogoContextType {
 const LogoContext = createContext<LogoContextType | undefined>(undefined);
 
 export const LogoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [selectedLogoId, setSelectedLogoId] = useState<string | null>(null);
-  const [useTextLogo, setUseTextLogo] = useState<boolean>(true);
+  const [selectedLogoId, setSelectedLogoId] = useState<string | null>('custom-main');
+  const [useTextLogo, setUseTextLogo] = useState<boolean>(false);
 
   // Load saved logo preference from localStorage
   useEffect(() => {
