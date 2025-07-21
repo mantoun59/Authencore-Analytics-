@@ -1,0 +1,167 @@
+{
+  "common": {
+    "loading": "Chargement...",
+    "submit": "Soumettre",
+    "cancel": "Annuler",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "save": "Enregistrer",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "close": "Fermer",
+    "yes": "Oui",
+    "no": "Non",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "name": "Nom",
+    "phone": "Téléphone",
+    "address": "Adresse",
+    "age": "Âge",
+    "gender": "Genre",
+    "male": "Masculin",
+    "female": "Féminin",
+    "other": "Autre",
+    "selectLanguage": "Sélectionner la langue"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "assessments": "Évaluations",
+    "partnerEmployer": "Partenaire/Employeur",
+    "admin": "Administrateur",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "signOut": "Se déconnecter",
+    "dashboard": "Tableau de bord"
+  },
+  "hero": {
+    "title": "Psychométrie Avancée Alimentée par l'IA",
+    "subtitle": "Évaluations professionnelles de classe mondiale avec analyse approfondie et rapports instantanés",
+    "getStarted": "Commencer",
+    "learnMore": "En savoir plus",
+    "tagline": "Lire les esprits, façonner l'avenir"
+  },
+  "features": {
+    "title": "Caractéristiques Principales",
+    "subtitle": "Outils d'évaluation complets pour le développement professionnel moderne",
+    "aiPowered": {
+      "title": "Analyse Alimentée par l'IA",
+      "description": "Les algorithmes avancés d'apprentissage automatique fournissent des insights profonds et des recommandations personnalisées."
+    },
+    "realTime": {
+      "title": "Rapports en Temps Réel",
+      "description": "Rapports instantanés et détaillés générés immédiatement après l'achèvement de l'évaluation."
+    },
+    "comprehensive": {
+      "title": "Évaluations Complètes",
+      "description": "Large gamme d'évaluations psychométriques scientifiquement validées pour divers objectifs."
+    },
+    "secure": {
+      "title": "Sécurisé et Privé",
+      "description": "Chiffrement de niveau entreprise et politiques de confidentialité strictes protègent toutes les données utilisateur."
+    }
+  },
+  "assessments": {
+    "title": "Nos Évaluations",
+    "subtitle": "Évaluations psychométriques scientifiquement validées",
+    "takeAssessment": "Passer l'Évaluation",
+    "learnMore": "En savoir plus",
+    "duration": "Durée",
+    "minutes": "minutes",
+    "careerLaunch": {
+      "title": "Lancement de Carrière",
+      "description": "Évaluation complète pour les jeunes professionnels entrant sur le marché du travail.",
+      "duration": "25-30"
+    },
+    "culturalIntelligence": {
+      "title": "Intelligence Culturelle (CAIR)",
+      "description": "Évalue la capacité à travailler efficacement dans des environnements culturellement diversifiés.",
+      "duration": "20-25"
+    },
+    "communication": {
+      "title": "Styles de Communication",
+      "description": "Identifie les modèles de communication et les préférences de style personnel.",
+      "duration": "15-20"
+    },
+    "emotionalIntelligence": {
+      "title": "Intelligence Émotionnelle",
+      "description": "Mesure la capacité à comprendre et gérer les émotions efficacement.",
+      "duration": "20-25"
+    },
+    "leadership": {
+      "title": "Leadership Authentique",
+      "description": "Évalue le potentiel et le style de leadership authentique.",
+      "duration": "25-30"
+    },
+    "stressResilience": {
+      "title": "Résilience au Stress",
+      "description": "Évalue la capacité à gérer le stress et la résilience au travail.",
+      "duration": "15-20"
+    },
+    "genZ": {
+      "title": "Lieu de Travail Génération Z",
+      "description": "Évaluation spécialisée pour comprendre les préférences de travail de la Génération Z.",
+      "duration": "20-25"
+    },
+    "digitalWellness": {
+      "title": "Bien-être Numérique",
+      "description": "Évalue les habitudes numériques et l'équilibre travail-vie à l'ère numérique.",
+      "duration": "15-20"
+    },
+    "faithValues": {
+      "title": "Foi et Valeurs",
+      "description": "Explore l'alignement entre les valeurs personnelles et la foi dans le contexte professionnel.",
+      "duration": "30-35"
+    }
+  },
+  "about": {
+    "title": "À propos d'AuthenCore Analytics",
+    "subtitle": "Pionniers de l'évaluation psychométrique moderne",
+    "mission": "Notre Mission",
+    "missionText": "Révolutionner l'évaluation des talents grâce à la science psychométrique avancée et l'intelligence artificielle.",
+    "vision": "Notre Vision",
+    "visionText": "Un monde où chaque individu atteint son plein potentiel grâce à des insights précis et un développement personnalisé.",
+    "values": "Nos Valeurs",
+    "valuesText": "Intégrité scientifique, innovation, confidentialité de l'utilisateur et développement éthique des talents."
+  },
+  "footer": {
+    "company": "Entreprise",
+    "about": "À propos",
+    "careers": "Carrières",
+    "contact": "Contact",
+    "resources": "Ressources",
+    "documentation": "Documentation",
+    "support": "Support",
+    "community": "Communauté",
+    "legal": "Légal",
+    "privacy": "Confidentialité",
+    "terms": "Conditions",
+    "cookies": "Cookies",
+    "rightsReserved": "Tous droits réservés.",
+    "tagline": "Évaluations psychométriques de nouvelle génération alimentées par l'IA"
+  },
+  "auth": {
+    "signIn": "Se Connecter",
+    "signUp": "S'Inscrire",
+    "email": "E-mail",
+    "password": "Mot de Passe",
+    "confirmPassword": "Confirmer le Mot de Passe",
+    "forgotPassword": "Mot de passe oublié ?",
+    "noAccount": "Vous n'avez pas de compte ?",
+    "hasAccount": "Vous avez déjà un compte ?",
+    "signInWithGoogle": "Se connecter avec Google",
+    "signUpWithGoogle": "S'inscrire avec Google"
+  },
+  "errors": {
+    "generic": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "network": "Erreur réseau. Vérifiez votre connexion.",
+    "validation": "Veuillez remplir tous les champs obligatoires.",
+    "authentication": "Erreur d'authentification. Vérifiez vos identifiants."
+  },
+  "success": {
+    "saved": "Enregistré avec succès",
+    "submitted": "Soumis avec succès",
+    "updated": "Mis à jour avec succès",
+    "deleted": "Supprimé avec succès"
+  }
+}

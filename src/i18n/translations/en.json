@@ -1,0 +1,167 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "next": "Next",
+    "previous": "Previous",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "phone": "Phone",
+    "address": "Address",
+    "age": "Age",
+    "gender": "Gender",
+    "male": "Male",
+    "female": "Female",
+    "other": "Other",
+    "selectLanguage": "Select Language"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "assessments": "Assessments",
+    "partnerEmployer": "Partner/Employer",
+    "admin": "Admin",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "dashboard": "Dashboard"
+  },
+  "hero": {
+    "title": "Advanced AI-Powered Psychometrics",
+    "subtitle": "World-class professional assessments with deep analysis and instant reporting",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "tagline": "Reading minds, shaping futures"
+  },
+  "features": {
+    "title": "Key Features",
+    "subtitle": "Comprehensive assessment tools for modern professional development",
+    "aiPowered": {
+      "title": "AI-Powered Analysis",
+      "description": "Advanced machine learning algorithms provide deep insights and personalized recommendations."
+    },
+    "realTime": {
+      "title": "Real-Time Reporting",
+      "description": "Instant, detailed reports generated immediately upon assessment completion."
+    },
+    "comprehensive": {
+      "title": "Comprehensive Assessments",
+      "description": "Wide range of scientifically validated psychometric assessments for various purposes."
+    },
+    "secure": {
+      "title": "Secure & Private",
+      "description": "Enterprise-grade encryption and strict privacy policies protect all user data."
+    }
+  },
+  "assessments": {
+    "title": "Our Assessments",
+    "subtitle": "Scientifically validated psychometric evaluations",
+    "takeAssessment": "Take Assessment",
+    "learnMore": "Learn More",
+    "duration": "Duration",
+    "minutes": "minutes",
+    "careerLaunch": {
+      "title": "Career Launch",
+      "description": "Comprehensive assessment for young professionals entering the workforce.",
+      "duration": "25-30"
+    },
+    "culturalIntelligence": {
+      "title": "Cultural Intelligence (CAIR)",
+      "description": "Evaluates ability to work effectively in culturally diverse environments.",
+      "duration": "20-25"
+    },
+    "communication": {
+      "title": "Communication Styles",
+      "description": "Identifies communication patterns and personal style preferences.",
+      "duration": "15-20"
+    },
+    "emotionalIntelligence": {
+      "title": "Emotional Intelligence",
+      "description": "Measures ability to understand and manage emotions effectively.",
+      "duration": "20-25"
+    },
+    "leadership": {
+      "title": "Authentic Leadership",
+      "description": "Assesses authentic leadership potential and style.",
+      "duration": "25-30"
+    },
+    "stressResilience": {
+      "title": "Stress Resilience",
+      "description": "Evaluates ability to handle stress and workplace resilience.",
+      "duration": "15-20"
+    },
+    "genZ": {
+      "title": "Gen Z Workplace",
+      "description": "Specialized assessment for understanding Generation Z workplace preferences.",
+      "duration": "20-25"
+    },
+    "digitalWellness": {
+      "title": "Digital Wellness",
+      "description": "Assesses digital habits and work-life balance in the digital age.",
+      "duration": "15-20"
+    },
+    "faithValues": {
+      "title": "Faith & Values",
+      "description": "Explores alignment between personal values and faith in professional context.",
+      "duration": "30-35"
+    }
+  },
+  "about": {
+    "title": "About AuthenCore Analytics",
+    "subtitle": "Pioneers in modern psychometric assessment",
+    "mission": "Our Mission",
+    "missionText": "To revolutionize talent assessment through advanced psychometric science and artificial intelligence.",
+    "vision": "Our Vision",
+    "visionText": "A world where every individual reaches their full potential through accurate insights and personalized development.",
+    "values": "Our Values",
+    "valuesText": "Scientific integrity, innovation, user privacy, and ethical talent development."
+  },
+  "footer": {
+    "company": "Company",
+    "about": "About",
+    "careers": "Careers",
+    "contact": "Contact",
+    "resources": "Resources",
+    "documentation": "Documentation",
+    "support": "Support",
+    "community": "Community",
+    "legal": "Legal",
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "cookies": "Cookies",
+    "rightsReserved": "All rights reserved.",
+    "tagline": "Next-generation AI-powered psychometric assessments"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "forgotPassword": "Forgot your password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "signInWithGoogle": "Sign in with Google",
+    "signUpWithGoogle": "Sign up with Google"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "network": "Network error. Check your connection.",
+    "validation": "Please complete all required fields.",
+    "authentication": "Authentication error. Check your credentials."
+  },
+  "success": {
+    "saved": "Successfully saved",
+    "submitted": "Successfully submitted",
+    "updated": "Successfully updated",
+    "deleted": "Successfully deleted"
+  }
+}
