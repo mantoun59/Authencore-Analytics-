@@ -35,7 +35,7 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
         className={`${sizeClasses[size]} object-contain`}
       />
       {showTagline && (
-        <p className={`text-foreground/70 italic text-xs mt-1 ${size === 'lg' ? 'text-sm' : ''}`}>
+        <p className={`text-foreground/70 italic text-sm mt-1 ${size === 'lg' ? 'text-base' : ''}`}>
           Reading minds, shaping future
         </p>
       )}

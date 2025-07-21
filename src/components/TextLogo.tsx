@@ -18,9 +18,9 @@ const TextLogo: React.FC<TextLogoProps> = ({
   };
 
   const taglineSizes = {
-    sm: 'text-xs',
-    md: 'text-sm', 
-    lg: 'text-base'
+    sm: 'text-sm',
+    md: 'text-base', 
+    lg: 'text-lg'
   };
 
   return (
