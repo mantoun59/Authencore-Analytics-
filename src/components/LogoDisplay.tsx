@@ -20,11 +20,11 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
     return <TextLogo size={size} showTagline={showTagline} className={className} />;
   }
 
-  // Size mapping for images - making main logo 200px
+  // Size mapping for images - navbar optimized
   const sizeClasses = {
     sm: 'h-8',
-    md: 'w-[200px] h-auto',
-    lg: 'w-[250px] h-auto'
+    md: 'w-[120px] h-auto',
+    lg: 'w-[180px] h-auto'
   };
 
   return (
