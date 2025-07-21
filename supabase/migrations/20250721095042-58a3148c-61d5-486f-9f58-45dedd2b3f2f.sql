@@ -1,0 +1,1 @@
+SELECT public.assign_admin_role('marounantoun@gmail.com');
