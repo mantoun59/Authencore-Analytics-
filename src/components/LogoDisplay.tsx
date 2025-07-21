@@ -16,8 +16,8 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
 
   // Size mapping for images - navbar optimized
   const sizeClasses = {
-    sm: 'h-6',
-    md: 'h-10',
+    sm: 'h-8',
+    md: 'w-[180px] h-auto',
     lg: 'w-[180px] h-auto'
   };
 
