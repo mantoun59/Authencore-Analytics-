@@ -16,8 +16,8 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
 
   // Size mapping for images - navbar optimized
   const sizeClasses = {
-    sm: 'h-8',
-    md: 'w-[120px] h-auto',
+    sm: 'h-6',
+    md: 'h-10',
     lg: 'w-[180px] h-auto'
   };
 
@@ -29,7 +29,11 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
         className={`${sizeClasses[size]} object-contain`}
       />
       {showTagline && (
-        <p className={`text-foreground/70 italic text-sm mt-1 ${size === 'lg' ? 'text-base' : ''}`}>
+        <p className={`text-foreground/70 italic mt-1 ${
+          size === 'lg' ? 'text-lg' : 
+          size === 'md' ? 'text-base' : 
+          'text-sm'
+        }`}>
           Reading minds, shaping future
         </p>
       )}

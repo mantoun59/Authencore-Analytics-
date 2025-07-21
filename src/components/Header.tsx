@@ -28,8 +28,8 @@ const Header = () => {
           <div className="flex items-center justify-between h-24">
         <div className="flex items-center">
           <Link to="/" className="flex items-center">
-            <LogoDisplay size="md" showTagline={false} className="hidden md:block" />
-            <LogoDisplay size="sm" showTagline={false} className="md:hidden" />
+            <LogoDisplay size="md" showTagline={true} className="hidden md:block" />
+            <LogoDisplay size="sm" showTagline={true} className="md:hidden" />
           </Link>
         </div>
             {/* Desktop Navigation */}
