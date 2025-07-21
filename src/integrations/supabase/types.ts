@@ -788,6 +788,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assign_admin_role: {
+        Args: { p_email: string }
+        Returns: undefined
+      }
       authenticate_employer: {
         Args: { p_email: string; p_password: string }
         Returns: {
