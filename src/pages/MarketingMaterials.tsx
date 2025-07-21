@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useToast } from '@/hooks/use-toast';
+import jsPDF from 'jspdf';
 
 // Import marketing materials
 import marketingBrochure from '@/assets/marketing-brochure-cover.jpg';
@@ -70,19 +71,279 @@ const marketingMaterials: MarketingMaterial[] = [
 const MarketingMaterials: React.FC = () => {
   const { toast } = useToast();
 
-  const handleDownload = (material: MarketingMaterial) => {
-    // Create a download link for the image
-    const link = document.createElement('a');
-    link.href = material.image;
-    link.download = `${material.title.replace(/\s+/g, '-').toLowerCase()}.${material.format.toLowerCase()}`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+  const generateCompanyBrochure = () => {
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(24);
+    doc.setTextColor(41, 128, 185);
+    doc.text('AuthenCore Analytics', 20, 30);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(128, 128, 128);
+    doc.text('Reading minds, shaping future', 20, 40);
+    
+    // Content sections
+    doc.setFontSize(18);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Company Overview', 20, 60);
+    
+    doc.setFontSize(12);
+    doc.text('AuthenCore Analytics is a leading provider of professional psychometric', 20, 75);
+    doc.text('assessments and analytics solutions. We specialize in comprehensive', 20, 85);
+    doc.text('psychological evaluations for individuals and organizations.', 20, 95);
+    
+    doc.text('Our Services:', 20, 115);
+    doc.text('• Professional Psychometric Assessments', 25, 125);
+    doc.text('• Career Launch Assessments', 25, 135);
+    doc.text('• Emotional Intelligence Evaluations', 25, 145);
+    doc.text('• Leadership and Communication Style Analysis', 25, 155);
+    doc.text('• Burnout Prevention Programs', 25, 165);
+    doc.text('• Digital Wellness Assessments', 25, 175);
+    
+    doc.text('Why Choose AuthenCore Analytics?', 20, 195);
+    doc.text('✓ Scientifically validated assessments', 25, 205);
+    doc.text('✓ Professional-grade reporting', 25, 215);
+    doc.text('✓ Secure and confidential processing', 25, 225);
+    doc.text('✓ Immediate results and insights', 25, 235);
+    doc.text('✓ Comprehensive analytics dashboard', 25, 245);
+    
+    // Footer
+    doc.setFontSize(10);
+    doc.setTextColor(128, 128, 128);
+    doc.text('© 2024 AuthenCore Analytics. All rights reserved.', 20, 280);
+    doc.text('Professional Assessment Solutions | www.authencore-analytics.com', 20, 290);
+    
+    return doc;
+  };
 
-    toast({
-      title: "Download Started",
-      description: `${material.title} is being downloaded.`,
-    });
+  const generateProductSheet = () => {
+    const doc = new jsPDF();
+    
+    // Header
+    doc.setFontSize(20);
+    doc.setTextColor(41, 128, 185);
+    doc.text('Assessment Products & Services', 20, 30);
+    
+    // Product 1
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Career Launch Assessment', 20, 50);
+    doc.setFontSize(11);
+    doc.text('Comprehensive career readiness evaluation measuring key workplace', 20, 60);
+    doc.text('competencies, personality traits, and professional development areas.', 20, 68);
+    doc.text('• Duration: 45-60 minutes', 25, 78);
+    doc.text('• Detailed PDF reports with recommendations', 25, 86);
+    doc.text('• Suitable for: Job seekers, recent graduates, career changers', 25, 94);
+    
+    // Product 2
+    doc.setFontSize(16);
+    doc.text('Emotional Intelligence Assessment', 20, 110);
+    doc.setFontSize(11);
+    doc.text('Measures emotional awareness, regulation, and interpersonal skills', 20, 120);
+    doc.text('essential for workplace success and personal development.', 20, 128);
+    doc.text('• Duration: 30-40 minutes', 25, 138);
+    doc.text('• EQ scores across 4 key domains', 25, 146);
+    doc.text('• Development recommendations included', 25, 154);
+    
+    // Product 3
+    doc.setFontSize(16);
+    doc.text('Leadership Style Assessment', 20, 170);
+    doc.setFontSize(11);
+    doc.text('Identifies leadership strengths, communication preferences, and', 20, 180);
+    doc.text('management style to enhance team effectiveness.', 20, 188);
+    doc.text('• Duration: 35-45 minutes', 25, 198);
+    doc.text('• 360-degree feedback integration available', 25, 206);
+    doc.text('• Team dynamics analysis', 25, 214);
+    
+    // Enterprise Solutions
+    doc.setFontSize(16);
+    doc.setTextColor(41, 128, 185);
+    doc.text('Enterprise Solutions', 20, 235);
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text('• Bulk assessment packages with volume discounts', 25, 245);
+    doc.text('• Custom branding and white-label options', 25, 253);
+    doc.text('• API integration for HRIS systems', 25, 261);
+    doc.text('• Dedicated account management', 25, 269);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(128, 128, 128);
+    doc.text('Contact us for pricing and custom solutions: info@authencore-analytics.com', 20, 290);
+    
+    return doc;
+  };
+
+  const generateCaseStudy = () => {
+    const doc = new jsPDF();
+    
+    doc.setFontSize(20);
+    doc.setTextColor(41, 128, 185);
+    doc.text('Success Story: TechCorp Implementation', 20, 30);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Client Challenge', 20, 50);
+    doc.setFontSize(11);
+    doc.text('TechCorp, a growing software company with 200+ employees, faced', 20, 60);
+    doc.text('challenges in hiring the right talent and reducing turnover rates.', 20, 68);
+    doc.text('Their existing interview process lacked objective assessment tools.', 20, 76);
+    
+    doc.setFontSize(14);
+    doc.text('AuthenCore Solution', 20, 95);
+    doc.setFontSize(11);
+    doc.text('Implemented comprehensive assessment suite including:', 20, 105);
+    doc.text('• Career Launch Assessments for all new hires', 25, 115);
+    doc.text('• Leadership evaluations for management candidates', 25, 123);
+    doc.text('• Team compatibility analysis', 25, 131);
+    doc.text('• Custom reporting dashboard for HR team', 25, 139);
+    
+    doc.setFontSize(14);
+    doc.text('Results Achieved', 20, 158);
+    doc.setFontSize(11);
+    doc.text('Within 6 months of implementation:', 20, 168);
+    doc.text('✓ 35% reduction in employee turnover', 25, 178);
+    doc.text('✓ 40% improvement in hiring accuracy', 25, 186);
+    doc.text('✓ 25% faster onboarding process', 25, 194);
+    doc.text('✓ 90% employee satisfaction with role fit', 25, 202);
+    doc.text('✓ $50,000 annual savings in recruitment costs', 25, 210);
+    
+    doc.setFontSize(12);
+    doc.setTextColor(41, 128, 185);
+    doc.text('"AuthenCore Analytics transformed our hiring process. We now', 20, 230);
+    doc.text('make data-driven decisions and see much better outcomes."', 20, 240);
+    doc.setFontSize(10);
+    doc.setTextColor(0, 0, 0);
+    doc.text('- Sarah Johnson, HR Director, TechCorp', 20, 250);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(128, 128, 128);
+    doc.text('Ready to transform your organization? Contact us today.', 20, 280);
+    doc.text('Email: sales@authencore-analytics.com | Phone: (555) 123-4567', 20, 290);
+    
+    return doc;
+  };
+
+  const generateServicesOverview = () => {
+    const doc = new jsPDF('landscape');
+    
+    doc.setFontSize(22);
+    doc.setTextColor(41, 128, 185);
+    doc.text('AuthenCore Analytics - Complete Service Portfolio', 20, 25);
+    
+    // Column 1
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Individual Assessments', 20, 45);
+    doc.setFontSize(10);
+    doc.text('• Career Launch Assessment', 25, 55);
+    doc.text('• Emotional Intelligence', 25, 62);
+    doc.text('• Communication Styles', 25, 69);
+    doc.text('• Digital Wellness', 25, 76);
+    doc.text('• Stress & Resilience', 25, 83);
+    doc.text('• Burnout Prevention', 25, 90);
+    
+    doc.setFontSize(14);
+    doc.text('Professional Features', 20, 110);
+    doc.setFontSize(10);
+    doc.text('• Instant PDF reports', 25, 120);
+    doc.text('• Scientific validation', 25, 127);
+    doc.text('• Multiple languages', 25, 134);
+    doc.text('• Mobile-friendly interface', 25, 141);
+    doc.text('• Data security compliance', 25, 148);
+    
+    // Column 2
+    doc.setFontSize(14);
+    doc.text('Enterprise Solutions', 150, 45);
+    doc.setFontSize(10);
+    doc.text('• Bulk assessment packages', 155, 55);
+    doc.text('• Custom branding options', 155, 62);
+    doc.text('• API integrations', 155, 69);
+    doc.text('• White-label solutions', 155, 76);
+    doc.text('• Dedicated support', 155, 83);
+    doc.text('• Training programs', 155, 90);
+    
+    doc.setFontSize(14);
+    doc.text('Analytics & Reporting', 150, 110);
+    doc.setFontSize(10);
+    doc.text('• Comprehensive dashboards', 155, 120);
+    doc.text('• Trend analysis', 155, 127);
+    doc.text('• Benchmark comparisons', 155, 134);
+    doc.text('• Export capabilities', 155, 141);
+    doc.text('• Real-time insights', 155, 148);
+    
+    // Bottom section
+    doc.setFontSize(16);
+    doc.setTextColor(41, 128, 185);
+    doc.text('Industry Applications', 20, 175);
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Healthcare | Education | Technology | Finance | Manufacturing | Consulting | Government | Non-Profit', 25, 185);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(128, 128, 128);
+    doc.text('Contact: info@authencore-analytics.com | Visit: www.authencore-analytics.com | Call: (555) 123-4567', 20, 200);
+    
+    return doc;
+  };
+
+  const handleDownload = async (material: MarketingMaterial) => {
+    try {
+      let doc;
+      let filename;
+      
+      switch (material.id) {
+        case 'company-brochure':
+          doc = generateCompanyBrochure();
+          filename = 'AuthenCore-Company-Brochure.pdf';
+          break;
+        case 'product-sheet':
+          doc = generateProductSheet();
+          filename = 'AuthenCore-Product-Sheet.pdf';
+          break;
+        case 'case-study':
+          doc = generateCaseStudy();
+          filename = 'AuthenCore-Case-Study.pdf';
+          break;
+        case 'services-overview':
+          doc = generateServicesOverview();
+          filename = 'AuthenCore-Services-Overview.pdf';
+          break;
+        default:
+          // Fallback to image download
+          const response = await fetch(material.image);
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `AuthenCore-${material.title.replace(/\s+/g, '-').toLowerCase()}.jpg`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          
+          toast({
+            title: "Download Started",
+            description: `${material.title} is being downloaded.`,
+          });
+          return;
+      }
+      
+      if (doc) {
+        doc.save(filename);
+        toast({
+          title: "Download Started",
+          description: `${material.title} PDF is being downloaded.`,
+        });
+      }
+    } catch (error) {
+      console.error('Download error:', error);
+      toast({
+        title: "Download Failed",
+        description: "Unable to download the file. Please try again.",
+        variant: "destructive"
+      });
+    }
   };
 
   const categories = Array.from(new Set(marketingMaterials.map(m => m.category)));
