@@ -149,14 +149,14 @@ const Auth = () => {
               <div className="mt-6 text-center">
                 <p className="text-sm text-muted-foreground">
                   {isLogin ? "Don't have an account?" : "Already have an account?"}
-                  <Button
-                    variant="link"
-                    className="ml-1 p-0 h-auto font-semibold"
-                    onClick={() => setIsLogin(!isLogin)}
-                  >
-                    {isLogin ? "Sign up" : "Sign in"}
-                  </Button>
                 </p>
+                <Button
+                  variant="outline"
+                  className="mt-2 w-full"
+                  onClick={() => setIsLogin(!isLogin)}
+                >
+                  {isLogin ? "Create New Account" : "Back to Sign In"}
+                </Button>
               </div>
             </CardContent>
           </Card>
