@@ -8,7 +8,7 @@ import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rock
 import { Link } from "react-router-dom";
 import { assessmentsData } from "@/data/assessmentsData";
 import assessmentConceptImage from "@/assets/assessment-concept.jpg";
-import TextLogo from "@/components/TextLogo";
+import LogoDisplay from "@/components/LogoDisplay";
 
 const Assessment = () => {
   const getInfoRoute = (assessmentId: string) => {
@@ -110,7 +110,7 @@ const Assessment = () => {
         <div className="max-w-6xl mx-auto text-center">
           {/* Display the new logo prominently */}
           <div className="text-center mb-12">
-            <TextLogo size="lg" showTagline={true} className="text-center" />
+            <LogoDisplay size="lg" showTagline={true} className="justify-center" />
           </div>
           <Badge className="mb-6 bg-primary/10 text-primary hover:bg-primary/20">
             🎯 Assessment Center

@@ -13,6 +13,7 @@ import marketingBrochure from '@/assets/marketing-brochure-cover.jpg';
 import productSheet from '@/assets/product-sheet.jpg';
 import servicesOverview from '@/assets/services-overview.jpg';
 import caseStudyTemplate from '@/assets/case-study-template.jpg';
+import finalLogo from '@/assets/final-logo.png';
 
 interface MarketingMaterial {
   id: string;
@@ -71,17 +72,55 @@ const marketingMaterials: MarketingMaterial[] = [
 const MarketingMaterials: React.FC = () => {
   const { toast } = useToast();
 
-  const generateCompanyBrochure = () => {
+  const loadLogoAsBase64 = async (): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const img = document.createElement('img') as HTMLImageElement;
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        if (!ctx) {
+          reject(new Error('Unable to get canvas context'));
+          return;
+        }
+        
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        
+        try {
+          const dataURL = canvas.toDataURL('image/png');
+          resolve(dataURL);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      img.onerror = () => reject(new Error('Failed to load logo image'));
+      img.src = finalLogo; // Use the imported logo
+    });
+  };
+
+  const generateCompanyBrochure = async () => {
     const doc = new jsPDF();
     
-    // Header
+    // Add logo
+    try {
+      const logoBase64 = await loadLogoAsBase64();
+      doc.addImage(logoBase64, 'PNG', 20, 10, 50, 30);
+    } catch (error) {
+      console.warn('Logo loading failed, using text fallback');
+    }
+    
+    
+    // Header text
     doc.setFontSize(24);
     doc.setTextColor(41, 128, 185);
-    doc.text('AuthenCore Analytics', 20, 30);
+    doc.text('AuthenCore Analytics', 80, 25);
     
     doc.setFontSize(14);
     doc.setTextColor(128, 128, 128);
-    doc.text('Reading minds, shaping future', 20, 40);
+    doc.text('Reading minds, shaping future', 80, 35);
     
     // Content sections
     doc.setFontSize(18);
@@ -117,15 +156,21 @@ const MarketingMaterials: React.FC = () => {
     return doc;
   };
 
-  const generateProductSheet = () => {
+  const generateProductSheet = async () => {
     const doc = new jsPDF();
     
-    // Header
+    // Add logo
+    try {
+      const logoBase64 = await loadLogoAsBase64();
+      doc.addImage(logoBase64, 'PNG', 20, 10, 45, 25);
+    } catch (error) {
+      console.warn('Logo loading failed, using text fallback');
+    }
+    
+    // Header text
     doc.setFontSize(20);
     doc.setTextColor(41, 128, 185);
-    doc.text('Assessment Products & Services', 20, 30);
-    
-    // Product 1
+    doc.text('Assessment Products & Services', 75, 25);
     doc.setFontSize(16);
     doc.setTextColor(0, 0, 0);
     doc.text('Career Launch Assessment', 20, 50);
@@ -174,12 +219,20 @@ const MarketingMaterials: React.FC = () => {
     return doc;
   };
 
-  const generateCaseStudy = () => {
+  const generateCaseStudy = async () => {
     const doc = new jsPDF();
     
+    // Add logo
+    try {
+      const logoBase64 = await loadLogoAsBase64();
+      doc.addImage(logoBase64, 'PNG', 20, 10, 45, 25);
+    } catch (error) {
+      console.warn('Logo loading failed, using text fallback');
+    }
+    // Header text  
     doc.setFontSize(20);
     doc.setTextColor(41, 128, 185);
-    doc.text('Success Story: TechCorp Implementation', 20, 30);
+    doc.text('Success Story: TechCorp Implementation', 75, 25);
     
     doc.setFontSize(14);
     doc.setTextColor(0, 0, 0);
@@ -224,14 +277,21 @@ const MarketingMaterials: React.FC = () => {
     return doc;
   };
 
-  const generateServicesOverview = () => {
+  const generateServicesOverview = async () => {
     const doc = new jsPDF('landscape');
     
+    // Add logo
+    try {
+      const logoBase64 = await loadLogoAsBase64();
+      doc.addImage(logoBase64, 'PNG', 20, 10, 45, 25);
+    } catch (error) {
+      console.warn('Logo loading failed, using text fallback');
+    }
+    
+    // Header text
     doc.setFontSize(22);
     doc.setTextColor(41, 128, 185);
-    doc.text('AuthenCore Analytics - Complete Service Portfolio', 20, 25);
-    
-    // Column 1
+    doc.text('AuthenCore Analytics - Complete Service Portfolio', 75, 20);
     doc.setFontSize(14);
     doc.setTextColor(0, 0, 0);
     doc.text('Individual Assessments', 20, 45);
@@ -244,6 +304,7 @@ const MarketingMaterials: React.FC = () => {
     doc.text('• Burnout Prevention', 25, 90);
     
     doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
     doc.text('Professional Features', 20, 110);
     doc.setFontSize(10);
     doc.text('• Instant PDF reports', 25, 120);
@@ -294,19 +355,19 @@ const MarketingMaterials: React.FC = () => {
       
       switch (material.id) {
         case 'company-brochure':
-          doc = generateCompanyBrochure();
+          doc = await generateCompanyBrochure();
           filename = 'AuthenCore-Company-Brochure.pdf';
           break;
         case 'product-sheet':
-          doc = generateProductSheet();
+          doc = await generateProductSheet();
           filename = 'AuthenCore-Product-Sheet.pdf';
           break;
         case 'case-study':
-          doc = generateCaseStudy();
+          doc = await generateCaseStudy();
           filename = 'AuthenCore-Case-Study.pdf';
           break;
         case 'services-overview':
-          doc = generateServicesOverview();
+          doc = await generateServicesOverview();
           filename = 'AuthenCore-Services-Overview.pdf';
           break;
         default:

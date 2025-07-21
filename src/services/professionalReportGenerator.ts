@@ -77,12 +77,20 @@ export class ProfessionalReportGenerator {
     const pageHeight = pdf.internal.pageSize.getHeight();
     let yPosition = 20;
 
-    // Header with logo (placeholder)
+    // Header with logo
     if (config.includeLogo) {
-      pdf.setFontSize(16);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('AuthenCore Analytics', 20, yPosition);
-      yPosition += 15;
+      try {
+        const logoBase64 = await this.loadLogoAsBase64();
+        pdf.addImage(logoBase64, 'PNG', 20, yPosition, 40, 30);
+        yPosition += 35;
+      } catch (error) {
+        // Fallback to text logo
+        pdf.setFontSize(16);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setTextColor(41, 128, 185);
+        pdf.text('AuthenCore Analytics', 20, yPosition);
+        yPosition += 15;
+      }
     }
 
     // Report title
@@ -404,6 +412,35 @@ export class ProfessionalReportGenerator {
     };
 
     return [...baseRecommendations, ...(specificRecs[assessmentType] || [])];
+  }
+
+  private async loadLogoAsBase64(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        if (!ctx) {
+          reject(new Error('Unable to get canvas context'));
+          return;
+        }
+        
+        canvas.width = img.width;
+        canvas.height = img.height;
+        ctx.drawImage(img, 0, 0);
+        
+        try {
+          const dataURL = canvas.toDataURL('image/png');
+          resolve(dataURL);
+        } catch (error) {
+          reject(error);
+        }
+      };
+      img.onerror = () => reject(new Error('Failed to load logo image'));
+      img.src = '/src/assets/final-logo.png';
+    });
   }
 }
 
