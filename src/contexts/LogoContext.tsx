@@ -20,6 +20,7 @@ import logo16 from '../assets/logo-generated-16.png';
 import logo17 from '../assets/logo-generated-17.png';
 import logo18 from '../assets/logo-generated-18.png';
 import exactShape3 from '../assets/authencore-exact-shape-3.png';
+import customLogoNew from '../assets/custom-logo-new.png';
 
 export interface LogoOption {
   id: string;
@@ -29,6 +30,12 @@ export interface LogoOption {
 }
 
 export const logoOptions: LogoOption[] = [
+  {
+    id: 'custom-new',
+    name: 'AuthenCore Analytics Latest',
+    style: 'Latest custom logo design',
+    image: customLogoNew
+  },
   {
     id: 'option-21',
     name: 'Exact Shape - Black & Blue',
@@ -162,7 +169,7 @@ interface LogoContextType {
 const LogoContext = createContext<LogoContextType | undefined>(undefined);
 
 export const LogoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [selectedLogoId, setSelectedLogoId] = useState<string | null>('option-21');
+  const [selectedLogoId, setSelectedLogoId] = useState<string | null>('custom-new');
   const [useTextLogo, setUseTextLogo] = useState<boolean>(false);
 
   // Load saved logo preference from localStorage
