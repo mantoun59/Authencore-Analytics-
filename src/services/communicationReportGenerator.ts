@@ -117,22 +117,22 @@ export const generateCommunicationReport = (
 const generateExecutiveSummary = (results: CommunicationStylesResults) => {
   const { overallScore, profile, dimensions } = results;
   
-  // Identify top 3 strengths (highest scoring dimensions)
+  // Identify top 3 strengths (highest scoring dimensions) 
   const strengthDimensions = Object.entries(dimensions)
     .sort(([,a], [,b]) => b.score - a.score)
     .slice(0, 3);
   
   const keyStrengths = strengthDimensions.map(([key, dimension]) => {
     const strengthDescriptions = {
-      'assertiveness': 'Direct and confident communication',
-      'expressiveness': 'Engaging and animated communication style',
-      'informationProcessing': 'Systematic and thorough information analysis',
-      'channelPreferences': 'Versatile across communication channels',
-      'listeningPatterns': 'Strong active listening and empathy',
-      'influenceStrategies': 'Effective persuasion and influence skills',
-      'conflictCommunication': 'Skilled conflict resolution abilities'
+      'assertiveness': `${profile.type} communication with ${dimension.score}% assertiveness effectiveness`,
+      'expressiveness': `${dimension.level} expressiveness driving ${profile.primary.toLowerCase()}`, 
+      'informationProcessing': `${dimension.level} information processing supporting ${profile.workStyle.toLowerCase()}`,
+      'channelPreferences': `${dimension.level} channel versatility across communication platforms`,
+      'listeningPatterns': `${dimension.level} listening effectiveness with ${dimension.percentile}th percentile performance`,
+      'influenceStrategies': `${dimension.level} influence capability aligned with ${profile.strength.toLowerCase()}`,
+      'conflictCommunication': `${dimension.level} conflict resolution skills in ${profile.workStyle.toLowerCase()}`
     };
-    return strengthDescriptions[key as keyof typeof strengthDescriptions] || 'Strong communication skill';
+    return strengthDescriptions[key as keyof typeof strengthDescriptions] || `${dimension.level} ${key} communication skill`;
   });
   
   // Identify primary challenges (lowest scoring dimensions)
@@ -142,15 +142,15 @@ const generateExecutiveSummary = (results: CommunicationStylesResults) => {
   
   const primaryChallenges = challengeDimensions.map(([key, dimension]) => {
     const challengeDescriptions = {
-      'assertiveness': 'Developing stronger assertiveness in communication',
-      'expressiveness': 'Enhancing expressiveness and emotional connection',
-      'informationProcessing': 'Improving information processing efficiency',
-      'channelPreferences': 'Expanding comfort with various communication channels',
-      'listeningPatterns': 'Strengthening active listening skills',
-      'influenceStrategies': 'Developing more sophisticated influence techniques',
-      'conflictCommunication': 'Building conflict resolution capabilities'
+      'assertiveness': `${dimension.level} assertiveness (${dimension.score}%) may limit ${profile.type} effectiveness in leadership situations`,
+      'expressiveness': `${dimension.level} expressiveness (${dimension.percentile}th percentile) could impact ${profile.primary.toLowerCase()} in team dynamics`,
+      'informationProcessing': `${dimension.level} information processing may create gaps in ${profile.workStyle.toLowerCase()}`,
+      'channelPreferences': `${dimension.level} channel adaptation could limit versatility in diverse communication contexts`,
+      'listeningPatterns': `${dimension.level} listening effectiveness (${dimension.score}%) may affect relationship building in ${profile.workStyle.toLowerCase()}`,
+      'influenceStrategies': `${dimension.level} influence skills could limit impact in ${profile.strength.toLowerCase()} situations`,
+      'conflictCommunication': `${dimension.level} conflict resolution abilities may create challenges in ${profile.challenge.toLowerCase()}`
     };
-    return challengeDescriptions[key as keyof typeof challengeDescriptions] || 'Area for communication development';
+    return challengeDescriptions[key as keyof typeof challengeDescriptions] || `Development opportunity in ${key} (${dimension.score}%)`;
   });
   
   const recommendedActions = [

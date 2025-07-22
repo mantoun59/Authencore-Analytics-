@@ -87,17 +87,23 @@ const CommunicationAssessment = () => {
 
       const scoringResult = await calculateResults(answers, assessmentStartTime, responseTimings);
       
-      // Generate professional report
-      await generateProfessionalReport({
-        assessmentType: 'communication_styles',
-        candidateInfo: {
-          name: userProfile?.name || 'Anonymous',
-          email: userProfile?.email || 'unknown@example.com',
-          date: new Date().toLocaleDateString()
-        },
-        results: scoringResult,
-        reportType: 'individual'
-      });
+      // Generate both individual and employer reports
+      const { generateEnhancedCommunicationReport } = await import('@/services/enhancedCommunicationReportGenerator');
+      const { generateEmployerReport } = await import('@/services/assessmentSpecificReportGenerator');
+      
+      const individualReport = generateEnhancedCommunicationReport(
+        scoringResult,
+        userProfile?.name || 'Anonymous'
+      );
+      
+      const employerReport = generateEmployerReport(
+        scoringResult,
+        userProfile?.name || 'Anonymous',
+        userProfile?.position
+      );
+      
+      console.log('Individual Report:', individualReport);
+      console.log('Employer Report with Interview Questions:', employerReport);
 
       // Save results to database
       if (user?.id) {
