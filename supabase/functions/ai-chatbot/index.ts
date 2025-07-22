@@ -6,6 +6,33 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Validation helper function
+const validateChatbotRequest = (data: unknown) => {
+  if (!data || typeof data !== 'object') {
+    throw new Error('Invalid request body - must be an object');
+  }
+  
+  const req = data as Record<string, unknown>;
+  
+  if (!req.message || typeof req.message !== 'string') {
+    throw new Error('Invalid or missing message field - must be a string');
+  }
+  
+  if (req.message.length > 1000) {
+    throw new Error('Message too long - maximum 1000 characters');
+  }
+  
+  if (req.sessionId && typeof req.sessionId !== 'string') {
+    throw new Error('Invalid sessionId - must be a string');
+  }
+  
+  return {
+    message: req.message.trim(),
+    sessionId: req.sessionId as string | undefined,
+    context: req.context as Record<string, unknown> | undefined
+  };
+};
+
 const SYSTEM_PROMPT = `You are a helpful AI assistant for AuthenCore Analytics, a professional psychological assessment platform. Your role is to assist users with questions about our website, assessments, and services.
 
 ABOUT AUTHENCORE ANALYTICS:

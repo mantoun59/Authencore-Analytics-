@@ -11,7 +11,7 @@ interface Props {
 interface State {
   hasError: boolean;
   error: Error | null;
-  errorInfo: any;
+  errorInfo: React.ErrorInfo | null;
 }
 
 class AssessmentErrorBoundary extends Component<Props, State> {
@@ -25,7 +25,7 @@ class AssessmentErrorBoundary extends Component<Props, State> {
     return { hasError: true, error, errorInfo: null };
   }
 
-  public componentDidCatch(error: Error, errorInfo: any) {
+  public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     this.setState({
       error,
       errorInfo

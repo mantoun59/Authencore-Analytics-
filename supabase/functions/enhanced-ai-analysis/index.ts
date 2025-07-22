@@ -1,19 +1,50 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface EnhancedAIRequest {
-  prompt: string;
-  model: string;
-  temperature: number;
-  maxTokens: number;
-}
+// Validation helper function
+const validateEnhancedAIRequest = (data: unknown) => {
+  if (!data || typeof data !== 'object') {
+    throw new Error('Invalid request body - must be an object');
+  }
+  
+  const req = data as Record<string, unknown>;
+  
+  if (!req.prompt || typeof req.prompt !== 'string') {
+    throw new Error('Invalid or missing prompt field - must be a string');
+  }
+  
+  if (req.prompt.length > 5000) {
+    throw new Error('Prompt too long - maximum 5000 characters');
+  }
+  
+  const validModels = ['gpt-4o-mini', 'gpt-4o', 'gpt-4.1-2025-04-14'];
+  const model = req.model || 'gpt-4o-mini';
+  if (typeof model !== 'string' || !validModels.includes(model)) {
+    throw new Error(`Invalid model - must be one of: ${validModels.join(', ')}`);
+  }
+  
+  const temperature = req.temperature || 0.3;
+  if (typeof temperature !== 'number' || temperature < 0 || temperature > 2) {
+    throw new Error('Invalid temperature - must be a number between 0 and 2');
+  }
+  
+  const maxTokens = req.maxTokens || 4000;
+  if (typeof maxTokens !== 'number' || maxTokens < 1 || maxTokens > 8000) {
+    throw new Error('Invalid maxTokens - must be a number between 1 and 8000');
+  }
+  
+  return {
+    prompt: req.prompt.trim(),
+    model: model as string,
+    temperature: temperature as number,
+    maxTokens: maxTokens as number
+  };
+};
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -22,11 +53,36 @@ serve(async (req) => {
   }
 
   try {
+    // Validate OpenAI API key
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
     if (!openAIApiKey) {
-      throw new Error('OPENAI_API_KEY is not configured');
+      console.error('❌ OPENAI_API_KEY is not configured');
+      return new Response(
+        JSON.stringify({ error: 'AI service is not configured' }),
+        { 
+          status: 500, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
     }
 
-    const { prompt, model, temperature, maxTokens }: EnhancedAIRequest = await req.json();
+    // Parse and validate request body
+    let requestBody;
+    try {
+      requestBody = await req.json();
+    } catch (error) {
+      console.error('❌ Invalid JSON in request body:', error);
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON in request body' }),
+        { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+        }
+      );
+    }
+
+    // Validate request structure
+    const { prompt, model, temperature, maxTokens } = validateEnhancedAIRequest(requestBody);
 
     console.log(`🤖 Enhanced AI Analysis Request - Model: ${model}, Tokens: ${maxTokens}`);
 
