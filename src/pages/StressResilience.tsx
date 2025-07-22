@@ -15,6 +15,7 @@ import { ArrowRight, Brain, Heart, Zap, Target, CheckCircle2, BarChart3, Trendin
 import { useAuth } from "@/contexts/AuthContext";
 import { burnoutPreventionQuestions } from "@/data/burnoutPreventionQuestions";
 import { useStressResilienceScoring } from "@/hooks/useStressResilienceScoring";
+import { generateDetailedBurnoutReport } from "@/services/burnoutReportGenerator";
 import { generateProfessionalReport } from "@/services/professionalReportGenerator";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -89,22 +90,31 @@ const StressResilience = () => {
       const results = calculateResults(responses);
       const completionTime = Math.round((Date.now() - startTime) / 60000);
       
-      // Generate professional report
-      await generateProfessionalReport({
-        assessmentType: 'burnout_prevention',
+      // Generate detailed burnout report
+      await generateDetailedBurnoutReport({
         candidateInfo: {
           name: userProfile?.name || 'Anonymous',
           email: userProfile?.email || 'unknown@example.com',
           date: new Date().toLocaleDateString()
         },
-        results: results,
-        reportType: 'individual'
+        results: results
       });
 
-      // Save to database
-      if (user?.id) {
+      // Save to database - create anonymous user if needed
+      let userId = user?.id;
+      if (!userId) {
+        // Create anonymous user entry for tracking
+        const anonymousUser = await supabase.from('profiles').insert({
+          user_id: crypto.randomUUID(),
+          email: userProfile?.email || `anonymous-${Date.now()}@burnout-assessment.com`,
+          full_name: userProfile?.name || 'Anonymous User'
+        }).select().single();
+        userId = anonymousUser.data?.user_id;
+      }
+
+      if (userId) {
         await supabase.from('assessment_results').insert({
-          user_id: user.id,
+          user_id: userId,
           assessment_type: 'burnout_prevention',
           results: results as any,
           completed_at: new Date().toISOString()
@@ -468,9 +478,19 @@ const StressResilience = () => {
 
             {/* Actions */}
             <div className="flex flex-wrap justify-center gap-4">
-              <Button className="bg-green-600 hover:bg-green-700">
+              <Button 
+                className="bg-green-600 hover:bg-green-700"
+                onClick={() => generateDetailedBurnoutReport({
+                  candidateInfo: {
+                    name: userProfile?.name || 'Anonymous',
+                    email: userProfile?.email || 'unknown@example.com',
+                    date: new Date().toLocaleDateString()
+                  },
+                  results: currentResults
+                })}
+              >
                 <FileText className="mr-2 w-4 h-4" />
-                Download Report
+                Download Detailed Report
               </Button>
               <Button variant="outline">
                 <Share2 className="mr-2 w-4 h-4" />

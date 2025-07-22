@@ -56,6 +56,7 @@ const AdminAnalytics = () => {
           paymentsRes,
           eventsRes,
           assessmentResultsRes,
+          genZResultsRes,
           recentActivityRes
         ] = await Promise.all([
           supabase.from('solo_candidates').select('*').gte('created_at', dateFilter.toISOString()),
@@ -64,6 +65,7 @@ const AdminAnalytics = () => {
           supabase.from('payments').select('*').gte('created_at', dateFilter.toISOString()),
           supabase.from('analytics_events').select('*').limit(100).order('created_at', { ascending: false }).gte('created_at', dateFilter.toISOString()),
           supabase.from('assessment_results').select('*').gte('created_at', dateFilter.toISOString()),
+          supabase.from('genz_assessment_results').select('*').gte('created_at', dateFilter.toISOString()),
           supabase.from('solo_candidates').select('*').gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
         ]);
 
@@ -73,12 +75,15 @@ const AdminAnalytics = () => {
         const payments = paymentsRes.data || [];
         const events = eventsRes.data || [];
         const assessmentResults = assessmentResultsRes.data || [];
+        const genZResults = genZResultsRes.data || [];
         const recentActivity = recentActivityRes.data || [];
 
-        // Calculate analytics
+        // Calculate analytics including all assessment types
         const totalCandidates = soloCandidates.length + employerCandidates.length;
         const completedAssessments = soloCandidates.filter(c => c.assessment_completed).length + 
-                                   employerCandidates.filter(c => c.assessment_completed).length;
+                                   employerCandidates.filter(c => c.assessment_completed).length +
+                                   assessmentResults.length +
+                                   genZResults.length;
         const totalRevenue = payments.filter(p => p.status === 'paid').reduce((sum, p) => sum + Number(p.amount), 0);
         const paidSoloCandidates = soloCandidates.filter(c => c.payment_status === 'paid').length;
         
@@ -111,6 +116,9 @@ const AdminAnalytics = () => {
           acc[result.assessment_type] = (acc[result.assessment_type] || 0) + 1;
           return acc;
         }, {});
+        
+        // Add GenZ assessments
+        assessmentTypes['gen_z_workplace'] = genZResults.length;
 
         // Performance metrics
         const performanceMetrics = {
