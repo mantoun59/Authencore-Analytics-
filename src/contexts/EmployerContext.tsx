@@ -9,13 +9,29 @@ interface Employer {
   is_active: boolean;
 }
 
+interface Candidate {
+  id: string;
+  full_name: string;
+  email: string;
+  position_applied?: string;
+  assessment_completed: boolean;
+  invited_at: string;
+  completed_at?: string;
+}
+
+interface CandidateData {
+  fullName: string;
+  email: string;
+  positionApplied?: string;
+}
+
 interface EmployerContextType {
   employer: Employer | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<{ error?: string }>;
   logout: () => void;
-  getCandidates: () => Promise<any[]>;
-  inviteCandidate: (candidateData: any) => Promise<{ error?: string }>;
+  getCandidates: () => Promise<Candidate[]>;
+  inviteCandidate: (candidateData: CandidateData) => Promise<{ error?: string }>;
 }
 
 const EmployerContext = createContext<EmployerContextType | undefined>(undefined);

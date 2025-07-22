@@ -11,9 +11,11 @@ import {
 } from 'lucide-react';
 import { CommunicationQuestion } from '@/data/communicationQuestions';
 
+import type { AssessmentResponse } from '@/types/assessment.types';
+
 interface RankingComponentProps {
   question: CommunicationQuestion;
-  onResponse: (response: any) => void;
+  onResponse: (response: AssessmentResponse) => void;
 }
 
 export const RankingComponent: React.FC<RankingComponentProps> = ({ question, onResponse }) => {
@@ -38,9 +40,19 @@ export const RankingComponent: React.FC<RankingComponentProps> = ({ question, on
       weight: rankedOptions.length - index // Higher weight for higher ranked items
     }));
     
+    const assessmentResponse: AssessmentResponse = {
+      questionId: question.id,
+      answer: rankedResponse,
+      responseTime: Date.now(), // Could track actual response time if needed
+      metadata: {
+        rankingComplete: true,
+        totalOptions: rankedOptions.length
+      }
+    };
+    
     setIsComplete(true);
     setTimeout(() => {
-      onResponse(rankedResponse);
+      onResponse(assessmentResponse);
     }, 1000);
   };
 

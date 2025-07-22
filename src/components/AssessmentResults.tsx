@@ -30,17 +30,12 @@ import Footer from "@/components/Footer";
 import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
 import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
 import { toast } from "sonner";
+import type { AssessmentData, CandidateInfo } from "@/types/assessment.types";
 
 interface AssessmentResultsProps {
-  data: any;
+  data: AssessmentData | Record<string, unknown>; // Flexible type for different assessment formats
   assessmentType?: string;
-  candidateInfo?: {
-    name: string;
-    email: string;
-    age?: number;
-    experience?: string;
-    position?: string;
-  };
+  candidateInfo?: CandidateInfo;
 }
 
 const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: AssessmentResultsProps) => {
@@ -229,7 +224,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       }
 
       const request: AIReportRequest = {
-        assessmentResultId: data.id || `assessment-${Date.now()}`,
+        assessmentResultId: `assessment-${Date.now()}`,
         reportType,
         candidateInfo: {
           name: candidateInfo.name,

@@ -15,9 +15,11 @@ import {
 } from 'lucide-react';
 import { CommunicationQuestion } from '@/data/communicationQuestions';
 
+import type { AssessmentResponse } from '@/types/assessment.types';
+
 interface SimulationComponentProps {
   question: CommunicationQuestion;
-  onResponse: (response: any) => void;
+  onResponse: (response: AssessmentResponse) => void;
 }
 
 export const SimulationComponent: React.FC<SimulationComponentProps> = ({ question, onResponse }) => {
@@ -33,11 +35,22 @@ export const SimulationComponent: React.FC<SimulationComponentProps> = ({ questi
     return () => clearInterval(timer);
   }, []);
 
-  const handleResponseSelect = (option: any) => {
+  const handleResponseSelect = (option: { id: string; text: string; indicators: string[] }) => {
     setSelectedResponse(option.id);
+    
+    const assessmentResponse: AssessmentResponse = {
+      questionId: question.id,
+      answer: option.id,
+      responseTime: timeElapsed,
+      metadata: {
+        selectedOption: option,
+        totalTimeElapsed: timeElapsed
+      }
+    };
+    
     // Add a small delay to show selection before moving on
     setTimeout(() => {
-      onResponse(option);
+      onResponse(assessmentResponse);
     }, 500);
   };
 

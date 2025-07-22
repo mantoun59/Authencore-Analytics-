@@ -9,9 +9,10 @@ import { Clock, Brain, Heart, Users, Zap, Target, ArrowLeft, ArrowRight, CheckCi
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AssessmentErrorBoundary from "@/components/AssessmentErrorBoundary";
+import type { AssessmentData } from "@/types/assessment.types";
 
 interface AssessmentQuestionsProps {
-  onComplete: (data: any) => void;
+  onComplete: (data: AssessmentData) => void;
 }
 
 const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
@@ -384,16 +385,25 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
 
   const completeAssessment = () => {
     try {
-      const assessmentData = {
-        responses,
-        responseTime,
-        phases,
-        completedAt: Date.now(),
-        stressPatterns: responseTime.map((time, index) => ({
-          questionIndex: index,
-          responseTime: time,
-          stressLevel: index < responseTime.length / 2 ? 1 : stressLevel
-        }))
+      const assessmentData: AssessmentData = {
+        responses: Object.keys(responses).map(questionId => ({
+          questionId,
+          answer: responses[questionId],
+          responseTime: responseTime[parseInt(questionId.slice(-1)) - 1] || 0
+        })),
+        startTime: startTime,
+        endTime: Date.now(),
+        totalTime: Date.now() - startTime,
+        assessmentType: 'stress-resilience',
+        metadata: {
+          phases,
+          completedAt: Date.now(),
+          stressPatterns: responseTime.map((time, index) => ({
+            questionIndex: index,
+            responseTime: time,
+            stressLevel: index < responseTime.length / 2 ? 1 : stressLevel
+          }))
+        }
       };
       // Clear saved progress on completion
       localStorage.removeItem('assessment-progress');

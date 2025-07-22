@@ -9,10 +9,12 @@ import { Brain, Target, MessageSquare, Shield, TrendingUp, Settings } from 'luci
 import { toast } from 'sonner';
 import { EnhancedAIEngine, type EnhancedAIConfig } from '@/services/enhancedAIEngine';
 
+import type { AssessmentData, CandidateInfo } from '@/types/assessment.types';
+
 interface EnhancedAIControlsProps {
   onConfigUpdate?: (config: Partial<EnhancedAIConfig>) => void;
-  assessmentData?: any;
-  candidateInfo?: any;
+  assessmentData?: AssessmentData;
+  candidateInfo?: CandidateInfo;
 }
 
 export const EnhancedAIControls: React.FC<EnhancedAIControlsProps> = ({
