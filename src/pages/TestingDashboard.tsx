@@ -7,14 +7,94 @@ import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Copy, Link2, QrCode, Users, TestTube, BarChart3, MessageSquare } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const TestingDashboard = () => {
   const { toast } = useToast();
   const [baseUrl, setBaseUrl] = useState("");
+  const [candidateForm, setCandidateForm] = useState({
+    name: "",
+    email: "",
+    position: "",
+    company: ""
+  });
+  const [testCandidates, setTestCandidates] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setBaseUrl(window.location.origin);
+    fetchTestCandidates();
   }, []);
+
+  const fetchTestCandidates = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('solo_candidates')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      setTestCandidates(data || []);
+    } catch (error) {
+      console.error('Error fetching test candidates:', error);
+    }
+  };
+
+  const handleInputChange = (field: string, value: string) => {
+    setCandidateForm(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const createTestCandidate = async () => {
+    if (!candidateForm.name || !candidateForm.email) {
+      toast({
+        title: "Missing Information",
+        description: "Please provide at least name and email.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const accessToken = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+      
+      const { data, error } = await supabase
+        .from('solo_candidates')
+        .insert([{
+          full_name: candidateForm.name,
+          email: candidateForm.email,
+          access_token: accessToken,
+          payment_status: 'completed', // Test candidates don't need to pay
+          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days
+        }])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      toast({
+        title: "Test Candidate Created",
+        description: `Successfully created test account for ${candidateForm.name}`,
+      });
+
+      // Reset form and refresh candidates
+      setCandidateForm({ name: "", email: "", position: "", company: "" });
+      fetchTestCandidates();
+
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to create test candidate",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const testingLinks = [
     {
@@ -189,36 +269,77 @@ const TestingDashboard = () => {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="candidate-name">Candidate Name</Label>
-                      <Input id="candidate-name" placeholder="John Doe" />
+                      <Input 
+                        id="candidate-name" 
+                        placeholder="John Doe" 
+                        value={candidateForm.name}
+                        onChange={(e) => handleInputChange('name', e.target.value)}
+                      />
                     </div>
                     <div>
                       <Label htmlFor="candidate-email">Email Address</Label>
-                      <Input id="candidate-email" type="email" placeholder="john@example.com" />
+                      <Input 
+                        id="candidate-email" 
+                        type="email" 
+                        placeholder="john@example.com"
+                        value={candidateForm.email}
+                        onChange={(e) => handleInputChange('email', e.target.value)}
+                      />
                     </div>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <Label htmlFor="position">Position</Label>
-                      <Input id="position" placeholder="Software Developer" />
+                      <Input 
+                        id="position" 
+                        placeholder="Software Developer"
+                        value={candidateForm.position}
+                        onChange={(e) => handleInputChange('position', e.target.value)}
+                      />
                     </div>
                     <div>
                       <Label htmlFor="company">Company</Label>
-                      <Input id="company" placeholder="Tech Corp" />
+                      <Input 
+                        id="company" 
+                        placeholder="Tech Corp"
+                        value={candidateForm.company}
+                        onChange={(e) => handleInputChange('company', e.target.value)}
+                      />
                     </div>
                   </div>
-                  <Button>Create Test Candidate</Button>
+                  <Button 
+                    onClick={createTestCandidate}
+                    disabled={loading}
+                  >
+                    {loading ? "Creating..." : "Create Test Candidate"}
+                  </Button>
                 </div>
 
                 <div className="mt-8">
                   <h3 className="text-lg font-semibold mb-4">Recent Test Candidates</h3>
                   <div className="space-y-2">
-                    <div className="flex items-center justify-between p-3 border rounded">
-                      <div>
-                        <p className="font-medium">Demo Candidate</p>
-                        <p className="text-sm text-muted-foreground">demo@example.com • Software Developer</p>
+                    {testCandidates.length > 0 ? (
+                      testCandidates.map((candidate) => (
+                        <div key={candidate.id} className="flex items-center justify-between p-3 border rounded">
+                          <div>
+                            <p className="font-medium">{candidate.full_name}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {candidate.email} • Created: {new Date(candidate.created_at).toLocaleDateString()}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              Access Token: {candidate.access_token}
+                            </p>
+                          </div>
+                          <Badge variant={candidate.payment_status === 'completed' ? "default" : "secondary"}>
+                            {candidate.assessment_completed ? "Completed" : "Active"}
+                          </Badge>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="text-center text-muted-foreground py-4">
+                        <p>No test candidates created yet</p>
                       </div>
-                      <Badge variant="secondary">Active</Badge>
-                    </div>
+                    )}
                   </div>
                 </div>
               </CardContent>
