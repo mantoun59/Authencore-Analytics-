@@ -80,8 +80,6 @@ const AIChat = () => {
         throw new Error(data.error || 'Failed to get response');
       }
     } catch (error) {
-      console.error('Error sending message:', error);
-      
       // Handle specific error types
       let errorMessage = "Failed to send message. Please try again.";
       

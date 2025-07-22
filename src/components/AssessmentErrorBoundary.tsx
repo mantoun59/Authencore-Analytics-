@@ -26,14 +26,12 @@ class AssessmentErrorBoundary extends Component<Props, State> {
   }
 
   public componentDidCatch(error: Error, errorInfo: any) {
-    console.error('Assessment error:', error, errorInfo);
     this.setState({
       error,
       errorInfo
     });
     
     // Log error to analytics or error reporting service
-    // This could be extended to send to a service like Sentry
     try {
       localStorage.setItem('last-assessment-error', JSON.stringify({
         error: error.message,
@@ -42,7 +40,7 @@ class AssessmentErrorBoundary extends Component<Props, State> {
         errorInfo
       }));
     } catch (e) {
-      console.warn('Could not save error details:', e);
+      // Silent fallback for localStorage issues
     }
   }
 
@@ -60,7 +58,7 @@ class AssessmentErrorBoundary extends Component<Props, State> {
       localStorage.removeItem('assessment-progress');
       localStorage.removeItem('genz-assessment-progress');
     } catch (e) {
-      console.warn('Could not clear saved progress:', e);
+      // Silent fallback for localStorage issues
     }
     
     window.location.href = '/';
@@ -70,7 +68,7 @@ class AssessmentErrorBoundary extends Component<Props, State> {
     try {
       localStorage.removeItem('last-assessment-error');
     } catch (e) {
-      console.warn('Could not clear error data:', e);
+      // Silent fallback for localStorage issues
     }
   };
 

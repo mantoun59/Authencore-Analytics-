@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 /* Background patterns for visual interest */
 @layer utilities {
   .bg-grid-pattern {
@@ -17,8 +16,6 @@
     background-size: 15px 15px;
   }
 }
-@tailwind components;
-@tailwind utilities;
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
