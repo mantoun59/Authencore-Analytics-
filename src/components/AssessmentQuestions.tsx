@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Clock, Brain, Heart, Users, Zap, Target, ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AssessmentErrorBoundary from "@/components/AssessmentErrorBoundary";
 
 interface AssessmentQuestionsProps {
   onComplete: (data: any) => void;
@@ -20,6 +21,10 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
   const [startTime, setStartTime] = useState(Date.now());
   const [responseTime, setResponseTime] = useState<number[]>([]);
   const [stressLevel, setStressLevel] = useState(1);
+  const [lastAnswer, setLastAnswer] = useState<string>('');
+  const [quickAdvanceTimer, setQuickAdvanceTimer] = useState<NodeJS.Timeout | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [isRecovering, setIsRecovering] = useState(false);
 
   const phases = [
     {
@@ -182,22 +187,176 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
   const allQuestions = Object.values(questionBank).flat();
   const currentPhaseQuestions = allQuestions.filter(q => q.phase === currentPhase);
 
+  // Auto-save progress to localStorage
+  useEffect(() => {
+    const saveProgress = () => {
+      try {
+        const progressData = {
+          currentPhase,
+          currentQuestion,
+          responses,
+          responseTime,
+          stressLevel,
+          timestamp: Date.now()
+        };
+        localStorage.setItem('assessment-progress', JSON.stringify(progressData));
+      } catch (err) {
+        console.warn('Could not save assessment progress:', err);
+      }
+    };
+    
+    if (Object.keys(responses).length > 0) {
+      saveProgress();
+    }
+  }, [currentPhase, currentQuestion, responses, responseTime, stressLevel]);
+
+  // Load saved progress on component mount
+  useEffect(() => {
+    const loadSavedProgress = () => {
+      try {
+        const saved = localStorage.getItem('assessment-progress');
+        if (saved) {
+          const progressData = JSON.parse(saved);
+          // Only restore if saved within last 24 hours
+          if (Date.now() - progressData.timestamp < 24 * 60 * 60 * 1000) {
+            setIsRecovering(true);
+            setCurrentPhase(progressData.currentPhase);
+            setCurrentQuestion(progressData.currentQuestion);
+            setResponses(progressData.responses);
+            setResponseTime(progressData.responseTime);
+            setStressLevel(progressData.stressLevel);
+            setTimeout(() => setIsRecovering(false), 1000);
+          } else {
+            // Clear old data
+            localStorage.removeItem('assessment-progress');
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load saved progress:', err);
+        setError('Error loading saved progress');
+      }
+    };
+    
+    loadSavedProgress();
+  }, []);
+
   useEffect(() => {
     setStartTime(Date.now());
   }, [currentQuestion]);
 
-  const handleAnswer = (value: string) => {
-    const questionId = currentPhaseQuestions[currentQuestion]?.id;
-    if (questionId) {
-      const timeSpent = Date.now() - startTime;
-      setResponseTime(prev => [...prev, timeSpent]);
-      setResponses(prev => ({ ...prev, [questionId]: value }));
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (error) return;
       
-      // Simulate stress increase in stress phases
-      if (phases[currentPhase].stressMultiplier > 1) {
-        setStressLevel(prev => Math.min(prev + 0.2, 5));
+      const questionId = currentPhaseQuestions[currentQuestion]?.id;
+      const currentAnswer = questionId ? responses[questionId] : '';
+      
+      // Number keys for quick answer selection
+      if (e.key >= '1' && e.key <= '5') {
+        const optionIndex = parseInt(e.key) - 1;
+        if (currentQ && optionIndex < currentQ.options.length) {
+          handleAnswer(optionIndex.toString());
+          // Auto-advance if same answer selected twice quickly
+          if (lastAnswer === optionIndex.toString()) {
+            setTimeout(nextQuestion, 300);
+          }
+          setLastAnswer(optionIndex.toString());
+        }
       }
+      
+      // Arrow keys for navigation
+      if (e.key === 'ArrowRight' && currentAnswer) {
+        nextQuestion();
+      }
+      if (e.key === 'ArrowLeft' && !(currentPhase === 0 && currentQuestion === 0)) {
+        previousQuestion();
+      }
+      
+      // Enter to advance if answered
+      if (e.key === 'Enter' && currentAnswer) {
+        nextQuestion();
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [currentPhase, currentQuestion, responses, lastAnswer, error]);
+
+  // Error boundary effect
+  useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      console.error('Assessment error:', event.error);
+      setError(`Connection error: ${event.error?.message || 'Unknown error'}`);
+    };
+    
+    const handleRejection = (event: PromiseRejectionEvent) => {
+      console.error('Assessment promise rejection:', event.reason);
+      setError(`Network error: ${event.reason?.message || 'Connection failed'}`);
+    };
+    
+    window.addEventListener('error', handleError);
+    window.addEventListener('unhandledrejection', handleRejection);
+    
+    return () => {
+      window.removeEventListener('error', handleError);
+      window.removeEventListener('unhandledrejection', handleRejection);
+    };
+  }, []);
+
+  const handleAnswer = (value: string) => {
+    try {
+      const questionId = currentPhaseQuestions[currentQuestion]?.id;
+      if (questionId) {
+        const timeSpent = Date.now() - startTime;
+        setResponseTime(prev => [...prev, timeSpent]);
+        setResponses(prev => ({ ...prev, [questionId]: value }));
+        
+        // Quick advance if same answer selected
+        if (lastAnswer === value && quickAdvanceTimer === null) {
+          const timer = setTimeout(() => {
+            nextQuestion();
+            setQuickAdvanceTimer(null);
+          }, 800);
+          setQuickAdvanceTimer(timer);
+        } else {
+          if (quickAdvanceTimer) {
+            clearTimeout(quickAdvanceTimer);
+            setQuickAdvanceTimer(null);
+          }
+        }
+        
+        setLastAnswer(value);
+        setError(null); // Clear any previous errors
+        
+        // Simulate stress increase in stress phases
+        if (phases[currentPhase].stressMultiplier > 1) {
+          setStressLevel(prev => Math.min(prev + 0.2, 5));
+        }
+      }
+    } catch (err) {
+      console.error('Error handling answer:', err);
+      setError('Error saving your answer. Please try again.');
     }
+  };
+
+  const clearProgress = () => {
+    try {
+      localStorage.removeItem('assessment-progress');
+      setError(null);
+      setCurrentPhase(0);
+      setCurrentQuestion(0);
+      setResponses({});
+      setResponseTime([]);
+      setStressLevel(1);
+    } catch (err) {
+      console.error('Error clearing progress:', err);
+    }
+  };
+
+  const retryFromError = () => {
+    setError(null);
+    setIsRecovering(false);
   };
 
   const nextQuestion = () => {
@@ -224,18 +383,25 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
   };
 
   const completeAssessment = () => {
-    const assessmentData = {
-      responses,
-      responseTime,
-      phases,
-      completedAt: Date.now(),
-      stressPatterns: responseTime.map((time, index) => ({
-        questionIndex: index,
-        responseTime: time,
-        stressLevel: index < responseTime.length / 2 ? 1 : stressLevel
-      }))
-    };
-    onComplete(assessmentData);
+    try {
+      const assessmentData = {
+        responses,
+        responseTime,
+        phases,
+        completedAt: Date.now(),
+        stressPatterns: responseTime.map((time, index) => ({
+          questionIndex: index,
+          responseTime: time,
+          stressLevel: index < responseTime.length / 2 ? 1 : stressLevel
+        }))
+      };
+      // Clear saved progress on completion
+      localStorage.removeItem('assessment-progress');
+      onComplete(assessmentData);
+    } catch (err) {
+      console.error('Error completing assessment:', err);
+      setError('Error submitting assessment. Please try again.');
+    }
   };
 
   const totalQuestions = allQuestions.length;
@@ -247,9 +413,60 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
   const timeLimit = phases[currentPhase].timeLimit;
   const PhaseIcon = phases[currentPhase].icon;
 
+  // Error display
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="pt-20 pb-16 px-4">
+          <div className="max-w-2xl mx-auto">
+            <Card className="border-red-200 bg-red-50/50 dark:border-red-800 dark:bg-red-950/50">
+              <CardHeader>
+                <CardTitle className="text-red-700 dark:text-red-300 flex items-center gap-2">
+                  ⚠️ Connection Error
+                </CardTitle>
+                <CardDescription className="text-red-600 dark:text-red-400">
+                  {error}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  Don't worry! Your progress has been automatically saved. You can continue from where you left off.
+                </p>
+                <div className="flex gap-3">
+                  <Button onClick={retryFromError} variant="outline">
+                    Try Again
+                  </Button>
+                  <Button onClick={clearProgress} variant="destructive">
+                    Start Over
+                  </Button>
+                </div>
+                <div className="text-xs text-muted-foreground">
+                  Progress: {Object.keys(responses).length} of {totalQuestions} questions completed
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <AssessmentErrorBoundary>
+      <div className="min-h-screen bg-background">
+        <Header />
+      
+      {/* Recovery notification */}
+      {isRecovering && (
+        <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="h-5 w-5" />
+            Restored your progress! Continuing from where you left off...
+          </div>
+        </div>
+      )}
       
       <div className="pt-20 pb-16 px-4">
         <div className="max-w-4xl mx-auto">
@@ -331,17 +548,33 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
                   className="space-y-3"
                 >
                   {currentQ.options.map((option, index) => (
-                    <div key={index} className="flex items-center space-x-2">
+                    <div key={index} className="flex items-center space-x-3 p-3 rounded-lg border border-transparent hover:bg-muted/50 hover:border-muted-foreground/20 transition-all">
                       <RadioGroupItem value={index.toString()} id={`option-${index}`} />
                       <Label 
                         htmlFor={`option-${index}`} 
                         className="text-sm leading-relaxed cursor-pointer flex-1"
                       >
+                        <span className="inline-block w-6 text-xs text-muted-foreground">{index + 1}.</span>
                         {option}
                       </Label>
+                      {lastAnswer === index.toString() && quickAdvanceTimer && (
+                        <div className="text-xs text-blue-500 animate-pulse">
+                          Auto-advancing...
+                        </div>
+                      )}
                     </div>
                   ))}
                 </RadioGroup>
+                
+                <div className="mt-6 p-4 bg-muted/30 rounded-lg">
+                  <div className="text-xs text-muted-foreground space-y-1">
+                    <div>💡 <strong>Quick tips:</strong></div>
+                    <div>• Use number keys 1-5 to select answers quickly</div>
+                    <div>• Press Enter or → to advance, ← to go back</div>
+                    <div>• Select the same answer twice for auto-advance</div>
+                    <div>• Your progress is automatically saved</div>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           )}
@@ -379,10 +612,9 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
             </Button>
           </div>
         </div>
+        <Footer />
       </div>
-
-      <Footer />
-    </div>
+    </AssessmentErrorBoundary>
   );
 };
 

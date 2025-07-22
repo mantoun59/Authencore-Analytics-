@@ -56,6 +56,12 @@ export default function GenZWorkplaceAssessment() {
   const [sessionId] = useState(() => crypto.randomUUID());
   const [startTime] = useState(Date.now());
   
+  // Error handling and recovery
+  const [error, setError] = useState<string | null>(null);
+  const [isRecovering, setIsRecovering] = useState(false);
+  const [lastResponse, setLastResponse] = useState<string | null>(null);
+  const [quickAdvanceTimer, setQuickAdvanceTimer] = useState<NodeJS.Timeout | null>(null);
+  
   // User data
   const [userData, setUserData] = useState({
     username: '',
@@ -85,13 +91,84 @@ export default function GenZWorkplaceAssessment() {
   // AI Report generation
   const [isGeneratingReport, setIsGeneratingReport] = useState(false);
   
+  // Auto-save progress
+  useEffect(() => {
+    if (currentStep !== 'welcome' && userData.username) {
+      try {
+        const progressData = {
+          currentStep,
+          userData,
+          currentScenarioIndex,
+          responses,
+          selectedValues,
+          sessionId,
+          timestamp: Date.now()
+        };
+        localStorage.setItem('genz-assessment-progress', JSON.stringify(progressData));
+      } catch (err) {
+        console.warn('Could not save assessment progress:', err);
+      }
+    }
+  }, [currentStep, userData, currentScenarioIndex, responses, selectedValues, sessionId]);
+
+  // Load saved progress on mount
+  useEffect(() => {
+    const loadSavedProgress = () => {
+      try {
+        const saved = localStorage.getItem('genz-assessment-progress');
+        if (saved) {
+          const progressData = JSON.parse(saved);
+          // Only restore if saved within last 24 hours
+          if (Date.now() - progressData.timestamp < 24 * 60 * 60 * 1000) {
+            setIsRecovering(true);
+            setCurrentStep(progressData.currentStep);
+            setUserData(progressData.userData);
+            setCurrentScenarioIndex(progressData.currentScenarioIndex);
+            setResponses(progressData.responses);
+            setSelectedValues(progressData.selectedValues);
+            setTimeout(() => setIsRecovering(false), 1500);
+          } else {
+            localStorage.removeItem('genz-assessment-progress');
+          }
+        }
+      } catch (err) {
+        console.warn('Could not load saved progress:', err);
+        setError('Error loading saved progress');
+      }
+    };
+    
+    loadSavedProgress();
+  }, []);
+
   // Load scenarios from database
   useEffect(() => {
     loadScenarios();
   }, []);
 
+  // Error handling
+  useEffect(() => {
+    const handleError = (event: ErrorEvent) => {
+      console.error('GenZ Assessment error:', event.error);
+      setError(`Connection error: ${event.error?.message || 'Unknown error'}`);
+    };
+    
+    const handleRejection = (event: PromiseRejectionEvent) => {
+      console.error('GenZ Assessment promise rejection:', event.reason);
+      setError(`Network error: ${event.reason?.message || 'Connection failed'}`);
+    };
+    
+    window.addEventListener('error', handleError);
+    window.addEventListener('unhandledrejection', handleRejection);
+    
+    return () => {
+      window.removeEventListener('error', handleError);
+      window.removeEventListener('unhandledrejection', handleRejection);
+    };
+  }, []);
+
   const loadScenarios = async () => {
     try {
+      setError(null);
       const { data, error } = await supabase
         .from('genz_assessment_scenarios')
         .select('*')
@@ -104,11 +181,33 @@ export default function GenZWorkplaceAssessment() {
       setScenarios(shuffled);
     } catch (error) {
       console.error('Error loading scenarios:', error);
+      setError('Failed to load assessment scenarios. Please check your connection and try again.');
       toast({
-        title: "Error",
-        description: "Failed to load assessment scenarios",
+        title: "Connection Error",
+        description: "Failed to load assessment scenarios. Please try again.",
         variant: "destructive"
       });
+    }
+  };
+
+  const clearProgress = () => {
+    try {
+      localStorage.removeItem('genz-assessment-progress');
+      setError(null);
+      setCurrentStep('welcome');
+      setCurrentScenarioIndex(0);
+      setResponses([]);
+      setSelectedValues([]);
+    } catch (err) {
+      console.error('Error clearing progress:', err);
+    }
+  };
+
+  const retryFromError = () => {
+    setError(null);
+    setIsRecovering(false);
+    if (scenarios.length === 0) {
+      loadScenarios();
     }
   };
 
@@ -122,27 +221,53 @@ export default function GenZWorkplaceAssessment() {
   };
 
   const handleScenarioResponse = useCallback((response: 'love' | 'good' | 'meh' | 'nope' | 'toxic') => {
-    const responseTime = Date.now() - (responses.length === 0 ? startTime : Date.now() - 3000);
-    const currentScenario = scenarios[currentScenarioIndex];
-    
-    if (!currentScenario) return;
+    try {
+      const responseTime = Date.now() - (responses.length === 0 ? startTime : Date.now() - 3000);
+      const currentScenario = scenarios[currentScenarioIndex];
+      
+      if (!currentScenario) return;
 
-    const newResponse = {
-      scenarioId: currentScenario.id,
-      response,
-      responseTime,
-      swipeData: null // Could track swipe gestures in future
-    };
+      const newResponse = {
+        scenarioId: currentScenario.id,
+        response,
+        responseTime,
+        swipeData: null // Could track swipe gestures in future
+      };
 
-    setResponses(prev => [...prev, newResponse]);
+      setResponses(prev => [...prev, newResponse]);
+      setError(null); // Clear any previous errors
 
+      // Quick advance if same response selected
+      if (lastResponse === response && quickAdvanceTimer === null) {
+        const timer = setTimeout(() => {
+          advanceToNext();
+          setQuickAdvanceTimer(null);
+        }, 600);
+        setQuickAdvanceTimer(timer);
+      } else {
+        if (quickAdvanceTimer) {
+          clearTimeout(quickAdvanceTimer);
+          setQuickAdvanceTimer(null);
+        }
+        // Normal advance delay
+        setTimeout(advanceToNext, 300);
+      }
+      
+      setLastResponse(response);
+    } catch (err) {
+      console.error('Error handling scenario response:', err);
+      setError('Error saving your response. Please try again.');
+    }
+  }, [currentScenarioIndex, scenarios, responses.length, startTime, lastResponse, quickAdvanceTimer]);
+
+  const advanceToNext = () => {
     // Move to next scenario or values step
     if (currentScenarioIndex < scenarios.length - 1) {
       setCurrentScenarioIndex(prev => prev + 1);
     } else {
       setCurrentStep('values');
     }
-  }, [currentScenarioIndex, scenarios, responses.length, startTime]);
+  };
 
   const handleValuesComplete = (values: Array<{ valueId: string; rank: number }>) => {
     setSelectedValues(values);
@@ -156,6 +281,7 @@ export default function GenZWorkplaceAssessment() {
 
   const generateResults = async () => {
     try {
+      setError(null);
       const scoringData: GenZScoringData = {
         sessionId,
         responses,
@@ -169,13 +295,17 @@ export default function GenZWorkplaceAssessment() {
       // Save to database
       await saveResults(finalResults);
       
+      // Clear progress on completion
+      localStorage.removeItem('genz-assessment-progress');
+      
       setResults(finalResults);
       setCurrentStep('results');
     } catch (error) {
       console.error('Error generating results:', error);
+      setError('Failed to generate assessment results. Please try again.');
       toast({
         title: "Error",
-        description: "Failed to generate assessment results",
+        description: "Failed to generate assessment results. Please try again.",
         variant: "destructive"
       });
     }
@@ -234,9 +364,53 @@ export default function GenZWorkplaceAssessment() {
   const currentScenario = scenarios[currentScenarioIndex];
   const progress = scenarios.length > 0 ? ((currentScenarioIndex + 1) / scenarios.length) * 100 : 0;
 
+  // Error display
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
+        <Card className="w-full max-w-2xl bg-card/95 backdrop-blur-sm border-red-200 dark:border-red-800">
+          <CardHeader>
+            <CardTitle className="text-red-700 dark:text-red-300 flex items-center gap-2">
+              ⚠️ Connection Error
+            </CardTitle>
+            <CardDescription className="text-red-600 dark:text-red-400">
+              {error}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              Don't worry! Your progress has been automatically saved. You can continue from where you left off.
+            </p>
+            <div className="flex gap-3">
+              <Button onClick={retryFromError} variant="outline">
+                Try Again
+              </Button>
+              <Button onClick={clearProgress} variant="destructive">
+                Start Over
+              </Button>
+            </div>
+            <div className="text-xs text-muted-foreground">
+              Progress: {responses.length} scenario responses + {selectedValues.length} values selected
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   if (currentStep === 'welcome') {
     return (
       <div className="min-h-screen bg-gradient-primary flex items-center justify-center p-4">
+        {/* Recovery notification */}
+        {isRecovering && (
+          <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 bg-blue-500 text-white px-6 py-3 rounded-lg shadow-lg">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-5 w-5" />
+              Restored your progress! Continuing from where you left off...
+            </div>
+          </div>
+        )}
+        
         <Card className="w-full max-w-2xl bg-card/95 backdrop-blur-sm">
           <CardHeader className="text-center space-y-6">
             <div className="flex justify-center space-x-4 text-4xl">
@@ -449,6 +623,22 @@ function ScenarioFeed({
     { key: 'toxic' as const, emoji: '🚩', label: 'Red flag' }
   ];
 
+  // Keyboard shortcuts for quick reactions
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      const key = e.key;
+      if (key >= '1' && key <= '5') {
+        const reactionIndex = parseInt(key) - 1;
+        if (reactionIndex < reactions.length) {
+          onResponse(reactions[reactionIndex].key);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [onResponse]);
+
   return (
     <div className="h-screen flex flex-col">
       {/* Header */}
@@ -482,17 +672,29 @@ function ScenarioFeed({
             </div>
             
             <div className="grid grid-cols-5 gap-3 mt-8">
-              {reactions.map(reaction => (
+              {reactions.map((reaction, index) => (
                 <Button
                   key={reaction.key}
                   variant="outline"
                   onClick={() => onResponse(reaction.key)}
-                  className="h-20 flex flex-col space-y-2 hover:scale-105 transition-transform"
+                  className="h-20 flex flex-col space-y-2 hover:scale-105 transition-transform relative"
                 >
                   <span className="text-2xl">{reaction.emoji}</span>
                   <span className="text-xs">{reaction.label}</span>
+                  <span className="text-xs text-muted-foreground absolute bottom-1 right-1">
+                    {index + 1}
+                  </span>
                 </Button>
               ))}
+            </div>
+            
+            <div className="mt-6 p-4 bg-muted/30 rounded-lg">
+              <div className="text-xs text-muted-foreground space-y-1">
+                <div>💡 <strong>Quick tips:</strong></div>
+                <div>• Use number keys 1-5 for quick reactions</div>
+                <div>• Double-tap same reaction for auto-advance</div>
+                <div>• Your progress is automatically saved</div>
+              </div>
             </div>
           </CardContent>
         </Card>
