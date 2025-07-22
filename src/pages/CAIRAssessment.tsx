@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { cairQuestions, personalityDimensions } from "@/data/cairQuestionsFixed";
+import { cairQuestions, personalityDimensions } from "@/data/cairPersonalityQuestionsOnly";
 import { Shield, Brain, Users, Lightbulb, Heart, Download, Share2, Eye, Clock, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -107,7 +107,7 @@ export default function CAIRAssessment() {
     // Calculate personality dimension scores
     responses.forEach(response => {
       const question = questions.find(q => q.id === response.questionId);
-      if (question && question.type === 'forced_choice') {
+      if (question && question.type === 'personality') {
         let score = response.answer === 'A' ? 1 : 0;
         if (question.reverse) score = 1 - score;
         
@@ -137,8 +137,8 @@ export default function CAIRAssessment() {
 
     responses.forEach(response => {
       const question = questions.find(q => q.id === response.questionId);
-      if (question && question.type === 'distortion') {
-        switch (question.distortionType) {
+      if (question && question.type === 'validity') {
+        switch (question.validityType) {
           case 'fake_good':
             if (response.answer === 'A') fakeGoodScore++;
             break;
@@ -146,31 +146,33 @@ export default function CAIRAssessment() {
             if (response.answer === 'A') fakeBadScore++;
             break;
           case 'random_check':
-            if (response.answer === 'B') randomResponseScore++;
+            if (response.answer === 'A') randomResponseScore++;
+            break;
+          case 'inconsistency':
+            // Check for consistency patterns
+            if (response.answer === 'A') inconsistencyScore++;
             break;
         }
       }
     });
 
-    // Check inconsistency pairs
-    const teamworkPair = [
-      responses.find(r => r.questionId === 'ic001'),
-      responses.find(r => r.questionId === 'ic002')
+    // Check inconsistency patterns (questions that contradict each other)
+    const teamworkResponses = [
+      responses.find(r => r.questionId === 'v013'),  // prefer teamwork
+      responses.find(r => r.questionId === 'v016')   // prefer working alone
     ];
-    if (teamworkPair[0] && teamworkPair[1]) {
-      if ((teamworkPair[0].answer === 'A' && teamworkPair[1].answer === 'A') ||
-          (teamworkPair[0].answer === 'B' && teamworkPair[1].answer === 'B')) {
+    if (teamworkResponses[0] && teamworkResponses[1]) {
+      if (teamworkResponses[0].answer === 'A' && teamworkResponses[1].answer === 'A') {
         inconsistencyScore++;
       }
     }
 
-    const challengePair = [
-      responses.find(r => r.questionId === 'ic003'),
-      responses.find(r => r.questionId === 'ic004')
+    const pressureResponses = [
+      responses.find(r => r.questionId === 'v014'),  // enjoy challenges
+      responses.find(r => r.questionId === 'v018')   // dislike challenging work
     ];
-    if (challengePair[0] && challengePair[1]) {
-      if ((challengePair[0].answer === 'A' && challengePair[1].answer === 'A') ||
-          (challengePair[0].answer === 'B' && challengePair[1].answer === 'B')) {
+    if (pressureResponses[0] && pressureResponses[1]) {
+      if (pressureResponses[0].answer === 'A' && pressureResponses[1].answer === 'A') {
         inconsistencyScore++;
       }
     }
@@ -207,6 +209,134 @@ export default function CAIRAssessment() {
     if (percentile >= 30) return 'Average';
     if (percentile >= 15) return 'Low';
     return 'Very Low';
+  };
+
+  const getWorkplaceImplications = (dimension: string, percentile: number): string => {
+    const implications = {
+      conscientiousness: {
+        high: "Highly reliable, organized, and detail-oriented. Excellent at following through on commitments and maintaining quality standards.",
+        moderate: "Generally dependable with good organizational skills. May need structure and clear expectations to perform optimally.",
+        low: "May benefit from external structure and deadlines. Creative and adaptable but might struggle with routine tasks."
+      },
+      agreeableness: {
+        high: "Excellent team player, collaborative, and supportive. Strong at building consensus and maintaining workplace harmony.",
+        moderate: "Balanced approach to cooperation and assertiveness. Can work well in teams while maintaining personal boundaries.",
+        low: "Direct communicator who focuses on results. May excel in competitive environments and making tough decisions."
+      },
+      innovation: {
+        high: "Creative problem-solver who thrives on new challenges. Excellent at generating ideas and adapting to change.",
+        moderate: "Balances creativity with practicality. Can innovate when needed while maintaining operational efficiency.",
+        low: "Prefers proven methods and stable processes. Excellent at execution and maintaining consistent quality."
+      },
+      resilience: {
+        high: "Exceptional stress tolerance and recovery ability. Maintains performance under pressure and bounces back quickly from setbacks.",
+        moderate: "Generally handles stress well with adequate support. May need time to process challenging situations.",
+        low: "May be sensitive to stress and change. Benefits from supportive environment and gradual exposure to challenges."
+      }
+    };
+
+    const level = percentile >= 70 ? 'high' : percentile >= 30 ? 'moderate' : 'low';
+    return implications[dimension as keyof typeof implications]?.[level] || "Personality trait analysis pending.";
+  };
+
+  const getInterviewQuestions = (dimension: string, percentile: number): string[] => {
+    const questions = {
+      conscientiousness: {
+        high: [
+          "Tell me about a time when you had to manage multiple competing priorities. How did you approach it?",
+          "Describe a situation where attention to detail was critical. What was your process?",
+          "How do you ensure quality when working under tight deadlines?"
+        ],
+        moderate: [
+          "Describe your typical approach to planning and organizing work projects.",
+          "Tell me about a time when you had to improve a process or system.",
+          "How do you balance thoroughness with efficiency in your work?"
+        ],
+        low: [
+          "How do you handle structured environments and detailed procedures?",
+          "Describe a time when you had to work within strict guidelines or deadlines.",
+          "What systems or tools help you stay organized and on track?"
+        ]
+      },
+      agreeableness: {
+        high: [
+          "Tell me about a time when you had to navigate a team conflict. How did you handle it?",
+          "Describe a situation where you had to balance team harmony with business needs.",
+          "How do you provide constructive feedback to colleagues?"
+        ],
+        moderate: [
+          "Describe your approach to building relationships with new team members.",
+          "Tell me about a time when you had to advocate for an unpopular but necessary decision.",
+          "How do you handle disagreements with colleagues or supervisors?"
+        ],
+        low: [
+          "Tell me about a time when you had to make a difficult decision that affected others.",
+          "How do you approach situations where you need to be more direct or assertive?",
+          "Describe your communication style when delivering challenging news."
+        ]
+      },
+      innovation: {
+        high: [
+          "Describe the most innovative solution you've developed to solve a work problem.",
+          "Tell me about a time when you challenged conventional thinking in your workplace.",
+          "How do you approach situations where there's no established procedure?"
+        ],
+        moderate: [
+          "Describe a time when you had to adapt to significant changes in your work environment.",
+          "Tell me about a creative solution you developed within existing constraints.",
+          "How do you balance innovation with practical implementation?"
+        ],
+        low: [
+          "How do you approach learning and implementing new technologies or processes?",
+          "Describe a time when you successfully improved an existing process.",
+          "What's your approach when faced with ambiguous or undefined tasks?"
+        ]
+      },
+      resilience: {
+        high: [
+          "Tell me about the most stressful period in your career and how you managed it.",
+          "Describe a time when you failed at something important. How did you respond?",
+          "How do you maintain performance during high-pressure situations?"
+        ],
+        moderate: [
+          "Describe your strategies for managing stress and maintaining work-life balance.",
+          "Tell me about a time when you had to bounce back from a setback.",
+          "How do you handle criticism or negative feedback?"
+        ],
+        low: [
+          "What type of work environment helps you perform at your best?",
+          "How do you prefer to receive support when facing challenging situations?",
+          "Describe your ideal pace and structure for taking on new responsibilities."
+        ]
+      }
+    };
+
+    const level = percentile >= 70 ? 'high' : percentile >= 30 ? 'moderate' : 'low';
+    return questions[dimension as keyof typeof questions]?.[level] || ["Standard behavioral interview questions recommended."];
+  };
+
+  const getDevelopmentRecommendations = (dimension: string, percentile: number): string => {
+    const recommendations = {
+      conscientiousness: {
+        moderate: "Focus on developing stronger planning and time management systems. Consider using project management tools and creating detailed schedules.",
+        low: "Implement structured organizational systems, set regular check-in points, and consider working with a mentor on goal-setting techniques."
+      },
+      agreeableness: {
+        moderate: "Practice assertiveness training while maintaining collaborative skills. Work on direct communication techniques for difficult conversations.",
+        low: "Develop emotional intelligence and active listening skills. Consider team-building exercises and conflict resolution training."
+      },
+      innovation: {
+        moderate: "Engage in creative thinking exercises and cross-functional projects. Seek opportunities to work on new initiatives and change management.",
+        low: "Start with small innovative projects within familiar areas. Practice brainstorming techniques and seek exposure to new ideas and approaches."
+      },
+      resilience: {
+        moderate: "Develop stress management techniques such as mindfulness or regular exercise. Build a strong support network and practice self-care strategies.",
+        low: "Focus on building coping strategies gradually. Consider stress reduction techniques, seek mentorship, and ensure adequate support systems are in place."
+      }
+    };
+
+    const level = percentile >= 30 ? 'moderate' : 'low';
+    return recommendations[dimension as keyof typeof recommendations]?.[level] || "Continued development in this area will enhance overall effectiveness.";
   };
 
   const generateCandidateReport = async () => {
@@ -476,9 +606,6 @@ export default function CAIRAssessment() {
         <div className="mb-8">
           <div className="flex justify-between items-center mb-4">
             <span className="text-slate-600">Question {currentQuestionIndex + 1} of {questions.length}</span>
-            <Badge variant={currentQuestion.type === 'distortion' ? 'destructive' : 'default'}>
-              {currentQuestion.type === 'distortion' ? 'Validity Check' : 'Personality'}
-            </Badge>
           </div>
           <Progress value={progress} className="h-2" />
         </div>
@@ -681,21 +808,71 @@ export default function CAIRAssessment() {
                   </CardContent>
                 </Card>
 
-                {/* Interview Suggestions */}
+                {/* Detailed Personality Profile */}
                 <Card>
                   <CardHeader>
-                    <CardTitle>Interview Focus Areas</CardTitle>
+                    <CardTitle>Detailed Personality Analysis</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {Object.entries(scores).map(([dimension, data]) => {
+                        const dimInfo = personalityDimensions[dimension as keyof typeof personalityDimensions];
+                        const strengthLevel = data.percentile >= 70 ? 'Strong' : data.percentile >= 30 ? 'Moderate' : 'Developing';
+                        const colorClass = data.percentile >= 70 ? 'text-green-600' : data.percentile >= 30 ? 'text-blue-600' : 'text-orange-600';
+                        
+                        return (
+                          <div key={dimension} className="border-l-4 border-blue-200 pl-4">
+                            <div className="flex justify-between items-center mb-2">
+                              <h4 className="font-semibold">{dimInfo.name}</h4>
+                              <span className={`text-sm font-medium ${colorClass}`}>{strengthLevel} ({data.percentile}%)</span>
+                            </div>
+                            <p className="text-sm text-slate-600 mb-2">{dimInfo.description}</p>
+                            <div className="bg-slate-50 p-2 rounded text-xs">
+                              <strong>Workplace Implications:</strong> {getWorkplaceImplications(dimension, data.percentile)}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Interview Questions */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Targeted Interview Questions</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      {Object.entries(scores).map(([dimension, data]) => (
+                        <div key={dimension} className="border rounded-lg p-3">
+                          <h4 className="font-semibold mb-2">{personalityDimensions[dimension as keyof typeof personalityDimensions].name}</h4>
+                          <div className="space-y-2">
+                            {getInterviewQuestions(dimension, data.percentile).map((question, index) => (
+                              <div key={index} className="text-sm bg-blue-50 p-2 rounded">
+                                <span className="font-medium text-blue-800">Q{index + 1}:</span> {question}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Development Recommendations */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Development & Coaching Suggestions</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-3">
                       {Object.entries(scores)
-                        .filter(([, data]) => data.percentile < 30)
-                        .map(([dimension]) => (
-                          <div key={dimension} className="bg-slate-50 p-3 rounded">
-                            <span className="font-medium">Explore {personalityDimensions[dimension as keyof typeof personalityDimensions].name}:</span>
-                            <span className="text-sm text-slate-600 ml-2">
-                              Ask for specific examples and behavioral indicators
-                            </span>
+                        .filter(([, data]) => data.percentile < 70)
+                        .map(([dimension, data]) => (
+                          <div key={dimension} className="bg-green-50 p-3 rounded">
+                            <span className="font-medium text-green-800">{personalityDimensions[dimension as keyof typeof personalityDimensions].name} Development:</span>
+                            <p className="text-sm text-green-700 mt-1">{getDevelopmentRecommendations(dimension, data.percentile)}</p>
                           </div>
                         ))}
                     </div>
