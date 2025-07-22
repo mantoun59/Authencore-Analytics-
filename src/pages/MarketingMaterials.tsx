@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, FileText, Image, Users, BarChart3, Briefcase } from 'lucide-react';
+import { Download, FileText, Image, Users, BarChart3, Briefcase, Sparkles, Target, TrendingUp, Award, Building, Globe } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -413,52 +413,117 @@ const MarketingMaterials: React.FC = () => {
     <div className="min-h-screen bg-background">
       <Header />
       
-      {/* Hero Section */}
-      <section className="py-16 bg-gradient-to-br from-primary/10 via-background to-secondary/10">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              Marketing Materials
+      {/* Hero Section with Background Image */}
+      <section className="relative py-20 bg-gradient-to-br from-primary/10 via-background to-secondary/10 overflow-hidden">
+        <div className="absolute inset-0 opacity-5">
+          <img 
+            src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=1926&q=80" 
+            alt="Professional workspace" 
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center max-w-4xl mx-auto">
+            <div className="flex justify-center mb-6">
+              <div className="p-4 bg-primary/10 rounded-full">
+                <Briefcase className="h-12 w-12 text-primary" />
+              </div>
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Professional Marketing Materials
             </h1>
-            <p className="text-xl text-muted-foreground mb-8">
-              Download professional marketing materials to showcase AuthenCore Analytics 
-              services and capabilities to your stakeholders.
+            <p className="text-xl text-muted-foreground mb-8 leading-relaxed">
+              Showcase AuthenCore Analytics with our comprehensive collection of professional marketing materials. 
+              High-quality resources designed to communicate our value proposition effectively.
             </p>
+            <div className="flex justify-center gap-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <Award className="h-4 w-4" />
+                <span>Professional Quality</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Download className="h-4 w-4" />
+                <span>Instant Download</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-4 w-4" />
+                <span>Ready to Use</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Materials Grid */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="mb-12">
-            <h2 className="text-3xl font-bold mb-4">Available Materials</h2>
-            <p className="text-muted-foreground">
-              Choose from our comprehensive collection of marketing materials
+          <div className="text-center mb-16">
+            <div className="flex justify-center mb-4">
+              <div className="p-3 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-full">
+                <FileText className="h-8 w-8 text-primary" />
+              </div>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">Available Materials</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Choose from our comprehensive collection of marketing materials, each professionally designed 
+              to communicate our expertise and value proposition.
             </p>
+          </div>
+
+          {/* Category Features */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
+            <div className="text-center p-6 bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-950 dark:to-blue-900 rounded-lg">
+              <Building className="h-8 w-8 text-blue-600 mx-auto mb-3" />
+              <h3 className="font-semibold mb-2">Company Overview</h3>
+              <p className="text-sm text-muted-foreground">Comprehensive business profiles</p>
+            </div>
+            <div className="text-center p-6 bg-gradient-to-br from-green-50 to-green-100 dark:from-green-950 dark:to-green-900 rounded-lg">
+              <BarChart3 className="h-8 w-8 text-green-600 mx-auto mb-3" />
+              <h3 className="font-semibold mb-2">Product Information</h3>
+              <p className="text-sm text-muted-foreground">Detailed service specifications</p>
+            </div>
+            <div className="text-center p-6 bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-950 dark:to-purple-900 rounded-lg">
+              <Users className="h-8 w-8 text-purple-600 mx-auto mb-3" />
+              <h3 className="font-semibold mb-2">Case Studies</h3>
+              <p className="text-sm text-muted-foreground">Real-world success stories</p>
+            </div>
+            <div className="text-center p-6 bg-gradient-to-br from-orange-50 to-orange-100 dark:from-orange-950 dark:to-orange-900 rounded-lg">
+              <Globe className="h-8 w-8 text-orange-600 mx-auto mb-3" />
+              <h3 className="font-semibold mb-2">Services</h3>
+              <p className="text-sm text-muted-foreground">Complete service portfolio</p>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {marketingMaterials.map((material) => {
               const IconComponent = material.icon;
               return (
-                <Card key={material.id} className="overflow-hidden hover:shadow-lg transition-shadow">
-                  <div className="aspect-video relative bg-gradient-to-br from-primary/5 to-secondary/5">
+                <Card key={material.id} className="group overflow-hidden hover:shadow-xl transition-all duration-300 border-0 bg-gradient-to-br from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
+                  <div className="aspect-video relative bg-gradient-to-br from-primary/5 to-secondary/5 overflow-hidden">
                     <img
                       src={material.image}
                       alt={material.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                     <div className="absolute top-4 right-4">
-                      <Badge variant="outline" className="bg-white/80 backdrop-blur">
+                      <Badge variant="outline" className="bg-white/90 backdrop-blur border-white/20 shadow-sm">
                         {material.category}
                       </Badge>
                     </div>
+                    <div className="absolute bottom-4 left-4">
+                      <div className="flex items-center gap-2 text-white">
+                        <IconComponent className="h-5 w-5" />
+                        <span className="font-medium">{material.format}</span>
+                      </div>
+                    </div>
                   </div>
                   
-                  <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <IconComponent className="h-5 w-5 text-primary" />
+                  <CardHeader className="pb-4">
+                    <CardTitle className="flex items-center gap-3 text-xl">
+                      <div className="p-2 bg-primary/10 rounded-lg">
+                        <IconComponent className="h-5 w-5 text-primary" />
+                      </div>
                       {material.title}
                     </CardTitle>
                   </CardHeader>
