@@ -16,9 +16,9 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
 
   // Size mapping for images - adjusted for navbar height (h-24 = 96px)
   const sizeClasses = {
-    sm: 'h-8 w-auto max-w-[100px]', // 32px height for mobile
-    md: 'h-12 w-auto max-w-[140px]', // 48px height for desktop
-    lg: 'h-16 w-auto max-w-[180px]' // 64px height for large displays
+    sm: 'h-10 w-auto max-w-[130px]', // 40px height for mobile (30% increase)
+    md: 'h-16 w-auto max-w-[180px]', // 64px height for desktop (30% increase)
+    lg: 'h-32 w-auto max-w-[360px]' // 128px height for large displays (double size)
   };
 
   return (
