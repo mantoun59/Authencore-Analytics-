@@ -125,8 +125,8 @@ const MarketingMaterials: React.FC = () => {
           return;
         }
         
-        // Maintain aspect ratio while setting fixed width
-        const targetWidth = 120;
+        // Maintain aspect ratio while setting larger fixed width for PDFs
+        const targetWidth = 180; // Increased from 120 to 180 for better PDF visibility
         const aspectRatio = img.height / img.width;
         const targetHeight = targetWidth * aspectRatio;
         
@@ -149,10 +149,10 @@ const MarketingMaterials: React.FC = () => {
   const generateCompanyBrochure = async () => {
     const doc = new jsPDF();
     
-    // Add logo with proper dimensions
+    // Add logo with proper dimensions - increased size for better visibility
     try {
       const logoBase64 = await loadLogoAsBase64();
-      doc.addImage(logoBase64, 'PNG', 20, 10, 30, 20);
+      doc.addImage(logoBase64, 'PNG', 20, 10, 45, 30); // Increased from 30x20 to 45x30
     } catch (error) {
       console.warn('Logo loading failed, using text fallback');
     }
