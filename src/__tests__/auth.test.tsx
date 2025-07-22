@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, waitFor } from '@testing-library/react'
+import { renderHook } from '@testing-library/react'
 import { AuthProvider, useAuth } from '../contexts/AuthContext'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactNode } from 'react'
@@ -58,14 +58,12 @@ describe('useAuth Hook', () => {
     expect(result.current.loading).toBe(true)
   })
 
-  it('has null user initially', async () => {
+  it('has null user initially', () => {
     const { result } = renderHook(() => useAuth(), {
       wrapper: createWrapper(),
     })
 
-    await waitFor(() => {
-      expect(result.current.user).toBeNull()
-    })
+    expect(result.current.user).toBeNull()
   })
 
   it('throws error when used outside provider', () => {
