@@ -424,9 +424,6 @@ const MarketingMaterials: React.FC = () => {
               Download professional marketing materials to showcase AuthenCore Analytics 
               services and capabilities to your stakeholders.
             </p>
-            <Badge variant="secondary" className="text-base px-4 py-2">
-              All materials are professionally designed and ready to use
-            </Badge>
           </div>
         </div>
       </section>
