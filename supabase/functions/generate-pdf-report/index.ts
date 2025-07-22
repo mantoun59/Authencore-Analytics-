@@ -482,16 +482,28 @@ function generateCareerLaunchReport(results: any, userData: any): string {
 // Helper Functions
 function getReportStyles(): string {
   return `
-    @page { margin: 0.5in; }
-    @page :first { margin: 1.5in; }
-    @page :nth(2) { margin: 1.25in; }
-    @page :nth(3) { margin: 1in; }
+    @page { 
+      margin: 1.2in 1in; 
+      size: A4;
+    }
+    @page :first { 
+      margin: 1.5in 1.2in; 
+    }
+    @page :nth(2) { 
+      margin: 1.3in 1.1in; 
+    }
+    @page :nth(3) { 
+      margin: 1.2in 1in; 
+    }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { 
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
       line-height: 1.6; 
       color: #333; 
       background: #f8f9fa;
+      max-width: 8in;
+      margin: 0 auto;
+      padding: 20px;
     }
     .header { 
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
@@ -539,10 +551,11 @@ function getReportStyles(): string {
     .summary-box p { margin-bottom: 12px; font-size: 1.1em; }
     .dimensions-section, .detailed-analysis, .career-recommendations, .riasec-section, .personality-insights { 
       background: white; 
-      padding: 30px; 
+      padding: 40px 35px; 
       border-radius: 15px; 
       box-shadow: 0 5px 20px rgba(0,0,0,0.1); 
-      margin-bottom: 30px; 
+      margin: 35px 0; 
+      page-break-inside: avoid;
     }
     .chart-container { 
       text-align: center; 
@@ -596,35 +609,40 @@ function getReportStyles(): string {
     .action-plan { 
       background: linear-gradient(135deg, #e7f3ff 0%, #d1ecf1 100%); 
       border: 2px solid #b3d9ff; 
-      padding: 30px; 
+      padding: 40px 35px; 
       border-radius: 15px; 
-      margin-bottom: 30px; 
+      margin: 35px 0; 
+      page-break-inside: avoid;
     }
     .interview-questions { 
       background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%); 
       border: 2px solid #ffd93d; 
-      padding: 30px; 
+      padding: 40px 35px; 
       border-radius: 15px; 
-      margin-bottom: 30px; 
+      margin: 35px 0; 
+      page-break-inside: avoid;
     }
     .distortion-analysis { 
       background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%); 
       border: 2px solid #17a2b8; 
-      padding: 30px; 
+      padding: 40px 35px; 
       border-radius: 15px; 
-      margin-bottom: 30px; 
+      margin: 35px 0; 
+      page-break-inside: avoid;
     }
     .sharing-section {
       background: linear-gradient(135deg, #f3e5f5 0%, #e1bee7 100%);
       border: 2px solid #ab47bc;
-      padding: 30px;
+      padding: 40px 35px;
       border-radius: 15px;
-      margin-bottom: 30px;
+      margin: 35px 0;
+      page-break-inside: avoid;
     }
     .sharing-box {
       background: rgba(255,255,255,0.8);
-      padding: 20px;
+      padding: 25px;
       border-radius: 10px;
+      margin-top: 15px;
     }
     h2 { 
       color: #667eea; 
@@ -679,9 +697,19 @@ function getReportStyles(): string {
     .validity-medium { color: #ffc107; font-weight: bold; }
     .validity-low { color: #dc3545; font-weight: bold; }
     @media print {
-      body { background: white; }
+      body { 
+        background: white; 
+        margin: 0;
+        padding: 15px;
+      }
       .header { background: #667eea !important; }
-      .action-plan, .interview-questions, .distortion-analysis, .sharing-section { break-inside: avoid; }
+      .action-plan, .interview-questions, .distortion-analysis, .sharing-section, 
+      .dimensions-section, .career-recommendations, .riasec-section, .personality-insights { 
+        break-inside: avoid; 
+        page-break-inside: avoid;
+      }
+      h2 { page-break-after: avoid; }
+      .chart-container { page-break-inside: avoid; }
     }
   `;
 }
