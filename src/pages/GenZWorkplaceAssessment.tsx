@@ -79,6 +79,16 @@ export default function GenZWorkplaceAssessment() {
     swipeData?: any;
   }>>([]);
   
+  // Navigation helpers
+  const canGoBack = currentScenarioIndex > 0;
+  const goBackScenario = () => {
+    if (canGoBack) {
+      setCurrentScenarioIndex(prev => prev - 1);
+      // Remove the last response to allow re-answering
+      setResponses(prev => prev.slice(0, -1));
+    }
+  };
+  
   // Values selection
   const [selectedValues, setSelectedValues] = useState<Array<{
     valueId: string;
@@ -482,6 +492,8 @@ export default function GenZWorkplaceAssessment() {
           scenarioIndex={currentScenarioIndex}
           totalScenarios={scenarios.length}
           onResponse={handleScenarioResponse}
+          canGoBack={canGoBack}
+          onGoBack={goBackScenario}
         />
       </div>
     );
@@ -493,6 +505,10 @@ export default function GenZWorkplaceAssessment() {
         <ValuesSelection 
           values={VALUES_CARDS}
           onComplete={handleValuesComplete}
+          onGoBack={() => {
+            setCurrentStep('scenarios');
+            setCurrentScenarioIndex(Math.max(0, scenarios.length - 1));
+          }}
         />
       </div>
     );
@@ -605,13 +621,17 @@ function ScenarioFeed({
   progress, 
   scenarioIndex, 
   totalScenarios, 
-  onResponse 
+  onResponse,
+  canGoBack,
+  onGoBack 
 }: { 
   scenario: Scenario;
   progress: number;
   scenarioIndex: number;
   totalScenarios: number;
   onResponse: (response: 'love' | 'good' | 'meh' | 'nope' | 'toxic') => void;
+  canGoBack: boolean;
+  onGoBack: () => void;
 }) {
   if (!scenario) return null;
 
@@ -688,7 +708,23 @@ function ScenarioFeed({
               ))}
             </div>
             
-            <div className="mt-6 p-4 bg-muted/30 rounded-lg">
+            {/* Navigation */}
+            <div className="flex justify-between items-center mt-6">
+              <Button
+                variant="outline"
+                onClick={onGoBack}
+                disabled={!canGoBack}
+                size="sm"
+              >
+                ← Previous
+              </Button>
+              <div className="text-xs text-muted-foreground">
+                React with emojis above
+              </div>
+              <div className="w-20" /> {/* Spacer for alignment */}
+            </div>
+            
+            <div className="mt-4 p-4 bg-muted/30 rounded-lg">
               <div className="text-xs text-muted-foreground space-y-1">
                 <div>💡 <strong>Quick tips:</strong></div>
                 <div>• Use number keys 1-5 for quick reactions</div>
@@ -705,10 +741,12 @@ function ScenarioFeed({
 
 function ValuesSelection({ 
   values, 
-  onComplete 
+  onComplete,
+  onGoBack
 }: { 
   values: ValueCard[];
   onComplete: (selection: Array<{ valueId: string; rank: number }>) => void;
+  onGoBack: () => void;
 }) {
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
@@ -763,13 +801,22 @@ function ValuesSelection({
           ))}
         </div>
         
-        <Button 
-          onClick={handleComplete}
-          disabled={selectedValues.length !== 5}
-          className="w-full"
-        >
-          Continue with my top 5 →
-        </Button>
+        <div className="flex justify-between gap-4">
+          <Button
+            variant="outline"
+            onClick={onGoBack}
+            className="flex-1"
+          >
+            ← Back to Scenarios
+          </Button>
+          <Button 
+            onClick={handleComplete}
+            disabled={selectedValues.length !== 5}
+            className="flex-1"
+          >
+            Continue with my top 5 →
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
