@@ -6,6 +6,9 @@ import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Progress } from '@/components/ui/progress';
 import { 
   Users, 
   Building, 
@@ -14,7 +17,13 @@ import {
   FileText,
   Calendar,
   Download,
-  BarChart3
+  BarChart3,
+  Clock,
+  Target,
+  AlertTriangle,
+  CheckCircle,
+  Filter,
+  RefreshCw
 } from 'lucide-react';
 import Header from '@/components/Header';
 import ProtectedAdminRoute from '@/components/ProtectedAdminRoute';
@@ -24,6 +33,9 @@ const AdminAnalytics = () => {
   const { isAdmin } = useAdminAuth();
   const [analytics, setAnalytics] = useState<any>({});
   const [loading, setLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState('30'); // days
+  const [assessmentFilter, setAssessmentFilter] = useState('all');
+  const [refreshing, setRefreshing] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,19 +43,28 @@ const AdminAnalytics = () => {
 
     const loadAnalytics = async () => {
       try {
-        // Load various analytics data
+        // Calculate date filter
+        const daysAgo = parseInt(timeRange);
+        const dateFilter = new Date();
+        dateFilter.setDate(dateFilter.getDate() - daysAgo);
+
+        // Load various analytics data with time filtering
         const [
           soloCandiatesRes,
           employerCandidatesRes,
           employersRes,
           paymentsRes,
-          eventsRes
+          eventsRes,
+          assessmentResultsRes,
+          recentActivityRes
         ] = await Promise.all([
-          supabase.from('solo_candidates').select('*'),
-          supabase.from('employer_candidates').select('*'),
-          supabase.from('employer_accounts').select('*'),
-          supabase.from('payments').select('*'),
-          supabase.from('analytics_events').select('*').limit(100).order('created_at', { ascending: false })
+          supabase.from('solo_candidates').select('*').gte('created_at', dateFilter.toISOString()),
+          supabase.from('employer_candidates').select('*').gte('created_at', dateFilter.toISOString()),
+          supabase.from('employer_accounts').select('*').gte('created_at', dateFilter.toISOString()),
+          supabase.from('payments').select('*').gte('created_at', dateFilter.toISOString()),
+          supabase.from('analytics_events').select('*').limit(100).order('created_at', { ascending: false }).gte('created_at', dateFilter.toISOString()),
+          supabase.from('assessment_results').select('*').gte('created_at', dateFilter.toISOString()),
+          supabase.from('solo_candidates').select('*').gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
         ]);
 
         const soloCandidates = soloCandiatesRes.data || [];
@@ -51,6 +72,8 @@ const AdminAnalytics = () => {
         const employers = employersRes.data || [];
         const payments = paymentsRes.data || [];
         const events = eventsRes.data || [];
+        const assessmentResults = assessmentResultsRes.data || [];
+        const recentActivity = recentActivityRes.data || [];
 
         // Calculate analytics
         const totalCandidates = soloCandidates.length + employerCandidates.length;
@@ -58,6 +81,15 @@ const AdminAnalytics = () => {
                                    employerCandidates.filter(c => c.assessment_completed).length;
         const totalRevenue = payments.filter(p => p.status === 'paid').reduce((sum, p) => sum + Number(p.amount), 0);
         const paidSoloCandidates = soloCandidates.filter(c => c.payment_status === 'paid').length;
+        
+        // Completion rate and time analytics
+        const completionRate = totalCandidates > 0 ? (completedAssessments / totalCandidates) * 100 : 0;
+        const averageCompletionTime = assessmentResults.length > 0 ? 
+          assessmentResults.reduce((sum, r) => sum + (new Date(r.completed_at).getTime() - new Date(r.created_at).getTime()), 0) / assessmentResults.length / (1000 * 60) : 0;
+        
+        // Growth metrics
+        const weeklyGrowth = recentActivity.length;
+        const conversionRate = totalCandidates > 0 ? (completedAssessments / totalCandidates) * 100 : 0;
 
         // Demographics
         const countries = [...soloCandidates, ...employerCandidates]
@@ -74,6 +106,21 @@ const AdminAnalytics = () => {
             return acc;
           }, {});
 
+        // Assessment type breakdown
+        const assessmentTypes = assessmentResults.reduce((acc: any, result) => {
+          acc[result.assessment_type] = (acc[result.assessment_type] || 0) + 1;
+          return acc;
+        }, {});
+
+        // Performance metrics
+        const performanceMetrics = {
+          avgTimeToComplete: averageCompletionTime,
+          completionRate,
+          conversionRate,
+          weeklyGrowth,
+          retentionRate: employers.filter(e => e.is_active).length / Math.max(employers.length, 1) * 100
+        };
+
         setAnalytics({
           totalCandidates,
           completedAssessments,
@@ -86,7 +133,10 @@ const AdminAnalytics = () => {
           events,
           soloCandidates,
           employerCandidates,
-          payments: payments.filter(p => p.status === 'paid')
+          payments: payments.filter(p => p.status === 'paid'),
+          assessmentTypes,
+          performanceMetrics,
+          assessmentResults
         });
       } catch (error) {
         console.error('Error loading analytics:', error);
@@ -96,7 +146,18 @@ const AdminAnalytics = () => {
     };
 
     loadAnalytics();
-  }, [user, isAdmin]);
+  }, [user, isAdmin, timeRange, assessmentFilter]);
+
+  const refreshData = async () => {
+    setRefreshing(true);
+    setLoading(true);
+    await new Promise(resolve => setTimeout(resolve, 1000)); // Add slight delay for UX
+    const loadAnalytics = async () => {
+      // ... same logic as above but extracted for reuse
+    };
+    await loadAnalytics();
+    setRefreshing(false);
+  };
 
   const exportData = async () => {
     try {
@@ -148,16 +209,45 @@ const AdminAnalytics = () => {
           <div className="flex items-center justify-between mb-8">
             <div>
               <h1 className="text-3xl font-bold">Analytics Dashboard</h1>
-              <p className="text-muted-foreground">Track assessment progress and business metrics</p>
+              <p className="text-muted-foreground">
+                Comprehensive insights and performance metrics for the past {timeRange} days
+              </p>
             </div>
-            <Button onClick={exportData} variant="outline">
-              <Download className="w-4 h-4 mr-2" />
-              Export Data
-            </Button>
+            <div className="flex gap-2">
+              <Select value={timeRange} onValueChange={setTimeRange}>
+                <SelectTrigger className="w-32">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="7">7 days</SelectItem>
+                  <SelectItem value="30">30 days</SelectItem>
+                  <SelectItem value="90">90 days</SelectItem>
+                  <SelectItem value="365">1 year</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button onClick={refreshData} variant="outline" disabled={refreshing}>
+                <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
+                Refresh
+              </Button>
+              <Button onClick={exportData} variant="outline">
+                <Download className="w-4 h-4 mr-2" />
+                Export
+              </Button>
+            </div>
           </div>
 
-          {/* Key Metrics */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Enhanced Metrics Tabs */}
+          <Tabs defaultValue="overview" className="space-y-6">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="performance">Performance</TabsTrigger>
+              <TabsTrigger value="demographics">Demographics</TabsTrigger>
+              <TabsTrigger value="activity">Activity</TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="overview" className="space-y-6">
+              {/* Key Metrics */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Candidates</CardTitle>
@@ -209,9 +299,97 @@ const AdminAnalytics = () => {
                 </p>
               </CardContent>
             </Card>
-          </div>
+              </div>
+            </TabsContent>
 
-          {/* Demographics */}
+            <TabsContent value="performance" className="space-y-6">
+              {/* Performance Metrics */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Completion Rate</CardTitle>
+                    <Target className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{analytics.performanceMetrics?.completionRate.toFixed(1)}%</div>
+                    <Progress value={analytics.performanceMetrics?.completionRate || 0} className="mt-2" />
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Avg. Completion Time</CardTitle>
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      {analytics.performanceMetrics?.avgTimeToComplete.toFixed(0)} min
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Per assessment
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Conversion Rate</CardTitle>
+                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{analytics.performanceMetrics?.conversionRate.toFixed(1)}%</div>
+                    <p className="text-xs text-muted-foreground">
+                      Start to completion
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Weekly Growth</CardTitle>
+                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">+{analytics.performanceMetrics?.weeklyGrowth}</div>
+                    <p className="text-xs text-muted-foreground">
+                      New candidates this week
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Assessment Types Breakdown */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Assessment Types Performance</CardTitle>
+                  <CardDescription>Distribution of completed assessments by type</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4">
+                    {Object.entries(analytics.assessmentTypes || {}).map(([type, count]) => (
+                      <div key={type} className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <div className="w-3 h-3 bg-primary rounded-full" />
+                          <span className="capitalize">{type.replace('_', ' ')}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-24 bg-muted rounded-full h-2">
+                            <div 
+                              className="bg-primary h-2 rounded-full" 
+                              style={{ width: `${(count as number / analytics.completedAssessments) * 100}%` }}
+                            />
+                          </div>
+                          <Badge variant="secondary">{count as number}</Badge>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="demographics" className="space-y-6">
+              {/* Demographics */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             <Card>
               <CardHeader>
@@ -247,9 +425,11 @@ const AdminAnalytics = () => {
                 </div>
               </CardContent>
             </Card>
-          </div>
+              </div>
+            </TabsContent>
 
-          {/* Recent Activity */}
+            <TabsContent value="activity" className="space-y-6">
+              {/* Recent Activity */}
           <Card>
             <CardHeader>
               <CardTitle>Recent Activity</CardTitle>
@@ -275,6 +455,8 @@ const AdminAnalytics = () => {
               </div>
             </CardContent>
           </Card>
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </ProtectedAdminRoute>

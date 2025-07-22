@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -7,6 +7,7 @@ import { useCareerLaunchScoring } from "@/hooks/useCareerLaunchScoring";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { ChevronLeft, ChevronRight, Brain, Target, Star, Users } from "lucide-react";
+import EnhancedProgressIndicator from "@/components/EnhancedProgressIndicator";
 
 interface CareerLaunchAssessmentProps {
   onComplete: (results: any) => void;
@@ -24,11 +25,31 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
     dimension: string;
     score: number;
   }>>([]);
+  const [startTime] = useState(Date.now());
+  const [timeSpent, setTimeSpent] = useState(0);
   const { calculateScores } = useCareerLaunchScoring();
   const { toast } = useToast();
 
+  // Update time spent every 30 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeSpent((Date.now() - startTime) / (1000 * 60)); // Convert to minutes
+    }, 30000);
+
+    return () => clearInterval(interval);
+  }, [startTime]);
+
   const currentQuestion = careerLaunchQuestions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / careerLaunchQuestions.length) * 100;
+  
+  // Calculate questions per category for enhanced progress
+  const questionsPerCategory = careerLaunchQuestions.reduce((acc, q) => {
+    acc[q.category] = (acc[q.category] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  
+  // Estimate completion time (average 45 seconds per question)
+  const estimatedTime = (careerLaunchQuestions.length * 0.75); // 45 seconds = 0.75 minutes
 
   const handleAnswer = (selectedOption: 'A' | 'B') => {
     const score = selectedOption === 'A' ? 1 : 0;
@@ -187,25 +208,15 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5 p-4">
       <div className="max-w-2xl mx-auto">
-        {/* Progress Header */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <div className={`p-2 rounded-lg bg-background ${getCategoryColor(currentQuestion.category)}`}>
-                {getCategoryIcon(currentQuestion.category)}
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold capitalize">
-                  {currentQuestion.category} Assessment
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Question {currentQuestionIndex + 1} of {careerLaunchQuestions.length}
-                </p>
-              </div>
-            </div>
-          </div>
-          <Progress value={progress} className="h-2" />
-        </div>
+        {/* Enhanced Progress Header */}
+        <EnhancedProgressIndicator
+          currentQuestion={currentQuestionIndex + 1}
+          totalQuestions={careerLaunchQuestions.length}
+          estimatedTime={estimatedTime}
+          timeSpent={timeSpent}
+          currentCategory={currentQuestion.category}
+          questionsPerCategory={questionsPerCategory}
+        />
 
         {/* Question Card */}
         <Card className="mb-6 shadow-lg border-0 bg-card/95 backdrop-blur-sm">

@@ -4,6 +4,7 @@ import { useEmployer } from '@/contexts/EmployerContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { 
   Users, 
   UserPlus, 
@@ -12,8 +13,12 @@ import {
   Calendar,
   CheckCircle,
   Clock,
-  Building
+  Building,
+  Rocket,
+  Settings,
+  BarChart3
 } from 'lucide-react';
+import EmployerOnboarding from '@/components/EmployerOnboarding';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -21,7 +26,11 @@ const EmployerDashboard = () => {
   const { employer, logout, getCandidates } = useEmployer();
   const [candidates, setCandidates] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const navigate = useNavigate();
+
+  // Check if this is a new employer (no candidates yet)
+  const isNewEmployer = candidates.length === 0;
 
   useEffect(() => {
     if (!employer) {
@@ -33,6 +42,11 @@ const EmployerDashboard = () => {
       const candidateData = await getCandidates();
       setCandidates(candidateData);
       setLoading(false);
+      
+      // Show onboarding for new employers
+      if (candidateData.length === 0) {
+        setShowOnboarding(true);
+      }
     };
 
     loadCandidates();
@@ -111,6 +125,16 @@ const EmployerDashboard = () => {
           <Button variant="outline" onClick={() => navigate('/sample-reports')}>
             <FileText className="w-4 h-4 mr-2" />
             Sample Reports
+          </Button>
+          {isNewEmployer && (
+            <Button variant="outline" onClick={() => setShowOnboarding(true)}>
+              <Rocket className="w-4 h-4 mr-2" />
+              Getting Started
+            </Button>
+          )}
+          <Button variant="outline" onClick={() => navigate('/employer-analytics')}>
+            <BarChart3 className="w-4 h-4 mr-2" />
+            Analytics
           </Button>
         </div>
 

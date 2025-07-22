@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { 
   User, 
   Building, 
@@ -31,6 +32,15 @@ const SampleReports = () => {
   const [selectedAssessment, setSelectedAssessment] = useState('leadership');
   const [reportType, setReportType] = useState<'candidate' | 'employer'>('candidate');
   const [isGenerating, setIsGenerating] = useState(false);
+
+  // URL parameter support for direct links
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const assessmentParam = urlParams.get('assessment');
+    if (assessmentParam && assessments[assessmentParam as keyof typeof assessments]) {
+      setSelectedAssessment(assessmentParam);
+    }
+  }, []);
 
   const generateSamplePDF = async () => {
     setIsGenerating(true);
