@@ -286,7 +286,7 @@ const MarketingMaterials: React.FC = () => {
     
     doc.setFontSize(10);
     doc.setTextColor(128, 128, 128);
-    doc.text('Contact us for pricing and custom solutions: info@authencore-analytics.com', 20, 290);
+    doc.text('Contact us for pricing and custom solutions: info@authencore-analytics.org', 20, 290);
     
     return doc;
   };
@@ -344,7 +344,7 @@ const MarketingMaterials: React.FC = () => {
     doc.setFontSize(10);
     doc.setTextColor(128, 128, 128);
     doc.text('Ready to transform your organization? Contact us today.', 20, 280);
-    doc.text('Email: sales@authencore-analytics.com | Phone: (555) 123-4567', 20, 290);
+    doc.text('Email: sales@authencore-analytics.org | Phone: (555) 123-4567', 20, 290);
     
     return doc;
   };
@@ -415,7 +415,7 @@ const MarketingMaterials: React.FC = () => {
     
     doc.setFontSize(10);
     doc.setTextColor(128, 128, 128);
-    doc.text('Contact: info@authencore-analytics.com | Visit: www.authencore-analytics.com | Call: (555) 123-4567', 20, 200);
+    doc.text('Contact: info@authencore-analytics.org | Visit: www.authencore-analytics.org | Call: (555) 123-4567', 20, 200);
     
     return doc;
   };
