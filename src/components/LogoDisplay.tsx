@@ -14,11 +14,11 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
 }) => {
   const { selectedLogo } = useLogo();
 
-  // Size mapping for images - updated for header
+  // Size mapping for images - adjusted for navbar height (h-24 = 96px)
   const sizeClasses = {
-    sm: 'h-12 w-auto max-w-[120px]',
-    md: 'w-[180px] h-auto',
-    lg: 'w-[200px] h-auto'
+    sm: 'h-8 w-auto max-w-[100px]', // 32px height for mobile
+    md: 'h-12 w-auto max-w-[140px]', // 48px height for desktop
+    lg: 'h-16 w-auto max-w-[180px]' // 64px height for large displays
   };
 
   return (
