@@ -219,7 +219,7 @@ const SoloAssessment = () => {
                     Start Assessment
                   </Button>
                   <p className="text-xs text-muted-foreground">
-                    Assessment takes approximately 15-20 minutes to complete
+                    Assessment takes approximately 25-30 minutes to complete
                   </p>
                 </div>
               )}

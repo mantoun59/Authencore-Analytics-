@@ -65,8 +65,8 @@ const CandidateTesting = () => {
     {
       id: "cair",
       title: "CAIR Assessment",
-      description: "Comprehensive assessment and intelligence report",
-      duration: "15-25 minutes",
+      description: "Comprehensive 120-question personality assessment with validity detection",
+      duration: "25-30 minutes",
       route: "/cair"
     },
     {

@@ -10,29 +10,24 @@ import { Link } from 'react-router-dom';
 const CAIRCulturalDescription = () => {
   const dimensions = [
     {
-      title: "Openness to Diversity",
-      description: "Acceptance and appreciation of cultural differences.",
-      icon: Globe
+      title: "Conscientiousness",
+      description: "Organization, reliability, and goal-oriented behavior in multicultural settings.",
+      icon: CheckCircle
     },
     {
-      title: "Relational Flexibility", 
-      description: "Ability to build effective relationships across cultures.",
+      title: "Agreeableness", 
+      description: "Cooperation, trust, and interpersonal harmony across cultural boundaries.",
       icon: Users
     },
     {
-      title: "Cognitive Agility",
-      description: "Quick learning and adjustment in diverse contexts.",
+      title: "Innovation",
+      description: "Creativity, adaptability, and openness to new cultural experiences.",
       icon: Brain
     },
     {
-      title: "Emotional Resilience",
-      description: "Managing emotions effectively in unfamiliar environments.",
+      title: "Resilience",
+      description: "Stress tolerance, emotional stability, and adaptability in diverse environments.",
       icon: Heart
-    },
-    {
-      title: "Behavioural Adaptability",
-      description: "Adjusting behaviours to fit cultural expectations and norms.",
-      icon: User
     }
   ];
 
@@ -45,7 +40,7 @@ const CAIRCulturalDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              100 Questions | 4 Dimensions | $29.99
+              120 Questions | 4 Dimensions | $29.99
             </Badge>
           </div>
           
@@ -69,7 +64,7 @@ const CAIRCulturalDescription = () => {
           </CardHeader>
           <CardContent>
             <p className="text-lg text-foreground leading-relaxed">
-              The Cultural Adaptability and Integration Readiness Plus (CAIR+) assessment evaluates how effectively you can adapt, integrate, and thrive in diverse cultural environments. Covering 5 key dimensions, CAIR+ empowers expatriates, international students, and global professionals to enhance their intercultural confidence and success.
+              The Cultural Adaptability and Integration Readiness Plus (CAIR+) assessment is a comprehensive personality evaluation featuring 120 carefully crafted questions. With 100 personality questions across 4 core dimensions plus 20 validity checks, CAIR+ provides scientifically validated insights into personality traits crucial for workplace success and cultural adaptation.
             </p>
           </CardContent>
         </Card>
@@ -78,7 +73,7 @@ const CAIRCulturalDescription = () => {
         <Card className="mb-12">
           <CardHeader>
             <CardTitle className="text-2xl text-primary">4 Dimensions Covered in CAIR+</CardTitle>
-            <p className="text-muted-foreground">Understand the key cultural adaptability dimensions assessed.</p>
+            <p className="text-muted-foreground">Understand the key personality dimensions assessed across 25 questions each.</p>
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -169,9 +164,9 @@ const CAIRCulturalDescription = () => {
                   </p>
                 </div>
                 <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🔍 Validity Detection</h4>
+                  <h4 className="font-semibold mb-2">📈 Actionable Insights</h4>
                   <p className="text-sm text-muted-foreground">
-                    Advanced algorithms ensure honest responses and reliable results.
+                    Personalized recommendations and development strategies based on your unique profile.
                   </p>
                 </div>
               </div>

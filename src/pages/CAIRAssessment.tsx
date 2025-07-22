@@ -447,7 +447,7 @@ export default function CAIRAssessment() {
               <li>• Choose the option that best describes you most of the time</li>
               <li>• Don't overthink - go with your first instinct</li>
               <li>• Complete all questions in one session</li>
-              <li>• The assessment takes approximately 15-20 minutes</li>
+              <li>• The assessment takes approximately 25-30 minutes</li>
             </ul>
           </div>
           
