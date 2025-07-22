@@ -5,7 +5,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { createAssessmentQuestions, personalityDimensions } from "@/data/cairQuestions";
+import { cairQuestions, personalityDimensions } from "@/data/cairQuestionsFixed";
 import { Shield, Brain, Users, Lightbulb, Heart, Download, Share2, Eye, Clock, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
@@ -43,7 +43,7 @@ export default function CAIRAssessment() {
     company: ''
   });
   
-  const [questions] = useState(() => createAssessmentQuestions());
+  const [questions] = useState(() => cairQuestions);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [responses, setResponses] = useState<AssessmentResponse[]>([]);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());

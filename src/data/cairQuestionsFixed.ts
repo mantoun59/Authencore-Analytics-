@@ -1102,3 +1102,26 @@ export const cairQuestions: CAIRQuestion[] = [
     distortionType: 'fake_good'
   }
 ];
+
+export const personalityDimensions = {
+  conscientiousness: {
+    name: 'Conscientiousness',
+    description: 'Organization, reliability, and goal-oriented behavior',
+    subdimensions: ['planning', 'organization', 'time_management', 'quality_focus', 'task_management']
+  },
+  agreeableness: {
+    name: 'Agreeableness', 
+    description: 'Cooperation, trust, and interpersonal harmony',
+    subdimensions: ['conflict_approach', 'trust', 'helpfulness', 'cooperation', 'empathy']
+  },
+  innovation: {
+    name: 'Innovation',
+    description: 'Creativity, adaptability, and openness to new experiences',
+    subdimensions: ['problem_solving', 'orientation', 'learning_style', 'ideation', 'change_tolerance']
+  },
+  resilience: {
+    name: 'Resilience',
+    description: 'Stress tolerance, emotional stability, and bounce-back ability',
+    subdimensions: ['stress_tolerance', 'optimism', 'persistence', 'adaptability', 'recovery']
+  }
+};
