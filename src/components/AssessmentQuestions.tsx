@@ -612,6 +612,8 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
             </Button>
           </div>
         </div>
+        </div>
+        
         <Footer />
       </div>
     </AssessmentErrorBoundary>
