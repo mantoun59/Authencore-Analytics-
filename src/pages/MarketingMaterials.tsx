@@ -164,7 +164,7 @@ const MarketingMaterials: React.FC = () => {
     
     doc.setFontSize(14);
     doc.setTextColor(128, 128, 128);
-    doc.text('Reading minds, shaping future', 60, 30);
+    doc.text('Where data meets trust', 60, 30);
     
     // Key Statistics Box
     doc.setFillColor(245, 245, 245);

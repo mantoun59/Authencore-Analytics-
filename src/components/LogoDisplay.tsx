@@ -34,7 +34,7 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
           size === 'md' ? 'text-base' : 
           'text-sm'
         }`}>
-          Reading minds, shaping future
+          Where data meets trust
         </p>
       )}
     </div>

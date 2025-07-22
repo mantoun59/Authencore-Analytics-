@@ -30,7 +30,7 @@ const TextLogo: React.FC<TextLogoProps> = ({
       </div>
       {showTagline && (
         <p className={`text-foreground/70 italic ${taglineSizes[size]} mt-1`}>
-          Reading minds, shaping future
+          Where data meets trust
         </p>
       )}
     </div>
