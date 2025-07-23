@@ -186,6 +186,14 @@ const PartnerDashboard = () => {
             <div className="flex flex-wrap gap-2">
               <Button 
                 variant="outline" 
+                onClick={() => navigate('/partner-analytics')}
+                className="flex items-center gap-2"
+              >
+                <BarChart3 className="h-4 w-4" />
+                View Analytics
+              </Button>
+              <Button 
+                variant="outline" 
                 onClick={() => navigate('/sample-reports')}
                 className="flex items-center gap-2"
               >

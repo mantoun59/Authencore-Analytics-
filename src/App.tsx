@@ -46,6 +46,8 @@ import DigitalWellnessDescription from "./pages/DigitalWellnessDescription";
 import EmotionalIntelligenceDescription from "./pages/EmotionalIntelligenceDescription";
 import FaithValuesDescription from "./pages/FaithValuesDescription";
 import GenZWorkplaceDescription from "./pages/GenZWorkplaceDescription";
+import EmployerAnalytics from "./pages/EmployerAnalytics";
+import PartnerAnalytics from "./pages/PartnerAnalytics";
 import ScrollToTop from "@/components/ScrollToTop";
 import AIChat from "@/components/AIChat";
 
@@ -107,6 +109,8 @@ const App = () => (
             <Route path="/testing-dashboard" element={<TestingDashboard />} />
             <Route path="/sample-career-launch-report" element={<SampleCareerLaunchReport />} />
             <Route path="/marketing-materials" element={<MarketingMaterials />} />
+            <Route path="/employer-analytics" element={<EmployerAnalytics />} />
+            <Route path="/partner-analytics" element={<PartnerAnalytics />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
