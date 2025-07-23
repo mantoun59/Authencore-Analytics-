@@ -178,16 +178,16 @@ const AdminGuideGenerator = () => {
         step: 'Partner Permissions',
         content: [
           'Available Assessment Types:',
-          '• Leadership Assessment',
-          '• Communication Styles',
-          '• Cultural Intelligence (CAIR)',
-          '• Emotional Intelligence',
-          '• Gen Z Workplace',
-          '• Faith & Values',
-          '• Digital Wellness',
-          '• Career Launch',
-          '• Stress Resilience',
-          '• Burnout Prevention'
+          '• CareerLaunch - Career Discovery & Planning',
+          '• CAIR+ Personality - Advanced Personality Assessment',
+          '• Burnout Prevention Index - Proactive Burnout Prevention',
+          '• Cultural Intelligence - Global Business Competency',
+          '• Communication Styles - Advanced Communication Analysis',
+          '• Emotional Intelligence - EQ Assessment & Development',
+          '• Faith & Values - Comprehensive Values Alignment',
+          '• Gen Z Workplace - Generational Workplace Assessment',
+          '• Digital Wellness - Digital Health & Productivity',
+          '• Leadership Assessment - Authentic Leadership Development'
         ]
       },
       {
