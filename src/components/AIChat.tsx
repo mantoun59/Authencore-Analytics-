@@ -47,7 +47,7 @@ const AIChat = () => {
           generatorRef.current = await pipeline(
             'text-generation',
             'Xenova/gpt2',
-            { device: 'cpu' } // Use CPU for better compatibility
+            { device: 'wasm' } // Use WASM for browser compatibility
           );
           console.log('✅ Model loaded successfully!');
           setIsModelLoaded(true);
