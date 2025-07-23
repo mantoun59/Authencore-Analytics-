@@ -9,6 +9,7 @@ import { cairQuestions, personalityDimensions } from "@/data/cairPersonalityQues
 import { Shield, Brain, Users, Lightbulb, Heart, Download, Share2, Eye, Clock, CheckCircle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import AssessmentResults from "@/components/AssessmentResults";
 
 interface UserProfile {
   name: string;
@@ -890,7 +891,31 @@ export default function CAIRAssessment() {
   if (phase === 'registration') return renderRegistration();
   if (phase === 'instructions') return renderInstructions();
   if (phase === 'assessment') return renderAssessment();
-  if (phase === 'results') return renderResults();
+  if (phase === 'results') {
+    // Transform responses into AssessmentData format for UnifiedAssessmentService
+    const assessmentData = {
+      responses: responses.map(r => ({
+        questionId: r.questionId,
+        answer: r.answer,
+        responseTime: r.responseTime
+      })),
+      candidateInfo: {
+        name: userProfile.name,
+        email: userProfile.email
+      }
+    };
+    
+    return (
+      <AssessmentResults 
+        data={assessmentData}
+        assessmentType="cair-personality"
+        candidateInfo={{
+          name: userProfile.name,
+          email: userProfile.email
+        }}
+      />
+    );
+  }
 
   return null;
 };

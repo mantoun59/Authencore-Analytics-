@@ -31,6 +31,7 @@ import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator
 import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
 import { toast } from "sonner";
 import UnifiedAssessmentService from "@/services/unifiedAssessmentService";
+import ConsolidatedReportService from "@/services/consolidatedReportService";
 import type { AssessmentData, CandidateInfo } from "@/types/assessment.types";
 
 interface AssessmentResultsProps {
@@ -43,6 +44,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   const [assessmentResult, setAssessmentResult] = useState<any>(null);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const unifiedService = UnifiedAssessmentService.getInstance();
+  const reportService = ConsolidatedReportService.getInstance();
 
   useEffect(() => {
     if (data) {
@@ -90,7 +92,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   const getDevelopmentAreas = () => assessmentResult?.developmentAreas || [];
   const getRecommendations = () => assessmentResult?.recommendations || [];
 
-  // Generate PDF using unified service
+  // Generate PDF using consolidated report service
   const downloadReport = async () => {
     if (!assessmentResult) {
       toast.error('No assessment data available');
@@ -98,7 +100,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     }
 
     try {
-      await unifiedService.generatePDF(assessmentResult, 'candidate');
+      await reportService.generateComprehensiveReport(assessmentResult);
     } catch (error) {
       console.error('Error generating PDF:', error);
       toast.error('Failed to generate PDF report');

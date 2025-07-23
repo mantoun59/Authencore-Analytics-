@@ -255,6 +255,11 @@ const EmotionalIntelligenceAssessment = () => {
         <div className="container mx-auto px-4 py-8">
           <AssessmentResults 
             data={transformedResult}
+            assessmentType="emotional-intelligence"
+            candidateInfo={{
+              name: userData?.fullName || '',
+              email: userData?.email || ''
+            }}
           />
         </div>
       </div>
