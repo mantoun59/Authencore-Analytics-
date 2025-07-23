@@ -2,6 +2,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ImageGenerator from "@/components/ImageGenerator";
 import { PartnerManagement } from "@/components/PartnerManagement";
+import AdminGuideGenerator from "@/components/AdminGuideGenerator";
 import { EnhancedAIControls } from "@/components/EnhancedAIControls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProtectedAdminRoute from "@/components/ProtectedAdminRoute";
@@ -21,11 +22,12 @@ const AdminPage = () => {
             </div>
 
             <Tabs defaultValue="partners" className="w-full">
-              <TabsList className="grid w-full grid-cols-5">
+              <TabsList className="grid w-full grid-cols-6">
                 <TabsTrigger value="partners">Partner Management</TabsTrigger>
                 <TabsTrigger value="testing">Testing Portal</TabsTrigger>
                 <TabsTrigger value="ai-engine">AI Engine</TabsTrigger>
                 <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                <TabsTrigger value="setup-guide">Setup Guide</TabsTrigger>
                 <TabsTrigger value="images">Image Generator</TabsTrigger>
               </TabsList>
               
@@ -76,6 +78,10 @@ const AdminPage = () => {
                     </div>
                   </div>
                 </div>
+              </TabsContent>
+              
+              <TabsContent value="setup-guide" className="mt-6">
+                <AdminGuideGenerator />
               </TabsContent>
               
               <TabsContent value="images" className="mt-6">
