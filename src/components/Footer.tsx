@@ -1,4 +1,4 @@
-import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
+import { Mail, Phone, MapPin, ExternalLink, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import LogoDisplay from "@/components/LogoDisplay";
 
@@ -24,7 +24,7 @@ const Footer = () => {
               Measuring Minds. Shaping Futures.
             </p>
             
-            <div className="space-y-2">
+            <div className="space-y-4">
               <a
                 href="https://www.authencore.org"
                 target="_blank"
@@ -33,6 +33,57 @@ const Footer = () => {
               >
                 www.authencore.org
               </a>
+              
+              {/* Social Media Links */}
+              <div className="space-y-2">
+                <h5 className="text-sm font-semibold text-foreground">Follow Us</h5>
+                <div className="flex items-center space-x-4">
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // Facebook brand color #1877F2
+                    }}
+                    className="text-[#1877F2] hover:text-[#1664D8] transition-colors"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // X (Twitter) brand color #000000
+                    }}
+                    className="text-foreground hover:text-primary transition-colors"
+                    aria-label="X (Twitter)"
+                  >
+                    <Twitter className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // Instagram brand gradient simplified to #E4405F
+                    }}
+                    className="text-[#E4405F] hover:text-[#C73650] transition-colors"
+                    aria-label="Instagram"
+                  >
+                    <Instagram className="w-5 h-5" />
+                  </a>
+                  <a
+                    href="#"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      // LinkedIn brand color #0A66C2
+                    }}
+                    className="text-[#0A66C2] hover:text-[#0956A5] transition-colors"
+                    aria-label="LinkedIn"
+                  >
+                    <Linkedin className="w-5 h-5" />
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
 
