@@ -54,6 +54,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     const mockScore = Math.floor(Math.random() * 40) + 60; // 60-100 range
     setOverallScore(mockScore);
 
+    console.log('Assessment Type in calculateScores:', assessmentType); // Debug log
+
     // Assessment-specific profiles and scoring
     switch (assessmentType) {
       case 'faith-values':
@@ -117,11 +119,13 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         break;
 
       case 'cair':
+      case 'cairplus':
+      case 'cair-personality':
         const cairProfiles = [
-          { name: "Well-Balanced Profile", min: 75 },
-          { name: "Developing Profile", min: 60 },
-          { name: "Emerging Profile", min: 45 },
-          { name: "Basic Profile", min: 0 }
+          { name: "Well-Balanced Personality", min: 75 },
+          { name: "Developing Personality", min: 60 },
+          { name: "Emerging Personality", min: 45 },
+          { name: "Basic Personality", min: 0 }
         ];
         const cairProfile = cairProfiles.find(p => mockScore >= p.min) || cairProfiles[cairProfiles.length - 1];
         setResilienceProfile(cairProfile.name);
@@ -153,11 +157,12 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         break;
 
       case 'burnout':
+      case 'burnout-prevention':
         const burnoutProfiles = [
-          { name: "Low Risk", min: 75 },
-          { name: "Moderate Risk", min: 60 },
-          { name: "Elevated Risk", min: 45 },
-          { name: "High Risk", min: 0 }
+          { name: "Low Burnout Risk", min: 75 },
+          { name: "Moderate Burnout Risk", min: 60 },
+          { name: "Elevated Burnout Risk", min: 45 },
+          { name: "High Burnout Risk", min: 0 }
         ];
         const burnoutProfile = burnoutProfiles.find(p => mockScore >= p.min) || burnoutProfiles[burnoutProfiles.length - 1];
         setResilienceProfile(burnoutProfile.name);
@@ -167,7 +172,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
           work_boundaries: Math.floor(Math.random() * 30) + 70,
           recovery_capacity: Math.floor(Math.random() * 30) + 70,
           support_systems: Math.floor(Math.random() * 30) + 70,
-          prevention_mindset: Math.floor(Math.random() * 30) + 70
+          prevention_mindset: Math.floor(Math.random() * 30) + 70,
+          burnout_awareness: Math.floor(Math.random() * 30) + 70
         });
         break;
 
@@ -370,6 +376,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         ];
 
       case 'cair':
+      case 'cairplus':
+      case 'cair-personality':
         return [
           {
             key: "conscientiousness",
@@ -458,6 +466,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         ];
 
       case 'burnout':
+      case 'burnout-prevention':
         return [
           {
             key: "stress_awareness",
@@ -609,6 +618,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
             ]
           };
         case 'cair':
+        case 'cairplus':
+        case 'cair-personality':
           return {
             title: 'CAIR+ Personality Assessment Report',
             scoreLabel: 'Overall Personality Score',
@@ -616,8 +627,9 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
             filename: `cair-personality-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
             keyMetrics: [
               '• Conscientiousness: High',
-              '• Analytical Thinking: Strong',
-              '• Adaptability: Good'
+              '• Agreeableness: Strong',
+              '• Innovation: Excellent',
+              '• Resilience: Good'
             ]
           };
         case 'communication':
@@ -681,15 +693,17 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
             ]
           };
         case 'burnout':
+        case 'burnout-prevention':
           return {
-            title: 'Burnout Prevention Assessment Report',
-            scoreLabel: 'Overall Burnout Risk Score',
+            title: 'Burnout Prevention Index Assessment Report',
+            scoreLabel: 'Overall Burnout Prevention Score',
             profileLabel: `Risk Profile: ${resilienceProfile}`,
             filename: `burnout-prevention-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
             keyMetrics: [
               '• Stress Awareness: Good',
-              '• Coping Strategies: Developing',
-              '• Support Systems: Strong'
+              '• Coping Strategies: Developing', 
+              '• Work Boundaries: Strong',
+              '• Recovery Capacity: Excellent'
             ]
           };
         case 'stress':
@@ -851,6 +865,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   };
 
   const getAssessmentTitle = () => {
+    console.log('Assessment Type in getAssessmentTitle:', assessmentType); // Debug log
     switch (assessmentType) {
       case 'faith-values':
         return 'Your Faith & Values Profile';
@@ -858,9 +873,11 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         return 'Your Leadership Profile';
       case 'career':
       case 'career-launch':
-        return 'Your Career Profile';
+        return 'Your Career Launch Profile';
       case 'cair':
-        return 'Your Personality Profile';
+      case 'cairplus':
+      case 'cair-personality':
+        return 'Your CAIR+ Personality Profile';
       case 'communication':
         return 'Your Communication Profile';
       case 'emotional':
@@ -872,7 +889,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       case 'genz':
         return 'Your Gen Z Workplace Profile';
       case 'burnout':
-        return 'Your Burnout Risk Profile';
+      case 'burnout-prevention':
+        return 'Your Burnout Prevention Profile';
       default:
         return 'Your Resilience Profile';
     }
@@ -888,7 +906,9 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       case 'career-launch':
         return 'Based on your career interests, aptitudes, and values, here\'s your comprehensive career readiness assessment.';
       case 'cair':
-        return 'Based on your personality responses, here\'s your comprehensive CAIR+ personality assessment with validity analysis.';
+      case 'cairplus':
+      case 'cair-personality':
+        return 'Based on your personality responses, here\'s your comprehensive CAIR+ personality assessment analyzing Conscientiousness, Agreeableness, Innovation, and Resilience.';
       case 'communication':
         return 'Based on your communication scenarios and preferences, here\'s your comprehensive communication styles assessment.';
       case 'emotional':
@@ -900,7 +920,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       case 'genz':
         return 'Based on your workplace preferences and generational characteristics, here\'s your comprehensive Gen Z workplace assessment.';
       case 'burnout':
-        return 'Based on your stress patterns and coping mechanisms, here\'s your comprehensive burnout prevention assessment.';
+      case 'burnout-prevention':
+        return 'Based on your stress patterns and coping mechanisms, here\'s your comprehensive burnout prevention assessment focusing on risk identification and prevention strategies.';
       default:
         return 'Based on your responses across multiple scenarios and stress conditions, here\'s your comprehensive resilience assessment.';
     }
