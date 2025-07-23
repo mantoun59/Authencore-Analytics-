@@ -231,30 +231,141 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     
     // Generate title and content based on assessment type
     const getReportContent = () => {
-      if (assessmentType === 'faith-values') {
-        return {
-          title: 'Faith and Values Assessment Report',
-          scoreLabel: 'Overall Values Alignment Score',
-          profileLabel: `Values Profile: ${resilienceProfile}`,
-          filename: `faith-values-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-          keyMetrics: [
-            '• Spiritual Integration: High',
-            '• Values Consistency: Strong',
-            '• Moral Courage: Developing'
-          ]
-        };
-      } else {
-        return {
-          title: 'Stress Resilience & Adaptability Assessment',
-          scoreLabel: 'Overall Resilience Score',
-          profileLabel: `Resilience Profile: ${resilienceProfile}`,
-          filename: `resilience-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-          keyMetrics: [
-            '• Stress Threshold: High',
-            '• Recovery Rate: Fast',
-            '• Burnout Risk: Low'
-          ]
-        };
+      switch (assessmentType) {
+        case 'faith-values':
+          return {
+            title: 'Faith and Values Assessment Report',
+            scoreLabel: 'Overall Values Alignment Score',
+            profileLabel: `Values Profile: ${resilienceProfile}`,
+            filename: `faith-values-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Spiritual Integration: High',
+              '• Values Consistency: Strong',
+              '• Moral Courage: Developing'
+            ]
+          };
+        case 'leadership':
+          return {
+            title: 'Leadership Assessment Report',
+            scoreLabel: 'Overall Leadership Score',
+            profileLabel: `Leadership Profile: ${resilienceProfile}`,
+            filename: `leadership-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Strategic Thinking: High',
+              '• Team Development: Strong',
+              '• Decision Making: Excellent'
+            ]
+          };
+        case 'career':
+        case 'career-launch':
+          return {
+            title: 'CareerLaunch Assessment Report',
+            scoreLabel: 'Overall Career Readiness Score',
+            profileLabel: `Career Profile: ${resilienceProfile}`,
+            filename: `career-launch-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Career Readiness: High',
+              '• Skills Match: Strong',
+              '• Growth Potential: Excellent'
+            ]
+          };
+        case 'cair':
+          return {
+            title: 'CAIR+ Personality Assessment Report',
+            scoreLabel: 'Overall Personality Score',
+            profileLabel: `Personality Profile: ${resilienceProfile}`,
+            filename: `cair-personality-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Conscientiousness: High',
+              '• Analytical Thinking: Strong',
+              '• Adaptability: Good'
+            ]
+          };
+        case 'communication':
+          return {
+            title: 'Communication Styles Assessment Report',
+            scoreLabel: 'Overall Communication Score',
+            profileLabel: `Communication Profile: ${resilienceProfile}`,
+            filename: `communication-styles-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Active Listening: Excellent',
+              '• Written Communication: Strong',
+              '• Empathy: High'
+            ]
+          };
+        case 'emotional':
+          return {
+            title: 'Emotional Intelligence Assessment Report',
+            scoreLabel: 'Overall EQ Score',
+            profileLabel: `EQ Profile: ${resilienceProfile}`,
+            filename: `emotional-intelligence-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Self-Awareness: High',
+              '• Social Skills: Strong',
+              '• Motivation: Excellent'
+            ]
+          };
+        case 'cultural':
+          return {
+            title: 'Cultural Intelligence Assessment Report',
+            scoreLabel: 'Overall CQ Score',
+            profileLabel: `Cultural Profile: ${resilienceProfile}`,
+            filename: `cultural-intelligence-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Cultural Awareness: High',
+              '• Adaptability: Strong',
+              '• Global Mindset: Excellent'
+            ]
+          };
+        case 'digital':
+          return {
+            title: 'Digital Wellness Assessment Report',
+            scoreLabel: 'Overall Digital Wellness Score',
+            profileLabel: `Digital Profile: ${resilienceProfile}`,
+            filename: `digital-wellness-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Technology Proficiency: Excellent',
+              '• Digital Communication: Strong',
+              '• Screen Time Management: Developing'
+            ]
+          };
+        case 'genz':
+          return {
+            title: 'Gen Z Workplace Assessment Report',
+            scoreLabel: 'Overall Workplace Readiness Score',
+            profileLabel: `Gen Z Profile: ${resilienceProfile}`,
+            filename: `genz-workplace-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Digital Fluency: Excellent',
+              '• Social Awareness: High',
+              '• Adaptability: Strong'
+            ]
+          };
+        case 'burnout':
+          return {
+            title: 'Burnout Prevention Assessment Report',
+            scoreLabel: 'Overall Burnout Risk Score',
+            profileLabel: `Risk Profile: ${resilienceProfile}`,
+            filename: `burnout-prevention-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Stress Awareness: Good',
+              '• Coping Strategies: Developing',
+              '• Support Systems: Strong'
+            ]
+          };
+        case 'stress':
+        default:
+          return {
+            title: 'Stress Resilience & Adaptability Assessment',
+            scoreLabel: 'Overall Resilience Score',
+            profileLabel: `Resilience Profile: ${resilienceProfile}`,
+            filename: `resilience-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+            keyMetrics: [
+              '• Stress Threshold: High',
+              '• Recovery Rate: Fast',
+              '• Burnout Risk: Low'
+            ]
+          };
       }
     };
 

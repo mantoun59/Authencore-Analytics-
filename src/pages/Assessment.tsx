@@ -14,7 +14,7 @@ const Assessment = () => {
   const getInfoRoute = (assessmentId: string) => {
     const routeMap: { [key: string]: string } = {
       'career-launch': '/career-launch-info',
-      'cair-personality': '/cair-cultural-info',
+      'cair-personality': '/cair-personality-info',
       'stress-resilience': '/burnout-prevention-info',
       'cultural-intelligence': '/cair-cultural-info',
       'communication-styles': '/communication-style-info',

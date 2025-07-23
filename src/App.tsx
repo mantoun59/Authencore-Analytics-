@@ -41,6 +41,7 @@ import MarketingMaterials from "./pages/MarketingMaterials";
 import AuthenticLeadershipDescription from "./pages/AuthenticLeadershipDescription";
 import BurnoutPreventionDescription from "./pages/BurnoutPreventionDescription";
 import CAIRCulturalDescription from "./pages/CAIRCulturalDescription";
+import CAIRPersonalityDescription from "./pages/CAIRPersonalityDescription";
 import CareerLaunchDescription from "./pages/CareerLaunchDescription";
 import CommunicationStyleDescription from "./pages/CommunicationStyleDescription";
 import DigitalWellnessDescription from "./pages/DigitalWellnessDescription";
@@ -94,6 +95,7 @@ const App = () => (
             <Route path="/authentic-leadership-info" element={<AuthenticLeadershipDescription />} />
             <Route path="/burnout-prevention-info" element={<BurnoutPreventionDescription />} />
             <Route path="/cair-cultural-info" element={<CAIRCulturalDescription />} />
+            <Route path="/cair-personality-info" element={<CAIRPersonalityDescription />} />
             <Route path="/career-launch-info" element={<CareerLaunchDescription />} />
             <Route path="/communication-style-info" element={<CommunicationStyleDescription />} />
             <Route path="/digital-wellness-info" element={<DigitalWellnessDescription />} />
