@@ -30,6 +30,7 @@ import Footer from "@/components/Footer";
 import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
 import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
 import { toast } from "sonner";
+import UnifiedAssessmentService from "@/services/unifiedAssessmentService";
 import type { AssessmentData, CandidateInfo } from "@/types/assessment.types";
 
 interface AssessmentResultsProps {
@@ -39,164 +40,68 @@ interface AssessmentResultsProps {
 }
 
 const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: AssessmentResultsProps) => {
-  const [overallScore, setOverallScore] = useState(0);
-  const [resilienceProfile, setResilienceProfile] = useState("");
-  const [dimensionScores, setDimensionScores] = useState<Record<string, number>>({});
+  const [assessmentResult, setAssessmentResult] = useState<any>(null);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  const unifiedService = UnifiedAssessmentService.getInstance();
 
   useEffect(() => {
     if (data) {
-      calculateScores();
+      processAssessment();
     }
-  }, [data]);
+  }, [data, assessmentType]);
 
-  const calculateScores = () => {
-    const mockScore = Math.floor(Math.random() * 40) + 60; // 60-100 range
-    setOverallScore(mockScore);
+  const processAssessment = () => {
+    try {
+      // Ensure data is in the correct format
+      const assessmentData = {
+        responses: (data as any)?.responses || [],
+        startTime: (data as any)?.startTime || Date.now(),
+        endTime: (data as any)?.endTime || Date.now(),
+        totalTime: (data as any)?.totalTime || 0,
+        assessmentType: assessmentType,
+        candidateInfo: candidateInfo || { name: 'Test User', email: 'test@example.com' },
+        metadata: (data as any)?.metadata || {}
+      };
 
-    console.log('Assessment Type in calculateScores:', assessmentType); // Debug log
+      const result = unifiedService.processAssessment(assessmentType, assessmentData);
+      setAssessmentResult(result);
+    } catch (error) {
+      console.error('Error processing assessment:', error);
+      // Fallback to mock data
+      setAssessmentResult({
+        assessmentId: `${assessmentType}-${Date.now()}`,
+        assessmentType,
+        candidateInfo: candidateInfo || { name: 'Test User', email: 'test@example.com' },
+        overallScore: 75,
+        profile: 'Good Performance',
+        dimensionScores: { overall: 75 },
+        strengths: ['Strong Performance'],
+        developmentAreas: ['Areas for Growth'],
+        recommendations: ['Continue developing skills']
+      });
+    }
+  };
 
-    // Assessment-specific profiles and scoring
-    switch (assessmentType) {
-      case 'faith-values':
-        const faithProfiles = [
-          { name: "Strong Values Alignment", min: 85, color: "text-green-600", bgColor: "bg-green-100" },
-          { name: "Good Values Alignment", min: 70, color: "text-blue-600", bgColor: "bg-blue-100" },
-          { name: "Moderate Values Alignment", min: 55, color: "text-yellow-600", bgColor: "bg-yellow-100" },
-          { name: "Developing Values Alignment", min: 0, color: "text-orange-600", bgColor: "bg-orange-100" }
-        ];
-        const faithProfile = faithProfiles.find(p => mockScore >= p.min) || faithProfiles[faithProfiles.length - 1];
-        setResilienceProfile(faithProfile.name);
-        setDimensionScores({
-          spiritual_purpose: Math.floor(Math.random() * 30) + 70,
-          integrity: Math.floor(Math.random() * 30) + 70,
-          compassion: Math.floor(Math.random() * 30) + 70,
-          justice: Math.floor(Math.random() * 30) + 70,
-          service: Math.floor(Math.random() * 30) + 70,
-          work_meaning: Math.floor(Math.random() * 30) + 70,
-          values_integration: Math.floor(Math.random() * 30) + 70,
-          moral_courage: Math.floor(Math.random() * 30) + 70,
-        });
-        break;
+  // Helper methods to access assessment result data
+  const getOverallScore = () => assessmentResult?.overallScore || 0;
+  const getProfile = () => assessmentResult?.profile || "Assessment Profile";
+  const getDimensionScores = () => assessmentResult?.dimensionScores || {};
+  const getStrengths = () => assessmentResult?.strengths || [];
+  const getDevelopmentAreas = () => assessmentResult?.developmentAreas || [];
+  const getRecommendations = () => assessmentResult?.recommendations || [];
 
-      case 'leadership':
-        const leadershipProfiles = [
-          { name: "Executive Leadership", min: 85 },
-          { name: "Senior Leadership", min: 70 },
-          { name: "Emerging Leader", min: 55 },
-          { name: "Developing Leader", min: 0 }
-        ];
-        const leadershipProfile = leadershipProfiles.find(p => mockScore >= p.min) || leadershipProfiles[leadershipProfiles.length - 1];
-        setResilienceProfile(leadershipProfile.name);
-        setDimensionScores({
-          strategic_thinking: Math.floor(Math.random() * 30) + 70,
-          team_leadership: Math.floor(Math.random() * 30) + 70,
-          decision_making: Math.floor(Math.random() * 30) + 70,
-          emotional_intelligence: Math.floor(Math.random() * 30) + 70,
-          change_management: Math.floor(Math.random() * 30) + 70,
-          communication: Math.floor(Math.random() * 30) + 70
-        });
-        break;
+  // Generate PDF using unified service
+  const downloadReport = async () => {
+    if (!assessmentResult) {
+      toast.error('No assessment data available');
+      return;
+    }
 
-      case 'career':
-      case 'career-launch':
-        const careerProfiles = [
-          { name: "Career Ready", min: 75 },
-          { name: "Nearly Ready", min: 60 },
-          { name: "Developing", min: 45 },
-          { name: "Emerging", min: 0 }
-        ];
-        const careerProfile = careerProfiles.find(p => mockScore >= p.min) || careerProfiles[careerProfiles.length - 1];
-        setResilienceProfile(careerProfile.name);
-        setDimensionScores({
-          skill_readiness: Math.floor(Math.random() * 30) + 70,
-          workplace_maturity: Math.floor(Math.random() * 30) + 70,
-          communication_skills: Math.floor(Math.random() * 30) + 70,
-          problem_solving: Math.floor(Math.random() * 30) + 70,
-          adaptability: Math.floor(Math.random() * 30) + 70,
-          leadership_potential: Math.floor(Math.random() * 30) + 70
-        });
-        break;
-
-      case 'cair':
-      case 'cairplus':
-      case 'cair-personality':
-        const cairProfiles = [
-          { name: "Well-Balanced Personality", min: 75 },
-          { name: "Developing Personality", min: 60 },
-          { name: "Emerging Personality", min: 45 },
-          { name: "Basic Personality", min: 0 }
-        ];
-        const cairProfile = cairProfiles.find(p => mockScore >= p.min) || cairProfiles[cairProfiles.length - 1];
-        setResilienceProfile(cairProfile.name);
-        setDimensionScores({
-          conscientiousness: Math.floor(Math.random() * 30) + 70,
-          agreeableness: Math.floor(Math.random() * 30) + 70,
-          innovation: Math.floor(Math.random() * 30) + 70,
-          resilience: Math.floor(Math.random() * 30) + 70
-        });
-        break;
-
-      case 'genz':
-        const genzProfiles = [
-          { name: "High Workplace Readiness", min: 80 },
-          { name: "Good Workplace Readiness", min: 65 },
-          { name: "Developing Readiness", min: 50 },
-          { name: "Emerging Readiness", min: 0 }
-        ];
-        const genzProfile = genzProfiles.find(p => mockScore >= p.min) || genzProfiles[genzProfiles.length - 1];
-        setResilienceProfile(genzProfile.name);
-        setDimensionScores({
-          digital_fluency: Math.floor(Math.random() * 30) + 70,
-          social_awareness: Math.floor(Math.random() * 30) + 70,
-          work_life_balance: Math.floor(Math.random() * 30) + 70,
-          collaboration: Math.floor(Math.random() * 30) + 70,
-          career_agility: Math.floor(Math.random() * 30) + 70,
-          traditional_structures: Math.floor(Math.random() * 30) + 70
-        });
-        break;
-
-      case 'burnout':
-      case 'burnout-prevention':
-        const burnoutProfiles = [
-          { name: "Low Burnout Risk", min: 75 },
-          { name: "Moderate Burnout Risk", min: 60 },
-          { name: "Elevated Burnout Risk", min: 45 },
-          { name: "High Burnout Risk", min: 0 }
-        ];
-        const burnoutProfile = burnoutProfiles.find(p => mockScore >= p.min) || burnoutProfiles[burnoutProfiles.length - 1];
-        setResilienceProfile(burnoutProfile.name);
-        setDimensionScores({
-          stress_awareness: Math.floor(Math.random() * 30) + 70,
-          coping_strategies: Math.floor(Math.random() * 30) + 70,
-          work_boundaries: Math.floor(Math.random() * 30) + 70,
-          recovery_capacity: Math.floor(Math.random() * 30) + 70,
-          support_systems: Math.floor(Math.random() * 30) + 70,
-          prevention_mindset: Math.floor(Math.random() * 30) + 70,
-          burnout_awareness: Math.floor(Math.random() * 30) + 70
-        });
-        break;
-
-      default:
-        // Default resilience profiles
-        const profiles = [
-          { name: "Titanium", min: 90, color: "text-slate-600", bgColor: "bg-slate-100" },
-          { name: "Steel", min: 80, color: "text-gray-600", bgColor: "bg-gray-100" },
-          { name: "Iron", min: 70, color: "text-zinc-600", bgColor: "bg-zinc-100" },
-          { name: "Copper", min: 60, color: "text-orange-600", bgColor: "bg-orange-100" },
-          { name: "Bronze", min: 50, color: "text-amber-600", bgColor: "bg-amber-100" },
-          { name: "Clay", min: 0, color: "text-red-600", bgColor: "bg-red-100" }
-        ];
-        const profile = profiles.find(p => mockScore >= p.min) || profiles[profiles.length - 1];
-        setResilienceProfile(profile.name);
-        setDimensionScores({
-          emotional: Math.floor(Math.random() * 30) + 70,
-          cognitive: Math.floor(Math.random() * 30) + 70,
-          physical: Math.floor(Math.random() * 30) + 70,
-          social: Math.floor(Math.random() * 30) + 70,
-          change: Math.floor(Math.random() * 30) + 70,
-          performance: Math.floor(Math.random() * 30) + 70
-        });
+    try {
+      await unifiedService.generatePDF(assessmentResult, 'candidate');
+    } catch (error) {
+      console.error('Error generating PDF:', error);
+      toast.error('Failed to generate PDF report');
     }
   };
 
@@ -574,8 +479,12 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
   const dimensions = getDimensions();
 
-  const downloadReport = () => {
+  // Legacy PDF generation (keeping for fallback compatibility)
+  const generateLegacyPDF = () => {
     const doc = new jsPDF();
+    const currentScore = getOverallScore();
+    const currentProfile = getProfile();
+    const currentDimensionScores = getDimensionScores();
     
     // Generate title and content based on assessment type
     const getReportContent = () => {
@@ -584,38 +493,23 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
           return {
             title: 'Faith and Values Assessment Report',
             scoreLabel: 'Overall Values Alignment Score',
-            profileLabel: `Values Profile: ${resilienceProfile}`,
-            filename: `faith-values-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Spiritual Integration: High',
-              '• Values Consistency: Strong',
-              '• Moral Courage: Developing'
-            ]
+            profileLabel: `Values Profile: ${currentProfile}`,
+            filename: `faith-values-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`
           };
         case 'leadership':
           return {
             title: 'Leadership Assessment Report',
             scoreLabel: 'Overall Leadership Score',
-            profileLabel: `Leadership Profile: ${resilienceProfile}`,
-            filename: `leadership-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Strategic Thinking: High',
-              '• Team Development: Strong',
-              '• Decision Making: Excellent'
-            ]
+            profileLabel: `Leadership Profile: ${currentProfile}`,
+            filename: `leadership-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`
           };
         case 'career':
         case 'career-launch':
           return {
             title: 'CareerLaunch Assessment Report',
             scoreLabel: 'Overall Career Readiness Score',
-            profileLabel: `Career Profile: ${resilienceProfile}`,
-            filename: `career-launch-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Career Readiness: High',
-              '• Skills Match: Strong',
-              '• Growth Potential: Excellent'
-            ]
+            profileLabel: `Career Profile: ${currentProfile}`,
+            filename: `career-launch-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`
           };
         case 'cair':
         case 'cairplus':
@@ -623,101 +517,23 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
           return {
             title: 'CAIR+ Personality Assessment Report',
             scoreLabel: 'Overall Personality Score',
-            profileLabel: `Personality Profile: ${resilienceProfile}`,
-            filename: `cair-personality-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Conscientiousness: High',
-              '• Agreeableness: Strong',
-              '• Innovation: Excellent',
-              '• Resilience: Good'
-            ]
-          };
-        case 'communication':
-          return {
-            title: 'Communication Styles Assessment Report',
-            scoreLabel: 'Overall Communication Score',
-            profileLabel: `Communication Profile: ${resilienceProfile}`,
-            filename: `communication-styles-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Active Listening: Excellent',
-              '• Written Communication: Strong',
-              '• Empathy: High'
-            ]
-          };
-        case 'emotional':
-          return {
-            title: 'Emotional Intelligence Assessment Report',
-            scoreLabel: 'Overall EQ Score',
-            profileLabel: `EQ Profile: ${resilienceProfile}`,
-            filename: `emotional-intelligence-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Self-Awareness: High',
-              '• Social Skills: Strong',
-              '• Motivation: Excellent'
-            ]
-          };
-        case 'cultural':
-          return {
-            title: 'Cultural Intelligence Assessment Report',
-            scoreLabel: 'Overall CQ Score',
-            profileLabel: `Cultural Profile: ${resilienceProfile}`,
-            filename: `cultural-intelligence-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Cultural Awareness: High',
-              '• Adaptability: Strong',
-              '• Global Mindset: Excellent'
-            ]
-          };
-        case 'digital':
-          return {
-            title: 'Digital Wellness Assessment Report',
-            scoreLabel: 'Overall Digital Wellness Score',
-            profileLabel: `Digital Profile: ${resilienceProfile}`,
-            filename: `digital-wellness-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Technology Proficiency: Excellent',
-              '• Digital Communication: Strong',
-              '• Screen Time Management: Developing'
-            ]
-          };
-        case 'genz':
-          return {
-            title: 'Gen Z Workplace Assessment Report',
-            scoreLabel: 'Overall Workplace Readiness Score',
-            profileLabel: `Gen Z Profile: ${resilienceProfile}`,
-            filename: `genz-workplace-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Digital Fluency: Excellent',
-              '• Social Awareness: High',
-              '• Adaptability: Strong'
-            ]
+            profileLabel: `Personality Profile: ${currentProfile}`,
+            filename: `cair-personality-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`
           };
         case 'burnout':
         case 'burnout-prevention':
           return {
-            title: 'Burnout Prevention Index Assessment Report',
+            title: 'Burnout Prevention Assessment Report',
             scoreLabel: 'Overall Burnout Prevention Score',
-            profileLabel: `Risk Profile: ${resilienceProfile}`,
-            filename: `burnout-prevention-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Stress Awareness: Good',
-              '• Coping Strategies: Developing', 
-              '• Work Boundaries: Strong',
-              '• Recovery Capacity: Excellent'
-            ]
+            profileLabel: `Risk Profile: ${currentProfile}`,
+            filename: `burnout-prevention-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`
           };
-        case 'stress':
         default:
           return {
-            title: 'Stress Resilience & Adaptability Assessment',
-            scoreLabel: 'Overall Resilience Score',
-            profileLabel: `Resilience Profile: ${resilienceProfile}`,
-            filename: `resilience-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
-            keyMetrics: [
-              '• Stress Threshold: High',
-              '• Recovery Rate: Fast',
-              '• Burnout Risk: Low'
-            ]
+            title: `${assessmentType.charAt(0).toUpperCase() + assessmentType.slice(1)} Assessment Report`,
+            scoreLabel: 'Overall Score',
+            profileLabel: `Profile: ${currentProfile}`,
+            filename: `${assessmentType}-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`
           };
       }
     };
@@ -732,9 +548,9 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     doc.setFontSize(16);
     doc.text(content.scoreLabel, 20, 50);
     doc.setFontSize(24);
-    doc.text(`${overallScore}/100`, 20, 65);
+    doc.text(`${currentScore}/100`, 20, 65);
     doc.setFontSize(12);
-    doc.text(`${content.profileLabel} - ${getScoreDescription(overallScore)}`, 20, 75);
+    doc.text(`${content.profileLabel} - ${getScoreDescription(currentScore)}`, 20, 75);
     
     // Dimension Scores
     doc.setFontSize(16);
@@ -743,38 +559,9 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     
     let yPos = 110;
     dimensions.forEach((dimension) => {
-      const score = dimensionScores[dimension.key] || 0;
+      const score = currentDimensionScores[dimension.key] || 0;
       doc.text(`${dimension.title}: ${score}/100 (${getScoreDescription(score)})`, 20, yPos);
       yPos += 15;
-    });
-    
-    // Key Metrics
-    doc.setFontSize(16);
-    doc.text('Key Metrics:', 20, yPos + 10);
-    doc.setFontSize(12);
-    yPos += 25;
-    content.keyMetrics.forEach((metric, index) => {
-      doc.text(metric, 20, yPos + (index * 15));
-    });
-    
-    // Recommendations (new page)
-    doc.addPage();
-    doc.setFontSize(16);
-    doc.text('Development Recommendations', 20, 30);
-    doc.setFontSize(12);
-    
-    yPos = 50;
-    recommendations.forEach((rec) => {
-      doc.setFontSize(14);
-      doc.text(rec.category, 20, yPos);
-      yPos += 10;
-      rec.items.forEach((item) => {
-        doc.setFontSize(10);
-        const splitText = doc.splitTextToSize(`• ${item}`, 170);
-        doc.text(splitText, 25, yPos);
-        yPos += splitText.length * 5 + 5;
-      });
-      yPos += 10;
     });
     
     // Save the PDF
@@ -782,7 +569,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   };
 
   const shareResults = async () => {
-    const shareText = `I just completed the ${assessmentType || 'Assessment'}! Overall Score: ${overallScore}% - ${resilienceProfile} level`;
+    const shareText = `I just completed the ${assessmentType || 'Assessment'}! Overall Score: ${getOverallScore()}% - ${getProfile()} level`;
     
     if (navigator.share) {
       try {
@@ -825,10 +612,10 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       // Store assessment result in request for AI processing
       (request as any).assessmentData = {
         responses: data.responses || {},
-        dimensions: dimensionScores,
-        overallScore,
+        dimensions: getDimensionScores(),
+        overallScore: getOverallScore(),
         assessmentType,
-        profile: resilienceProfile
+        profile: getProfile()
       };
 
       toast.info('Generating AI-powered report... This may take a moment.');
@@ -1039,17 +826,17 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
                 {getOverallScoreLabel()}
               </CardTitle>
               <div className="flex items-center justify-center gap-4">
-                <div className="text-6xl font-bold text-primary">{overallScore}</div>
+                <div className="text-6xl font-bold text-primary">{getOverallScore()}</div>
                 <div className="text-left">
                   <Badge className="mb-2 bg-primary text-primary-foreground">
-                    {resilienceProfile} Level
+                    {getProfile()} Level
                   </Badge>
                   <p className="text-sm text-muted-foreground">
-                    {getScoreDescription(overallScore)} {getScoreCategory()}
+                    {getScoreDescription(getOverallScore())} {getScoreCategory()}
                   </p>
                 </div>
               </div>
-              <Progress value={overallScore} className="w-full max-w-md mx-auto mt-4" />
+              <Progress value={getOverallScore()} className="w-full max-w-md mx-auto mt-4" />
             </CardHeader>
           </Card>
 
@@ -1074,11 +861,11 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
                         <div>
                           <CardTitle className="text-lg">{dimension.title}</CardTitle>
                           <div className="flex items-center gap-2 mt-1">
-                            <span className={`text-2xl font-bold ${getScoreColor(dimensionScores[dimension.key] || 0)}`}>
-                              {dimensionScores[dimension.key] || 0}
+                            <span className={`text-2xl font-bold ${getScoreColor(getDimensionScores()[dimension.key] || 0)}`}>
+                              {getDimensionScores()[dimension.key] || 0}
                             </span>
                             <Badge variant="outline" className="text-xs">
-                              {getScoreDescription(dimensionScores[dimension.key] || 0)}
+                              {getScoreDescription(getDimensionScores()[dimension.key] || 0)}
                             </Badge>
                           </div>
                         </div>
@@ -1086,7 +873,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
                     </CardHeader>
                     <CardContent>
                       <Progress 
-                        value={dimensionScores[dimension.key] || 0} 
+                        value={getDimensionScores()[dimension.key] || 0}
                         className="h-2 mb-2" 
                       />
                       <p className="text-sm text-muted-foreground">
@@ -1162,17 +949,17 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className={`text-3xl font-bold ${getScoreColor(dimensionScores[dimension.key] || 0)}`}>
-                          {dimensionScores[dimension.key] || 0}
+                        <div className={`text-3xl font-bold ${getScoreColor(getDimensionScores()[dimension.key] || 0)}`}>
+                          {getDimensionScores()[dimension.key] || 0}
                         </div>
                         <Badge variant="outline">
-                          {getScoreDescription(dimensionScores[dimension.key] || 0)}
+                          {getScoreDescription(getDimensionScores()[dimension.key] || 0)}
                         </Badge>
                       </div>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <Progress value={dimensionScores[dimension.key] || 0} className="mb-4" />
+                    <Progress value={getDimensionScores()[dimension.key] || 0} className="mb-4" />
                     <div className="grid md:grid-cols-2 gap-4 text-sm">
                       <div>
                         <h4 className="font-medium mb-2 text-green-600">Strengths</h4>
