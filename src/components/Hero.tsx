@@ -25,8 +25,11 @@ const Hero = () => {
             </div>
 
             {/* Company Logo */}
-            <div className="flex justify-center mb-6">
-              <LogoDisplay size="lg" showTagline={true} className="text-center" />
+            <div className="flex flex-col items-center mb-6">
+              <LogoDisplay size="lg" showTagline={false} className="text-center" />
+              <p className="text-lg text-foreground/70 italic mt-2">
+                Reading minds. Shaping futures
+              </p>
             </div>
 
             {/* Main heading */}
