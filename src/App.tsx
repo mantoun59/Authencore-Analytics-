@@ -36,6 +36,7 @@ import AdminAnalytics from "./pages/AdminAnalytics";
 import CandidateTesting from "./pages/CandidateTesting";
 import TestingDashboard from "./pages/TestingDashboard";
 import SampleCareerLaunchReport from "./pages/SampleCareerLaunchReport";
+import SampleReports from "./pages/SampleReports";
 import MarketingMaterials from "./pages/MarketingMaterials";
 import AuthenticLeadershipDescription from "./pages/AuthenticLeadershipDescription";
 import BurnoutPreventionDescription from "./pages/BurnoutPreventionDescription";
@@ -108,6 +109,7 @@ const App = () => (
             <Route path="/candidate-testing" element={<CandidateTesting />} />
             <Route path="/testing-dashboard" element={<TestingDashboard />} />
             <Route path="/sample-career-launch-report" element={<SampleCareerLaunchReport />} />
+            <Route path="/sample-reports" element={<SampleReports />} />
             <Route path="/marketing-materials" element={<MarketingMaterials />} />
             <Route path="/employer-analytics" element={<EmployerAnalytics />} />
             <Route path="/partner-analytics" element={<PartnerAnalytics />} />

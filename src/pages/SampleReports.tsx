@@ -178,6 +178,27 @@ const SampleReports = () => {
       icon: Clock,
       color: 'text-cyan-600',
       bgColor: 'bg-cyan-50'
+    },
+    'faith-values': {
+      title: 'Faith & Values Alignment Index (FVAI)',
+      description: '90-question assessment analyzing faith-based values alignment across 42 dimensions',
+      icon: Sparkles,
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50'
+    },
+    genz: {
+      title: 'Gen Z Workplace Assessment',
+      description: 'Comprehensive Gen Z workplace readiness and cultural fit evaluation',
+      icon: TrendingUp,
+      color: 'text-emerald-600',
+      bgColor: 'bg-emerald-50'
+    },
+    burnout: {
+      title: 'Burnout Prevention Assessment',
+      description: 'Advanced burnout risk assessment and prevention strategies',
+      icon: Brain,
+      color: 'text-red-600',
+      bgColor: 'bg-red-50'
     }
   };
 
@@ -286,6 +307,93 @@ const SampleReports = () => {
             { career: 'Digital Marketing Specialist', match: 85, readiness: 'Ready', growth: 'High' },
             { career: 'Business Analyst', match: 78, readiness: 'Nearly Ready', growth: 'Medium' },
             { career: 'Project Coordinator', match: 72, readiness: 'Developing', growth: 'High' }
+          ]
+        };
+      
+      case 'faith-values':
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 87,
+            readinessLevel: 'Strong Alignment',
+            topStrengths: ['Spiritual Integration', 'Values Consistency', 'Ethical Decision Making'],
+            keyDevelopmentAreas: ['Community Engagement', 'Workplace Application', 'Leadership Development'],
+            recommendedNextSteps: [
+              'Seek leadership roles in faith-based organizations',
+              'Mentor others in values-based decision making',
+              'Integrate spiritual practices into daily work'
+            ]
+          },
+          dimensionScores: {
+            spiritual_foundation: { score: 91, level: 'Excellent', interpretation: 'Strong spiritual grounding and consistent practice' },
+            moral_compass: { score: 88, level: 'Very Good', interpretation: 'Clear ethical framework guides decisions' },
+            workplace_integration: { score: 79, level: 'Good', interpretation: 'Successfully applies values in professional settings' },
+            community_service: { score: 82, level: 'Very Good', interpretation: 'Active in serving others and community involvement' },
+            personal_growth: { score: 85, level: 'Very Good', interpretation: 'Committed to continuous spiritual development' },
+            leadership_calling: { score: 83, level: 'Very Good', interpretation: 'Natural inclination to lead with values' }
+          },
+          careerRecommendations: [
+            'Non-profit leadership roles',
+            'Faith-based organizational positions',
+            'Ethical consulting and advisory roles'
+          ]
+        };
+      
+      case 'genz':
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 84,
+            readinessLevel: 'High Workplace Readiness',
+            topStrengths: ['Digital Fluency', 'Social Awareness', 'Adaptability'],
+            keyDevelopmentAreas: ['Traditional Communication', 'Hierarchy Navigation', 'Long-term Focus'],
+            recommendedNextSteps: [
+              'Develop formal communication skills',
+              'Seek mentorship from experienced professionals',
+              'Practice patience with traditional processes'
+            ]
+          },
+          dimensionScores: {
+            digital_native: { score: 95, level: 'Excellent', interpretation: 'Exceptional digital skills and technology adoption' },
+            social_consciousness: { score: 89, level: 'Very Good', interpretation: 'Strong awareness of social and environmental issues' },
+            work_life_balance: { score: 82, level: 'Very Good', interpretation: 'Healthy boundaries and life integration' },
+            collaboration: { score: 78, level: 'Good', interpretation: 'Effective team player with modern collaboration style' },
+            career_agility: { score: 85, level: 'Very Good', interpretation: 'Flexible and open to career pivots' },
+            traditional_structures: { score: 68, level: 'Moderate', interpretation: 'Developing comfort with hierarchical environments' }
+          },
+          careerRecommendations: [
+            'Startup and tech company roles',
+            'Social impact positions',
+            'Remote and flexible work environments'
+          ]
+        };
+      
+      case 'burnout':
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 72,
+            readinessLevel: 'Moderate Risk',
+            topStrengths: ['Work-Life Awareness', 'Stress Recognition', 'Support Seeking'],
+            keyDevelopmentAreas: ['Boundary Setting', 'Recovery Techniques', 'Workload Management'],
+            recommendedNextSteps: [
+              'Implement daily stress management practices',
+              'Establish clear work-life boundaries',
+              'Develop comprehensive self-care routine'
+            ]
+          },
+          dimensionScores: {
+            stress_awareness: { score: 81, level: 'Very Good', interpretation: 'Good recognition of stress signals and triggers' },
+            coping_strategies: { score: 69, level: 'Moderate', interpretation: 'Basic coping skills with room for improvement' },
+            work_boundaries: { score: 65, level: 'Moderate', interpretation: 'Developing ability to set and maintain boundaries' },
+            recovery_capacity: { score: 74, level: 'Good', interpretation: 'Reasonable ability to recover from stress' },
+            support_systems: { score: 77, level: 'Good', interpretation: 'Good network of support and resources' },
+            prevention_mindset: { score: 66, level: 'Moderate', interpretation: 'Growing awareness of preventive approaches' }
+          },
+          careerRecommendations: [
+            'Lower-stress work environments',
+            'Flexible schedule positions',
+            'Supportive organizational cultures'
           ]
         };
       
