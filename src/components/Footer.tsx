@@ -2,14 +2,24 @@ import { Mail, Phone, MapPin, ExternalLink, Linkedin, Twitter, Facebook, Youtube
 import { Link, useNavigate } from "react-router-dom";
 import LogoDisplay from "@/components/LogoDisplay";
 
+import { useToast } from "@/hooks/use-toast";
+
 const Footer = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const handleHashNavigation = (hash: string) => {
     navigate('/compliance');
     setTimeout(() => {
       document.getElementById(hash)?.scrollIntoView({ behavior: 'smooth' });
     }, 100);
+  };
+
+  const handleComingSoon = (platform: string) => {
+    toast({
+      title: "Coming Soon!",
+      description: `Our ${platform} page will be available soon. Stay tuned!`,
+    });
   };
   return (
     <footer className="bg-card border-t border-border">
@@ -56,15 +66,13 @@ const Footer = () => {
                   >
                     <Twitter className="w-5 h-5" />
                   </a>
-                  <a
-                    href="https://facebook.com/authencore"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => handleComingSoon("Facebook")}
                     className="text-foreground hover:text-primary transition-colors"
                     aria-label="Facebook"
                   >
                     <Facebook className="w-5 h-5" />
-                  </a>
+                  </button>
                   <a
                     href="https://youtube.com/@authencore"
                     target="_blank"
@@ -74,15 +82,13 @@ const Footer = () => {
                   >
                     <Youtube className="w-5 h-5" />
                   </a>
-                  <a
-                    href="https://instagram.com/authencore"
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <button
+                    onClick={() => handleComingSoon("Instagram")}
                     className="text-foreground hover:text-primary transition-colors"
                     aria-label="Instagram"
                   >
                     <Instagram className="w-5 h-5" />
-                  </a>
+                  </button>
                 </div>
               </div>
             </div>
