@@ -229,17 +229,48 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   const downloadReport = () => {
     const doc = new jsPDF();
     
+    // Generate title and content based on assessment type
+    const getReportContent = () => {
+      if (assessmentType === 'faith-values') {
+        return {
+          title: 'Faith and Values Assessment Report',
+          scoreLabel: 'Overall Values Alignment Score',
+          profileLabel: `Values Profile: ${resilienceProfile}`,
+          filename: `faith-values-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+          keyMetrics: [
+            '• Spiritual Integration: High',
+            '• Values Consistency: Strong',
+            '• Moral Courage: Developing'
+          ]
+        };
+      } else {
+        return {
+          title: 'Stress Resilience & Adaptability Assessment',
+          scoreLabel: 'Overall Resilience Score',
+          profileLabel: `Resilience Profile: ${resilienceProfile}`,
+          filename: `resilience-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`,
+          keyMetrics: [
+            '• Stress Threshold: High',
+            '• Recovery Rate: Fast',
+            '• Burnout Risk: Low'
+          ]
+        };
+      }
+    };
+
+    const content = getReportContent();
+    
     // Title
     doc.setFontSize(20);
-    doc.text('Stress Resilience & Adaptability Assessment', 20, 30);
+    doc.text(content.title, 20, 30);
     
     // Overall Score
     doc.setFontSize(16);
-    doc.text('Overall Resilience Score', 20, 50);
+    doc.text(content.scoreLabel, 20, 50);
     doc.setFontSize(24);
     doc.text(`${overallScore}/100`, 20, 65);
     doc.setFontSize(12);
-    doc.text(`${resilienceProfile} Level - ${getScoreDescription(overallScore)}`, 20, 75);
+    doc.text(`${content.profileLabel} - ${getScoreDescription(overallScore)}`, 20, 75);
     
     // Dimension Scores
     doc.setFontSize(16);
@@ -258,9 +289,9 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     doc.text('Key Metrics:', 20, yPos + 10);
     doc.setFontSize(12);
     yPos += 25;
-    doc.text('• Stress Threshold: High', 20, yPos);
-    doc.text('• Recovery Rate: Fast', 20, yPos + 15);
-    doc.text('• Burnout Risk: Low', 20, yPos + 30);
+    content.keyMetrics.forEach((metric, index) => {
+      doc.text(metric, 20, yPos + (index * 15));
+    });
     
     // Recommendations (new page)
     doc.addPage();
@@ -283,7 +314,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     });
     
     // Save the PDF
-    doc.save(`resilience-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`);
+    doc.save(content.filename);
   };
 
   const shareResults = async () => {
