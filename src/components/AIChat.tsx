@@ -95,35 +95,73 @@ const AIChat = () => {
       
       let aiResponse = "";
       
-      // Simple rule-based responses for immediate functionality
+      // Advanced context-aware responses
       const input = currentInput.toLowerCase();
+      const words = input.split(' ');
       
-      if (input.includes('price') || input.includes('cost') || input.includes('$')) {
-        aiResponse = "Our assessments range from $9.99 to $34.99. The CareerLaunch Assessment at $9.99 is our most popular and comprehensive option, covering 18 dimensions of career discovery.";
-      } else if (input.includes('career') || input.includes('job') || input.includes('work')) {
-        aiResponse = "Our CareerLaunch Assessment ($9.99) is perfect for career discovery! It analyzes your interests, aptitudes, personality, and values across 18 dimensions to help you find the right career path.";
-      } else if (input.includes('personality')) {
-        aiResponse = "Our CAIR+ Personality Assessment ($29.99) is a comprehensive personality evaluation with advanced validity detection and percentile scoring. It provides deep insights into your personality traits.";
-      } else if (input.includes('stress') || input.includes('resilience')) {
-        aiResponse = "The Stress Resilience Assessment ($19.99) measures your ability to handle stress and adapt to challenges. It includes 60 questions with biometric simulation for accurate results.";
-      } else if (input.includes('communication')) {
-        aiResponse = "Our Communication Styles Assessment ($24.99) analyzes how you communicate with others using 80 questions and linguistic analysis. Perfect for improving workplace relationships.";
-      } else if (input.includes('leadership') || input.includes('manager')) {
-        aiResponse = "The Leadership Assessment ($34.99) is our premium executive evaluation with 90 questions and 360-degree feedback capabilities. Ideal for current and aspiring leaders.";
-      } else if (input.includes('emotional') || input.includes('eq')) {
-        aiResponse = "Our Emotional Intelligence Assessment ($24.99) measures your EQ across multiple dimensions with 65 specialized questions. Great for personal and professional development.";
-      } else if (input.includes('digital') || input.includes('wellness') || input.includes('screen')) {
-        aiResponse = "The Digital Wellness Assessment ($14.99) helps you understand your digital habits and find balance. It includes 55 questions with habit tracking features.";
-      } else if (input.includes('cultural') || input.includes('diversity')) {
-        aiResponse = "Our Cultural Intelligence Assessment ($19.99) evaluates your ability to work across cultures using 60+ real-world scenarios across 4 CQ dimensions.";
-      } else if (input.includes('values') || input.includes('faith')) {
-        aiResponse = "The Faith & Values Assessment ($19.99) explores your core values and beliefs with 70 thoughtful questions to help align your life and career choices.";
-      } else if (input.includes('gen z') || input.includes('generation') || input.includes('workplace')) {
-        aiResponse = "Our Gen Z Workplace Assessment ($16.99) focuses on generational workplace dynamics with 50 targeted questions about modern work preferences and styles.";
-      } else if (input.includes('help') || input.includes('support') || input.includes('question')) {
-        aiResponse = "I'm here to help! You can ask me about our assessments, pricing, what each test measures, or how they can benefit you. What specific information would you like to know?";
+      // Multi-keyword detection for more nuanced responses
+      const hasKeyword = (keywords: string[]) => keywords.some(keyword => input.includes(keyword));
+      const hasMultipleKeywords = (keywordSets: string[][]) => 
+        keywordSets.every(set => set.some(keyword => input.includes(keyword)));
+      
+      // Professional assessment recommendations based on context
+      if (hasKeyword(['price', 'cost', 'pricing', 'expensive', 'cheap', 'budget', '$', 'money'])) {
+        if (hasKeyword(['career', 'job', 'work', 'profession'])) {
+          aiResponse = "For career exploration, I recommend our CareerLaunch Assessment at $9.99 - it's our most comprehensive career discovery tool with exceptional value. It analyzes 144 questions across 18 dimensions including interests, aptitudes, personality traits, and core values to provide a complete career roadmap with RIASEC profiling and detailed PDF reports.";
+        } else if (hasKeyword(['personality', 'traits', 'character'])) {
+          aiResponse = "Our CAIR+ Personality Assessment at $29.99 represents premium psychological evaluation with advanced validity detection. This 100-question assessment features sophisticated percentile scoring, dual reporting capabilities, and comprehensive personality insights that exceed industry standards.";
+        } else if (hasKeyword(['leadership', 'manager', 'executive', 'management'])) {
+          aiResponse = "The Leadership Assessment at $34.99 is our executive-level evaluation designed for current and aspiring leaders. It includes 90 comprehensive questions with 360-degree feedback integration, advanced leadership competency mapping, and strategic development recommendations.";
+        } else {
+          aiResponse = "Our assessment portfolio ranges from $9.99 to $34.99, strategically priced for maximum accessibility while maintaining scientific rigor. The CareerLaunch Assessment ($9.99) offers exceptional value for comprehensive career discovery, while specialized assessments like Leadership ($34.99) provide executive-level insights. All assessments include detailed reports and actionable recommendations.";
+        }
+      } else if (hasKeyword(['career', 'job', 'work', 'profession', 'occupation', 'vocation'])) {
+        if (hasKeyword(['change', 'transition', 'switch', 'new'])) {
+          aiResponse = "Career transitions require comprehensive self-understanding. Our CareerLaunch Assessment ($9.99) is specifically designed for career changers, analyzing your transferable skills, emerging interests, and evolving values. It provides detailed exploration of 18 career dimensions with RIASEC profiling to identify optimal career paths that align with your authentic self.";
+        } else if (hasKeyword(['student', 'college', 'graduate', 'university'])) {
+          aiResponse = "For students and recent graduates, the CareerLaunch Assessment ($9.99) provides critical career clarity during this pivotal time. It evaluates academic strengths, emerging professional interests, and core values to guide major selection and career planning with scientifically-validated assessments.";
+        } else {
+          aiResponse = "The CareerLaunch Assessment ($9.99) is our flagship career discovery tool, utilizing 144 carefully crafted questions to evaluate interests, aptitudes, personality, and values across 18 comprehensive dimensions. It includes detailed RIASEC profiling, aptitude analysis, and generates professional PDF reports with specific career recommendations and development pathways.";
+        }
+      } else if (hasKeyword(['personality', 'traits', 'character', 'temperament', 'psychological'])) {
+        aiResponse = "Our CAIR+ Personality Assessment ($29.99) represents advanced psychological evaluation with cutting-edge validity detection technology. This comprehensive 100-question assessment provides percentile scoring against normative populations, dual reporting capabilities, and deep insights into personality patterns that influence professional and personal success.";
+      } else if (hasKeyword(['stress', 'resilience', 'pressure', 'overwhelm', 'burnout', 'anxiety'])) {
+        if (hasKeyword(['work', 'workplace', 'job', 'professional'])) {
+          aiResponse = "Workplace stress resilience is critical for professional success. Our Stress Resilience Assessment ($19.99) evaluates your adaptive capacity through 60 questions with advanced biometric simulation. It identifies stress patterns, coping mechanisms, and provides targeted strategies for building resilience in high-pressure professional environments.";
+        } else {
+          aiResponse = "The Stress Resilience Assessment ($19.99) provides comprehensive evaluation of your stress response patterns and adaptive capabilities. Using 60 specialized questions with biometric simulation technology, it measures resilience across multiple domains and offers evidence-based strategies for stress management and emotional regulation.";
+        }
+      } else if (hasKeyword(['communication', 'interpersonal', 'relationships', 'social', 'speaking'])) {
+        if (hasKeyword(['workplace', 'professional', 'team', 'colleagues'])) {
+          aiResponse = "Professional communication excellence drives career success. Our Communication Styles Assessment ($24.99) analyzes your communication patterns through 80 questions with sophisticated linguistic analysis. It identifies your communication strengths, potential blind spots, and provides strategies for enhancing workplace relationships and influence.";
+        } else {
+          aiResponse = "The Communication Styles Assessment ($24.99) provides deep analysis of your interpersonal communication patterns using 80 questions with advanced linguistic analysis. It evaluates verbal and non-verbal communication styles, identifies optimization opportunities, and offers personalized strategies for enhanced relationship building.";
+        }
+      } else if (hasKeyword(['leadership', 'manager', 'executive', 'management', 'supervisor', 'director'])) {
+        aiResponse = "Executive leadership assessment requires sophisticated evaluation tools. Our Leadership Assessment ($34.99) is designed for current and aspiring leaders, featuring 90 comprehensive questions with 360-degree feedback capabilities. It evaluates leadership competencies, emotional intelligence in leadership contexts, and provides strategic development recommendations for executive growth.";
+      } else if (hasKeyword(['emotional', 'eq', 'emotions', 'feelings', 'empathy'])) {
+        aiResponse = "Emotional Intelligence is foundational to personal and professional success. Our EQ Assessment ($24.99) measures emotional intelligence across five core dimensions through 65 specialized questions. It evaluates self-awareness, self-regulation, motivation, empathy, and social skills with detailed development recommendations.";
+      } else if (hasKeyword(['digital', 'technology', 'screen', 'online', 'wellness', 'balance'])) {
+        aiResponse = "Digital wellness is increasingly critical in our connected world. Our Digital Wellness Assessment ($14.99) evaluates your relationship with technology through 55 questions with integrated habit tracking. It identifies digital patterns, potential areas of concern, and provides evidence-based strategies for healthy technology integration.";
+      } else if (hasKeyword(['cultural', 'diversity', 'international', 'global', 'cross-cultural'])) {
+        aiResponse = "Cultural Intelligence is essential for global success. Our Cultural Intelligence Assessment ($19.99) evaluates your ability to navigate cross-cultural environments through 60+ real-world scenarios across four CQ dimensions: Drive, Knowledge, Strategy, and Action. Perfect for international professionals and diverse team environments.";
+      } else if (hasKeyword(['values', 'faith', 'beliefs', 'spirituality', 'meaning', 'purpose'])) {
+        aiResponse = "Understanding your core values drives authentic life decisions. Our Faith & Values Assessment ($19.99) explores your fundamental beliefs and values through 70 thoughtful questions. It helps align career choices, relationship decisions, and life goals with your authentic value system for greater fulfillment and purpose.";
+      } else if (hasKeyword(['gen z', 'generation', 'generational', 'young', 'millennial', 'workplace dynamics'])) {
+        aiResponse = "Generational workplace dynamics significantly impact professional satisfaction. Our Gen Z Workplace Assessment ($16.99) focuses specifically on modern workplace preferences and generational communication styles through 50 targeted questions. It's invaluable for understanding and optimizing multigenerational team dynamics.";
+      } else if (hasKeyword(['help', 'support', 'guidance', 'assistance', 'question', 'information'])) {
+        aiResponse = "I'm here to provide expert guidance on our comprehensive assessment portfolio. AuthenCore Analytics offers scientifically-validated psychological assessments designed to unlock human potential. Whether you're seeking career clarity, personality insights, leadership development, or specialized evaluations, I can recommend the optimal assessment based on your specific goals and circumstances.";
+      } else if (hasKeyword(['recommend', 'suggest', 'best', 'which', 'what should', 'advice'])) {
+        aiResponse = "Optimal assessment selection depends on your specific objectives. For comprehensive career exploration, the CareerLaunch Assessment ($9.99) provides exceptional value. For leadership development, consider our Leadership Assessment ($34.99). For personal development, the CAIR+ Personality Assessment ($29.99) offers deep insights. I'd be happy to provide personalized recommendations based on your specific goals - what area of development interests you most?";
+      } else if (hasKeyword(['science', 'research', 'valid', 'reliable', 'evidence', 'study'])) {
+        aiResponse = "All AuthenCore Analytics assessments are built on rigorous scientific foundations with established validity and reliability. Our instruments utilize psychometrically sound methodologies, normative populations, and evidence-based frameworks. Each assessment undergoes continuous validation studies to ensure accuracy and meaningful insights for professional and personal development.";
       } else {
-        aiResponse = "Thanks for your question! AuthenCore Analytics offers 10 professional psychological assessments ranging from $9.99 to $34.99. Would you like to know more about a specific assessment or our pricing?";
+        // Intelligent contextual response based on message intent
+        if (input.length > 50) {
+          aiResponse = "Thank you for your detailed inquiry. AuthenCore Analytics specializes in comprehensive psychological assessment solutions that provide actionable insights for personal and professional development. Our scientifically-validated assessments range from career discovery to executive leadership evaluation. Could you share more about your specific development goals so I can provide targeted recommendations?";
+        } else {
+          aiResponse = "Welcome to AuthenCore Analytics - where we're 'Measuring Minds, Shaping Futures.' Our comprehensive assessment portfolio includes 10 scientifically-validated evaluations designed to unlock human potential. From career discovery ($9.99) to executive leadership assessment ($34.99), we provide insights that drive meaningful development. What specific area of growth interests you most?";
+        }
       }
 
       // If AI model is loaded, try to use it for more sophisticated responses
