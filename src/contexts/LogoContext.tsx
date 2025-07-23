@@ -1,9 +1,5 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext } from 'react';
 import finalLogo from '../assets/final-logo.png';
-import blueGreenLogo from '../assets/authencore-logo-blue-green.png';
-import purpleOrangeLogo from '../assets/authencore-logo-purple-orange.png';
-import redTealLogo from '../assets/authencore-logo-red-teal.png';
-import goldBlueLogo from '../assets/authencore-logo-gold-blue.png';
 
 export interface LogoOption {
   id: string;
@@ -12,37 +8,13 @@ export interface LogoOption {
   image: string;
 }
 
-// Multiple colored logo options
+// Single final logo option
 export const logoOptions: LogoOption[] = [
   {
     id: 'final-logo',
-    name: 'AuthenCore Analytics Original',
-    style: 'Original brand logo',
+    name: 'AuthenCore Analytics Final',
+    style: 'Final approved brand logo',
     image: finalLogo
-  },
-  {
-    id: 'blue-green-logo',
-    name: 'AuthenCore Analytics Blue-Green',
-    style: 'Vibrant blue and green gradient',
-    image: blueGreenLogo
-  },
-  {
-    id: 'purple-orange-logo',
-    name: 'AuthenCore Analytics Purple-Orange',
-    style: 'Dynamic purple and orange gradient',
-    image: purpleOrangeLogo
-  },
-  {
-    id: 'red-teal-logo',
-    name: 'AuthenCore Analytics Red-Teal',
-    style: 'Bold red and teal gradient',
-    image: redTealLogo
-  },
-  {
-    id: 'gold-blue-logo',
-    name: 'AuthenCore Analytics Gold-Blue',
-    style: 'Elegant gold and blue gradient',
-    image: goldBlueLogo
   }
 ];
 
@@ -50,21 +22,22 @@ interface LogoContextType {
   selectedLogoId: string;
   selectedLogo: LogoOption;
   setSelectedLogo: (logoId: string) => void;
-  useTextLogo: boolean;
+  useTextLogo: false;
   setUseTextLogo: (useText: boolean) => void;
-  logoOptions: LogoOption[];
 }
 
 const LogoContext = createContext<LogoContextType | undefined>(undefined);
 
 export const LogoProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [selectedLogoId, setSelectedLogoIdState] = useState('final-logo');
-  const [useTextLogo, setUseTextLogo] = useState(false);
-  
-  const selectedLogo = logoOptions.find(logo => logo.id === selectedLogoId) || logoOptions[0];
+  const selectedLogoId = 'final-logo';
+  const selectedLogo = logoOptions[0];
 
-  const setSelectedLogo = (logoId: string) => {
-    setSelectedLogoIdState(logoId);
+  const setSelectedLogo = () => {
+    // No-op since we only have one logo now
+  };
+
+  const setUseTextLogo = () => {
+    // No-op since we always use the final logo
   };
 
   return (
@@ -72,9 +45,8 @@ export const LogoProvider: React.FC<{ children: React.ReactNode }> = ({ children
       selectedLogoId,
       selectedLogo,
       setSelectedLogo,
-      useTextLogo,
-      setUseTextLogo,
-      logoOptions
+      useTextLogo: false,
+      setUseTextLogo
     }}>
       {children}
     </LogoContext.Provider>
