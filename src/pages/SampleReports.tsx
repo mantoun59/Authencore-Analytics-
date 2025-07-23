@@ -29,7 +29,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 const SampleReports = () => {
-  const [selectedAssessment, setSelectedAssessment] = useState('leadership');
+  const [selectedAssessment, setSelectedAssessment] = useState('faith-values');
   const [reportType, setReportType] = useState<'candidate' | 'employer'>('candidate');
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -91,34 +91,123 @@ const SampleReports = () => {
       
       toast.info(`Generating sample ${reportType} PDF report...`);
       
-      const response = await supabase.functions.invoke('generate-pdf-report', {
-        body: aiReportFormat
-      });
+      try {
+        // Try Supabase function first
+        const response = await supabase.functions.invoke('generate-pdf-report', {
+          body: aiReportFormat
+        });
 
-      if (response.data) {
-        // Open HTML report in new window for PDF printing
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(response.data);
-          newWindow.document.close();
-          
-          setTimeout(() => {
-            newWindow.focus();
-            newWindow.print();
-          }, 1000);
+        if (response.data) {
+          // Open HTML report in new window for PDF printing
+          const newWindow = window.open('', '_blank');
+          if (newWindow) {
+            newWindow.document.write(response.data);
+            newWindow.document.close();
+            
+            setTimeout(() => {
+              newWindow.focus();
+              newWindow.print();
+            }, 1000);
+          }
+          toast.success(`Sample ${reportType} PDF report generated successfully!`);
+        } else {
+          throw new Error('No data returned from PDF service');
         }
+      } catch (pdfError) {
+        // Fallback: Generate simple HTML report
+        console.log('PDF service failed, generating HTML fallback:', pdfError);
+        generateFallbackReport(sampleData, selectedAssessment, reportType);
+        toast.success(`Sample ${reportType} report generated successfully!`);
       }
-      
-      toast.success(`Sample ${reportType} PDF report generated successfully!`);
       
     } catch (error) {
-      // Log for debugging in development only
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Error generating sample PDF:', error);
-      }
-      toast.error('Failed to generate sample PDF. Please try again.');
+      console.error('Error generating sample report:', error);
+      toast.error('Failed to generate sample report. Please try again.');
     } finally {
       setIsGenerating(false);
+    }
+  };
+
+  const generateFallbackReport = (sampleData: any, assessmentType: string, reportType: string) => {
+    const reportContent = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>Sample ${assessments[assessmentType].title} Report</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+          .header { text-align: center; border-bottom: 2px solid #333; padding-bottom: 20px; }
+          .section { margin: 20px 0; padding: 15px; border-left: 4px solid #0066cc; }
+          .score { font-size: 24px; font-weight: bold; color: #0066cc; }
+          .strength { color: #00cc00; }
+          .development { color: #ff6600; }
+          ul { list-style-type: none; padding: 0; }
+          li { margin: 5px 0; padding: 5px; background: #f5f5f5; }
+        </style>
+      </head>
+      <body>
+        <div class="header">
+          <h1>Sample ${assessments[assessmentType].title}</h1>
+          <h2>${reportType.charAt(0).toUpperCase() + reportType.slice(1)} Report</h2>
+          <p>Candidate: ${sampleData.candidateInfo.name}</p>
+          <p>Date: ${sampleData.candidateInfo.completionDate}</p>
+        </div>
+        
+        <div class="section">
+          <h3>Executive Summary</h3>
+          <div class="score">Overall Score: ${sampleData.executiveSummary.overallScore}/100</div>
+          <p><strong>Readiness Level:</strong> ${sampleData.executiveSummary.readinessLevel}</p>
+          
+          <h4 class="strength">Top Strengths:</h4>
+          <ul>
+            ${sampleData.executiveSummary.topStrengths.map(strength => `<li class="strength">• ${strength}</li>`).join('')}
+          </ul>
+          
+          <h4 class="development">Development Areas:</h4>
+          <ul>
+            ${sampleData.executiveSummary.keyDevelopmentAreas.map(area => `<li class="development">• ${area}</li>`).join('')}
+          </ul>
+        </div>
+        
+        <div class="section">
+          <h3>Detailed Analysis</h3>
+          ${Object.entries(sampleData.dimensionScores).map(([key, dimension]: [string, any]) => `
+            <div style="margin: 10px 0; padding: 10px; border: 1px solid #ddd;">
+              <h4>${key.replace('_', ' ').toUpperCase()}</h4>
+              <div class="score">${dimension.score}/100 - ${dimension.level}</div>
+              <p>${dimension.interpretation}</p>
+            </div>
+          `).join('')}
+        </div>
+        
+        <div class="section">
+          <h3>Recommended Next Steps</h3>
+          <ul>
+            ${sampleData.executiveSummary.recommendedNextSteps.map((step, index) => `<li><strong>${index + 1}.</strong> ${step}</li>`).join('')}
+          </ul>
+        </div>
+        
+        ${sampleData.careerRecommendations ? `
+        <div class="section">
+          <h3>Career Recommendations</h3>
+          <ul>
+            ${sampleData.careerRecommendations.map(rec => `<li>• ${rec}</li>`).join('')}
+          </ul>
+        </div>
+        ` : ''}
+      </body>
+      </html>
+    `;
+    
+    const newWindow = window.open('', '_blank');
+    if (newWindow) {
+      newWindow.document.write(reportContent);
+      newWindow.document.close();
+      
+      setTimeout(() => {
+        newWindow.focus();
+        newWindow.print();
+      }, 1000);
     }
   };
 
@@ -394,6 +483,151 @@ const SampleReports = () => {
             'Lower-stress work environments',
             'Flexible schedule positions',
             'Supportive organizational cultures'
+          ]
+        };
+      
+      case 'cair':
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 78,
+            readinessLevel: 'Well-Balanced Profile',
+            topStrengths: ['Conscientiousness', 'Analytical Thinking', 'Adaptability'],
+            keyDevelopmentAreas: ['Assertiveness', 'Risk Taking', 'Innovation'],
+            recommendedNextSteps: [
+              'Practice assertiveness in team meetings',
+              'Seek opportunities for creative problem-solving',
+              'Develop comfort with calculated risks'
+            ]
+          },
+          dimensionScores: {
+            conscientiousness: { score: 87, level: 'Excellent', interpretation: 'Highly organized and reliable with strong attention to detail' },
+            analytical_thinking: { score: 82, level: 'Very Good', interpretation: 'Strong logical reasoning and problem-solving capabilities' },
+            adaptability: { score: 79, level: 'Good', interpretation: 'Flexible and comfortable with change' },
+            assertiveness: { score: 65, level: 'Moderate', interpretation: 'Could benefit from more confident communication' },
+            innovation: { score: 68, level: 'Moderate', interpretation: 'Developing creative and innovative thinking' },
+            integrity: { score: 92, level: 'Excellent', interpretation: 'Strong ethical foundation and trustworthiness' }
+          },
+          careerRecommendations: [
+            'Financial analysis and planning roles',
+            'Quality assurance positions',
+            'Research and development support'
+          ]
+        };
+      
+      case 'communication':
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 85,
+            readinessLevel: 'Strong Communicator',
+            topStrengths: ['Active Listening', 'Written Communication', 'Empathy'],
+            keyDevelopmentAreas: ['Public Speaking', 'Conflict Resolution', 'Cross-Cultural Communication'],
+            recommendedNextSteps: [
+              'Join professional speaking organization',
+              'Practice conflict mediation techniques',
+              'Develop cultural awareness skills'
+            ]
+          },
+          dimensionScores: {
+            active_listening: { score: 91, level: 'Excellent', interpretation: 'Exceptional ability to understand and respond to others' },
+            written_communication: { score: 86, level: 'Very Good', interpretation: 'Clear and effective written expression' },
+            empathy: { score: 88, level: 'Very Good', interpretation: 'Strong emotional intelligence and understanding' },
+            public_speaking: { score: 72, level: 'Good', interpretation: 'Comfortable presenting but room for improvement' },
+            conflict_resolution: { score: 74, level: 'Good', interpretation: 'Developing skills in managing disagreements' },
+            nonverbal_communication: { score: 80, level: 'Good', interpretation: 'Good awareness of body language and cues' }
+          },
+          careerRecommendations: [
+            'Human resources roles',
+            'Customer relationship management',
+            'Training and development positions'
+          ]
+        };
+      
+      case 'emotional':
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 81,
+            readinessLevel: 'High Emotional Intelligence',
+            topStrengths: ['Self-Awareness', 'Social Skills', 'Motivation'],
+            keyDevelopmentAreas: ['Stress Management', 'Emotional Regulation', 'Influence'],
+            recommendedNextSteps: [
+              'Practice mindfulness and stress reduction techniques',
+              'Develop emotional regulation strategies',
+              'Build influence and persuasion skills'
+            ]
+          },
+          dimensionScores: {
+            self_awareness: { score: 89, level: 'Very Good', interpretation: 'Strong understanding of own emotions and reactions' },
+            social_skills: { score: 85, level: 'Very Good', interpretation: 'Excellent interpersonal and relationship skills' },
+            motivation: { score: 83, level: 'Very Good', interpretation: 'High internal drive and goal orientation' },
+            stress_management: { score: 71, level: 'Moderate', interpretation: 'Developing better stress coping mechanisms' },
+            empathy: { score: 86, level: 'Very Good', interpretation: 'Strong ability to understand others\' perspectives' },
+            emotional_regulation: { score: 73, level: 'Good', interpretation: 'Good control over emotional responses' }
+          },
+          careerRecommendations: [
+            'Leadership and management roles',
+            'Counseling and coaching positions',
+            'Team leadership opportunities'
+          ]
+        };
+      
+      case 'cultural':
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 76,
+            readinessLevel: 'Culturally Proficient',
+            topStrengths: ['Cultural Awareness', 'Language Skills', 'Adaptability'],
+            keyDevelopmentAreas: ['Cross-Cultural Leadership', 'Global Business Acumen', 'Cultural Sensitivity'],
+            recommendedNextSteps: [
+              'Seek international project opportunities',
+              'Develop cross-cultural leadership skills',
+              'Study global business practices'
+            ]
+          },
+          dimensionScores: {
+            cultural_drive: { score: 78, level: 'Good', interpretation: 'Strong motivation to work across cultures' },
+            cultural_knowledge: { score: 74, level: 'Good', interpretation: 'Good understanding of cultural differences' },
+            cultural_strategy: { score: 72, level: 'Good', interpretation: 'Developing strategic cultural thinking' },
+            cultural_action: { score: 81, level: 'Very Good', interpretation: 'Good at adapting behavior across cultures' },
+            global_mindset: { score: 79, level: 'Good', interpretation: 'Strong global perspective and openness' },
+            communication_adaptation: { score: 75, level: 'Good', interpretation: 'Good at adjusting communication style' }
+          },
+          careerRecommendations: [
+            'International business roles',
+            'Global project management',
+            'Cross-cultural consulting'
+          ]
+        };
+      
+      case 'digital':
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 73,
+            readinessLevel: 'Digital Native',
+            topStrengths: ['Technology Adoption', 'Digital Communication', 'Online Learning'],
+            keyDevelopmentAreas: ['Digital Wellness', 'Screen Time Management', 'Tech-Life Balance'],
+            recommendedNextSteps: [
+              'Implement digital wellness practices',
+              'Create structured screen time limits',
+              'Develop offline hobbies and activities'
+            ]
+          },
+          dimensionScores: {
+            technology_proficiency: { score: 92, level: 'Excellent', interpretation: 'Outstanding technical skills and adaptation' },
+            digital_communication: { score: 85, level: 'Very Good', interpretation: 'Excellent online communication abilities' },
+            information_literacy: { score: 78, level: 'Good', interpretation: 'Good at evaluating digital information' },
+            digital_wellness: { score: 58, level: 'Developing', interpretation: 'Needs improvement in managing digital habits' },
+            screen_time_management: { score: 62, level: 'Developing', interpretation: 'Could benefit from better time boundaries' },
+            cybersecurity_awareness: { score: 74, level: 'Good', interpretation: 'Good understanding of online safety' }
+          },
+          careerRecommendations: [
+            'Technology and software roles',
+            'Digital marketing positions',
+            'Online education and training'
           ]
         };
       
