@@ -54,173 +54,512 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     const mockScore = Math.floor(Math.random() * 40) + 60; // 60-100 range
     setOverallScore(mockScore);
 
-    if (assessmentType === 'faith-values') {
-      // Faith Values specific profiles
-      const profiles = [
-        { name: "Strong Values Alignment", min: 85, color: "text-green-600", bgColor: "bg-green-100" },
-        { name: "Good Values Alignment", min: 70, color: "text-blue-600", bgColor: "bg-blue-100" },
-        { name: "Moderate Values Alignment", min: 55, color: "text-yellow-600", bgColor: "bg-yellow-100" },
-        { name: "Developing Values Alignment", min: 0, color: "text-orange-600", bgColor: "bg-orange-100" }
-      ];
+    // Assessment-specific profiles and scoring
+    switch (assessmentType) {
+      case 'faith-values':
+        const faithProfiles = [
+          { name: "Strong Values Alignment", min: 85, color: "text-green-600", bgColor: "bg-green-100" },
+          { name: "Good Values Alignment", min: 70, color: "text-blue-600", bgColor: "bg-blue-100" },
+          { name: "Moderate Values Alignment", min: 55, color: "text-yellow-600", bgColor: "bg-yellow-100" },
+          { name: "Developing Values Alignment", min: 0, color: "text-orange-600", bgColor: "bg-orange-100" }
+        ];
+        const faithProfile = faithProfiles.find(p => mockScore >= p.min) || faithProfiles[faithProfiles.length - 1];
+        setResilienceProfile(faithProfile.name);
+        setDimensionScores({
+          spiritual_purpose: Math.floor(Math.random() * 30) + 70,
+          integrity: Math.floor(Math.random() * 30) + 70,
+          compassion: Math.floor(Math.random() * 30) + 70,
+          justice: Math.floor(Math.random() * 30) + 70,
+          service: Math.floor(Math.random() * 30) + 70,
+          work_meaning: Math.floor(Math.random() * 30) + 70,
+          values_integration: Math.floor(Math.random() * 30) + 70,
+          moral_courage: Math.floor(Math.random() * 30) + 70,
+        });
+        break;
 
-      const profile = profiles.find(p => mockScore >= p.min) || profiles[profiles.length - 1];
-      setResilienceProfile(profile.name);
+      case 'leadership':
+        const leadershipProfiles = [
+          { name: "Executive Leadership", min: 85 },
+          { name: "Senior Leadership", min: 70 },
+          { name: "Emerging Leader", min: 55 },
+          { name: "Developing Leader", min: 0 }
+        ];
+        const leadershipProfile = leadershipProfiles.find(p => mockScore >= p.min) || leadershipProfiles[leadershipProfiles.length - 1];
+        setResilienceProfile(leadershipProfile.name);
+        setDimensionScores({
+          strategic_thinking: Math.floor(Math.random() * 30) + 70,
+          team_leadership: Math.floor(Math.random() * 30) + 70,
+          decision_making: Math.floor(Math.random() * 30) + 70,
+          emotional_intelligence: Math.floor(Math.random() * 30) + 70,
+          change_management: Math.floor(Math.random() * 30) + 70,
+          communication: Math.floor(Math.random() * 30) + 70
+        });
+        break;
 
-      // Faith Values dimension scores
-      setDimensionScores({
-        spiritual_purpose: Math.floor(Math.random() * 30) + 70,
-        integrity: Math.floor(Math.random() * 30) + 70,
-        compassion: Math.floor(Math.random() * 30) + 70,
-        justice: Math.floor(Math.random() * 30) + 70,
-        service: Math.floor(Math.random() * 30) + 70,
-        work_meaning: Math.floor(Math.random() * 30) + 70,
-        values_integration: Math.floor(Math.random() * 30) + 70,
-        moral_courage: Math.floor(Math.random() * 30) + 70,
-      });
-    } else {
-      // Default resilience profiles
-      const profiles = [
-        { name: "Titanium", min: 90, color: "text-slate-600", bgColor: "bg-slate-100" },
-        { name: "Steel", min: 80, color: "text-gray-600", bgColor: "bg-gray-100" },
-        { name: "Iron", min: 70, color: "text-zinc-600", bgColor: "bg-zinc-100" },
-        { name: "Copper", min: 60, color: "text-orange-600", bgColor: "bg-orange-100" },
-        { name: "Bronze", min: 50, color: "text-amber-600", bgColor: "bg-amber-100" },
-        { name: "Clay", min: 0, color: "text-red-600", bgColor: "bg-red-100" }
-      ];
+      case 'career':
+      case 'career-launch':
+        const careerProfiles = [
+          { name: "Career Ready", min: 75 },
+          { name: "Nearly Ready", min: 60 },
+          { name: "Developing", min: 45 },
+          { name: "Emerging", min: 0 }
+        ];
+        const careerProfile = careerProfiles.find(p => mockScore >= p.min) || careerProfiles[careerProfiles.length - 1];
+        setResilienceProfile(careerProfile.name);
+        setDimensionScores({
+          skill_readiness: Math.floor(Math.random() * 30) + 70,
+          workplace_maturity: Math.floor(Math.random() * 30) + 70,
+          communication_skills: Math.floor(Math.random() * 30) + 70,
+          problem_solving: Math.floor(Math.random() * 30) + 70,
+          adaptability: Math.floor(Math.random() * 30) + 70,
+          leadership_potential: Math.floor(Math.random() * 30) + 70
+        });
+        break;
 
-      const profile = profiles.find(p => mockScore >= p.min) || profiles[profiles.length - 1];
-      setResilienceProfile(profile.name);
+      case 'cair':
+        const cairProfiles = [
+          { name: "Well-Balanced Profile", min: 75 },
+          { name: "Developing Profile", min: 60 },
+          { name: "Emerging Profile", min: 45 },
+          { name: "Basic Profile", min: 0 }
+        ];
+        const cairProfile = cairProfiles.find(p => mockScore >= p.min) || cairProfiles[cairProfiles.length - 1];
+        setResilienceProfile(cairProfile.name);
+        setDimensionScores({
+          conscientiousness: Math.floor(Math.random() * 30) + 70,
+          agreeableness: Math.floor(Math.random() * 30) + 70,
+          innovation: Math.floor(Math.random() * 30) + 70,
+          resilience: Math.floor(Math.random() * 30) + 70
+        });
+        break;
 
-      setDimensionScores({
-        emotional: Math.floor(Math.random() * 30) + 70,
-        cognitive: Math.floor(Math.random() * 30) + 70,
-        physical: Math.floor(Math.random() * 30) + 70,
-        social: Math.floor(Math.random() * 30) + 70,
-        change: Math.floor(Math.random() * 30) + 70,
-        performance: Math.floor(Math.random() * 30) + 70
-      });
+      case 'genz':
+        const genzProfiles = [
+          { name: "High Workplace Readiness", min: 80 },
+          { name: "Good Workplace Readiness", min: 65 },
+          { name: "Developing Readiness", min: 50 },
+          { name: "Emerging Readiness", min: 0 }
+        ];
+        const genzProfile = genzProfiles.find(p => mockScore >= p.min) || genzProfiles[genzProfiles.length - 1];
+        setResilienceProfile(genzProfile.name);
+        setDimensionScores({
+          digital_fluency: Math.floor(Math.random() * 30) + 70,
+          social_awareness: Math.floor(Math.random() * 30) + 70,
+          work_life_balance: Math.floor(Math.random() * 30) + 70,
+          collaboration: Math.floor(Math.random() * 30) + 70,
+          career_agility: Math.floor(Math.random() * 30) + 70,
+          traditional_structures: Math.floor(Math.random() * 30) + 70
+        });
+        break;
+
+      case 'burnout':
+        const burnoutProfiles = [
+          { name: "Low Risk", min: 75 },
+          { name: "Moderate Risk", min: 60 },
+          { name: "Elevated Risk", min: 45 },
+          { name: "High Risk", min: 0 }
+        ];
+        const burnoutProfile = burnoutProfiles.find(p => mockScore >= p.min) || burnoutProfiles[burnoutProfiles.length - 1];
+        setResilienceProfile(burnoutProfile.name);
+        setDimensionScores({
+          stress_awareness: Math.floor(Math.random() * 30) + 70,
+          coping_strategies: Math.floor(Math.random() * 30) + 70,
+          work_boundaries: Math.floor(Math.random() * 30) + 70,
+          recovery_capacity: Math.floor(Math.random() * 30) + 70,
+          support_systems: Math.floor(Math.random() * 30) + 70,
+          prevention_mindset: Math.floor(Math.random() * 30) + 70
+        });
+        break;
+
+      default:
+        // Default resilience profiles
+        const profiles = [
+          { name: "Titanium", min: 90, color: "text-slate-600", bgColor: "bg-slate-100" },
+          { name: "Steel", min: 80, color: "text-gray-600", bgColor: "bg-gray-100" },
+          { name: "Iron", min: 70, color: "text-zinc-600", bgColor: "bg-zinc-100" },
+          { name: "Copper", min: 60, color: "text-orange-600", bgColor: "bg-orange-100" },
+          { name: "Bronze", min: 50, color: "text-amber-600", bgColor: "bg-amber-100" },
+          { name: "Clay", min: 0, color: "text-red-600", bgColor: "bg-red-100" }
+        ];
+        const profile = profiles.find(p => mockScore >= p.min) || profiles[profiles.length - 1];
+        setResilienceProfile(profile.name);
+        setDimensionScores({
+          emotional: Math.floor(Math.random() * 30) + 70,
+          cognitive: Math.floor(Math.random() * 30) + 70,
+          physical: Math.floor(Math.random() * 30) + 70,
+          social: Math.floor(Math.random() * 30) + 70,
+          change: Math.floor(Math.random() * 30) + 70,
+          performance: Math.floor(Math.random() * 30) + 70
+        });
     }
   };
 
   const getDimensions = () => {
-    if (assessmentType === 'faith-values') {
-      return [
-        {
-          key: "spiritual_purpose",
-          title: "Spiritual Purpose",
-          description: "Sense of life meaning through spiritual beliefs",
-          icon: Target,
-          color: "text-purple-500",
-          bgColor: "bg-purple-50"
-        },
-        {
-          key: "integrity", 
-          title: "Integrity",
-          description: "Honesty and moral principles in work",
-          icon: Shield,
-          color: "text-blue-500",
-          bgColor: "bg-blue-50"
-        },
-        {
-          key: "compassion",
-          title: "Compassion",
-          description: "Care and empathy for others",
-          icon: Heart,
-          color: "text-red-500",
-          bgColor: "bg-red-50"
-        },
-        {
-          key: "justice",
-          title: "Justice",
-          description: "Commitment to fairness and equality",
-          icon: Award,
-          color: "text-green-500",
-          bgColor: "bg-green-50"
-        },
-        {
-          key: "service",
-          title: "Service",
-          description: "Dedication to helping others",
-          icon: Users,
-          color: "text-teal-500",
-          bgColor: "bg-teal-50"
-        },
-        {
-          key: "work_meaning",
-          title: "Work Meaning",
-          description: "Finding purpose and significance in work",
-          icon: Sparkles,
-          color: "text-yellow-500",
-          bgColor: "bg-yellow-50"
-        },
-        {
-          key: "values_integration",
-          title: "Values Integration",
-          description: "Aligning personal values with work",
-          icon: TrendingUp,
-          color: "text-indigo-500",
-          bgColor: "bg-indigo-50"
-        },
-        {
-          key: "moral_courage",
-          title: "Moral Courage",
-          description: "Standing up for ethical principles",
-          icon: Brain,
-          color: "text-orange-500",
-          bgColor: "bg-orange-50"
-        }
-      ];
-    } else {
-      return [
-        {
-          key: "emotional",
-          title: "Emotional Resilience",
-          description: "Emotional regulation under pressure",
-          icon: Heart,
-          color: "text-red-500",
-          bgColor: "bg-red-50"
-        },
-        {
-          key: "cognitive", 
-          title: "Cognitive Flexibility",
-          description: "Problem-solving under stress",
-          icon: Brain,
-          color: "text-blue-500",
-          bgColor: "bg-blue-50"
-        },
-        {
-          key: "physical",
-          title: "Physical Stress Response",
-          description: "Energy management and recovery",
-          icon: Zap,
-          color: "text-green-500",
-          bgColor: "bg-green-50"
-        },
-        {
-          key: "social",
-          title: "Social Support Utilization",
-          description: "Help-seeking and network building",
-          icon: Users,
-          color: "text-purple-500",
-          bgColor: "bg-purple-50"
-        },
-        {
-          key: "change",
-          title: "Change Adaptability",
-          description: "Comfort with ambiguity and innovation",
-          icon: Target,
-          color: "text-orange-500",
-          bgColor: "bg-orange-50"
-        },
-        {
-          key: "performance",
-          title: "Performance Under Pressure",
-          description: "Deadline management and crisis leadership",
-          icon: Clock,
-          color: "text-yellow-500",
-          bgColor: "bg-yellow-50"
-        }
-      ];
+    switch (assessmentType) {
+      case 'faith-values':
+        return [
+          {
+            key: "spiritual_purpose",
+            title: "Spiritual Purpose",
+            description: "Sense of life meaning through spiritual beliefs",
+            icon: Target,
+            color: "text-purple-500",
+            bgColor: "bg-purple-50"
+          },
+          {
+            key: "integrity", 
+            title: "Integrity",
+            description: "Honesty and moral principles in work",
+            icon: Shield,
+            color: "text-blue-500",
+            bgColor: "bg-blue-50"
+          },
+          {
+            key: "compassion",
+            title: "Compassion",
+            description: "Care and empathy for others",
+            icon: Heart,
+            color: "text-red-500",
+            bgColor: "bg-red-50"
+          },
+          {
+            key: "justice",
+            title: "Justice",
+            description: "Commitment to fairness and equality",
+            icon: Award,
+            color: "text-green-500",
+            bgColor: "bg-green-50"
+          },
+          {
+            key: "service",
+            title: "Service",
+            description: "Dedication to helping others",
+            icon: Users,
+            color: "text-teal-500",
+            bgColor: "bg-teal-50"
+          },
+          {
+            key: "work_meaning",
+            title: "Work Meaning",
+            description: "Finding purpose and significance in work",
+            icon: Sparkles,
+            color: "text-yellow-500",
+            bgColor: "bg-yellow-50"
+          },
+          {
+            key: "values_integration",
+            title: "Values Integration",
+            description: "Aligning personal values with work",
+            icon: TrendingUp,
+            color: "text-indigo-500",
+            bgColor: "bg-indigo-50"
+          },
+          {
+            key: "moral_courage",
+            title: "Moral Courage",
+            description: "Standing up for ethical principles",
+            icon: Brain,
+            color: "text-orange-500",
+            bgColor: "bg-orange-50"
+          }
+        ];
+
+      case 'leadership':
+        return [
+          {
+            key: "strategic_thinking",
+            title: "Strategic Thinking",
+            description: "Vision, planning, and long-term perspective",
+            icon: Target,
+            color: "text-purple-500",
+            bgColor: "bg-purple-50"
+          },
+          {
+            key: "team_leadership",
+            title: "Team Leadership",
+            description: "Inspiring and developing team members",
+            icon: Users,
+            color: "text-blue-500",
+            bgColor: "bg-blue-50"
+          },
+          {
+            key: "decision_making",
+            title: "Decision Making",
+            description: "Sound judgment under pressure",
+            icon: Brain,
+            color: "text-green-500",
+            bgColor: "bg-green-50"
+          },
+          {
+            key: "emotional_intelligence",
+            title: "Emotional Intelligence",
+            description: "Self-awareness and social skills",
+            icon: Heart,
+            color: "text-red-500",
+            bgColor: "bg-red-50"
+          },
+          {
+            key: "change_management",
+            title: "Change Management",
+            description: "Leading organizational transformation",
+            icon: TrendingUp,
+            color: "text-orange-500",
+            bgColor: "bg-orange-50"
+          },
+          {
+            key: "communication",
+            title: "Communication",
+            description: "Clear and persuasive messaging",
+            icon: Sparkles,
+            color: "text-yellow-500",
+            bgColor: "bg-yellow-50"
+          }
+        ];
+
+      case 'career':
+      case 'career-launch':
+        return [
+          {
+            key: "skill_readiness",
+            title: "Skill Readiness",
+            description: "Technical and professional capabilities",
+            icon: Target,
+            color: "text-blue-500",
+            bgColor: "bg-blue-50"
+          },
+          {
+            key: "workplace_maturity",
+            title: "Workplace Maturity",
+            description: "Professional behavior and work ethic",
+            icon: Shield,
+            color: "text-green-500",
+            bgColor: "bg-green-50"
+          },
+          {
+            key: "communication_skills",
+            title: "Communication Skills",
+            description: "Verbal and written communication abilities",
+            icon: Users,
+            color: "text-purple-500",
+            bgColor: "bg-purple-50"
+          },
+          {
+            key: "problem_solving",
+            title: "Problem Solving",
+            description: "Analytical and creative thinking",
+            icon: Brain,
+            color: "text-orange-500",
+            bgColor: "bg-orange-50"
+          },
+          {
+            key: "adaptability",
+            title: "Adaptability",
+            description: "Flexibility and openness to change",
+            icon: TrendingUp,
+            color: "text-teal-500",
+            bgColor: "bg-teal-50"
+          },
+          {
+            key: "leadership_potential",
+            title: "Leadership Potential",
+            description: "Emerging leadership capabilities",
+            icon: Award,
+            color: "text-red-500",
+            bgColor: "bg-red-50"
+          }
+        ];
+
+      case 'cair':
+        return [
+          {
+            key: "conscientiousness",
+            title: "Conscientiousness",
+            description: "Organization, reliability, and attention to detail",
+            icon: Shield,
+            color: "text-blue-500",
+            bgColor: "bg-blue-50"
+          },
+          {
+            key: "agreeableness",
+            title: "Agreeableness",
+            description: "Cooperation, trust, and interpersonal harmony",
+            icon: Users,
+            color: "text-green-500",
+            bgColor: "bg-green-50"
+          },
+          {
+            key: "innovation",
+            title: "Innovation",
+            description: "Creativity, adaptability, and openness to new ideas",
+            icon: Brain,
+            color: "text-purple-500",
+            bgColor: "bg-purple-50"
+          },
+          {
+            key: "resilience",
+            title: "Resilience",
+            description: "Stress tolerance and emotional stability",
+            icon: Heart,
+            color: "text-red-500",
+            bgColor: "bg-red-50"
+          }
+        ];
+
+      case 'genz':
+        return [
+          {
+            key: "digital_fluency",
+            title: "Digital Fluency",
+            description: "Technology proficiency and digital communication",
+            icon: Sparkles,
+            color: "text-blue-500",
+            bgColor: "bg-blue-50"
+          },
+          {
+            key: "social_awareness",
+            title: "Social Awareness",
+            description: "Understanding of social and environmental issues",
+            icon: Heart,
+            color: "text-green-500",
+            bgColor: "bg-green-50"
+          },
+          {
+            key: "work_life_balance",
+            title: "Work-Life Balance",
+            description: "Healthy boundaries and life integration",
+            icon: Target,
+            color: "text-purple-500",
+            bgColor: "bg-purple-50"
+          },
+          {
+            key: "collaboration",
+            title: "Collaboration",
+            description: "Modern team collaboration and networking",
+            icon: Users,
+            color: "text-orange-500",
+            bgColor: "bg-orange-50"
+          },
+          {
+            key: "career_agility",
+            title: "Career Agility",
+            description: "Flexibility and openness to career changes",
+            icon: TrendingUp,
+            color: "text-teal-500",
+            bgColor: "bg-teal-50"
+          },
+          {
+            key: "traditional_structures",
+            title: "Traditional Structures",
+            description: "Comfort with hierarchical environments",
+            icon: Building,
+            color: "text-red-500",
+            bgColor: "bg-red-50"
+          }
+        ];
+
+      case 'burnout':
+        return [
+          {
+            key: "stress_awareness",
+            title: "Stress Awareness",
+            description: "Recognition of stress signals and triggers",
+            icon: AlertTriangle,
+            color: "text-red-500",
+            bgColor: "bg-red-50"
+          },
+          {
+            key: "coping_strategies",
+            title: "Coping Strategies",
+            description: "Effective stress management techniques",
+            icon: Shield,
+            color: "text-blue-500",
+            bgColor: "bg-blue-50"
+          },
+          {
+            key: "work_boundaries",
+            title: "Work Boundaries",
+            description: "Ability to set and maintain work-life limits",
+            icon: Target,
+            color: "text-green-500",
+            bgColor: "bg-green-50"
+          },
+          {
+            key: "recovery_capacity",
+            title: "Recovery Capacity",
+            description: "Ability to bounce back from stress",
+            icon: TrendingUp,
+            color: "text-purple-500",
+            bgColor: "bg-purple-50"
+          },
+          {
+            key: "support_systems",
+            title: "Support Systems",
+            description: "Network of professional and personal support",
+            icon: Users,
+            color: "text-teal-500",
+            bgColor: "bg-teal-50"
+          },
+          {
+            key: "prevention_mindset",
+            title: "Prevention Mindset",
+            description: "Proactive approach to preventing burnout",
+            icon: Heart,
+            color: "text-orange-500",
+            bgColor: "bg-orange-50"
+          }
+        ];
+
+      default:
+        return [
+          {
+            key: "emotional",
+            title: "Emotional Resilience",
+            description: "Emotional regulation under pressure",
+            icon: Heart,
+            color: "text-red-500",
+            bgColor: "bg-red-50"
+          },
+          {
+            key: "cognitive", 
+            title: "Cognitive Flexibility",
+            description: "Problem-solving under stress",
+            icon: Brain,
+            color: "text-blue-500",
+            bgColor: "bg-blue-50"
+          },
+          {
+            key: "physical",
+            title: "Physical Stress Response",
+            description: "Energy management and recovery",
+            icon: Zap,
+            color: "text-green-500",
+            bgColor: "bg-green-50"
+          },
+          {
+            key: "social",
+            title: "Social Support Utilization",
+            description: "Help-seeking and network building",
+            icon: Users,
+            color: "text-purple-500",
+            bgColor: "bg-purple-50"
+          },
+          {
+            key: "change",
+            title: "Change Adaptability",
+            description: "Comfort with ambiguity and innovation",
+            icon: Target,
+            color: "text-orange-500",
+            bgColor: "bg-orange-50"
+          },
+          {
+            key: "performance",
+            title: "Performance Under Pressure",
+            description: "Deadline management and crisis leadership",
+            icon: Clock,
+            color: "text-yellow-500",
+            bgColor: "bg-yellow-50"
+          }
+        ];
     }
   };
 
@@ -511,6 +850,118 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     return "Needs Development";
   };
 
+  const getAssessmentTitle = () => {
+    switch (assessmentType) {
+      case 'faith-values':
+        return 'Your Faith & Values Profile';
+      case 'leadership':
+        return 'Your Leadership Profile';
+      case 'career':
+      case 'career-launch':
+        return 'Your Career Profile';
+      case 'cair':
+        return 'Your Personality Profile';
+      case 'communication':
+        return 'Your Communication Profile';
+      case 'emotional':
+        return 'Your Emotional Intelligence Profile';
+      case 'cultural':
+        return 'Your Cultural Intelligence Profile';
+      case 'digital':
+        return 'Your Digital Wellness Profile';
+      case 'genz':
+        return 'Your Gen Z Workplace Profile';
+      case 'burnout':
+        return 'Your Burnout Risk Profile';
+      default:
+        return 'Your Resilience Profile';
+    }
+  };
+
+  const getAssessmentDescription = () => {
+    switch (assessmentType) {
+      case 'faith-values':
+        return 'Based on your responses across faith values scenarios and workplace situations, here\'s your comprehensive values alignment assessment.';
+      case 'leadership':
+        return 'Based on your leadership scenarios and decision-making patterns, here\'s your comprehensive leadership assessment.';
+      case 'career':
+      case 'career-launch':
+        return 'Based on your career interests, aptitudes, and values, here\'s your comprehensive career readiness assessment.';
+      case 'cair':
+        return 'Based on your personality responses, here\'s your comprehensive CAIR+ personality assessment with validity analysis.';
+      case 'communication':
+        return 'Based on your communication scenarios and preferences, here\'s your comprehensive communication styles assessment.';
+      case 'emotional':
+        return 'Based on your emotional intelligence scenarios, here\'s your comprehensive EQ assessment.';
+      case 'cultural':
+        return 'Based on your cross-cultural scenarios, here\'s your comprehensive cultural intelligence assessment.';
+      case 'digital':
+        return 'Based on your digital habits and wellness patterns, here\'s your comprehensive digital wellness assessment.';
+      case 'genz':
+        return 'Based on your workplace preferences and generational characteristics, here\'s your comprehensive Gen Z workplace assessment.';
+      case 'burnout':
+        return 'Based on your stress patterns and coping mechanisms, here\'s your comprehensive burnout prevention assessment.';
+      default:
+        return 'Based on your responses across multiple scenarios and stress conditions, here\'s your comprehensive resilience assessment.';
+    }
+  };
+
+  const getScoreCategory = () => {
+    switch (assessmentType) {
+      case 'faith-values':
+        return 'values alignment';
+      case 'leadership':
+        return 'leadership capacity';
+      case 'career':
+      case 'career-launch':
+        return 'career readiness';
+      case 'cair':
+        return 'personality profile';
+      case 'communication':
+        return 'communication effectiveness';
+      case 'emotional':
+        return 'emotional intelligence';
+      case 'cultural':
+        return 'cultural intelligence';
+      case 'digital':
+        return 'digital wellness';
+      case 'genz':
+        return 'workplace readiness';
+      case 'burnout':
+        return 'burnout risk level';
+      default:
+        return 'resilience capacity';
+    }
+  };
+
+  const getOverallScoreLabel = () => {
+    switch (assessmentType) {
+      case 'faith-values':
+        return 'Overall Values Alignment Score';
+      case 'leadership':
+        return 'Overall Leadership Score';
+      case 'career':
+      case 'career-launch':
+        return 'Overall Career Readiness Score';
+      case 'cair':
+        return 'Overall Personality Score';
+      case 'communication':
+        return 'Overall Communication Score';
+      case 'emotional':
+        return 'Overall EQ Score';
+      case 'cultural':
+        return 'Overall CQ Score';
+      case 'digital':
+        return 'Overall Digital Wellness Score';
+      case 'genz':
+        return 'Overall Workplace Readiness Score';
+      case 'burnout':
+        return 'Overall Burnout Risk Score';
+      default:
+        return 'Overall Resilience Score';
+    }
+  };
+
   const recommendations = [
     {
       category: "Stress Management",
@@ -551,13 +1002,10 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
               Assessment Complete
             </Badge>
             <h1 className="text-4xl font-bold mb-4">
-              {assessmentType === 'faith-values' ? 'Your Faith & Values Profile' : 'Your Resilience Profile'}
+              {getAssessmentTitle()}
             </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              {assessmentType === 'faith-values' 
-                ? 'Based on your responses across faith values scenarios and workplace situations, here\'s your comprehensive values alignment assessment.'
-                : 'Based on your responses across multiple scenarios and stress conditions, here\'s your comprehensive resilience assessment.'
-              }
+              {getAssessmentDescription()}
             </p>
           </div>
 
@@ -565,7 +1013,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
           <Card className="mb-8 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
             <CardHeader className="text-center">
               <CardTitle className="text-2xl mb-2">
-                {assessmentType === 'faith-values' ? 'Overall Values Alignment Score' : 'Overall Resilience Score'}
+                {getOverallScoreLabel()}
               </CardTitle>
               <div className="flex items-center justify-center gap-4">
                 <div className="text-6xl font-bold text-primary">{overallScore}</div>
@@ -574,7 +1022,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
                     {resilienceProfile} Level
                   </Badge>
                   <p className="text-sm text-muted-foreground">
-                    {getScoreDescription(overallScore)} {assessmentType === 'faith-values' ? 'values alignment' : 'resilience capacity'}
+                    {getScoreDescription(overallScore)} {getScoreCategory()}
                   </p>
                 </div>
               </div>
