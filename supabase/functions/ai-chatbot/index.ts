@@ -104,59 +104,59 @@ serve(async (req) => {
       throw new Error('Message is required');
     }
 
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openAIApiKey) {
-      console.error('❌ OpenAI API key not found in environment');
-      throw new Error('OpenAI API key not configured');
+    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
+    if (!anthropicApiKey) {
+      console.error('❌ Anthropic API key not found in environment');
+      throw new Error('Anthropic API key not configured');
     }
     
-    console.log('🔑 OpenAI API key found, length:', openAIApiKey.length);
+    console.log('🔑 Anthropic API key found, length:', anthropicApiKey.length);
 
-    // Prepare messages for OpenAI
+    // Prepare messages for Claude
     const messages = [
-      { role: 'system', content: SYSTEM_PROMPT },
       ...conversationHistory,
       { role: 'user', content: message }
     ];
 
-    console.log('🚀 Making request to OpenAI API...');
+    console.log('🚀 Making request to Claude API...');
     
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
+        'Authorization': `Bearer ${anthropicApiKey}`,
         'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
-        messages,
-        temperature: 0.7,
+        model: 'claude-3-5-haiku-20241022',
         max_tokens: 500,
+        system: SYSTEM_PROMPT,
+        messages,
       }),
     });
 
-    console.log('📊 OpenAI API response status:', response.status);
+    console.log('📊 Claude API response status:', response.status);
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('❌ OpenAI API error:', response.status, errorText);
+      console.error('❌ Claude API error:', response.status, errorText);
       
       if (response.status === 401) {
-        throw new Error('Invalid OpenAI API key. Please check your API key configuration.');
+        throw new Error('Invalid Anthropic API key. Please check your API key configuration.');
       } else if (response.status === 429) {
-        throw new Error('OpenAI API rate limit or quota exceeded. Please try again later.');
+        throw new Error('Claude API rate limit exceeded. Please try again later.');
       } else if (response.status === 400) {
-        throw new Error('Invalid request to OpenAI API. Please try a different message.');
+        throw new Error('Invalid request to Claude API. Please try a different message.');
       } else {
-        throw new Error(`OpenAI API error: ${response.status} - ${errorText}`);
+        throw new Error(`Claude API error: ${response.status} - ${errorText}`);
       }
     }
 
     const data = await response.json();
-    const assistantMessage = data.choices?.[0]?.message?.content;
+    const assistantMessage = data.content?.[0]?.text;
 
     if (!assistantMessage) {
-      throw new Error('No response received from OpenAI API');
+      throw new Error('No response received from Claude API');
     }
 
     console.log('✅ Successfully generated response, length:', assistantMessage.length);
