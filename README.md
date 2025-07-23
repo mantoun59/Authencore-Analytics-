@@ -47,232 +47,340 @@ A comprehensive psychometric assessment platform built with React, TypeScript, a
 
 ## 🚀 Getting Started
 
+### Quick Start
+1. Clone the repository
+2. Install dependencies: `npm install` or `bun install`
+3. Configure Supabase project and secrets
+4. Run development server: `npm run dev`
+5. Access at `http://localhost:5173`
+
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before you begin, ensure you have the following:
 - **Node.js 18+** or **Bun** - JavaScript runtime
 - **Git** - Version control system
 - **Supabase Account** - Backend services provider
-- **Code Editor** - VS Code recommended
+- **Code Editor** - VS Code recommended with TypeScript extensions
 
-### Step 1: Clone the Repository
+### Step 1: Clone and Install
 
 ```bash
+# Clone the repository
 git clone <YOUR_GIT_URL>
 cd authencore-assessment-platform
-```
 
-### Step 2: Install Dependencies
-
-Using npm:
-```bash
+# Install dependencies (choose one)
 npm install
-```
-
-Using Bun (recommended for faster installation):
-```bash
+# OR for faster installation
 bun install
 ```
 
-### Step 3: Environment Variables
+### Step 2: Environment Configuration
 
-This project uses Supabase's integrated configuration, but you'll need to be aware of the following configuration values:
+> **Important:** This project does NOT use `.env` files. All configuration is handled through Supabase integration and secrets.
 
-#### Client Configuration (Automatically configured)
-```javascript
-// src/integrations/supabase/client.ts
+#### Client Configuration (Auto-configured)
+The client configuration is automatically set in `src/integrations/supabase/client.ts`:
+```typescript
+// These values are hardcoded in the client
 const SUPABASE_URL = "https://jlbftyjewxgetxcihban.supabase.co"
-const SUPABASE_PUBLISHABLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 ```
 
-#### Supabase Secrets (Required for Edge Functions)
-The following secrets must be configured in your Supabase dashboard:
+#### Required Supabase Secrets
 
-1. **OPENAI_API_KEY** - For AI-powered report generation
-   - Get from: https://platform.openai.com/api-keys
-   - Used by: `ai-chatbot`, `enhanced-ai-analysis`, `generate-ai-report` functions
+Configure these secrets in your Supabase dashboard at **Settings** > **Edge Functions** > **Secrets**:
 
-2. **SUPABASE_URL** - Your Supabase project URL
-   - Auto-configured: `https://jlbftyjewxgetxcihban.supabase.co`
+| Secret Name | Required | Description | Where to Get |
+|-------------|----------|-------------|--------------|
+| `OPENAI_API_KEY` | ✅ | AI report generation | [OpenAI Platform](https://platform.openai.com/api-keys) |
+| `SUPABASE_URL` | ✅ | Project URL | Auto-configured |
+| `SUPABASE_ANON_KEY` | ✅ | Public client key | Supabase Dashboard > Settings > API |
+| `SUPABASE_SERVICE_ROLE_KEY` | ✅ | Server operations | Supabase Dashboard > Settings > API |
+| `SUPABASE_DB_URL` | ✅ | Database connection | Supabase Dashboard > Settings > Database |
 
-3. **SUPABASE_ANON_KEY** - Public anon key for client-side operations
-   - Auto-configured from your Supabase project
+#### Setting Up Secrets
+1. Navigate to your Supabase project dashboard
+2. Go to **Settings** > **Edge Functions** > **Secrets**
+3. Click **Add Secret** for each required secret
+4. Secrets are automatically available to Edge Functions
 
-4. **SUPABASE_SERVICE_ROLE_KEY** - Service role key for server-side operations
-   - Found in: Supabase Dashboard > Settings > API
-   - Used by: Edge functions for database operations
+### Step 3: Supabase Project Setup
 
-5. **SUPABASE_DB_URL** - Direct database connection string
-   - Format: `postgresql://postgres:[password]@[host]:6543/postgres`
-   - Found in: Supabase Dashboard > Settings > Database
+#### 3.1 Authentication Configuration
+Navigate to **Authentication** > **Settings** in your Supabase dashboard:
 
-#### Setting Supabase Secrets
-Navigate to your Supabase project:
-1. Go to **Settings** > **Edge Functions**
-2. Click **Add Secret**
-3. Enter the secret name and value
-4. Secrets are automatically available in Edge Functions
+1. **Site URL**: Set to `http://localhost:5173` (development)
+2. **Redirect URLs**: Add production URLs when deploying
+3. **Email Confirmations**: Enable for security (recommended)
+4. **Email Templates**: Customize as needed
+5. **Auth Providers**: Enable additional providers (Google, GitHub, etc.)
 
-### Step 4: Supabase Project Setup
+#### 3.2 Database Schema Overview
 
-#### 4.1 Create Supabase Project
-1. Go to [supabase.com](https://supabase.com)
-2. Create a new project or use existing project ID: `jlbftyjewxgetxcihban`
-3. Wait for project initialization to complete
+The platform uses a comprehensive database schema with proper Row Level Security:
 
-#### 4.2 Authentication Configuration
-1. Navigate to **Authentication** > **Settings**
-2. **Enable email confirmations** (recommended)
-3. Configure **Site URL**: `http://localhost:5173` (development)
-4. Set **Redirect URLs** for production deployment
-5. **Email Templates**: Customize confirmation and recovery emails
-6. **Auth Providers**: Enable additional providers as needed (Google, GitHub, etc.)
+**Core Authentication & Users:**
+```sql
+-- User management
+profiles              -- Extended user information
+user_roles           -- Role-based access control (admin, user)
+user_sessions        -- Session management with expiration
+user_mfa            -- Multi-factor authentication settings
+security_events      -- Security audit trail
+```
 
-#### 4.3 Database Schema
-The database includes the following main tables:
+**Assessment System:**
+```sql
+-- Assessment data
+assessment_results           -- Core assessment completion data
+generated_reports           -- AI-generated assessment reports
+genz_assessment_results     -- Gen Z workplace assessment
+genz_assessment_responses   -- Individual response tracking
+genz_assessment_scenarios   -- Assessment scenario data
+genz_collaboration_responses -- Collaboration scenarios
+genz_values_responses       -- Values ranking responses
+```
 
-**Core Tables:**
-- `profiles` - User profile information
-- `user_roles` - Role-based access control
-- `user_sessions` - Session management
-- `user_mfa` - Multi-factor authentication
+**Business Management:**
+```sql
+-- Individual users
+solo_candidates      -- Self-assessment participants
 
-**Assessment Tables:**
-- `assessment_results` - Assessment completion data
-- `generated_reports` - AI-generated assessment reports
-- `genz_assessment_results` - Gen Z workplace assessment data
-- `genz_assessment_responses` - Individual response tracking
-- `genz_assessment_scenarios` - Assessment scenarios
+-- Employer system
+employer_accounts    -- Employer organization accounts
+employer_candidates  -- Employer-sponsored assessments
 
-**Business Tables:**
-- `solo_candidates` - Individual assessment participants
-- `employer_accounts` - Employer organization accounts
-- `employer_candidates` - Employer-sponsored assessments
-- `partner_accounts` - Partner organization management
-- `partner_access_permissions` - Partner access control
-- `partner_access_logs` - Partner activity logging
+-- Partner system
+partner_accounts           -- Partner organization management
+partner_access_permissions -- Granular access control
+partner_access_logs       -- Activity logging and auditing
+```
 
-**System Tables:**
-- `analytics_events` - Platform usage analytics
-- `security_events` - Security monitoring and audit trails
-- `api_rate_limits` - API rate limiting
-- `payments` - Payment processing records
+**System & Analytics:**
+```sql
+analytics_events     -- Platform usage tracking
+api_rate_limits     -- Rate limiting enforcement
+payments           -- Payment processing records
+```
 
-### Step 5: Database Migrations
+### Step 4: Database Migrations
 
-The project includes comprehensive database migrations that set up the entire schema with proper security policies.
+The project includes 17 carefully ordered database migrations that create the complete schema with security policies.
 
-#### Running Migrations
-Migrations are automatically handled through the Lovable platform when connected to Supabase. However, if you need to manually run migrations:
+#### Automatic Migration (Recommended)
+When using Lovable with Supabase integration, migrations are automatically applied. No manual intervention required.
 
-1. **Access Supabase SQL Editor**:
-   - Go to your Supabase project
-   - Navigate to **SQL Editor**
+#### Manual Migration (If Needed)
+If you need to run migrations manually, execute them in the Supabase SQL Editor in this exact order:
 
-2. **Run Migration Files** (in order):
-   ```sql
-   -- Core setup and profiles
-   \i supabase/migrations/20250716053331-7c27f452-1163-41b9-ad81-2591ead9e66a.sql
-   
-   -- Security fixes
-   \i supabase/migrations/20250716055923-75af7589-9ec4-4cbf-b1d5-c4c2ed7304d7.sql
-   
-   -- Role-based access control
-   \i supabase/migrations/20250716163529-174aba09-a438-4ae7-9186-a22f19d52d6f.sql
-   \i supabase/migrations/20250716163559-dda489ea-8dd4-4867-bf4d-748f5f7b4fff.sql
-   \i supabase/migrations/20250716165013-1bcfd18b-98c0-4da2-b636-efb2d5ca554a.sql
-   
-   -- Additional features
-   \i supabase/migrations/20250716134955-0ac27dc7-d6cc-49a1-b1b5-470a3dad7701.sql
-   \i supabase/migrations/20250716154257-0270df65-64e9-4cf9-86e4-c058983057f4.sql
-   \i supabase/migrations/20250717051748-a9b31ce6-d470-4e6e-a4dc-d77d4ee1e9b8.sql
-   \i supabase/migrations/20250719050543-07508d9e-7ef5-46d7-8550-5dbe12cf4c0a.sql
-   \i supabase/migrations/20250719141423-6b10ce80-580e-404c-81f4-c3b5871a9cac.sql
-   \i supabase/migrations/20250720124225-6bc1606c-959d-4732-9b9a-8eb37897bdbf.sql
-   \i supabase/migrations/20250720125445-f5719918-c38a-4a9d-a962-2a718518bdd2.sql
-   \i supabase/migrations/20250720125730-f145b3e5-5778-4a75-bfc8-d2854f79d57d.sql
-   \i supabase/migrations/20250721084127-302550e6-52da-44ad-b018-4e8654f30dd7.sql
-   \i supabase/migrations/20250721095042-58a3148c-61d5-486f-9f58-45dedd2b3f2f.sql
-   \i supabase/migrations/20250721095424-54738fdc-803f-493d-aa8a-ecbd822f4b6f.sql
-   \i supabase/migrations/20250721100012-bdaf4fff-9187-47ce-b8c6-715b23a669af.sql
-   ```
+```sql
+-- 1. Core setup and user profiles
+supabase/migrations/20250716053331-7c27f452-1163-41b9-ad81-2591ead9e66a.sql
 
-#### Key Migration Features
+-- 2. Security fixes and RLS improvements
+supabase/migrations/20250716055923-75af7589-9ec4-4cbf-b1d5-c4c2ed7304d7.sql
 
-**Security & Authentication:**
-- Row Level Security (RLS) enabled on all tables
-- Secure database functions with proper search_path
-- User profile management with automatic creation
-- Multi-factor authentication support
-- Session management and security monitoring
+-- 3. Assessment system foundation
+supabase/migrations/20250716134955-0ac27dc7-d6cc-49a1-b1b5-470a3dad7701.sql
+supabase/migrations/20250716154257-0270df65-64e9-4cf9-86e4-c058983057f4.sql
+
+-- 4. Role-based access control system
+supabase/migrations/20250716163529-174aba09-a438-4ae7-9186-a22f19d52d6f.sql
+supabase/migrations/20250716163559-dda489ea-8dd4-4867-bf4d-748f5f7b4fff.sql
+supabase/migrations/20250716165013-1bcfd18b-98c0-4da2-b636-efb2d5ca554a.sql
+
+-- 5. Business features and Gen Z assessment
+supabase/migrations/20250717051748-a9b31ce6-d470-4e6e-a4dc-d77d4ee1e9b8.sql
+supabase/migrations/20250719050543-07508d9e-7ef5-46d7-8550-5dbe12cf4c0a.sql
+supabase/migrations/20250719141423-6b10ce80-580e-404c-81f4-c3b5871a9cac.sql
+
+-- 6. Advanced features and security
+supabase/migrations/20250720124225-6bc1606c-959d-4732-9b9a-8eb37897bdbf.sql
+supabase/migrations/20250720125445-f5719918-c38a-4a9d-a962-2a718518bdd2.sql
+supabase/migrations/20250720125730-f145b3e5-5778-4a75-bfc8-d2854f79d57d.sql
+
+-- 7. Final security and system optimizations
+supabase/migrations/20250721084127-302550e6-52da-44ad-b018-4e8654f30dd7.sql
+supabase/migrations/20250721095042-58a3148c-61d5-486f-9f58-45dedd2b3f2f.sql
+supabase/migrations/20250721095424-54738fdc-803f-493d-aa8a-ecbd822f4b6f.sql
+supabase/migrations/20250721100012-bdaf4fff-9187-47ce-b8c6-715b23a669af.sql
+```
+
+#### Migration Features
+
+**Security Implementation:**
+- ✅ Row Level Security (RLS) on all tables
+- ✅ Secure database functions with `SECURITY DEFINER`
+- ✅ Proper `search_path` configuration
+- ✅ Automatic user profile creation triggers
+- ✅ Session management with timeout
+- ✅ Audit trail for security events
 
 **Business Logic:**
-- Partner account management with access controls
-- Employer dashboard functionality
-- Assessment result storage and retrieval
-- Payment processing integration
-- Analytics and reporting infrastructure
+- ✅ Multi-tenant partner system with access controls
+- ✅ Employer dashboard with candidate management
+- ✅ Assessment result storage and AI report generation
+- ✅ Payment processing integration
+- ✅ Comprehensive analytics system
 
-**Admin Setup:**
-The migrations include an admin setup function. To assign admin role to a user:
+**Database Functions:**
+The migrations create several key functions:
 ```sql
--- Replace with your admin email
+-- Authentication
+authenticate_employer(email, password)
+authenticate_partner(username, password)
+
+-- Security
+log_security_event(user_id, event_type, details)
+detect_suspicious_activity(user_id, ip, user_agent, action)
+check_rate_limit(identifier, endpoint, limit, window)
+
+-- Access Control
+check_partner_assessment_access(partner_id, assessment_type)
+assign_admin_role(email)
+is_admin(user_id)
+has_role(user_id, role)
+
+-- Logging
+log_analytics_event(event_type, entity_type, entity_id, metadata)
+log_partner_activity(partner_id, action, assessment_type)
+```
+
+### Step 5: Edge Functions
+
+The platform includes 6 powerful Edge Functions that are automatically deployed:
+
+| Function | Purpose | Secrets Required |
+|----------|---------|------------------|
+| `ai-chatbot` | AI assistant for user guidance | `OPENAI_API_KEY` |
+| `enhanced-ai-analysis` | Advanced assessment analysis | `OPENAI_API_KEY` |
+| `generate-ai-report` | AI-powered report generation | `OPENAI_API_KEY` |
+| `generate-pdf-report` | PDF report creation | `SUPABASE_SERVICE_ROLE_KEY` |
+| `security-middleware` | Security validation & monitoring | `SUPABASE_SERVICE_ROLE_KEY` |
+| `send-partner-credentials` | Partner onboarding emails | `SUPABASE_SERVICE_ROLE_KEY` |
+
+### Step 6: Initial Admin Setup
+
+After migrations are complete, set up your first admin user:
+
+```sql
+-- Replace with your admin email address
 SELECT public.assign_admin_role('your-email@authencore.org');
 ```
 
-### Step 6: Edge Functions Deployment
+This grants full platform access including:
+- User management
+- Partner management  
+- Analytics dashboard
+- System configuration
+- Security monitoring
 
-Edge Functions are automatically deployed when connected to Supabase. Key functions include:
+### Step 7: Development Server
 
-- **ai-chatbot**: AI assistant for user guidance
-- **enhanced-ai-analysis**: Advanced assessment analysis
-- **generate-ai-report**: AI-powered report generation  
-- **generate-pdf-report**: PDF report creation
-- **security-middleware**: Security validation and monitoring
-- **send-partner-credentials**: Partner onboarding emails
+Start the development environment:
 
-### Step 7: Run the Development Server
-
-Start the development server:
 ```bash
+# Start development server
 npm run dev
-# or
+# OR
 bun dev
+
+# Available scripts
+npm run build          # Production build
+npm run preview         # Preview production build
+npm run lint           # ESLint checking
+npm run lint:fix       # Auto-fix linting issues
+npm run test           # Unit tests (Vitest)
+npm run test:coverage  # Test coverage report
+npm run cypress:open   # Interactive E2E tests
+npm run cypress:run    # Headless E2E tests
 ```
 
-The application will be available at:
-- **Local**: http://localhost:5173
-- **Network**: http://[your-ip]:5173
+**Access Points:**
+- 🌐 **Local**: http://localhost:5173
+- 📱 **Network**: http://[your-ip]:5173 (mobile testing)
+- 🔧 **Vite Dev Tools**: Available in browser console
 
-### Step 8: Initial Setup Verification
+### Step 8: Verification Checklist
 
-1. **Database Connection**: Check that all tables are created successfully
-2. **Authentication**: Test user registration and login
-3. **Admin Access**: Verify admin user can access admin dashboard
-4. **Assessment Flow**: Complete a sample assessment end-to-end
-5. **Edge Functions**: Test AI report generation functionality
+Complete these verification steps to ensure proper setup:
 
-### Common Setup Issues
+#### ✅ Database Verification
+- [ ] All 17 migrations applied successfully
+- [ ] Tables created with proper RLS policies
+- [ ] Database functions working correctly
+- [ ] Admin user role assigned
 
-**Database Connection Errors:**
-- Verify Supabase project is active and accessible
-- Check that all migrations have been applied successfully
-- Ensure RLS policies are properly configured
+#### ✅ Authentication Testing
+- [ ] User registration working
+- [ ] Email confirmation (if enabled)
+- [ ] Login/logout functionality
+- [ ] Session management
+- [ ] Admin dashboard accessible
 
-**Authentication Issues:**
-- Confirm email confirmation is properly configured
-- Check Site URL and Redirect URL settings
-- Verify auth providers are enabled if using OAuth
+#### ✅ Assessment Flow
+- [ ] Complete a sample assessment end-to-end
+- [ ] AI report generation working
+- [ ] PDF export functionality
+- [ ] Result storage in database
 
-**Edge Function Errors:**
-- Ensure all required secrets are configured in Supabase
-- Check Edge Function logs in Supabase dashboard
-- Verify OpenAI API key has sufficient credits and permissions
+#### ✅ Edge Functions
+- [ ] Check Edge Function logs in Supabase dashboard
+- [ ] Test AI chatbot functionality
+- [ ] Verify report generation
+- [ ] Confirm email sending (if configured)
 
-**Build Issues:**
-- Run `npm install` or `bun install` to ensure all dependencies are installed
-- Check Node.js version compatibility (18+)
-- Clear cache with `npm run clean` if available
+### Troubleshooting Common Issues
+
+#### 🔴 Database Connection Errors
+```bash
+# Check Supabase project status
+# Verify project ID: jlbftyjewxgetxcihban
+# Ensure all migrations completed successfully
+# Check RLS policies are active
+```
+
+#### 🔴 Authentication Problems
+```bash
+# Verify Site URL configuration
+# Check email confirmation settings
+# Confirm auth providers are enabled
+# Review redirect URL configuration
+```
+
+#### 🔴 Edge Function Failures
+```bash
+# Verify all required secrets are set
+# Check Edge Function logs in Supabase dashboard
+# Confirm OpenAI API key has sufficient credits
+# Review function deployment status
+```
+
+#### 🔴 Build/Development Issues
+```bash
+# Clear node modules and reinstall
+rm -rf node_modules package-lock.json
+npm install
+
+# Check Node.js version
+node --version  # Should be 18+
+
+# Clear browser cache and storage
+# Check for TypeScript errors
+npm run build
+```
+
+#### 🔴 Performance Issues
+```bash
+# Enable production optimizations
+npm run build
+npm run preview
+
+# Check network requests in browser dev tools
+# Monitor Supabase dashboard for slow queries
+# Review Edge Function execution times
+```
 
 ## 🔧 Configuration
 
