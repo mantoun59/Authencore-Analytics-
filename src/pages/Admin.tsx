@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import ImageGenerator from "@/components/ImageGenerator";
 import { PartnerManagement } from "@/components/PartnerManagement";
 import AdminGuideGenerator from "@/components/AdminGuideGenerator";
+import SEOOptimizer from "@/components/SEOOptimizer";
 import { EnhancedAIControls } from "@/components/EnhancedAIControls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProtectedAdminRoute from "@/components/ProtectedAdminRoute";
@@ -22,13 +23,14 @@ const AdminPage = () => {
             </div>
 
             <Tabs defaultValue="partners" className="w-full">
-              <TabsList className="grid w-full grid-cols-6">
-                <TabsTrigger value="partners">Partner Management</TabsTrigger>
-                <TabsTrigger value="testing">Testing Portal</TabsTrigger>
+              <TabsList className="grid w-full grid-cols-7">
+                <TabsTrigger value="partners">Partners</TabsTrigger>
+                <TabsTrigger value="testing">Testing</TabsTrigger>
                 <TabsTrigger value="ai-engine">AI Engine</TabsTrigger>
                 <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                <TabsTrigger value="seo-marketing">SEO & Marketing</TabsTrigger>
                 <TabsTrigger value="setup-guide">Setup Guide</TabsTrigger>
-                <TabsTrigger value="images">Image Generator</TabsTrigger>
+                <TabsTrigger value="images">Images</TabsTrigger>
               </TabsList>
               
               <TabsContent value="partners" className="mt-6">
@@ -78,6 +80,10 @@ const AdminPage = () => {
                     </div>
                   </div>
                 </div>
+              </TabsContent>
+              
+              <TabsContent value="seo-marketing" className="mt-6">
+                <SEOOptimizer />
               </TabsContent>
               
               <TabsContent value="setup-guide" className="mt-6">
