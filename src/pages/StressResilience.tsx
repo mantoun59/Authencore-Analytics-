@@ -67,27 +67,30 @@ const StressResilience = () => {
       return;
     }
 
-    addResponse({
+    const finalResponse = {
       questionId: currentQuestion.id,
       selectedOption,
       score: selectedOption,
       timeTaken: Date.now() - startTime,
       confidence: confidence[0]
-    });
+    };
+    
+    addResponse(finalResponse);
     
     if (currentQuestionIndex < burnoutPreventionQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedOption(null);
       setConfidence([3]);
     } else {
-      completeAssessment();
+      // Pass the final responses including the current one
+      completeAssessment([...responses, finalResponse]);
     }
   };
 
-  const completeAssessment = async () => {
+  const completeAssessment = async (finalResponses = responses) => {
     setIsSubmitting(true);
     try {
-      const results = calculateResults(responses);
+      const results = calculateResults(finalResponses);
       const completionTime = Math.round((Date.now() - startTime) / 60000);
       
       // Generate detailed burnout report
