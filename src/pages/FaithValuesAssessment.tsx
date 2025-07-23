@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
+import AssessmentLogo from '@/components/AssessmentLogo';
 import ApplicantDataForm from '@/components/ApplicantDataForm';
 import { shuffledFaithValuesQuestions } from '@/data/shuffledFaithValuesQuestions';
 import { useFaithValuesScoring } from '@/hooks/useFaithValuesScoring';
@@ -246,7 +247,14 @@ const FaithValuesAssessment = () => {
           <div className="max-w-3xl mx-auto">
             <Card className="shadow-xl">
               <CardHeader className="text-center">
-                <div className="text-6xl mb-4">🌟</div>
+                <div className="flex items-center justify-center gap-4 mb-4">
+                  <AssessmentLogo 
+                    assessmentType="faith-values" 
+                    size="xl" 
+                    fallbackText="FV"
+                  />
+                  <div className="text-6xl">🌟</div>
+                </div>
                 <CardTitle className="text-3xl font-bold text-primary mb-2">
                   Faith & Values Alignment Index (FVAI)
                 </CardTitle>

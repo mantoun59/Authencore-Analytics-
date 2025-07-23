@@ -48,6 +48,7 @@ import FaithValuesDescription from "./pages/FaithValuesDescription";
 import GenZWorkplaceDescription from "./pages/GenZWorkplaceDescription";
 import EmployerAnalytics from "./pages/EmployerAnalytics";
 import PartnerAnalytics from "./pages/PartnerAnalytics";
+import LogoManagement from "./pages/LogoManagement";
 import ScrollToTop from "@/components/ScrollToTop";
 import AIChat from "@/components/AIChat";
 
@@ -111,6 +112,7 @@ const App = () => (
             <Route path="/marketing-materials" element={<MarketingMaterials />} />
             <Route path="/employer-analytics" element={<EmployerAnalytics />} />
             <Route path="/partner-analytics" element={<PartnerAnalytics />} />
+            <Route path="/logo-management" element={<LogoManagement />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

@@ -27,10 +27,12 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import AssessmentLogo from "@/components/AssessmentLogo";
 import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
 import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
 import { toast } from "sonner";
 import type { AssessmentData, CandidateInfo } from "@/types/assessment.types";
+import { useAssessmentLogos } from "@/hooks/useAssessmentLogos";
 
 interface AssessmentResultsProps {
   data: AssessmentData | Record<string, unknown>; // Flexible type for different assessment formats
@@ -435,10 +437,17 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         <div className="max-w-6xl mx-auto">
           {/* Results Header */}
           <div className="text-center mb-12">
-            <Badge className="mb-4 bg-green-100 text-green-700 hover:bg-green-200">
-              <CheckCircle2 className="h-4 w-4 mr-2" />
-              Assessment Complete
-            </Badge>
+            <div className="flex items-center justify-center gap-4 mb-4">
+              <AssessmentLogo 
+                assessmentType={assessmentType} 
+                size="lg" 
+                fallbackText={assessmentType === 'faith-values' ? 'FV' : 'SR'}
+              />
+              <Badge className="bg-green-100 text-green-700 hover:bg-green-200">
+                <CheckCircle2 className="h-4 w-4 mr-2" />
+                Assessment Complete
+              </Badge>
+            </div>
             <h1 className="text-4xl font-bold mb-4">
               {assessmentType === 'faith-values' ? 'Your Faith & Values Profile' : 'Your Resilience Profile'}
             </h1>
