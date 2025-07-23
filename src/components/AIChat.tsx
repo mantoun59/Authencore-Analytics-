@@ -4,8 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageCircle, Send, X, Bot, User, Loader2 } from 'lucide-react';
-import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { pipeline, env } from '@huggingface/transformers';
 
 interface Message {
   id: string;
@@ -26,8 +26,41 @@ const AIChat = () => {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isModelLoaded, setIsModelLoaded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const generatorRef = useRef<any>(null);
+
+  // Configure transformers.js
+  useEffect(() => {
+    env.allowLocalModels = false;
+    env.useBrowserCache = true;
+  }, []);
+
+  // Initialize the model
+  useEffect(() => {
+    const initModel = async () => {
+      try {
+        if (!generatorRef.current) {
+          generatorRef.current = await pipeline(
+            'text-generation',
+            'Xenova/gpt2',
+            { device: 'webgpu' }
+          );
+          setIsModelLoaded(true);
+        }
+      } catch (error) {
+        console.error('Failed to load model:', error);
+        toast({
+          title: "Model Loading Error",
+          description: "Failed to load AI model. Please refresh the page.",
+          variant: "destructive"
+        });
+      }
+    };
+    
+    initModel();
+  }, [toast]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -38,7 +71,7 @@ const AIChat = () => {
   }, [messages]);
 
   const sendMessage = async () => {
-    if (!inputMessage.trim() || isLoading) return;
+    if (!inputMessage.trim() || isLoading || !isModelLoaded) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -48,54 +81,75 @@ const AIChat = () => {
     };
 
     setMessages(prev => [...prev, userMessage]);
+    const currentInput = inputMessage;
     setInputMessage('');
     setIsLoading(true);
 
     try {
-      // Prepare conversation history for context
-      const conversationHistory = messages.map(msg => ({
-        role: msg.type === 'user' ? 'user' : 'assistant',
-        content: msg.content
-      }));
+      if (!generatorRef.current) {
+        throw new Error('AI model not loaded');
+      }
 
-      const { data, error } = await supabase.functions.invoke('ai-chatbot', {
-        body: {
-          message: inputMessage,
-          conversationHistory: conversationHistory.slice(-10) // Keep last 10 messages for context
-        }
+      // Create context prompt about AuthenCore Analytics
+      const contextPrompt = `You are a helpful assistant for AuthenCore Analytics, a professional psychological assessment platform. Our mission is "Measuring Minds. Shaping Futures." We provide scientifically validated tests for individuals and organizations including:
+
+1. CareerLaunch Assessment ($9.99) - Career discovery assessment
+2. CAIR+ Personality Assessment ($29.99) - Comprehensive personality assessment  
+3. Stress Resilience Assessment ($19.99) - Stress and adaptability assessment
+4. Cultural Intelligence Assessment ($19.99) - Global cultural intelligence
+5. Communication Styles Assessment ($24.99) - Communication assessment
+6. Emotional Intelligence Assessment ($24.99) - EQ assessment
+7. Leadership Assessment ($34.99) - Executive leadership assessment
+8. Digital Wellness Assessment ($14.99) - Digital wellness assessment
+9. Faith & Values Assessment ($19.99) - Personal values assessment
+10. Gen Z Workplace Assessment ($16.99) - Generational workplace assessment
+
+User: ${currentInput}
+Assistant:`;
+
+      // Generate response using the local model
+      const result = await generatorRef.current(contextPrompt, {
+        max_new_tokens: 150,
+        temperature: 0.7,
+        do_sample: true,
+        pad_token_id: 50256
       });
 
-      if (error) throw error;
-
-      if (data.success) {
-        const assistantMessage: Message = {
-          id: (Date.now() + 1).toString(),
-          type: 'assistant',
-          content: data.response,
-          timestamp: new Date()
-        };
-
-        setMessages(prev => [...prev, assistantMessage]);
+      let aiResponse = result[0].generated_text;
+      
+      // Extract only the assistant's response
+      const assistantStart = aiResponse.indexOf('Assistant:');
+      if (assistantStart !== -1) {
+        aiResponse = aiResponse.substring(assistantStart + 10).trim();
       } else {
-        throw new Error(data.error || 'Failed to get response');
+        // Fallback: take everything after the user input
+        const userEnd = aiResponse.indexOf(currentInput) + currentInput.length;
+        aiResponse = aiResponse.substring(userEnd).trim();
       }
+
+      // Clean up the response
+      aiResponse = aiResponse.split('\n')[0] || "I'm here to help with questions about AuthenCore Analytics!";
+
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'assistant',
+        content: aiResponse,
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      // Handle specific error types
-      let errorMessage = "Failed to send message. Please try again.";
+      console.error('AI generation error:', error);
       
-      if (error instanceof Error) {
-        if (error.message.includes('quota') || error.message.includes('rate limit')) {
-          errorMessage = "AI service is temporarily unavailable due to high demand. Please try again later.";
-        } else if (error.message.includes('non-2xx status code')) {
-          errorMessage = "AI service is currently experiencing issues. Please try again in a few minutes.";
-        }
-      }
-      
-      toast({
-        title: "Service Unavailable",
-        description: errorMessage,
-        variant: "destructive"
-      });
+      // Fallback response
+      const assistantMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        type: 'assistant',
+        content: "I'm here to help with questions about AuthenCore Analytics! Our assessments help you discover your potential. What would you like to know?",
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, assistantMessage]);
     } finally {
       setIsLoading(false);
     }
