@@ -10,7 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import Header from '@/components/Header';
 import ApplicantDataForm from '@/components/ApplicantDataForm';
-import { complete90FaithValuesQuestions } from '@/data/complete90FaithValuesQuestions';
+import { shuffledFaithValuesQuestions } from '@/data/shuffledFaithValuesQuestions';
 import { useFaithValuesScoring } from '@/hooks/useFaithValuesScoring';
 import { ChevronLeft, ChevronRight, GripVertical, Download, RotateCcw } from 'lucide-react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
@@ -65,7 +65,7 @@ const FaithValuesAssessment = () => {
   const { toast } = useToast();
   const { result, isCalculating, calculateScores, reset } = useFaithValuesScoring();
 
-  const questions = complete90FaithValuesQuestions;
+  const questions = shuffledFaithValuesQuestions;
   const progress = ((currentScenario + 1) / questions.length) * 100;
   const currentScenarioData = questions[currentScenario];
 
@@ -440,9 +440,17 @@ const FaithValuesAssessment = () => {
                           // Likert scale questions
                           Array.from({ length: currentScenarioData.scale.max - currentScenarioData.scale.min + 1 }, (_, i) => {
                             const value = currentScenarioData.scale.min + i;
-                            const label = i === 0 ? currentScenarioData.scale.minLabel : 
-                                          i === currentScenarioData.scale.max - currentScenarioData.scale.min ? currentScenarioData.scale.maxLabel :
-                                          value.toString();
+                            const scaleLabels = [
+                              currentScenarioData.scale.minLabel,
+                              "Disagree",
+                              "Somewhat Disagree", 
+                              "Neither Agree nor Disagree",
+                              "Somewhat Agree",
+                              "Agree",
+                              currentScenarioData.scale.maxLabel
+                            ];
+                            const label = scaleLabels[i] || value.toString();
+                            
                             return (
                               <div key={value} className="flex items-center space-x-2">
                                 <RadioGroupItem value={value.toString()} id={`option-${value}`} />
@@ -608,7 +616,16 @@ const FaithValuesAssessment = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
         <Header />
         <div className="container mx-auto px-4 py-8">
-          <AssessmentResults data={transformedResult} />
+          <AssessmentResults 
+            data={transformedResult} 
+            assessmentType="faith-values"
+            candidateInfo={{
+              name: userData?.fullName || '',
+              email: userData?.email || '',
+              experience: userData?.experience || '',
+              position: userData?.currentPosition || ''
+            }}
+          />
           <div className="text-center mt-8">
             <Button onClick={handleRestart} variant="outline" className="flex items-center gap-2">
               <RotateCcw size={16} />

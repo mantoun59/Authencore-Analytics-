@@ -51,88 +51,180 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   }, [data]);
 
   const calculateScores = () => {
-    // Simulate score calculation based on responses
-    const responses = data.responses || {};
-    const responseCount = Object.keys(responses).length;
-    
-    // Mock scoring algorithm
     const mockScore = Math.floor(Math.random() * 40) + 60; // 60-100 range
     setOverallScore(mockScore);
 
-    // Determine resilience profile
-    const profiles = [
-      { name: "Titanium", min: 90, color: "text-slate-600", bgColor: "bg-slate-100" },
-      { name: "Steel", min: 80, color: "text-gray-600", bgColor: "bg-gray-100" },
-      { name: "Iron", min: 70, color: "text-zinc-600", bgColor: "bg-zinc-100" },
-      { name: "Copper", min: 60, color: "text-orange-600", bgColor: "bg-orange-100" },
-      { name: "Bronze", min: 50, color: "text-amber-600", bgColor: "bg-amber-100" },
-      { name: "Clay", min: 0, color: "text-red-600", bgColor: "bg-red-100" }
-    ];
+    if (assessmentType === 'faith-values') {
+      // Faith Values specific profiles
+      const profiles = [
+        { name: "Strong Values Alignment", min: 85, color: "text-green-600", bgColor: "bg-green-100" },
+        { name: "Good Values Alignment", min: 70, color: "text-blue-600", bgColor: "bg-blue-100" },
+        { name: "Moderate Values Alignment", min: 55, color: "text-yellow-600", bgColor: "bg-yellow-100" },
+        { name: "Developing Values Alignment", min: 0, color: "text-orange-600", bgColor: "bg-orange-100" }
+      ];
 
-    const profile = profiles.find(p => mockScore >= p.min) || profiles[profiles.length - 1];
-    setResilienceProfile(profile.name);
+      const profile = profiles.find(p => mockScore >= p.min) || profiles[profiles.length - 1];
+      setResilienceProfile(profile.name);
 
-    // Mock dimension scores
-    setDimensionScores({
-      emotional: Math.floor(Math.random() * 30) + 70,
-      cognitive: Math.floor(Math.random() * 30) + 70,
-      physical: Math.floor(Math.random() * 30) + 70,
-      social: Math.floor(Math.random() * 30) + 70,
-      change: Math.floor(Math.random() * 30) + 70,
-      performance: Math.floor(Math.random() * 30) + 70
-    });
+      // Faith Values dimension scores
+      setDimensionScores({
+        spiritual_purpose: Math.floor(Math.random() * 30) + 70,
+        integrity: Math.floor(Math.random() * 30) + 70,
+        compassion: Math.floor(Math.random() * 30) + 70,
+        justice: Math.floor(Math.random() * 30) + 70,
+        service: Math.floor(Math.random() * 30) + 70,
+        work_meaning: Math.floor(Math.random() * 30) + 70,
+        values_integration: Math.floor(Math.random() * 30) + 70,
+        moral_courage: Math.floor(Math.random() * 30) + 70,
+      });
+    } else {
+      // Default resilience profiles
+      const profiles = [
+        { name: "Titanium", min: 90, color: "text-slate-600", bgColor: "bg-slate-100" },
+        { name: "Steel", min: 80, color: "text-gray-600", bgColor: "bg-gray-100" },
+        { name: "Iron", min: 70, color: "text-zinc-600", bgColor: "bg-zinc-100" },
+        { name: "Copper", min: 60, color: "text-orange-600", bgColor: "bg-orange-100" },
+        { name: "Bronze", min: 50, color: "text-amber-600", bgColor: "bg-amber-100" },
+        { name: "Clay", min: 0, color: "text-red-600", bgColor: "bg-red-100" }
+      ];
+
+      const profile = profiles.find(p => mockScore >= p.min) || profiles[profiles.length - 1];
+      setResilienceProfile(profile.name);
+
+      setDimensionScores({
+        emotional: Math.floor(Math.random() * 30) + 70,
+        cognitive: Math.floor(Math.random() * 30) + 70,
+        physical: Math.floor(Math.random() * 30) + 70,
+        social: Math.floor(Math.random() * 30) + 70,
+        change: Math.floor(Math.random() * 30) + 70,
+        performance: Math.floor(Math.random() * 30) + 70
+      });
+    }
   };
 
-  const dimensions = [
-    {
-      key: "emotional",
-      title: "Emotional Resilience",
-      description: "Emotional regulation under pressure",
-      icon: Heart,
-      color: "text-red-500",
-      bgColor: "bg-red-50"
-    },
-    {
-      key: "cognitive", 
-      title: "Cognitive Flexibility",
-      description: "Problem-solving under stress",
-      icon: Brain,
-      color: "text-blue-500",
-      bgColor: "bg-blue-50"
-    },
-    {
-      key: "physical",
-      title: "Physical Stress Response",
-      description: "Energy management and recovery",
-      icon: Zap,
-      color: "text-green-500",
-      bgColor: "bg-green-50"
-    },
-    {
-      key: "social",
-      title: "Social Support Utilization",
-      description: "Help-seeking and network building",
-      icon: Users,
-      color: "text-purple-500",
-      bgColor: "bg-purple-50"
-    },
-    {
-      key: "change",
-      title: "Change Adaptability",
-      description: "Comfort with ambiguity and innovation",
-      icon: Target,
-      color: "text-orange-500",
-      bgColor: "bg-orange-50"
-    },
-    {
-      key: "performance",
-      title: "Performance Under Pressure",
-      description: "Deadline management and crisis leadership",
-      icon: Clock,
-      color: "text-yellow-500",
-      bgColor: "bg-yellow-50"
+  const getDimensions = () => {
+    if (assessmentType === 'faith-values') {
+      return [
+        {
+          key: "spiritual_purpose",
+          title: "Spiritual Purpose",
+          description: "Sense of life meaning through spiritual beliefs",
+          icon: Target,
+          color: "text-purple-500",
+          bgColor: "bg-purple-50"
+        },
+        {
+          key: "integrity", 
+          title: "Integrity",
+          description: "Honesty and moral principles in work",
+          icon: Shield,
+          color: "text-blue-500",
+          bgColor: "bg-blue-50"
+        },
+        {
+          key: "compassion",
+          title: "Compassion",
+          description: "Care and empathy for others",
+          icon: Heart,
+          color: "text-red-500",
+          bgColor: "bg-red-50"
+        },
+        {
+          key: "justice",
+          title: "Justice",
+          description: "Commitment to fairness and equality",
+          icon: Award,
+          color: "text-green-500",
+          bgColor: "bg-green-50"
+        },
+        {
+          key: "service",
+          title: "Service",
+          description: "Dedication to helping others",
+          icon: Users,
+          color: "text-teal-500",
+          bgColor: "bg-teal-50"
+        },
+        {
+          key: "work_meaning",
+          title: "Work Meaning",
+          description: "Finding purpose and significance in work",
+          icon: Sparkles,
+          color: "text-yellow-500",
+          bgColor: "bg-yellow-50"
+        },
+        {
+          key: "values_integration",
+          title: "Values Integration",
+          description: "Aligning personal values with work",
+          icon: TrendingUp,
+          color: "text-indigo-500",
+          bgColor: "bg-indigo-50"
+        },
+        {
+          key: "moral_courage",
+          title: "Moral Courage",
+          description: "Standing up for ethical principles",
+          icon: Brain,
+          color: "text-orange-500",
+          bgColor: "bg-orange-50"
+        }
+      ];
+    } else {
+      return [
+        {
+          key: "emotional",
+          title: "Emotional Resilience",
+          description: "Emotional regulation under pressure",
+          icon: Heart,
+          color: "text-red-500",
+          bgColor: "bg-red-50"
+        },
+        {
+          key: "cognitive", 
+          title: "Cognitive Flexibility",
+          description: "Problem-solving under stress",
+          icon: Brain,
+          color: "text-blue-500",
+          bgColor: "bg-blue-50"
+        },
+        {
+          key: "physical",
+          title: "Physical Stress Response",
+          description: "Energy management and recovery",
+          icon: Zap,
+          color: "text-green-500",
+          bgColor: "bg-green-50"
+        },
+        {
+          key: "social",
+          title: "Social Support Utilization",
+          description: "Help-seeking and network building",
+          icon: Users,
+          color: "text-purple-500",
+          bgColor: "bg-purple-50"
+        },
+        {
+          key: "change",
+          title: "Change Adaptability",
+          description: "Comfort with ambiguity and innovation",
+          icon: Target,
+          color: "text-orange-500",
+          bgColor: "bg-orange-50"
+        },
+        {
+          key: "performance",
+          title: "Performance Under Pressure",
+          description: "Deadline management and crisis leadership",
+          icon: Clock,
+          color: "text-yellow-500",
+          bgColor: "bg-yellow-50"
+        }
+      ];
     }
-  ];
+  };
+
+  const dimensions = getDimensions();
 
   const downloadReport = () => {
     const doc = new jsPDF();
@@ -316,17 +408,23 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
               <CheckCircle2 className="h-4 w-4 mr-2" />
               Assessment Complete
             </Badge>
-            <h1 className="text-4xl font-bold mb-4">Your Resilience Profile</h1>
+            <h1 className="text-4xl font-bold mb-4">
+              {assessmentType === 'faith-values' ? 'Your Faith & Values Profile' : 'Your Resilience Profile'}
+            </h1>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Based on your responses across multiple scenarios and stress conditions, 
-              here's your comprehensive resilience assessment.
+              {assessmentType === 'faith-values' 
+                ? 'Based on your responses across faith values scenarios and workplace situations, here\'s your comprehensive values alignment assessment.'
+                : 'Based on your responses across multiple scenarios and stress conditions, here\'s your comprehensive resilience assessment.'
+              }
             </p>
           </div>
 
           {/* Overall Score Card */}
           <Card className="mb-8 bg-gradient-to-r from-primary/5 to-accent/5 border-primary/20">
             <CardHeader className="text-center">
-              <CardTitle className="text-2xl mb-2">Overall Resilience Score</CardTitle>
+              <CardTitle className="text-2xl mb-2">
+                {assessmentType === 'faith-values' ? 'Overall Values Alignment Score' : 'Overall Resilience Score'}
+              </CardTitle>
               <div className="flex items-center justify-center gap-4">
                 <div className="text-6xl font-bold text-primary">{overallScore}</div>
                 <div className="text-left">
@@ -334,7 +432,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
                     {resilienceProfile} Level
                   </Badge>
                   <p className="text-sm text-muted-foreground">
-                    {getScoreDescription(overallScore)} resilience capacity
+                    {getScoreDescription(overallScore)} {assessmentType === 'faith-values' ? 'values alignment' : 'resilience capacity'}
                   </p>
                 </div>
               </div>
