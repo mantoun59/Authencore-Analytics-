@@ -126,11 +126,16 @@ export class UnifiedAssessmentService {
   }
 
   public processAssessment(assessmentType: string, data: AssessmentData): UnifiedAssessmentResult {
+    console.log('🔄 Processing assessment with type:', assessmentType);
+    
     const config = this.assessmentConfigs.get(assessmentType);
     if (!config) {
+      console.error('❌ Unknown assessment type:', assessmentType);
+      console.log('📋 Available assessment types:', Array.from(this.assessmentConfigs.keys()));
       throw new Error(`Unknown assessment type: ${assessmentType}`);
     }
 
+    console.log('✅ Found config for:', config.id, '-', config.title);
     const dimensionScores = config.scoringAlgorithm(data.responses || []);
     const overallScore = this.calculateOverallScore(dimensionScores);
     const profile = config.profileCalculation(overallScore);

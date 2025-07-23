@@ -370,16 +370,27 @@ export class ConsolidatedReportService {
 
   // Helper methods
   private getAssessmentTitle(assessmentType: string): string {
+    console.log('🎯 Getting assessment title for type:', assessmentType);
+    
     const titles: Record<string, string> = {
       'career-launch': 'CareerLaunch Assessment Report',
+      'career': 'CareerLaunch Assessment Report',
       'cair-personality': 'CAIR+ Personality Assessment Report',
+      'cair': 'CAIR+ Personality Assessment Report',
+      'cairplus': 'CAIR+ Personality Assessment Report',
       'burnout-prevention': 'Burnout Prevention Assessment Report',
+      'burnout': 'Burnout Prevention Assessment Report',
+      'stress-resilience': 'Burnout Prevention Assessment Report',
       'faith-values': 'Faith & Values Assessment Report',
       'leadership': 'Leadership Assessment Report',
       'genz': 'Gen Z Workplace Assessment Report',
-      'emotional-intelligence': 'Emotional Intelligence Assessment Report'
+      'emotional-intelligence': 'Emotional Intelligence Assessment Report',
+      'emotional': 'Emotional Intelligence Assessment Report'
     };
-    return titles[assessmentType] || 'Professional Assessment Report';
+    
+    const title = titles[assessmentType] || 'Professional Assessment Report';
+    console.log('📋 Selected title:', title);
+    return title;
   }
 
   private formatDimensionName(dimension: string): string {
