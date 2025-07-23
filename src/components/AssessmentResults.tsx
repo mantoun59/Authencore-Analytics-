@@ -949,6 +949,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       case 'genz':
         return 'workplace readiness';
       case 'burnout':
+      case 'burnout-prevention':
         return 'burnout risk level';
       default:
         return 'resilience capacity';
@@ -977,6 +978,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       case 'genz':
         return 'Overall Workplace Readiness Score';
       case 'burnout':
+      case 'burnout-prevention':
         return 'Overall Burnout Risk Score';
       default:
         return 'Overall Resilience Score';
