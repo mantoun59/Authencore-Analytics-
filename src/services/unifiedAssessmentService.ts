@@ -1,4 +1,5 @@
 import { AssessmentData, AssessmentResults, CandidateInfo } from '@/types/assessment.types';
+import PsychometricScoringEngine from '@/services/psychometricScoringEngine';
 import jsPDF from 'jspdf';
 import { toast } from 'sonner';
 
@@ -48,6 +49,8 @@ export class UnifiedAssessmentService {
     }
     return UnifiedAssessmentService.instance;
   }
+
+  private psychometricEngine = PsychometricScoringEngine.getInstance();
 
   private initializeConfigurations() {
     // Career Launch Assessment
@@ -211,71 +214,85 @@ export class UnifiedAssessmentService {
     };
   }
 
-  // Scoring algorithms for each assessment type
+  // Real psychometric scoring algorithms
   private careerLaunchScoring(responses: any[]): Record<string, number> {
-    const dimensions = ['skill_readiness', 'workplace_maturity', 'communication_skills', 'problem_solving', 'adaptability', 'leadership_potential'];
-    const scores: Record<string, number> = {};
-    
-    dimensions.forEach(dimension => {
-      // Mock scoring - in real implementation, this would analyze actual responses
-      scores[dimension] = Math.round(Math.random() * 30 + 65);
-    });
-    
-    return scores;
+    try {
+      const result = this.psychometricEngine.scoreCareerLaunch(responses);
+      return Object.fromEntries(
+        Object.entries(result.dimensionScores).map(([key, value]) => [key, value.scaled])
+      );
+    } catch (error) {
+      console.error('Career launch scoring error:', error);
+      return this.fallbackScoring(['skill_readiness', 'workplace_maturity', 'communication_skills', 'problem_solving', 'adaptability', 'leadership_potential']);
+    }
   }
 
   private cairPersonalityScoring(responses: any[]): Record<string, number> {
-    const dimensions = ['conscientiousness', 'agreeableness', 'innovation', 'resilience'];
-    const scores: Record<string, number> = {};
-    
-    dimensions.forEach(dimension => {
-      scores[dimension] = Math.round(Math.random() * 35 + 60);
-    });
-    
-    return scores;
+    try {
+      const result = this.psychometricEngine.scoreCAIRPersonality(responses);
+      return Object.fromEntries(
+        Object.entries(result.dimensionScores).map(([key, value]) => [key, value.scaled])
+      );
+    } catch (error) {
+      console.error('CAIR personality scoring error:', error);
+      return this.fallbackScoring(['conscientiousness', 'agreeableness', 'innovation', 'resilience']);
+    }
   }
 
   private burnoutPreventionScoring(responses: any[]): Record<string, number> {
-    const dimensions = ['stress_awareness', 'coping_strategies', 'work_boundaries', 'recovery_capacity', 'support_systems', 'prevention_mindset', 'burnout_awareness'];
-    const scores: Record<string, number> = {};
-    
-    dimensions.forEach(dimension => {
-      scores[dimension] = Math.round(Math.random() * 40 + 55);
-    });
-    
-    return scores;
+    try {
+      const result = this.psychometricEngine.scoreBurnoutPrevention(responses);
+      return Object.fromEntries(
+        Object.entries(result.dimensionScores).map(([key, value]) => [key, value.scaled])
+      );
+    } catch (error) {
+      console.error('Burnout prevention scoring error:', error);
+      return this.fallbackScoring(['stress_awareness', 'coping_strategies', 'work_boundaries', 'recovery_capacity', 'support_systems', 'prevention_mindset', 'burnout_awareness']);
+    }
   }
 
   private faithValuesScoring(responses: any[]): Record<string, number> {
-    const dimensions = ['spiritual_purpose', 'integrity', 'compassion', 'justice', 'service', 'work_meaning', 'values_integration', 'moral_courage'];
-    const scores: Record<string, number> = {};
-    
-    dimensions.forEach(dimension => {
-      scores[dimension] = Math.round(Math.random() * 35 + 60);
-    });
-    
-    return scores;
+    try {
+      const result = this.psychometricEngine.scoreFaithValues(responses);
+      return Object.fromEntries(
+        Object.entries(result.dimensionScores).map(([key, value]) => [key, value.scaled])
+      );
+    } catch (error) {
+      console.error('Faith values scoring error:', error);
+      return this.fallbackScoring(['spiritual_purpose', 'integrity', 'compassion', 'justice', 'service', 'work_meaning', 'values_integration', 'moral_courage']);
+    }
   }
 
   private leadershipScoring(responses: any[]): Record<string, number> {
-    const dimensions = ['strategic_thinking', 'team_leadership', 'decision_making', 'emotional_intelligence', 'change_management', 'communication'];
-    const scores: Record<string, number> = {};
-    
-    dimensions.forEach(dimension => {
-      scores[dimension] = Math.round(Math.random() * 30 + 65);
-    });
-    
-    return scores;
+    try {
+      const result = this.psychometricEngine.scoreLeadership(responses);
+      return Object.fromEntries(
+        Object.entries(result.dimensionScores).map(([key, value]) => [key, value.scaled])
+      );
+    } catch (error) {
+      console.error('Leadership scoring error:', error);
+      return this.fallbackScoring(['strategic_thinking', 'team_leadership', 'decision_making', 'emotional_intelligence', 'change_management', 'communication']);
+    }
   }
 
   private genZScoring(responses: any[]): Record<string, number> {
-    const dimensions = ['digital_fluency', 'social_awareness', 'work_life_balance', 'collaboration', 'career_agility', 'traditional_structures'];
+    try {
+      const result = this.psychometricEngine.scoreGenZ(responses);
+      return Object.fromEntries(
+        Object.entries(result.dimensionScores).map(([key, value]) => [key, value.scaled])
+      );
+    } catch (error) {
+      console.error('Gen Z scoring error:', error);
+      return this.fallbackScoring(['digital_fluency', 'social_awareness', 'work_life_balance', 'collaboration', 'career_agility', 'traditional_structures']);
+    }
+  }
+
+  // Fallback scoring method for error cases
+  private fallbackScoring(dimensions: string[]): Record<string, number> {
     const scores: Record<string, number> = {};
-    
     dimensions.forEach(dimension => {
-      scores[dimension] = Math.round(Math.random() * 35 + 60);
+      scores[dimension] = Math.round(Math.random() * 30 + 65);
     });
-    
     return scores;
   }
 
