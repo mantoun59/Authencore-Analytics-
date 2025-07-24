@@ -29,7 +29,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 const SampleReports = () => {
-  const [selectedAssessment, setSelectedAssessment] = useState('stress-resilience');
+  const [selectedAssessment, setSelectedAssessment] = useState('faith-values');
   const [reportType, setReportType] = useState<'candidate' | 'employer'>('candidate');
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -45,9 +45,13 @@ const SampleReports = () => {
   const generateSamplePDF = async () => {
     setIsGenerating(true);
     try {
+      console.log('🎯 Generating sample report for assessment type:', selectedAssessment);
+      
       const sampleData = reportType === 'employer' 
         ? getSampleEmployerReport(selectedAssessment)
         : getSampleCandidateReport(selectedAssessment);
+        
+      console.log('📋 Sample data generated:', sampleData);
       
       // Convert sample data to AI report format
       const aiReportFormat = {
@@ -349,6 +353,8 @@ const SampleReports = () => {
   };
 
   const getSampleCandidateReport = (assessmentType: string) => {
+    console.log('🔍 getSampleCandidateReport called with type:', assessmentType);
+    
     const baseReport = {
       candidateInfo: {
         name: 'Sarah Johnson',
@@ -360,6 +366,8 @@ const SampleReports = () => {
 
     switch (assessmentType) {
       case 'leadership':
+      case 'leadership-assessment':
+        console.log('✅ Matched leadership case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -427,6 +435,7 @@ const SampleReports = () => {
       
       case 'career':
       case 'career-launch':
+        console.log('✅ Matched career-launch case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -459,6 +468,76 @@ const SampleReports = () => {
             { career: 'Project Coordinator', match: 72, readiness: 'Developing', growth: 'High' }
           ]
         };
+
+      case 'faith-values':
+        console.log('✅ Matched faith-values case');
+        console.log('✅ Matched faith-values case');
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 87,
+            readinessLevel: 'Strong Alignment',
+            topStrengths: ['Spiritual Integration', 'Values Consistency', 'Ethical Decision Making'],
+            keyDevelopmentAreas: ['Community Engagement', 'Workplace Application', 'Leadership Development'],
+            recommendedNextSteps: [
+              'Seek leadership roles in faith-based organizations',
+              'Mentor others in values-based decision making',
+              'Integrate spiritual practices into daily work'
+            ]
+          },
+          dimensionScores: {
+            spiritual_purpose: { score: 92, level: 'Excellent', interpretation: 'Strong sense of spiritual purpose and calling' },
+            integrity: { score: 94, level: 'Excellent', interpretation: 'Exceptional ethical foundation and honesty' },
+            compassion: { score: 88, level: 'Very Good', interpretation: 'Strong empathy and care for others' },
+            justice: { score: 85, level: 'Very Good', interpretation: 'Commitment to fairness and social justice' },
+            service: { score: 83, level: 'Very Good', interpretation: 'Dedication to serving others and community' },
+            work_meaning: { score: 89, level: 'Very Good', interpretation: 'Clear connection between work and values' },
+            values_integration: { score: 86, level: 'Very Good', interpretation: 'Consistent application of values in decisions' },
+            moral_courage: { score: 81, level: 'Good', interpretation: 'Willingness to stand up for beliefs and values' }
+          },
+          careerRecommendations: [
+            'Faith-based organizational leadership',
+            'Non-profit management roles',
+            'Values-driven business positions'
+          ]
+        };
+
+      case 'genz':
+        console.log('✅ Matched genz case');
+      case 'genz-assessment':
+      case 'genz-workplace':
+        console.log('✅ Matched genz case');
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 79,
+            readinessLevel: 'Gen Z Ready',
+            topStrengths: ['Digital Fluency', 'Diversity Appreciation', 'Social Impact Focus'],
+            keyDevelopmentAreas: ['Traditional Business Skills', 'Face-to-Face Communication', 'Formal Structure Adaptation'],
+            recommendedNextSteps: [
+              'Develop traditional business acumen',
+              'Practice formal presentation skills',
+              'Build cross-generational relationships'
+            ]
+          },
+          dimensionScores: {
+            digital_fluency: { score: 95, level: 'Excellent', interpretation: 'Outstanding digital skills and adaptation' },
+            diversity_mindset: { score: 91, level: 'Excellent', interpretation: 'Strong appreciation for diversity and inclusion' },
+            social_impact: { score: 87, level: 'Very Good', interpretation: 'Clear focus on meaningful work and social impact' },
+            flexibility: { score: 82, level: 'High', interpretation: 'Adaptable and open to change' },
+            entrepreneurship: { score: 76, level: 'Good', interpretation: 'Entrepreneurial thinking and innovation' },
+            work_life_balance: { score: 89, level: 'Very Good', interpretation: 'Strong focus on work-life integration' },
+            traditional_skills: { score: 64, level: 'Developing', interpretation: 'Areas for growth in traditional business skills' }
+          },
+          careerRecommendations: [
+            'Social impact organizations',
+            'Technology and innovation roles',
+            'Purpose-driven companies'
+          ]
+        };
+
+      case 'digital-wellness':
+      case 'digital':
       
       case 'faith-values':
         return {
@@ -548,6 +627,9 @@ const SampleReports = () => {
         };
       
       case 'cair':
+      case 'cair-personality':
+      case 'cair-assessment':
+        console.log('✅ Matched cair case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -577,6 +659,9 @@ const SampleReports = () => {
         };
       
       case 'communication':
+      case 'communication-styles':
+      case 'communication-assessment':
+        console.log('✅ Matched communication case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -606,6 +691,8 @@ const SampleReports = () => {
         };
       
       case 'emotional':
+      case 'emotional-intelligence':
+        console.log('✅ Matched emotional-intelligence case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -635,6 +722,8 @@ const SampleReports = () => {
         };
       
       case 'cultural':
+      case 'cultural-intelligence':
+        console.log('✅ Matched cultural-intelligence case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -667,6 +756,7 @@ const SampleReports = () => {
       case 'burnout-prevention':
       case 'burnout':
       case 'stress':
+        console.log('✅ Matched stress-resilience/burnout case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -703,6 +793,7 @@ const SampleReports = () => {
       
       case 'digital-wellness':
       case 'digital':
+        console.log('✅ Matched digital-wellness case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -732,6 +823,7 @@ const SampleReports = () => {
         };
       
       default:
+        console.log('❌ No specific case found for assessment type:', assessmentType, '- falling back to default');
         return {
           ...baseReport,
           executiveSummary: {
