@@ -164,15 +164,23 @@ const MarketingMaterials: React.FC = () => {
         pdf.addImage(logoBase64, 'PNG', 20, 20, 60, 30);
       }
       
+      // Decorative elements
+      pdf.setFillColor(94, 234, 212); // Teal accent circles
+      pdf.circle(180, 25, 8, 'F');
+      pdf.circle(165, 45, 5, 'F');
+      pdf.circle(190, 55, 3, 'F');
+      
       // Title
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(42);
+      pdf.setFontSize(38);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('AuthenCore Analytics', 20, 110);
+      const titleLines = pdf.splitTextToSize('AuthenCore Analytics', 170);
+      pdf.text(titleLines, 20, 110);
       
-      pdf.setFontSize(20);
+      pdf.setFontSize(18);
       pdf.setFont('helvetica', 'normal');
-      pdf.text('Advanced Psychological Assessment Platform', 20, 130);
+      const subtitleLines = pdf.splitTextToSize('Advanced Psychological Assessment Platform', 170);
+      pdf.text(subtitleLines, 20, 130);
       
       // Key differentiators box
       pdf.setFillColor(30, 41, 59); // Darker blue
@@ -196,30 +204,51 @@ const MarketingMaterials: React.FC = () => {
       ];
       
       differentiators.forEach((item, index) => {
-        pdf.text(item, 30, 185 + (index * 8));
+        const wrappedText = pdf.splitTextToSize(item, 160);
+        pdf.text(wrappedText, 30, 185 + (index * 10));
       });
+      
+      // Stats box
+      pdf.setFillColor(22, 163, 74);
+      pdf.rect(20, 245, 170, 20, 'F');
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(10);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('50,000+ Assessments Completed', 25, 252);
+      pdf.text('85% Accuracy Rate', 80, 252);
+      pdf.text('95% Client Satisfaction', 135, 252);
+      pdf.text('30+ Industries Served', 25, 260);
+      pdf.text('ISO 27001 Certified', 80, 260);
+      pdf.text('GDPR Compliant', 135, 260);
       
       // Footer tagline
       pdf.setTextColor(156, 163, 175);
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'italic');
-      pdf.text('Transforming talent decisions through science', 20, 270);
+      const taglineLines = pdf.splitTextToSize('Transforming talent decisions through science', 170);
+      pdf.text(taglineLines, 20, 280);
       
       // Page 2 - Assessment Suite
       pdf.addPage();
       pdf.setFillColor(255, 255, 255);
       pdf.rect(0, 0, 210, 297, 'F');
       
-      // Header
+      // Header with icon
       pdf.setFillColor(59, 130, 246);
-      pdf.rect(0, 0, 210, 40, 'F');
+      pdf.rect(0, 0, 210, 45, 'F');
+      
+      // Add brain icon illustration
+      pdf.setFillColor(255, 255, 255);
+      pdf.circle(25, 25, 8, 'F');
+      pdf.setFillColor(59, 130, 246);
+      pdf.circle(25, 25, 6, 'F');
       
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(28);
+      pdf.setFontSize(24);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Comprehensive Assessment Suite', 20, 28);
+      pdf.text('Comprehensive Assessment Suite', 45, 30);
       
-      // Assessment cards
+      // Assessment cards with icons
       pdf.setTextColor(0, 0, 0);
       const assessmentData = [
         {
@@ -227,130 +256,158 @@ const MarketingMaterials: React.FC = () => {
           purpose: 'Career discovery & planning with RIASEC profiling',
           target: 'Students, career changers, HR professionals',
           outcome: 'Personalized career paths with 90% accuracy match',
-          price: '$9.99'
+          price: '$9.99',
+          icon: '🚀'
         },
         {
           title: 'CAIR+ Personality',
           purpose: 'Advanced personality assessment with validity detection',
           target: 'Employers, recruiters, team leaders',
           outcome: 'Predicts job performance with 85% reliability',
-          price: '$29.99'
+          price: '$29.99',
+          icon: '🧠'
         },
         {
           title: 'Burnout Prevention Index',
           purpose: 'Proactive stress & resilience evaluation',
           target: 'Managers, wellness coordinators, coaches',
           outcome: 'Reduces burnout risk by 60% through early intervention',
-          price: '$39.99'
+          price: '$39.99',
+          icon: '🛡️'
         },
         {
           title: 'Cultural Intelligence',
           purpose: 'Global competency & cross-cultural effectiveness',
           target: 'International teams, global organizations',
           outcome: 'Improves cross-cultural team performance by 40%',
-          price: '$19.99'
+          price: '$19.99',
+          icon: '🌍'
         }
       ];
       
-      let yPos = 60;
-      assessmentData.slice(0, 4).forEach((assessment, index) => {
-        // Assessment card background
+      let yPos = 65;
+      assessmentData.forEach((assessment, index) => {
+        // Assessment card background with rounded corners effect
         pdf.setFillColor(248, 250, 252);
-        pdf.rect(20, yPos - 5, 170, 45, 'F');
+        pdf.rect(20, yPos - 5, 170, 48, 'F');
+        
+        // Icon
+        pdf.setFontSize(16);
+        pdf.text(assessment.icon, 25, yPos + 5);
         
         // Title
         pdf.setTextColor(37, 99, 235);
-        pdf.setFontSize(14);
+        pdf.setFontSize(13);
         pdf.setFont('helvetica', 'bold');
-        pdf.text(assessment.title, 25, yPos + 5);
+        const titleLines = pdf.splitTextToSize(assessment.title, 120);
+        pdf.text(titleLines, 35, yPos + 5);
         
         // Price tag
         pdf.setTextColor(22, 163, 74);
         pdf.setFontSize(12);
         pdf.setFont('helvetica', 'bold');
-        pdf.text(assessment.price, 160, yPos + 5);
+        pdf.text(assessment.price, 155, yPos + 5);
         
         // Purpose
         pdf.setTextColor(75, 85, 99);
-        pdf.setFontSize(10);
+        pdf.setFontSize(9);
         pdf.setFont('helvetica', 'normal');
-        pdf.text(`Purpose: ${assessment.purpose}`, 25, yPos + 15);
+        const purposeLines = pdf.splitTextToSize(`Purpose: ${assessment.purpose}`, 145);
+        pdf.text(purposeLines, 25, yPos + 16);
         
         // Target users
-        pdf.text(`Target: ${assessment.target}`, 25, yPos + 23);
+        const targetLines = pdf.splitTextToSize(`Target: ${assessment.target}`, 145);
+        pdf.text(targetLines, 25, yPos + 25);
         
         // Outcome
         pdf.setTextColor(16, 185, 129);
         pdf.setFont('helvetica', 'bold');
-        pdf.text(`Outcome: ${assessment.outcome}`, 25, yPos + 31);
+        const outcomeLines = pdf.splitTextToSize(`Outcome: ${assessment.outcome}`, 145);
+        pdf.text(outcomeLines, 25, yPos + 34);
         
-        yPos += 55;
+        yPos += 53;
       });
       
       // Page 3 - User Profiles & Use Cases
       pdf.addPage();
       
-      // Header
+      // Header with people icon
       pdf.setFillColor(59, 130, 246);
-      pdf.rect(0, 0, 210, 40, 'F');
+      pdf.rect(0, 0, 210, 45, 'F');
+      
+      // Add people icon illustration
+      pdf.setFillColor(255, 255, 255);
+      pdf.circle(20, 25, 6, 'F');
+      pdf.circle(30, 25, 6, 'F');
+      pdf.circle(40, 25, 6, 'F');
       
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(28);
+      pdf.setFontSize(24);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Strategic Applications', 20, 28);
+      pdf.text('Strategic Applications', 55, 30);
       
-      // User profiles section
+      // User profiles section with icons
       pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(20);
+      pdf.setFontSize(18);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('User Profiles', 20, 60);
+      pdf.text('👥 User Profiles', 20, 65);
       
       const userProfiles = [
         {
           type: 'Employers & HR Teams',
           use: 'Streamline hiring with predictive personality insights, reduce turnover by 45%',
-          features: 'Bulk assessments, custom branding, compliance reporting'
+          features: 'Bulk assessments, custom branding, compliance reporting',
+          icon: '🏢'
         },
         {
           type: 'Career Coaches & Consultants',
           use: 'Deliver evidence-based coaching with comprehensive client insights',
-          features: 'White-label reports, client management, progress tracking'
+          features: 'White-label reports, client management, progress tracking',
+          icon: '👩‍💼'
         },
         {
           type: 'Solo Candidates & Professionals',
           use: 'Gain deep self-awareness for career advancement and personal growth',
-          features: 'Instant results, action plans, development resources'
+          features: 'Instant results, action plans, development resources',
+          icon: '🎯'
         }
       ];
       
       let profileYPos = 80;
       userProfiles.forEach((profile) => {
         pdf.setFillColor(241, 245, 249);
-        pdf.rect(20, profileYPos - 5, 170, 35, 'F');
+        pdf.rect(20, profileYPos - 5, 170, 40, 'F');
+        
+        // Icon
+        pdf.setFontSize(14);
+        pdf.text(profile.icon, 25, profileYPos + 5);
         
         pdf.setTextColor(37, 99, 235);
-        pdf.setFontSize(14);
+        pdf.setFontSize(13);
         pdf.setFont('helvetica', 'bold');
-        pdf.text(profile.type, 25, profileYPos + 5);
+        const typeLines = pdf.splitTextToSize(profile.type, 140);
+        pdf.text(typeLines, 35, profileYPos + 5);
         
         pdf.setTextColor(75, 85, 99);
-        pdf.setFontSize(10);
+        pdf.setFontSize(9);
         pdf.setFont('helvetica', 'normal');
-        pdf.text(pdf.splitTextToSize(profile.use, 160), 25, profileYPos + 15);
+        const useLines = pdf.splitTextToSize(profile.use, 150);
+        pdf.text(useLines, 25, profileYPos + 16);
         
         pdf.setTextColor(16, 185, 129);
-        pdf.setFontSize(9);
+        pdf.setFontSize(8);
         pdf.setFont('helvetica', 'italic');
-        pdf.text(`Features: ${profile.features}`, 25, profileYPos + 25);
+        const featureLines = pdf.splitTextToSize(`Features: ${profile.features}`, 150);
+        pdf.text(featureLines, 25, profileYPos + 28);
         
         profileYPos += 45;
       });
       
-      // Strategic use cases
+      // Strategic use cases with chart illustration
       pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(20);
+      pdf.setFontSize(18);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Strategic Use Cases', 20, 220);
+      pdf.text('📊 Strategic Use Cases', 20, 225);
       
       const useCases = [
         '• Pre-hiring: Screen candidates with 85% accuracy, reduce bad hires by 50%',
@@ -362,29 +419,36 @@ const MarketingMaterials: React.FC = () => {
       ];
       
       pdf.setTextColor(75, 85, 99);
-      pdf.setFontSize(11);
+      pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
       useCases.forEach((useCase, index) => {
-        pdf.text(useCase, 25, 240 + (index * 8));
+        const caseLines = pdf.splitTextToSize(useCase, 165);
+        pdf.text(caseLines, 25, 240 + (index * 9));
       });
       
       // Page 4 - Technical Excellence & Contact
       pdf.addPage();
       
-      // Header
+      // Header with tech icon
       pdf.setFillColor(59, 130, 246);
-      pdf.rect(0, 0, 210, 40, 'F');
+      pdf.rect(0, 0, 210, 45, 'F');
+      
+      // Add tech icon illustration
+      pdf.setFillColor(255, 255, 255);
+      pdf.rect(20, 18, 12, 8, 'F');
+      pdf.setFillColor(94, 234, 212);
+      pdf.rect(22, 20, 8, 4, 'F');
       
       pdf.setTextColor(255, 255, 255);
-      pdf.setFontSize(28);
+      pdf.setFontSize(24);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Technical Excellence', 20, 28);
+      pdf.text('Technical Excellence', 45, 30);
       
-      // Technical specs
+      // Technical specs with icons
       pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(18);
+      pdf.setFontSize(16);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Platform Capabilities', 20, 60);
+      pdf.text('🔧 Platform Capabilities', 20, 65);
       
       const techSpecs = [
         '🔬 Advanced Psychometric Validation: Test-retest reliability >0.85',
@@ -398,42 +462,55 @@ const MarketingMaterials: React.FC = () => {
       ];
       
       pdf.setTextColor(75, 85, 99);
-      pdf.setFontSize(11);
+      pdf.setFontSize(10);
       pdf.setFont('helvetica', 'normal');
       techSpecs.forEach((spec, index) => {
-        pdf.text(spec, 25, 80 + (index * 12));
+        const specLines = pdf.splitTextToSize(spec, 160);
+        pdf.text(specLines, 25, 80 + (index * 11));
       });
       
-      // Competitive advantage
+      // Competitive advantage with trophy icon
       pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(18);
+      pdf.setFontSize(16);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('Competitive Advantage', 20, 200);
+      pdf.text('🏆 Competitive Advantage', 20, 195);
       
       pdf.setFillColor(22, 163, 74);
-      pdf.rect(20, 210, 170, 50, 'F');
+      pdf.rect(20, 205, 170, 55, 'F');
+      
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(13);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('vs. Traditional Assessments:', 30, 220);
+      
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'normal');
+      const advantages = [
+        '• 3x faster completion time with higher engagement',
+        '• 50% higher accuracy in performance predictions',
+        '• Real-time validity detection prevents response gaming',
+        '• Advanced AI insights not available in traditional tools'
+      ];
+      
+      advantages.forEach((advantage, index) => {
+        const advLines = pdf.splitTextToSize(advantage, 160);
+        pdf.text(advLines, 30, 235 + (index * 8));
+      });
+      
+      // Contact info with design elements
+      pdf.setFillColor(15, 23, 42);
+      pdf.rect(20, 270, 170, 25, 'F');
       
       pdf.setTextColor(255, 255, 255);
       pdf.setFontSize(14);
       pdf.setFont('helvetica', 'bold');
-      pdf.text('vs. Traditional Assessments:', 30, 225);
+      pdf.text('📞 Ready to Transform Your Talent Strategy?', 25, 280);
       
-      pdf.setFontSize(12);
+      pdf.setFontSize(11);
       pdf.setFont('helvetica', 'normal');
-      pdf.text('• 3x faster completion time', 30, 238);
-      pdf.text('• 50% higher accuracy in predictions', 30, 248);
-      pdf.text('• Real-time validity detection prevents gaming', 30, 258);
-      
-      // Contact info
-      pdf.setTextColor(0, 0, 0);
-      pdf.setFontSize(16);
-      pdf.setFont('helvetica', 'bold');
-      pdf.text('Ready to Transform Your Talent Strategy?', 20, 280);
-      
-      pdf.setFontSize(12);
-      pdf.setFont('helvetica', 'normal');
-      pdf.setTextColor(37, 99, 235);
-      pdf.text('Visit: authencore-analytics.com | Email: info@authencore.com', 20, 290);
+      pdf.setTextColor(94, 234, 212);
+      const contactLines = pdf.splitTextToSize('Visit: authencore-analytics.com | Email: info@authencore.com', 160);
+      pdf.text(contactLines, 25, 290);
       
       return pdf;
     } catch (error) {
