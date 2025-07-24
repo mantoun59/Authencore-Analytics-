@@ -13,8 +13,11 @@ interface GeneratePDFRequest {
   userInfo: {
     name: string;
     email: string;
+    userId: string;
   };
   assessmentType: string;
+  language?: string; // Add language support
+  assessmentResultId?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -32,30 +35,81 @@ const handler = async (req: Request): Promise<Response> => {
     const requestData: GeneratePDFRequest = await req.json();
     console.log("Generating PDF for:", requestData.userInfo.name);
 
-    // Enhanced HTML template with better styling
+    // Enhanced HTML template with language support
     const htmlContent = generateEnhancedHTML(requestData);
     
-    // For now, we'll return the HTML content
-    // In production, you would use a PDF generation service like Puppeteer
+    // Generate filename with timestamp and language
+    const timestamp = Date.now();
+    const language = requestData.language || 'en';
+    const filename = `${requestData.assessmentType}-${requestData.reportType}-${language}-${timestamp}.html`;
+    const filePath = `${requestData.userInfo.userId}/${filename}`;
+    
+    // Upload to Supabase Storage
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from('reports')
+      .upload(filePath, new Blob([htmlContent], { type: 'text/html' }), {
+        cacheControl: '3600',
+        upsert: false
+      });
+
+    if (uploadError) {
+      console.error("Storage upload error:", uploadError);
+      throw new Error(`Failed to upload PDF: ${uploadError.message}`);
+    }
+
+    // Get public URL for the uploaded file
+    const { data: urlData } = supabase.storage
+      .from('reports')
+      .getPublicUrl(filePath);
+
     const response = {
       success: true,
-      htmlContent: htmlContent,
-      downloadUrl: `data:text/html;base64,${btoa(htmlContent)}`,
-      message: "PDF generation successful"
+      downloadUrl: urlData.publicUrl,
+      filePath: filePath,
+      language: language,
+      message: "PDF generation and storage successful"
     };
 
     // Store PDF record in database
-    const { error: dbError } = await supabase
-      .from('pdf_reports')
-      .insert({
-        user_id: requestData.userInfo.email, // This should be the actual user_id
-        report_type: requestData.reportType,
-        file_path: `reports/${requestData.userInfo.email}/${Date.now()}-${requestData.assessmentType}.html`,
-        file_size: htmlContent.length
+    if (requestData.userInfo.userId && requestData.assessmentResultId) {
+      const { error: dbError } = await supabase
+        .from('pdf_reports')
+        .insert({
+          user_id: requestData.userInfo.userId,
+          assessment_result_id: requestData.assessmentResultId,
+          report_type: requestData.reportType,
+          file_path: filePath,
+          file_size: htmlContent.length
+        });
+
+      if (dbError) {
+        console.error("Database error:", dbError);
+      }
+    }
+
+    // Send email with download link
+    try {
+      const { error: emailError } = await supabase.functions.invoke('send-assessment-report', {
+        body: {
+          to: requestData.userInfo.email,
+          reportType: requestData.reportType,
+          candidateName: requestData.userInfo.name,
+          assessmentType: requestData.assessmentType,
+          downloadLink: urlData.publicUrl,
+          language: language,
+          employerInfo: requestData.reportType === 'employer' ? {
+            companyName: 'Your Organization',
+            contactPerson: 'Hiring Manager'
+          } : undefined
+        }
       });
 
-    if (dbError) {
-      console.error("Database error:", dbError);
+      if (emailError) {
+        console.error("Email sending error:", emailError);
+        // Don't throw error - PDF generation was successful
+      }
+    } catch (emailError) {
+      console.error("Email function invocation error:", emailError);
     }
 
     return new Response(JSON.stringify(response), {
@@ -82,7 +136,10 @@ const handler = async (req: Request): Promise<Response> => {
 };
 
 function generateEnhancedHTML(data: GeneratePDFRequest): string {
-  const { assessmentData, reportType, userInfo, assessmentType } = data;
+  const { assessmentData, reportType, userInfo, assessmentType, language = 'en' } = data;
+  
+  // Multilingual text content
+  const texts = getLocalizedTexts(language);
   
   return `
     <!DOCTYPE html>
@@ -225,18 +282,18 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
                 <div class="subtitle">Professional Assessment Platform</div>
             </div>
 
-            ${reportType === 'employer' ? '<div class="confidential">⚠️ CONFIDENTIAL: This report contains sensitive candidate assessment data</div>' : ''}
+            ${reportType === 'employer' ? `<div class="confidential">${texts.confidentialNotice}</div>` : ''}
 
             <div class="report-info">
-                <h1>${assessmentType} Assessment Report</h1>
-                <p><strong>Candidate:</strong> ${userInfo.name}</p>
-                <p><strong>Email:</strong> ${userInfo.email}</p>
-                <p><strong>Report Type:</strong> ${reportType === 'candidate' ? 'Individual Report' : 'Employer Report'}</p>
-                <p><strong>Generated:</strong> ${new Date().toLocaleDateString()}</p>
+                <h1>${texts.title} - ${assessmentType}</h1>
+                <p><strong>${texts.candidateLabel}</strong> ${userInfo.name}</p>
+                <p><strong>${texts.emailLabel}</strong> ${userInfo.email}</p>
+                <p><strong>${texts.reportTypeLabel}</strong> ${reportType === 'candidate' ? texts.individualReport : texts.employerReport}</p>
+                <p><strong>${texts.generatedLabel}</strong> ${new Date().toLocaleDateString()}</p>
             </div>
 
             <div class="section">
-                <h2>Executive Summary</h2>
+                <h2>${texts.executiveSummary}</h2>
                 <p>This comprehensive ${assessmentType} assessment provides detailed insights into personality dimensions, behavioral patterns, and professional capabilities. The analysis includes validity checks and evidence-based recommendations.</p>
                 
                 ${assessmentData?.executiveSummary ? `
@@ -257,15 +314,15 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
             </div>
 
             <div class="section">
-                <h2>Dimensional Analysis</h2>
+                <h2>${texts.dimensionalAnalysis}</h2>
                 ${generateDimensionScores(assessmentData)}
             </div>
 
             ${reportType === 'employer' ? `
             <div class="section">
-                <h2>Hiring Insights</h2>
+                <h2>${texts.hiringInsights}</h2>
                 <div class="dimension">
-                    <h3>Cultural Fit Analysis</h3>
+                    <h3>${texts.culturalFitAnalysis}</h3>
                     <p>Assessment of alignment with organizational culture and values.</p>
                     <div class="score-bar">
                         <div class="score-fill" style="width: 82%">
@@ -274,7 +331,7 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
                     </div>
                 </div>
                 <div class="dimension">
-                    <h3>Role Alignment</h3>
+                    <h3>${texts.roleAlignment}</h3>
                     <p>Compatibility with position requirements and responsibilities.</p>
                     <div class="score-bar">
                         <div class="score-fill" style="width: 78%">
@@ -286,9 +343,9 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
             ` : ''}
 
             <div class="section">
-                <h2>Professional Development</h2>
+                <h2>${texts.professionalDevelopment}</h2>
                 <div class="recommendations">
-                    <h3>📈 Recommended Next Steps</h3>
+                    <h3>📈 ${texts.recommendedNextSteps}</h3>
                     <ul>
                         <li>Focus on developing leadership communication skills</li>
                         <li>Enhance strategic thinking through cross-functional projects</li>
@@ -299,9 +356,9 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
             </div>
 
             <div class="footer">
-                <p>© 2025 AuthenCore - Professional Assessment Platform</p>
-                <p>This report is confidential and intended solely for the specified recipient.</p>
-                <p>Report generated with advanced psychometric algorithms and AI analysis.</p>
+                <p>${texts.copyrightNotice}</p>
+                <p>${texts.confidentialityNote}</p>
+                <p>${texts.aiGeneratedNote}</p>
             </div>
         </div>
     </body>
@@ -336,5 +393,72 @@ function generateDimensionScores(assessmentData: any): string {
       </div>
     `).join('');
 }
+
+// Multilingual support function
+function getLocalizedTexts(language: string) {
+  const texts = {
+    en: {
+      title: 'Assessment Report',
+      candidateLabel: 'Candidate:',
+      emailLabel: 'Email:',
+      reportTypeLabel: 'Report Type:',
+      generatedLabel: 'Generated:',
+      executiveSummary: 'Executive Summary',
+      dimensionalAnalysis: 'Dimensional Analysis',
+      hiringInsights: 'Hiring Insights',
+      culturalFitAnalysis: 'Cultural Fit Analysis',
+      roleAlignment: 'Role Alignment',
+      professionalDevelopment: 'Professional Development',
+      recommendedNextSteps: 'Recommended Next Steps',
+      confidentialNotice: '⚠️ CONFIDENTIAL: This report contains sensitive candidate assessment data',
+      individualReport: 'Individual Report',
+      employerReport: 'Employer Report',
+      copyrightNotice: '© 2025 AuthenCore - Professional Assessment Platform',
+      confidentialityNote: 'This report is confidential and intended solely for the specified recipient.',
+      aiGeneratedNote: 'Report generated with advanced psychometric algorithms and AI analysis.'
+    },
+    es: {
+      title: 'Informe de Evaluación',
+      candidateLabel: 'Candidato:',
+      emailLabel: 'Correo:',
+      reportTypeLabel: 'Tipo de Informe:',
+      generatedLabel: 'Generado:',
+      executiveSummary: 'Resumen Ejecutivo',
+      dimensionalAnalysis: 'Análisis Dimensional',
+      hiringInsights: 'Perspectivas de Contratación',
+      culturalFitAnalysis: 'Análisis de Ajuste Cultural',
+      roleAlignment: 'Alineación del Rol',
+      professionalDevelopment: 'Desarrollo Profesional',
+      recommendedNextSteps: 'Próximos Pasos Recomendados',
+      confidentialNotice: '⚠️ CONFIDENCIAL: Este informe contiene datos sensibles de evaluación del candidato',
+      individualReport: 'Informe Individual',
+      employerReport: 'Informe del Empleador',
+      copyrightNotice: '© 2025 AuthenCore - Plataforma de Evaluación Profesional',
+      confidentialityNote: 'Este informe es confidencial y está destinado únicamente al destinatario especificado.',
+      aiGeneratedNote: 'Informe generado con algoritmos psicométricos avanzados y análisis de IA.'
+    },
+    fr: {
+      title: 'Rapport d\'Évaluation',
+      candidateLabel: 'Candidat:',
+      emailLabel: 'Email:',
+      reportTypeLabel: 'Type de Rapport:',
+      generatedLabel: 'Généré:',
+      executiveSummary: 'Résumé Exécutif',
+      dimensionalAnalysis: 'Analyse Dimensionnelle',
+      hiringInsights: 'Perspectives d\'Embauche',
+      culturalFitAnalysis: 'Analyse d\'Adéquation Culturelle',
+      roleAlignment: 'Alignement du Rôle',
+      professionalDevelopment: 'Développement Professionnel',
+      recommendedNextSteps: 'Prochaines Étapes Recommandées',
+      confidentialNotice: '⚠️ CONFIDENTIEL: Ce rapport contient des données sensibles d\'évaluation du candidat',
+      individualReport: 'Rapport Individuel',
+      employerReport: 'Rapport Employeur',
+      copyrightNotice: '© 2025 AuthenCore - Plateforme d\'Évaluation Professionnelle',
+      confidentialityNote: 'Ce rapport est confidentiel et destiné uniquement au destinataire spécifié.',
+      aiGeneratedNote: 'Rapport généré avec des algorithmes psychométriques avancés et une analyse IA.'
+    }
+  };
+  
+  return texts[language as keyof typeof texts] || texts.en;
 
 serve(handler);
