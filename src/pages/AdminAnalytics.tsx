@@ -33,12 +33,37 @@ const AdminAnalytics = () => {
   const { user } = useAuth();
   const { isAdmin } = useAdminAuth();
   const [analytics, setAnalytics] = useState<AnalyticsData>({
-    totalAssessments: 0,
+    userCount: 0,
+    assessmentCount: 0,
     completionRate: 0,
     averageScore: 0,
-    assessmentsByType: {},
-    timeRange: '30',
-    trends: []
+    dailyUsage: [],
+    totalAssessments: 0,
+    totalCandidates: 0,
+    completedAssessments: 0,
+    paidSoloCandidates: 0,
+    soloCandidates: [],
+    employerCandidates: [],
+    totalRevenue: 0,
+    activeEmployers: 0,
+    payments: [],
+    employers: [],
+    performanceMetrics: {
+      averageCompletionTime: 0,
+      averageScore: 0,
+      popularAssessments: [],
+      completionRateByAssessment: [],
+      timeToComplete: [],
+      completionRate: 0,
+      avgTimeToComplete: 0,
+      conversionRate: 0,
+      weeklyGrowth: 0
+    },
+    assessmentTypes: [],
+    assessmentsByType: [],
+    countries: [],
+    genders: [],
+    events: []
   });
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('30'); // days
@@ -105,14 +130,14 @@ const AdminAnalytics = () => {
         const conversionRate = totalCandidates > 0 ? (completedAssessments / totalCandidates) * 100 : 0;
 
         // Demographics
-        const countries = [...soloCandidates, ...employerCandidates]
+        const countriesObj = [...soloCandidates, ...employerCandidates]
           .filter(c => c.country)
           .reduce((acc: any, c) => {
             acc[c.country] = (acc[c.country] || 0) + 1;
             return acc;
           }, {});
 
-        const genders = [...soloCandidates, ...employerCandidates]
+        const gendersObj = [...soloCandidates, ...employerCandidates]
           .filter(c => c.gender)
           .reduce((acc: any, c) => {
             acc[c.gender] = (acc[c.gender] || 0) + 1;
@@ -120,45 +145,78 @@ const AdminAnalytics = () => {
           }, {});
 
         // Assessment type breakdown
-        const assessmentTypes = assessmentResults.reduce((acc: any, result) => {
+        const assessmentTypesObj = assessmentResults.reduce((acc: any, result) => {
           acc[result.assessment_type] = (acc[result.assessment_type] || 0) + 1;
           return acc;
         }, {});
         
         // Add GenZ assessments
-        assessmentTypes['gen_z_workplace'] = genZResults.length;
+        assessmentTypesObj['gen_z_workplace'] = genZResults.length;
+
+        // Transform data to match interface expectations
+        const countries = Object.entries(countriesObj).map(([name, count]) => ({ name, count: count as number }));
+        const genders = Object.entries(gendersObj).map(([name, count]) => ({ name, count: count as number }));
+        const assessmentTypes = Object.entries(assessmentTypesObj).map(([name, count]) => ({ name, count: count as number }));
+        const mappedEvents = events.map(e => ({
+          type: e.event_type,
+          timestamp: e.created_at,
+          details: e.metadata
+        }));
+        const mappedSoloCandidates = soloCandidates.map(c => ({
+          id: c.id,
+          name: c.full_name || c.email,
+          email: c.email
+        }));
+        const mappedEmployerCandidates = employerCandidates.map(c => ({
+          id: c.id,
+          name: c.full_name || c.email,
+          email: c.email
+        }));
+        const mappedPayments = payments.filter(p => p.status === 'paid').map(p => ({
+          amount: Number(p.amount),
+          date: p.created_at
+        }));
+        const mappedEmployers = employers.map(e => ({
+          id: e.id,
+          name: e.name,
+          active: e.is_active
+        }));
 
         // Performance metrics
         const performanceMetrics = {
-          avgTimeToComplete: averageCompletionTime,
+          averageCompletionTime: averageCompletionTime,
+          averageScore: 0,
+          popularAssessments: assessmentTypes.slice(0, 5),
+          completionRateByAssessment: assessmentTypes.map(a => ({ assessment: a.name, rate: completionRate })),
+          timeToComplete: assessmentTypes.map(a => ({ assessment: a.name, time: averageCompletionTime })),
           completionRate,
+          avgTimeToComplete: averageCompletionTime,
           conversionRate,
-          weeklyGrowth,
-          retentionRate: employers.filter(e => e.is_active).length / Math.max(employers.length, 1) * 100
+          weeklyGrowth
         };
 
         setAnalytics({
+          userCount: totalCandidates,
+          assessmentCount: completedAssessments,
           totalAssessments: completedAssessments,
           completionRate,
-          averageScore: 0, // Will be calculated from actual scores
-          assessmentsByType: assessmentTypes,
-          timeRange,
-          trends: [],
+          averageScore: 0,
+          dailyUsage: [],
           totalCandidates,
           completedAssessments,
           totalRevenue,
           paidSoloCandidates,
-          employers: employers.length,
           activeEmployers: employers.filter(e => e.is_active).length,
+          employers: mappedEmployers,
           countries,
           genders,
-          events,
-          soloCandidates,
-          employerCandidates,
-          payments: payments.filter(p => p.status === 'paid'),
+          events: mappedEvents,
+          soloCandidates: mappedSoloCandidates,
+          employerCandidates: mappedEmployerCandidates,
+          payments: mappedPayments,
           assessmentTypes,
-          performanceMetrics,
-          assessmentResults
+          assessmentsByType: assessmentTypes,
+          performanceMetrics
         });
       } catch (error) {
         console.error('Error loading analytics:', error);
@@ -316,9 +374,9 @@ const AdminAnalytics = () => {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{analytics.activeEmployers}</div>
-                <p className="text-xs text-muted-foreground">
-                  of {analytics.employers} total
-                </p>
+                 <p className="text-xs text-muted-foreground">
+                   of {analytics.employers.length} total
+                 </p>
               </CardContent>
             </Card>
               </div>
@@ -388,20 +446,20 @@ const AdminAnalytics = () => {
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    {Object.entries(analytics.assessmentTypes || {}).map(([type, count]) => (
-                      <div key={type} className="flex items-center justify-between">
+                    {analytics.assessmentTypes.map((item) => (
+                      <div key={item.name} className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <div className="w-3 h-3 bg-primary rounded-full" />
-                          <span className="capitalize">{type.replace('_', ' ')}</span>
+                          <span className="capitalize">{item.name.replace('_', ' ')}</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <div className="w-24 bg-muted rounded-full h-2">
                             <div 
                               className="bg-primary h-2 rounded-full" 
-                              style={{ width: `${(count as number / analytics.completedAssessments) * 100}%` }}
+                              style={{ width: `${(item.count / analytics.completedAssessments) * 100}%` }}
                             />
                           </div>
-                          <Badge variant="secondary">{count as number}</Badge>
+                          <Badge variant="secondary">{item.count}</Badge>
                         </div>
                       </div>
                     ))}
@@ -419,13 +477,13 @@ const AdminAnalytics = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {Object.entries(analytics.countries || {})
-                    .sort(([,a], [,b]) => (b as number) - (a as number))
+                  {analytics.countries
+                    .sort((a, b) => b.count - a.count)
                     .slice(0, 5)
-                    .map(([country, count]) => (
-                      <div key={country} className="flex justify-between items-center">
-                        <span>{country}</span>
-                        <Badge variant="secondary">{count as number}</Badge>
+                    .map((item) => (
+                      <div key={item.name} className="flex justify-between items-center">
+                        <span>{item.name}</span>
+                        <Badge variant="secondary">{item.count}</Badge>
                       </div>
                     ))}
                 </div>
@@ -438,10 +496,10 @@ const AdminAnalytics = () => {
               </CardHeader>
               <CardContent>
                 <div className="space-y-2">
-                  {Object.entries(analytics.genders || {}).map(([gender, count]) => (
-                    <div key={gender} className="flex justify-between items-center">
-                      <span className="capitalize">{gender}</span>
-                      <Badge variant="secondary">{count as number}</Badge>
+                  {analytics.genders.map((item) => (
+                    <div key={item.name} className="flex justify-between items-center">
+                      <span className="capitalize">{item.name}</span>
+                      <Badge variant="secondary">{item.count}</Badge>
                     </div>
                   ))}
                 </div>
