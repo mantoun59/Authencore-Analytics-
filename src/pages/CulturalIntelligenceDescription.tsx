@@ -40,7 +40,7 @@ const CulturalIntelligenceDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              60+ Scenarios | 4 CQ Dimensions | $19.99
+              60 Questions | 4 CQ Dimensions | $19.99
             </Badge>
           </div>
           

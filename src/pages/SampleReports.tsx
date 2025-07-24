@@ -996,7 +996,14 @@ const SampleReports = () => {
                   <Badge variant="outline">{dimension.level}</Badge>
                 </div>
                 <div className="px-4 mb-3">
-                  <Progress value={dimension.score} className="h-3" />
+                  <Progress 
+                    value={dimension.score} 
+                    className={`h-3 ${
+                      dimension.score >= 71 ? '[&>div]:bg-green-500' : 
+                      dimension.score >= 41 ? '[&>div]:bg-yellow-500' : 
+                      '[&>div]:bg-red-500'
+                    }`} 
+                  />
                 </div>
                 <div className="flex justify-between text-sm text-muted-foreground px-2">
                   <span className="font-medium">{dimension.score}/100</span>
@@ -1104,7 +1111,14 @@ const SampleReports = () => {
                   <span className="text-sm text-muted-foreground font-medium">{employerReport.fitAnalysis.culturalFit}%</span>
                 </div>
                 <div className="px-4">
-                  <Progress value={employerReport.fitAnalysis.culturalFit} className="h-3" />
+                  <Progress 
+                    value={employerReport.fitAnalysis.culturalFit} 
+                    className={`h-3 ${
+                      employerReport.fitAnalysis.culturalFit >= 71 ? '[&>div]:bg-green-500' : 
+                      employerReport.fitAnalysis.culturalFit >= 41 ? '[&>div]:bg-yellow-500' : 
+                      '[&>div]:bg-red-500'
+                    }`} 
+                  />
                 </div>
               </div>
               <div>
@@ -1113,7 +1127,14 @@ const SampleReports = () => {
                   <span className="text-sm text-muted-foreground font-medium">{employerReport.fitAnalysis.roleAlignment}%</span>
                 </div>
                 <div className="px-4">
-                  <Progress value={employerReport.fitAnalysis.roleAlignment} className="h-3" />
+                  <Progress 
+                    value={employerReport.fitAnalysis.roleAlignment} 
+                    className={`h-3 ${
+                      employerReport.fitAnalysis.roleAlignment >= 71 ? '[&>div]:bg-green-500' : 
+                      employerReport.fitAnalysis.roleAlignment >= 41 ? '[&>div]:bg-yellow-500' : 
+                      '[&>div]:bg-red-500'
+                    }`} 
+                  />
                 </div>
               </div>
               <div>
@@ -1122,7 +1143,14 @@ const SampleReports = () => {
                   <span className="text-sm text-muted-foreground font-medium">{employerReport.fitAnalysis.growthPotential}%</span>
                 </div>
                 <div className="px-4">
-                  <Progress value={employerReport.fitAnalysis.growthPotential} className="h-3" />
+                  <Progress 
+                    value={employerReport.fitAnalysis.growthPotential} 
+                    className={`h-3 ${
+                      employerReport.fitAnalysis.growthPotential >= 71 ? '[&>div]:bg-green-500' : 
+                      employerReport.fitAnalysis.growthPotential >= 41 ? '[&>div]:bg-yellow-500' : 
+                      '[&>div]:bg-red-500'
+                    }`} 
+                  />
                 </div>
               </div>
             </div>
