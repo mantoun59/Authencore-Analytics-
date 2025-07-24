@@ -431,6 +431,156 @@ export type Database = {
         }
         Relationships: []
       }
+      guest_access_tokens: {
+        Row: {
+          assessment_type: string
+          created_at: string
+          email: string
+          expires_at: string
+          id: string
+          is_active: boolean | null
+          order_id: string | null
+          token: string
+          used_at: string | null
+        }
+        Insert: {
+          assessment_type: string
+          created_at?: string
+          email: string
+          expires_at: string
+          id?: string
+          is_active?: boolean | null
+          order_id?: string | null
+          token: string
+          used_at?: string | null
+        }
+        Update: {
+          assessment_type?: string
+          created_at?: string
+          email?: string
+          expires_at?: string
+          id?: string
+          is_active?: boolean | null
+          order_id?: string | null
+          token?: string
+          used_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "guest_access_tokens_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_items: {
+        Row: {
+          assessment_type: string
+          created_at: string
+          id: string
+          order_id: string | null
+          quantity: number | null
+          total_price: number
+          unit_price: number
+        }
+        Insert: {
+          assessment_type: string
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          quantity?: number | null
+          total_price: number
+          unit_price: number
+        }
+        Update: {
+          assessment_type?: string
+          created_at?: string
+          id?: string
+          order_id?: string | null
+          quantity?: number | null
+          total_price?: number
+          unit_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          assessment_type: string | null
+          billing_info: Json | null
+          created_at: string
+          currency: string
+          expires_at: string | null
+          guest_email: string | null
+          guest_name: string | null
+          id: string
+          is_guest_order: boolean | null
+          payment_metadata: Json | null
+          payment_processor: string | null
+          payment_reference: string | null
+          payment_status: string
+          plan_id: string | null
+          total_amount: number
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          assessment_type?: string | null
+          billing_info?: Json | null
+          created_at?: string
+          currency?: string
+          expires_at?: string | null
+          guest_email?: string | null
+          guest_name?: string | null
+          id?: string
+          is_guest_order?: boolean | null
+          payment_metadata?: Json | null
+          payment_processor?: string | null
+          payment_reference?: string | null
+          payment_status?: string
+          plan_id?: string | null
+          total_amount: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          assessment_type?: string | null
+          billing_info?: Json | null
+          created_at?: string
+          currency?: string
+          expires_at?: string | null
+          guest_email?: string | null
+          guest_name?: string | null
+          id?: string
+          is_guest_order?: boolean | null
+          payment_metadata?: Json | null
+          payment_processor?: string | null
+          payment_reference?: string | null
+          payment_status?: string
+          plan_id?: string | null
+          total_amount?: number
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "payment_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       partner_access_logs: {
         Row: {
           action: string
@@ -540,6 +690,95 @@ export type Database = {
           password_hash?: string
           updated_at?: string
           username?: string
+        }
+        Relationships: []
+      }
+      partner_pricing: {
+        Row: {
+          assessment_type: string
+          created_at: string
+          discount_percentage: number | null
+          fixed_price: number | null
+          id: string
+          is_active: boolean | null
+          min_quantity: number
+          partner_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          assessment_type: string
+          created_at?: string
+          discount_percentage?: number | null
+          fixed_price?: number | null
+          id?: string
+          is_active?: boolean | null
+          min_quantity?: number
+          partner_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          assessment_type?: string
+          created_at?: string
+          discount_percentage?: number | null
+          fixed_price?: number | null
+          id?: string
+          is_active?: boolean | null
+          min_quantity?: number
+          partner_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_pricing_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partner_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payment_plans: {
+        Row: {
+          assessment_access: Json | null
+          billing_interval: string | null
+          created_at: string
+          currency: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          max_assessments: number | null
+          name: string
+          plan_type: string
+          price: number
+          updated_at: string
+        }
+        Insert: {
+          assessment_access?: Json | null
+          billing_interval?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_assessments?: number | null
+          name: string
+          plan_type: string
+          price: number
+          updated_at?: string
+        }
+        Update: {
+          assessment_access?: Json | null
+          billing_interval?: string | null
+          created_at?: string
+          currency?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_assessments?: number | null
+          name?: string
+          plan_type?: string
+          price?: number
+          updated_at?: string
         }
         Relationships: []
       }
@@ -910,6 +1149,10 @@ export type Database = {
           is_expired: boolean
         }[]
       }
+      check_guest_access: {
+        Args: { p_token: string; p_assessment_type: string }
+        Returns: boolean
+      }
       check_partner_assessment_access: {
         Args: { p_partner_id: string; p_assessment_type: string }
         Returns: boolean
@@ -935,6 +1178,10 @@ export type Database = {
           p_action: string
         }
         Returns: boolean
+      }
+      generate_guest_token: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       get_security_status: {
         Args: Record<PropertyKey, never>
@@ -998,6 +1245,10 @@ export type Database = {
       request_admin_password_reset: {
         Args: { p_email: string }
         Returns: undefined
+      }
+      use_guest_token: {
+        Args: { p_token: string; p_assessment_type: string }
+        Returns: boolean
       }
     }
     Enums: {
