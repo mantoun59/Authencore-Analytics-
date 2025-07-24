@@ -16,7 +16,7 @@ const Assessment = () => {
       'career-launch': '/career-launch-info',
       'cair-personality': '/cair-personality-info',
       'stress-resilience': '/burnout-prevention-info',
-      'cultural-intelligence': '/cultural-intelligence', // Fixed: Cultural Intelligence should go to its own page
+      'cultural-intelligence': '/cair-cultural-info',
       'communication-styles': '/communication-style-info',
       'emotional-intelligence': '/emotional-intelligence-info',
       'faith-values': '/faith-values-info',
