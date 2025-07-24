@@ -1,4 +1,26 @@
 import { useState, useCallback } from 'react';
+import { SwipeData } from '@/types/assessment.enhanced';
+
+interface GenZScenario {
+  id: string;
+  category: string;
+  text: string;
+  context?: string;
+  emoji?: string;
+  responses: Record<string, Record<string, number>>;
+}
+
+interface ValueSelection {
+  valueId: string;
+  rank: number;
+}
+
+interface GenZResponse {
+  scenarioId: string;
+  response: string;
+  responseTime: number;
+  swipeData?: SwipeData;
+}
 
 interface GenZDimension {
   score: number;
@@ -57,12 +79,7 @@ interface ValidityMetrics {
 
 export interface GenZScoringData {
   sessionId: string;
-  responses: Array<{
-    scenarioId: string;
-    response: string;
-    responseTime: number;
-    swipeData?: any;
-  }>;
+  responses: GenZResponse[];
   valuesSelection: Array<{
     valueId: string;
     rank: number;
@@ -83,7 +100,7 @@ export interface GenZScoringData {
 export const useGenZScoring = () => {
   const [isCalculating, setIsCalculating] = useState(false);
 
-  const calculateDimensions = useCallback((responses: any[], scenarios: any[]) => {
+  const calculateDimensions = useCallback((responses: GenZResponse[], scenarios: GenZScenario[]) => {
     const dimensions: Record<string, GenZDimension> = {
       flexibility: { score: 50, category: 'work_style', factors: [] },
       purpose_alignment: { score: 50, category: 'values', factors: [] },
@@ -122,7 +139,7 @@ export const useGenZScoring = () => {
     return dimensions;
   }, []);
 
-  const calculateTraits = useCallback((responses: any[], scenarios: any[]) => {
+  const calculateTraits = useCallback((responses: GenZResponse[], scenarios: GenZScenario[]) => {
     const traits: GenZTraits = {
       innovation: 0,
       collaboration: 0,
@@ -156,7 +173,7 @@ export const useGenZScoring = () => {
     return traits;
   }, []);
 
-  const calculateWorkplacePreferences = useCallback((valuesSelection: any[]) => {
+  const calculateWorkplacePreferences = useCallback((valuesSelection: ValueSelection[]) => {
     const preferences: WorkplacePreferences = {
       remote_hybrid: 0,
       flat_hierarchy: 0,
@@ -190,7 +207,7 @@ export const useGenZScoring = () => {
     return preferences;
   }, []);
 
-  const calculateRedFlags = useCallback((responses: any[], scenarios: any[]) => {
+  const calculateRedFlags = useCallback((responses: GenZResponse[], scenarios: GenZScenario[]) => {
     const redFlags: RedFlags = {
       micromanagement: 0,
       rigid_structure: 0,
@@ -319,7 +336,7 @@ export const useGenZScoring = () => {
     return profiles[topProfile];
   }, []);
 
-  const calculateValidityMetrics = useCallback((responses: any[], totalTime: number): ValidityMetrics => {
+  const calculateValidityMetrics = useCallback((responses: GenZResponse[], totalTime: number): ValidityMetrics => {
     const totalResponses = responses.length;
     const avgResponseTime = totalTime / totalResponses;
     
@@ -339,7 +356,7 @@ export const useGenZScoring = () => {
     };
   }, []);
 
-  const calculateFinalResults = useCallback(async (data: GenZScoringData, scenarios: any[]) => {
+  const calculateFinalResults = useCallback(async (data: GenZScoringData, scenarios: GenZScenario[]) => {
     setIsCalculating(true);
     
     try {

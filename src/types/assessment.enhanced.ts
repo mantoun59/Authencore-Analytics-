@@ -7,6 +7,72 @@ export interface AssessmentResponse {
   responseTime?: number;
 }
 
+// Enhanced types for AI Report Generator
+export interface ValidityMetricsDetailed {
+  consistencyScore: number;
+  responsePattern: string;
+  flaggedResponses: number;
+  overallValidity: 'Valid' | 'Questionable' | 'Invalid';
+  responseTimeVariance?: number;
+  patternAnalysis?: {
+    straightLining: boolean;
+    rapidResponses: number;
+    inconsistentPairs: number;
+  };
+  fakeGoodScore?: number;
+  fakeBadScore?: number;
+  randomResponseScore?: number;
+  inconsistencyScore?: number;
+  responseTimeProfile?: string;
+}
+
+export interface CognitiveProfile {
+  analyticalThinking: number;
+  creativeProblemSolving: number;
+  decisionMakingStyle: string;
+  informationProcessing: string;
+  learningPreference: string;
+}
+
+export interface BehavioralPredictions {
+  workStyle: string;
+  communicationPreference: string;
+  leadershipPotential: number;
+  teamDynamics: string;
+  stressResponse: string;
+  adaptabilityScore: number;
+}
+
+export interface SummaryTableData {
+  category: string;
+  score: number;
+  percentile: number;
+  interpretation: string;
+  recommendations: string[];
+}
+
+export interface ScenarioResponse {
+  scenarioId: string;
+  selectedOption: string;
+  responseTime: number;
+  confidence?: number;
+  metadata?: Record<string, unknown>;
+}
+
+export interface SwipeData {
+  direction: 'left' | 'right';
+  velocity: number;
+  timestamp: number;
+  position: { x: number; y: number };
+}
+
+export interface CollaborationResponse {
+  scenarioId: string;
+  selectedOption: string;
+  optionScores: Record<string, number>;
+  reasoning?: string;
+}
+
 export interface AssessmentResults {
   overallScore: number;
   dimensionScores: Record<string, DimensionScore>;
@@ -36,6 +102,9 @@ export interface ValidityMetrics {
   flaggedResponses: number;
   overallValidity: 'Valid' | 'Questionable' | 'Invalid';
 }
+
+// Use the detailed version for enhanced reporting
+export type { ValidityMetricsDetailed as EnhancedValidityMetrics };
 
 export interface EmployerReport extends AssessmentResults {
   culturalFit: number;

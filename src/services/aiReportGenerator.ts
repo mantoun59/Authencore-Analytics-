@@ -2,6 +2,13 @@ import { supabase } from "@/integrations/supabase/client";
 import jsPDF from 'jspdf';
 import { toast } from "sonner";
 import { EnhancedAIEngine, type EnhancedReportContent, type DistortionAnalysis, type EnhancedInterviewQuestions } from './enhancedAIEngine';
+import { 
+  ValidityMetricsDetailed, 
+  CognitiveProfile, 
+  BehavioralPredictions, 
+  SummaryTableData,
+  AssessmentLogger 
+} from '@/types/assessment.enhanced';
 
 export interface AIReportRequest {
   assessmentResultId: string;
@@ -34,7 +41,7 @@ export interface AIReportContent {
     dimensionScores: Record<string, any>;
     personalizedInsights: string;
     behavioralPatterns: string[];
-    validityMetrics: any;
+    validityMetrics: ValidityMetricsDetailed;
   };
   actionPlan: {
     immediate: string[];
@@ -48,12 +55,12 @@ export interface AIReportContent {
   };
   distortionAnalysis: DistortionAnalysis;
   enhancedInsights?: {
-    cognitiveProfile: any;
-    behavioralPredictions: any;
+    cognitiveProfile: CognitiveProfile;
+    behavioralPredictions: BehavioralPredictions;
     aiConfidence: number;
   };
   employerSpecific?: {
-    summaryTable: any;
+    summaryTable: SummaryTableData[];
     interviewQuestions: {
       clarification: string[];
       validation: string[];
@@ -79,7 +86,7 @@ export class AIReportGenerator {
 
   async generateReport(request: AIReportRequest): Promise<AIReportContent> {
     try {
-      console.log('🚀 Starting Enhanced AI Report Generation');
+      AssessmentLogger.log('Starting Enhanced AI Report Generation');
       
       // Check if this is a sample report
       const isSampleReport = request.assessmentResultId === 'mock-assessment-id';
@@ -118,7 +125,7 @@ export class AIReportGenerator {
       
       // Enhance the report with advanced AI analysis
       try {
-        console.log('🧠 Enhancing report with advanced AI analysis');
+        AssessmentLogger.log('Enhancing report with advanced AI analysis');
         
         // Create mock assessment data from the basic report for enhancement
         const assessmentData = {
@@ -182,13 +189,13 @@ export class AIReportGenerator {
         return mergedReport;
 
       } catch (enhancementError) {
-        console.warn('⚠️ Enhanced AI analysis failed, using basic report:', enhancementError);
+        AssessmentLogger.warn('Enhanced AI analysis failed, using basic report', enhancementError);
         toast.success('AI Report generated successfully (basic analysis)');
         return basicReportContent;
       }
 
     } catch (error) {
-      console.error('❌ Error generating AI report:', error);
+      AssessmentLogger.error('Error generating AI report', error);
       toast.error('Failed to generate AI report');
       throw error;
     }
@@ -199,7 +206,7 @@ export class AIReportGenerator {
       // Use the new Supabase Edge Function for professional PDF generation
       await this.generateProfessionalPDF(reportContent, reportType);
     } catch (error) {
-      console.error('Error generating PDF report:', error);
+      AssessmentLogger.error('Error generating PDF report', error);
       // Fallback to jsPDF if edge function fails
       await this.generateFallbackPDF(reportContent, reportType);
     }
@@ -249,7 +256,7 @@ export class AIReportGenerator {
       toast.success(`Professional ${reportType} PDF report generated successfully!`);
       
     } catch (error) {
-      console.error('Error with professional PDF generation:', error);
+      AssessmentLogger.error('Error with professional PDF generation', error);
       throw error;
     }
   }
@@ -378,15 +385,18 @@ export class AIReportGenerator {
            dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   }
 
-  private parseValidityFromContent(reportContent: AIReportContent): any {
+  private parseValidityFromContent(reportContent: AIReportContent): ValidityMetricsDetailed {
     return {
+      consistencyScore: reportContent.distortionAnalysis?.score || 85,
+      responsePattern: 'Normal',
+      flaggedResponses: 0,
+      overallValidity: reportContent.distortionAnalysis?.reliability === 'high' ? 'Valid' : 
+                      reportContent.distortionAnalysis?.reliability === 'medium' ? 'Questionable' : 'Invalid',
       fakeGoodScore: reportContent.distortionAnalysis?.score || 2,
       fakeBadScore: 1,
       randomResponseScore: 0,
       inconsistencyScore: reportContent.distortionAnalysis?.reliability === 'low' ? 3 : 1,
-      responseTimeProfile: 'Normal',
-      overallValidity: reportContent.distortionAnalysis?.reliability === 'high' ? 'Valid' : 
-                      reportContent.distortionAnalysis?.reliability === 'medium' ? 'Questionable' : 'Invalid'
+      responseTimeProfile: 'Normal'
     };
   }
 

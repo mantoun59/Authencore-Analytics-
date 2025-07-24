@@ -123,7 +123,7 @@ const SampleReports = () => {
         }
       } catch (pdfError) {
         // Fallback: Generate simple HTML report
-        console.log('PDF service failed, generating HTML fallback:', pdfError);
+        // PDF service failed, using HTML fallback
         generateFallbackReport(sampleData, selectedAssessment, reportType);
         toast.success(`Sample ${reportType} report generated successfully!`);
       }

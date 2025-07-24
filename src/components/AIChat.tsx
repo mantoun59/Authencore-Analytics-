@@ -41,15 +41,12 @@ const AIChat = () => {
   useEffect(() => {
     const initModel = async () => {
       try {
-        console.log('🤖 Initializing AI model...');
         if (!generatorRef.current) {
-          console.log('📦 Loading GPT-2 model...');
           generatorRef.current = await pipeline(
             'text-generation',
             'Xenova/gpt2',
             { device: 'webgpu' } // Use WebGPU for better performance, fallback to CPU
           );
-          console.log('✅ Model loaded successfully!');
           setIsModelLoaded(true);
         }
       } catch (error) {
@@ -91,7 +88,7 @@ const AIChat = () => {
     setIsLoading(true);
 
     try {
-      console.log('💬 Processing message:', currentInput);
+      // Processing user message
       
       let aiResponse = "";
       
@@ -167,7 +164,7 @@ const AIChat = () => {
       // If AI model is loaded, try to use it for more sophisticated responses
       if (generatorRef.current && isModelLoaded) {
         try {
-          console.log('🤖 Using AI model for enhanced response...');
+          // Using AI model for enhanced response
           const contextPrompt = `You are a helpful assistant for AuthenCore Analytics. User asked: "${currentInput}". Respond helpfully about our assessments: ${aiResponse}`;
           
           const result = await generatorRef.current(contextPrompt, {
@@ -187,7 +184,7 @@ const AIChat = () => {
             }
           }
         } catch (modelError) {
-          console.log('📝 Using rule-based response (AI model failed)');
+          // Using rule-based response (AI model failed)
         }
       }
 
