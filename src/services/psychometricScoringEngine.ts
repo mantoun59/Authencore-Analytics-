@@ -4,20 +4,29 @@ import { leadershipQuestions } from '@/data/leadershipQuestions';
 import { genZScenarios } from '@/data/genZScenarios';
 import { faithValuesData } from '@/data/faithValuesQuestions';
 
-export interface PsychometricResponse {
-  questionId: string;
-  answer: string | number;
-  responseTime?: number;
-  timestamp?: number;
-}
-
-export interface ValidityMetrics {
+interface ValidityMetrics {
+  responseConsistency: number;
+  fakeGoodPattern: number;
+  fakeBadPattern: number;
+  extremeResponding: number;
+  speedFlags: number;
+  patternFlags: boolean;
+  socialDesirabilityBias: number;
+  minimizationPattern: number;
+  overallReliability: string;
   consistency: number;
   responseTime: number;
   engagement: 'high' | 'medium' | 'low';
   fakeGood?: number;
   fakeBad?: number;
   inconsistency?: number;
+}
+
+export interface PsychometricResponse {
+  questionId: string;
+  answer: string | number;
+  responseTime?: number;
+  timestamp?: number;
 }
 
 export interface DimensionScore {
@@ -104,6 +113,7 @@ export class PsychometricScoringEngine {
   public scoreBurnoutPrevention(responses: PsychometricResponse[]): PsychometricResult {
     const dimensionScores: Record<string, DimensionScore> = {};
     const categoryScores: Record<string, number[]> = {};
+    const rawResponses: number[] = [];
 
     responses.forEach(response => {
       const question = burnoutPreventionQuestions.find(q => q.id === response.questionId);
@@ -115,8 +125,12 @@ export class PsychometricScoringEngine {
           categoryScores[question.category] = [];
         }
         categoryScores[question.category].push(selectedOption.score);
+        rawResponses.push(selectedOption.score);
       }
     });
+
+    // Calculate enhanced validity metrics for burnout assessment
+    const validityMetrics = this.calculateBurnoutValidityMetrics(responses, rawResponses);
 
     // Calculate category scores and map to dimensions
     const categoryToDimension: Record<string, string> = {
@@ -134,13 +148,15 @@ export class PsychometricScoringEngine {
         const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
         const scaledScore = (avgScore / 5) * 100; // Convert 1-5 scale to 0-100
         const dimension = categoryToDimension[category] || category;
-        dimensionScores[dimension] = this.calculateDimensionScore(scaledScore, dimension, 'burnout');
+        
+        // Adjust score based on validity concerns
+        const adjustedScore = this.adjustScoreForValidity(scaledScore, validityMetrics, dimension);
+        dimensionScores[dimension] = this.calculateDimensionScore(adjustedScore, dimension, 'burnout');
       }
     });
 
     const overallScore = this.calculateOverallScore(dimensionScores);
-    const profile = this.getBurnoutProfile(overallScore);
-    const validityMetrics = this.calculateValidityMetrics(responses);
+    const profile = this.getBurnoutProfile(overallScore, validityMetrics);
 
     return {
       dimensionScores,
@@ -149,7 +165,7 @@ export class PsychometricScoringEngine {
       validityMetrics,
       strengths: this.identifyStrengths(dimensionScores),
       developmentAreas: this.identifyDevelopmentAreas(dimensionScores),
-      recommendations: this.generateBurnoutRecommendations(dimensionScores, overallScore)
+      recommendations: this.generateBurnoutRecommendations(dimensionScores, overallScore, validityMetrics)
     };
   }
 
@@ -420,10 +436,21 @@ export class PsychometricScoringEngine {
     const engagement: 'high' | 'medium' | 'low' = avgResponseTime < 2 ? 'low' : avgResponseTime > 10 ? 'low' : avgResponseTime > 4 ? 'high' : 'medium';
 
     return {
+      responseConsistency: consistency,
+      fakeGoodPattern: 0,
+      fakeBadPattern: 0,
+      extremeResponding: 0,
+      speedFlags: 0,
+      patternFlags: false,
+      socialDesirabilityBias: 0,
+      minimizationPattern: 0,
+      overallReliability: 'Good',
       consistency,
       responseTime: Math.round(avgResponseTime),
       engagement,
-      ...validityScores
+      fakeGood: validityScores?.fakeGood,
+      fakeBad: validityScores?.fakeBad,
+      inconsistency: validityScores?.inconsistency
     };
   }
 
@@ -449,7 +476,7 @@ export class PsychometricScoringEngine {
     return 'Emerging Personality';
   }
 
-  private getBurnoutProfile(score: number): string {
+  private getBurnoutProfileLegacy(score: number): string {
     if (score >= 80) return 'Low Burnout Risk';
     if (score >= 65) return 'Moderate Burnout Risk';
     if (score >= 50) return 'Elevated Burnout Risk';
@@ -508,7 +535,7 @@ export class PsychometricScoringEngine {
     return recommendations.slice(0, 4);
   }
 
-  private generateBurnoutRecommendations(dimensionScores: Record<string, DimensionScore>, overallScore: number): string[] {
+  private generateBurnoutRecommendationsLegacy(dimensionScores: Record<string, DimensionScore>, overallScore: number): string[] {
     const recommendations: string[] = [];
     
     Object.entries(dimensionScores).forEach(([dimension, score]) => {
@@ -575,6 +602,249 @@ export class PsychometricScoringEngine {
     ];
 
     return recommendations;
+  }
+
+  // Enhanced Burnout-Specific Validity Methods
+  private calculateBurnoutValidityMetrics(responses: PsychometricResponse[], rawResponses: number[]): ValidityMetrics {
+    const baseMetrics = this.calculateValidityMetrics(responses);
+    
+    // Burnout-specific validity calculations
+    const fakeGoodPattern = this.calculateBurnoutFakeGood(rawResponses);
+    const fakeBadPattern = this.calculateBurnoutFakeBad(rawResponses);
+    const minimizationPattern = this.calculateMinimizationPattern(rawResponses);
+    const extremeResponding = this.calculateExtremeResponding(rawResponses);
+    const speedFlags = this.calculateBurnoutSpeedFlags(responses);
+    const patternFlags = this.calculateBurnoutPatternFlags(rawResponses);
+    const socialDesirabilityBias = this.calculateBurnoutSocialDesirability(rawResponses);
+    
+    const overallReliability = this.calculateOverallReliability({
+      ...baseMetrics,
+      fakeGoodPattern,
+      fakeBadPattern,
+      minimizationPattern,
+      extremeResponding,
+      speedFlags,
+      patternFlags,
+      socialDesirabilityBias
+    });
+
+    return {
+      ...baseMetrics,
+      responseConsistency: baseMetrics.consistency,
+      fakeGoodPattern,
+      fakeBadPattern,
+      extremeResponding,
+      speedFlags,
+      patternFlags,
+      socialDesirabilityBias,
+      minimizationPattern,
+      overallReliability
+    };
+  }
+
+  private calculateBurnoutFakeGood(rawResponses: number[]): number {
+    // Detect overly positive responses suggesting denial or minimization
+    const highScores = rawResponses.filter(score => score >= 4).length;
+    const ratio = highScores / rawResponses.length;
+    
+    if (ratio > 0.8) return 85; // Very high fake-good pattern
+    if (ratio > 0.7) return 65;
+    if (ratio > 0.6) return 45;
+    if (ratio > 0.5) return 25;
+    return 0;
+  }
+
+  private calculateBurnoutFakeBad(rawResponses: number[]): number {
+    // Detect overly negative responses suggesting exaggeration
+    const lowScores = rawResponses.filter(score => score <= 2).length;
+    const ratio = lowScores / rawResponses.length;
+    
+    if (ratio > 0.75) return 80; // Very high fake-bad pattern
+    if (ratio > 0.65) return 60;
+    if (ratio > 0.55) return 40;
+    if (ratio > 0.45) return 20;
+    return 0;
+  }
+
+  private calculateMinimizationPattern(rawResponses: number[]): number {
+    // Detect subtle minimization (consistently choosing middle-high options)
+    const middleHighScores = rawResponses.filter(score => score === 3 || score === 4).length;
+    const ratio = middleHighScores / rawResponses.length;
+    
+    if (ratio > 0.85) return 70; // Possible minimization
+    if (ratio > 0.75) return 50;
+    if (ratio > 0.65) return 30;
+    return 0;
+  }
+
+  private calculateExtremeResponding(rawResponses: number[]): number {
+    // Detect tendency to use only extreme response options
+    const extremeScores = rawResponses.filter(score => score === 1 || score === 5).length;
+    const ratio = extremeScores / rawResponses.length;
+    
+    if (ratio > 0.7) return 75; // High extreme responding
+    if (ratio > 0.6) return 55;
+    if (ratio > 0.5) return 35;
+    if (ratio > 0.4) return 15;
+    return 0;
+  }
+
+  private calculateBurnoutSpeedFlags(responses: PsychometricResponse[]): number {
+    let speedScore = 0;
+    const responseTimes = responses.map(r => r.responseTime || 5000);
+    
+    // Too fast responses (less than 2 seconds)
+    const tooFast = responseTimes.filter(time => time < 2000).length;
+    if (tooFast > responses.length * 0.5) speedScore += 40;
+    
+    // Consistently fast responses (under 3 seconds)
+    const consistentlyFast = responseTimes.filter(time => time < 3000).length;
+    if (consistentlyFast > responses.length * 0.7) speedScore += 30;
+    
+    // Too slow responses (over 45 seconds) - possible distraction
+    const tooSlow = responseTimes.filter(time => time > 45000).length;
+    if (tooSlow > responses.length * 0.3) speedScore += 20;
+    
+    return Math.min(100, speedScore);
+  }
+
+  private calculateBurnoutPatternFlags(rawResponses: number[]): boolean {
+    // Check for systematic response patterns
+    
+    // Ascending/descending pattern
+    let ascending = 0, descending = 0;
+    for (let i = 1; i < rawResponses.length; i++) {
+      if (rawResponses[i] > rawResponses[i-1]) ascending++;
+      if (rawResponses[i] < rawResponses[i-1]) descending++;
+    }
+    
+    if (ascending > rawResponses.length * 0.8 || descending > rawResponses.length * 0.8) {
+      return true;
+    }
+    
+    // Same response repeated too often
+    const responseCounts = [0, 0, 0, 0, 0, 0]; // for scores 0-5
+    rawResponses.forEach(score => responseCounts[score]++);
+    const maxCount = Math.max(...responseCounts);
+    
+    return maxCount > rawResponses.length * 0.8;
+  }
+
+  private calculateBurnoutSocialDesirability(rawResponses: number[]): number {
+    // Burnout-specific social desirability patterns
+    let biasScore = 0;
+    
+    // Tendency to report high coping and low stress (socially desirable in workplace)
+    const moderateResponses = rawResponses.filter(score => score === 3).length;
+    const ratio = moderateResponses / rawResponses.length;
+    
+    if (ratio > 0.6) biasScore += 35; // Too many "moderate" responses
+    
+    // Avoidance of low scores on positive dimensions (e.g., social support)
+    const avoidanceLow = rawResponses.filter(score => score >= 3).length / rawResponses.length;
+    if (avoidanceLow > 0.85) biasScore += 25;
+    
+    return Math.min(100, biasScore);
+  }
+
+  private adjustScoreForValidity(rawScore: number, validityMetrics: ValidityMetrics, dimension: string): number {
+    let adjustedScore = rawScore;
+    
+    // Adjust based on fake-good pattern
+    if (validityMetrics.fakeGoodPattern > 60) {
+      // Lower the score if fake-good detected (person may be minimizing problems)
+      adjustedScore = rawScore * 0.85;
+    }
+    
+    // Adjust based on fake-bad pattern
+    if (validityMetrics.fakeBadPattern > 60) {
+      // Raise the score if fake-bad detected (person may be exaggerating)
+      adjustedScore = Math.min(100, rawScore * 1.15);
+    }
+    
+    // Adjust for extreme responding
+    if (validityMetrics.extremeResponding > 60) {
+      // Move score toward mean
+      adjustedScore = rawScore * 0.9 + 50 * 0.1;
+    }
+    
+    return Math.max(0, Math.min(100, adjustedScore));
+  }
+
+  private calculateOverallReliability(metrics: any): string {
+    const issues = [
+      metrics.fakeGoodPattern > 50,
+      metrics.fakeBadPattern > 50,
+      metrics.extremeResponding > 60,
+      metrics.speedFlags > 40,
+      metrics.patternFlags,
+      metrics.socialDesirabilityBias > 50,
+      metrics.minimizationPattern > 60
+    ].filter(Boolean).length;
+    
+    if (issues === 0) return 'Excellent';
+    if (issues <= 1) return 'Good';
+    if (issues <= 2) return 'Moderate';
+    if (issues <= 3) return 'Questionable';
+    return 'Poor';
+  }
+
+  private getBurnoutProfile(score: number, validityMetrics: ValidityMetrics): string {
+    let baseProfile = '';
+    if (score >= 80) baseProfile = 'Low Burnout Risk';
+    else if (score >= 65) baseProfile = 'Moderate Burnout Risk';
+    else if (score >= 50) baseProfile = 'Elevated Burnout Risk';
+    else baseProfile = 'High Burnout Risk';
+    
+    // Add validity qualifier if needed
+    if (validityMetrics.overallReliability === 'Poor' || validityMetrics.overallReliability === 'Questionable') {
+      baseProfile += ' (Results should be interpreted with caution)';
+    }
+    
+    return baseProfile;
+  }
+
+  private generateBurnoutRecommendations(dimensionScores: Record<string, DimensionScore>, overallScore: number, validityMetrics: ValidityMetrics): string[] {
+    const recommendations: string[] = [];
+    
+    // Add validity-based recommendations first
+    if (validityMetrics.overallReliability === 'Poor') {
+      recommendations.push('Consider re-taking assessment with more careful responses for accurate results');
+    }
+    if (validityMetrics.fakeGoodPattern > 60) {
+      recommendations.push('Consider being more open about stress levels for accurate support planning');
+    }
+    if (validityMetrics.fakeBadPattern > 60) {
+      recommendations.push('Focus on specific, manageable stress reduction strategies rather than overwhelming changes');
+    }
+    
+    // Add dimension-based recommendations
+    Object.entries(dimensionScores).forEach(([dimension, score]) => {
+      if (score.scaled < 65) {
+        switch (dimension) {
+          case 'stress_awareness':
+            recommendations.push('Develop stress recognition and early warning systems');
+            break;
+          case 'coping_strategies':
+            recommendations.push('Learn and practice effective stress management techniques');
+            break;
+          case 'work_boundaries':
+            recommendations.push('Establish clear work-life boundaries and limits');
+            break;
+          case 'support_systems':
+            recommendations.push('Build stronger professional and personal support networks');
+            break;
+          case 'recovery_capacity':
+            recommendations.push('Prioritize rest, recovery, and restoration activities');
+            break;
+          case 'prevention_mindset':
+            recommendations.push('Develop proactive burnout prevention strategies');
+            break;
+        }
+      }
+    });
+
+    return recommendations.slice(0, 6);
   }
 }
 
