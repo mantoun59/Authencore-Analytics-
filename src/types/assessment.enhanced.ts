@@ -224,3 +224,73 @@ export function isValidUserProfile(data: unknown): data is UserProfile {
     typeof (data as UserProfile).email === 'string'
   );
 }
+
+// Enhanced response validation
+export function validateAssessmentResponse(response: unknown): response is AssessmentResponse {
+  if (typeof response !== 'object' || response === null) return false;
+  
+  const r = response as Record<string, unknown>;
+  return (
+    typeof r.id === 'string' &&
+    typeof r.questionId === 'string' &&
+    typeof r.selectedOption === 'string' &&
+    typeof r.timestamp === 'number' &&
+    r.timestamp > 0 &&
+    (r.responseTime === undefined || typeof r.responseTime === 'number')
+  );
+}
+
+export function validateResponseTime(responseTime: number, questionType: string = 'default'): boolean {
+  const minTimes = { default: 500, complex: 2000, simple: 200 };
+  const maxTimes = { default: 300000, complex: 600000, simple: 60000 }; // 5-10 minutes max
+  
+  const min = minTimes[questionType as keyof typeof minTimes] || minTimes.default;
+  const max = maxTimes[questionType as keyof typeof maxTimes] || maxTimes.default;
+  
+  return responseTime >= min && responseTime <= max;
+}
+
+export function validateResponseConsistency(responses: AssessmentResponse[]): {
+  isValid: boolean;
+  flags: string[];
+  score: number;
+} {
+  const flags: string[] = [];
+  let consistencyScore = 100;
+  
+  if (responses.length === 0) {
+    return { isValid: false, flags: ['No responses provided'], score: 0 };
+  }
+  
+  // Check for rapid-fire responses (< 1 second)
+  const rapidResponses = responses.filter(r => r.responseTime && r.responseTime < 1000).length;
+  if (rapidResponses > responses.length * 0.3) {
+    flags.push('High number of rapid responses detected');
+    consistencyScore -= 25;
+  }
+  
+  // Check for extremely slow responses (> 5 minutes)
+  const slowResponses = responses.filter(r => r.responseTime && r.responseTime > 300000).length;
+  if (slowResponses > responses.length * 0.1) {
+    flags.push('Unusually slow response pattern detected');
+    consistencyScore -= 15;
+  }
+  
+  // Check for pattern repetition (same option selected repeatedly)
+  const optionCounts = responses.reduce((acc, r) => {
+    acc[r.selectedOption] = (acc[r.selectedOption] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  
+  const maxOptionPercentage = Math.max(...Object.values(optionCounts)) / responses.length;
+  if (maxOptionPercentage > 0.8) {
+    flags.push('Straight-line responding detected');
+    consistencyScore -= 30;
+  }
+  
+  return {
+    isValid: consistencyScore >= 60,
+    flags,
+    score: Math.max(0, consistencyScore)
+  };
+}
