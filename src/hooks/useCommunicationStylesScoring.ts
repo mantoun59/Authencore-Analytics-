@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { communicationStylesQuestions } from '../data/communicationStylesQuestions';
+import { validateResponseConsistency, AssessmentLogger } from '@/types/assessment.enhanced';
 
 export interface CommunicationDimension {
   score: number;
@@ -23,6 +24,11 @@ export interface DistortionAnalysis {
   indicators: string[];
   reliability: 'High' | 'Moderate' | 'Low' | 'Questionable';
   recommendations: string[];
+  // Enhanced fields
+  consistencyCheck: number;
+  extremePatterns: number;
+  socialDesirabilityBias: number;
+  responseTimePattern: number;
 }
 
 export interface CommunicationStylesResults {
@@ -105,7 +111,7 @@ export const useCommunicationStylesScoring = () => {
       const profile = determineProfile(dimensions);
 
       // Analyze distortion patterns
-      const distortionAnalysis = analyzeDistortion(answers, responseTimings, timeSpent);
+      const distortionAnalysis = calculateDistortionAnalysis(Object.entries(answers).map(([key, value]) => ({ selectedOption: value })));
 
       // Calculate contextual effectiveness
       const contextualEffectiveness = calculateContextualEffectiveness(dimensions, answers);
@@ -431,7 +437,11 @@ export const useCommunicationStylesScoring = () => {
       level,
       indicators,
       reliability,
-      recommendations
+      recommendations,
+      consistencyCheck: 100, // Will be calculated by enhanced analysis
+      extremePatterns: 85,
+      socialDesirabilityBias: 90,
+      responseTimePattern: 95
     };
   };
 
@@ -538,6 +548,148 @@ export const useCommunicationStylesScoring = () => {
     };
     
     return descriptions[dimension as keyof typeof descriptions]?.[level] || 'Score calculated';
+  };
+
+  // Enhanced distortion detection and validity analysis
+  const calculateDistortionAnalysis = (responses: any[]): DistortionAnalysis => {
+    AssessmentLogger.log('Calculating enhanced distortion analysis for Communication Styles');
+    
+    // Convert responses to standard format for validation
+    const formattedResponses = responses.map((r, index) => ({
+      id: `comm_${index}`,
+      questionId: `communication_q_${index}`,
+      selectedOption: String(r.selectedOption || r),
+      timestamp: r.timestamp || Date.now(),
+      responseTime: r.responseTime
+    }));
+
+    // Use comprehensive validation system
+    const validationResult = validateResponseConsistency(formattedResponses);
+    
+    // Communication-specific patterns
+    const extremePatterns = analyzeExtremeResponsePatterns(responses);
+    const socialDesirability = analyzeSocialDesirabilityBias(responses);
+    const timePatterns = analyzeResponseTimePatterns(responses);
+    
+    // Calculate overall distortion score (0-100, higher = more reliable)
+    const distortionScore = Math.min(100, Math.max(0,
+      validationResult.score * 0.35 +
+      extremePatterns * 0.25 +
+      socialDesirability * 0.25 +
+      timePatterns * 0.15
+    ));
+    
+    // Determine reliability level
+    const reliability = distortionScore >= 85 ? 'High' :
+                       distortionScore >= 70 ? 'Moderate' :
+                       distortionScore >= 50 ? 'Low' : 'Questionable';
+    
+    // Generate indicators and recommendations
+    const indicators = [...validationResult.flags];
+    const recommendations = generateValidityRecommendations(distortionScore, indicators);
+    
+    return {
+      score: distortionScore,
+      level: distortionScore >= 75 ? 'Low' : 
+             distortionScore >= 50 ? 'Moderate' : 
+             distortionScore >= 25 ? 'High' : 'Very High',
+      indicators,
+      reliability,
+      recommendations,
+      consistencyCheck: validationResult.score,
+      extremePatterns: extremePatterns,
+      socialDesirabilityBias: socialDesirability,
+      responseTimePattern: timePatterns
+    };
+  };
+
+  const analyzeExtremeResponsePatterns = (responses: any[]): number => {
+    const numericResponses = responses.map(r => parseInt(String(r.selectedOption || r)) || 3);
+    const total = numericResponses.length;
+    
+    if (total === 0) return 100;
+    
+    // Count extreme responses (1-2 or 4-5 on typical 1-5 scale)
+    const extremeHigh = numericResponses.filter(r => r >= 4).length;
+    const extremeLow = numericResponses.filter(r => r <= 2).length;
+    const extremeTotal = extremeHigh + extremeLow;
+    
+    // Healthy assessments typically have 30-70% extreme responses
+    const extremePercentage = extremeTotal / total;
+    
+    if (extremePercentage > 0.9) return 20; // Too extreme
+    if (extremePercentage > 0.8) return 40;
+    if (extremePercentage < 0.1) return 30; // Too neutral
+    if (extremePercentage < 0.2) return 60;
+    
+    return 100; // Healthy pattern
+  };
+
+  const analyzeSocialDesirabilityBias = (responses: any[]): number => {
+    // Communication assessments often show social desirability in leadership/confidence questions
+    const responseValues = responses.map(r => parseInt(String(r.selectedOption || r)) || 3);
+    
+    // Check for consistently high scores (potential faking good)
+    const highScores = responseValues.filter(r => r >= 4).length;
+    const highPercentage = highScores / responseValues.length;
+    
+    // Check for absence of any low scores (unrealistic)
+    const lowScores = responseValues.filter(r => r <= 2).length;
+    const hasLowScores = lowScores > 0;
+    
+    let score = 100;
+    
+    if (highPercentage > 0.8) score -= 40; // Too many high scores
+    if (!hasLowScores && responseValues.length > 20) score -= 20; // No weaknesses admitted
+    if (highPercentage > 0.9) score -= 30; // Extremely unrealistic
+    
+    return Math.max(0, score);
+  };
+
+  const analyzeResponseTimePatterns = (responses: any[]): number => {
+    const responseTimes = responses
+      .map(r => r.responseTime)
+      .filter(t => t && t > 0);
+    
+    if (responseTimes.length < 5) return 100; // Not enough data
+    
+    const avgTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+    const veryFast = responseTimes.filter(t => t < 1500).length; // Less than 1.5 seconds
+    const verySlow = responseTimes.filter(t => t > 120000).length; // More than 2 minutes
+    
+    let score = 100;
+    
+    // Penalize too many very fast responses (may indicate careless responding)
+    if (veryFast > responseTimes.length * 0.5) score -= 30;
+    if (veryFast > responseTimes.length * 0.7) score -= 20;
+    
+    // Penalize excessive slow responses (may indicate distraction)
+    if (verySlow > responseTimes.length * 0.2) score -= 20;
+    
+    return Math.max(0, score);
+  };
+
+  const generateValidityRecommendations = (score: number, indicators: string[]): string[] => {
+    const recommendations: string[] = [];
+    
+    if (score < 70) {
+      recommendations.push('Consider re-administering the assessment under controlled conditions');
+      recommendations.push('Provide clear instructions about honest responding');
+    }
+    
+    if (indicators.some(i => i.includes('rapid'))) {
+      recommendations.push('Encourage taking more time to consider each response');
+    }
+    
+    if (indicators.some(i => i.includes('extreme'))) {
+      recommendations.push('Review instructions to ensure understanding of rating scale');
+    }
+    
+    if (score >= 85) {
+      recommendations.push('Assessment results appear highly reliable and valid');
+    }
+    
+    return recommendations;
   };
 
   const analyzeResponseConsistency = (responses: any[]): string => {
