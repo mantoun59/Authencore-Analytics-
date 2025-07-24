@@ -83,25 +83,31 @@ export class ProductionErrorBoundary extends React.Component<
     if (this.state.hasError) {
       const FallbackComponent = this.props.fallback;
       if (FallbackComponent && this.state.error) {
-        return <FallbackComponent error={this.state.error} resetError={this.resetError} />;
+        return React.createElement(FallbackComponent, {
+          error: this.state.error,
+          resetError: this.resetError
+        });
       }
       
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-6">
-            <h2 className="text-xl font-semibold text-red-600 mb-4">Something went wrong</h2>
-            <p className="text-gray-600 mb-4">
-              We're sorry, but something unexpected happened. Please try refreshing the page.
-            </p>
-            <button
-              onClick={this.resetError}
-              className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
-        </div>
-      );
+      return React.createElement('div', {
+        className: "min-h-screen flex items-center justify-center bg-gray-50"
+      }, React.createElement('div', {
+        className: "max-w-md w-full bg-white shadow-lg rounded-lg p-6"
+      }, [
+        React.createElement('h2', {
+          key: 'title',
+          className: "text-xl font-semibold text-red-600 mb-4"
+        }, 'Something went wrong'),
+        React.createElement('p', {
+          key: 'message',
+          className: "text-gray-600 mb-4"
+        }, "We're sorry, but something unexpected happened. Please try refreshing the page."),
+        React.createElement('button', {
+          key: 'button',
+          onClick: this.resetError,
+          className: "w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition-colors"
+        }, 'Try Again')
+      ]));
     }
 
     return this.props.children;

@@ -32,7 +32,7 @@ import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
 import { toast } from "sonner";
 import UnifiedAssessmentService from "@/services/unifiedAssessmentService";
 import ConsolidatedReportService from "@/services/consolidatedReportService";
-import type { AssessmentData, CandidateInfo, AssessmentResult } from "@/types/assessment.types";
+import type { AssessmentData, CandidateInfo, AssessmentResult, UnifiedAssessmentResult } from "@/types/assessment.types";
 
 interface AssessmentResultsProps {
   data: AssessmentData | Record<string, unknown>; // Flexible type for different assessment formats
@@ -41,7 +41,14 @@ interface AssessmentResultsProps {
 }
 
 const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: AssessmentResultsProps) => {
-  const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
+  const [results, setResults] = useState<AssessmentResult>({
+    overallScore: 0,
+    dimensions: [],
+    improvements: [],
+    profile: '',
+    recommendations: [],
+    strengths: []
+  });
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const unifiedService = UnifiedAssessmentService.getInstance();
   const reportService = ConsolidatedReportService.getInstance();
@@ -69,43 +76,62 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
       const result = unifiedService.processAssessment(assessmentType, assessmentData);
       // Assessment result generated successfully
-      setAssessmentResult(result);
+      if (typeof result === 'object' && 'overallScore' in result) {
+        setResults({
+          overallScore: result.overallScore || 0,
+          dimensions: Array.isArray(result.dimensionScores) ? result.dimensionScores : [],
+          improvements: result.developmentAreas?.map(area => ({ category: area, items: [] })) || [],
+          profile: result.assessmentType || 'Assessment Complete',
+          recommendations: [],
+          strengths: []
+        });
+      }
     } catch (error) {
       // Error processing assessment, falling back to mock data
       
-      // Fallback to mock data - ENSURE CORRECT ASSESSMENT TYPE
-      setAssessmentResult({
-        assessmentId: `${assessmentType}-${Date.now()}`,
-        assessmentType: assessmentType, // Critical: maintain the correct type
-        candidateInfo: candidateInfo || { name: 'Test User', email: 'test@example.com' },
+      // Fallback to mock data
+      setResults({
         overallScore: 75,
+        dimensions: [{ name: 'Overall', score: 75, description: 'General assessment', level: 'medium' }],
+        improvements: [{ category: 'Time Management', items: ['Improve scheduling', 'Set priorities'] }],
         profile: 'Assessment Complete',
-        dimensionScores: { overall: 75 },
-        strengths: ['Data Analysis', 'Problem Solving'],
-        developmentAreas: ['Time Management'], 
-        recommendations: ['Continue developing your skills'],
-        validityMetrics: { consistency: 85, responseTime: 5, engagement: 'medium' }
+        recommendations: [{ category: 'Development', items: ['Continue developing your skills'] }],
+        strengths: ['Data Analysis', 'Problem Solving']
       });
     }
   };
 
   // Helper methods to access assessment result data
-  const getOverallScore = () => assessmentResult?.overallScore || 0;
-  const getProfile = () => assessmentResult?.profile || "Assessment Profile";
-  const getDimensionScores = () => assessmentResult?.dimensionScores || {};
-  const getStrengths = () => assessmentResult?.strengths || [];
-  const getDevelopmentAreas = () => assessmentResult?.developmentAreas || [];
-  const getRecommendations = () => assessmentResult?.recommendations || [];
+  const getOverallScore = () => results?.overallScore || 0;
+  const getProfile = () => results?.profile || "Assessment Profile";
+  const getDimensionScores = () => results?.dimensions || [];
+  const getStrengths = () => results?.strengths || [];
+  const getDevelopmentAreas = () => results?.improvements || [];
+  const getRecommendations = () => results?.recommendations || [];
 
   // Generate PDF using consolidated report service
   const downloadReport = async () => {
-    if (!assessmentResult) {
+    if (!results) {
       toast.error('No assessment data available');
       return;
     }
 
     try {
-      await reportService.generateComprehensiveReport(assessmentResult);
+      const unifiedResult: any = {
+        assessmentId: 'assessment-' + Date.now(),
+        assessmentType: assessmentType,
+        candidateInfo: candidateInfo || { name: '', email: '' },
+        dimensionScores: results.dimensions,
+        developmentAreas: results.improvements.map(imp => imp.category),
+        overallScore: results.overallScore,
+        timestamp: new Date().toISOString(),
+        validityIndicators: { consistencyScore: 0.8, fakeGoodIndicator: 0.2, flaggedQuestions: [] },
+        reportData: { summary: '', insights: [], recommendations: [] },
+        profile: results.profile,
+        strengths: results.strengths,
+        recommendations: results.recommendations
+      };
+      await reportService.generateComprehensiveReport(unifiedResult);
     } catch (error) {
       console.error('Error generating PDF:', error);
       toast.error('Failed to generate PDF report');

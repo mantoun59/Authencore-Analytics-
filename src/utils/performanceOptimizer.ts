@@ -175,11 +175,12 @@ class PerformanceOptimizer {
     this.measurements.clear();
   }
 
-  // React component wrapper for automatic performance monitoring
+// React component wrapper for automatic performance monitoring
   static withPerformanceMonitoring<P extends object>(
     WrappedComponent: React.ComponentType<P>,
     componentName?: string
   ) {
+    const React = require('react');
     const optimizer = PerformanceOptimizer.getInstance();
     const name = componentName || WrappedComponent.displayName || WrappedComponent.name || 'Unknown';
 

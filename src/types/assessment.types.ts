@@ -63,8 +63,70 @@ export interface AssessmentResults {
     items: string[];
   }>;
   strengths: string[];
-  improvements: string[];
+  improvements: Array<{
+    category: string;
+    items: string[];
+  }>;
   metadata?: Record<string, unknown>;
+}
+
+// Analytics and reporting types
+export interface UnifiedAssessmentResult {
+  assessmentId: string;
+  assessmentType: string;
+  candidateInfo: CandidateInfo;
+  dimensionScores: DimensionScore[];
+  developmentAreas: string[];
+  overallScore: number;
+  timestamp: string;
+  validityIndicators: ValidityIndicators;
+  reportData: ReportData;
+}
+
+export interface ValidityIndicators {
+  consistencyScore: number;
+  fakeGoodIndicator: number;
+  flaggedQuestions: number[];
+}
+
+export interface ReportData {
+  summary: string;
+  insights: string[];
+  recommendations: string[];
+}
+
+export interface AnalyticsData {
+  userCount: number;
+  assessmentCount: number;
+  completionRate: number;
+  averageScore: number;
+  dailyUsage: Array<{ date: string; count: number }>;
+  totalAssessments: number;
+  totalCandidates: number;
+  completedAssessments: number;
+  paidSoloCandidates: number;
+  soloCandidates: Array<{ id: string; name: string; email: string }>;
+  employerCandidates: Array<{ id: string; name: string; email: string }>;
+  totalRevenue: number;
+  activeEmployers: number;
+  payments: Array<{ amount: number; date: string }>;
+  employers: Array<{ id: string; name: string; active: boolean }>;
+  performanceMetrics: {
+    averageCompletionTime: number;
+    averageScore: number;
+    popularAssessments: Array<{ name: string; count: number }>;
+    completionRateByAssessment: Array<{ assessment: string; rate: number }>;
+    timeToComplete: Array<{ assessment: string; time: number }>;
+    completionRate: number;
+    avgTimeToComplete: number;
+    conversionRate: number;
+    weeklyGrowth: number;
+  };
+  assessmentTypes: Array<{ name: string; count: number }>;
+  assessmentsByType: Array<{ name: string; count: number }>;
+  countries: Array<{ name: string; count: number }>;
+  genders: Array<{ name: string; count: number }>;
+  events: Array<{ type: string; timestamp: string; details: any }>;
 }
 
 // Communication Assessment Types
@@ -290,12 +352,26 @@ export interface AIAnalysisConfig {
 }
 
 export interface AIAnalysisResult {
+  overallAssessment: string;
+  keyInsights: string[];
+  recommendations: string[];
+  detailedAnalysis: string;
+  confidenceLevel: number;
+  limitations: string[];
+  validityAssessment: {
+    consistencyScore: number;
+    fakeGoodIndicator: number;
+    fakeGoodRisk: string;
+    flaggedResponses: number[];
+    recommendedActions: string[];
+    score: number;
+    reliability: 'low' | 'medium' | 'high';
+    confidenceLevel: number;
+  };
   executiveSummary: {
     overallAssessment: string;
     keyInsights: string[];
     recommendations: string[];
+    confidenceLevel: number;
   };
-  detailedAnalysis: Record<string, unknown>;
-  confidenceLevel: number;
-  limitations: string[];
 }
