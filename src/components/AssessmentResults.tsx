@@ -32,7 +32,7 @@ import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
 import { toast } from "sonner";
 import UnifiedAssessmentService from "@/services/unifiedAssessmentService";
 import ConsolidatedReportService from "@/services/consolidatedReportService";
-import type { AssessmentData, CandidateInfo } from "@/types/assessment.types";
+import type { AssessmentData, CandidateInfo, AssessmentResult } from "@/types/assessment.types";
 
 interface AssessmentResultsProps {
   data: AssessmentData | Record<string, unknown>; // Flexible type for different assessment formats
@@ -41,7 +41,7 @@ interface AssessmentResultsProps {
 }
 
 const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: AssessmentResultsProps) => {
-  const [assessmentResult, setAssessmentResult] = useState<any>(null);
+  const [assessmentResult, setAssessmentResult] = useState<AssessmentResult | null>(null);
   const [isGeneratingAI, setIsGeneratingAI] = useState(false);
   const unifiedService = UnifiedAssessmentService.getInstance();
   const reportService = ConsolidatedReportService.getInstance();

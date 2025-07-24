@@ -9,7 +9,7 @@ import { Brain, Target, MessageSquare, Shield, TrendingUp, Settings } from 'luci
 import { toast } from 'sonner';
 import { EnhancedAIEngine, type EnhancedAIConfig } from '@/services/enhancedAIEngine';
 
-import type { AssessmentData, CandidateInfo } from '@/types/assessment.types';
+import type { AssessmentData, CandidateInfo, AIAnalysisResult } from '@/types/assessment.types';
 
 interface EnhancedAIControlsProps {
   onConfigUpdate?: (config: Partial<EnhancedAIConfig>) => void;
@@ -30,7 +30,7 @@ export const EnhancedAIControls: React.FC<EnhancedAIControlsProps> = ({
   });
 
   const [isGenerating, setIsGenerating] = useState(false);
-  const [lastAnalysis, setLastAnalysis] = useState<any>(null);
+  const [lastAnalysis, setLastAnalysis] = useState<AIAnalysisResult | null>(null);
 
   const updateConfig = (updates: Partial<EnhancedAIConfig>) => {
     const newConfig = { ...config, ...updates };

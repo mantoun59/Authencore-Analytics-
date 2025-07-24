@@ -51,6 +51,9 @@ export interface DimensionScore {
   components?: Record<string, number>;
 }
 
+// Alias for backward compatibility
+export type AssessmentResult = AssessmentResults;
+
 export interface AssessmentResults {
   overallScore: number;
   dimensions: DimensionScore[];

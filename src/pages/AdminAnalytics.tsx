@@ -27,11 +27,19 @@ import {
 } from 'lucide-react';
 import Header from '@/components/Header';
 import ProtectedAdminRoute from '@/components/ProtectedAdminRoute';
+import type { AnalyticsData } from '@/types/assessment.types';
 
 const AdminAnalytics = () => {
   const { user } = useAuth();
   const { isAdmin } = useAdminAuth();
-  const [analytics, setAnalytics] = useState<any>({});
+  const [analytics, setAnalytics] = useState<AnalyticsData>({
+    totalAssessments: 0,
+    completionRate: 0,
+    averageScore: 0,
+    assessmentsByType: {},
+    timeRange: '30',
+    trends: []
+  });
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('30'); // days
   const [assessmentFilter, setAssessmentFilter] = useState('all');
@@ -130,6 +138,12 @@ const AdminAnalytics = () => {
         };
 
         setAnalytics({
+          totalAssessments: completedAssessments,
+          completionRate,
+          averageScore: 0, // Will be calculated from actual scores
+          assessmentsByType: assessmentTypes,
+          timeRange,
+          trends: [],
           totalCandidates,
           completedAssessments,
           totalRevenue,
