@@ -199,7 +199,7 @@ const CAIRPersonalityDescription = () => {
                     </Button>
                   </Link>
                   <Link to="/sample-reports?assessment=cair">
-                    <Button size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
+                    <Button size="lg" variant="outline" className="border-white text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm">
                       View Sample Report
                     </Button>
                   </Link>
