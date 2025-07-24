@@ -460,5 +460,6 @@ function getLocalizedTexts(language: string) {
   };
   
   return texts[language as keyof typeof texts] || texts.en;
+}
 
 serve(handler);
