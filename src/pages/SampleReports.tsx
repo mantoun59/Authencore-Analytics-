@@ -921,7 +921,6 @@ const SampleReports = () => {
     console.log('⚙️ Assessment config:', assessment);
     return assessment;
   }, [selectedAssessment]);
-  };
 
 
   const renderCandidateReport = () => (
