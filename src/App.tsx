@@ -51,6 +51,7 @@ import FaithValuesDescription from "./pages/FaithValuesDescription";
 import GenZWorkplaceDescription from "./pages/GenZWorkplaceDescription";
 import EmployerAnalytics from "./pages/EmployerAnalytics";
 import PartnerAnalytics from "./pages/PartnerAnalytics";
+import Payment from "./pages/Payment";
 import ScrollToTop from "@/components/ScrollToTop";
 import AIChat from "@/components/AIChat";
 
@@ -115,6 +116,7 @@ const App = () => (
             <Route path="/sample-career-launch-report" element={<SampleCareerLaunchReport />} />
             <Route path="/sample-reports" element={<SampleReports />} />
             <Route path="/marketing-materials" element={<MarketingMaterials />} />
+            <Route path="/payment" element={<Payment />} />
             <Route path="/employer-analytics" element={<EmployerAnalytics />} />
             <Route path="/partner-analytics" element={<PartnerAnalytics />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
