@@ -70,11 +70,14 @@ interface WorkplaceProfile {
 }
 
 interface ValidityMetrics {
-  allPositive: number;
-  allNegative: number;
-  tooFast: number;
-  samePattern: number;
-  noSwipes: boolean;
+  responseConsistency: number;
+  fakeGoodPattern: number;
+  fakeBadPattern: number;
+  socialDesirabilityBias: number;
+  speedFlags: number;
+  patternFlags: boolean;
+  engagementLevel: number;
+  authenticityScore: number;
 }
 
 export interface GenZScoringData {
@@ -336,24 +339,242 @@ export const useGenZScoring = () => {
     return profiles[topProfile];
   }, []);
 
-  const calculateValidityMetrics = useCallback((responses: GenZResponse[], totalTime: number): ValidityMetrics => {
+  const calculateValidityMetrics = useCallback((responses: GenZResponse[], valuesSelection: ValueSelection[], totalTime: number): ValidityMetrics => {
     const totalResponses = responses.length;
     const avgResponseTime = totalTime / totalResponses;
     
-    const positiveCount = responses.filter(r => ['love', 'good'].includes(r.response)).length;
-    const negativeCount = responses.filter(r => ['nope', 'toxic'].includes(r.response)).length;
-    const fastResponses = responses.filter(r => r.responseTime < 1000).length;
+    // Fake-Good Pattern Detection
+    const fakeGoodPattern = calculateFakeGoodPattern(responses, valuesSelection);
     
-    const responsePattern = responses.map(r => r.response);
-    const uniqueResponses = new Set(responsePattern).size;
+    // Fake-Bad Pattern Detection  
+    const fakeBadPattern = calculateFakeBadPattern(responses);
+    
+    // Social Desirability Bias
+    const socialDesirabilityBias = calculateSocialDesirabilityBias(responses);
+    
+    // Response Consistency
+    const responseConsistency = calculateResponseConsistency(responses, valuesSelection);
+    
+    // Speed and Pattern Flags
+    const speedFlags = calculateSpeedFlags(responses);
+    const patternFlags = calculatePatternFlags(responses);
+    
+    // Engagement Level
+    const engagementLevel = calculateEngagementLevel(responses);
+    
+    // Overall Authenticity Score
+    const authenticityScore = Math.max(0, 100 - (fakeGoodPattern * 0.3) - (fakeBadPattern * 0.3) - (socialDesirabilityBias * 0.2) - (speedFlags * 0.2));
     
     return {
-      allPositive: positiveCount / totalResponses,
-      allNegative: negativeCount / totalResponses,
-      tooFast: fastResponses / totalResponses,
-      samePattern: 1 - (uniqueResponses / Math.min(5, totalResponses)),
-      noSwipes: !responses.some(r => r.swipeData)
+      responseConsistency,
+      fakeGoodPattern,
+      fakeBadPattern,
+      socialDesirabilityBias,
+      speedFlags,
+      patternFlags,
+      engagementLevel,
+      authenticityScore
     };
+  }, []);
+
+  const calculateFakeGoodPattern = useCallback((responses: GenZResponse[], valuesSelection: ValueSelection[]): number => {
+    let fakeGoodScore = 0;
+    
+    // Check for excessive positive responses
+    const positiveResponses = responses.filter(r => ['love', 'good'].includes(r.response)).length;
+    const positiveRatio = positiveResponses / responses.length;
+    
+    if (positiveRatio > 0.85) {
+      fakeGoodScore += 40;
+    } else if (positiveRatio > 0.75) {
+      fakeGoodScore += 25;
+    } else if (positiveRatio > 0.65) {
+      fakeGoodScore += 15;
+    }
+    
+    // Check for inconsistency between values and responses
+    const topValues = valuesSelection.slice(0, 3).map(v => v.valueId);
+    let valueConsistency = 0;
+    
+    responses.forEach(response => {
+      if (response.response === 'love' || response.response === 'good') {
+        // If responding positively to scenarios that don't align with top values
+        if (!isResponseAlignedWithValues(response.scenarioId, topValues)) {
+          valueConsistency += 1;
+        }
+      }
+    });
+    
+    if (valueConsistency > responses.length * 0.4) {
+      fakeGoodScore += 30;
+    }
+    
+    return Math.min(100, fakeGoodScore);
+  }, []);
+
+  const calculateFakeBadPattern = useCallback((responses: GenZResponse[]): number => {
+    let fakeBadScore = 0;
+    
+    // Check for excessive negative responses
+    const negativeResponses = responses.filter(r => ['nope', 'toxic'].includes(r.response)).length;
+    const negativeRatio = negativeResponses / responses.length;
+    
+    if (negativeRatio > 0.8) {
+      fakeBadScore += 50;
+    } else if (negativeRatio > 0.7) {
+      fakeBadScore += 35;
+    } else if (negativeRatio > 0.6) {
+      fakeBadScore += 20;
+    }
+    
+    // Check for consistently toxic responses without variation
+    const toxicResponses = responses.filter(r => r.response === 'toxic').length;
+    if (toxicResponses > responses.length * 0.5) {
+      fakeBadScore += 25;
+    }
+    
+    return Math.min(100, fakeBadScore);
+  }, []);
+
+  const calculateSocialDesirabilityBias = useCallback((responses: GenZResponse[]): number => {
+    let biasScore = 0;
+    
+    // Count responses that are socially desirable but unrealistic
+    const perfectResponses = responses.filter(r => {
+      // Scenarios about work-life balance, collaboration, etc. where "love" might be socially desirable
+      return r.response === 'love' && (r.scenarioId.includes('collaboration') || r.scenarioId.includes('balance'));
+    }).length;
+    
+    if (perfectResponses > responses.length * 0.7) {
+      biasScore += 35;
+    }
+    
+    // Check for avoidance of "toxic" responses even for clearly problematic scenarios
+    const problematicScenarios = responses.filter(r => 
+      r.scenarioId.includes('micromanage') || r.scenarioId.includes('overtime')
+    );
+    
+    const avoidedToxicResponses = problematicScenarios.filter(r => r.response !== 'toxic').length;
+    if (avoidedToxicResponses > problematicScenarios.length * 0.8) {
+      biasScore += 25;
+    }
+    
+    return Math.min(100, biasScore);
+  }, []);
+
+  const calculateResponseConsistency = useCallback((responses: GenZResponse[], valuesSelection: ValueSelection[]): number => {
+    let consistencyScore = 100;
+    const topValues = valuesSelection.slice(0, 3).map(v => v.valueId);
+    
+    // Check alignment between top values and scenario responses
+    responses.forEach(response => {
+      const isPositive = ['love', 'good'].includes(response.response);
+      const alignsWithValues = isResponseAlignedWithValues(response.scenarioId, topValues);
+      
+      if (isPositive && !alignsWithValues) {
+        consistencyScore -= 3;
+      } else if (!isPositive && alignsWithValues) {
+        consistencyScore -= 2;
+      }
+    });
+    
+    return Math.max(0, consistencyScore);
+  }, []);
+
+  const calculateSpeedFlags = useCallback((responses: GenZResponse[]): number => {
+    let speedScore = 0;
+    
+    // Too fast responses (less than 1 second for swipe decision)
+    const tooFastResponses = responses.filter(r => r.responseTime < 1000).length;
+    const fastRatio = tooFastResponses / responses.length;
+    
+    if (fastRatio > 0.6) {
+      speedScore += 40;
+    } else if (fastRatio > 0.4) {
+      speedScore += 25;
+    } else if (fastRatio > 0.3) {
+      speedScore += 15;
+    }
+    
+    // Too slow responses (over 30 seconds - potential overthinking or distraction)
+    const tooSlowResponses = responses.filter(r => r.responseTime > 30000).length;
+    if (tooSlowResponses > responses.length * 0.3) {
+      speedScore += 15;
+    }
+    
+    return Math.min(100, speedScore);
+  }, []);
+
+  const calculatePatternFlags = useCallback((responses: GenZResponse[]): boolean => {
+    // Check for alternating patterns
+    let alternatingCount = 0;
+    for (let i = 1; i < responses.length; i++) {
+      const prev = ['love', 'good'].includes(responses[i-1].response);
+      const curr = ['love', 'good'].includes(responses[i].response);
+      if (prev !== curr) {
+        alternatingCount++;
+      }
+    }
+    
+    // Flag if more than 80% of responses alternate
+    if (alternatingCount > responses.length * 0.8) {
+      return true;
+    }
+    
+    // Check for same response repeated too often
+    const responseCounts = { love: 0, good: 0, nope: 0, toxic: 0 };
+    responses.forEach(r => {
+      responseCounts[r.response as keyof typeof responseCounts]++;
+    });
+    
+    const maxCount = Math.max(...Object.values(responseCounts));
+    return maxCount > responses.length * 0.85;
+  }, []);
+
+  const calculateEngagementLevel = useCallback((responses: GenZResponse[]): number => {
+    let engagementScore = 50; // Base score
+    
+    // Check for swipe data usage (indicates higher engagement)
+    const swipeResponses = responses.filter(r => r.swipeData).length;
+    engagementScore += (swipeResponses / responses.length) * 20;
+    
+    // Check response time distribution (good engagement shows thoughtful variation)
+    const responseTimes = responses.map(r => r.responseTime);
+    const avgTime = responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length;
+    const variance = responseTimes.reduce((sum, time) => sum + Math.pow(time - avgTime, 2), 0) / responseTimes.length;
+    
+    // Moderate variance indicates thoughtful responses
+    if (variance > 1000000 && variance < 10000000) {
+      engagementScore += 15;
+    }
+    
+    // Check for use of all response types
+    const uniqueResponses = new Set(responses.map(r => r.response)).size;
+    engagementScore += (uniqueResponses / 4) * 15; // Max 4 response types
+    
+    return Math.min(100, engagementScore);
+  }, []);
+
+  const isResponseAlignedWithValues = useCallback((scenarioId: string, topValues: string[]): boolean => {
+    // Map scenario types to values (simplified mapping)
+    const scenarioValueMap: Record<string, string[]> = {
+      'remote': ['v2'], // Remote First
+      'balance': ['v5'], // Work-Life Balance  
+      'impact': ['v6'], // Impact
+      'autonomy': ['v8'], // Autonomy
+      'transparency': ['v12'], // Transparency
+      'innovation': ['v1'], // Innovation
+      'growth': ['v3'], // Growth
+      'collaboration': ['v4'] // Collaboration
+    };
+    
+    for (const [scenarioType, valueIds] of Object.entries(scenarioValueMap)) {
+      if (scenarioId.includes(scenarioType)) {
+        return valueIds.some(valueId => topValues.includes(valueId));
+      }
+    }
+    
+    return false; // Default to not aligned if scenario type not recognized
   }, []);
 
   const calculateFinalResults = useCallback(async (data: GenZScoringData, scenarios: GenZScenario[]) => {
@@ -369,13 +590,13 @@ export const useGenZScoring = () => {
       const redFlags = calculateRedFlags(responses, scenarios);
       const companyMatches = generateCompanyMatches(dimensions, traits, redFlags);
       const workplaceProfile = determineWorkplaceProfile(dimensions, traits);
-      const validityMetrics = calculateValidityMetrics(responses, totalTime);
+      const validityMetrics = calculateValidityMetrics(responses, valuesSelection, totalTime);
       
-      // Generate employer insights
+      // Generate employer insights with enhanced validity considerations
       const employerInsights = {
         authenticity: {
-          score: Math.max(0, 100 - (validityMetrics.allPositive * 30) - (validityMetrics.tooFast * 40)),
-          flags: [] as string[]
+          score: validityMetrics.authenticityScore,
+          flags: generateValidityFlags(validityMetrics)
         },
         traits: {
           digitalFluency: Math.min(95, dimensions.digital_native.score + 15),
@@ -384,9 +605,13 @@ export const useGenZScoring = () => {
           growthMindset: dimensions.growth_mindset.score
         },
         retention: {
-          riskLevel: 'low' as 'low' | 'medium' | 'high',
+          riskLevel: calculateRetentionRisk(validityMetrics, redFlags) as 'low' | 'medium' | 'high',
           stayProbability: Math.min(95, 40 + Object.values(workplacePreferences).reduce((a, b) => a + b, 0) / 10),
           keyDrivers: ['Flexible work options', 'Growth opportunities', 'Purpose alignment']
+        },
+        validityAssessment: {
+          overallReliability: getReliabilityLevel(validityMetrics),
+          recommendedActions: getRecommendedActions(validityMetrics)
         }
       };
 
@@ -407,6 +632,81 @@ export const useGenZScoring = () => {
       setIsCalculating(false);
     }
   }, [calculateDimensions, calculateTraits, calculateWorkplacePreferences, calculateRedFlags, generateCompanyMatches, determineWorkplaceProfile, calculateValidityMetrics]);
+
+  const generateValidityFlags = useCallback((validityMetrics: ValidityMetrics): string[] => {
+    const flags = [];
+    
+    if (validityMetrics.fakeGoodPattern > 60) {
+      flags.push('Potential fake-good responding detected');
+    }
+    if (validityMetrics.fakeBadPattern > 60) {
+      flags.push('Potential fake-bad responding detected');
+    }
+    if (validityMetrics.socialDesirabilityBias > 50) {
+      flags.push('High social desirability bias');
+    }
+    if (validityMetrics.speedFlags > 50) {
+      flags.push('Response speed concerns');
+    }
+    if (validityMetrics.patternFlags) {
+      flags.push('Systematic response pattern detected');
+    }
+    if (validityMetrics.responseConsistency < 70) {
+      flags.push('Low response consistency');
+    }
+    
+    return flags;
+  }, []);
+
+  const calculateRetentionRisk = useCallback((validityMetrics: ValidityMetrics, redFlags: RedFlags): string => {
+    if (validityMetrics.authenticityScore < 60) {
+      return 'high'; // Low authenticity suggests unreliable data
+    }
+    
+    const totalRedFlags = Object.values(redFlags).reduce((sum, count) => sum + count, 0);
+    if (totalRedFlags > 8) {
+      return 'high';
+    } else if (totalRedFlags > 4) {
+      return 'medium';
+    }
+    
+    return 'low';
+  }, []);
+
+  const getReliabilityLevel = useCallback((validityMetrics: ValidityMetrics): string => {
+    if (validityMetrics.authenticityScore > 85 && validityMetrics.responseConsistency > 80 && !validityMetrics.patternFlags) {
+      return 'Excellent';
+    } else if (validityMetrics.authenticityScore > 70 && validityMetrics.responseConsistency > 70) {
+      return 'Good';
+    } else if (validityMetrics.authenticityScore > 55) {
+      return 'Moderate';
+    } else {
+      return 'Poor';
+    }
+  }, []);
+
+  const getRecommendedActions = useCallback((validityMetrics: ValidityMetrics): string[] => {
+    const actions = [];
+    
+    if (validityMetrics.authenticityScore < 70) {
+      actions.push('Consider follow-up interview to verify responses');
+    }
+    if (validityMetrics.fakeGoodPattern > 50) {
+      actions.push('Probe for specific examples during behavioral interviews');
+    }
+    if (validityMetrics.fakeBadPattern > 50) {
+      actions.push('Explore motivation and career goals in interview');
+    }
+    if (validityMetrics.engagementLevel < 60) {
+      actions.push('Assess genuine interest in role and company');
+    }
+    
+    if (actions.length === 0) {
+      actions.push('Results appear reliable - proceed with confidence');
+    }
+    
+    return actions;
+  }, []);
 
   return {
     calculateFinalResults,
