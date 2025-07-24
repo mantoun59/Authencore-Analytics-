@@ -365,7 +365,7 @@ export const assessmentsData: AssessmentData[] = [
     subtitle: 'Digital Health & Productivity',
     price: '$12.99',
     duration: '10-12 minutes',
-    questions: 40,
+    questions: 25,
     description: 'Assessment of digital habits, screen time impact, and technology wellness in professional settings',
     detailedDescription: 'The Digital Wellness Assessment evaluates your relationship with technology and its impact on productivity, well-being, and professional performance. This assessment provides insights into digital habits and offers strategies for optimizing technology use in work environments.',
     whatItMeasures: [

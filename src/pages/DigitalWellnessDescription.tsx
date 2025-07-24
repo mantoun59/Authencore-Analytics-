@@ -10,33 +10,23 @@ import { Link } from 'react-router-dom';
 const DigitalWellnessDescription = () => {
   const dimensions = [
     {
-      title: "Device Dependency",
-      description: "Level of reliance and compulsion towards digital devices.",
+      title: "Screen Balance",
+      description: "Relationship with digital devices and screen time management.",
       icon: Smartphone
     },
     {
-      title: "Online Communication Health", 
-      description: "Quality and balance of digital social interactions.",
-      icon: MessageSquare
-    },
-    {
-      title: "Information Processing Habits",
-      description: "How you consume, filter, and process online information.",
-      icon: Brain
-    },
-    {
-      title: "Digital Boundaries",
+      title: "Digital Boundaries", 
       description: "Ability to set limits and manage digital use effectively.",
       icon: Shield
     },
     {
-      title: "Emotional Impact",
-      description: "Effects of digital activities on mood and wellbeing.",
-      icon: Heart
+      title: "Mindful Usage",
+      description: "Conscious and intentional use of digital technology.",
+      icon: Brain
     },
     {
-      title: "Lifestyle Integration",
-      description: "Harmonising digital use with offline goals and values.",
+      title: "Tech-Life Integration",
+      description: "Harmonizing digital use with offline goals and values.",
       icon: Scale
     }
   ];
@@ -50,7 +40,7 @@ const DigitalWellnessDescription = () => {
         <div className="text-center mb-12">
           <div className="flex justify-center items-center gap-4 mb-6">
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
-              40 Questions | 6 Dimensions | $12.99
+              25 Questions | 4 Dimensions | $12.99
             </Badge>
           </div>
           
@@ -74,7 +64,7 @@ const DigitalWellnessDescription = () => {
           </CardHeader>
           <CardContent>
             <p className="text-lg text-foreground leading-relaxed">
-              The Digital Wellness Quotient assessment helps you understand your relationship with digital technology and its impact on your mental health, productivity, and overall life balance. Covering 6 dimensions, it empowers you to build healthy digital habits, improve focus, and enhance wellbeing in an increasingly connected world.
+              The Digital Wellness Quotient assessment helps you understand your relationship with digital technology and its impact on your mental health, productivity, and overall life balance. Covering 4 core dimensions, it empowers you to build healthy digital habits, improve focus, and enhance wellbeing in an increasingly connected world.
             </p>
           </CardContent>
         </Card>
@@ -82,7 +72,7 @@ const DigitalWellnessDescription = () => {
         {/* Dimensions Section */}
         <Card className="mb-12">
           <CardHeader>
-            <CardTitle className="text-2xl text-primary">6 Dimensions Covered in Digital Wellness</CardTitle>
+            <CardTitle className="text-2xl text-primary">4 Core Dimensions Covered</CardTitle>
             <p className="text-muted-foreground">Understand the key areas assessed for your digital wellbeing.</p>
           </CardHeader>
           <CardContent>
