@@ -585,6 +585,44 @@ export type Database = {
         }
         Relationships: []
       }
+      pdf_reports: {
+        Row: {
+          assessment_result_id: string | null
+          file_path: string
+          file_size: number | null
+          generated_at: string | null
+          id: string
+          report_type: string
+          user_id: string | null
+        }
+        Insert: {
+          assessment_result_id?: string | null
+          file_path: string
+          file_size?: number | null
+          generated_at?: string | null
+          id?: string
+          report_type: string
+          user_id?: string | null
+        }
+        Update: {
+          assessment_result_id?: string | null
+          file_path?: string
+          file_size?: number | null
+          generated_at?: string | null
+          id?: string
+          report_type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pdf_reports_assessment_result_id_fkey"
+            columns: ["assessment_result_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           created_at: string
@@ -609,6 +647,33 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      scoring_versions: {
+        Row: {
+          algorithm_type: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          parameters: Json
+          version_number: string
+        }
+        Insert: {
+          algorithm_type: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          parameters: Json
+          version_number: string
+        }
+        Update: {
+          algorithm_type?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          parameters?: Json
+          version_number?: string
         }
         Relationships: []
       }
@@ -879,6 +944,10 @@ export type Database = {
           p_severity?: string
         }
         Returns: string
+      }
+      request_admin_password_reset: {
+        Args: { p_email: string }
+        Returns: undefined
       }
     }
     Enums: {

@@ -202,7 +202,7 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
         };
         localStorage.setItem('assessment-progress', JSON.stringify(progressData));
       } catch (err) {
-        console.warn('Could not save assessment progress:', err);
+        // Could not save assessment progress (development only)
       }
     };
     
@@ -233,7 +233,7 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
           }
         }
       } catch (err) {
-        console.warn('Could not load saved progress:', err);
+        // Could not load saved progress (development only)
         setError('Error loading saved progress');
       }
     };

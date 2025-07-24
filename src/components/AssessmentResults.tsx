@@ -54,8 +54,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
   const processAssessment = () => {
     try {
-      console.log('🔍 Processing assessment with type:', assessmentType);
-      console.log('📊 Assessment data:', data);
+      // Processing assessment with type and data (development only)
       
       // Ensure data is in the correct format
       const assessmentData = {
@@ -69,11 +68,10 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       };
 
       const result = unifiedService.processAssessment(assessmentType, assessmentData);
-      console.log('✅ Assessment result generated:', result);
+      // Assessment result generated successfully
       setAssessmentResult(result);
     } catch (error) {
-      console.error('❌ Error processing assessment:', error);
-      console.log('🔄 Falling back to mock data for assessment type:', assessmentType);
+      // Error processing assessment, falling back to mock data
       
       // Fallback to mock data - ENSURE CORRECT ASSESSMENT TYPE
       setAssessmentResult({
@@ -661,7 +659,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   };
 
   const getAssessmentTitle = () => {
-    console.log('Assessment Type in getAssessmentTitle:', assessmentType); // Debug log
+    // Debug: Assessment Type in getAssessmentTitle (development only)
     switch (assessmentType) {
       case 'faith-values':
         return 'Your Faith & Values Profile';
