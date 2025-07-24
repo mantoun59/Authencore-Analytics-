@@ -29,7 +29,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 const SampleReports = () => {
-  const [selectedAssessment, setSelectedAssessment] = useState('career-launch');
+  const [selectedAssessment, setSelectedAssessment] = useState('stress-resilience');
   const [reportType, setReportType] = useState<'candidate' | 'employer'>('candidate');
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -388,6 +388,9 @@ const SampleReports = () => {
           ]
         };
       
+      case 'stress-resilience':
+      case 'burnout-prevention':
+      case 'burnout':
       case 'stress':
         return {
           ...baseReport,
@@ -660,6 +663,45 @@ const SampleReports = () => {
           ]
         };
       
+      case 'stress-resilience':
+      case 'burnout-prevention':
+      case 'burnout':
+      case 'stress':
+        return {
+          ...baseReport,
+          executiveSummary: {
+            overallScore: 75,
+            readinessLevel: 'High Resilience',
+            topStrengths: ['Emotional Regulation', 'Problem-Solving Under Pressure', 'Recovery Speed'],
+            keyDevelopmentAreas: ['Physical Stress Management', 'Support Network Utilization', 'Preventive Strategies'],
+            recommendedNextSteps: [
+              'Develop comprehensive stress management toolkit',
+              'Build stronger professional support network',
+              'Practice mindfulness and recovery techniques'
+            ]
+          },
+          dimensionScores: {
+            workload_management: { score: 78, level: 'Good', interpretation: 'Effective task prioritization and delegation' },
+            emotional_exhaustion: { score: 82, level: 'Low', interpretation: 'Strong emotional regulation under pressure' },
+            personal_efficacy: { score: 86, level: 'High', interpretation: 'Strong belief in capability to handle challenges' },
+            support_systems: { score: 71, level: 'Moderate', interpretation: 'Developing skills in seeking and utilizing support' },
+            work_life_integration: { score: 74, level: 'Good', interpretation: 'Good balance between work and personal life' },
+            coping_strategies: { score: 79, level: 'Good', interpretation: 'Effective stress management techniques' },
+            wellbeing_practices: { score: 77, level: 'Good', interpretation: 'Regular wellness and self-care practices' }
+          },
+          careerRecommendations: [
+            'High-stress environment roles',
+            'Crisis management positions',
+            'Emergency response leadership'
+          ],
+          riskAssessment: {
+            burnoutRisk: 'Low',
+            stressThreshold: 'High',
+            recoveryTime: 'Fast'
+          }
+        };
+      
+      case 'digital-wellness':
       case 'digital':
         return {
           ...baseReport,

@@ -75,7 +75,7 @@ export class UnifiedAssessmentService {
 
     // Burnout Prevention Assessment
     this.registerAssessment({
-      id: 'burnout-prevention',
+      id: 'stress-resilience',
       title: 'Burnout Prevention Assessment',
       dimensions: ['stress_awareness', 'coping_strategies', 'work_boundaries', 'recovery_capacity', 'support_systems', 'prevention_mindset', 'burnout_awareness'],
       scoringAlgorithm: this.burnoutPreventionScoring.bind(this),
@@ -157,9 +157,9 @@ export class UnifiedAssessmentService {
     this.assessmentConfigs.set('career', this.assessmentConfigs.get('career-launch')!);
     this.assessmentConfigs.set('cair', this.assessmentConfigs.get('cair-personality')!);
     this.assessmentConfigs.set('cairplus', this.assessmentConfigs.get('cair-personality')!);
-    this.assessmentConfigs.set('burnout', this.assessmentConfigs.get('burnout-prevention')!);
-    this.assessmentConfigs.set('stress-resilience', this.assessmentConfigs.get('burnout-prevention')!);
-    this.assessmentConfigs.set('stress', this.assessmentConfigs.get('burnout-prevention')!);
+    this.assessmentConfigs.set('burnout', this.assessmentConfigs.get('stress-resilience')!);
+    this.assessmentConfigs.set('burnout-prevention', this.assessmentConfigs.get('stress-resilience')!);
+    this.assessmentConfigs.set('stress', this.assessmentConfigs.get('stress-resilience')!);
     this.assessmentConfigs.set('emotional', this.assessmentConfigs.get('emotional-intelligence')!);
     this.assessmentConfigs.set('cultural', this.assessmentConfigs.get('cultural-intelligence')!);
     this.assessmentConfigs.set('digital', this.assessmentConfigs.get('digital-wellness')!);
