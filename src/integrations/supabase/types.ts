@@ -650,6 +650,39 @@ export type Database = {
         }
         Relationships: []
       }
+      schema_versions: {
+        Row: {
+          checksum: string | null
+          description: string
+          executed_at: string | null
+          executed_by: string | null
+          id: string
+          metadata: Json | null
+          migration_file: string
+          version_number: string
+        }
+        Insert: {
+          checksum?: string | null
+          description: string
+          executed_at?: string | null
+          executed_by?: string | null
+          id?: string
+          metadata?: Json | null
+          migration_file: string
+          version_number: string
+        }
+        Update: {
+          checksum?: string | null
+          description?: string
+          executed_at?: string | null
+          executed_by?: string | null
+          id?: string
+          metadata?: Json | null
+          migration_file?: string
+          version_number?: string
+        }
+        Relationships: []
+      }
       scoring_versions: {
         Row: {
           algorithm_type: string
@@ -903,6 +936,15 @@ export type Database = {
         }
         Returns: boolean
       }
+      get_security_status: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          table_name: string
+          rls_enabled: boolean
+          policy_count: number
+          last_updated: string
+        }[]
+      }
       has_role: {
         Args: {
           _user_id: string
@@ -933,6 +975,14 @@ export type Database = {
           p_metadata?: Json
         }
         Returns: undefined
+      }
+      log_security_audit: {
+        Args: {
+          p_audit_type: string
+          p_findings?: Json
+          p_recommendations?: Json
+        }
+        Returns: string
       }
       log_security_event: {
         Args: {
