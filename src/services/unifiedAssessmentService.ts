@@ -123,15 +123,50 @@ export class UnifiedAssessmentService {
       reportTemplate: this.emotionalIntelligenceReportTemplate.bind(this)
     });
 
+    // Add cultural intelligence assessment  
+    this.registerAssessment({
+      id: 'cultural-intelligence',
+      title: 'Cultural Intelligence Assessment',
+      dimensions: ['cultural_drive', 'cultural_knowledge', 'cultural_strategy', 'cultural_action'],
+      scoringAlgorithm: this.culturalIntelligenceScoring.bind(this),
+      profileCalculation: (score) => score >= 85 ? 'Highly Culturally Intelligent' : score >= 70 ? 'Strong Cultural Intelligence' : score >= 55 ? 'Developing Cultural Intelligence' : 'Emerging Cultural Intelligence',
+      reportTemplate: this.culturalIntelligenceReportTemplate.bind(this)
+    });
+
+    // Add communication assessment
+    this.registerAssessment({
+      id: 'communication',
+      title: 'Communication Assessment',
+      dimensions: ['verbal_communication', 'written_communication', 'listening_skills', 'nonverbal_awareness'],
+      scoringAlgorithm: this.communicationScoring.bind(this),
+      profileCalculation: (score) => score >= 85 ? 'Excellent Communicator' : score >= 70 ? 'Strong Communicator' : score >= 55 ? 'Developing Communicator' : 'Emerging Communicator',
+      reportTemplate: this.communicationReportTemplate.bind(this)
+    });
+
+    // Add digital wellness assessment
+    this.registerAssessment({
+      id: 'digital-wellness',
+      title: 'Digital Wellness Assessment',
+      dimensions: ['technology_proficiency', 'digital_communication', 'screen_time_management', 'digital_wellness'],
+      scoringAlgorithm: this.digitalWellnessScoring.bind(this),
+      profileCalculation: (score) => score >= 85 ? 'Digital Wellness Expert' : score >= 70 ? 'Good Digital Balance' : score >= 55 ? 'Developing Digital Wellness' : 'Digital Wellness Concerns',
+      reportTemplate: this.digitalWellnessReportTemplate.bind(this)
+    });
+
     // Add aliases for consistency
     this.assessmentConfigs.set('career', this.assessmentConfigs.get('career-launch')!);
     this.assessmentConfigs.set('cair', this.assessmentConfigs.get('cair-personality')!);
     this.assessmentConfigs.set('cairplus', this.assessmentConfigs.get('cair-personality')!);
     this.assessmentConfigs.set('burnout', this.assessmentConfigs.get('burnout-prevention')!);
     this.assessmentConfigs.set('stress-resilience', this.assessmentConfigs.get('burnout-prevention')!);
+    this.assessmentConfigs.set('stress', this.assessmentConfigs.get('burnout-prevention')!);
     this.assessmentConfigs.set('emotional', this.assessmentConfigs.get('emotional-intelligence')!);
+    this.assessmentConfigs.set('cultural', this.assessmentConfigs.get('cultural-intelligence')!);
+    this.assessmentConfigs.set('digital', this.assessmentConfigs.get('digital-wellness')!);
     this.assessmentConfigs.set('genz-assessment', this.assessmentConfigs.get('genz')!);
     this.assessmentConfigs.set('genz-workplace', this.assessmentConfigs.get('genz')!);
+    this.assessmentConfigs.set('communication-styles', this.assessmentConfigs.get('communication')!);
+    this.assessmentConfigs.set('leadership-assessment', this.assessmentConfigs.get('leadership')!);
   }
 
   private registerAssessment(config: AssessmentConfig) {
@@ -315,6 +350,33 @@ export class UnifiedAssessmentService {
     }
   }
 
+  private culturalIntelligenceScoring(responses: any[]): Record<string, number> {
+    try {
+      return this.fallbackScoring(['cultural_drive', 'cultural_knowledge', 'cultural_strategy', 'cultural_action']);
+    } catch (error) {
+      console.error('Cultural intelligence scoring error:', error);
+      return this.fallbackScoring(['cultural_drive', 'cultural_knowledge', 'cultural_strategy', 'cultural_action']);
+    }
+  }
+
+  private communicationScoring(responses: any[]): Record<string, number> {
+    try {
+      return this.fallbackScoring(['verbal_communication', 'written_communication', 'listening_skills', 'nonverbal_awareness']);
+    } catch (error) {
+      console.error('Communication scoring error:', error);
+      return this.fallbackScoring(['verbal_communication', 'written_communication', 'listening_skills', 'nonverbal_awareness']);
+    }
+  }
+
+  private digitalWellnessScoring(responses: any[]): Record<string, number> {
+    try {
+      return this.fallbackScoring(['technology_proficiency', 'digital_communication', 'screen_time_management', 'digital_wellness']);
+    } catch (error) {
+      console.error('Digital wellness scoring error:', error);
+      return this.fallbackScoring(['technology_proficiency', 'digital_communication', 'screen_time_management', 'digital_wellness']);
+    }
+  }
+
   // Fallback scoring method for error cases
   private fallbackScoring(dimensions: string[]): Record<string, number> {
     const scores: Record<string, number> = {};
@@ -424,6 +486,48 @@ export class UnifiedAssessmentService {
         'Develop emotional regulation strategies for challenging situations',
         'Strengthen empathy through active listening and perspective-taking',
         'Improve social skills through team collaboration and leadership opportunities'
+      ]
+    };
+  }
+
+  private culturalIntelligenceReportTemplate(results: UnifiedAssessmentResult): ReportContent {
+    return {
+      title: 'Cultural Intelligence Assessment Report',
+      executiveSummary: `Your cultural intelligence assessment shows ${results.profile} with an overall score of ${results.overallScore}/100. Your cultural strengths include ${results.strengths.join(', ')}.`,
+      dimensionAnalysis: 'This assessment evaluates your cultural intelligence across four dimensions: cultural drive, cultural knowledge, cultural strategy, and cultural action.',
+      actionPlan: [
+        'Pursue international assignments and cross-cultural experiences',
+        'Develop language skills and cultural knowledge',
+        'Practice cultural adaptation strategies',
+        'Build cross-cultural communication skills'
+      ]
+    };
+  }
+
+  private communicationReportTemplate(results: UnifiedAssessmentResult): ReportContent {
+    return {
+      title: 'Communication Assessment Report',
+      executiveSummary: `Your communication assessment indicates ${results.profile} with an overall score of ${results.overallScore}/100. Your communication strengths include ${results.strengths.join(', ')}.`,
+      dimensionAnalysis: 'This assessment evaluates your communication abilities across verbal, written, listening, and nonverbal dimensions.',
+      actionPlan: [
+        'Join public speaking groups to enhance verbal communication',
+        'Practice active listening techniques',
+        'Develop professional writing skills',
+        'Improve nonverbal communication awareness'
+      ]
+    };
+  }
+
+  private digitalWellnessReportTemplate(results: UnifiedAssessmentResult): ReportContent {
+    return {
+      title: 'Digital Wellness Assessment Report',
+      executiveSummary: `Your digital wellness assessment shows ${results.profile} with an overall score of ${results.overallScore}/100. Your digital strengths include ${results.strengths.join(', ')}.`,
+      dimensionAnalysis: 'This assessment evaluates your digital wellness across technology proficiency, digital communication, screen time management, and overall digital wellness.',
+      actionPlan: [
+        'Implement healthy screen time boundaries',
+        'Develop digital wellness practices',
+        'Balance technology use with offline activities',
+        'Maintain cybersecurity awareness'
       ]
     };
   }

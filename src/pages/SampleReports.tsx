@@ -29,7 +29,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 const SampleReports = () => {
-  const [selectedAssessment, setSelectedAssessment] = useState('faith-values');
+  const [selectedAssessment, setSelectedAssessment] = useState('career-launch');
   const [reportType, setReportType] = useState<'candidate' | 'employer'>('candidate');
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -212,56 +212,63 @@ const SampleReports = () => {
   };
 
   const assessments = {
-    leadership: {
+    'leadership': {
       title: 'Leadership Assessment',
       description: 'Comprehensive leadership evaluation with multi-dimensional analysis',
       icon: Target,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50'
     },
-    stress: {
+    'stress-resilience': {
       title: 'Stress Resilience Assessment',
       description: 'Advanced stress resilience and adaptability evaluation',
       icon: Brain,
       color: 'text-green-600',
       bgColor: 'bg-green-50'
     },
-    career: {
+    'burnout-prevention': {
+      title: 'Burnout Prevention Assessment',
+      description: 'Advanced burnout risk assessment and prevention strategies',
+      icon: Brain,
+      color: 'text-red-600',
+      bgColor: 'bg-red-50'
+    },
+    'career-launch': {
       title: 'CareerLaunch Assessment',
       description: 'Comprehensive career discovery assessment analyzing interests, aptitudes, personality, and values',
       icon: TrendingUp,
       color: 'text-purple-600',
       bgColor: 'bg-purple-50'
     },
-    cair: {
+    'cair-personality': {
       title: 'CAIR+ Personality Assessment',
       description: 'Comprehensive personality assessment with validity detection',
       icon: User,
       color: 'text-orange-600',
       bgColor: 'bg-orange-50'
     },
-    communication: {
+    'communication': {
       title: 'Communication Styles Assessment',
       description: 'Comprehensive communication assessment with linguistic analysis',
       icon: Users,
       color: 'text-indigo-600',
       bgColor: 'bg-indigo-50'
     },
-    emotional: {
+    'emotional-intelligence': {
       title: 'Emotional Intelligence Assessment',
       description: 'EQ assessment measuring self-awareness and social skills',
       icon: Heart,
       color: 'text-pink-600',
       bgColor: 'bg-pink-50'
     },
-    cultural: {
+    'cultural-intelligence': {
       title: 'Cultural Intelligence Assessment',
       description: 'Global business and cultural awareness evaluation',
       icon: Globe,
       color: 'text-teal-600',
       bgColor: 'bg-teal-50'
     },
-    digital: {
+    'digital-wellness': {
       title: 'Digital Wellness Assessment',
       description: 'Real-time digital wellness and behavioral tracking',
       icon: Clock,
@@ -275,14 +282,64 @@ const SampleReports = () => {
       color: 'text-purple-600',
       bgColor: 'bg-purple-50'
     },
-    genz: {
+    'genz': {
       title: 'Gen Z Workplace Assessment',
       description: 'Comprehensive Gen Z workplace readiness and cultural fit evaluation',
       icon: TrendingUp,
       color: 'text-emerald-600',
       bgColor: 'bg-emerald-50'
     },
-    burnout: {
+    // Aliases for backward compatibility
+    'leadership-assessment': {
+      title: 'Leadership Assessment',
+      description: 'Comprehensive leadership evaluation with multi-dimensional analysis',
+      icon: Target,
+      color: 'text-blue-600',
+      bgColor: 'bg-blue-50'
+    },
+    'stress': {
+      title: 'Stress Resilience Assessment',
+      description: 'Advanced stress resilience and adaptability evaluation',
+      icon: Brain,
+      color: 'text-green-600',
+      bgColor: 'bg-green-50'
+    },
+    'career': {
+      title: 'CareerLaunch Assessment',
+      description: 'Comprehensive career discovery assessment analyzing interests, aptitudes, personality, and values',
+      icon: TrendingUp,
+      color: 'text-purple-600',
+      bgColor: 'bg-purple-50'
+    },
+    'cair': {
+      title: 'CAIR+ Personality Assessment',
+      description: 'Comprehensive personality assessment with validity detection',
+      icon: User,
+      color: 'text-orange-600',
+      bgColor: 'bg-orange-50'
+    },
+    'emotional': {
+      title: 'Emotional Intelligence Assessment',
+      description: 'EQ assessment measuring self-awareness and social skills',
+      icon: Heart,
+      color: 'text-pink-600',
+      bgColor: 'bg-pink-50'
+    },
+    'cultural': {
+      title: 'Cultural Intelligence Assessment',
+      description: 'Global business and cultural awareness evaluation',
+      icon: Globe,
+      color: 'text-teal-600',
+      bgColor: 'bg-teal-50'
+    },
+    'digital': {
+      title: 'Digital Wellness Assessment',
+      description: 'Real-time digital wellness and behavioral tracking',
+      icon: Clock,
+      color: 'text-cyan-600',
+      bgColor: 'bg-cyan-50'
+    },
+    'burnout': {
       title: 'Burnout Prevention Assessment',
       description: 'Advanced burnout risk assessment and prevention strategies',
       icon: Brain,
@@ -366,6 +423,7 @@ const SampleReports = () => {
         };
       
       case 'career':
+      case 'career-launch':
         return {
           ...baseReport,
           executiveSummary: {
