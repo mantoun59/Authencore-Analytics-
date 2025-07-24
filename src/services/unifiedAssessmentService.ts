@@ -113,12 +113,25 @@ export class UnifiedAssessmentService {
       reportTemplate: this.genZReportTemplate.bind(this)
     });
 
+    // Add emotional intelligence assessment
+    this.registerAssessment({
+      id: 'emotional-intelligence',
+      title: 'Emotional Intelligence Assessment',
+      dimensions: ['self_awareness', 'self_regulation', 'motivation', 'empathy', 'social_skills'],
+      scoringAlgorithm: this.emotionalIntelligenceScoring.bind(this),
+      profileCalculation: (score) => score >= 85 ? 'Highly Emotionally Intelligent' : score >= 70 ? 'Strong Emotional Intelligence' : score >= 55 ? 'Developing Emotional Intelligence' : 'Emerging Emotional Intelligence',
+      reportTemplate: this.emotionalIntelligenceReportTemplate.bind(this)
+    });
+
     // Add aliases for consistency
     this.assessmentConfigs.set('career', this.assessmentConfigs.get('career-launch')!);
     this.assessmentConfigs.set('cair', this.assessmentConfigs.get('cair-personality')!);
     this.assessmentConfigs.set('cairplus', this.assessmentConfigs.get('cair-personality')!);
     this.assessmentConfigs.set('burnout', this.assessmentConfigs.get('burnout-prevention')!);
     this.assessmentConfigs.set('stress-resilience', this.assessmentConfigs.get('burnout-prevention')!);
+    this.assessmentConfigs.set('emotional', this.assessmentConfigs.get('emotional-intelligence')!);
+    this.assessmentConfigs.set('genz-assessment', this.assessmentConfigs.get('genz')!);
+    this.assessmentConfigs.set('genz-workplace', this.assessmentConfigs.get('genz')!);
   }
 
   private registerAssessment(config: AssessmentConfig) {
@@ -142,7 +155,7 @@ export class UnifiedAssessmentService {
 
     return {
       assessmentId: `${assessmentType}-${Date.now()}`,
-      assessmentType: config.id,
+      assessmentType: assessmentType, // Keep original assessment type for proper identification
       candidateInfo: data.candidateInfo || { name: 'Unknown', email: 'unknown@email.com' },
       overallScore,
       profile,
@@ -292,6 +305,16 @@ export class UnifiedAssessmentService {
     }
   }
 
+  private emotionalIntelligenceScoring(responses: any[]): Record<string, number> {
+    try {
+      // Use the existing emotional intelligence scoring from the hook
+      return this.fallbackScoring(['self_awareness', 'self_regulation', 'motivation', 'empathy', 'social_skills']);
+    } catch (error) {
+      console.error('Emotional intelligence scoring error:', error);
+      return this.fallbackScoring(['self_awareness', 'self_regulation', 'motivation', 'empathy', 'social_skills']);
+    }
+  }
+
   // Fallback scoring method for error cases
   private fallbackScoring(dimensions: string[]): Record<string, number> {
     const scores: Record<string, number> = {};
@@ -387,6 +410,20 @@ export class UnifiedAssessmentService {
         'Seek organizations that align with your values',
         'Develop traditional business skills to complement modern approaches',
         'Build intergenerational collaboration skills'
+      ]
+    };
+  }
+
+  private emotionalIntelligenceReportTemplate(results: UnifiedAssessmentResult): ReportContent {
+    return {
+      title: 'Emotional Intelligence Assessment Report',
+      executiveSummary: `Your emotional intelligence assessment indicates ${results.profile} with an overall score of ${results.overallScore}/100. Your emotional strengths include ${results.strengths.join(', ')}.`,
+      dimensionAnalysis: 'This assessment evaluates your emotional intelligence across five core dimensions: self-awareness, self-regulation, motivation, empathy, and social skills.',
+      actionPlan: [
+        'Practice mindfulness and self-reflection to enhance self-awareness',
+        'Develop emotional regulation strategies for challenging situations',
+        'Strengthen empathy through active listening and perspective-taking',
+        'Improve social skills through team collaboration and leadership opportunities'
       ]
     };
   }

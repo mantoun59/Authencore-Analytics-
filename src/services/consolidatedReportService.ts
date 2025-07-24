@@ -384,12 +384,14 @@ export class ConsolidatedReportService {
       'faith-values': 'Faith & Values Assessment Report',
       'leadership': 'Leadership Assessment Report',
       'genz': 'Gen Z Workplace Assessment Report',
+      'genz-assessment': 'Gen Z Workplace Assessment Report',
+      'genz-workplace': 'Gen Z Workplace Assessment Report',
       'emotional-intelligence': 'Emotional Intelligence Assessment Report',
       'emotional': 'Emotional Intelligence Assessment Report'
     };
     
-    const title = titles[assessmentType] || 'Professional Assessment Report';
-    console.log('📋 Selected title:', title);
+    const title = titles[assessmentType] || `${assessmentType.toUpperCase()} Assessment Report`;
+    console.log('📋 Selected title:', title, 'for assessment type:', assessmentType);
     return title;
   }
 
