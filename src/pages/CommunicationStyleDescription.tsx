@@ -154,7 +154,7 @@ const CommunicationStyleDescription = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Communication DNA profile with style analysis, channel effectiveness, and professional development recommendations.
                   </p>
-                  <Link to="/sample-reports" className="text-primary hover:underline text-sm font-medium">
+                  <Link to="/sample-reports?assessment=communication" className="text-primary hover:underline text-sm font-medium">
                     View Sample Communication Report →
                   </Link>
                 </div>

@@ -154,7 +154,7 @@ const AuthenticLeadershipDescription = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Comprehensive leadership assessment with authentic leadership dimensions and development roadmap.
                   </p>
-                  <Link to="/sample-reports" className="text-primary hover:underline text-sm font-medium">
+                  <Link to="/sample-reports?assessment=leadership" className="text-primary hover:underline text-sm font-medium">
                     View Sample Leadership Report →
                   </Link>
                 </div>

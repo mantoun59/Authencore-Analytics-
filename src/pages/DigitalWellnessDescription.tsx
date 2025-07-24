@@ -154,7 +154,7 @@ const DigitalWellnessDescription = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Comprehensive digital wellness analysis with habit tracking and optimization recommendations.
                   </p>
-                  <Link to="/sample-reports" className="text-primary hover:underline text-sm font-medium">
+                  <Link to="/sample-reports?assessment=digital-wellness" className="text-primary hover:underline text-sm font-medium">
                     View Sample Digital Wellness Report →
                   </Link>
                 </div>

@@ -144,8 +144,8 @@ const EmotionalIntelligenceDescription = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Comprehensive EQ profile with practical recommendations for personal and professional development.
                   </p>
-                  <Link to="/sample-reports" className="text-primary hover:underline text-sm font-medium">
-                    View Sample EQ Report →
+                  <Link to="/sample-reports?assessment=emotional-intelligence" className="text-primary hover:underline text-sm font-medium">
+                    View Sample Emotional Intelligence Report →
                   </Link>
                 </div>
                 <div className="p-4 border rounded-lg">

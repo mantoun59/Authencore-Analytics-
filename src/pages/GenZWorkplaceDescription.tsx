@@ -181,8 +181,8 @@ const GenZWorkplaceDescription = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Comprehensive Gen Z workplace analysis with career preferences and development recommendations.
                   </p>
-                  <Link to="/sample-reports" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Gen Z Report →
+                  <Link to="/sample-reports?assessment=genz" className="text-primary hover:underline text-sm font-medium">
+                    View Sample Gen Z Workplace Report →
                   </Link>
                 </div>
                 <div className="p-4 border rounded-lg">

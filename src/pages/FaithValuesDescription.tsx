@@ -154,8 +154,8 @@ const FaithValuesDescription = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Personal faith and values alignment analysis with spiritual growth recommendations.
                   </p>
-                  <Link to="/sample-reports" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Faith Values Report →
+                  <Link to="/sample-reports?assessment=faith-values" className="text-primary hover:underline text-sm font-medium">
+                    View Sample Faith & Values Report →
                   </Link>
                 </div>
                 <div className="p-4 border rounded-lg">

@@ -29,7 +29,7 @@ import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
 const SampleReports = () => {
-  const [selectedAssessment, setSelectedAssessment] = useState('faith-values');
+  const [selectedAssessment, setSelectedAssessment] = useState('career-launch');
   const [reportType, setReportType] = useState<'candidate' | 'employer'>('candidate');
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -37,8 +37,12 @@ const SampleReports = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const assessmentParam = urlParams.get('assessment');
+    console.log('🔍 URL assessment parameter:', assessmentParam);
     if (assessmentParam && assessments[assessmentParam as keyof typeof assessments]) {
+      console.log('✅ Setting assessment to:', assessmentParam);
       setSelectedAssessment(assessmentParam);
+    } else {
+      console.log('❌ Assessment parameter not found in assessments object:', assessmentParam);
     }
   }, []);
 

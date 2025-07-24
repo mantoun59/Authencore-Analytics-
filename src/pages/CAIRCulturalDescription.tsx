@@ -144,8 +144,8 @@ const CAIRCulturalDescription = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Detailed CAIR+ personality profile with validity scores, workplace predictions, and development insights.
                   </p>
-                  <Link to="/sample-reports" className="text-primary hover:underline text-sm font-medium">
-                    View Sample CAIR+ Report →
+                  <Link to="/sample-reports?assessment=cultural-intelligence" className="text-primary hover:underline text-sm font-medium">
+                    View Sample Cultural Intelligence Report →
                   </Link>
                 </div>
                 <div className="p-4 border rounded-lg">

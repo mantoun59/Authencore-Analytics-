@@ -159,8 +159,8 @@ const BurnoutPreventionDescription = () => {
                   <p className="text-sm text-muted-foreground mb-3">
                     Comprehensive burnout risk assessment with personalized prevention strategies and wellness recommendations.
                   </p>
-                  <Link to="/sample-reports" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Burnout Report →
+                  <Link to="/sample-reports?assessment=stress-resilience" className="text-primary hover:underline text-sm font-medium">
+                    View Sample Burnout Prevention Report →
                   </Link>
                 </div>
                 <div className="p-4 border rounded-lg">
