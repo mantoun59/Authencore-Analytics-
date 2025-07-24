@@ -640,6 +640,83 @@ const MarketingMaterials: React.FC = () => {
     return doc;
   };
 
+  const generateAPIIntegrationGuide = async () => {
+    const doc = new jsPDF();
+    
+    // Add logo
+    try {
+      const logoBase64 = await loadLogoAsBase64();
+      doc.addImage(logoBase64, 'PNG', 20, 10, 45, 25);
+    } catch (error) {
+      console.warn('Logo loading failed, using text fallback');
+    }
+    
+    // Header text
+    doc.setFontSize(20);
+    doc.setTextColor(41, 128, 185);
+    doc.text('API Integration Guide', 75, 25);
+    
+    doc.setFontSize(14);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Getting Started with AuthenCore APIs', 20, 50);
+    doc.setFontSize(11);
+    doc.text('This guide provides comprehensive documentation for integrating', 20, 60);
+    doc.text('AuthenCore Analytics APIs into your existing systems.', 20, 68);
+    
+    // Authentication Section
+    doc.setFontSize(14);
+    doc.setTextColor(41, 128, 185);
+    doc.text('Authentication', 20, 85);
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text('All API requests require authentication using API keys.', 20, 95);
+    doc.text('Include your API key in the Authorization header:', 20, 103);
+    doc.setFontSize(9);
+    doc.setTextColor(100, 100, 100);
+    doc.text('Authorization: Bearer YOUR_API_KEY', 25, 113);
+    
+    // REST API Endpoints
+    doc.setFontSize(14);
+    doc.setTextColor(41, 128, 185);
+    doc.text('Core API Endpoints', 20, 130);
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Assessment Management:', 20, 140);
+    doc.setFontSize(9);
+    doc.text('• POST /api/v1/assessments - Create new assessment', 25, 150);
+    doc.text('• GET /api/v1/assessments/{id} - Retrieve assessment', 25, 158);
+    doc.text('• GET /api/v1/assessments/{id}/results - Get results', 25, 166);
+    
+    doc.setFontSize(11);
+    doc.text('User Management:', 20, 180);
+    doc.setFontSize(9);
+    doc.text('• POST /api/v1/users - Create user account', 25, 190);
+    doc.text('• GET /api/v1/users/{id} - Retrieve user profile', 25, 198);
+    doc.text('• PUT /api/v1/users/{id} - Update user information', 25, 206);
+    
+    // Webhooks Section
+    doc.setFontSize(14);
+    doc.setTextColor(41, 128, 185);
+    doc.text('Webhooks & Real-time Updates', 20, 223);
+    doc.setFontSize(11);
+    doc.setTextColor(0, 0, 0);
+    doc.text('Configure webhooks to receive real-time notifications:', 20, 233);
+    doc.setFontSize(9);
+    doc.text('• assessment.completed - When assessment is finished', 25, 243);
+    doc.text('• user.created - When new user is registered', 25, 251);
+    doc.text('• report.generated - When PDF report is ready', 25, 259);
+    
+    // Implementation Timeline
+    doc.setFontSize(14);
+    doc.setTextColor(41, 128, 185);
+    doc.text('Implementation Timeline', 20, 275);
+    doc.setFontSize(10);
+    doc.setTextColor(128, 128, 128);
+    doc.text('Support: api-support@authencore-analytics.org | Docs: docs.authencore.com', 20, 290);
+    
+    return doc;
+  };
+
   const generateServicesOverview = async () => {
     const doc = new jsPDF('landscape');
     
@@ -746,7 +823,7 @@ const MarketingMaterials: React.FC = () => {
           filename = 'AuthenCore-Pricing-Packages.pdf';
           break;
         case 'api-integration-guide':
-          doc = await generateProductSheet();
+          doc = await generateAPIIntegrationGuide();
           filename = 'AuthenCore-API-Integration-Guide.pdf';
           break;
         default:
