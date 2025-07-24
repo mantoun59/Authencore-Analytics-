@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
@@ -906,9 +906,23 @@ const SampleReports = () => {
     return { ...candidateReport, ...employerSpecific };
   };
 
-  const currentReport = reportType === 'candidate' 
-    ? getSampleCandidateReport(selectedAssessment) 
-    : getSampleEmployerReport(selectedAssessment);
+  const currentReport = useMemo(() => {
+    console.log('🎯 Getting current report for assessment:', selectedAssessment);
+    const report = reportType === 'employer' 
+      ? getSampleEmployerReport(selectedAssessment)
+      : getSampleCandidateReport(selectedAssessment);
+    console.log('📋 Current report generated:', report);
+    return report;
+  }, [selectedAssessment, reportType]);
+
+  const currentAssessment = useMemo(() => {
+    console.log('🔍 Getting current assessment config for:', selectedAssessment);
+    const assessment = assessments[selectedAssessment];
+    console.log('⚙️ Assessment config:', assessment);
+    return assessment;
+  }, [selectedAssessment]);
+  };
+
 
   const renderCandidateReport = () => (
     <div className="space-y-6">
@@ -1258,15 +1272,15 @@ const SampleReports = () => {
           <Card className="mb-8">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${assessments[selectedAssessment].bgColor}`}>
-                  {(() => {
-                    const IconComponent = assessments[selectedAssessment].icon;
-                    return <IconComponent className={`h-6 w-6 ${assessments[selectedAssessment].color}`} />;
+                <div className={`p-2 rounded-lg ${currentAssessment?.bgColor || 'bg-gray-50'}`}>
+                  {currentAssessment?.icon && (() => {
+                    const IconComponent = currentAssessment.icon;
+                    return <IconComponent className={`h-6 w-6 ${currentAssessment.color || 'text-gray-600'}`} />;
                   })()}
                 </div>
                 <div>
-                  <CardTitle>{assessments[selectedAssessment].title}</CardTitle>
-                  <CardDescription>{assessments[selectedAssessment].description}</CardDescription>
+                  <CardTitle>{currentAssessment?.title || 'Assessment Report'}</CardTitle>
+                  <CardDescription>{currentAssessment?.description || 'Sample assessment report'}</CardDescription>
                 </div>
               </div>
             </CardHeader>
