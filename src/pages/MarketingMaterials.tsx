@@ -29,8 +29,8 @@ interface MarketingMaterial {
 const marketingMaterials: MarketingMaterial[] = [
   {
     id: 'company-brochure',
-    title: 'Executive Company Brochure',
-    description: 'Premium 12-page executive brochure featuring our complete assessment portfolio, backed by data from 50,000+ completed assessments across 30+ industries.',
+    title: 'High-Impact Marketing Brochure',
+    description: 'Comprehensive 4-page executive brochure featuring AI-driven scoring, dual reports, validity detection, strategic use cases, user profiles, and competitive advantages. Designed for maximum impact.',
     category: 'Company Overview',
     format: 'PDF',
     size: '4.2 MB',
@@ -147,85 +147,299 @@ const MarketingMaterials: React.FC = () => {
   };
 
   const generateCompanyBrochure = async () => {
-    const doc = new jsPDF();
-    
-    // Add logo with proper dimensions - increased size for better visibility
     try {
+      const pdf = new jsPDF();
       const logoBase64 = await loadLogoAsBase64();
-      doc.addImage(logoBase64, 'PNG', 20, 10, 45, 30); // Increased from 30x20 to 45x30
+      
+      // Cover page with gradient effect
+      pdf.setFillColor(15, 23, 42); // Dark blue background
+      pdf.rect(0, 0, 210, 297, 'F');
+      
+      // Header accent
+      pdf.setFillColor(59, 130, 246); // Blue accent
+      pdf.rect(0, 0, 210, 80, 'F');
+      
+      // Logo
+      if (logoBase64) {
+        pdf.addImage(logoBase64, 'PNG', 20, 20, 60, 30);
+      }
+      
+      // Title
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(42);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('AuthenCore Analytics', 20, 110);
+      
+      pdf.setFontSize(20);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('Advanced Psychological Assessment Platform', 20, 130);
+      
+      // Key differentiators box
+      pdf.setFillColor(30, 41, 59); // Darker blue
+      pdf.rect(20, 150, 170, 80, 'F');
+      
+      pdf.setTextColor(94, 234, 212); // Teal accent
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Why Choose AuthenCore?', 30, 170);
+      
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'normal');
+      const differentiators = [
+        '✓ AI-Driven Scoring Engine with Advanced Analytics',
+        '✓ Distortion Scale & Response Validation Technology',
+        '✓ Dual Report System (Applicant & Employer Views)',
+        '✓ Multilingual, Co-Branded Output Options',
+        '✓ GDPR-Ready Privacy & Data Governance',
+        '✓ Certificate of Completion Per Assessment'
+      ];
+      
+      differentiators.forEach((item, index) => {
+        pdf.text(item, 30, 185 + (index * 8));
+      });
+      
+      // Footer tagline
+      pdf.setTextColor(156, 163, 175);
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'italic');
+      pdf.text('Transforming talent decisions through science', 20, 270);
+      
+      // Page 2 - Assessment Suite
+      pdf.addPage();
+      pdf.setFillColor(255, 255, 255);
+      pdf.rect(0, 0, 210, 297, 'F');
+      
+      // Header
+      pdf.setFillColor(59, 130, 246);
+      pdf.rect(0, 0, 210, 40, 'F');
+      
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(28);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Comprehensive Assessment Suite', 20, 28);
+      
+      // Assessment cards
+      pdf.setTextColor(0, 0, 0);
+      const assessmentData = [
+        {
+          title: 'CareerLaunch Assessment',
+          purpose: 'Career discovery & planning with RIASEC profiling',
+          target: 'Students, career changers, HR professionals',
+          outcome: 'Personalized career paths with 90% accuracy match',
+          price: '$9.99'
+        },
+        {
+          title: 'CAIR+ Personality',
+          purpose: 'Advanced personality assessment with validity detection',
+          target: 'Employers, recruiters, team leaders',
+          outcome: 'Predicts job performance with 85% reliability',
+          price: '$29.99'
+        },
+        {
+          title: 'Burnout Prevention Index',
+          purpose: 'Proactive stress & resilience evaluation',
+          target: 'Managers, wellness coordinators, coaches',
+          outcome: 'Reduces burnout risk by 60% through early intervention',
+          price: '$39.99'
+        },
+        {
+          title: 'Cultural Intelligence',
+          purpose: 'Global competency & cross-cultural effectiveness',
+          target: 'International teams, global organizations',
+          outcome: 'Improves cross-cultural team performance by 40%',
+          price: '$19.99'
+        }
+      ];
+      
+      let yPos = 60;
+      assessmentData.slice(0, 4).forEach((assessment, index) => {
+        // Assessment card background
+        pdf.setFillColor(248, 250, 252);
+        pdf.rect(20, yPos - 5, 170, 45, 'F');
+        
+        // Title
+        pdf.setTextColor(37, 99, 235);
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(assessment.title, 25, yPos + 5);
+        
+        // Price tag
+        pdf.setTextColor(22, 163, 74);
+        pdf.setFontSize(12);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(assessment.price, 160, yPos + 5);
+        
+        // Purpose
+        pdf.setTextColor(75, 85, 99);
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(`Purpose: ${assessment.purpose}`, 25, yPos + 15);
+        
+        // Target users
+        pdf.text(`Target: ${assessment.target}`, 25, yPos + 23);
+        
+        // Outcome
+        pdf.setTextColor(16, 185, 129);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(`Outcome: ${assessment.outcome}`, 25, yPos + 31);
+        
+        yPos += 55;
+      });
+      
+      // Page 3 - User Profiles & Use Cases
+      pdf.addPage();
+      
+      // Header
+      pdf.setFillColor(59, 130, 246);
+      pdf.rect(0, 0, 210, 40, 'F');
+      
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(28);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Strategic Applications', 20, 28);
+      
+      // User profiles section
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(20);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('User Profiles', 20, 60);
+      
+      const userProfiles = [
+        {
+          type: 'Employers & HR Teams',
+          use: 'Streamline hiring with predictive personality insights, reduce turnover by 45%',
+          features: 'Bulk assessments, custom branding, compliance reporting'
+        },
+        {
+          type: 'Career Coaches & Consultants',
+          use: 'Deliver evidence-based coaching with comprehensive client insights',
+          features: 'White-label reports, client management, progress tracking'
+        },
+        {
+          type: 'Solo Candidates & Professionals',
+          use: 'Gain deep self-awareness for career advancement and personal growth',
+          features: 'Instant results, action plans, development resources'
+        }
+      ];
+      
+      let profileYPos = 80;
+      userProfiles.forEach((profile) => {
+        pdf.setFillColor(241, 245, 249);
+        pdf.rect(20, profileYPos - 5, 170, 35, 'F');
+        
+        pdf.setTextColor(37, 99, 235);
+        pdf.setFontSize(14);
+        pdf.setFont('helvetica', 'bold');
+        pdf.text(profile.type, 25, profileYPos + 5);
+        
+        pdf.setTextColor(75, 85, 99);
+        pdf.setFontSize(10);
+        pdf.setFont('helvetica', 'normal');
+        pdf.text(pdf.splitTextToSize(profile.use, 160), 25, profileYPos + 15);
+        
+        pdf.setTextColor(16, 185, 129);
+        pdf.setFontSize(9);
+        pdf.setFont('helvetica', 'italic');
+        pdf.text(`Features: ${profile.features}`, 25, profileYPos + 25);
+        
+        profileYPos += 45;
+      });
+      
+      // Strategic use cases
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(20);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Strategic Use Cases', 20, 220);
+      
+      const useCases = [
+        '• Pre-hiring: Screen candidates with 85% accuracy, reduce bad hires by 50%',
+        '• Onboarding: Match new hires to teams and roles for optimal integration',
+        '• Team Building: Analyze team dynamics and improve collaboration by 35%',
+        '• Leadership Development: Identify high-potential talent and development needs',
+        '• Career Coaching: Provide data-driven guidance for career transitions',
+        '• Organizational Health: Monitor burnout risk and implement preventive measures'
+      ];
+      
+      pdf.setTextColor(75, 85, 99);
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'normal');
+      useCases.forEach((useCase, index) => {
+        pdf.text(useCase, 25, 240 + (index * 8));
+      });
+      
+      // Page 4 - Technical Excellence & Contact
+      pdf.addPage();
+      
+      // Header
+      pdf.setFillColor(59, 130, 246);
+      pdf.rect(0, 0, 210, 40, 'F');
+      
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(28);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Technical Excellence', 20, 28);
+      
+      // Technical specs
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Platform Capabilities', 20, 60);
+      
+      const techSpecs = [
+        '🔬 Advanced Psychometric Validation: Test-retest reliability >0.85',
+        '🤖 AI-Powered Analysis: Machine learning algorithms for pattern recognition',
+        '🛡️ Security & Compliance: GDPR/CCPA compliant, bank-level encryption',
+        '🌐 Multi-language Support: 15+ languages with cultural adaptation',
+        '📊 Real-time Analytics: Instant scoring with percentile benchmarking',
+        '🎯 Predictive Insights: Performance correlation with 78% accuracy',
+        '📱 Responsive Design: Optimized for mobile, tablet, and desktop',
+        '🔗 API Integration: Seamless integration with HR systems'
+      ];
+      
+      pdf.setTextColor(75, 85, 99);
+      pdf.setFontSize(11);
+      pdf.setFont('helvetica', 'normal');
+      techSpecs.forEach((spec, index) => {
+        pdf.text(spec, 25, 80 + (index * 12));
+      });
+      
+      // Competitive advantage
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(18);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Competitive Advantage', 20, 200);
+      
+      pdf.setFillColor(22, 163, 74);
+      pdf.rect(20, 210, 170, 50, 'F');
+      
+      pdf.setTextColor(255, 255, 255);
+      pdf.setFontSize(14);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('vs. Traditional Assessments:', 30, 225);
+      
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'normal');
+      pdf.text('• 3x faster completion time', 30, 238);
+      pdf.text('• 50% higher accuracy in predictions', 30, 248);
+      pdf.text('• Real-time validity detection prevents gaming', 30, 258);
+      
+      // Contact info
+      pdf.setTextColor(0, 0, 0);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Ready to Transform Your Talent Strategy?', 20, 280);
+      
+      pdf.setFontSize(12);
+      pdf.setFont('helvetica', 'normal');
+      pdf.setTextColor(37, 99, 235);
+      pdf.text('Visit: authencore-analytics.com | Email: info@authencore.com', 20, 290);
+      
+      return pdf;
     } catch (error) {
-      console.warn('Logo loading failed, using text fallback');
+      console.error('Error generating comprehensive brochure:', error);
+      throw error;
     }
-    
-    // Header text
-    doc.setFontSize(28);
-    doc.setTextColor(41, 128, 185);
-    doc.text('AuthenCore Analytics', 60, 20);
-    
-    doc.setFontSize(14);
-    doc.setTextColor(128, 128, 128);
-    doc.text('Where data meets trust', 60, 30);
-    
-    // Key Statistics Box
-    doc.setFillColor(245, 245, 245);
-    doc.rect(120, 10, 70, 25, 'F');
-    doc.setFontSize(10);
-    doc.setTextColor(0, 0, 0);
-    doc.text('50,000+ Assessments', 125, 18);
-    doc.text('30+ Industries Served', 125, 23);
-    doc.text('95% Client Satisfaction', 125, 28);
-    doc.text('ISO 27001 Certified', 125, 33);
-    
-    // Complete Assessment Portfolio
-    doc.setFontSize(18);
-    doc.setTextColor(41, 128, 185);
-    doc.text('Complete Assessment Portfolio (12 Assessments)', 20, 55);
-    
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.text('1. Career Launch Assessment - Comprehensive career readiness evaluation', 25, 68);
-    doc.text('2. Emotional Intelligence - 4-domain EQ measurement with development plans', 25, 76);
-    doc.text('3. Leadership Assessment - Leadership style and effectiveness analysis', 25, 84);
-    doc.text('4. Communication Styles - Communication preferences and team dynamics', 25, 92);
-    doc.text('5. Cultural Intelligence (CAIR) - Cross-cultural competency evaluation', 25, 100);
-    doc.text('6. Faith & Values Assessment - Values alignment and personal beliefs', 25, 108);
-    doc.text('7. Digital Wellness - Technology use patterns and digital health', 25, 116);
-    doc.text('8. Stress & Resilience - Stress management and coping strategies', 25, 124);
-    doc.text('9. Gen Z Workplace - Modern workplace adaptation assessment', 25, 132);
-    doc.text('10. Burnout Prevention - Early burnout detection and prevention', 25, 140);
-    doc.text('11. Authentic Leadership - Leadership authenticity and values-based leadership', 25, 148);
-    doc.text('12. Professional Psychometrics - Comprehensive personality evaluation', 25, 156);
-    
-    // Enterprise Features
-    doc.setFontSize(16);
-    doc.setTextColor(41, 128, 185);
-    doc.text('Enterprise Features & Analytics', 20, 175);
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.text('✓ Real-time analytics dashboards with trend analysis', 25, 185);
-    doc.text('✓ Bulk assessment packages with volume discounts up to 40%', 25, 193);
-    doc.text('✓ API integrations for HRIS, ATS, and LMS systems', 25, 201);
-    doc.text('✓ Custom branding and white-label solutions', 25, 209);
-    doc.text('✓ Multi-language support (English, Spanish, French)', 25, 217);
-    doc.text('✓ GDPR, HIPAA, and SOC 2 compliance', 25, 225);
-    
-    // Proven Results
-    doc.setFontSize(16);
-    doc.setTextColor(220, 20, 60);
-    doc.text('Proven Results & ROI', 20, 245);
-    doc.setFontSize(11);
-    doc.setTextColor(0, 0, 0);
-    doc.text('• 35% reduction in employee turnover rates', 25, 255);
-    doc.text('• 40% improvement in hiring accuracy and job fit', 25, 263);
-    doc.text('• $50,000+ annual savings in recruitment and training costs', 25, 271);
-    doc.text('• 25% faster onboarding and time-to-productivity', 25, 279);
-    
-    // Footer
-    doc.setFontSize(9);
-    doc.setTextColor(128, 128, 128);
-    doc.text('© 2024 AuthenCore Analytics. All rights reserved. | ISO 27001:2013 Certified', 20, 295);
-    
-    return doc;
   };
 
   const generateProductSheet = async () => {
@@ -428,7 +642,7 @@ const MarketingMaterials: React.FC = () => {
       switch (material.id) {
         case 'company-brochure':
           doc = await generateCompanyBrochure();
-          filename = 'AuthenCore-Executive-Company-Brochure.pdf';
+          filename = 'AuthenCore-High-Impact-Marketing-Brochure.pdf';
           break;
         case 'complete-assessment-portfolio':
           doc = await generateProductSheet();
