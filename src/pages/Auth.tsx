@@ -14,7 +14,8 @@ const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [isLogin, setIsLogin] = useState(true);
-  const { signIn, signUp, user } = useAuth();
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const { signIn, signUp, resetPassword, user } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -70,6 +71,93 @@ const Auth = () => {
       setLoading(false);
     }
   };
+
+  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+
+    try {
+      const result = await resetPassword(email);
+      
+      if (result.error) {
+        toast({
+          title: "Error",
+          description: result.error.message || "Failed to send reset email",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Reset Email Sent",
+          description: "Please check your email for password reset instructions",
+        });
+        setShowForgotPassword(false);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (showForgotPassword) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container mx-auto px-4 py-16">
+          <div className="max-w-md mx-auto">
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-center">Reset Password</CardTitle>
+                <CardDescription className="text-center">
+                  Enter your email address to receive password reset instructions
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="email"
+                        name="email"
+                        type="email"
+                        placeholder="Enter your email"
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+                  
+                  <Button type="submit" className="w-full" disabled={loading}>
+                    {loading ? "Sending..." : "Send Reset Email"}
+                  </Button>
+                </form>
+
+                <div className="mt-6 text-center">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setShowForgotPassword(false)}
+                  >
+                    Back to Sign In
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -145,6 +233,18 @@ const Auth = () => {
                   {loading ? (isLogin ? "Signing In..." : "Creating Account...") : (isLogin ? "Sign In" : "Sign Up")}
                 </Button>
               </form>
+
+              {isLogin && (
+                <div className="mt-4 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotPassword(true)}
+                    className="text-sm text-primary hover:text-primary-glow underline"
+                  >
+                    Forgot your password?
+                  </button>
+                </div>
+              )}
 
               <div className="mt-6 text-center">
                 <p className="text-sm text-muted-foreground">
