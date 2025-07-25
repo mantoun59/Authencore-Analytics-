@@ -28,6 +28,33 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
+// Helper function to map assessment types to PDF generation function format
+const getAssessmentTypeForPDF = (assessmentType: string): string => {
+  const typeMapping: Record<string, string> = {
+    'leadership': 'leadership_assessment',
+    'leadership-assessment': 'leadership_assessment', 
+    'stress-resilience': 'stress_resilience',
+    'stress': 'stress_resilience',
+    'burnout-prevention': 'stress_resilience',
+    'burnout': 'stress_resilience',
+    'career-launch': 'career_launch',
+    'career': 'career_launch',
+    'cair-personality': 'cair_plus',
+    'cair': 'cair_plus',
+    'communication': 'communication_styles',
+    'emotional-intelligence': 'emotional_intelligence',
+    'emotional': 'emotional_intelligence',
+    'cultural-intelligence': 'cultural_intelligence',
+    'cultural': 'cultural_intelligence',
+    'digital-wellness': 'digital_wellness',
+    'digital': 'digital_wellness',
+    'faith-values': 'faith_values',
+    'genz': 'genz_assessment'
+  };
+  
+  return typeMapping[assessmentType] || assessmentType;
+};
+
 const SampleReports = () => {
   const [selectedAssessment, setSelectedAssessment] = useState('career-launch');
   const [reportType, setReportType] = useState<'candidate' | 'employer'>('candidate');
@@ -49,63 +76,39 @@ const SampleReports = () => {
   const generateSamplePDF = async () => {
     setIsGenerating(true);
     try {
-      // Generating sample report for assessment type
+      console.log('🚀 Starting sample PDF generation...', { selectedAssessment, reportType });
       
       const sampleData = reportType === 'employer' 
         ? getSampleEmployerReport(selectedAssessment)
         : getSampleCandidateReport(selectedAssessment);
         
-      // Sample data generated
+      console.log('📊 Sample data generated:', sampleData);
       
-      // Convert sample data to AI report format
-      const aiReportFormat = {
-        candidateInfo: {
+      // Format data for PDF generation function
+      const pdfRequestData = {
+        assessmentType: getAssessmentTypeForPDF(selectedAssessment),
+        results: sampleData,
+        userData: {
           name: sampleData.candidateInfo.name,
           email: sampleData.candidateInfo.email,
-          completionDate: new Date().toISOString(),
-          assessmentType: selectedAssessment,
-          assessmentId: sampleData.candidateInfo.assessmentId
-        },
-        executiveSummary: {
-          overallScore: sampleData.executiveSummary.overallScore,
-          keyInsights: ["Strong analytical thinking", "Excellent communication skills", "Leadership potential"],
-          topStrengths: sampleData.executiveSummary.topStrengths,
-          developmentAreas: sampleData.executiveSummary.keyDevelopmentAreas,
-          recommendedActions: sampleData.executiveSummary.recommendedNextSteps
-        },
-        detailedAnalysis: {
-          dimensionScores: sampleData.dimensionScores,
-          personalizedInsights: "This candidate demonstrates strong capabilities across multiple dimensions with particular strengths in strategic thinking and communication.",
-          behavioralPatterns: ["Analytical approach to problems", "Collaborative working style", "Goal-oriented mindset"],
-          validityMetrics: {}
-        },
-        actionPlan: {
-          immediate: sampleData.executiveSummary.recommendedNextSteps,
-          shortTerm: ["Develop leadership skills", "Expand technical expertise", "Build professional network"],
-          longTerm: ["Pursue advanced certification", "Take on leadership role", "Mentor others"]
-        },
-        careerGuidance: {
-          recommendations: (sampleData as any).careerRecommendations || ["Leadership roles", "Strategic positions", "Team management"],
-          pathways: ["Individual contributor to team lead", "Specialist to manager", "Cross-functional experience"],
-          skills: ["Project management", "Data analysis", "Strategic thinking", "Team leadership", "Communication skills"]
-        },
-        distortionAnalysis: {
-          score: 15,
-          reliability: 'high' as const,
-          consistencyFlags: [],
-          interpretation: 'Responses show high consistency and reliability, indicating authentic assessment completion.'
+          date: sampleData.candidateInfo.completionDate
         }
       };
+      
+      console.log('📝 PDF request data formatted:', pdfRequestData);
       
       toast.info(`Generating sample ${reportType} PDF report...`);
       
       try {
-        // Try Supabase function first
+        console.log('📡 Calling Supabase PDF generation function...');
         const response = await supabase.functions.invoke('generate-pdf-report', {
-          body: aiReportFormat
+          body: pdfRequestData
         });
 
+        console.log('✅ PDF function response:', response);
+
         if (response.data) {
+          console.log('📄 Opening PDF report in new window...');
           // Open HTML report in new window for PDF printing
           const newWindow = window.open('', '_blank');
           if (newWindow) {
@@ -118,12 +121,16 @@ const SampleReports = () => {
             }, 1000);
           }
           toast.success(`Sample ${reportType} PDF report generated successfully!`);
+        } else if (response.error) {
+          console.error('❌ PDF generation error:', response.error);
+          throw new Error(`PDF generation failed: ${response.error.message}`);
         } else {
+          console.error('❌ No data returned from PDF service');
           throw new Error('No data returned from PDF service');
         }
       } catch (pdfError) {
+        console.error('❌ PDF service failed, using HTML fallback:', pdfError);
         // Fallback: Generate simple HTML report
-        // PDF service failed, using HTML fallback
         generateFallbackReport(sampleData, selectedAssessment, reportType);
         toast.success(`Sample ${reportType} report generated successfully!`);
       }
