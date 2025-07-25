@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Image, Sparkles, Upload, Download, FileText, Trash2, Eye } from 'lucide-react';
+import { Users, Image, Sparkles, Upload, Download, FileText, Trash2, Eye, BookOpen } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -196,17 +196,11 @@ const MarketingMaterials: React.FC = () => {
           </div>
 
           {/* Statistics Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
             <Card className="text-center bg-gradient-to-br from-primary/5 to-primary/10 border-primary/20">
               <CardContent className="pt-6">
                 <div className="text-3xl font-bold text-primary mb-2">{files.length}</div>
                 <div className="text-sm text-muted-foreground">Materials Available</div>
-              </CardContent>
-            </Card>
-            <Card className="text-center bg-gradient-to-br from-accent/5 to-accent/10 border-accent/20">
-              <CardContent className="pt-6">
-                <div className="text-3xl font-bold text-accent mb-2">50K+</div>
-                <div className="text-sm text-muted-foreground">Completed Assessments</div>
               </CardContent>
             </Card>
             <Card className="text-center bg-gradient-to-br from-secondary/5 to-secondary/10 border-secondary/20">
@@ -288,7 +282,9 @@ const MarketingMaterials: React.FC = () => {
                   <CardHeader className="pb-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-2">
-                        <FileText className="w-5 h-5 text-red-500" />
+                        <div className="bg-gradient-to-br from-blue-500/20 to-purple-500/20 p-2 rounded-lg">
+                          <BookOpen className="w-5 h-5 text-blue-600" />
+                        </div>
                         <CardTitle className="text-lg leading-tight group-hover:text-primary transition-colors line-clamp-2">
                           {file.title}
                         </CardTitle>
