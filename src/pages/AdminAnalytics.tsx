@@ -314,8 +314,9 @@ const AdminAnalytics = () => {
 
           {/* Enhanced Metrics Tabs */}
           <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="financial">Financial</TabsTrigger>
               <TabsTrigger value="performance">Performance</TabsTrigger>
               <TabsTrigger value="demographics">Demographics</TabsTrigger>
               <TabsTrigger value="activity">Activity</TabsTrigger>
@@ -376,6 +377,175 @@ const AdminAnalytics = () => {
               </CardContent>
             </Card>
               </div>
+            </TabsContent>
+
+            <TabsContent value="financial" className="space-y-6">
+              {/* Financial Overview Metrics */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                    <DollarSign className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">${analytics.totalRevenue.toFixed(2)}</div>
+                    <p className="text-xs text-muted-foreground">
+                      Last {timeRange} days
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Paid Solo Candidates</CardTitle>
+                    <Users className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">{analytics.paidSoloCandidates}</div>
+                    <p className="text-xs text-muted-foreground">
+                      Completed payments
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Average Revenue per User</CardTitle>
+                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      ${analytics.paidSoloCandidates > 0 ? (analytics.totalRevenue / analytics.paidSoloCandidates).toFixed(2) : '0.00'}
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      ARPU
+                    </p>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Payment Conversion Rate</CardTitle>
+                    <Target className="h-4 w-4 text-muted-foreground" />
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-2xl font-bold">
+                      {analytics.totalCandidates > 0 ? ((analytics.paidSoloCandidates / analytics.totalCandidates) * 100).toFixed(1) : 0}%
+                    </div>
+                    <p className="text-xs text-muted-foreground">
+                      Candidates to payment
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Financial Details */}
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Revenue Breakdown</CardTitle>
+                    <CardDescription>Payment analysis and trends</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium">Solo Assessments</span>
+                        <div className="text-right">
+                          <div className="font-semibold">${analytics.totalRevenue.toFixed(2)}</div>
+                          <div className="text-xs text-muted-foreground">{analytics.paidSoloCandidates} payments</div>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-sm font-medium">Employer Subscriptions</span>
+                        <div className="text-right">
+                          <div className="font-semibold">$0.00</div>
+                          <div className="text-xs text-muted-foreground">0 active</div>
+                        </div>
+                      </div>
+                      <div className="border-t pt-2">
+                        <div className="flex justify-between items-center font-semibold">
+                          <span>Total Revenue</span>
+                          <span>${analytics.totalRevenue.toFixed(2)}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Payment Status Overview</CardTitle>
+                    <CardDescription>Current payment processing status</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4 text-green-500" />
+                          <span className="text-sm">Completed Payments</span>
+                        </div>
+                        <Badge variant="secondary">{analytics.paidSoloCandidates}</Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-yellow-500" />
+                          <span className="text-sm">Pending Payments</span>
+                        </div>
+                        <Badge variant="outline">0</Badge>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                          <AlertTriangle className="w-4 h-4 text-red-500" />
+                          <span className="text-sm">Failed Payments</span>
+                        </div>
+                        <Badge variant="destructive">0</Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              {/* Payment History */}
+              {analytics.payments && analytics.payments.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Recent Payments</CardTitle>
+                    <CardDescription>Latest successful payment transactions</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      {analytics.payments.slice(0, 10).map((payment: any, index: number) => (
+                        <div key={index} className="flex justify-between items-center py-2 border-b">
+                          <div>
+                            <span className="font-medium">${payment.amount.toFixed(2)}</span>
+                            <span className="text-sm text-muted-foreground ml-2">Solo Assessment</span>
+                          </div>
+                          <span className="text-sm text-muted-foreground">
+                            {new Date(payment.date).toLocaleDateString()}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* No Payment Data Message */}
+              {(!analytics.payments || analytics.payments.length === 0) && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Payment History</CardTitle>
+                    <CardDescription>No payments recorded in the selected time period</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="text-center py-6">
+                      <DollarSign className="w-12 h-12 text-muted-foreground mx-auto mb-2" />
+                      <p className="text-muted-foreground">No payment transactions found for the last {timeRange} days.</p>
+                      <p className="text-sm text-muted-foreground mt-1">Payments will appear here once processed.</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
 
             <TabsContent value="performance" className="space-y-6">
