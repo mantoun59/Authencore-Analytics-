@@ -978,7 +978,103 @@ function generateStressReport(results: any, userData: any): string {
 }
 
 function generateLeadershipReport(results: any, userData: any): string {
-  return generateCommunicationReport(results, userData); // Enhanced version coming
+  const dimensions = results?.dimensions || {};
+  const overall = results?.overall || 0;
+  const profile = results?.profile || {};
+  const recommendations = results?.recommendations || {};
+  
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Leadership Assessment Report</title>
+    <style>
+      ${getReportStyles()}
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    ${generateReportHeader("Leadership Assessment", userData)}
+    
+    <div class="executive-summary">
+      <h2>Executive Summary</h2>
+      <div class="summary-content">
+        <div class="overall-score">
+          <h3>Overall Leadership Score: ${overall}/100</h3>
+          <div class="score-bar">
+            <div class="score-fill" style="width: ${overall}%"></div>
+          </div>
+        </div>
+        <p><strong>Leadership Profile:</strong> ${profile.type || 'Balanced Leader'}</p>
+        <p>${profile.description || 'Your leadership assessment reveals a well-rounded approach to leadership with specific strengths and development opportunities.'}</p>
+      </div>
+    </div>
+
+    <div class="dimension-analysis">
+      <h2>Leadership Dimension Analysis</h2>
+      ${Object.entries(dimensions).map(([dimension, data]: [string, any]) => `
+        <div class="dimension-section">
+          <h3>${formatDimensionName(dimension)}</h3>
+          <div class="dimension-score">
+            <span class="score-value">${data.percentage || 0}%</span>
+            <span class="score-level ${(data.level || '').toLowerCase()}">${data.level || 'Developing'}</span>
+          </div>
+          <div class="score-bar">
+            <div class="score-fill" style="width: ${data.percentage || 0}%"></div>
+          </div>
+          <p><strong>Interpretation:</strong> ${data.interpretation || 'This dimension reflects your effectiveness in this leadership area.'}</p>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="strengths-development">
+      <div class="strengths">
+        <h3>Key Leadership Strengths</h3>
+        <ul>
+          ${(profile.strengths || []).map((strength: string) => `<li>${formatDimensionName(strength)}</li>`).join('')}
+        </ul>
+      </div>
+      <div class="development-areas">
+        <h3>Development Opportunities</h3>
+        <ul>
+          ${Object.entries(dimensions).filter(([_, data]: [string, any]) => (data.percentage || 0) < 70).map(([dimension, _]) => `<li>${formatDimensionName(dimension)}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    ${generateActionPlan([
+      ...(recommendations.immediate || []).map((rec: any) => `${formatDimensionName(rec.dimension)}: ${rec.actions?.join(', ') || ''}`),
+      ...(recommendations.shortTerm || []).map((rec: any) => `${formatDimensionName(rec.dimension)}: ${rec.actions?.join(', ') || ''}`)
+    ])}
+
+    <div class="leadership-recommendations">
+      <h2>Long-term Leadership Development</h2>
+      ${(recommendations.longTerm || []).map((rec: any) => `
+        <div class="recommendation-item">
+          <h4>${rec.title}</h4>
+          <p>${rec.description}</p>
+          <span class="timeline">Timeline: ${rec.timeline}</span>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="chart-container">
+      <canvas id="leadershipChart"></canvas>
+    </div>
+
+    <script>
+      ${generateLeadershipChartScript(dimensions)}
+    </script>
+
+    <div class="report-footer">
+      <p>This report is confidential and intended solely for the individual assessed.</p>
+      <p>Report ID: ${generateReportId()}</p>
+      <p>Generated: ${new Date().toLocaleDateString()}</p>
+    </div>
+  </body>
+  </html>
+  `;
 }
 
 function generateFaithValuesReport(results: any, userData: any): string {
@@ -1158,6 +1254,56 @@ function generatePersonalityChartScript(scores: any): string {
             }
           }
         });
+      }
+    });
+  `;
+}
+
+function formatDimensionName(dimension: string): string {
+  const dimensionNames: Record<string, string> = {
+    'strategicThinking': 'Strategic Thinking',
+    'emotionalIntelligence': 'Emotional Intelligence',
+    'communicationInfluence': 'Communication & Influence',
+    'teamDevelopment': 'Team Development',
+    'decisionMaking': 'Decision Making',
+    'changeManagement': 'Change Management'
+  };
+  return dimensionNames[dimension] || dimension.replace(/([A-Z])/g, ' $1').trim();
+}
+
+function generateLeadershipChartScript(dimensions: any): string {
+  const labels = Object.keys(dimensions).map(dim => formatDimensionName(dim));
+  const data = Object.values(dimensions).map((dim: any) => dim.percentage || 0);
+  
+  return `
+    const ctx = document.getElementById('leadershipChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ${JSON.stringify(labels)},
+        datasets: [{
+          label: 'Leadership Scores',
+          data: ${JSON.stringify(data)},
+          borderColor: 'rgb(59, 130, 246)',
+          backgroundColor: 'rgba(59, 130, 246, 0.1)',
+          pointBackgroundColor: 'rgb(59, 130, 246)',
+          pointBorderColor: '#fff',
+          pointHoverBackgroundColor: '#fff',
+          pointHoverBorderColor: 'rgb(59, 130, 246)'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          r: {
+            angleLines: { display: true },
+            suggestedMin: 0,
+            suggestedMax: 100
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
       }
     });
   `;
