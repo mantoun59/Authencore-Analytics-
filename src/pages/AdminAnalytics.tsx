@@ -271,7 +271,8 @@ const AdminAnalytics = () => {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-          <p>Loading analytics...</p>
+          <p>Loading comprehensive analytics...</p>
+          <p className="text-sm text-muted-foreground mt-2">Analyzing financial data, user metrics, and performance indicators</p>
         </div>
       </div>
     );
