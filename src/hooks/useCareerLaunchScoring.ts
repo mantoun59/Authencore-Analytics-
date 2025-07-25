@@ -1,221 +1,108 @@
 import { useState } from 'react';
+import { CareerLaunchScoringEngine, CareerLaunchDimensions } from '@/services/careerLaunchScoringEngine';
 
 interface AnswerItem {
   id: string;
-  category: 'interest' | 'aptitude' | 'personality' | 'value';
+  category: 'interest' | 'aptitude' | 'personality' | 'value' | 'RIASEC' | 'Aptitude' | 'Personality' | 'Values';
   dimension: string;
   score: number;
-}
-
-interface AptitudeScore {
-  name: string;
-  score: number;
+  value?: number;
+  answer?: any;
+  responseTime?: number;
 }
 
 interface CareerLaunchResult {
-  interests: {
-    realistic: number;
-    investigative: number;
-    artistic: number;
-    social: number;
-    enterprising: number;
-    conventional: number;
+  // Raw dimension scores
+  dimensionScores: CareerLaunchDimensions;
+  
+  // Percentile rankings
+  percentileRanks: Record<string, number>;
+  
+  // Overall readiness indicators
+  overallReadiness: number;
+  readinessLevel: 'Emerging' | 'Developing' | 'Ready' | 'Advanced';
+  
+  // Detailed analysis
+  strengths: string[];
+  developmentAreas: string[];
+  careerRecommendations: string[];
+  
+  // Quality metrics
+  assessmentQuality: {
+    isValid: boolean;
+    warnings: string[];
+    qualityScore: number;
   };
-  aptitudes: AptitudeScore[];
-  personality: {
-    introversion: number;
-    openness: number;
-    conscientiousness: number;
-    adaptability: number;
+  
+  // Enhanced insights
+  insights: {
+    careerFitProfile: string;
+    workplaceReadiness: string;
+    nextSteps: string[];
   };
-  values: {
-    security: number;
-    achievement: number;
-    creativity: number;
-    community: number;
-  };
-  flags: {
-    misalignment: string[];
-  };
-  career_fit: {
-    label: string;
-    suggestions: string[];
-  };
-  action_plan: string[];
+  
+  // Legacy compatibility
+  interests?: any;
+  aptitudes?: any;
+  personality?: any;
+  values?: any;
+  flags?: any;
+  career_fit?: any;
+  action_plan?: string[];
 }
 
 export const useCareerLaunchScoring = () => {
   const [result, setResult] = useState<CareerLaunchResult | null>(null);
+  const scoringEngine = CareerLaunchScoringEngine.getInstance();
 
-  const calculateScores = (answers: AnswerItem[]): CareerLaunchResult => {
-    // Initialize score accumulators
-    const interestTotals = {
-      realistic: 0,
-      investigative: 0,
-      artistic: 0,
-      social: 0,
-      enterprising: 0,
-      conventional: 0
-    };
-
-    const aptitudeTotals = {
-      verbal: 0,
-      numerical: 0,
-      abstract: 0,
-      memory: 0
-    };
-
-    const personalityTotals = {
-      introversion: 0,
-      openness: 0,
-      conscientiousness: 0,
-      adaptability: 0
-    };
-
-    const valueTotals = {
-      security: 0,
-      achievement: 0,
-      creativity: 0,
-      community: 0
-    };
-
-    const counts = {
-      interests: { realistic: 0, investigative: 0, artistic: 0, social: 0, enterprising: 0, conventional: 0 },
-      aptitudes: { verbal: 0, numerical: 0, abstract: 0, memory: 0 },
-      personality: { introversion: 0, openness: 0, conscientiousness: 0, adaptability: 0 },
-      values: { security: 0, achievement: 0, creativity: 0, community: 0 }
-    };
-
-    // Process answers with error handling
-    answers.forEach(answer => {
-      if (answer.category === 'interest' && answer.dimension in interestTotals) {
-        interestTotals[answer.dimension as keyof typeof interestTotals] += answer.score;
-        counts.interests[answer.dimension as keyof typeof counts.interests]++;
-      } else if (answer.category === 'aptitude' && answer.dimension in aptitudeTotals) {
-        aptitudeTotals[answer.dimension as keyof typeof aptitudeTotals] += answer.score;
-        counts.aptitudes[answer.dimension as keyof typeof counts.aptitudes]++;
-      } else if (answer.category === 'personality' && answer.dimension in personalityTotals) {
-        personalityTotals[answer.dimension as keyof typeof personalityTotals] += answer.score;
-        counts.personality[answer.dimension as keyof typeof counts.personality]++;
-      } else if (answer.category === 'value' && answer.dimension in valueTotals) {
-        valueTotals[answer.dimension as keyof typeof valueTotals] += answer.score;
-        counts.values[answer.dimension as keyof typeof counts.values]++;
-      } else {
-        console.warn(`Unmapped dimension: ${answer.dimension} in category: ${answer.category}`);
-      }
-    });
-
-    // Calculate normalized scores (0-100)
-    const interests = {
-      realistic: Math.round((interestTotals.realistic / Math.max(counts.interests.realistic || 1, 1)) * 100),
-      investigative: Math.round((interestTotals.investigative / Math.max(counts.interests.investigative || 1, 1)) * 100),
-      artistic: Math.round((interestTotals.artistic / Math.max(counts.interests.artistic || 1, 1)) * 100),
-      social: Math.round((interestTotals.social / Math.max(counts.interests.social || 1, 1)) * 100),
-      enterprising: Math.round((interestTotals.enterprising / Math.max(counts.interests.enterprising || 1, 1)) * 100),
-      conventional: Math.round((interestTotals.conventional / Math.max(counts.interests.conventional || 1, 1)) * 100)
-    };
-
-    const aptitudes: AptitudeScore[] = [
-      { name: "Verbal Reasoning", score: Math.round((aptitudeTotals.verbal / Math.max(counts.aptitudes.verbal || 1, 1)) * 100) },
-      { name: "Numerical Reasoning", score: Math.round((aptitudeTotals.numerical / Math.max(counts.aptitudes.numerical || 1, 1)) * 100) },
-      { name: "Abstract Logic", score: Math.round((aptitudeTotals.abstract / Math.max(counts.aptitudes.abstract || 1, 1)) * 100) },
-      { name: "Memory/Attention", score: Math.round((aptitudeTotals.memory / Math.max(counts.aptitudes.memory || 1, 1)) * 100) }
-    ].sort((a, b) => b.score - a.score);
-
-    const personality = {
-      introversion: Math.round((personalityTotals.introversion / Math.max(counts.personality.introversion || 1, 1)) * 100),
-      openness: Math.round((personalityTotals.openness / Math.max(counts.personality.openness || 1, 1)) * 100),
-      conscientiousness: Math.round((personalityTotals.conscientiousness / Math.max(counts.personality.conscientiousness || 1, 1)) * 100),
-      adaptability: Math.round((personalityTotals.adaptability / Math.max(counts.personality.adaptability || 1, 1)) * 100)
-    };
-
-    const values = {
-      security: Math.round((valueTotals.security / Math.max(counts.values.security || 1, 1)) * 100),
-      achievement: Math.round((valueTotals.achievement / Math.max(counts.values.achievement || 1, 1)) * 100),
-      creativity: Math.round((valueTotals.creativity / Math.max(counts.values.creativity || 1, 1)) * 100),
-      community: Math.round((valueTotals.community / Math.max(counts.values.community || 1, 1)) * 100)
-    };
-
-    // Generate misalignment flags
-    const flags: string[] = [];
+  const calculateScores = (answers: AnswerItem[], candidateProfile?: any, totalTime?: number): CareerLaunchResult => {
+    console.log('🎯 Enhanced CareerLaunch Scoring initiated with', answers.length, 'responses');
     
-    if (interests.artistic > 70 && values.security < 40) {
-      flags.push("High Artistic interest + Low Security value — explore creative careers with stable options.");
-    }
+    // Validate assessment quality
+    const assessmentQuality = scoringEngine.validateAssessmentQuality(answers, totalTime || 1200);
     
-    if (personality.conscientiousness < 50) {
-      flags.push("Low Conscientiousness may affect structured roles like Accounting or Law.");
-    }
+    // Calculate core dimension scores using advanced weighting
+    const dimensionScores = scoringEngine.scoreCareerReadiness(answers, candidateProfile);
     
-    if (interests.enterprising > 70 && personality.introversion > 60) {
-      flags.push("High Enterprising interest but Introverted personality — consider leadership roles in smaller teams.");
-    }
+    // Calculate percentile rankings
+    const percentileRanks = scoringEngine.calculatePercentileRanks(dimensionScores);
     
-    if (values.creativity > 70 && interests.conventional > 60) {
-      flags.push("High Creativity value but Conventional interests — explore innovative roles within structured environments.");
-    }
-
-    // Generate career fit profile
-    const topInterest = Object.entries(interests).reduce((a, b) => a[1] > b[1] ? a : b)[0];
-    const topAptitude = aptitudes[0].name.toLowerCase();
+    // Calculate overall readiness score
+    const overallReadiness = Math.round(
+      Object.values(dimensionScores).reduce((sum, score) => sum + score, 0) / 
+      Object.values(dimensionScores).length
+    );
     
-    let careerLabel = "Balanced Professional";
-    let suggestions: string[] = ["Consultant", "Project Manager", "Analyst"];
-
-    if (topInterest === 'investigative' && topAptitude.includes('abstract')) {
-      careerLabel = "Strategic Creative Thinker";
-      suggestions = ["Content Strategist", "Research Analyst", "UX Designer"];
-    } else if (topInterest === 'artistic' && values.creativity > 70) {
-      careerLabel = "Creative Innovator";
-      suggestions = ["Graphic Designer", "Marketing Creative", "Art Director"];
-    } else if (topInterest === 'social' && personality.openness > 70) {
-      careerLabel = "People-Focused Leader";
-      suggestions = ["HR Manager", "Counselor", "Training Specialist"];
-    } else if (topInterest === 'enterprising' && aptitudes[0].name.includes('Verbal')) {
-      careerLabel = "Strategic Communicator";
-      suggestions = ["Sales Manager", "Business Development", "Marketing Manager"];
-    } else if (topInterest === 'realistic' && aptitudes[0].name.includes('Numerical')) {
-      careerLabel = "Technical Problem Solver";
-      suggestions = ["Engineer", "Data Analyst", "IT Specialist"];
-    } else if (topInterest === 'conventional' && personality.conscientiousness > 70) {
-      careerLabel = "Systematic Organizer";
-      suggestions = ["Accountant", "Operations Manager", "Financial Analyst"];
-    }
-
-    // Generate action plan
-    const actionPlan: string[] = [];
+    // Determine readiness level
+    const readinessLevel = getReadinessLevel(overallReadiness);
     
-    if (aptitudes[0].score > 75) {
-      actionPlan.push(`Leverage your strength in ${aptitudes[0].name.toLowerCase()} through specialized training or certification.`);
-    }
+    // Generate insights and recommendations
+    const { strengths, developmentAreas } = identifyStrengthsAndAreas(dimensionScores);
+    const careerRecommendations = generateCareerRecommendations(dimensionScores, percentileRanks);
+    const insights = generateInsights(dimensionScores, overallReadiness);
     
-    if (personality.openness > 70) {
-      actionPlan.push("Consider internships in creative or analytical industries to explore diverse career paths.");
-    }
-    
-    if (values.achievement > 70) {
-      actionPlan.push("Seek opportunities with clear advancement paths and performance recognition.");
-    }
-    
-    if (personality.conscientiousness < 60) {
-      actionPlan.push("Work on building routines and organizational skills to improve performance consistency.");
-    }
-    
-    if (actionPlan.length === 0) {
-      actionPlan.push("Explore informational interviews in your areas of interest to gain real-world insights.");
-    }
-
     const newResult: CareerLaunchResult = {
-      interests,
-      aptitudes,
-      personality,
-      values,
-      flags: { misalignment: flags },
+      dimensionScores,
+      percentileRanks,
+      overallReadiness,
+      readinessLevel,
+      strengths,
+      developmentAreas,
+      careerRecommendations,
+      assessmentQuality,
+      insights,
+      
+      // Legacy compatibility - map to old format
+      interests: mapToLegacyInterests(dimensionScores),
+      aptitudes: mapToLegacyAptitudes(dimensionScores),
+      personality: mapToLegacyPersonality(dimensionScores),
+      values: mapToLegacyValues(dimensionScores),
+      flags: { misalignment: generateCompatibilityFlags(dimensionScores) },
       career_fit: {
-        label: careerLabel,
-        suggestions
+        label: insights.careerFitProfile,
+        suggestions: careerRecommendations.slice(0, 3)
       },
-      action_plan: actionPlan
+      action_plan: insights.nextSteps
     };
 
     setResult(newResult);
@@ -228,3 +115,184 @@ export const useCareerLaunchScoring = () => {
     setResult
   };
 };
+
+// Helper functions for enhanced scoring
+
+function getReadinessLevel(score: number): CareerLaunchResult['readinessLevel'] {
+  if (score >= 85) return 'Advanced';
+  if (score >= 70) return 'Ready';
+  if (score >= 55) return 'Developing';
+  return 'Emerging';
+}
+
+function identifyStrengthsAndAreas(scores: CareerLaunchDimensions): {
+  strengths: string[];
+  developmentAreas: string[];
+} {
+  const entries = Object.entries(scores);
+  const sorted = entries.sort(([,a], [,b]) => b - a);
+  
+  const strengths = sorted
+    .filter(([, score]) => score >= 75)
+    .slice(0, 3)
+    .map(([dimension]) => formatDimensionName(dimension));
+  
+  const developmentAreas = sorted
+    .filter(([, score]) => score < 65)
+    .slice(-3)
+    .map(([dimension]) => formatDimensionName(dimension));
+  
+  return { strengths, developmentAreas };
+}
+
+function formatDimensionName(dimension: string): string {
+  return dimension
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, l => l.toUpperCase());
+}
+
+function generateCareerRecommendations(scores: CareerLaunchDimensions, percentiles: Record<string, number>): string[] {
+  const recommendations: string[] = [];
+  
+  // High leadership potential
+  if (scores.leadership_potential >= 75 && scores.communication_skills >= 70) {
+    recommendations.push("Management Trainee Programs", "Entrepreneurship Opportunities", "Team Lead Roles");
+  }
+  
+  // Strong problem solving
+  if (scores.problem_solving >= 80) {
+    recommendations.push("Data Analysis Roles", "Consulting Positions", "Research & Development");
+  }
+  
+  // High practical skills
+  if (scores.practical_skills >= 75) {
+    recommendations.push("Technical Specialist Roles", "Operations Management", "Project Coordination");
+  }
+  
+  // Strong communication
+  if (scores.communication_skills >= 80) {
+    recommendations.push("Client Relations", "Training & Development", "Marketing Communications");
+  }
+  
+  // High workplace maturity
+  if (scores.workplace_maturity >= 80) {
+    recommendations.push("Administrative Roles", "Process Improvement", "Quality Assurance");
+  }
+  
+  // Balanced profile
+  if (Object.values(scores).every(score => score >= 65 && score <= 85)) {
+    recommendations.push("General Management", "Business Analyst", "Project Manager");
+  }
+  
+  // Default recommendations if none match
+  if (recommendations.length === 0) {
+    recommendations.push("Entry-Level Professional Roles", "Skill Development Programs", "Internship Opportunities");
+  }
+  
+  return [...new Set(recommendations)]; // Remove duplicates
+}
+
+function generateInsights(scores: CareerLaunchDimensions, overallScore: number): CareerLaunchResult['insights'] {
+  const topDimension = Object.entries(scores).reduce((a, b) => a[1] > b[1] ? a : b)[0];
+  
+  // Career fit profile
+  let careerFitProfile = "Balanced Professional";
+  if (scores.leadership_potential >= 80) careerFitProfile = "Natural Leader";
+  else if (scores.problem_solving >= 80) careerFitProfile = "Analytical Thinker";
+  else if (scores.communication_skills >= 80) careerFitProfile = "People Connector";
+  else if (scores.practical_skills >= 80) careerFitProfile = "Hands-On Implementer";
+  else if (scores.adaptability >= 80) careerFitProfile = "Flexible Innovator";
+  
+  // Workplace readiness
+  let workplaceReadiness = "Ready to contribute with proper onboarding";
+  if (overallScore >= 85) workplaceReadiness = "Highly prepared for immediate contribution";
+  else if (overallScore >= 70) workplaceReadiness = "Well-prepared with minor skill development needed";
+  else if (overallScore < 55) workplaceReadiness = "Requires significant development before workplace entry";
+  
+  // Next steps
+  const nextSteps: string[] = [];
+  if (scores.skill_readiness < 70) {
+    nextSteps.push("Complete relevant certifications or training programs");
+  }
+  if (scores.workplace_maturity < 65) {
+    nextSteps.push("Gain practical experience through internships or part-time work");
+  }
+  if (scores.communication_skills < 70) {
+    nextSteps.push("Develop professional communication skills through practice and feedback");
+  }
+  if (scores.leadership_potential >= 75) {
+    nextSteps.push("Seek leadership opportunities in current roles or volunteer activities");
+  }
+  if (nextSteps.length === 0) {
+    nextSteps.push("Explore advanced opportunities that match your strengths");
+  }
+  
+  return {
+    careerFitProfile,
+    workplaceReadiness,
+    nextSteps
+  };
+}
+
+// Legacy compatibility mapping functions
+function mapToLegacyInterests(scores: CareerLaunchDimensions): any {
+  return {
+    realistic: scores.practical_skills,
+    investigative: scores.problem_solving,
+    artistic: scores.adaptability,
+    social: scores.communication_skills,
+    enterprising: scores.leadership_potential,
+    conventional: scores.workplace_maturity
+  };
+}
+
+function mapToLegacyAptitudes(scores: CareerLaunchDimensions): any {
+  return [
+    { name: "Problem Solving", score: scores.problem_solving },
+    { name: "Communication", score: scores.communication_skills },
+    { name: "Leadership", score: scores.leadership_potential },
+    { name: "Practical Skills", score: scores.practical_skills }
+  ].sort((a, b) => b.score - a.score);
+}
+
+function mapToLegacyPersonality(scores: CareerLaunchDimensions): any {
+  return {
+    conscientiousness: scores.workplace_maturity,
+    openness: scores.adaptability,
+    introversion: 100 - scores.communication_skills, // Inverted
+    adaptability: scores.adaptability
+  };
+}
+
+function mapToLegacyValues(scores: CareerLaunchDimensions): any {
+  return {
+    achievement: scores.leadership_potential,
+    security: scores.workplace_maturity,
+    creativity: scores.adaptability,
+    community: scores.communication_skills
+  };
+}
+
+function generateCompatibilityFlags(scores: CareerLaunchDimensions): string[] {
+  const flags: string[] = [];
+  
+  if (scores.leadership_potential > 80 && scores.communication_skills < 60) {
+    flags.push("High leadership potential but may need communication skill development");
+  }
+  
+  if (scores.problem_solving > 80 && scores.practical_skills < 50) {
+    flags.push("Strong analytical skills but may benefit from hands-on experience");
+  }
+  
+  if (scores.adaptability > 80 && scores.workplace_maturity < 60) {
+    flags.push("High adaptability but may need structure for optimal performance");
+  }
+  
+  const minScore = Math.min(...Object.values(scores));
+  const maxScore = Math.max(...Object.values(scores));
+  if (maxScore - minScore > 35) {
+    flags.push("Significant variance in skills - focus on developing weaker areas");
+  }
+  
+  return flags;
+}
