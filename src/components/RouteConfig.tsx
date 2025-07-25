@@ -1,130 +1,346 @@
 import { Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import ProtectedAdminRoute from "@/components/ProtectedAdminRoute";
+import { Card, CardContent } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 
-// Import all pages
+// Immediate load - Critical pages
 import Index from "@/pages/Index";
-import AboutPage from "@/pages/About";
 import Auth from "@/pages/Auth";
-import Assessment from "@/pages/Assessment";
-import CareerLaunch from "@/pages/CareerLaunch";
-import CAIRAssessment from "@/pages/CAIRAssessment";
-import StressResilience from "@/pages/StressResilience";
-import CulturalIntelligenceAssessment from "@/pages/CulturalIntelligenceAssessment";
-import CommunicationAssessment from "@/pages/CommunicationAssessment";
-import EmotionalIntelligenceAssessment from "@/pages/EmotionalIntelligenceAssessment";
-import FaithValuesAssessment from "@/pages/FaithValuesAssessment";
-import GenZWorkplaceAssessment from "@/pages/GenZWorkplaceAssessment";
-import DigitalWellnessAssessment from "@/pages/DigitalWellnessAssessment";
-import PartnerLogin from "@/pages/PartnerLogin";
-import PartnerDashboard from "@/pages/PartnerDashboard";
-import LeadershipAssessment from "@/pages/LeadershipAssessment";
-import PrivacyPolicy from "@/pages/PrivacyPolicy";
-import CompliancePage from "@/pages/CompliancePage";
-import Security from "@/pages/Security";
 import NotFound from "@/pages/NotFound";
-import AdminPage from "@/pages/Admin";
-import EmployerLogin from "@/pages/EmployerLogin";
-import EmployerDashboard from "@/pages/EmployerDashboard";
-import SoloAssessment from "@/pages/SoloAssessment";
-import AdminAnalytics from "@/pages/AdminAnalytics";
-import CandidateTesting from "@/pages/CandidateTesting";
-import TestingDashboard from "@/pages/TestingDashboard";
-import SampleCareerLaunchReport from "@/pages/SampleCareerLaunchReport";
-import SampleReports from "@/pages/SampleReports";
-import MarketingMaterials from "@/pages/MarketingMaterials";
-import AuthenticLeadershipDescription from "@/pages/AuthenticLeadershipDescription";
-import BurnoutPreventionDescription from "@/pages/BurnoutPreventionDescription";
-import CAIRCulturalDescription from "@/pages/CAIRCulturalDescription";
-import CulturalIntelligenceDescription from "@/pages/CulturalIntelligenceDescription";
-import CAIRPersonalityDescription from "@/pages/CAIRPersonalityDescription";
-import CareerLaunchDescription from "@/pages/CareerLaunchDescription";
-import CommunicationStyleDescription from "@/pages/CommunicationStyleDescription";
-import DigitalWellnessDescription from "@/pages/DigitalWellnessDescription";
-import EmotionalIntelligenceDescription from "@/pages/EmotionalIntelligenceDescription";
-import FaithValuesDescription from "@/pages/FaithValuesDescription";
-import GenZWorkplaceDescription from "@/pages/GenZWorkplaceDescription";
-import EmployerAnalytics from "@/pages/EmployerAnalytics";
-import PartnerAnalytics from "@/pages/PartnerAnalytics";
-import Payment from "@/pages/Payment";
+
+// Lazy load - Assessment pages (large components)
+const Assessment = lazy(() => import("@/pages/Assessment"));
+const CareerLaunch = lazy(() => import("@/pages/CareerLaunch"));
+const CAIRAssessment = lazy(() => import("@/pages/CAIRAssessment"));
+const StressResilience = lazy(() => import("@/pages/StressResilience"));
+const CulturalIntelligenceAssessment = lazy(() => import("@/pages/CulturalIntelligenceAssessment"));
+const CommunicationAssessment = lazy(() => import("@/pages/CommunicationAssessment"));
+const EmotionalIntelligenceAssessment = lazy(() => import("@/pages/EmotionalIntelligenceAssessment"));
+const FaithValuesAssessment = lazy(() => import("@/pages/FaithValuesAssessment"));
+const GenZWorkplaceAssessment = lazy(() => import("@/pages/GenZWorkplaceAssessment"));
+const DigitalWellnessAssessment = lazy(() => import("@/pages/DigitalWellnessAssessment"));
+const LeadershipAssessment = lazy(() => import("@/pages/LeadershipAssessment"));
+
+// Lazy load - Information pages
+const AboutPage = lazy(() => import("@/pages/About"));
+const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
+const CompliancePage = lazy(() => import("@/pages/CompliancePage"));
+const Security = lazy(() => import("@/pages/Security"));
+
+// Lazy load - Partner/Employer features
+const PartnerLogin = lazy(() => import("@/pages/PartnerLogin"));
+const PartnerDashboard = lazy(() => import("@/pages/PartnerDashboard"));
+const EmployerLogin = lazy(() => import("@/pages/EmployerLogin"));
+const EmployerDashboard = lazy(() => import("@/pages/EmployerDashboard"));
+const SoloAssessment = lazy(() => import("@/pages/SoloAssessment"));
+
+// Lazy load - Admin features (heavy components)
+const AdminPage = lazy(() => import("@/pages/Admin"));
+const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
+const MarketingMaterials = lazy(() => import("@/pages/MarketingMaterials"));
+
+// Lazy load - Testing & Analytics
+const CandidateTesting = lazy(() => import("@/pages/CandidateTesting"));
+const TestingDashboard = lazy(() => import("@/pages/TestingDashboard"));
+const EmployerAnalytics = lazy(() => import("@/pages/EmployerAnalytics"));
+const PartnerAnalytics = lazy(() => import("@/pages/PartnerAnalytics"));
+
+// Lazy load - Reports & Materials
+const SampleCareerLaunchReport = lazy(() => import("@/pages/SampleCareerLaunchReport"));
+const SampleReports = lazy(() => import("@/pages/SampleReports"));
+const Payment = lazy(() => import("@/pages/Payment"));
+
+// Lazy load - Description pages (content heavy)
+const AuthenticLeadershipDescription = lazy(() => import("@/pages/AuthenticLeadershipDescription"));
+const BurnoutPreventionDescription = lazy(() => import("@/pages/BurnoutPreventionDescription"));
+const CAIRCulturalDescription = lazy(() => import("@/pages/CAIRCulturalDescription"));
+const CulturalIntelligenceDescription = lazy(() => import("@/pages/CulturalIntelligenceDescription"));
+const CAIRPersonalityDescription = lazy(() => import("@/pages/CAIRPersonalityDescription"));
+const CareerLaunchDescription = lazy(() => import("@/pages/CareerLaunchDescription"));
+const CommunicationStyleDescription = lazy(() => import("@/pages/CommunicationStyleDescription"));
+const DigitalWellnessDescription = lazy(() => import("@/pages/DigitalWellnessDescription"));
+const EmotionalIntelligenceDescription = lazy(() => import("@/pages/EmotionalIntelligenceDescription"));
+const FaithValuesDescription = lazy(() => import("@/pages/FaithValuesDescription"));
+const GenZWorkplaceDescription = lazy(() => import("@/pages/GenZWorkplaceDescription"));
+
+// Loading component for Suspense fallbacks
+const LoadingFallback = ({ message = "Loading..." }: { message?: string }) => (
+  <div className="min-h-screen bg-background flex items-center justify-center">
+    <Card className="w-full max-w-md mx-4">
+      <CardContent className="pt-6">
+        <div className="text-center space-y-4">
+          <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+          <div className="space-y-2">
+            <h2 className="text-lg font-semibold">{message}</h2>
+            <p className="text-sm text-muted-foreground">
+              Please wait while we load the content...
+            </p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  </div>
+);
 
 const RouteConfig = () => {
   return (
     <Routes>
-      {/* Public Routes */}
+      {/* Critical Routes - Immediate Load */}
       <Route path="/" element={<Index />} />
-      <Route path="/about" element={<AboutPage />} />
       <Route path="/auth" element={<Auth />} />
-      <Route path="/privacy" element={<PrivacyPolicy />} />
-      <Route path="/compliance" element={<CompliancePage />} />
-      <Route path="/security" element={<Security />} />
       
-      {/* Assessment Overview */}
-      <Route path="/assessment" element={<Assessment />} />
+      {/* Public Information Pages - Lazy Loaded */}
+      <Route path="/about" element={
+        <Suspense fallback={<LoadingFallback message="Loading About Page..." />}>
+          <AboutPage />
+        </Suspense>
+      } />
+      <Route path="/privacy" element={
+        <Suspense fallback={<LoadingFallback message="Loading Privacy Policy..." />}>
+          <PrivacyPolicy />
+        </Suspense>
+      } />
+      <Route path="/compliance" element={
+        <Suspense fallback={<LoadingFallback message="Loading Compliance Information..." />}>
+          <CompliancePage />
+        </Suspense>
+      } />
+      <Route path="/security" element={
+        <Suspense fallback={<LoadingFallback message="Loading Security Information..." />}>
+          <Security />
+        </Suspense>
+      } />
       
-      {/* Assessment Pages */}
-      <Route path="/career-launch" element={<CareerLaunch />} />
-      <Route path="/cair-assessment" element={<CAIRAssessment />} />
-      <Route path="/cair" element={<CAIRAssessment />} />
-      <Route path="/stress-resilience" element={<StressResilience />} />
-      <Route path="/cultural-intelligence" element={<CulturalIntelligenceAssessment />} />
-      <Route path="/communication-assessment" element={<CommunicationAssessment />} />
-      <Route path="/communication" element={<CommunicationAssessment />} />
-      <Route path="/emotional-intelligence" element={<EmotionalIntelligenceAssessment />} />
-      <Route path="/faith-values" element={<FaithValuesAssessment />} />
-      <Route path="/genz-assessment" element={<GenZWorkplaceAssessment />} />
-      <Route path="/genz" element={<GenZWorkplaceAssessment />} />
-      <Route path="/genz-workplace" element={<GenZWorkplaceAssessment />} />
-      <Route path="/digital-wellness" element={<DigitalWellnessAssessment />} />
-      <Route path="/leadership-assessment" element={<LeadershipAssessment />} />
-      <Route path="/leadership" element={<LeadershipAssessment />} />
+      {/* Assessment Overview - Lazy Loaded */}
+      <Route path="/assessment" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessments..." />}>
+          <Assessment />
+        </Suspense>
+      } />
       
-      {/* Assessment Description Pages */}
-      <Route path="/authentic-leadership-info" element={<AuthenticLeadershipDescription />} />
-      <Route path="/burnout-prevention-info" element={<BurnoutPreventionDescription />} />
-      <Route path="/cair-cultural-info" element={<CAIRCulturalDescription />} />
-      <Route path="/cultural-intelligence-info" element={<CulturalIntelligenceDescription />} />
-      <Route path="/cair-personality-info" element={<CAIRPersonalityDescription />} />
-      <Route path="/career-launch-info" element={<CareerLaunchDescription />} />
-      <Route path="/communication-style-info" element={<CommunicationStyleDescription />} />
-      <Route path="/digital-wellness-info" element={<DigitalWellnessDescription />} />
-      <Route path="/emotional-intelligence-info" element={<EmotionalIntelligenceDescription />} />
-      <Route path="/faith-values-info" element={<FaithValuesDescription />} />
-      <Route path="/genz-workplace-info" element={<GenZWorkplaceDescription />} />
+      {/* Assessment Pages - Lazy Loaded with Custom Messages */}
+      <Route path="/career-launch" element={
+        <Suspense fallback={<LoadingFallback message="Preparing Career Launch Assessment..." />}>
+          <CareerLaunch />
+        </Suspense>
+      } />
+      <Route path="/cair-assessment" element={
+        <Suspense fallback={<LoadingFallback message="Loading CAIR Assessment..." />}>
+          <CAIRAssessment />
+        </Suspense>
+      } />
+      <Route path="/cair" element={
+        <Suspense fallback={<LoadingFallback message="Loading CAIR Assessment..." />}>
+          <CAIRAssessment />
+        </Suspense>
+      } />
+      <Route path="/stress-resilience" element={
+        <Suspense fallback={<LoadingFallback message="Loading Stress & Resilience Assessment..." />}>
+          <StressResilience />
+        </Suspense>
+      } />
+      <Route path="/cultural-intelligence" element={
+        <Suspense fallback={<LoadingFallback message="Loading Cultural Intelligence Assessment..." />}>
+          <CulturalIntelligenceAssessment />
+        </Suspense>
+      } />
+      <Route path="/communication-assessment" element={
+        <Suspense fallback={<LoadingFallback message="Loading Communication Assessment..." />}>
+          <CommunicationAssessment />
+        </Suspense>
+      } />
+      <Route path="/communication" element={
+        <Suspense fallback={<LoadingFallback message="Loading Communication Assessment..." />}>
+          <CommunicationAssessment />
+        </Suspense>
+      } />
+      <Route path="/emotional-intelligence" element={
+        <Suspense fallback={<LoadingFallback message="Loading Emotional Intelligence Assessment..." />}>
+          <EmotionalIntelligenceAssessment />
+        </Suspense>
+      } />
+      <Route path="/faith-values" element={
+        <Suspense fallback={<LoadingFallback message="Loading Faith & Values Assessment..." />}>
+          <FaithValuesAssessment />
+        </Suspense>
+      } />
+      <Route path="/genz-assessment" element={
+        <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
+          <GenZWorkplaceAssessment />
+        </Suspense>
+      } />
+      <Route path="/genz" element={
+        <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
+          <GenZWorkplaceAssessment />
+        </Suspense>
+      } />
+      <Route path="/genz-workplace" element={
+        <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
+          <GenZWorkplaceAssessment />
+        </Suspense>
+      } />
+      <Route path="/digital-wellness" element={
+        <Suspense fallback={<LoadingFallback message="Loading Digital Wellness Assessment..." />}>
+          <DigitalWellnessAssessment />
+        </Suspense>
+      } />
+      <Route path="/leadership-assessment" element={
+        <Suspense fallback={<LoadingFallback message="Loading Leadership Assessment..." />}>
+          <LeadershipAssessment />
+        </Suspense>
+      } />
+      <Route path="/leadership" element={
+        <Suspense fallback={<LoadingFallback message="Loading Leadership Assessment..." />}>
+          <LeadershipAssessment />
+        </Suspense>
+      } />
       
-      {/* Partner Routes */}
-      <Route path="/partner-login" element={<PartnerLogin />} />
-      <Route path="/partner-dashboard" element={<PartnerDashboard />} />
-      <Route path="/partner-analytics" element={<PartnerAnalytics />} />
+      {/* Assessment Description Pages - Lazy Loaded */}
+      <Route path="/authentic-leadership-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <AuthenticLeadershipDescription />
+        </Suspense>
+      } />
+      <Route path="/burnout-prevention-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <BurnoutPreventionDescription />
+        </Suspense>
+      } />
+      <Route path="/cair-cultural-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <CAIRCulturalDescription />
+        </Suspense>
+      } />
+      <Route path="/cultural-intelligence-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <CulturalIntelligenceDescription />
+        </Suspense>
+      } />
+      <Route path="/cair-personality-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <CAIRPersonalityDescription />
+        </Suspense>
+      } />
+      <Route path="/career-launch-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <CareerLaunchDescription />
+        </Suspense>
+      } />
+      <Route path="/communication-style-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <CommunicationStyleDescription />
+        </Suspense>
+      } />
+      <Route path="/digital-wellness-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <DigitalWellnessDescription />
+        </Suspense>
+      } />
+      <Route path="/emotional-intelligence-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <EmotionalIntelligenceDescription />
+        </Suspense>
+      } />
+      <Route path="/faith-values-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <FaithValuesDescription />
+        </Suspense>
+      } />
+      <Route path="/genz-workplace-info" element={
+        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
+          <GenZWorkplaceDescription />
+        </Suspense>
+      } />
       
-      {/* Employer Routes */}
-      <Route path="/employer-login" element={<EmployerLogin />} />
-      <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-      <Route path="/employer-analytics" element={<EmployerAnalytics />} />
+      {/* Partner Routes - Lazy Loaded */}
+      <Route path="/partner-login" element={
+        <Suspense fallback={<LoadingFallback message="Loading Partner Portal..." />}>
+          <PartnerLogin />
+        </Suspense>
+      } />
+      <Route path="/partner-dashboard" element={
+        <Suspense fallback={<LoadingFallback message="Loading Partner Dashboard..." />}>
+          <PartnerDashboard />
+        </Suspense>
+      } />
+      <Route path="/partner-analytics" element={
+        <Suspense fallback={<LoadingFallback message="Loading Analytics..." />}>
+          <PartnerAnalytics />
+        </Suspense>
+      } />
       
-      {/* Testing & Assessment Routes */}
-      <Route path="/solo-assessment/:token" element={<SoloAssessment />} />
-      <Route path="/candidate-testing" element={<CandidateTesting />} />
-      <Route path="/testing-dashboard" element={<TestingDashboard />} />
+      {/* Employer Routes - Lazy Loaded */}
+      <Route path="/employer-login" element={
+        <Suspense fallback={<LoadingFallback message="Loading Employer Portal..." />}>
+          <EmployerLogin />
+        </Suspense>
+      } />
+      <Route path="/employer-dashboard" element={
+        <Suspense fallback={<LoadingFallback message="Loading Dashboard..." />}>
+          <EmployerDashboard />
+        </Suspense>
+      } />
+      <Route path="/employer-analytics" element={
+        <Suspense fallback={<LoadingFallback message="Loading Analytics..." />}>
+          <EmployerAnalytics />
+        </Suspense>
+      } />
       
-      {/* Payment & Sample Routes */}
-      <Route path="/payment" element={<Payment />} />
-      <Route path="/sample-career-launch-report" element={<SampleCareerLaunchReport />} />
-      <Route path="/sample-reports" element={<SampleReports />} />
+      {/* Testing & Assessment Routes - Lazy Loaded */}
+      <Route path="/solo-assessment/:token" element={
+        <Suspense fallback={<LoadingFallback message="Preparing Assessment..." />}>
+          <SoloAssessment />
+        </Suspense>
+      } />
+      <Route path="/candidate-testing" element={
+        <Suspense fallback={<LoadingFallback message="Loading Testing Interface..." />}>
+          <CandidateTesting />
+        </Suspense>
+      } />
+      <Route path="/testing-dashboard" element={
+        <Suspense fallback={<LoadingFallback message="Loading Dashboard..." />}>
+          <TestingDashboard />
+        </Suspense>
+      } />
       
-      {/* Protected Admin Routes */}
+      {/* Payment & Sample Routes - Lazy Loaded */}
+      <Route path="/payment" element={
+        <Suspense fallback={<LoadingFallback message="Loading Payment Options..." />}>
+          <Payment />
+        </Suspense>
+      } />
+      <Route path="/sample-career-launch-report" element={
+        <Suspense fallback={<LoadingFallback message="Generating Sample Report..." />}>
+          <SampleCareerLaunchReport />
+        </Suspense>
+      } />
+      <Route path="/sample-reports" element={
+        <Suspense fallback={<LoadingFallback message="Loading Sample Reports..." />}>
+          <SampleReports />
+        </Suspense>
+      } />
+      
+      {/* Protected Admin Routes - Lazy Loaded with Protection */}
       <Route path="/admin" element={
         <ProtectedAdminRoute>
-          <AdminPage />
+          <Suspense fallback={<LoadingFallback message="Loading Admin Panel..." />}>
+            <AdminPage />
+          </Suspense>
         </ProtectedAdminRoute>
       } />
       <Route path="/admin-analytics" element={
         <ProtectedAdminRoute>
-          <AdminAnalytics />
+          <Suspense fallback={<LoadingFallback message="Loading Analytics Dashboard..." />}>
+            <AdminAnalytics />
+          </Suspense>
         </ProtectedAdminRoute>
       } />
       <Route path="/marketing-materials" element={
         <ProtectedAdminRoute>
-          <MarketingMaterials />
+          <Suspense fallback={<LoadingFallback message="Loading Marketing Materials..." />}>
+            <MarketingMaterials />
+          </Suspense>
         </ProtectedAdminRoute>
       } />
       
