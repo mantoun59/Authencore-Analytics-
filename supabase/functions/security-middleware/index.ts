@@ -43,11 +43,18 @@ serve(async (req) => {
       case 'log_security_event':
         return await handleLogSecurityEvent(user_id, payload);
       
-      case 'analyze_suspicious_activity':
-        return await handleAnalyzeSuspiciousActivity(payload);
+      case 'admin_route_access_attempt':
+        return await handleAdminRouteAccess(user_id, payload);
       
       default:
-        throw new Error('Invalid action');
+        console.error(`Unknown action: ${action}`);
+        return new Response(JSON.stringify({ 
+          error: 'Invalid action',
+          allowed: false 
+        }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
     }
 
   } catch (error) {
@@ -306,6 +313,73 @@ async function handleAnalyzeSuspiciousActivity(activityData: any): Promise<Respo
       risk_level: 'unknown',
       threats: ['analysis_failed'],
       recommendations: ['manual_review_required']
+    }), {
+      status: 500,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+}
+
+async function handleAdminRouteAccess(user_id?: string, payload?: any): Promise<Response> {
+  try {
+    if (!user_id) {
+      return new Response(JSON.stringify({ 
+        allowed: false,
+        error: 'User ID required for admin route access' 
+      }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Check if user has admin role
+    const { data, error } = await supabase
+      .from('user_roles')
+      .select('role')
+      .eq('user_id', user_id)
+      .eq('role', 'admin')
+      .maybeSingle();
+
+    if (error) {
+      console.error('Error checking admin role:', error);
+      return new Response(JSON.stringify({ 
+        allowed: false,
+        error: 'Database error checking admin role' 
+      }), {
+        status: 500,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    const isAdmin = !!data;
+
+    // Log the access attempt
+    await supabase.rpc('log_security_event', {
+      p_user_id: user_id,
+      p_event_type: 'admin_route_access',
+      p_event_details: { 
+        path: payload?.path,
+        allowed: isAdmin,
+        timestamp: new Date().toISOString()
+      },
+      p_ip_address: payload?.ip_address,
+      p_user_agent: payload?.userAgent,
+      p_severity: isAdmin ? 'info' : 'warning'
+    });
+
+    return new Response(JSON.stringify({ 
+      allowed: isAdmin,
+      isAdmin,
+      timestamp: new Date().toISOString()
+    }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+
+  } catch (error) {
+    console.error('Admin route access check error:', error);
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      allowed: false 
     }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

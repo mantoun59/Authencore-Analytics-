@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { MessageCircle, Send, X, Bot, User, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { pipeline, env } from '@huggingface/transformers';
+import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
   id: string;
@@ -26,43 +26,8 @@ const AIChat = () => {
   ]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isModelLoaded, setIsModelLoaded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
-  const generatorRef = useRef<any>(null);
-
-  // Configure transformers.js
-  useEffect(() => {
-    env.allowLocalModels = false;
-    env.useBrowserCache = true;
-  }, []);
-
-  // Initialize the model
-  useEffect(() => {
-    const initModel = async () => {
-      try {
-        if (!generatorRef.current) {
-          generatorRef.current = await pipeline(
-            'text-generation',
-            'Xenova/gpt2',
-            { device: 'webgpu' } // Use WebGPU for better performance, fallback to CPU
-          );
-          setIsModelLoaded(true);
-        }
-      } catch (error) {
-        // Failed to load model
-        // Set model as loaded anyway to allow basic functionality
-        setIsModelLoaded(true);
-        toast({
-          title: "Using Fallback Mode",
-          description: "AI model couldn't load, using simple responses.",
-          variant: "default"
-        });
-      }
-    };
-    
-    initModel();
-  }, [toast]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -161,31 +126,24 @@ const AIChat = () => {
         }
       }
 
-      // If AI model is loaded, try to use it for more sophisticated responses
-      if (generatorRef.current && isModelLoaded) {
-        try {
-          // Using AI model for enhanced response
-          const contextPrompt = `You are a helpful assistant for AuthenCore Analytics. User asked: "${currentInput}". Respond helpfully about our assessments: ${aiResponse}`;
-          
-          const result = await generatorRef.current(contextPrompt, {
-            max_new_tokens: 100,
-            temperature: 0.7,
-            do_sample: true,
-            pad_token_id: 50256
-          });
-          
-          // Try to extract AI response but fall back to rule-based if needed
-          if (result && result[0] && result[0].generated_text) {
-            const generated = result[0].generated_text;
-            const responseStart = generated.indexOf('Respond helpfully') + 'Respond helpfully about our assessments: '.length;
-            const aiGenerated = generated.substring(responseStart).trim();
-            if (aiGenerated && aiGenerated.length > 10) {
-              aiResponse = aiGenerated.split('\n')[0] || aiResponse;
-            }
+      // Try to use Supabase edge function for more sophisticated responses
+      try {
+        const { data, error } = await supabase.functions.invoke('ai-chatbot', {
+          body: { 
+            message: currentInput,
+            conversationHistory: messages.slice(-4).map(m => ({
+              role: m.type === 'user' ? 'user' : 'assistant',
+              content: m.content
+            }))
           }
-        } catch (modelError) {
-          // Using rule-based response (AI model failed)
+        });
+
+        if (data && data.response && !error) {
+          aiResponse = data.response;
         }
+      } catch (edgeFunctionError) {
+        // Fall back to rule-based response if edge function fails
+        console.log('Using fallback response');
       }
 
       const assistantMessage: Message = {
