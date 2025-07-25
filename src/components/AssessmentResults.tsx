@@ -29,6 +29,8 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
 import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
+import InteractiveResultsVisualization from "@/components/InteractiveResultsVisualization";
+import ProgressTracker from "@/components/ProgressTracker";
 import { toast } from "sonner";
 import UnifiedAssessmentService from "@/services/unifiedAssessmentService";
 import ConsolidatedReportService from "@/services/consolidatedReportService";
@@ -896,6 +898,18 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
             {/* Overview Tab */}
             <TabsContent value="overview" className="space-y-6">
+              <InteractiveResultsVisualization
+                dimensions={getDimensionScores()}
+                overallScore={getOverallScore()}
+                assessmentType={assessmentType}
+                strengths={getStrengths()}
+                improvementAreas={getDevelopmentAreas().map(area => typeof area === 'string' ? area : area.category)}
+              />
+              
+              <ProgressTracker 
+                currentAssessment={assessmentType}
+                userId={candidateInfo?.email || 'anonymous'}
+              />
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {dimensions.map((dimension) => (
                   <Card key={dimension.key} className="hover:shadow-lg transition-shadow">

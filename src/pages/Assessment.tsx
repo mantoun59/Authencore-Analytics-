@@ -10,8 +10,11 @@ import { assessmentsData } from "@/data/assessmentsData";
 import assessmentConceptImage from "@/assets/assessment-concept.jpg";
 import LogoDisplay from "@/components/LogoDisplay";
 import { PaymentButton } from "@/components/PaymentButton";
+import AssessmentPreviewModal from "@/components/AssessmentPreviewModal";
 
 const Assessment = () => {
+  const [previewModalOpen, setPreviewModalOpen] = useState(false);
+  const [selectedAssessment, setSelectedAssessment] = useState<any>(null);
   const getInfoRoute = (assessmentId: string) => {
     const routeMap: { [key: string]: string } = {
       'career-launch': '/career-launch-info',
@@ -42,6 +45,36 @@ const Assessment = () => {
       case 'Users': return Users;
       default: return Target;
     }
+  };
+
+  const getSampleQuestions = (assessmentType: string) => {
+    const sampleQuestions: { [key: string]: string[] } = {
+      'career-launch': [
+        "I feel confident about my technical skills for my desired career path",
+        "I can effectively communicate my ideas in professional settings",
+        "I adapt well to changing workplace priorities and requirements"
+      ],
+      'leadership-assessment': [
+        "I inspire others to achieve their best performance",
+        "I make decisions confidently even with incomplete information",
+        "I provide constructive feedback that helps team members grow"
+      ],
+      'communication-styles': [
+        "I adjust my communication style based on my audience",
+        "I listen actively and ask clarifying questions",
+        "I can influence others without being pushy or aggressive"
+      ]
+    };
+    return sampleQuestions[assessmentType] || [
+      "This assessment will evaluate your key competencies",
+      "Questions are designed to understand your natural tendencies",
+      "Your responses help create a personalized development plan"
+    ];
+  };
+
+  const handlePreviewAssessment = (assessment: any) => {
+    setSelectedAssessment(assessment);
+    setPreviewModalOpen(true);
   };
 
   const getColorClasses = (color: string) => {
@@ -180,11 +213,21 @@ const Assessment = () => {
                         variant="default"
                         size="default"
                       />
-                      <Link to={getInfoRoute(assessment.id)}>
-                        <Button variant="outline" size="sm" className="w-full">
-                          Learn More <ArrowRight className="ml-2 h-3 w-3" />
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          className="flex-1"
+                          onClick={() => handlePreviewAssessment(assessment)}
+                        >
+                          Preview
                         </Button>
-                      </Link>
+                        <Link to={getInfoRoute(assessment.id)} className="flex-1">
+                          <Button variant="outline" size="sm" className="w-full">
+                            Learn More <ArrowRight className="ml-2 h-3 w-3" />
+                          </Button>
+                        </Link>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
@@ -327,6 +370,24 @@ const Assessment = () => {
       </section>
 
       <Footer />
+      
+      {/* Assessment Preview Modal */}
+      {selectedAssessment && (
+        <AssessmentPreviewModal
+          isOpen={previewModalOpen}
+          onClose={() => setPreviewModalOpen(false)}
+          assessmentType={selectedAssessment.id}
+          assessmentTitle={selectedAssessment.title}
+          assessmentDescription={selectedAssessment.description}
+          sampleQuestions={getSampleQuestions(selectedAssessment.id)}
+          estimatedTime={selectedAssessment.duration}
+          onStartAssessment={() => {
+            setPreviewModalOpen(false);
+            // Navigate to payment or start assessment
+            window.location.href = getInfoRoute(selectedAssessment.id);
+          }}
+        />
+      )}
     </div>
   );
 };
