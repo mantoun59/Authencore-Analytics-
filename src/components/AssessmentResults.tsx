@@ -59,7 +59,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     }
   }, [data, assessmentType]);
 
-  const processAssessment = () => {
+  const processAssessment = async () => {
     try {
       // Processing assessment with type and data (development only)
       
@@ -74,12 +74,25 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         metadata: (data as any)?.metadata || {}
       };
 
-      const result = unifiedService.processAssessment(assessmentType, assessmentData);
+      const result = await unifiedService.processAssessment(assessmentType, assessmentData);
       // Assessment result generated successfully
       if (typeof result === 'object' && 'overallScore' in result) {
+        // Create dimension scores array with proper structure
+        const dimensionScores: any[] = [];
+        if (result.dimensionScores && typeof result.dimensionScores === 'object') {
+          Object.entries(result.dimensionScores).forEach(([key, value]) => {
+            dimensionScores.push({
+              name: key,
+              score: typeof value === 'number' ? value : 0,
+              description: 'Assessment dimension',
+              level: 'medium'
+            });
+          });
+        }
+
         setResults({
           overallScore: result.overallScore || 0,
-          dimensions: Array.isArray(result.dimensionScores) ? result.dimensionScores : [],
+          dimensions: dimensionScores,
           improvements: result.developmentAreas?.map(area => ({ category: area, items: [] })) || [],
           profile: result.assessmentType || 'Assessment Complete',
           recommendations: [],

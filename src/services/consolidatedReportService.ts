@@ -33,6 +33,35 @@ export class ConsolidatedReportService {
     config: ReportConfig = this.getDefaultConfig()
   ): Promise<void> {
     try {
+      // Try server-side PDF generation for better performance
+      try {
+        console.log('🚀 Attempting server-side PDF generation...');
+        const { data: pdfData, error } = await supabase.functions.invoke('generate-pdf-report', {
+          body: { result, config }
+        });
+
+        if (!error && pdfData && pdfData.pdf) {
+          // Download the server-generated PDF
+          const blob = new Blob([Uint8Array.from(atob(pdfData.pdf), c => c.charCodeAt(0))], 
+            { type: 'application/pdf' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = this.generateFileName(result, config);
+          a.click();
+          URL.revokeObjectURL(url);
+          
+          await this.logReportGeneration(result, config);
+          toast.success('Report generated on server successfully!');
+          return;
+        }
+        
+        console.log('⚠️ Server-side PDF generation failed, falling back to client-side');
+      } catch (error) {
+        console.warn('Server-side PDF generation error, using fallback:', error);
+      }
+
+      // Fallback to client-side generation
       const doc = new jsPDF();
       let yPosition = 20;
 

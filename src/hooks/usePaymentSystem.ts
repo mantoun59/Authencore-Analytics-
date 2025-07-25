@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { withNetworkFallback } from '@/utils/networkFallback';
 
 interface PaymentPlan {
   id: string;
@@ -57,14 +58,23 @@ export const usePaymentSystem = (): PaymentSystemHook => {
   const fetchPaymentPlans = async () => {
     try {
       setLoading(true);
-      const { data, error } = await supabase
-        .from('payment_plans')
-        .select('*')
-        .eq('is_active', true)
-        .order('price', { ascending: true });
+      
+      const result = await withNetworkFallback(
+        async () => {
+          const { data, error } = await supabase
+            .from('payment_plans')
+            .select('*')
+            .eq('is_active', true)
+            .order('price', { ascending: true });
 
-      if (error) throw error;
-      setPaymentPlans(data || []);
+          if (error) throw error;
+          return data || [];
+        },
+        'payment_plans',
+        { enableRetry: true, enableCaching: true, enableOfflineMode: true }
+      );
+
+      setPaymentPlans(result);
       setError(null);
     } catch (err: any) {
       setError(err.message);
@@ -79,17 +89,24 @@ export const usePaymentSystem = (): PaymentSystemHook => {
       setLoading(true);
       setError(null);
 
-      const { data, error } = await supabase.functions.invoke('create-payment-order', {
-        body: {
-          planId,
-          assessmentType: options.assessmentType,
-          guestInfo: options.guestInfo,
-          billingInfo: options.billingInfo,
-          quantity: options.quantity || 1,
-        }
-      });
+      const result = await withNetworkFallback(
+        async () => {
+          const { data, error } = await supabase.functions.invoke('create-payment-order', {
+            body: {
+              planId,
+              assessmentType: options.assessmentType,
+              guestInfo: options.guestInfo,
+              billingInfo: options.billingInfo,
+              quantity: options.quantity || 1,
+            }
+          });
 
-      if (error) throw error;
+          if (error) throw error;
+          return data;
+        },
+        undefined, // No caching for payment operations
+        { enableRetry: true, enableCaching: false, enableOfflineMode: true }
+      );
 
       toast({
         title: "Order Created",
@@ -97,7 +114,7 @@ export const usePaymentSystem = (): PaymentSystemHook => {
         variant: "default",
       });
 
-      return data;
+      return result;
     } catch (err: any) {
       setError(err.message);
       toast({

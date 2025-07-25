@@ -2,6 +2,7 @@ import { AssessmentData, AssessmentResults, CandidateInfo } from '@/types/assess
 import PsychometricScoringEngine from '@/services/psychometricScoringEngine';
 import jsPDF from 'jspdf';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 
 // Unified assessment configuration
 export interface AssessmentConfig {
@@ -28,6 +29,7 @@ export interface UnifiedAssessmentResult {
     responseTime: number;
     engagement: 'high' | 'medium' | 'low';
   };
+  serverProcessed?: boolean;
 }
 
 export interface ReportContent {
@@ -173,9 +175,31 @@ export class UnifiedAssessmentService {
     this.assessmentConfigs.set(config.id, config);
   }
 
-  public processAssessment(assessmentType: string, data: AssessmentData): UnifiedAssessmentResult {
+  public async processAssessment(assessmentType: string, data: AssessmentData): Promise<UnifiedAssessmentResult> {
     console.log('🔄 Processing assessment with type:', assessmentType);
     
+    // Try server-side processing for heavy computations
+    try {
+      console.log('🚀 Attempting server-side processing...');
+      const { data: serverResult, error } = await supabase.functions.invoke('process-assessment', {
+        body: {
+          assessmentType,
+          responses: data.responses,
+          candidateInfo: data.candidateInfo
+        }
+      });
+
+      if (!error && serverResult && !serverResult.error) {
+        console.log('✅ Server-side processing successful');
+        return serverResult;
+      }
+      
+      console.log('⚠️ Server-side processing failed, falling back to client-side');
+    } catch (error) {
+      console.warn('Server-side processing error, using fallback:', error);
+    }
+
+    // Fallback to client-side processing
     const config = this.assessmentConfigs.get(assessmentType);
     if (!config) {
       console.error('❌ Unknown assessment type:', assessmentType);
@@ -198,7 +222,8 @@ export class UnifiedAssessmentService {
       strengths: this.identifyStrengths(dimensionScores),
       developmentAreas: this.identifyDevelopmentAreas(dimensionScores),
       recommendations: this.generateRecommendations(assessmentType, dimensionScores, overallScore),
-      validityMetrics: this.calculateValidityMetrics(data.responses || [])
+      validityMetrics: this.calculateValidityMetrics(data.responses || []),
+      serverProcessed: false
     };
   }
 
