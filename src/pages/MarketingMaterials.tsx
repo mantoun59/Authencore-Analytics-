@@ -790,6 +790,44 @@ const MarketingMaterials: React.FC = () => {
 
   const handleDownload = async (material: MarketingMaterial) => {
     try {
+      // First try professional PDF generation edge function
+      try {
+        const response = await fetch('https://jlbftyjewxgetxcihban.supabase.co/functions/v1/generate-marketing-pdf', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpsYmZ0eWpld3hnZXR4Y2loYmFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2NDA4MzgsImV4cCI6MjA2ODIxNjgzOH0.g_SBYZPefuFcCQfG_Un3PEASxycvoa65bG1DmGtXfrg'}`,
+          },
+          body: JSON.stringify({
+            materialId: material.id,
+            title: material.title,
+            description: material.description,
+            category: material.category,
+          }),
+        });
+
+        if (response.ok) {
+          const blob = await response.blob();
+          const url = window.URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `AuthenCore-${material.title.replace(/\s+/g, '-')}-Professional.pdf`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          
+          toast({
+            title: "Professional PDF Generated",
+            description: `${material.title} has been downloaded successfully.`,
+          });
+          return;
+        }
+      } catch (serverError) {
+        console.warn('Professional PDF generation failed, using fallback:', serverError);
+      }
+
+      // Fallback to client-side generation
       let doc;
       let filename;
       
