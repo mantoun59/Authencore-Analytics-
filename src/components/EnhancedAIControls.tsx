@@ -106,7 +106,7 @@ export const EnhancedAIControls: React.FC<EnhancedAIControlsProps> = ({
         candidateInfo
       );
       
-      console.log('Enhanced Interview Questions:', questions);
+      // Enhanced Interview Questions generated successfully
       toast.success('Advanced interview questions generated!');
     } catch (error) {
       console.error('Interview question generation failed:', error);

@@ -56,7 +56,7 @@ export const useCareerLaunchScoring = () => {
   const scoringEngine = CareerLaunchScoringEngine.getInstance();
 
   const calculateScores = (answers: AnswerItem[], candidateProfile?: any, totalTime?: number): CareerLaunchResult => {
-    console.log('🎯 Enhanced CareerLaunch Scoring initiated with', answers.length, 'responses');
+    // Enhanced CareerLaunch Scoring initiated with responses
     
     // Validate assessment quality
     const assessmentQuality = scoringEngine.validateAssessmentQuality(answers, totalTime || 1200);

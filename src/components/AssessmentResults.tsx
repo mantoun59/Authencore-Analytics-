@@ -625,7 +625,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
           url: window.location.href
         });
       } catch (error) {
-        console.log('Error sharing:', error);
+        // Sharing failed - handle gracefully
       }
     } else {
       navigator.clipboard.writeText(shareText);
