@@ -321,55 +321,57 @@ const StressResilience = () => {
 
   if (currentStep === 'assessment') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50">
+      <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50 flex flex-col">
         <Header />
-        <div className="pt-20 pb-12">
-          <div className="container mx-auto px-4 max-w-4xl">
-            {/* Progress Header */}
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-2xl font-bold">Burnout Prevention Assessment</h2>
-                <span className="text-gray-600">
-                  Question {currentQuestionIndex + 1} of {burnoutPreventionQuestions.length}
+        <div className="flex-1 flex flex-col pt-16 pb-4">
+          <div className="container mx-auto px-4 max-w-4xl flex-1 flex flex-col">
+            {/* Compact Progress Header */}
+            <div className="mb-4">
+              <div className="flex items-center justify-between mb-2">
+                <h2 className="text-xl font-bold">Burnout Prevention Assessment</h2>
+                <span className="text-sm text-gray-600">
+                  {currentQuestionIndex + 1}/{burnoutPreventionQuestions.length}
                 </span>
               </div>
-              <Progress value={progress} className="h-3 mb-2" />
-              <p className="text-sm text-gray-600">{Math.round(progress)}% complete</p>
+              <Progress value={progress} className="h-2 mb-1" />
+              <p className="text-xs text-gray-600">{Math.round(progress)}% complete</p>
             </div>
 
-            {/* Question Card */}
-            <Card className="mb-8">
-              <CardHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Badge variant="outline">{currentQuestion.dimension}</Badge>
-                  <Badge variant="secondary">Question {currentQuestionIndex + 1}</Badge>
+            {/* Compact Question Card */}
+            <Card className="flex-1 flex flex-col min-h-0">
+              <CardHeader className="pb-3">
+                <div className="flex items-center gap-2 mb-2">
+                  <Badge variant="outline" className="text-xs">{currentQuestion.dimension}</Badge>
+                  <Badge variant="secondary" className="text-xs">Q{currentQuestionIndex + 1}</Badge>
                 </div>
-                <CardTitle className="text-xl leading-relaxed">
+                <CardTitle className="text-lg leading-relaxed">
                   {currentQuestion.question}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <RadioGroup
-                  value={selectedOption?.toString()}
-                  onValueChange={(value) => setSelectedOption(parseInt(value))}
-                  className="space-y-4"
-                >
-                  {currentQuestion.options.map((option, index) => (
-                    <div key={index} className="flex items-center space-x-2 p-3 rounded-lg hover:bg-gray-50">
-                      <RadioGroupItem value={index.toString()} id={`option-${index}`} />
-                      <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer">
-                        {typeof option === 'string' ? option : option.text}
-                      </Label>
-                    </div>
-                  ))}
-                </RadioGroup>
+              <CardContent className="flex-1 flex flex-col justify-between">
+                <div className="flex-1">
+                  <RadioGroup
+                    value={selectedOption?.toString()}
+                    onValueChange={(value) => setSelectedOption(parseInt(value))}
+                    className="space-y-2"
+                  >
+                    {currentQuestion.options.map((option, index) => (
+                      <div key={index} className="flex items-center space-x-2 p-2 rounded-lg hover:bg-gray-50">
+                        <RadioGroupItem value={index.toString()} id={`option-${index}`} />
+                        <Label htmlFor={`option-${index}`} className="flex-1 cursor-pointer text-sm">
+                          {typeof option === 'string' ? option : option.text}
+                        </Label>
+                      </div>
+                    ))}
+                  </RadioGroup>
+                </div>
 
-                {/* Confidence Slider */}
-                <div className="mt-6 pt-6 border-t">
-                  <Label className="text-sm font-medium mb-3 block">
-                    How confident are you in this response?
+                {/* Compact Confidence Slider */}
+                <div className="mt-4 pt-4 border-t">
+                  <Label className="text-sm font-medium mb-2 block">
+                    Confidence level:
                   </Label>
-                  <div className="px-3">
+                  <div className="px-2">
                     <Slider
                       value={confidence}
                       onValueChange={setConfidence}
@@ -378,17 +380,17 @@ const StressResilience = () => {
                       step={1}
                       className="w-full"
                     />
-                    <div className="flex justify-between text-xs text-gray-500 mt-2">
-                      <span>Not confident</span>
-                      <span>Very confident</span>
+                    <div className="flex justify-between text-xs text-gray-500 mt-1">
+                      <span>Low</span>
+                      <span>High</span>
                     </div>
                   </div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Navigation */}
-            <div className="flex justify-between">
+            {/* Fixed Navigation */}
+            <div className="flex justify-between mt-4">
               <Button
                 variant="outline"
                 onClick={() => {
@@ -398,6 +400,7 @@ const StressResilience = () => {
                   }
                 }}
                 disabled={currentQuestionIndex === 0}
+                size="sm"
               >
                 <ArrowLeft className="mr-2 w-4 h-4" />
                 Previous
@@ -407,18 +410,18 @@ const StressResilience = () => {
                 onClick={handleNextQuestion}
                 disabled={selectedOption === null || isSubmitting}
                 className="bg-green-600 hover:bg-green-700"
+                size="sm"
               >
                 {currentQuestionIndex === burnoutPreventionQuestions.length - 1 ? (
-                  isSubmitting ? 'Processing...' : 'Complete Assessment'
+                  isSubmitting ? 'Processing...' : 'Complete'
                 ) : (
-                  'Next Question'
+                  'Next'
                 )}
                 <ArrowRight className="ml-2 w-4 h-4" />
               </Button>
             </div>
           </div>
         </div>
-        <Footer />
       </div>
     );
   }
