@@ -405,33 +405,443 @@ For email functionality:
 
 ## 📊 Assessment Types & Scoring
 
-### Career Launch Assessment
+### 🚀 Career Launch Assessment
 - **Questions**: 45 comprehensive career-focused questions
-- **Scoring**: Multi-dimensional analysis including interests, values, skills
-- **Report**: Detailed career recommendations with action steps
+- **Duration**: 15-20 minutes
+- **Dimensions**: Career interests, work values, personality traits, skills assessment
+- **Scoring Algorithm**: Multi-dimensional career matching with RIASEC model integration
+- **Report Features**: 
+  - Personalized career path recommendations
+  - Industry fit analysis
+  - Skill development roadmap
+  - Educational pathway suggestions
+  - Action steps for career advancement
 
-### Communication Styles
-- **Questions**: 30 scenario-based questions
-- **Scoring**: Four primary communication styles with percentages
-- **Report**: Style breakdown with team dynamics insights
+### 💬 Communication Styles Assessment
+- **Questions**: 30 scenario-based workplace communication questions
+- **Duration**: 10-15 minutes
+- **Dimensions**: Direct/Indirect, Formal/Informal, Expressive/Reserved, Task/Relationship focused
+- **Scoring Algorithm**: Four-quadrant communication matrix with percentage breakdown
+- **Report Features**:
+  - Primary and secondary communication styles
+  - Team dynamics insights
+  - Conflict resolution strategies
+  - Leadership communication recommendations
+  - Cross-cultural communication tips
 
-### Cultural Intelligence (CAIR)
-- **Questions**: 20 cultural scenario questions
-- **Scoring**: Cultural adaptability and awareness metrics
-- **Report**: Cultural competency development recommendations
+### 🌍 Cultural Intelligence (CAIR) Assessment
+- **Questions**: 40 cultural scenario and behavioral questions
+- **Duration**: 15-20 minutes
+- **Dimensions**: Cultural Drive, Cultural Knowledge, Cultural Strategy, Cultural Action
+- **Scoring Algorithm**: Four-factor CQ model with cultural adaptability metrics
+- **Report Features**:
+  - CQ competency breakdown by dimension
+  - Cultural bridge-building strategies
+  - Global leadership potential assessment
+  - Diversity and inclusion recommendations
+  - Cultural sensitivity development plan
 
-### Other Assessments
-Each assessment includes:
-- Validated psychometric questions
-- Algorithm-based scoring
-- AI-enhanced report generation
-- Actionable insights and recommendations
+### 🧠 Emotional Intelligence Assessment
+- **Questions**: 35 emotional scenario questions
+- **Duration**: 12-18 minutes
+- **Dimensions**: Self-awareness, Self-regulation, Motivation, Empathy, Social skills
+- **Scoring Algorithm**: Five-factor EQ model with emotional competency mapping
+- **Report Features**:
+  - EQ strength and development areas
+  - Emotional leadership capacity
+  - Relationship management insights
+  - Stress management strategies
+  - Team emotional climate impact
 
-## 🏢 User Roles & Permissions
+### 👑 Leadership Assessment
+- **Questions**: 40 leadership scenario questions
+- **Duration**: 15-20 minutes
+- **Dimensions**: Visionary, Coaching, Affiliative, Democratic, Pacesetting, Commanding
+- **Scoring Algorithm**: Six leadership styles assessment with situational effectiveness
+- **Report Features**:
+  - Leadership style profile
+  - Situational leadership recommendations
+  - Team management strategies
+  - Executive presence development
+  - Leadership growth pathway
+
+### 💻 Digital Wellness Assessment
+- **Questions**: 25 technology usage and habit questions
+- **Duration**: 8-12 minutes
+- **Dimensions**: Usage patterns, Digital boundaries, Tech-life balance, Productivity impact
+- **Scoring Algorithm**: Digital wellness score with usage pattern analysis
+- **Report Features**:
+  - Digital wellness score and interpretation
+  - Technology usage patterns
+  - Digital detox recommendations
+  - Productivity optimization tips
+  - Healthy tech habit formation
+
+### 🙏 Faith & Values Assessment
+- **Questions**: 90 values-based ranking and scenario questions
+- **Duration**: 20-25 minutes
+- **Dimensions**: Spiritual values, Personal ethics, Work-life integration, Community involvement
+- **Scoring Algorithm**: Values hierarchy with faith-work alignment analysis
+- **Report Features**:
+  - Personal values ranking
+  - Faith-work integration assessment
+  - Ethical decision-making framework
+  - Purpose-driven career recommendations
+  - Community engagement suggestions
+
+### 💪 Stress Resilience Assessment
+- **Questions**: 30 stress response and coping questions
+- **Duration**: 10-15 minutes
+- **Dimensions**: Stress tolerance, Coping strategies, Recovery patterns, Support systems
+- **Scoring Algorithm**: Resilience quotient with stress vulnerability analysis
+- **Report Features**:
+  - Stress resilience profile
+  - Vulnerability and strength areas
+  - Coping strategy effectiveness
+  - Stress management toolkit
+  - Wellness and recovery plan
+
+### 🎯 Gen Z Workplace Assessment
+- **Questions**: 35 workplace preference and scenario questions
+- **Duration**: 12-18 minutes
+- **Dimensions**: Work preferences, Communication styles, Career expectations, Technology integration
+- **Scoring Algorithm**: Generational workplace fit with preference mapping
+- **Report Features**:
+  - Workplace preference profile
+  - Generational communication insights
+  - Career expectation alignment
+  - Technology integration preferences
+  - Multi-generational team strategies
+
+### 🔥 Burnout Prevention Assessment
+- **Questions**: 28 burnout risk and prevention questions
+- **Duration**: 10-12 minutes
+- **Dimensions**: Emotional exhaustion, Depersonalization, Personal accomplishment, Work engagement
+- **Scoring Algorithm**: Burnout risk assessment with early warning indicators
+- **Report Features**:
+  - Burnout risk level assessment
+  - Early warning signs identification
+  - Prevention strategy recommendations
+  - Work-life balance optimization
+  - Recovery and renewal planning
+
+## 👑 Administrator Guidance & Management
+
+### 🔐 Main Platform Administrator
+
+**Role**: Super Admin with full system access and control
+**Access**: All platform features, analytics, user management, system configuration
+
+#### Step-by-Step Setup Guide
+
+**Initial Admin Setup:**
+1. **Create Admin Account**
+   ```sql
+   -- After creating your user account normally, assign admin role
+   SELECT public.assign_admin_role('your-email@authencore.org');
+   ```
+
+2. **Access Admin Dashboard**
+   - Navigate to `/admin` after login
+   - Verify access to all admin sections
+   - Review system status and health metrics
+
+3. **Configure System Settings**
+   - Set up organizational details
+   - Configure email templates and notifications
+   - Establish security policies and MFA requirements
+   - Review and adjust assessment pricing
+
+#### Daily Administrative Tasks
+
+**User Management:**
+- Monitor new user registrations
+- Handle account verification issues
+- Process account deactivation requests
+- Review security events and suspicious activity
+
+**System Monitoring:**
+- Check Edge Function performance and logs
+- Monitor database performance metrics
+- Review error reports and system alerts
+- Validate backup integrity and security
+
+**Analytics Review:**
+- Analyze platform usage trends
+- Review assessment completion rates
+- Monitor revenue and payment processing
+- Generate executive summary reports
+
+#### Advanced Administration Functions
+
+**Security Management:**
+```sql
+-- Monitor security events
+SELECT * FROM public.security_events 
+WHERE created_at > now() - interval '24 hours'
+ORDER BY created_at DESC;
+
+-- Check suspicious activity
+SELECT user_id, COUNT(*) as event_count, 
+       MAX(created_at) as last_event
+FROM public.security_events 
+WHERE created_at > now() - interval '1 hour'
+GROUP BY user_id 
+HAVING COUNT(*) > 10;
+```
+
+**System Health Checks:**
+- Database connection integrity
+- Edge Function execution status
+- Storage bucket access verification
+- Email service connectivity
+
+### 🏢 Employer Account Administration
+
+**Role**: Business account managers with candidate oversight
+**Access**: Candidate management, assessment results, team analytics
+
+#### Employer Onboarding Process
+
+**Step 1: Account Creation**
+1. **Admin Creates Employer Account**
+   - Access Admin Dashboard → Employer Management
+   - Click "Add New Employer"
+   - Complete organization details:
+     - Company name and industry
+     - Contact information
+     - Billing preferences
+     - Assessment package selection
+
+2. **Configure Employer Settings**
+   ```sql
+   -- Create employer account with proper settings
+   INSERT INTO public.employer_accounts (
+     name, email, contact_person, industry, 
+     candidate_limit, active_until, is_active
+   ) VALUES (
+     'Company Name', 'contact@company.com', 'John Doe',
+     'Technology', 50, now() + interval '1 year', true
+   );
+   ```
+
+3. **Provide Employer Credentials**
+   - Generate secure temporary password
+   - Send welcome email with login instructions
+   - Schedule onboarding call if needed
+
+#### Employer Dashboard Functions
+
+**Candidate Management:**
+- Add individual candidates or bulk upload
+- Send assessment invitations with custom messages
+- Track assessment completion status
+- Download individual and group reports
+
+**Assessment Tools:**
+- Configure which assessments are available
+- Set assessment expiration dates
+- Create custom assessment packages
+- Monitor candidate progress in real-time
+
+**Reporting & Analytics:**
+- Team composition analysis
+- Hiring decision support metrics
+- Assessment result comparisons
+- Export capabilities for HR systems
+
+#### Employer Support & Maintenance
+
+**Regular Maintenance:**
+- Review candidate limits and usage
+- Update organization information
+- Process billing and subscription changes
+- Provide technical support for assessment issues
+
+**Troubleshooting Common Issues:**
+- Candidate invitation email delivery
+- Assessment link expiration problems
+- Report generation delays
+- User access and permission issues
+
+### 🤝 Partner Account Administration
+
+**Role**: White-label platform resellers with customization rights
+**Access**: Branded interface, candidate management, revenue sharing
+
+#### Partner Onboarding Workflow
+
+**Step 1: Partner Account Setup**
+1. **Create Partner Profile**
+   - Navigate to Admin → Partner Management
+   - Complete partner application review
+   - Set up organization details and branding
+   - Configure revenue sharing percentages
+
+2. **Technical Configuration**
+   ```sql
+   -- Create partner account with access permissions
+   INSERT INTO public.partner_accounts (
+     username, organization_name, contact_email,
+     candidate_limit, access_expires_at, is_active
+   ) VALUES (
+     'partner_org', 'Partner Organization', 'admin@partner.com',
+     200, now() + interval '2 years', true
+   );
+   
+   -- Configure assessment access permissions
+   INSERT INTO public.partner_access_permissions (
+     partner_id, assessment_type, can_access, candidate_limit
+   ) VALUES 
+     ((SELECT id FROM partner_accounts WHERE username = 'partner_org'), 
+      'career-launch', true, 50),
+     ((SELECT id FROM partner_accounts WHERE username = 'partner_org'), 
+      'communication-styles', true, 30);
+   ```
+
+3. **Branding Customization**
+   - Upload partner logo and brand assets
+   - Configure color scheme and styling
+   - Set up custom domain (if applicable)
+   - Create branded email templates
+
+#### Partner Management Functions
+
+**Access Control:**
+- Define which assessments partners can offer
+- Set candidate limits per assessment type
+- Configure pricing and revenue sharing
+- Monitor partner activity and usage
+
+**Performance Monitoring:**
+```sql
+-- Track partner activity and usage
+SELECT p.organization_name, 
+       COUNT(pal.id) as total_activities,
+       COUNT(DISTINCT pal.assessment_type) as unique_assessments
+FROM public.partner_accounts p
+LEFT JOIN public.partner_access_logs pal ON p.id = pal.partner_id
+WHERE pal.created_at > now() - interval '30 days'
+GROUP BY p.id, p.organization_name;
+```
+
+**Revenue & Analytics:**
+- Commission tracking and payments
+- Partner performance metrics
+- Candidate conversion rates
+- Usage pattern analysis
+
+#### Partner Support Services
+
+**Technical Support:**
+- API integration assistance
+- Custom integration development
+- Branding implementation support
+- Assessment customization guidance
+
+**Business Support:**
+- Sales training and materials
+- Marketing collateral development
+- Pricing strategy consultation
+- Performance optimization recommendations
+
+### 🔧 Special Administrative Tools
+
+#### Marketing Materials Management
+**Access**: `/marketing-materials`
+- Upload and organize promotional PDFs
+- Version control for marketing collateral
+- Download tracking and analytics
+- Brand compliance verification
+
+#### Bulk Operations Tools
+
+**User Management Scripts:**
+```sql
+-- Bulk user role assignment
+-- (Use with extreme caution - requires admin privileges)
+
+-- Assign multiple admin roles
+INSERT INTO public.user_roles (user_id, role)
+SELECT id, 'admin'::app_role 
+FROM auth.users 
+WHERE email IN ('admin1@company.com', 'admin2@company.com')
+ON CONFLICT (user_id, role) DO NOTHING;
+
+-- Bulk deactivate accounts
+UPDATE public.employer_accounts 
+SET is_active = false 
+WHERE last_login < now() - interval '6 months';
+```
+
+**Assessment Data Migration:**
+```sql
+-- Export assessment results for backup
+SELECT ar.*, gr.report_content, gr.created_at as report_date
+FROM public.assessment_results ar
+LEFT JOIN public.generated_reports gr ON ar.id = gr.assessment_id
+WHERE ar.created_at > '2024-01-01';
+```
+
+#### Security Audit Tools
+
+**Regular Security Checks:**
+- Review RLS policy effectiveness
+- Monitor failed authentication attempts
+- Audit administrative access logs
+- Validate data encryption compliance
+
+**Compliance Reporting:**
+- GDPR data processing reports
+- Security incident documentation
+- User consent and data retention audits
+- Third-party integration security reviews
+
+### 🚨 Emergency Procedures
+
+#### System Outage Response
+1. **Immediate Assessment**
+   - Check Supabase service status
+   - Verify Edge Function availability
+   - Test database connectivity
+   - Confirm authentication services
+
+2. **Communication Protocol**
+   - Notify key stakeholders
+   - Update system status page
+   - Communicate with active users
+   - Document incident timeline
+
+3. **Recovery Procedures**
+   - Activate backup systems if needed
+   - Coordinate with Supabase support
+   - Monitor recovery progress
+   - Validate full service restoration
+
+#### Data Breach Response
+1. **Immediate Actions**
+   - Isolate affected systems
+   - Preserve evidence and logs
+   - Assess scope of breach
+   - Notify security team
+
+2. **Investigation Process**
+   - Review security event logs
+   - Identify breach vector
+   - Assess data exposure
+   - Document findings
+
+3. **Recovery & Communication**
+   - Implement security fixes
+   - Reset affected credentials
+   - Notify users and authorities
+   - Update security procedures
+
+## 🏢 User Roles & Permissions Summary
 
 ### Individual Users
 - Take assessments independently
-- Access personal results and reports
+- Access personal results and reports  
 - Download PDF reports
 - Track assessment history
 
