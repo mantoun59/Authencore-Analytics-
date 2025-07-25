@@ -243,7 +243,40 @@ const FaithValuesAssessment = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
         <Header />
         <div className="container mx-auto px-4 py-8">
-          <div className="max-w-3xl mx-auto">
+          <div className="max-w-4xl mx-auto">
+            {/* Cultural Neutrality Notice */}
+            <Card className="mb-8 border-blue-200 bg-blue-50">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-3 text-blue-800">
+                  <span className="text-2xl">🌍</span>
+                  Cultural Neutrality & Inclusivity
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-blue-700">
+                <p className="mb-4">
+                  This assessment respects all faith traditions, spiritual practices, and philosophical worldviews. We use universal values terminology that transcends specific religious frameworks.
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div className="flex items-start gap-2">
+                    <span className="text-blue-600">✓</span>
+                    <span>Culturally sensitive questions</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-blue-600">✓</span>
+                    <span>No religious bias</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-blue-600">✓</span>
+                    <span>Universal values focus</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-blue-600">✓</span>
+                    <span>Behavioral preferences</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
             <Card className="shadow-xl">
               <CardHeader className="text-center">
                 <div className="text-6xl mb-4">🌟</div>
@@ -257,10 +290,10 @@ const FaithValuesAssessment = () => {
               <CardContent>
                 <div className="bg-slate-50 rounded-lg p-6 mb-6">
                   <p className="text-center text-lg mb-4">
-                    This comprehensive assessment uses validated psychological instruments to analyze how your faith-based values align with your professional life across spiritual foundations, moral values, workplace ethics, and life integration.
+                    This assessment analyzes how your personal values align with your professional environment, using culturally neutral approaches that respect diverse belief systems and worldviews.
                   </p>
                   <p className="text-center text-muted-foreground">
-                    Using multiple assessment techniques including Likert scales, ranking, scenarios, and semantic differentials.
+                    Using multiple assessment techniques including values ranking, ethical scenarios, and reflective questions.
                   </p>
                 </div>
                 
@@ -274,8 +307,8 @@ const FaithValuesAssessment = () => {
                     <span className="text-sm">90 Questions | 42 Dimensions</span>
                   </div>
                   <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
-                    <span className="text-2xl">🔬</span>
-                    <span className="text-sm">Validated Instruments</span>
+                    <span className="text-2xl">🌍</span>
+                    <span className="text-sm">Culturally Neutral</span>
                   </div>
                 </div>
                 

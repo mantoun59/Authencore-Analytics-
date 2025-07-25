@@ -12,6 +12,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { ArrowRight, Brain, Heart, Zap, Target, CheckCircle2, BarChart3, TrendingUp, Clock, Shield, Lightbulb, ArrowLeft, FileText, Share2, RotateCcw, Users } from "lucide-react";
+import StressResilienceVisualizer from "@/components/StressResilienceVisualizer";
 import { useAuth } from "@/contexts/AuthContext";
 import { burnoutPreventionQuestions } from "@/data/burnoutPreventionQuestions";
 import { useStressResilienceScoring } from "@/hooks/useStressResilienceScoring";
@@ -422,92 +423,67 @@ const StressResilience = () => {
     );
   }
 
-  if (currentStep === 'results' && currentResults) {
+  if (currentStep === 'results') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-green-50 to-teal-50">
         <Header />
         <div className="pt-20 pb-12">
           <div className="container mx-auto px-4 max-w-6xl">
-            {/* Results Header */}
-            <div className="text-center mb-12">
-              <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 mb-6">
-                <CheckCircle2 className="w-8 h-8 text-green-600" />
-              </div>
+            <div className="text-center mb-8">
               <h1 className="text-4xl font-bold text-gray-900 mb-4">
-                Assessment Complete!
+                Your Stress Resilience Report
               </h1>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Your comprehensive burnout prevention analysis is ready
+              <p className="text-lg text-gray-600">
+                Comprehensive analysis with interactive visualizations
               </p>
             </div>
 
-            {/* Overall Score */}
-            <Card className="mb-8">
-              <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Overall Burnout Risk Level</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center">
-                <div className="text-6xl font-bold text-green-600 mb-4">
-                  {currentResults.overallScore}%
-                </div>
-                <Badge 
-                  variant={currentResults.burnoutRisk === 'low' ? 'default' : 
-                           currentResults.burnoutRisk === 'medium' ? 'secondary' : 'destructive'}
-                  className="text-lg px-4 py-2"
-                >
-                  {currentResults.burnoutRisk} Risk
-                </Badge>
-              </CardContent>
-            </Card>
+            {currentResults && (
+              <div className="space-y-8">
+                {/* Import and use the visualizer */}
+                <StressResilienceVisualizer results={currentResults} />
 
-            {/* Dimension Scores */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {currentResults.dimensionScores?.map((dimension, index) => (
-                <Card key={index} className="text-center">
+                {/* Recommendations */}
+                <Card className="border-0 shadow-xl">
                   <CardHeader>
-                    <CardTitle className="text-lg capitalize">
-                      {dimension.dimension}
-                    </CardTitle>
+                    <CardTitle className="text-blue-700">📋 Personalized Recommendations</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-3xl font-bold text-blue-600 mb-2">
-                      {Math.round(dimension.score || dimension.percentage)}%
+                    <div className="grid gap-4">
+                      {currentResults.recommendations.map((recommendation, index) => (
+                        <div key={index} className="flex items-start gap-3 p-4 bg-blue-50 rounded-lg">
+                          <Lightbulb className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-700">{recommendation}</span>
+                        </div>
+                      ))}
                     </div>
-                    <Progress value={dimension.score || dimension.percentage} className="h-2" />
                   </CardContent>
                 </Card>
-              ))}
-            </div>
 
-            {/* Actions */}
-            <div className="flex flex-wrap justify-center gap-4">
-              <Button 
-                className="bg-green-600 hover:bg-green-700"
-                onClick={() => generateDetailedBurnoutReport({
-                  candidateInfo: {
-                    name: userProfile?.name || 'Anonymous',
-                    email: userProfile?.email || 'unknown@example.com',
-                    date: new Date().toLocaleDateString()
-                  },
-                  results: currentResults
-                })}
-              >
-                <FileText className="mr-2 w-4 h-4" />
-                Download Detailed Report
-              </Button>
-              <Button variant="outline">
-                <Share2 className="mr-2 w-4 h-4" />
-                Share Results
-              </Button>
-              <Button variant="outline" onClick={() => {
-                resetAssessment();
-                setCurrentStep('overview');
-                setCurrentQuestionIndex(0);
-              }}>
-                <RotateCcw className="mr-2 w-4 h-4" />
-                Retake Assessment
-              </Button>
-            </div>
+                {/* Actions */}
+                <div className="flex flex-wrap justify-center gap-4">
+                  <Button className="bg-green-600 hover:bg-green-700 text-white">
+                    <FileText className="mr-2 w-4 h-4" />
+                    Download Detailed Report
+                  </Button>
+                  <Button variant="outline">
+                    <Share2 className="mr-2 w-4 h-4" />
+                    Share Results
+                  </Button>
+                  <Button variant="outline" onClick={() => {
+                    resetAssessment();
+                    setCurrentStep('overview');
+                    setCurrentQuestionIndex(0);
+                    setSelectedOption(null);
+                    setConfidence([3]);
+                    setResults(null);
+                  }}>
+                    <RotateCcw className="mr-2 w-4 h-4" />
+                    Retake Assessment
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         <Footer />
