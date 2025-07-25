@@ -351,7 +351,8 @@ const StressResilience = () => {
               <CardContent className="flex-1 flex flex-col justify-between">
                 <div className="flex-1">
                   <RadioGroup
-                    value={selectedOption?.toString()}
+                    key={`question-${currentQuestionIndex}`}
+                    value={selectedOption?.toString() || ""}
                     onValueChange={(value) => setSelectedOption(parseInt(value))}
                     className="space-y-2"
                   >
