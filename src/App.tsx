@@ -22,28 +22,34 @@ const queryClient = new QueryClient({
   },
 });
 
-const App = () => (
-  <GlobalErrorBoundary>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <LogoProvider>
-          <AuthProvider>
-            <PartnerProvider>
-              <EmployerProvider>
-                <Toaster />
-                <Sonner />
-                <BrowserRouter>
-                  <ScrollToTop />
-                  <RouteConfig />
-                  <AIChat />
-                </BrowserRouter>
-              </EmployerProvider>
-            </PartnerProvider>
-          </AuthProvider>
-        </LogoProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </GlobalErrorBoundary>
-);
+const App = () => {
+  console.log('🏗️ App.tsx: App component initializing...');
+  
+  console.log('📦 App.tsx: Setting up providers...');
+  
+  return (
+    <GlobalErrorBoundary>
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <LogoProvider>
+            <AuthProvider>
+              <PartnerProvider>
+                <EmployerProvider>
+                  <Toaster />
+                  <Sonner />
+                  <BrowserRouter>
+                    <ScrollToTop />
+                    <RouteConfig />
+                    <AIChat />
+                  </BrowserRouter>
+                </EmployerProvider>
+              </PartnerProvider>
+            </AuthProvider>
+          </LogoProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    </GlobalErrorBoundary>
+  );
+};
 
 export default App;
