@@ -2401,16 +2401,6 @@ function generateCAIRChartScript(dimensionScores: any): string {
     });
   `;
 }
-      <p>Generated on ${new Date().toLocaleDateString()} • Report ID: ${generateReportId()}</p>
-    </div>
-
-    <script>
-      ${generatePersonalityChartScript(scores)}
-    </script>
-  </body>
-  </html>
-  `;
-}
 
 function generatePersonalityChartScript(scores: any): string {
   return `
