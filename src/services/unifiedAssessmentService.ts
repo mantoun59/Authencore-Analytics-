@@ -176,11 +176,11 @@ export class UnifiedAssessmentService {
   }
 
   public async processAssessment(assessmentType: string, data: AssessmentData): Promise<UnifiedAssessmentResult> {
-    console.log('🔄 Processing assessment with type:', assessmentType);
+    // Processing assessment with type
     
     // Try server-side processing for heavy computations
     try {
-      console.log('🚀 Attempting server-side processing...');
+      // Attempting server-side processing
       const { data: serverResult, error } = await supabase.functions.invoke('process-assessment', {
         body: {
           assessmentType,
@@ -190,11 +190,11 @@ export class UnifiedAssessmentService {
       });
 
       if (!error && serverResult && !serverResult.error) {
-        console.log('✅ Server-side processing successful');
+        // Server-side processing successful
         return serverResult;
       }
       
-      console.log('⚠️ Server-side processing failed, falling back to client-side');
+      // Server-side processing failed, falling back to client-side
     } catch (error) {
       console.warn('Server-side processing error, using fallback:', error);
     }
@@ -203,11 +203,11 @@ export class UnifiedAssessmentService {
     const config = this.assessmentConfigs.get(assessmentType);
     if (!config) {
       console.error('❌ Unknown assessment type:', assessmentType);
-      console.log('📋 Available assessment types:', Array.from(this.assessmentConfigs.keys()));
+      // Available assessment types
       throw new Error(`Unknown assessment type: ${assessmentType}`);
     }
 
-    console.log('✅ Found config for:', config.id, '-', config.title);
+    // Found config for assessment
     const dimensionScores = config.scoringAlgorithm(data.responses || []);
     const overallScore = this.calculateOverallScore(dimensionScores);
     const profile = config.profileCalculation(overallScore);

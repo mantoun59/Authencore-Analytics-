@@ -37,25 +37,25 @@ const SampleReports = () => {
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const assessmentParam = urlParams.get('assessment');
-    console.log('🔍 URL assessment parameter:', assessmentParam);
+    // URL assessment parameter processing
     if (assessmentParam && assessments[assessmentParam as keyof typeof assessments]) {
-      console.log('✅ Setting assessment to:', assessmentParam);
+      // Setting assessment to URL parameter
       setSelectedAssessment(assessmentParam);
     } else {
-      console.log('❌ Assessment parameter not found in assessments object:', assessmentParam);
+      // Assessment parameter not found, using default
     }
   }, []);
 
   const generateSamplePDF = async () => {
     setIsGenerating(true);
     try {
-      console.log('🎯 Generating sample report for assessment type:', selectedAssessment);
+      // Generating sample report for assessment type
       
       const sampleData = reportType === 'employer' 
         ? getSampleEmployerReport(selectedAssessment)
         : getSampleCandidateReport(selectedAssessment);
         
-      console.log('📋 Sample data generated:', sampleData);
+      // Sample data generated
       
       // Convert sample data to AI report format
       const aiReportFormat = {
@@ -357,7 +357,7 @@ const SampleReports = () => {
   };
 
   const getSampleCandidateReport = (assessmentType: string) => {
-    console.log('🔍 getSampleCandidateReport called with type:', assessmentType);
+    // getSampleCandidateReport called with type
     
     const baseReport = {
       candidateInfo: {
@@ -371,7 +371,7 @@ const SampleReports = () => {
     switch (assessmentType) {
       case 'leadership':
       case 'leadership-assessment':
-        console.log('✅ Matched leadership case');
+        // Matched leadership case
         return {
           ...baseReport,
           executiveSummary: {

@@ -151,7 +151,7 @@ export class AssessmentLogger {
 
   static log(message: string, data?: unknown): void {
     if (this.isDevelopment) {
-      console.log(`[Assessment] ${message}`, data);
+      // Assessment logging disabled for production
     }
   }
 

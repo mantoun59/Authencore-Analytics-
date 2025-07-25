@@ -500,7 +500,7 @@ export const generatePDFReport = async (report: CandidateReport): Promise<void> 
       throw new Error(response.error.message || 'Failed to generate PDF report');
     }
 
-    console.log('Enhanced PDF report generated successfully');
+    // Enhanced PDF report generated successfully
   } catch (error) {
     console.error('Error generating enhanced PDF, falling back to text format:', error);
     

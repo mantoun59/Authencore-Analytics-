@@ -287,12 +287,12 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
   // Error boundary effect
   useEffect(() => {
     const handleError = (event: ErrorEvent) => {
-      console.error('Assessment error:', event.error);
+      // Assessment error handled
       setError(`Connection error: ${event.error?.message || 'Unknown error'}`);
     };
     
     const handleRejection = (event: PromiseRejectionEvent) => {
-      console.error('Assessment promise rejection:', event.reason);
+      // Assessment promise rejection handled
       setError(`Network error: ${event.reason?.message || 'Connection failed'}`);
     };
     
@@ -336,7 +336,7 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
         }
       }
     } catch (err) {
-      console.error('Error handling answer:', err);
+      // Error handling answer
       setError('Error saving your answer. Please try again.');
     }
   };
@@ -351,7 +351,7 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
       setResponseTime([]);
       setStressLevel(1);
     } catch (err) {
-      console.error('Error clearing progress:', err);
+      // Error clearing progress
     }
   };
 
@@ -409,7 +409,7 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
       localStorage.removeItem('assessment-progress');
       onComplete(assessmentData);
     } catch (err) {
-      console.error('Error completing assessment:', err);
+      // Error completing assessment
       setError('Error submitting assessment. Please try again.');
     }
   };

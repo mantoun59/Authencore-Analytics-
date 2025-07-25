@@ -10,7 +10,7 @@ const Payment: React.FC = () => {
 
   const handlePaymentSuccess = (orderId: string) => {
     // Handle successful payment
-    console.log('Payment successful for order:', orderId);
+    // Payment successful for order
     // You can redirect to a success page or assessment page
     // window.location.href = `/assessment-success?order=${orderId}`;
   };

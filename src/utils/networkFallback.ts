@@ -41,7 +41,7 @@ export class NetworkFallbackManager {
 
   private setupNetworkListeners() {
     window.addEventListener('online', () => {
-      console.log('🌐 Network restored');
+      // Network restored
       this.isOnline = true;
       this.processOfflineQueue();
       toast.success('Connection restored', {
@@ -50,7 +50,7 @@ export class NetworkFallbackManager {
     });
 
     window.addEventListener('offline', () => {
-      console.log('📱 Network lost');
+      // Network lost
       this.isOnline = false;
       toast.warning('Connection lost', {
         description: 'Requests will be queued for when connection returns'
@@ -71,13 +71,13 @@ export class NetworkFallbackManager {
     if (options.enableCaching && cacheKey) {
       const cached = this.getFromCache(cacheKey);
       if (cached && this.isOnline) {
-        console.log(`📋 Cache hit for ${cacheKey}`);
+        // Cache hit
         // Return cached data but still try to refresh in background
         this.refreshCacheInBackground(requestFn, cacheKey);
         return cached;
       }
       if (cached && !this.isOnline) {
-        console.log(`📋 Using cached data offline for ${cacheKey}`);
+        // Using cached data offline
         return cached;
       }
     }
@@ -146,7 +146,7 @@ export class NetworkFallbackManager {
           config.maxDelay
         );
 
-        console.log(`Retrying in ${delay}ms...`);
+        // Retrying request
         await this.delay(delay);
       }
     }
@@ -155,7 +155,7 @@ export class NetworkFallbackManager {
     if (cacheKey) {
       const staleData = this.getFromCache(cacheKey, true);
       if (staleData) {
-        console.log(`📋 Using stale cache data for ${cacheKey}`);
+        // Using stale cache data
         toast.warning('Using cached data', {
           description: 'Could not fetch fresh data'
         });
@@ -170,7 +170,7 @@ export class NetworkFallbackManager {
   }
 
   private async processOfflineQueue() {
-    console.log(`Processing ${this.offlineQueue.length} queued requests`);
+    // Processing queued requests
     const queue = [...this.offlineQueue];
     this.offlineQueue = [];
 
@@ -191,7 +191,7 @@ export class NetworkFallbackManager {
     try {
       const result = await requestFn();
       this.saveToCache(cacheKey, result);
-      console.log(`🔄 Background refresh completed for ${cacheKey}`);
+      // Background refresh completed
     } catch (error) {
       console.warn(`Background refresh failed for ${cacheKey}:`, error);
     }

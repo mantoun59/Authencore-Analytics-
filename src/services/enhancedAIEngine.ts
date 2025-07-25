@@ -136,7 +136,7 @@ export class EnhancedAIEngine {
     reportType: 'candidate' | 'employer' = 'candidate'
   ): Promise<EnhancedReportContent> {
     try {
-      console.log('🚀 Enhanced AI Engine: Starting comprehensive report generation');
+      // Enhanced AI Engine: Starting comprehensive report generation
       
       // Run multiple AI analyses in parallel for comprehensive insights
       const [
@@ -166,7 +166,7 @@ export class EnhancedAIEngine {
         validityAssessment: distortionAnalysis
       };
 
-      console.log('✅ Enhanced AI Engine: Report generation completed successfully');
+      // Enhanced AI Engine: Report generation completed successfully
       toast.success('Enhanced AI report generated with advanced insights');
       
       return enhancedReport;
@@ -184,7 +184,7 @@ export class EnhancedAIEngine {
     jobRole?: string
   ): Promise<EnhancedInterviewQuestions> {
     try {
-      console.log('🎯 Enhanced AI Engine: Generating advanced interview questions');
+      // Enhanced AI Engine: Generating advanced interview questions
 
       const prompt = `
         You are a senior industrial psychologist and talent assessment expert specializing in interview design.
@@ -240,7 +240,7 @@ export class EnhancedAIEngine {
       const response = await this.callAIModel(prompt);
       const questions = JSON.parse(response);
       
-      console.log('✅ Enhanced AI Engine: Advanced interview questions generated');
+      // Enhanced AI Engine: Advanced interview questions generated
       return questions;
 
     } catch (error) {
@@ -251,7 +251,7 @@ export class EnhancedAIEngine {
 
   async analyzeDistortionScale(assessmentData: any): Promise<DistortionAnalysis> {
     try {
-      console.log('🔍 Enhanced AI Engine: Analyzing distortion scale with advanced algorithms');
+      // Enhanced AI Engine: Analyzing distortion scale with advanced algorithms
 
       const responses = assessmentData.responses || [];
       const responseTimes = responses.map((r: any) => r.responseTime || 0);
@@ -303,7 +303,7 @@ export class EnhancedAIEngine {
       const response = await this.callAIModel(prompt);
       const analysis = JSON.parse(response);
       
-      console.log('✅ Enhanced AI Engine: Distortion analysis completed');
+      // Enhanced AI Engine: Distortion analysis completed
       return analysis;
 
     } catch (error) {

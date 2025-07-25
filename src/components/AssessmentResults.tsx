@@ -146,7 +146,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       };
       await reportService.generateComprehensiveReport(unifiedResult);
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      // Error generating PDF
       toast.error('Failed to generate PDF report');
     }
   };
@@ -675,7 +675,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     } catch (error) {
       // Log for debugging in development only
       if (process.env.NODE_ENV === 'development') {
-        console.error('Error generating AI report:', error);
+        // Error generating AI report
       }
       toast.error('Failed to generate AI report. Please try again.');
     } finally {

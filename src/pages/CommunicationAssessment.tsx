@@ -103,8 +103,7 @@ const CommunicationAssessment = () => {
         userProfile?.position
       );
       
-      console.log('Individual Report:', individualReport);
-      console.log('Employer Report with Interview Questions:', employerReport);
+      // Individual and employer reports generated successfully
 
       // Save results to database
       if (user?.id) {

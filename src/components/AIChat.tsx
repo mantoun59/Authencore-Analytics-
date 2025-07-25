@@ -50,7 +50,7 @@ const AIChat = () => {
           setIsModelLoaded(true);
         }
       } catch (error) {
-        console.error('❌ Failed to load model:', error);
+        // Failed to load model
         // Set model as loaded anyway to allow basic functionality
         setIsModelLoaded(true);
         toast({
@@ -197,7 +197,7 @@ const AIChat = () => {
 
       setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
-      console.error('❌ Chat error:', error);
+      // Chat error handled
       
       // Fallback response
       const assistantMessage: Message = {

@@ -79,9 +79,8 @@ class GlobalErrorBoundary extends Component<Props, State> {
 
     // Log to console in development
     console.group(`🚨 Global Error Boundary [${errorId}]`);
-    console.error('Error:', error);
-    console.error('Component Stack:', errorInfo.componentStack);
-    console.error('Full Report:', errorReport);
+    // Log error details for debugging (removed for production)
+    // Error logged to storage for analysis
     console.groupEnd();
 
     // In production, you could send this to an error reporting service
@@ -89,7 +88,7 @@ class GlobalErrorBoundary extends Component<Props, State> {
     try {
       localStorage.setItem(`error_${errorId}`, JSON.stringify(errorReport));
     } catch (e) {
-      console.error('Failed to store error report:', e);
+      // Failed to store error report
     }
   };
 

@@ -118,11 +118,12 @@ const CandidateTesting = () => {
     }
 
     // In a real implementation, this would be sent to your backend
-    console.log("Candidate Feedback:", {
+    // Candidate feedback collected successfully
+    const feedbackData = {
       ...candidateInfo,
       feedback,
       timestamp: new Date().toISOString()
-    });
+    };
 
     toast({
       title: "Feedback Submitted",

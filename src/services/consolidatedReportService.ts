@@ -35,7 +35,7 @@ export class ConsolidatedReportService {
     try {
       // Try server-side PDF generation for better performance
       try {
-        console.log('🚀 Attempting server-side PDF generation...');
+        // Attempting server-side PDF generation
         const { data: pdfData, error } = await supabase.functions.invoke('generate-pdf-report', {
           body: { result, config }
         });
@@ -56,7 +56,7 @@ export class ConsolidatedReportService {
           return;
         }
         
-        console.log('⚠️ Server-side PDF generation failed, falling back to client-side');
+        // Server-side PDF generation failed, falling back to client-side
       } catch (error) {
         console.warn('Server-side PDF generation error, using fallback:', error);
       }
@@ -399,7 +399,7 @@ export class ConsolidatedReportService {
 
   // Helper methods
   private getAssessmentTitle(assessmentType: string): string {
-    console.log('🎯 Getting assessment title for type:', assessmentType);
+    // Getting assessment title for type
     
     const titles: Record<string, string> = {
       'career-launch': 'CareerLaunch Assessment Report',
@@ -427,7 +427,7 @@ export class ConsolidatedReportService {
     };
     
     const title = titles[assessmentType] || `${assessmentType.toUpperCase()} Assessment Report`;
-    console.log('📋 Selected title:', title, 'for assessment type:', assessmentType);
+    // Assessment title selected
     return title;
   }
 
