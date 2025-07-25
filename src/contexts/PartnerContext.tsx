@@ -18,6 +18,7 @@ interface PartnerContextType {
   logout: () => void;
   checkAssessmentAccess: (assessmentType: string) => boolean;
   logActivity: (action: string, assessmentType?: string) => void;
+  resetPassword: (username: string) => Promise<{ success: boolean; error?: string }>;
 }
 
 const PartnerContext = createContext<PartnerContextType | undefined>(undefined);
@@ -161,13 +162,39 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
     }
   };
 
+  const resetPassword = async (username: string) => {
+    try {
+      // Log the password reset request for security
+      await supabase.rpc('log_security_event', {
+        p_user_id: null,
+        p_event_type: 'partner_password_reset_requested',
+        p_event_details: { username },
+        p_severity: 'info'
+      });
+
+      return { 
+        success: true, 
+        error: 'Password reset request has been logged. Please contact your account manager for assistance.' 
+      };
+    } catch (error) {
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Error logging password reset request:', error);
+      }
+      return { 
+        success: false, 
+        error: 'Unable to process password reset request. Please contact support.' 
+      };
+    }
+  };
+
   const value = {
     partner,
     isAuthenticated,
     login,
     logout,
     checkAssessmentAccess,
-    logActivity
+    logActivity,
+    resetPassword
   };
 
   return <PartnerContext.Provider value={value}>{children}</PartnerContext.Provider>;

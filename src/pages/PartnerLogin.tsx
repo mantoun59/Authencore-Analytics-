@@ -1,22 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Eye, EyeOff, Building2, Clock, Users, Shield, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Building2, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { usePartner } from '@/contexts/PartnerContext';
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { format } from 'date-fns';
 
 const PartnerLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
   const { toast } = useToast();
-  const { partner, login, isAuthenticated } = usePartner();
+  const { partner, login, isAuthenticated, resetPassword } = usePartner();
   const navigate = useNavigate();
 
   // Redirect if already authenticated
@@ -60,6 +59,103 @@ const PartnerLogin = () => {
 
     setLoading(false);
   };
+
+  const handleForgotPassword = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(e.currentTarget);
+    const username = formData.get('username') as string;
+
+    try {
+      const result = await resetPassword(username);
+      
+      toast({
+        title: result.success ? "Request Logged" : "Error",
+        description: result.error || "Password reset request has been logged.",
+        variant: result.success ? "default" : "destructive"
+      });
+      
+      if (result.success) {
+        setShowForgotPassword(false);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An unexpected error occurred",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (showForgotPassword) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header />
+        <div className="container mx-auto px-4 py-16">
+          <div className="flex items-center justify-center min-h-[60vh]">
+            <Card className="w-full max-w-md">
+              <CardHeader className="text-center">
+                <div className="flex justify-center mb-4">
+                  <div className="p-3 rounded-full bg-primary/10">
+                    <Building2 className="h-8 w-8 text-primary" />
+                  </div>
+                </div>
+                <CardTitle className="text-2xl font-bold">Reset Partner Password</CardTitle>
+                <CardDescription>
+                  Enter your username to request password assistance
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleForgotPassword} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Username</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        id="username"
+                        name="username"
+                        type="text"
+                        placeholder="Enter your username"
+                        className="pl-10"
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <Button
+                    type="submit"
+                    className="w-full"
+                    disabled={loading}
+                  >
+                    {loading ? "Processing..." : "Request Password Reset"}
+                  </Button>
+                </form>
+
+                <div className="mt-6 text-center">
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setShowForgotPassword(false)}
+                  >
+                    Back to Login
+                  </Button>
+                </div>
+
+                <div className="mt-6 text-center text-sm text-muted-foreground">
+                  <p>Your account manager will be notified.</p>
+                  <p>For urgent support, contact your account manager directly.</p>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -121,6 +217,16 @@ const PartnerLogin = () => {
                   {loading ? "Signing In..." : "Sign In"}
                 </Button>
               </form>
+
+              <div className="mt-4 text-center">
+                <button
+                  type="button"
+                  onClick={() => setShowForgotPassword(true)}
+                  className="text-sm text-primary hover:text-primary-glow underline"
+                >
+                  Forgot your password?
+                </button>
+              </div>
 
               <div className="mt-6 text-center text-sm text-muted-foreground">
                 <p>Partner credentials are provided by AuthenCore.</p>

@@ -32,6 +32,7 @@ interface EmployerContextType {
   logout: () => void;
   getCandidates: () => Promise<Candidate[]>;
   inviteCandidate: (candidateData: CandidateData) => Promise<{ error?: string }>;
+  resetPassword: (email: string) => Promise<{ error?: string }>;
 }
 
 const EmployerContext = createContext<EmployerContextType | undefined>(undefined);
@@ -160,6 +161,21 @@ export const EmployerProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const resetPassword = async (email: string) => {
+    try {
+      // Use the admin password reset function
+      const { error } = await supabase.rpc('request_admin_password_reset', {
+        p_email: email
+      });
+
+      if (error) throw error;
+
+      return {};
+    } catch (error: any) {
+      return { error: error.message || 'Failed to send reset email' };
+    }
+  };
+
   return (
     <EmployerContext.Provider value={{
       employer,
@@ -167,7 +183,8 @@ export const EmployerProvider = ({ children }: { children: ReactNode }) => {
       login,
       logout,
       getCandidates,
-      inviteCandidate
+      inviteCandidate,
+      resetPassword
     }}>
       {children}
     </EmployerContext.Provider>
