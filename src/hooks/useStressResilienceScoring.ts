@@ -1,5 +1,24 @@
 import { useState, useCallback } from 'react';
-import { stressResilienceQuestions, resilienceProfiles, dimensionWeights } from '@/data/stressResilienceQuestions';
+import { burnoutPreventionQuestions } from '@/data/burnoutPreventionQuestions';
+
+// Define resilience profiles for burnout prevention assessment
+const resilienceProfiles = [
+  { name: 'Diamond', range: { min: 85, max: 100 } },
+  { name: 'Steel', range: { min: 70, max: 84 } },
+  { name: 'Bamboo', range: { min: 55, max: 69 } },
+  { name: 'Glass', range: { min: 40, max: 54 } },
+  { name: 'Clay', range: { min: 0, max: 39 } }
+];
+
+// Define dimension weights for scoring
+const dimensionWeights = {
+  workload: 0.2,
+  emotional: 0.25,
+  efficacy: 0.2,
+  support: 0.15,
+  worklife: 0.1,
+  coping: 0.1
+};
 
 interface StressResilienceResponse {
   questionId: string;
@@ -39,21 +58,23 @@ export const useStressResilienceScoring = () => {
 
   const calculateDimensionScores = useCallback((responses: StressResilienceResponse[]): DimensionScore[] => {
     const dimensionTotals = {
+      workload: { score: 0, maxScore: 0, questions: 0 },
       emotional: { score: 0, maxScore: 0, questions: 0 },
-      cognitive: { score: 0, maxScore: 0, questions: 0 },
-      physical: { score: 0, maxScore: 0, questions: 0 },
-      social: { score: 0, maxScore: 0, questions: 0 },
-      adaptability: { score: 0, maxScore: 0, questions: 0 },
-      performance: { score: 0, maxScore: 0, questions: 0 }
+      efficacy: { score: 0, maxScore: 0, questions: 0 },
+      support: { score: 0, maxScore: 0, questions: 0 },
+      worklife: { score: 0, maxScore: 0, questions: 0 },
+      coping: { score: 0, maxScore: 0, questions: 0 }
     };
 
     responses.forEach(response => {
-      const question = stressResilienceQuestions.find(q => q.id === response.questionId);
+      const question = burnoutPreventionQuestions.find(q => q.id === response.questionId);
       if (question) {
         const dimension = question.category;
-        dimensionTotals[dimension].score += response.score;
-        dimensionTotals[dimension].maxScore += 5; // Max score per question
-        dimensionTotals[dimension].questions += 1;
+        if (dimensionTotals[dimension]) {
+          dimensionTotals[dimension].score += response.score;
+          dimensionTotals[dimension].maxScore += 5; // Max score per question
+          dimensionTotals[dimension].questions += 1;
+        }
       }
     });
 
@@ -113,23 +134,23 @@ export const useStressResilienceScoring = () => {
     dimensionScores.forEach(dimension => {
       if (dimension.percentage >= 75) {
         switch (dimension.dimension.toLowerCase()) {
+          case 'workload':
+            strengths.push('Excellent workload management and organization');
+            break;
           case 'emotional':
-            strengths.push('Excellent emotional regulation under pressure');
+            strengths.push('Strong emotional resilience and energy levels');
             break;
-          case 'cognitive':
-            strengths.push('Strong problem-solving abilities in challenging situations');
+          case 'efficacy':
+            strengths.push('High sense of personal accomplishment and competence');
             break;
-          case 'physical':
-            strengths.push('Effective physical stress management');
-            break;
-          case 'social':
+          case 'support':
             strengths.push('Strong support network utilization');
             break;
-          case 'adaptability':
-            strengths.push('Excellent adaptability to change');
+          case 'worklife':
+            strengths.push('Excellent work-life balance and integration');
             break;
-          case 'performance':
-            strengths.push('Maintains high performance under pressure');
+          case 'coping':
+            strengths.push('Effective stress coping and wellness practices');
             break;
         }
       }
@@ -144,23 +165,23 @@ export const useStressResilienceScoring = () => {
     dimensionScores.forEach(dimension => {
       if (dimension.percentage < 50) {
         switch (dimension.dimension.toLowerCase()) {
+          case 'workload':
+            challenges.push('Managing workload and time effectively');
+            break;
           case 'emotional':
-            challenges.push('Emotional regulation during high-stress periods');
+            challenges.push('Emotional exhaustion and energy depletion');
             break;
-          case 'cognitive':
-            challenges.push('Maintaining clear thinking under pressure');
+          case 'efficacy':
+            challenges.push('Sense of personal accomplishment and competence');
             break;
-          case 'physical':
-            challenges.push('Managing physical stress responses');
+          case 'support':
+            challenges.push('Building and utilizing support systems');
             break;
-          case 'social':
-            challenges.push('Effectively utilizing support systems');
+          case 'worklife':
+            challenges.push('Achieving work-life balance and boundaries');
             break;
-          case 'adaptability':
-            challenges.push('Adapting to unexpected changes');
-            break;
-          case 'performance':
-            challenges.push('Maintaining performance quality under pressure');
+          case 'coping':
+            challenges.push('Developing effective stress coping strategies');
             break;
         }
       }
@@ -191,23 +212,23 @@ export const useStressResilienceScoring = () => {
     dimensionScores.forEach(dimension => {
       if (dimension.percentage < 60) {
         switch (dimension.dimension.toLowerCase()) {
+          case 'workload':
+            recommendations.push('Implement time management and task prioritization strategies');
+            break;
           case 'emotional':
-            recommendations.push('Practice emotional regulation techniques like deep breathing');
+            recommendations.push('Practice emotional regulation and stress recovery techniques');
             break;
-          case 'cognitive':
-            recommendations.push('Develop problem-solving frameworks for high-pressure situations');
+          case 'efficacy':
+            recommendations.push('Set achievable goals and celebrate accomplishments');
             break;
-          case 'physical':
-            recommendations.push('Incorporate stress-reducing physical activities');
+          case 'support':
+            recommendations.push('Build and maintain professional and personal support networks');
             break;
-          case 'social':
-            recommendations.push('Build and maintain professional support networks');
+          case 'worklife':
+            recommendations.push('Establish clear boundaries between work and personal time');
             break;
-          case 'adaptability':
-            recommendations.push('Practice flexibility through varied experiences');
-            break;
-          case 'performance':
-            recommendations.push('Develop pressure-testing strategies for skill maintenance');
+          case 'coping':
+            recommendations.push('Develop healthy coping mechanisms and wellness practices');
             break;
         }
       }
@@ -218,10 +239,10 @@ export const useStressResilienceScoring = () => {
 
   const assessBurnoutRisk = useCallback((dimensionScores: DimensionScore[]): 'low' | 'medium' | 'high' => {
     const emotionalScore = dimensionScores.find(d => d.dimension.toLowerCase() === 'emotional')?.percentage || 0;
-    const physicalScore = dimensionScores.find(d => d.dimension.toLowerCase() === 'physical')?.percentage || 0;
-    const adaptabilityScore = dimensionScores.find(d => d.dimension.toLowerCase() === 'adaptability')?.percentage || 0;
+    const workloadScore = dimensionScores.find(d => d.dimension.toLowerCase() === 'workload')?.percentage || 0;
+    const efficacyScore = dimensionScores.find(d => d.dimension.toLowerCase() === 'efficacy')?.percentage || 0;
 
-    const avgCriticalScores = (emotionalScore + physicalScore + adaptabilityScore) / 3;
+    const avgCriticalScores = (emotionalScore + workloadScore + efficacyScore) / 3;
 
     if (avgCriticalScores < 40) return 'high';
     if (avgCriticalScores < 60) return 'medium';
