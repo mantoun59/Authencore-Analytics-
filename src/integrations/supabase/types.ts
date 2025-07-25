@@ -14,6 +14,30 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_settings: {
+        Row: {
+          created_at: string
+          id: string
+          setting_key: string
+          setting_value: Json
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          setting_key: string
+          setting_value: Json
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       analytics_events: {
         Row: {
           created_at: string | null
@@ -1245,6 +1269,10 @@ export type Database = {
       request_admin_password_reset: {
         Args: { p_email: string }
         Returns: undefined
+      }
+      trigger_purchase_report: {
+        Args: { p_period: string; p_admin_email?: string }
+        Returns: Json
       }
       use_guest_token: {
         Args: { p_token: string; p_assessment_type: string }

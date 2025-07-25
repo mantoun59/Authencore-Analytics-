@@ -3,6 +3,7 @@ import Footer from "@/components/Footer";
 import ImageGenerator from "@/components/ImageGenerator";
 import { PartnerManagement } from "@/components/PartnerManagement";
 import AdminGuideGenerator from "@/components/AdminGuideGenerator";
+import PurchaseAnalyticsDashboard from "@/components/PurchaseAnalyticsDashboard";
 import SEOOptimizer from "@/components/SEOOptimizer";
 import { EnhancedAIControls } from "@/components/EnhancedAIControls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -20,11 +21,12 @@ const AdminPage = () => {
             </div>
 
             <Tabs defaultValue="partners" className="w-full">
-              <TabsList className="grid w-full grid-cols-7">
+              <TabsList className="grid w-full grid-cols-8">
                 <TabsTrigger value="partners">Partners</TabsTrigger>
                 <TabsTrigger value="testing">Testing</TabsTrigger>
                 <TabsTrigger value="ai-engine">AI Engine</TabsTrigger>
                 <TabsTrigger value="analytics">Analytics</TabsTrigger>
+                <TabsTrigger value="purchases">Purchase Reports</TabsTrigger>
                 <TabsTrigger value="seo-marketing">SEO & Marketing</TabsTrigger>
                 <TabsTrigger value="setup-guide">Setup Guide</TabsTrigger>
                 <TabsTrigger value="images">Images</TabsTrigger>
@@ -75,6 +77,18 @@ const AdminPage = () => {
                         <p className="text-sm text-muted-foreground">View detailed analytics and reports across all assessments</p>
                       </a>
                     </div>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="purchases" className="mt-6">
+                <div className="space-y-6">
+                  <div className="p-6 bg-card rounded-lg border">
+                    <h3 className="text-lg font-semibold mb-4">Purchase Analytics & Notifications</h3>
+                    <p className="text-muted-foreground mb-6">
+                      Track purchase data, view analytics, and manage automated email reports
+                    </p>
+                    <PurchaseAnalyticsDashboard />
                   </div>
                 </div>
               </TabsContent>
