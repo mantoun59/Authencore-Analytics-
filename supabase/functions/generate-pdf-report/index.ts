@@ -1324,8 +1324,123 @@ function getCareerOutlook(career: string): string {
 
 // Placeholder functions for other assessment types (will enhance these)
 
+// Emotional Intelligence Assessment Report Generator
 function generateEQReport(results: any, userData: any): string {
-  return generateCommunicationReport(results, userData); // Enhanced version coming
+  const scores = results?.scores || {};
+  const overallScore = results?.overallScore || 0;
+  const recommendations = results?.recommendations || [];
+  
+  // Extract EI dimensions
+  const eqDimensions = ['selfAwareness', 'selfRegulation', 'motivation', 'empathy', 'socialSkills'].map(dim => ({
+    name: formatDimensionName(dim.replace(/([A-Z])/g, ' $1')),
+    score: scores[dim]?.raw || 0,
+    percentage: scores[dim]?.percentage || 0,
+    level: scores[dim]?.level || 'Medium',
+    interpretation: scores[dim]?.interpretation || 'Developing emotional intelligence in this area'
+  }));
+
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Emotional Intelligence Assessment Report</title>
+    <style>
+      ${getReportStyles()}
+      .eq-dimension {
+        background: #f0f9ff;
+        border-left: 4px solid #0ea5e9;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 8px;
+      }
+      .eq-level {
+        padding: 8px 15px;
+        border-radius: 20px;
+        display: inline-block;
+        font-weight: bold;
+        margin: 5px 0;
+      }
+      .level-high { background: #d1fae5; color: #065f46; }
+      .level-medium { background: #fef3c7; color: #92400e; }
+      .level-low { background: #fee2e2; color: #991b1b; }
+      .eq-application {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 10px 0;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    ${generateReportHeader("Emotional Intelligence Assessment", userData)}
+    
+    <div class="executive-summary">
+      <h2>🧠 Executive Summary</h2>
+      <div class="summary-box">
+        <p><strong>Participant:</strong> ${userData?.name || 'Assessment Participant'}</p>
+        <p><strong>Assessment Date:</strong> ${userData?.date || new Date().toLocaleDateString()}</p>
+        <p><strong>Overall EQ Score:</strong> ${overallScore.toFixed(1)}/100</p>
+        <p><strong>EQ Profile:</strong> ${getEQProfile(overallScore)}</p>
+        
+        <div style="margin-top: 15px;">
+          <h3>🎯 Emotional Intelligence Overview</h3>
+          <p>Emotional Intelligence (EQ) measures your ability to understand, use, and manage emotions effectively. This assessment evaluated five key dimensions of emotional intelligence that are crucial for personal and professional success.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="personality-profile">
+      <h2>📊 EQ Dimension Analysis</h2>
+      <div class="chart-container">
+        <canvas id="eqChart" width="400" height="300"></canvas>
+      </div>
+      
+      ${eqDimensions.map(dimension => `
+        <div class="eq-dimension">
+          <h3>💡 ${dimension.name}</h3>
+          <span class="eq-level level-${dimension.level.toLowerCase()}">${dimension.level} Level</span>
+          <div class="progress-bar" style="margin: 10px 0;">
+            <div class="progress-fill" style="width: ${dimension.percentage}%"></div>
+          </div>
+          <p><strong>Score:</strong> ${dimension.score}/5 (${dimension.percentage}%)</p>
+          <p><strong>Interpretation:</strong> ${dimension.interpretation}</p>
+          
+          <div class="eq-application">
+            <h4>💼 Workplace Applications</h4>
+            <p>${getEQWorkplaceApplication(dimension.name.toLowerCase().replace(/\s+/g, ''), dimension.level)}</p>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="insights-section">
+      <h2>🎯 Development Recommendations</h2>
+      ${recommendations.map((rec: any) => `
+        <div class="insight-card">
+          <h3>📈 ${formatDimensionName(rec.dimension)}</h3>
+          <ul>
+            ${rec.suggestions.map((suggestion: string) => `<li>${suggestion}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('')}
+    </div>
+
+    ${generateEQActionPlan(eqDimensions, overallScore)}
+
+    <div class="footer">
+      <p><strong>Confidential Emotional Intelligence Assessment Report</strong> | Generated ${new Date().toLocaleDateString()}</p>
+      <p>This EQ assessment provides insights for emotional and social skill development.</p>
+    </div>
+
+    <script>
+      ${generateEQChartScript(eqDimensions)}
+    </script>
+  </body>
+  </html>
+  `;
 }
 
 // Cultural Intelligence Assessment Report Generator
@@ -1806,16 +1921,448 @@ function generateLeadershipReport(results: any, userData: any): string {
   `;
 }
 
+// Faith & Values Assessment Report Generator
 function generateFaithValuesReport(results: any, userData: any): string {
-  return generateCommunicationReport(results, userData); // Enhanced version coming
+  const valueScores = results?.valueScores || {};
+  const topValues = results?.topValues || [];
+  const cultureMatches = results?.cultureMatches || [];
+  const overallScore = results?.overallScore || 0;
+  
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Faith & Values Assessment Report</title>
+    <style>
+      ${getReportStyles()}
+      .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .value-card {
+        background: #fafaf9;
+        border: 1px solid #e7e5e4;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+      }
+      .value-icon {
+        font-size: 2em;
+        margin-bottom: 10px;
+      }
+      .culture-match {
+        background: #f0f9ff;
+        border-left: 4px solid #0ea5e9;
+        padding: 15px;
+        margin: 10px 0;
+        border-radius: 6px;
+      }
+      .alignment-score {
+        font-weight: bold;
+        color: #0ea5e9;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    ${generateReportHeader("Faith & Values Assessment", userData)}
+    
+    <div class="executive-summary">
+      <h2>✨ Executive Summary</h2>
+      <div class="summary-box">
+        <p><strong>Participant:</strong> ${userData?.name || 'Assessment Participant'}</p>
+        <p><strong>Assessment Date:</strong> ${userData?.date || new Date().toLocaleDateString()}</p>
+        <p><strong>Values Clarity Score:</strong> ${overallScore.toFixed(1)}/100</p>
+        <p><strong>Top Values Identified:</strong> ${topValues.length}</p>
+        
+        <div style="margin-top: 15px;">
+          <h3>🎯 Values Assessment Overview</h3>
+          <p>This assessment identified your core values and explored how they align with different organizational cultures and faith traditions. Understanding your values is crucial for making decisions that align with your authentic self.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="personality-profile">
+      <h2>💎 Your Core Values</h2>
+      <div class="chart-container">
+        <canvas id="valuesChart" width="400" height="300"></canvas>
+      </div>
+      
+      <div class="values-grid">
+        ${topValues.slice(0, 6).map((value: any) => `
+          <div class="value-card">
+            <div class="value-icon">${value.icon || '⭐'}</div>
+            <h3>${value.name}</h3>
+            <p><strong>Score:</strong> ${value.score}/10</p>
+            <p style="font-size: 14px; color: #64748b;">${value.description}</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="insights-section">
+      <h2>🏛️ Cultural & Organizational Alignment</h2>
+      <h3>Best Cultural Matches</h3>
+      ${cultureMatches.slice(0, 3).map((match: any) => `
+        <div class="culture-match">
+          <h4>${match.culture.name} <span class="alignment-score">(${(match.score * 100).toFixed(0)}% alignment)</span></h4>
+          <p><strong>Description:</strong> ${match.culture.description}</p>
+          <p><strong>Key Characteristics:</strong> ${match.culture.characteristics.join(', ')}</p>
+          <p><strong>Examples:</strong> ${match.culture.examples.join(', ')}</p>
+          <p><strong>Alignment:</strong> ${match.alignment}</p>
+        </div>
+      `).join('')}
+    </div>
+
+    ${generateValuesActionPlan(topValues, cultureMatches)}
+
+    <div class="footer">
+      <p><strong>Confidential Faith & Values Assessment Report</strong> | Generated ${new Date().toLocaleDateString()}</p>
+      <p>This values assessment provides insights for personal development and organizational fit.</p>
+    </div>
+
+    <script>
+      ${generateValuesChartScript(topValues)}
+    </script>
+  </body>
+  </html>
+  `;
 }
 
+// Gen Z Workplace Assessment Report Generator
 function generateGenZReport(results: any, userData: any): string {
-  return generateCommunicationReport(results, userData); // Enhanced version coming
+  const dimensions = results?.dimensions || {};
+  const traits = results?.traits || {};
+  const workplaceProfile = results?.workplaceProfile || {};
+  const workplacePreferences = results?.workplacePreferences || {};
+  const redFlags = results?.redFlags || [];
+  const companyMatches = results?.companyMatches || [];
+  const validityMetrics = results?.validityMetrics || {};
+  
+  const overallScore = results?.overallScore || 0;
+  const profile = workplaceProfile?.type || 'Balanced Professional';
+  
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Gen Z Workplace Assessment Report</title>
+    <style>
+      ${getReportStyles()}
+      .genz-profile {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .trait-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin: 20px 0;
+      }
+      .trait-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 15px;
+        text-align: center;
+      }
+      .workplace-pref {
+        background: #f0fdf4;
+        border-left: 4px solid #22c55e;
+        padding: 15px;
+        margin: 10px 0;
+      }
+      .red-flag {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 15px;
+        margin: 10px 0;
+      }
+      .company-match {
+        background: #f0f9ff;
+        border: 1px solid #93c5fd;
+        border-radius: 8px;
+        padding: 15px;
+        margin: 10px 0;
+      }
+      .match-score {
+        font-weight: bold;
+        color: #2563eb;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    ${generateReportHeader("Gen Z Workplace Assessment", userData)}
+    
+    <div class="executive-summary">
+      <h2>🚀 Executive Summary</h2>
+      <div class="summary-box">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <p><strong>Participant:</strong> ${userData?.name || userData?.username || 'Assessment Participant'}</p>
+            <p><strong>Assessment Date:</strong> ${userData?.date || new Date().toLocaleDateString()}</p>
+            <p><strong>Gen Z Profile:</strong> ${profile}</p>
+            <p><strong>Overall Score:</strong> ${overallScore.toFixed(1)}/100</p>
+          </div>
+          <div>
+            <p><strong>Birth Year:</strong> ${results?.birthYear || 'Gen Z'}</p>
+            <p><strong>Workplace Readiness:</strong> ${getGenZReadiness(overallScore)}</p>
+            <p><strong>Red Flags:</strong> ${redFlags.length}</p>
+            <p><strong>Top Company Matches:</strong> ${companyMatches.length}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="genz-profile">
+      <h2>✨ Your Gen Z Workplace Profile: ${profile}</h2>
+      <p style="font-size: 18px; margin-top: 15px;">${getGenZProfileDescription(profile)}</p>
+    </div>
+
+    <div class="personality-profile">
+      <h2>📊 Workplace Dimensions</h2>
+      <div class="chart-container">
+        <canvas id="genzChart" width="400" height="300"></canvas>
+      </div>
+      
+      <div class="trait-grid">
+        ${Object.entries(traits).slice(0, 6).map(([trait, score]: [string, any]) => `
+          <div class="trait-card">
+            <h3>${formatDimensionName(trait)}</h3>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width: ${score * 20}%"></div>
+            </div>
+            <p><strong>Score:</strong> ${score}/5</p>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="insights-section">
+      <h2>💼 Workplace Preferences</h2>
+      ${Object.entries(workplacePreferences).map(([pref, value]: [string, any]) => `
+        <div class="workplace-pref">
+          <h3>${formatDimensionName(pref)}</h3>
+          <p>${getWorkplacePreferenceDescription(pref, value)}</p>
+        </div>
+      `).join('')}
+    </div>
+
+    ${redFlags.length > 0 ? `
+      <div class="insights-section">
+        <h2>⚠️ Areas for Development</h2>
+        ${redFlags.map((flag: any) => `
+          <div class="red-flag">
+            <h3>${flag.type || 'Development Area'}</h3>
+            <p>${flag.description || 'Focus on improving this area for workplace success'}</p>
+          </div>
+        `).join('')}
+      </div>
+    ` : ''}
+
+    <div class="insights-section">
+      <h2>🏢 Company Culture Matches</h2>
+      ${companyMatches.slice(0, 3).map((match: any) => `
+        <div class="company-match">
+          <h3>${match.name || 'Company Type'} <span class="match-score">(${(match.score * 100).toFixed(0)}% match)</span></h3>
+          <p><strong>Culture:</strong> ${match.culture || 'Collaborative environment'}</p>
+          <p><strong>Why it fits:</strong> ${match.reasoning || 'Aligns with your workplace preferences'}</p>
+        </div>
+      `).join('')}
+    </div>
+
+    ${generateGenZActionPlan(profile, redFlags, companyMatches)}
+
+    <div class="footer">
+      <p><strong>Confidential Gen Z Workplace Assessment Report</strong> | Generated ${new Date().toLocaleDateString()}</p>
+      <p>This assessment provides insights for career development and workplace fit for the Gen Z generation.</p>
+    </div>
+
+    <script>
+      ${generateGenZChartScript(Object.entries(traits))}
+    </script>
+  </body>
+  </html>
+  `;
 }
 
+// Digital Wellness Assessment Report Generator
 function generateDigitalWellnessReport(results: any, userData: any): string {
-  return generateCommunicationReport(results, userData); // Enhanced version coming
+  const overall = results?.overall || 0;
+  const dimensions = results?.dimensions || {};
+  const riskAssessment = results?.riskAssessment || {};
+  const validity = results?.validity || {};
+  const behavioral = results?.behavioral || {};
+  const recommendations = results?.recommendations || {};
+  
+  const dimensionArray = Object.entries(dimensions).map(([name, data]: [string, any]) => ({
+    name: formatDimensionName(name),
+    score: data?.score || 0,
+    percentage: data?.percentage || 0,
+    level: data?.level || 'fair',
+    interpretation: data?.interpretation || 'Developing digital wellness habits'
+  }));
+  
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Digital Wellness Assessment Report</title>
+    <style>
+      ${getReportStyles()}
+      .wellness-score {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .dimension-wellness {
+        background: #f0fdf4;
+        border-left: 4px solid #22c55e;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 8px;
+      }
+      .risk-indicator {
+        padding: 15px;
+        border-radius: 8px;
+        margin: 10px 0;
+        font-weight: bold;
+      }
+      .risk-low { background: #d1fae5; color: #065f46; }
+      .risk-moderate { background: #fef3c7; color: #92400e; }
+      .risk-high { background: #fee2e2; color: #991b1b; }
+      .digital-habit {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        padding: 15px;
+        margin: 10px 0;
+      }
+      .recommendation-card {
+        background: #fafaf9;
+        border-left: 4px solid #8b5cf6;
+        padding: 15px;
+        margin: 10px 0;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    ${generateReportHeader("Digital Wellness Assessment", userData)}
+    
+    <div class="executive-summary">
+      <h2>📱 Executive Summary</h2>
+      <div class="summary-box">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <p><strong>Participant:</strong> ${userData?.name || 'Assessment Participant'}</p>
+            <p><strong>Assessment Date:</strong> ${userData?.date || new Date().toLocaleDateString()}</p>
+            <p><strong>Overall Wellness Score:</strong> ${overall.toFixed(1)}/100</p>
+            <p><strong>Digital Wellness Level:</strong> ${getDigitalWellnessLevel(overall)}</p>
+          </div>
+          <div>
+            <p><strong>Assessment Validity:</strong> ${validity?.overallValidity || 'Valid'}</p>
+            <p><strong>Response Consistency:</strong> ${(validity?.responseConsistency * 100 || 85).toFixed(0)}%</p>
+            <p><strong>Digital Habits Tracked:</strong> ${Object.keys(behavioral).length}</p>
+            <p><strong>Risk Level:</strong> ${getOverallRiskLevel(riskAssessment)}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wellness-score">
+      <h2>🌟 Your Digital Wellness Profile</h2>
+      <p style="font-size: 18px; margin-top: 15px;">${getDigitalWellnessDescription(overall)}</p>
+    </div>
+
+    <div class="personality-profile">
+      <h2>📊 Digital Wellness Dimensions</h2>
+      <div class="chart-container">
+        <canvas id="wellnessChart" width="400" height="300"></canvas>
+      </div>
+      
+      ${dimensionArray.map(dimension => `
+        <div class="dimension-wellness">
+          <h3>🎯 ${dimension.name}</h3>
+          <span class="eq-level level-${dimension.level}">${formatDimensionName(dimension.level)} Level</span>
+          <div class="progress-bar" style="margin: 10px 0;">
+            <div class="progress-fill" style="width: ${dimension.percentage}%"></div>
+          </div>
+          <p><strong>Score:</strong> ${dimension.score}/5 (${dimension.percentage}%)</p>
+          <p><strong>Assessment:</strong> ${dimension.interpretation}</p>
+          
+          <div class="digital-habit">
+            <h4>💡 What This Means</h4>
+            <p>${getDigitalDimensionDescription(dimension.name.toLowerCase().replace(/\s+/g, ''), dimension.level)}</p>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="insights-section">
+      <h2>⚠️ Risk Assessment</h2>
+      ${Object.entries(riskAssessment).map(([risk, data]: [string, any]) => `
+        <div class="risk-indicator risk-${getRiskLevelClass(data?.level || 'low')}">
+          <h3>${formatDimensionName(risk)} Risk: ${formatDimensionName(data?.level || 'low')}</h3>
+          <p>Score: ${data?.score || 0}/10</p>
+          <p>${getRiskDescription(risk, data?.level || 'low')}</p>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="insights-section">
+      <h2>🎯 Personalized Recommendations</h2>
+      
+      <div class="recommendation-card">
+        <h3>⚡ Immediate Actions</h3>
+        <ul>
+          ${(recommendations?.immediate || []).map((action: any) => `
+            <li><strong>${action.action}:</strong> ${action.description}</li>
+          `).join('')}
+        </ul>
+      </div>
+      
+      <div class="recommendation-card">
+        <h3>📅 Weekly Goals</h3>
+        <ul>
+          ${(recommendations?.weekly || []).map((goal: string) => `<li>${goal}</li>`).join('')}
+        </ul>
+      </div>
+      
+      <div class="recommendation-card">
+        <h3>🎯 Long-term Development</h3>
+        <ul>
+          ${(recommendations?.longterm || []).map((goal: string) => `<li>${goal}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    ${generateDigitalWellnessActionPlan(dimensionArray, riskAssessment, overall)}
+
+    <div class="footer">
+      <p><strong>Confidential Digital Wellness Assessment Report</strong> | Generated ${new Date().toLocaleDateString()}</p>
+      <p>This assessment provides insights for healthy technology use and digital well-being.</p>
+    </div>
+
+    <script>
+      ${generateDigitalWellnessChartScript(dimensionArray)}
+    </script>
+  </body>
+  </html>
+  `;
 }
 
 // CAIR+ Assessment Report Generator
@@ -2498,6 +3045,386 @@ function generateLeadershipChartScript(dimensions: any): string {
           legend: { display: false }
         }
       }
+    });
+  `;
+}
+
+// Helper Functions for All Assessment Reports
+
+// Emotional Intelligence Helper Functions
+function getEQProfile(score: number): string {
+  if (score >= 85) return 'Emotionally Gifted';
+  if (score >= 70) return 'Emotionally Intelligent';
+  if (score >= 55) return 'Emotionally Aware';
+  if (score >= 40) return 'Developing EQ';
+  return 'Early EQ Development';
+}
+
+function getEQWorkplaceApplication(dimension: string, level: string): string {
+  const applications: Record<string, Record<string, string>> = {
+    selfawareness: {
+      'High': 'Excellent self-insight enables effective leadership and authentic decision-making. Natural ability to understand personal impact on others.',
+      'Medium': 'Good understanding of own emotions and triggers. Can improve with mindfulness practices and reflection.',
+      'Low': 'Limited awareness of emotional patterns. Would benefit from 360 feedback and emotional intelligence training.'
+    },
+    selfregulation: {
+      'High': 'Outstanding emotional control under pressure. Ideal for high-stress roles and crisis management positions.',
+      'Medium': 'Generally manages emotions well. May need additional strategies for peak stress situations.',
+      'Low': 'May struggle with emotional control. Needs stress management training and coping strategy development.'
+    },
+    motivation: {
+      'High': 'Highly driven and goal-oriented. Natural leader with strong intrinsic motivation for achievement.',
+      'Medium': 'Good drive and ambition. May need clear goals and recognition to maintain peak motivation.',
+      'Low': 'May lack drive or struggle with goal-setting. Needs motivation enhancement and goal clarity.'
+    },
+    empathy: {
+      'High': 'Exceptional ability to understand others. Perfect for customer service, HR, and team leadership roles.',
+      'Medium': 'Good interpersonal understanding. Can build on this strength for relationship-building roles.',
+      'Low': 'Limited ability to read others. Needs training in active listening and perspective-taking.'
+    },
+    socialskills: {
+      'High': 'Outstanding social abilities. Natural networker and relationship builder. Ideal for client-facing roles.',
+      'Medium': 'Good social interaction skills. Can enhance through communication training and practice.',
+      'Low': 'May struggle in social situations. Needs communication skills training and confidence building.'
+    }
+  };
+  
+  return applications[dimension]?.[level] || 'Continue developing emotional intelligence skills for workplace effectiveness.';
+}
+
+function generateEQActionPlan(dimensions: any[], overallScore: number): string {
+  const actionItems = [];
+  
+  const lowestDimension = dimensions.sort((a, b) => a.percentage - b.percentage)[0];
+  if (lowestDimension) {
+    actionItems.push(`Priority focus: Develop ${lowestDimension.name.toLowerCase()} through targeted practice and training`);
+  }
+  
+  if (overallScore < 55) {
+    actionItems.push('Consider emotional intelligence coaching or training programs');
+    actionItems.push('Practice daily emotional awareness and reflection exercises');
+  }
+  
+  actionItems.push('Seek feedback from colleagues and supervisors on emotional impact');
+  actionItems.push('Practice active listening and empathy in daily interactions');
+  actionItems.push('Develop stress management and emotional regulation techniques');
+  actionItems.push('Set specific EQ development goals and track progress monthly');
+  
+  return generateActionPlan(actionItems);
+}
+
+function generateEQChartScript(dimensions: any[]): string {
+  return `
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('eqChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: [${dimensions.map(d => `'${d.name}'`).join(', ')}],
+          datasets: [{
+            label: 'EQ Scores (%)',
+            data: [${dimensions.map(d => d.percentage).join(', ')}],
+            backgroundColor: 'rgba(14, 165, 233, 0.2)',
+            borderColor: 'rgba(14, 165, 233, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(14, 165, 233, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(14, 165, 233, 1)'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              ticks: { stepSize: 20 }
+            }
+          },
+          plugins: {
+            legend: { display: true, position: 'bottom' },
+            title: { display: true, text: 'Emotional Intelligence Profile' }
+          }
+        }
+      });
+    });
+  `;
+}
+
+// Faith Values Helper Functions
+function generateValuesActionPlan(topValues: any[], cultureMatches: any[]): string {
+  const actionItems = [
+    'Reflect on how your top values align with your current role and organization',
+    'Use your values as a guide for important life and career decisions',
+    'Seek opportunities that allow you to express and live your core values',
+    'Consider the cultural fit when evaluating new job opportunities',
+    'Share your values with trusted colleagues and supervisors for better alignment'
+  ];
+  
+  if (cultureMatches.length > 0) {
+    actionItems.push(`Explore opportunities in organizations that match your values: ${cultureMatches.slice(0, 2).map(m => m.culture.name).join(', ')}`);
+  }
+  
+  return generateActionPlan(actionItems);
+}
+
+function generateValuesChartScript(topValues: any[]): string {
+  return `
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('valuesChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: [${topValues.slice(0, 6).map(v => `'${v.name}'`).join(', ')}],
+          datasets: [{
+            data: [${topValues.slice(0, 6).map(v => v.score).join(', ')}],
+            backgroundColor: [
+              'rgba(99, 102, 241, 0.8)',
+              'rgba(34, 197, 94, 0.8)', 
+              'rgba(251, 191, 36, 0.8)',
+              'rgba(239, 68, 68, 0.8)',
+              'rgba(168, 85, 247, 0.8)',
+              'rgba(14, 165, 233, 0.8)'
+            ]
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: true, position: 'bottom' },
+            title: { display: true, text: 'Core Values Distribution' }
+          }
+        }
+      });
+    });
+  `;
+}
+
+// Gen Z Helper Functions
+function getGenZReadiness(score: number): string {
+  if (score >= 80) return 'Highly Ready';
+  if (score >= 65) return 'Ready';
+  if (score >= 50) return 'Developing';
+  return 'Needs Support';
+}
+
+function getGenZProfileDescription(profile: string): string {
+  const descriptions: Record<string, string> = {
+    'Digital Native': 'You thrive in tech-forward environments and bring natural digital fluency to the workplace.',
+    'Purpose Driven': 'You seek meaningful work that aligns with your values and makes a positive impact.',
+    'Collaborative Innovator': 'You excel at working with diverse teams to create new solutions and approaches.',
+    'Flexible Professional': 'You adapt well to changing work environments and prefer flexible arrangements.',
+    'Balanced Professional': 'You demonstrate a well-rounded approach to work with adaptability across situations.'
+  };
+  
+  return descriptions[profile] || 'You bring unique Gen Z perspectives and capabilities to the workplace.';
+}
+
+function getWorkplacePreferenceDescription(pref: string, value: any): string {
+  const descriptions: Record<string, string> = {
+    flexibility: 'Preference for flexible work arrangements and adaptive schedules',
+    technology: 'Comfort level and preference for technology-integrated work environments',
+    purpose: 'Importance of meaningful work that aligns with personal values',
+    collaboration: 'Preference for teamwork and collaborative project approaches',
+    feedback: 'Desire for regular feedback and continuous learning opportunities',
+    diversity: 'Value placed on inclusive and diverse workplace environments'
+  };
+  
+  return descriptions[pref] || 'Important workplace consideration for optimal performance';
+}
+
+function generateGenZActionPlan(profile: string, redFlags: any[], companyMatches: any[]): string {
+  const actionItems = [
+    'Leverage your Gen Z strengths in technology adoption and digital innovation',
+    'Seek mentorship opportunities to bridge generational workplace differences',
+    'Practice professional communication across different generational styles'
+  ];
+  
+  if (redFlags.length > 0) {
+    actionItems.push(`Address development areas: Focus on ${redFlags[0]?.type || 'workplace skills'}`);
+  }
+  
+  if (companyMatches.length > 0) {
+    actionItems.push(`Target companies that match your values: ${companyMatches[0]?.name || 'purpose-driven organizations'}`);
+  }
+  
+  actionItems.push('Build cross-generational relationships and networks');
+  actionItems.push('Continuously develop both technical and soft skills');
+  
+  return generateActionPlan(actionItems);
+}
+
+function generateGenZChartScript(traits: any[]): string {
+  return `
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('genzChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [${traits.slice(0, 6).map(([name]) => `'${formatDimensionName(name)}'`).join(', ')}],
+          datasets: [{
+            label: 'Trait Scores',
+            data: [${traits.slice(0, 6).map(([, score]) => score).join(', ')}],
+            backgroundColor: 'rgba(99, 102, 241, 0.8)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: { beginAtZero: true, max: 5 }
+          },
+          plugins: {
+            legend: { display: false },
+            title: { display: true, text: 'Gen Z Workplace Traits' }
+          }
+        }
+      });
+    });
+  `;
+}
+
+// Digital Wellness Helper Functions
+function getDigitalWellnessLevel(score: number): string {
+  if (score >= 80) return 'Excellent';
+  if (score >= 65) return 'Good';
+  if (score >= 50) return 'Fair';
+  return 'Needs Improvement';
+}
+
+function getDigitalWellnessDescription(score: number): string {
+  if (score >= 80) return 'Outstanding digital wellness habits. You maintain healthy technology boundaries and demonstrate excellent digital life balance.';
+  if (score >= 65) return 'Good digital wellness practices with room for optimization. You generally manage technology use effectively.';
+  if (score >= 50) return 'Moderate digital wellness. Some areas need attention to develop healthier technology habits.';
+  return 'Digital wellness needs significant improvement. Consider implementing structured digital wellness practices.';
+}
+
+function getOverallRiskLevel(riskAssessment: any): string {
+  const risks = Object.values(riskAssessment).map((r: any) => r?.level === 'high' ? 3 : r?.level === 'moderate' ? 2 : 1);
+  const avgRisk = risks.reduce((a, b) => a + b, 0) / risks.length;
+  
+  if (avgRisk >= 2.5) return 'High';
+  if (avgRisk >= 1.5) return 'Moderate';
+  return 'Low';
+}
+
+function getDigitalDimensionDescription(dimension: string, level: string): string {
+  const descriptions: Record<string, Record<string, string>> = {
+    screenbalance: {
+      excellent: 'You maintain excellent balance between screen time and offline activities.',
+      good: 'You generally manage screen time well with occasional overuse.',
+      fair: 'You sometimes struggle with excessive screen time.',
+      poor: 'Screen time management needs significant improvement.'
+    },
+    digitalboundaries: {
+      excellent: 'You have strong boundaries between digital and personal time.',
+      good: 'You maintain good digital boundaries most of the time.',
+      fair: 'Digital boundaries could be stronger and more consistent.',
+      poor: 'Digital boundaries are weak or non-existent.'
+    },
+    mindfulusage: {
+      excellent: 'You use technology intentionally and purposefully.',
+      good: 'You generally use technology with awareness and intention.',
+      fair: 'Technology use is sometimes mindless or habitual.',
+      poor: 'Technology use lacks mindfulness and intention.'
+    },
+    techlifeintegration: {
+      excellent: 'Technology enhances rather than dominates your life.',
+      good: 'Technology is well-integrated into your daily routine.',
+      fair: 'Technology integration could be more balanced.',
+      poor: 'Technology may be negatively impacting life balance.'
+    }
+  };
+  
+  return descriptions[dimension]?.[level] || 'Continue developing healthy digital habits.';
+}
+
+function getRiskLevelClass(level: string): string {
+  if (level === 'high') return 'high';
+  if (level === 'moderate') return 'moderate';
+  return 'low';
+}
+
+function getRiskDescription(risk: string, level: string): string {
+  const descriptions: Record<string, Record<string, string>> = {
+    burnout: {
+      high: 'High risk of digital burnout from excessive technology use.',
+      moderate: 'Moderate risk - monitor technology use patterns.',
+      low: 'Low risk of digital burnout with current usage patterns.'
+    },
+    addiction: {
+      high: 'Signs of problematic technology dependence.',
+      moderate: 'Some indicators of excessive technology reliance.',
+      low: 'Healthy relationship with technology.'
+    },
+    social: {
+      high: 'Technology use may be impacting social relationships.',
+      moderate: 'Some impact on social connections from technology.',
+      low: 'Technology use supports rather than hinders social connections.'
+    }
+  };
+  
+  return descriptions[risk]?.[level] || 'Monitor this area for optimal digital wellness.';
+}
+
+function generateDigitalWellnessActionPlan(dimensions: any[], riskAssessment: any, overallScore: number): string {
+  const actionItems = [];
+  
+  const lowestDimension = dimensions.sort((a, b) => a.percentage - b.percentage)[0];
+  if (lowestDimension) {
+    actionItems.push(`Priority focus: Improve ${lowestDimension.name.toLowerCase()} practices`);
+  }
+  
+  if (overallScore < 50) {
+    actionItems.push('Implement a comprehensive digital wellness plan');
+    actionItems.push('Consider digital detox periods and screen-free times');
+  }
+  
+  actionItems.push('Set specific digital wellness goals and track progress');
+  actionItems.push('Create technology-free zones and times in your daily routine');
+  actionItems.push('Practice mindful technology use and regular digital breaks');
+  actionItems.push('Review and adjust notification settings to reduce digital overwhelm');
+  
+  return generateActionPlan(actionItems);
+}
+
+function generateDigitalWellnessChartScript(dimensions: any[]): string {
+  return `
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('wellnessChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: [${dimensions.map(d => `'${d.name}'`).join(', ')}],
+          datasets: [{
+            label: 'Wellness Scores (%)',
+            data: [${dimensions.map(d => d.percentage).join(', ')}],
+            backgroundColor: 'rgba(16, 185, 129, 0.2)',
+            borderColor: 'rgba(16, 185, 129, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(16, 185, 129, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(16, 185, 129, 1)'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              ticks: { stepSize: 20 }
+            }
+          },
+          plugins: {
+            legend: { display: true, position: 'bottom' },
+            title: { display: true, text: 'Digital Wellness Profile' }
+          }
+        }
+      });
     });
   `;
 }
