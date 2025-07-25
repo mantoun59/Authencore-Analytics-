@@ -5,6 +5,7 @@ import Footer from "@/components/Footer";
 import ApplicantDataForm from "@/components/ApplicantDataForm";
 import CareerLaunchAssessment from "@/components/CareerLaunchAssessment";
 import AssessmentResults from "@/components/AssessmentResults";
+import { PaymentProtection } from "@/components/PaymentProtection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -188,14 +189,16 @@ const CareerLaunch = () => {
             </div>
 
             <div className="space-y-4">
-              <Button 
-                size="lg" 
-                onClick={() => setGamePhase('registration')}
-                className="text-lg px-8 py-6"
-              >
-                <Rocket className="h-5 w-5 mr-2" />
-                Start Your Career Discovery
-              </Button>
+              <PaymentProtection assessmentType="career-launch">
+                <Button 
+                  size="lg" 
+                  onClick={() => setGamePhase('registration')}
+                  className="text-lg px-8 py-6"
+                >
+                  <Rocket className="h-5 w-5 mr-2" />
+                  Start Your Career Discovery
+                </Button>
+              </PaymentProtection>
               <p className="text-sm text-muted-foreground">
                 Assessment takes approximately 30-35 minutes • Get instant results
               </p>
@@ -233,10 +236,12 @@ const CareerLaunch = () => {
 
   if (gamePhase === 'assessment') {
     return (
-      <CareerLaunchAssessment 
-        onComplete={handleAssessmentComplete}
-        userProfile={userProfile}
-      />
+      <PaymentProtection assessmentType="career-launch">
+        <CareerLaunchAssessment 
+          onComplete={handleAssessmentComplete}
+          userProfile={userProfile}
+        />
+      </PaymentProtection>
     );
   }
 

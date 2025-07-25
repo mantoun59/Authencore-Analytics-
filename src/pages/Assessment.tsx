@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { assessmentsData } from "@/data/assessmentsData";
 import assessmentConceptImage from "@/assets/assessment-concept.jpg";
 import LogoDisplay from "@/components/LogoDisplay";
+import { PaymentButton } from "@/components/PaymentButton";
 
 const Assessment = () => {
   const getInfoRoute = (assessmentId: string) => {
@@ -171,11 +172,20 @@ const Assessment = () => {
                       ))}
                     </ul>
                     <div className="flex-grow"></div>
-                    <Link to={getInfoRoute(assessment.id)}>
-                      <Button className={`w-full ${colorClasses.button}`}>
-                        Learn More <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </Link>
+                    <div className="space-y-2">
+                      <PaymentButton
+                        assessmentType={assessment.id}
+                        price={assessment.price}
+                        className="w-full"
+                        variant="default"
+                        size="default"
+                      />
+                      <Link to={getInfoRoute(assessment.id)}>
+                        <Button variant="outline" size="sm" className="w-full">
+                          Learn More <ArrowRight className="ml-2 h-3 w-3" />
+                        </Button>
+                      </Link>
+                    </div>
                   </CardContent>
                 </Card>
               );
