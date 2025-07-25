@@ -26,7 +26,6 @@ import {
   RefreshCw
 } from 'lucide-react';
 import Header from '@/components/Header';
-import ProtectedAdminRoute from '@/components/ProtectedAdminRoute';
 import type { AnalyticsData } from '@/types/assessment.types';
 
 const AdminAnalytics = () => {
@@ -269,20 +268,17 @@ const AdminAnalytics = () => {
 
   if (loading) {
     return (
-      <ProtectedAdminRoute>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
-            <p>Loading analytics...</p>
-          </div>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-4"></div>
+          <p>Loading analytics...</p>
         </div>
-      </ProtectedAdminRoute>
+      </div>
     );
   }
 
   return (
-    <ProtectedAdminRoute>
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
         <Header />
         <div className="container mx-auto px-4 py-8">
           {/* Header */}
@@ -539,7 +535,6 @@ const AdminAnalytics = () => {
           </Tabs>
         </div>
       </div>
-    </ProtectedAdminRoute>
   );
 };
 

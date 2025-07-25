@@ -6,12 +6,9 @@ import AdminGuideGenerator from "@/components/AdminGuideGenerator";
 import SEOOptimizer from "@/components/SEOOptimizer";
 import { EnhancedAIControls } from "@/components/EnhancedAIControls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ProtectedAdminRoute from "@/components/ProtectedAdminRoute";
-
 const AdminPage = () => {
   return (
-    <ProtectedAdminRoute>
-      <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background">
         <Header />
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-6xl mx-auto">
@@ -112,7 +109,6 @@ const AdminPage = () => {
         </div>
         <Footer />
       </div>
-    </ProtectedAdminRoute>
   );
 };
 
