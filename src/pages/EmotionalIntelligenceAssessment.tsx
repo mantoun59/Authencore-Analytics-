@@ -27,7 +27,7 @@ type AssessmentPhase = 'welcome' | 'registration' | 'instructions' | 'assessment
 export default function EmotionalIntelligenceAssessment() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { calculateEQResults, isCalculating } = useEmotionalIntelligenceScoring();
+  const { calculateScores, isCalculating } = useEmotionalIntelligenceScoring();
   
   const [phase, setPhase] = useState<AssessmentPhase>('welcome');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -66,7 +66,7 @@ export default function EmotionalIntelligenceAssessment() {
       const endTime = Date.now();
       const completionTime = Math.round((endTime - startTime) / 1000 / 60);
       
-      const assessmentResults = await calculateEQResults(responses, completionTime);
+      const assessmentResults = calculateScores(responses);
       setResults(assessmentResults);
       setPhase('results');
       
@@ -348,7 +348,7 @@ export default function EmotionalIntelligenceAssessment() {
                 <Progress value={progress} className="h-2 bg-rose-200" />
                 <div className="space-y-2">
                   <p className="text-lg font-semibold text-rose-800">
-                    {currentQuestion.questionText}
+                    {currentQuestion.question}
                   </p>
                   <RadioGroup defaultValue={responses[currentQuestionIndex]?.toString()} onValueChange={(value) => handleResponse(Number(value))} className="grid gap-2">
                     <div className="flex items-center space-x-2">

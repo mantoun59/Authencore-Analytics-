@@ -11,7 +11,7 @@ import { Lightbulb, Clock, Star, Book, CheckCircle2, ArrowLeft, ArrowRight } fro
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useFaithValuesScoring } from '@/hooks/useFaithValuesScoring';
-import { faithValuesQuestions } from '@/data/faithValuesQuestions';
+import { faithValuesData } from '@/data/faithValuesQuestions';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -28,7 +28,7 @@ type AssessmentPhase = 'welcome' | 'registration' | 'instructions' | 'assessment
 export default function FaithValuesAssessment() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { calculateFaithResults, isCalculating } = useFaithValuesScoring();
+  const { calculateScores, isCalculating } = useFaithValuesScoring();
   
   const [phase, setPhase] = useState<AssessmentPhase>('welcome');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -50,7 +50,7 @@ export default function FaithValuesAssessment() {
   };
 
   const nextQuestion = () => {
-    if (currentQuestionIndex < faithValuesQuestions.length - 1) {
+    if (currentQuestionIndex < faithValuesData.universal_values.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       completeAssessment();
@@ -68,7 +68,7 @@ export default function FaithValuesAssessment() {
       const endTime = Date.now();
       const completionTime = Math.round((endTime - startTime) / 1000 / 60);
       
-      const assessmentResults = await calculateFaithResults(responses, completionTime);
+      const assessmentResults = calculateScores([], []);
       setResults(assessmentResults);
       setPhase('results');
       
@@ -122,8 +122,8 @@ export default function FaithValuesAssessment() {
     }
   };
 
-  const progress = ((currentQuestionIndex + 1) / faithValuesQuestions.length) * 100;
-  const currentQuestion = faithValuesQuestions[currentQuestionIndex];
+  const progress = ((currentQuestionIndex + 1) / faithValuesData.universal_values.length) * 100;
+  const currentQuestion = faithValuesData.universal_values[currentQuestionIndex];
 
   if (phase === 'welcome') {
     return (
@@ -327,8 +327,8 @@ export default function FaithValuesAssessment() {
           <div className="max-w-4xl mx-auto">
             <Card className="border-amber-200 shadow-xl">
               <CardHeader>
-                <CardTitle className="text-xl font-semibold">Question {currentQuestionIndex + 1} of {faithValuesQuestions.length}</CardTitle>
-                <CardDescription>{currentQuestion?.questionText}</CardDescription>
+                <CardTitle className="text-xl font-semibold">Question {currentQuestionIndex + 1} of {faithValuesData.universal_values.length}</CardTitle>
+                <CardDescription>{currentQuestion?.name}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Progress value={progress} />
@@ -345,7 +345,7 @@ export default function FaithValuesAssessment() {
                     Previous
                   </Button>
                   <Button onClick={nextQuestion} disabled={isCalculating}>
-                    {isCalculating ? 'Calculating...' : (currentQuestionIndex === faithValuesQuestions.length - 1 ? 'Complete' : 'Next')}
+                    {isCalculating ? 'Calculating...' : (currentQuestionIndex === faithValuesData.universal_values.length - 1 ? 'Complete' : 'Next')}
                   </Button>
                 </div>
               </CardContent>
@@ -376,7 +376,7 @@ export default function FaithValuesAssessment() {
                     {Object.entries(results.dimensionScores).map(([dimension, score]) => (
                       <div key={dimension} className="border rounded-md p-4">
                         <h4 className="font-semibold">{dimension}</h4>
-                        <p>Score: {score}</p>
+                        <p>Score: {String(score)}</p>
                       </div>
                     ))}
                   </div>
