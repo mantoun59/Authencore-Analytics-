@@ -807,20 +807,21 @@ const MarketingMaterials: React.FC = () => {
         });
 
         if (response.ok) {
-          const blob = await response.blob();
-          const url = window.URL.createObjectURL(blob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `AuthenCore-${material.title.replace(/\s+/g, '-')}-Professional.pdf`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(url);
+          const htmlContent = await response.text();
           
-          toast({
-            title: "Professional PDF Generated",
-            description: `${material.title} has been downloaded successfully.`,
-          });
+          // Open HTML content in new window for PDF printing
+          const newWindow = window.open('', '_blank');
+          if (newWindow) {
+            newWindow.document.write(htmlContent);
+            newWindow.document.close();
+            
+            toast({
+              title: "Professional PDF Ready",
+              description: `${material.title} is ready for download. Use the "Save as PDF" button in the new window.`,
+            });
+          } else {
+            throw new Error('Popup blocked');
+          }
           return;
         }
       } catch (serverError) {
