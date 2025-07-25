@@ -157,16 +157,52 @@ const FAQ = () => {
                             </div>
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
                               <span className="font-medium">Standard Assessments</span>
-                              <Badge variant="outline">25-35 minutes</Badge>
+                              <Badge variant="outline">25-40 minutes</Badge>
                             </div>
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
                               <span className="font-medium">Comprehensive Assessments</span>
-                              <Badge variant="outline">35-50 minutes</Badge>
+                              <Badge variant="outline">45-60 minutes</Badge>
                             </div>
                           </div>
                           <p className="text-sm text-muted-foreground">
                             All assessments can be paused and resumed within 24 hours of starting.
                           </p>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    
+                    <AccordionItem value="how-to-take">
+                      <AccordionTrigger>How do I take an assessment?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>Taking an assessment is simple and straightforward:</p>
+                          <ol className="space-y-3 text-sm">
+                            <li className="flex items-start gap-2">
+                              <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">1</span>
+                              <span>Select your desired assessment from our assessment catalog</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">2</span>
+                              <span>Complete the secure payment process</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">3</span>
+                              <span>Answer all questions honestly and thoughtfully</span>
+                            </li>
+                            <li className="flex items-start gap-2">
+                              <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">4</span>
+                              <span>Review your comprehensive results and download your PDF report</span>
+                            </li>
+                          </ol>
+                          <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-1">Important Tips:</h5>
+                            <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                              <li>• Find a quiet environment with minimal distractions</li>
+                              <li>• Answer instinctively rather than overthinking responses</li>
+                              <li>• Complete in one sitting when possible for best results</li>
+                              <li>• Be honest - there are no right or wrong answers</li>
+                            </ul>
+                          </div>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
@@ -183,7 +219,7 @@ const FAQ = () => {
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">Professional PDF report (10-25 pages)</span>
+                              <span className="text-sm">Professional PDF report (15+ pages)</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
