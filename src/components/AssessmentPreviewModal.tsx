@@ -121,7 +121,8 @@ const AssessmentPreviewModal = ({
                 className="w-full"
               />
               
-              <div className="min-h-[100px] p-4 bg-muted/30 rounded-lg border-l-4 border-primary">
+              <div className="min-h-[100px] p-4 bg-muted/30 rounded-lg border-l-4 border-primary animate-fade-in"
+                   key={currentQuestionIndex}>
                 <p className="text-base leading-relaxed">
                   {sampleQuestions[currentQuestionIndex]}
                 </p>

@@ -173,12 +173,12 @@ const ProgressTracker = ({ currentAssessment, userId }: ProgressTrackerProps) =>
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {getUniqueAssessmentTypes().map(type => {
+          {getUniqueAssessmentTypes().map((type, index) => {
             const latestScore = getLatestScoreForType(type);
             const trend = getImprovementTrend(type);
             
             return (
-              <div key={type} className="space-y-2">
+              <div key={type} className="space-y-2 animate-fade-in hover-scale" style={{ animationDelay: `${index * 0.1}s` }}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <span className="font-medium capitalize">{type.replace('-', ' ')}</span>

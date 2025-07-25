@@ -110,7 +110,8 @@ const InteractiveResultsVisualization = ({
         return (
           <div 
             key={index} 
-            className="p-4 border rounded-lg hover:shadow-md transition-all cursor-pointer"
+            className="p-4 border rounded-lg hover:shadow-md transition-all cursor-pointer hover-scale animate-fade-in"
+            style={{ animationDelay: `${index * 0.1}s` }}
             onClick={() => setSelectedDimension(dim)}
           >
             <div className="flex items-center justify-between mb-2">
