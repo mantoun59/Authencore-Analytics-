@@ -121,8 +121,24 @@ const FAQ = () => {
                               <p className="text-sm text-muted-foreground">$24.99 • Communication analysis</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">+ 5 More Assessments</h5>
-                              <p className="text-sm text-muted-foreground">Leadership, EQ, Digital Wellness, etc.</p>
+                              <h5 className="font-medium">Emotional Intelligence</h5>
+                              <p className="text-sm text-muted-foreground">$19.99 • EQ assessment and development</p>
+                            </div>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium">Leadership Assessment</h5>
+                              <p className="text-sm text-muted-foreground">$24.99 • Leadership style analysis</p>
+                            </div>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium">Digital Wellness</h5>
+                              <p className="text-sm text-muted-foreground">$14.99 • Digital habits analysis</p>
+                            </div>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium">Faith & Values</h5>
+                              <p className="text-sm text-muted-foreground">$19.99 • Values alignment assessment</p>
+                            </div>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium">Gen Z Workplace</h5>
+                              <p className="text-sm text-muted-foreground">$16.99 • Modern workplace readiness</p>
                             </div>
                           </div>
                         </div>
