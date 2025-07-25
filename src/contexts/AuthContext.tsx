@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { RateLimiter, SecurityMonitor, SecureStorage } from '@/utils/enhancedSecurity';
 
 interface AuthError {
   message: string;
@@ -67,10 +68,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signIn = async (email: string, password: string) => {
+    // Enhanced security: Rate limiting and bot detection
+    const rateLimitKey = `login_${email}`;
+    if (RateLimiter.isRateLimited(rateLimitKey, 5, 15 * 60 * 1000)) {
+      return { error: { message: 'Too many login attempts. Please try again later.' } };
+    }
+
+    if (SecurityMonitor.detectBotBehavior()) {
+      return { error: { message: 'Automated access detected. Please verify you are human.' } };
+    }
+
     const { error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
+
+    // Reset rate limit on successful login, log security events
+    if (!error) {
+      RateLimiter.resetRateLimit(rateLimitKey);
+      await SecureStorage.setSecureItem('last_login', new Date().toISOString());
+    }
+
     return { error };
   };
 
