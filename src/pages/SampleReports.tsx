@@ -74,6 +74,7 @@ const SampleReports = () => {
   }, []);
 
   const generateSamplePDF = async () => {
+    console.log('🎯 SAMPLE REPORT: Function called', { selectedAssessment, reportType });
     setIsGenerating(true);
     try {
       console.log('🚀 Starting sample PDF generation...', { selectedAssessment, reportType });
