@@ -20,6 +20,18 @@ export interface CAIRDimensionAnalysis {
   strengthsInRole: string[];
   potentialChallenges: string[];
   managementTips: string[];
+  subdimensions: SubdimensionAnalysis[];
+}
+
+export interface SubdimensionAnalysis {
+  name: string;
+  percentile: number;
+  level: string;
+  description: string;
+  workplaceRelevance: string;
+  developmentSuggestions: string[];
+  interviewQuestions: string[];
+  weight: number;
 }
 
 export interface WeaknessAnalysis {
@@ -153,6 +165,7 @@ export class CAIREmployerReportGenerator {
     return dimensions.map(dimension => {
       const percentile = this.calculateDimensionPercentile(dimension, assessmentData);
       const level = this.getDimensionLevel(percentile);
+      const subdimensions = this.analyzeSubdimensions(dimension, assessmentData);
       
       return {
         dimension,
@@ -162,24 +175,328 @@ export class CAIREmployerReportGenerator {
         behavioralIndicators: this.getBehavioralIndicators(dimension, level),
         strengthsInRole: this.getStrengthsInRole(dimension, level),
         potentialChallenges: this.getPotentialChallenges(dimension, level),
-        managementTips: this.getManagementTips(dimension, level)
+        managementTips: this.getManagementTips(dimension, level),
+        subdimensions
       };
     });
   }
 
+  private analyzeSubdimensions(dimension: string, assessmentData: AssessmentData): SubdimensionAnalysis[] {
+    // Group responses by subdimension
+    const subdimensionGroups: Record<string, any[]> = {};
+    
+    assessmentData.responses.forEach(response => {
+      const question = this.findQuestionById(response.questionId, assessmentData);
+      if (!question || !question.subdimension) return;
+      
+      const questionDimension = this.getQuestionDimension(response.questionId);
+      if (questionDimension !== dimension) return;
+      
+      if (!subdimensionGroups[question.subdimension]) {
+        subdimensionGroups[question.subdimension] = [];
+      }
+      
+      let score = response.answer === 'A' ? 1 : 0;
+      if (question.reverse) score = 1 - score;
+      
+      subdimensionGroups[question.subdimension].push(score);
+    });
+    
+    // Calculate subdimension scores and analysis
+    return Object.entries(subdimensionGroups).map(([subdimension, scores]) => {
+      const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+      const percentile = Math.round(Math.max(1, Math.min(99, average * 100)));
+      const level = this.getSubdimensionLevel(percentile);
+      const weight = this.getSubdimensionWeight(dimension, subdimension);
+      
+      return {
+        name: subdimension,
+        percentile,
+        level,
+        description: this.getSubdimensionDescription(dimension, subdimension),
+        workplaceRelevance: this.getSubdimensionWorkplaceRelevance(dimension, subdimension, level),
+        developmentSuggestions: this.getSubdimensionDevelopmentSuggestions(dimension, subdimension, level),
+        interviewQuestions: this.getSubdimensionInterviewQuestions(dimension, subdimension, level),
+        weight
+      };
+    }).sort((a, b) => b.percentile - a.percentile); // Sort by percentile descending
+  }
+
+  private getQuestionDimension(questionId: string): string {
+    const prefix = questionId.charAt(0).toLowerCase();
+    const dimensionMap: Record<string, string> = {
+      'c': 'conscientiousness',
+      'a': 'agreeableness', 
+      'i': 'innovation',
+      'r': 'resilience'
+    };
+    return dimensionMap[prefix] || '';
+  }
+
+  private getSubdimensionLevel(percentile: number): string {
+    if (percentile >= 90) return 'Exceptional';
+    if (percentile >= 75) return 'Strong';
+    if (percentile >= 60) return 'Above Average';
+    if (percentile >= 40) return 'Average';
+    if (percentile >= 25) return 'Below Average';
+    if (percentile >= 10) return 'Developing';
+    return 'Needs Attention';
+  }
+
+  private getSubdimensionDescription(dimension: string, subdimension: string): string {
+    const descriptions: Record<string, Record<string, string>> = {
+      conscientiousness: {
+        organization: "Systematic approach to tasks and workspace management",
+        reliability: "Consistency in meeting commitments and deadlines",
+        goal_orientation: "Focus on achieving specific objectives",
+        attention_to_detail: "Precision and thoroughness in work",
+        rule_following: "Adherence to procedures and guidelines",
+        self_improvement: "Commitment to personal development",
+        self_monitoring: "Awareness of own performance and progress",
+        preparation: "Proactive planning and readiness"
+      },
+      agreeableness: {
+        cooperation: "Willingness to work collaboratively",
+        helpfulness: "Support and assistance to others",
+        trust: "Faith in others' good intentions",
+        compassion: "Empathy and concern for others",
+        empathy: "Understanding others' emotions and perspectives",
+        modesty: "Humility and receptiveness to feedback",
+        interpersonal_warmth: "Friendliness and approachability",
+        consensus_building: "Ability to build agreement and harmony"
+      },
+      innovation: {
+        creativity: "Original thinking and idea generation",
+        openness_to_change: "Adaptability and change acceptance",
+        learning_style: "Approach to acquiring new knowledge",
+        ideation: "Brainstorming and conceptual thinking",
+        change_tolerance: "Comfort with uncertainty and change",
+        innovation_preference: "Preference for novel solutions",
+        improvement_orientation: "Drive to enhance existing systems",
+        ambiguity_tolerance: "Comfort with unclear situations",
+        abstract_thinking: "Conceptual and theoretical reasoning",
+        risk_taking: "Willingness to take calculated risks"
+      },
+      resilience: {
+        recovery_speed: "Ability to bounce back from setbacks",
+        stress_tolerance: "Performance under pressure",
+        optimism: "Positive outlook and hope",
+        energy_management: "Sustaining energy throughout challenges",
+        emotional_stability: "Emotional consistency and control",
+        pressure_performance: "Maintaining quality under stress",
+        workload_management: "Handling multiple demands effectively",
+        life_perspective: "Overall view of challenges and opportunities",
+        persistence: "Continuing despite difficulties",
+        work_recovery: "Ability to separate work and personal life"
+      }
+    };
+    
+    return descriptions[dimension]?.[subdimension] || "Individual trait component";
+  }
+
+  private getSubdimensionWorkplaceRelevance(dimension: string, subdimension: string, level: string): string {
+    const relevanceMap: Record<string, Record<string, Record<string, string>>> = {
+      conscientiousness: {
+        organization: {
+          'Exceptional': 'Creates and maintains highly efficient systems; excellent for project management roles',
+          'Strong': 'Maintains organized workspace and systematic approach to tasks',
+          'Average': 'Generally organized but may need structure for complex projects',
+          'Developing': 'Would benefit from organizational training and clear systems'
+        },
+        reliability: {
+          'Exceptional': 'Extremely dependable; never misses commitments; ideal for critical responsibilities',
+          'Strong': 'Consistently meets deadlines and follows through on commitments',
+          'Average': 'Generally reliable but may occasionally need reminders',
+          'Developing': 'Needs supervision to ensure commitments are met'
+        }
+      },
+      agreeableness: {
+        cooperation: {
+          'Exceptional': 'Outstanding team player; builds consensus; may avoid necessary conflicts',
+          'Strong': 'Works well in teams; collaborative approach to problem-solving',
+          'Average': 'Cooperates when needed but maintains independence',
+          'Developing': 'May prefer individual work; needs coaching on collaboration'
+        },
+        empathy: {
+          'Exceptional': 'Deeply understands others; excellent for customer service and team leadership',
+          'Strong': 'Good at reading emotional cues and responding appropriately',
+          'Average': 'Shows appropriate concern for others in most situations',
+          'Developing': 'May need coaching on interpersonal sensitivity'
+        }
+      }
+    };
+
+    return relevanceMap[dimension]?.[subdimension]?.[level] || 'Standard workplace expectations apply';
+  }
+
+  private getSubdimensionDevelopmentSuggestions(dimension: string, subdimension: string, level: string): string[] {
+    if (level === 'Exceptional' || level === 'Strong') {
+      return [`Leverage ${subdimension} strength to mentor others`, 'Consider leadership roles that utilize this strength'];
+    }
+
+    const suggestions: Record<string, Record<string, string[]>> = {
+      conscientiousness: {
+        organization: ['Use digital planning tools', 'Implement daily and weekly review processes', 'Create standardized filing systems'],
+        reliability: ['Set calendar reminders for all commitments', 'Break large tasks into smaller, manageable pieces', 'Establish accountability partnerships']
+      },
+      agreeableness: {
+        cooperation: ['Practice active listening techniques', 'Join cross-functional project teams', 'Seek feedback on collaborative skills'],
+        empathy: ['Practice perspective-taking exercises', 'Observe body language and emotional cues', 'Ask clarifying questions about others\' feelings']
+      },
+      innovation: {
+        creativity: ['Engage in brainstorming sessions', 'Explore different industries for inspiration', 'Practice lateral thinking exercises'],
+        openness_to_change: ['Start with small changes to build comfort', 'Focus on benefits of change', 'Seek change management training']
+      },
+      resilience: {
+        stress_tolerance: ['Learn stress management techniques', 'Practice mindfulness and meditation', 'Build strong support networks'],
+        recovery_speed: ['Develop healthy coping mechanisms', 'Practice reframing negative situations', 'Build emotional regulation skills']
+      }
+    };
+
+    return suggestions[dimension]?.[subdimension] || ['Focus on continuous improvement in this area'];
+  }
+
+  private getSubdimensionInterviewQuestions(dimension: string, subdimension: string, level: string): string[] {
+    const questions: Record<string, Record<string, string[]>> = {
+      conscientiousness: {
+        organization: [
+          'Describe your system for managing multiple projects simultaneously.',
+          'Tell me about a time when your organizational skills prevented a potential problem.',
+          'How do you prioritize tasks when everything seems urgent?'
+        ],
+        reliability: [
+          'Describe a situation where others were counting on you to deliver something critical.',
+          'Tell me about a time when you had to meet a challenging deadline.',
+          'How do you ensure you follow through on commitments?'
+        ]
+      },
+      agreeableness: {
+        cooperation: [
+          'Tell me about a successful team project and your role in it.',
+          'Describe a time when you had to work with someone difficult.',
+          'How do you handle situations where team members disagree?'
+        ],
+        empathy: [
+          'Describe a time when you had to deliver difficult news to someone.',
+          'Tell me about a situation where you helped a colleague through a challenge.',
+          'How do you ensure you understand others\' perspectives?'
+        ]
+      }
+    };
+
+    return questions[dimension]?.[subdimension] || ['Standard behavioral questions for this area'];
+  }
+
   private calculateDimensionPercentile(dimension: string, assessmentData: AssessmentData): number {
-    // Calculate percentile based on responses
+    // Calculate percentile based on responses with subdimension weighting
     const dimensionResponses = assessmentData.responses.filter(r => 
-      r.questionId.includes(dimension.substring(0, 4))
+      r.questionId.toLowerCase().startsWith(dimension.substring(0, 1).toLowerCase())
     );
     
     if (dimensionResponses.length === 0) return 50;
     
-    const avgScore = dimensionResponses.reduce((sum, response) => {
-      return sum + (response.answer === 'A' ? 100 : 0);
-    }, 0) / dimensionResponses.length;
+    // Group responses by subdimension for more accurate scoring
+    const subdimensionScores: Record<string, number[]> = {};
     
-    return Math.round(avgScore);
+    dimensionResponses.forEach(response => {
+      const question = this.findQuestionById(response.questionId, assessmentData);
+      if (!question || !question.subdimension) return;
+      
+      let score = response.answer === 'A' ? 1 : 0;
+      if (question.reverse) score = 1 - score;
+      
+      if (!subdimensionScores[question.subdimension]) {
+        subdimensionScores[question.subdimension] = [];
+      }
+      subdimensionScores[question.subdimension].push(score);
+    });
+    
+    // Calculate weighted average across subdimensions
+    const subdimensionAverages = Object.entries(subdimensionScores).map(([subdim, scores]) => {
+      const avg = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+      return { subdimension: subdim, average: avg, weight: this.getSubdimensionWeight(dimension, subdim) };
+    });
+    
+    if (subdimensionAverages.length === 0) return 50;
+    
+    const weightedSum = subdimensionAverages.reduce((sum, item) => sum + (item.average * item.weight), 0);
+    const totalWeight = subdimensionAverages.reduce((sum, item) => sum + item.weight, 0);
+    
+    const weightedAverage = weightedSum / totalWeight;
+    return Math.round(Math.max(1, Math.min(99, weightedAverage * 100)));
+  }
+
+  private findQuestionById(questionId: string, assessmentData: AssessmentData): any {
+    // This would typically come from the question data - simplified for now
+    const questionData: Record<string, { subdimension: string; reverse?: boolean }> = {
+      'c001': { subdimension: 'organization' },
+      'c002': { subdimension: 'organization' },
+      'c003': { subdimension: 'reliability' },
+      'c004': { subdimension: 'reliability' },
+      'c005': { subdimension: 'goal_orientation' },
+      'c006': { subdimension: 'attention_to_detail' },
+      'c007': { subdimension: 'rule_following' },
+      'c008': { subdimension: 'self_improvement' },
+      'c009': { subdimension: 'self_monitoring' },
+      'c010': { subdimension: 'preparation' },
+      'a001': { subdimension: 'cooperation' },
+      'a002': { subdimension: 'helpfulness' },
+      'a003': { subdimension: 'trust' },
+      'a004': { subdimension: 'compassion' },
+      'a005': { subdimension: 'cooperation' },
+      'a006': { subdimension: 'empathy' },
+      'a007': { subdimension: 'modesty' },
+      'a008': { subdimension: 'interpersonal_warmth' },
+      'a009': { subdimension: 'consensus_building' },
+      'a010': { subdimension: 'cooperation' },
+      'i001': { subdimension: 'creativity' },
+      'i002': { subdimension: 'openness_to_change' },
+      'i003': { subdimension: 'learning_style' },
+      'i004': { subdimension: 'ideation' },
+      'i005': { subdimension: 'change_tolerance' },
+      'i006': { subdimension: 'innovation_preference' },
+      'i007': { subdimension: 'improvement_orientation' },
+      'i008': { subdimension: 'ambiguity_tolerance', reverse: true },
+      'i009': { subdimension: 'abstract_thinking' },
+      'i010': { subdimension: 'risk_taking' },
+      'r001': { subdimension: 'recovery_speed' },
+      'r002': { subdimension: 'stress_tolerance' },
+      'r003': { subdimension: 'optimism' },
+      'r004': { subdimension: 'energy_management' },
+      'r005': { subdimension: 'emotional_stability' },
+      'r006': { subdimension: 'pressure_performance' },
+      'r007': { subdimension: 'workload_management' },
+      'r008': { subdimension: 'life_perspective' },
+      'r009': { subdimension: 'persistence' },
+      'r010': { subdimension: 'work_recovery' }
+    };
+    
+    return questionData[questionId];
+  }
+
+  private getSubdimensionWeight(dimension: string, subdimension: string): number {
+    const weights: Record<string, Record<string, number>> = {
+      conscientiousness: {
+        organization: 1.2, reliability: 1.3, goal_orientation: 1.1, attention_to_detail: 1.2,
+        rule_following: 1.0, self_improvement: 1.1, self_monitoring: 1.0, preparation: 1.1
+      },
+      agreeableness: {
+        cooperation: 1.3, helpfulness: 1.1, trust: 1.0, compassion: 1.2,
+        empathy: 1.2, modesty: 0.9, interpersonal_warmth: 1.1, consensus_building: 1.2
+      },
+      innovation: {
+        creativity: 1.3, openness_to_change: 1.2, learning_style: 1.1, ideation: 1.2,
+        change_tolerance: 1.1, innovation_preference: 1.3, improvement_orientation: 1.1,
+        ambiguity_tolerance: 1.0, abstract_thinking: 1.1, risk_taking: 1.0
+      },
+      resilience: {
+        recovery_speed: 1.3, stress_tolerance: 1.3, optimism: 1.1, energy_management: 1.0,
+        emotional_stability: 1.2, pressure_performance: 1.3, workload_management: 1.1,
+        life_perspective: 1.0, persistence: 1.2, work_recovery: 1.0
+      }
+    };
+    
+    return weights[dimension]?.[subdimension] || 1.0;
   }
 
   private getDimensionLevel(percentile: number): CAIRDimensionAnalysis['level'] {
