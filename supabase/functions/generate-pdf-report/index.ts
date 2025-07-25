@@ -2999,17 +2999,6 @@ function generatePersonalityChartScript(scores: any): string {
   `;
 }
 
-function formatDimensionName(dimension: string): string {
-  const dimensionNames: Record<string, string> = {
-    'strategicThinking': 'Strategic Thinking',
-    'emotionalIntelligence': 'Emotional Intelligence',
-    'communicationInfluence': 'Communication & Influence',
-    'teamDevelopment': 'Team Development',
-    'decisionMaking': 'Decision Making',
-    'changeManagement': 'Change Management'
-  };
-  return dimensionNames[dimension] || dimension.replace(/([A-Z])/g, ' $1').trim();
-}
 
 function generateLeadershipChartScript(dimensions: any): string {
   const labels = Object.keys(dimensions).map(dim => formatDimensionName(dim));
