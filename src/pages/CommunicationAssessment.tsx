@@ -14,6 +14,7 @@ import { generateProfessionalReport } from "@/services/professionalReportGenerat
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
+import CommunicationStylesVisualizer from "@/components/CommunicationStylesVisualizer";
 
 const CommunicationAssessment = () => {
   const navigate = useNavigate();
@@ -142,7 +143,7 @@ const CommunicationAssessment = () => {
   if (showResults && results) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-indigo-50 to-blue-50 py-8">
-        <div className="container mx-auto px-4 max-w-6xl">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="text-center mb-12">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-indigo-100 mb-6">
               <MessageSquare className="w-8 h-8 text-indigo-600" />
@@ -151,26 +152,14 @@ const CommunicationAssessment = () => {
               Communication Assessment Complete!
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Your comprehensive communication analysis is ready
+              Your comprehensive communication analysis with detailed visualizations
             </p>
           </div>
 
-          {/* Results display would go here */}
-          <Card className="mb-8">
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Your Communication Profile</CardTitle>
-            </CardHeader>
-            <CardContent className="text-center">
-              <div className="text-6xl font-bold text-indigo-600 mb-4">
-                {results.overallScore || 85}%
-              </div>
-              <Badge variant="default" className="text-lg px-4 py-2">
-                Effective Communicator
-              </Badge>
-            </CardContent>
-          </Card>
+          {/* Import and use the visualizer */}
+          <CommunicationStylesVisualizer results={results} />
 
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4 mt-12">
             <Button className="bg-indigo-600 hover:bg-indigo-700">
               <Download className="mr-2 w-4 h-4" />
               Download Report
@@ -178,6 +167,12 @@ const CommunicationAssessment = () => {
             <Button variant="outline">
               <Share2 className="mr-2 w-4 h-4" />
               Share Results
+            </Button>
+            <Button 
+              variant="outline"
+              onClick={() => navigate('/')}
+            >
+              Take Another Assessment
             </Button>
           </div>
         </div>
