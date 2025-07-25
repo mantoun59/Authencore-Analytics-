@@ -40,15 +40,35 @@ const AdminPage = () => {
                 <div className="space-y-6">
                   <div className="p-6 bg-card rounded-lg border">
                     <h3 className="text-lg font-semibold mb-4">Testing Portal Management</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <a href="/candidate-testing" className="p-4 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors">
-                        <h4 className="font-medium">Candidate Testing Portal</h4>
-                        <p className="text-sm text-muted-foreground">Direct access for candidates to take assessments</p>
-                      </a>
-                      <a href="/testing-dashboard" className="p-4 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors">
-                        <h4 className="font-medium">Testing Dashboard</h4>
-                        <p className="text-sm text-muted-foreground">Monitor and manage ongoing assessments</p>
-                      </a>
+                    <p className="text-muted-foreground mb-6">
+                      Comprehensive testing tools for candidate assessment and management
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="p-6 bg-primary/5 rounded-lg border hover:bg-primary/10 transition-colors">
+                        <h4 className="font-semibold text-lg mb-2">Candidate Testing Portal</h4>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Direct access portal for candidates to take assessments with guided interface
+                        </p>
+                        <a 
+                          href="/candidate-testing" 
+                          className="inline-flex items-center text-primary hover:text-primary-glow font-medium"
+                        >
+                          Access Portal →
+                        </a>
+                      </div>
+                      
+                      <div className="p-6 bg-secondary/5 rounded-lg border hover:bg-secondary/10 transition-colors">
+                        <h4 className="font-semibold text-lg mb-2">Testing Dashboard</h4>
+                        <p className="text-sm text-muted-foreground mb-4">
+                          Monitor and manage ongoing assessments, view real-time progress and results
+                        </p>
+                        <a 
+                          href="/testing-dashboard" 
+                          className="inline-flex items-center text-primary hover:text-primary-glow font-medium"
+                        >
+                          Open Dashboard →
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>

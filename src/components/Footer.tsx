@@ -100,65 +100,29 @@ const Footer = () => {
                 Home
               </Link>
               <Link
-                to="/candidate-testing"
+                to="/assessment"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                Testing Portal
+                Assessments
               </Link>
               <Link
-                to="/testing-dashboard"
+                to="/about"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                Testing Dashboard
+                About Us
               </Link>
               <Link
-                to="/marketing-materials"
+                to="/faq"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                Downloads
+                FAQ & Platform Guide
               </Link>
               <Link
                 to="/privacy"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                Privacy Policy & Literature
+                Privacy Policy
               </Link>
-              <Link
-                to="/compliance"
-                className="block text-foreground hover:text-primary transition-colors text-sm"
-              >
-                Compliance Documentation
-              </Link>
-              <button
-                onClick={() => handleHashNavigation('terms')}
-                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
-              >
-                Terms of Service
-              </button>
-              <button
-                onClick={() => handleHashNavigation('gdpr')}
-                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
-              >
-                GDPR Compliance
-              </button>
-              <button
-                onClick={() => handleHashNavigation('security')}
-                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
-              >
-                Data Security Standards
-              </button>
-              <button
-                onClick={() => handleHashNavigation('ethics')}
-                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
-              >
-                Assessment Ethics
-              </button>
-              <button
-                onClick={() => handleHashNavigation('assessment-integrity')}
-                className="block text-left text-foreground hover:text-primary transition-colors text-sm"
-              >
-                Assessment Integrity
-              </button>
             </div>
           </div>
 
@@ -210,16 +174,10 @@ const Footer = () => {
             </p>
             <div className="flex items-center space-x-6 text-sm">
               <Link to="/privacy" className="text-foreground hover:text-primary transition-colors">
-                Privacy & Literature
+                Privacy Policy
               </Link>
-              <button
-                onClick={() => handleHashNavigation('assessment-integrity')}
-                className="text-foreground hover:text-primary transition-colors"
-              >
-                Assessment Integrity
-              </button>
-              <Link to="/compliance" className="text-foreground hover:text-primary transition-colors">
-                Compliance Documentation
+              <Link to="/faq" className="text-foreground hover:text-primary transition-colors">
+                FAQ & Support
               </Link>
               <a href="mailto:contact@authencore.org" className="text-foreground hover:text-primary transition-colors">
                 Contact
