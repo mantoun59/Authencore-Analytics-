@@ -905,6 +905,365 @@ function generateRadarChartScript(chartId: string, title: string, labels: string
   `;
 }
 
+// Cultural Intelligence Helper Functions
+function getCQLevel(percentile: number): string {
+  if (percentile >= 90) return 'Exceptional';
+  if (percentile >= 75) return 'Strong';
+  if (percentile >= 60) return 'Above Average';
+  if (percentile >= 40) return 'Average';
+  if (percentile >= 25) return 'Below Average';
+  return 'Developing';
+}
+
+function getMostCommonAdaptationStyle(patterns: any[]): string {
+  if (patterns.length === 0) return 'Contextual';
+  const styles = patterns.map(p => p.decisionStyle);
+  const styleCount = styles.reduce((acc, style) => {
+    acc[style] = (acc[style] || 0) + 1;
+    return acc;
+  }, {} as Record<string, number>);
+  
+  return Object.entries(styleCount).reduce((a, b) => styleCount[a[0]] > styleCount[b[0]] ? a : b)[0];
+}
+
+function getCQDimensionDescription(dimension: string): string {
+  const descriptions: Record<string, string> = {
+    drive: 'Your motivation and confidence to engage with people from different cultural backgrounds. This includes your enjoyment of diverse environments and willingness to adapt your behavior.',
+    knowledge: 'Your understanding of cultural systems, values, and norms. This encompasses both general cultural knowledge and specific awareness of how culture shapes thinking and behavior.',
+    strategy: 'Your ability to plan and check your cultural interactions. This includes being aware of cultural differences and adjusting your mental models when cross-cultural interactions require it.',
+    action: 'Your capability to adapt your behavior when cross-cultural situations require it. This includes modifying your verbal and non-verbal behavior to suit different cultural contexts.'
+  };
+  
+  return descriptions[dimension] || 'Your capability in this cultural intelligence dimension.';
+}
+
+function getCQWorkplaceApplications(dimension: string, level: string): string {
+  const applications: Record<string, Record<string, string>> = {
+    drive: {
+      'Exceptional': 'Excellent for international assignments, cross-cultural team leadership, and global client relationships. Natural cultural ambassador.',
+      'Strong': 'Well-suited for multicultural teams and international projects. Shows genuine interest in cultural diversity.',
+      'Average': 'Can work effectively in diverse environments with proper support and cultural briefings.',
+      'Developing': 'May need extensive cultural training and support before international assignments.'
+    },
+    knowledge: {
+      'Exceptional': 'Ideal for roles requiring deep cultural understanding: international consulting, global marketing, diplomatic positions.',
+      'Strong': 'Good foundation for cross-cultural work. Can provide cultural insights to teams and projects.',
+      'Average': 'Adequate cultural awareness for most diverse workplace situations with occasional guidance.',
+      'Developing': 'Requires cultural education and training to work effectively across cultures.'
+    },
+    strategy: {
+      'Exceptional': 'Excellent at planning cross-cultural interactions and adjusting strategies based on cultural context.',
+      'Strong': 'Good at thinking through cultural implications and planning appropriate approaches.',
+      'Average': 'Can plan for cultural differences when prompted or guided through the process.',
+      'Developing': 'Needs structured frameworks and guidance for cross-cultural planning and strategy.'
+    },
+    action: {
+      'Exceptional': 'Naturally adapts behavior across cultures. Excellent for client-facing international roles.',
+      'Strong': 'Good at modifying behavior appropriately for different cultural contexts.',
+      'Average': 'Can adapt behavior with awareness and practice in specific cultural situations.',
+      'Developing': 'May struggle with behavioral adaptation and need coaching for cross-cultural interactions.'
+    }
+  };
+  
+  return applications[dimension]?.[level] || 'Continue developing cultural intelligence skills for workplace effectiveness.';
+}
+
+function getCQDevelopmentRecommendations(dimension: string, level: string): string {
+  const recommendations: Record<string, Record<string, string>> = {
+    drive: {
+      'Exceptional': 'Mentor others in cross-cultural engagement. Consider leadership roles in global initiatives.',
+      'Strong': 'Seek challenging international assignments. Share your cultural enthusiasm with others.',
+      'Average': 'Gradually increase exposure to diverse cultural environments. Practice cultural curiosity.',
+      'Developing': 'Start with cultural awareness training. Build confidence through guided multicultural experiences.'
+    },
+    knowledge: {
+      'Exceptional': 'Become a cultural subject matter expert. Contribute to cultural training programs.',
+      'Strong': 'Deepen knowledge in specific cultural areas relevant to your work.',
+      'Average': 'Read about different cultures and attend cultural awareness workshops.',
+      'Developing': 'Begin with foundational cultural learning. Use cultural intelligence resources and training.'
+    },
+    strategy: {
+      'Exceptional': 'Develop frameworks to help others plan cross-cultural interactions.',
+      'Strong': 'Practice advanced cultural planning and scenario analysis.',
+      'Average': 'Use structured approaches to plan for cultural differences.',
+      'Developing': 'Learn basic cultural planning frameworks and practice with guidance.'
+    },
+    action: {
+      'Exceptional': 'Help others develop behavioral adaptation skills.',
+      'Strong': 'Continue practicing behavioral flexibility in new cultural contexts.',
+      'Average': 'Practice specific behavioral adaptations with feedback.',
+      'Developing': 'Start with awareness of your own cultural behaviors and practice small adaptations.'
+    }
+  };
+  
+  return recommendations[dimension]?.[level] || 'Continue developing cultural intelligence capabilities.';
+}
+
+function generateCQStrengths(dimensions: any[]): string {
+  const strengths = dimensions.filter(d => d.percentile >= 70).map(d => `<li>${d.name}: ${d.level} (${d.percentile}th percentile)</li>`);
+  return strengths.length > 0 ? strengths.join('') : '<li>Balanced cultural intelligence profile with room for development</li>';
+}
+
+function generateCQDevelopmentAreas(dimensions: any[]): string {
+  const areas = dimensions.filter(d => d.percentile < 60).map(d => `<li>${d.name}: Focus on ${d.name.toLowerCase()} development</li>`);
+  return areas.length > 0 ? areas.join('') : '<li>Continue strengthening all CQ dimensions for optimal effectiveness</li>';
+}
+
+function getGlobalReadinessAssessment(overallScore: number, percentile: number): string {
+  if (overallScore >= 80) {
+    return 'Excellent global readiness. You demonstrate strong cultural intelligence across all dimensions and are well-prepared for international assignments and cross-cultural leadership roles.';
+  } else if (overallScore >= 65) {
+    return 'Good global readiness with some areas for development. You have solid cultural intelligence foundations and can be effective in most cross-cultural situations with continued growth.';
+  } else if (overallScore >= 50) {
+    return 'Moderate global readiness. You have basic cultural intelligence skills but would benefit from targeted development before taking on significant cross-cultural responsibilities.';
+  } else {
+    return 'Developing global readiness. Significant cultural intelligence development needed before international assignments. Consider comprehensive cultural training programs.';
+  }
+}
+
+function generateCQActionPlan(dimensions: any[], overallScore: number): string {
+  const actionItems = [
+    `Focus on developing your lowest-scoring CQ dimension: ${dimensions.sort((a, b) => a.percentile - b.percentile)[0]?.name || 'All dimensions'}`,
+    'Seek opportunities for cross-cultural interaction in your current role',
+    'Consider cultural mentorship or coaching for personalized development',
+    'Practice cultural observation and reflection techniques',
+    'Set specific goals for cultural intelligence improvement over the next 6 months'
+  ];
+  
+  if (overallScore >= 70) {
+    actionItems.unshift('Leverage your cultural intelligence strengths in leadership or mentoring roles');
+  }
+  
+  return generateActionPlan(actionItems);
+}
+
+function generateCQChartScript(dimensions: any[]): string {
+  return `
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('cqChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'radar',
+        data: {
+          labels: [${dimensions.map(d => `'${d.name}'`).join(', ')}],
+          datasets: [{
+            label: 'CQ Scores (Percentiles)',
+            data: [${dimensions.map(d => d.percentile).join(', ')}],
+            backgroundColor: 'rgba(99, 102, 241, 0.2)',
+            borderColor: 'rgba(99, 102, 241, 1)',
+            borderWidth: 2,
+            pointBackgroundColor: 'rgba(99, 102, 241, 1)',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: 'rgba(99, 102, 241, 1)'
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            r: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                stepSize: 20
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'bottom'
+            },
+            title: {
+              display: true,
+              text: 'Cultural Intelligence Dimension Scores'
+            }
+          }
+        }
+      });
+    });
+  `;
+}
+
+// Stress Resilience Helper Functions
+function getResilienceProfileDescription(profile: string): string {
+  const descriptions: Record<string, string> = {
+    'Diamond': 'Exceptional resilience - You demonstrate outstanding ability to handle stress and bounce back from challenges. You likely serve as a stabilizing force for others during difficult times.',
+    'Steel': 'Strong resilience - You have well-developed coping mechanisms and can handle significant stress while maintaining performance. You recover well from setbacks.',
+    'Bamboo': 'Flexible resilience - You demonstrate good adaptability and can bend without breaking under pressure. You may need some support during peak stress periods.',
+    'Glass': 'Developing resilience - You may struggle with high stress levels and benefit from building stronger coping strategies and support systems.',
+    'Clay': 'Fragile resilience - You may be particularly vulnerable to stress and burnout. Immediate attention to stress management and support systems is recommended.'
+  };
+  
+  return descriptions[profile] || 'Your resilience profile indicates areas for development in stress management.';
+}
+
+function getBurnoutRiskDescription(risk: string): string {
+  const descriptions: Record<string, string> = {
+    low: 'You demonstrate strong protective factors against burnout. Continue maintaining healthy work-life balance and stress management practices.',
+    medium: 'You show some risk factors for burnout. Monitor your stress levels and implement additional coping strategies as needed.',
+    high: 'You are showing significant risk factors for burnout. Immediate attention to stress reduction and support systems is recommended.'
+  };
+  
+  return descriptions[risk] || 'Monitor your stress levels and seek support as needed.';
+}
+
+function getStressDimensionDescription(dimension: string, level: string): string {
+  const descriptions: Record<string, Record<string, string>> = {
+    workload: {
+      excellent: 'You manage your workload exceptionally well, maintaining high productivity without overwhelm.',
+      good: 'You generally handle your workload effectively with good time management skills.',
+      fair: 'You can manage your workload adequately but may feel overwhelmed at times.',
+      'needs-improvement': 'You struggle with workload management and may frequently feel overwhelmed.'
+    },
+    emotional: {
+      excellent: 'You demonstrate outstanding emotional regulation and stability under pressure.',
+      good: 'You manage your emotions well during stressful situations.',
+      fair: 'You have adequate emotional coping strategies but may need additional support.',
+      'needs-improvement': 'You may struggle with emotional regulation during stressful periods.'
+    },
+    efficacy: {
+      excellent: 'You maintain high confidence in your abilities and feel very effective at work.',
+      good: 'You generally feel competent and effective in your work role.',
+      fair: 'You have moderate confidence in your abilities with room for growth.',
+      'needs-improvement': 'You may question your effectiveness and need confidence building.'
+    },
+    support: {
+      excellent: 'You have strong support systems and effectively utilize available resources.',
+      good: 'You have good support networks and know how to access help when needed.',
+      fair: 'You have some support available but may not always utilize it effectively.',
+      'needs-improvement': 'You may lack adequate support systems or struggle to access help.'
+    },
+    worklife: {
+      excellent: 'You maintain excellent work-life balance and boundary management.',
+      good: 'You generally maintain good work-life balance with occasional challenges.',
+      fair: 'You struggle sometimes with work-life balance but can manage adequately.',
+      'needs-improvement': 'You may have poor work-life boundaries leading to increased stress.'
+    },
+    coping: {
+      excellent: 'You have highly effective stress management and coping strategies.',
+      good: 'You have good coping mechanisms that work well for you.',
+      fair: 'You have some coping strategies but may need to develop additional ones.',
+      'needs-improvement': 'You may lack effective coping strategies for managing stress.'
+    }
+  };
+  
+  return descriptions[dimension]?.[level] || 'Continue developing this area for improved stress resilience.';
+}
+
+function getStressDimensionStrategies(dimension: string, level: string): string {
+  const strategies: Record<string, string> = {
+    workload: 'Practice time management techniques, prioritization frameworks, and delegation when possible. Consider workload redistribution if consistently overwhelmed.',
+    emotional: 'Develop emotional regulation techniques such as mindfulness, deep breathing, and cognitive reframing. Practice self-awareness of emotional triggers.',
+    efficacy: 'Build confidence through skill development, celebrating achievements, and seeking feedback. Focus on past successes and strengths.',
+    support: 'Strengthen relationships with colleagues, mentors, and friends. Learn to ask for help and utilize available resources effectively.',
+    worklife: 'Establish clear boundaries between work and personal time. Practice saying no to excessive demands and prioritize self-care activities.',
+    coping: 'Develop a toolkit of stress management techniques including exercise, relaxation, hobbies, and healthy lifestyle habits.'
+  };
+  
+  return strategies[dimension] || 'Focus on building resilience in this important area.';
+}
+
+function getStressDimensionWarnings(dimension: string): string {
+  const warnings: Record<string, string> = {
+    workload: 'High workload stress can lead to burnout, decreased performance, and health issues. Consider immediate workload management strategies.',
+    emotional: 'Poor emotional regulation can impact relationships, decision-making, and overall well-being. Seek support for emotional coping skills.',
+    efficacy: 'Low sense of efficacy can lead to decreased motivation and performance. Focus on building confidence and competence.',
+    support: 'Lack of support can increase vulnerability to stress and burnout. Actively work to build support networks.',
+    worklife: 'Poor work-life balance can lead to chronic stress and impact personal relationships and health.',
+    coping: 'Inadequate coping strategies can lead to harmful stress responses and potential mental health concerns.'
+  };
+  
+  return warnings[dimension] || 'This area requires immediate attention to prevent stress-related difficulties.';
+}
+
+function generateStressActionPlan(dimensionScores: any[], burnoutRisk: string, stressLevel: string): string {
+  const actionItems = [];
+  
+  // Risk-specific actions
+  if (burnoutRisk === 'high') {
+    actionItems.push('Seek immediate support from supervisor or HR regarding workload and stress levels');
+    actionItems.push('Consider professional counseling or employee assistance program resources');
+  }
+  
+  // Dimension-specific actions
+  const lowestDimension = dimensionScores.sort((a, b) => a.percentage - b.percentage)[0];
+  if (lowestDimension) {
+    actionItems.push(`Priority focus: Improve ${lowestDimension.dimension.toLowerCase()} management strategies`);
+  }
+  
+  // General actions
+  actionItems.push('Implement daily stress management techniques (meditation, exercise, or relaxation)');
+  actionItems.push('Review and improve work-life balance practices');
+  actionItems.push('Schedule regular check-ins with supervisor about workload and support needs');
+  actionItems.push('Consider stress management training or workshops');
+  actionItems.push('Reassess stress levels in 30 days and adjust strategies as needed');
+  
+  return generateActionPlan(actionItems);
+}
+
+function generateStressChartScript(dimensionScores: any[]): string {
+  const chartData = dimensionScores.map(d => ({
+    label: d.dimension,
+    value: d.percentage
+  }));
+  
+  return `
+    document.addEventListener('DOMContentLoaded', function() {
+      const ctx = document.getElementById('resilienceChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [${chartData.map(d => `'${d.label}'`).join(', ')}],
+          datasets: [{
+            label: 'Resilience Scores (%)',
+            data: [${chartData.map(d => d.value).join(', ')}],
+            backgroundColor: [
+              'rgba(139, 92, 246, 0.8)',
+              'rgba(59, 130, 246, 0.8)',
+              'rgba(16, 185, 129, 0.8)',
+              'rgba(245, 158, 11, 0.8)',
+              'rgba(239, 68, 68, 0.8)',
+              'rgba(168, 85, 247, 0.8)'
+            ],
+            borderColor: [
+              'rgba(139, 92, 246, 1)',
+              'rgba(59, 130, 246, 1)',
+              'rgba(16, 185, 129, 1)',
+              'rgba(245, 158, 11, 1)',
+              'rgba(239, 68, 68, 1)',
+              'rgba(168, 85, 247, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 100,
+              ticks: {
+                callback: function(value) {
+                  return value + '%';
+                }
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: false
+            },
+            title: {
+              display: true,
+              text: 'Stress Resilience Dimension Breakdown'
+            }
+          }
+        }
+      });
+    });
+  `;
+}
+
 function generateReportId(): string {
   return 'AR-' + Date.now().toString(36).toUpperCase() + '-' + Math.random().toString(36).substr(2, 5).toUpperCase();
 }
@@ -969,12 +1328,382 @@ function generateEQReport(results: any, userData: any): string {
   return generateCommunicationReport(results, userData); // Enhanced version coming
 }
 
+// Cultural Intelligence Assessment Report Generator
 function generateCulturalReport(results: any, userData: any): string {
-  return generateCommunicationReport(results, userData); // Enhanced version coming
+  const dimensions = results?.dimensions || {};
+  const culturalProfile = results?.culturalProfile || {};
+  const overallScore = results?.overallScore || 0;
+  const percentileScore = results?.percentileScore || 0;
+  const profile = results?.profile || 'Developing Cultural Intelligence';
+  const scenarioHistory = results?.scenarioHistory || [];
+  const adaptationPatterns = results?.adaptationPatterns || [];
+  
+  // Calculate CQ breakdown
+  const cqDimensions = ['drive', 'knowledge', 'strategy', 'action'].map(dim => ({
+    name: formatDimensionName(dim),
+    score: dimensions[dim]?.score || 0,
+    percentile: Math.min(99, Math.max(1, (dimensions[dim]?.score || 0) * 20)),
+    level: getCQLevel((dimensions[dim]?.score || 0) * 20),
+    components: dimensions[dim]?.components || {}
+  }));
+
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Cultural Intelligence (CQ) Assessment Report</title>
+    <style>
+      ${getReportStyles()}
+      .cq-dimension {
+        background: #f8fafc;
+        border-left: 4px solid #6366f1;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 8px;
+      }
+      .cq-components {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-top: 15px;
+      }
+      .component-card {
+        background: white;
+        padding: 15px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
+      }
+      .scenario-analysis {
+        background: #fefce8;
+        border: 1px solid #facc15;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px 0;
+      }
+      .cultural-context {
+        background: #f0f9ff;
+        border-left: 4px solid #0ea5e9;
+        padding: 15px;
+        margin: 10px 0;
+      }
+      .adaptation-pattern {
+        background: #f0fdf4;
+        border-left: 4px solid #22c55e;
+        padding: 15px;
+        margin: 10px 0;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    ${generateReportHeader("Cultural Intelligence (CQ) Assessment", userData)}
+    
+    <div class="executive-summary">
+      <h2>🌍 Executive Summary</h2>
+      <div class="summary-box">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <p><strong>Candidate:</strong> ${userData?.name || 'Assessment Participant'}</p>
+            <p><strong>Assessment Date:</strong> ${userData?.date || new Date().toLocaleDateString()}</p>
+            <p><strong>Overall CQ Score:</strong> ${overallScore.toFixed(1)}/100</p>
+            <p><strong>Percentile Ranking:</strong> ${percentileScore}th percentile</p>
+          </div>
+          <div>
+            <p><strong>CQ Profile:</strong> ${profile}</p>
+            <p><strong>Scenarios Completed:</strong> ${scenarioHistory.length}</p>
+            <p><strong>Cultural Contexts:</strong> ${new Set(scenarioHistory.map(s => s.location)).size}</p>
+            <p><strong>Adaptation Style:</strong> ${getMostCommonAdaptationStyle(adaptationPatterns)}</p>
+          </div>
+        </div>
+        
+        <div style="margin-top: 20px;">
+          <h3>🎯 Cultural Intelligence Overview</h3>
+          <p>Your Cultural Intelligence score reflects your capability to function effectively in culturally diverse environments. This assessment measured your motivation (CQ Drive), understanding (CQ Knowledge), planning (CQ Strategy), and behavioral adaptation (CQ Action) across various cultural scenarios.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="personality-profile">
+      <h2>📊 CQ Dimension Analysis</h2>
+      <div class="chart-container">
+        <canvas id="cqChart" width="400" height="300"></canvas>
+      </div>
+      
+      ${cqDimensions.map(dimension => `
+        <div class="cq-dimension">
+          <h3>🧭 ${dimension.name} (${dimension.percentile}th percentile)</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${dimension.percentile}%"></div>
+          </div>
+          <p><strong>Level:</strong> ${dimension.level}</p>
+          <p>${getCQDimensionDescription(dimension.name.toLowerCase())}</p>
+          
+          <div class="cq-components">
+            ${Object.entries(dimension.components).map(([comp, score]: [string, any]) => `
+              <div class="component-card">
+                <h4>${formatDimensionName(comp)}</h4>
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: ${Math.min(100, score * 20)}%"></div>
+                </div>
+                <p>Score: ${score.toFixed(1)}/5</p>
+              </div>
+            `).join('')}
+          </div>
+          
+          <div class="cultural-context">
+            <h4>💼 Workplace Applications</h4>
+            <p>${getCQWorkplaceApplications(dimension.name.toLowerCase(), dimension.level)}</p>
+          </div>
+          
+          <div class="adaptation-pattern">
+            <h4>🎯 Development Recommendations</h4>
+            <p>${getCQDevelopmentRecommendations(dimension.name.toLowerCase(), dimension.level)}</p>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="scenario-analysis">
+      <h2>🎭 Cultural Scenario Performance</h2>
+      <h3>Strengths Demonstrated</h3>
+      <ul>
+        ${(culturalProfile.strengths || []).slice(0, 3).map((strength: any) => `
+          <li><strong>${strength.location} - ${formatDimensionName(strength.type)}:</strong> ${(strength.appropriateness * 100).toFixed(0)}% cultural appropriateness</li>
+        `).join('')}
+      </ul>
+      
+      <h3>Areas for Growth</h3>
+      <ul>
+        ${(culturalProfile.challenges || []).slice(0, 3).map((challenge: any) => `
+          <li><strong>${challenge.location} - ${formatDimensionName(challenge.type)}:</strong> Opportunity for improvement in cultural adaptation</li>
+        `).join('')}
+      </ul>
+      
+      <h3>Cultural Adaptation Patterns</h3>
+      ${adaptationPatterns.slice(0, 3).map((pattern: any) => `
+        <div style="margin: 10px 0; padding: 10px; background: white; border-radius: 4px;">
+          <strong>${pattern.culturalContext}:</strong> ${pattern.decisionStyle} approach with ${(pattern.adaptationLevel * 100).toFixed(0)}% adaptation effectiveness
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="insights-section">
+      <h2>🧠 Cultural Intelligence Insights</h2>
+      
+      <div class="insights-grid">
+        <div class="insight-card strengths">
+          <h3>💪 Cultural Strengths</h3>
+          <ul>
+            ${generateCQStrengths(cqDimensions)}
+          </ul>
+        </div>
+        
+        <div class="insight-card growth-areas">
+          <h3>🌱 Development Opportunities</h3>
+          <ul>
+            ${generateCQDevelopmentAreas(cqDimensions)}
+          </ul>
+        </div>
+      </div>
+      
+      <div class="cultural-context">
+        <h3>🌏 Global Readiness Assessment</h3>
+        <p>${getGlobalReadinessAssessment(overallScore, percentileScore)}</p>
+      </div>
+    </div>
+
+    ${generateCQActionPlan(cqDimensions, overallScore)}
+
+    <div class="footer">
+      <p><strong>Confidential Cultural Intelligence Assessment Report</strong> | Generated ${new Date().toLocaleDateString()}</p>
+      <p>This CQ assessment provides insights for cross-cultural effectiveness and global professional development.</p>
+      <p>For questions about this report, contact your assessment administrator or HR professional.</p>
+    </div>
+
+    <script>
+      ${generateCQChartScript(cqDimensions)}
+    </script>
+  </body>
+  </html>
+  `;
 }
 
+// Stress Resilience (Burnout Prevention) Assessment Report Generator
 function generateStressReport(results: any, userData: any): string {
-  return generateCommunicationReport(results, userData); // Enhanced version coming
+  const dimensionScores = results?.dimensionScores || [];
+  const overallScore = results?.overallScore || 0;
+  const percentileScore = results?.percentileScore || 0;
+  const resilienceProfile = results?.resilienceProfile || 'Developing';
+  const burnoutRisk = results?.burnoutRisk || 'medium';
+  const stressManagementLevel = results?.stressManagementLevel || 'fair';
+  const strengths = results?.strengths || [];
+  const challenges = results?.challenges || [];
+  const recommendations = results?.recommendations || [];
+  
+  return `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Stress Resilience & Burnout Prevention Assessment Report</title>
+    <style>
+      ${getReportStyles()}
+      .resilience-profile {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 25px;
+        border-radius: 12px;
+        margin: 20px 0;
+        text-align: center;
+      }
+      .burnout-risk {
+        padding: 15px;
+        border-radius: 8px;
+        margin: 15px 0;
+        font-weight: bold;
+      }
+      .risk-low { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
+      .risk-medium { background: #fef3c7; color: #92400e; border-left: 4px solid #f59e0b; }
+      .risk-high { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+      .dimension-analysis {
+        background: #f8fafc;
+        border-left: 4px solid #8b5cf6;
+        padding: 20px;
+        margin: 15px 0;
+        border-radius: 8px;
+      }
+      .stress-metric {
+        background: white;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        margin: 10px 0;
+      }
+      .coping-strategy {
+        background: #f0fdf4;
+        border-left: 4px solid #22c55e;
+        padding: 15px;
+        margin: 10px 0;
+      }
+      .warning-sign {
+        background: #fef2f2;
+        border-left: 4px solid #ef4444;
+        padding: 15px;
+        margin: 10px 0;
+      }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    ${generateReportHeader("Stress Resilience & Burnout Prevention Assessment", userData)}
+    
+    <div class="executive-summary">
+      <h2>🛡️ Executive Summary</h2>
+      <div class="summary-box">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <p><strong>Participant:</strong> ${userData?.name || 'Assessment Participant'}</p>
+            <p><strong>Assessment Date:</strong> ${userData?.date || new Date().toLocaleDateString()}</p>
+            <p><strong>Overall Resilience Score:</strong> ${overallScore.toFixed(1)}/100</p>
+            <p><strong>Percentile Ranking:</strong> ${percentileScore}th percentile</p>
+          </div>
+          <div>
+            <p><strong>Resilience Profile:</strong> ${resilienceProfile}</p>
+            <p><strong>Stress Management Level:</strong> ${formatDimensionName(stressManagementLevel)}</p>
+            <p><strong>Burnout Risk Level:</strong> ${formatDimensionName(burnoutRisk)}</p>
+            <p><strong>Protective Factors:</strong> ${strengths.length}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="resilience-profile">
+      <h2>💎 Your Resilience Profile: ${resilienceProfile}</h2>
+      <p style="font-size: 18px; margin-top: 15px;">${getResilienceProfileDescription(resilienceProfile)}</p>
+    </div>
+
+    <div class="burnout-risk risk-${burnoutRisk}">
+      <h3>⚠️ Burnout Risk Assessment: ${formatDimensionName(burnoutRisk)} Risk</h3>
+      <p>${getBurnoutRiskDescription(burnoutRisk)}</p>
+    </div>
+
+    <div class="personality-profile">
+      <h2>📊 Stress Resilience Dimensions</h2>
+      <div class="chart-container">
+        <canvas id="resilienceChart" width="400" height="300"></canvas>
+      </div>
+      
+      ${dimensionScores.map((dimension: any) => `
+        <div class="dimension-analysis">
+          <h3>🎯 ${dimension.dimension} (${dimension.percentage.toFixed(0)}%)</h3>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${dimension.percentage}%"></div>
+          </div>
+          <p><strong>Level:</strong> ${formatDimensionName(dimension.level)}</p>
+          <p><strong>Score:</strong> ${dimension.score}/${dimension.maxScore}</p>
+          
+          <div class="stress-metric">
+            <h4>📋 What This Means</h4>
+            <p>${getStressDimensionDescription(dimension.dimension.toLowerCase(), dimension.level)}</p>
+          </div>
+          
+          <div class="coping-strategy">
+            <h4>💡 Strengthening Strategies</h4>
+            <p>${getStressDimensionStrategies(dimension.dimension.toLowerCase(), dimension.level)}</p>
+          </div>
+          
+          ${dimension.level === 'needs-improvement' ? `
+            <div class="warning-sign">
+              <h4>⚠️ Areas Requiring Attention</h4>
+              <p>${getStressDimensionWarnings(dimension.dimension.toLowerCase())}</p>
+            </div>
+          ` : ''}
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="insights-section">
+      <h2>🧠 Resilience Analysis</h2>
+      
+      <div class="insights-grid">
+        <div class="insight-card strengths">
+          <h3>💪 Protective Factors</h3>
+          <ul>
+            ${strengths.map((strength: string) => `<li>${strength}</li>`).join('') || '<li>Continue developing resilience skills</li>'}
+          </ul>
+        </div>
+        
+        <div class="insight-card growth-areas">
+          <h3>⚡ Vulnerability Areas</h3>
+          <ul>
+            ${challenges.map((challenge: string) => `<li>${challenge}</li>`).join('') || '<li>Focus on balanced development</li>'}
+          </ul>
+        </div>
+      </div>
+      
+      <div class="coping-strategy">
+        <h3>🛠️ Personalized Stress Management Plan</h3>
+        <ul>
+          ${recommendations.map((rec: string) => `<li>${rec}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+
+    ${generateStressActionPlan(dimensionScores, burnoutRisk, stressManagementLevel)}
+
+    <div class="footer">
+      <p><strong>Confidential Stress Resilience Assessment Report</strong> | Generated ${new Date().toLocaleDateString()}</p>
+      <p>This assessment provides insights for stress management and burnout prevention strategies.</p>
+      <p>For professional support, consider consulting with a mental health professional or employee assistance program.</p>
+    </div>
+
+    <script>
+      ${generateStressChartScript(dimensionScores)}
+    </script>
+  </body>
+  </html>
+  `;
 }
 
 function generateLeadershipReport(results: any, userData: any): string {
