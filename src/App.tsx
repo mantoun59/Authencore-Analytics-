@@ -10,7 +10,7 @@ import { EmployerProvider } from "@/contexts/EmployerContext";
 import RouteConfig from "@/components/RouteConfig";
 import ScrollToTop from "@/components/ScrollToTop";
 import AIChat from "@/components/AIChat";
-import GlobalErrorBoundary from "@/components/GlobalErrorBoundary";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -28,7 +28,7 @@ const App = () => {
   console.log('📦 App.tsx: Setting up providers...');
   
   return (
-    <GlobalErrorBoundary>
+    <ErrorBoundary level="critical">
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
           <LogoProvider>
@@ -48,7 +48,7 @@ const App = () => {
           </LogoProvider>
         </TooltipProvider>
       </QueryClientProvider>
-    </GlobalErrorBoundary>
+    </ErrorBoundary>
   );
 };
 
