@@ -2378,23 +2378,31 @@ function generateCAIRReport(results: any, userData: any): string {
   const overallScore = results?.overallScore || 0;
   const profile = results?.profile || 'Balanced Profile';
   
-  // Calculate top strengths and development areas
+  // Calculate comprehensive strengths and development areas with detailed analysis
   const allDimensions = Object.entries(dimensionScores).map(([name, data]: [string, any]) => ({
     name: formatDimensionName(name),
+    rawName: name,
     score: data?.score || 0,
     percentile: data?.percentile || 0,
-    level: data?.level || 'Average'
+    level: data?.level || 'Average',
+    subdimensions: subdimensionScores[name] || {}
   }));
   
   const topStrengths = allDimensions
     .filter(d => d.percentile >= 75)
     .sort((a, b) => b.percentile - a.percentile)
-    .slice(0, 3);
+    .slice(0, 4);
     
   const developmentAreas = allDimensions
     .filter(d => d.percentile < 60)
     .sort((a, b) => a.percentile - b.percentile)
-    .slice(0, 3);
+    .slice(0, 4);
+
+  // Enhanced career fit analysis
+  const careerFitAnalysis = generateEnhancedCareerFitAnalysis(allDimensions);
+  const workStylePreferences = generateWorkStylePreferences(allDimensions);
+  const leadershipReadiness = calculateLeadershipReadiness(allDimensions);
+  const teamContributions = generateTeamContributionAnalysis(allDimensions);
 
   return `
   <!DOCTYPE html>
@@ -2555,8 +2563,99 @@ function generateCAIRReport(results: any, userData: any): string {
       }).join('')}
     </div>
 
+    <div class="enhanced-insights-section">
+      <h2>🎯 Executive Behavioral Analysis</h2>
+      
+      <div class="behavioral-indicators">
+        <h3>📊 Observable Behavioral Patterns</h3>
+        ${generateBehavioralIndicators(allDimensions)}
+      </div>
+      
+      <div class="workplace-scenarios">
+        <h3>🏢 Workplace Scenario Analysis</h3>
+        ${generateWorkplaceScenarios(allDimensions)}
+      </div>
+      
+      <div class="decision-making-style">
+        <h3>🤔 Decision-Making Profile</h3>
+        ${generateDecisionMakingProfile(allDimensions)}
+      </div>
+      
+      <div class="stress-response-patterns">
+        <h3>⚡ Stress Response & Performance Patterns</h3>
+        ${generateStressResponseAnalysis(allDimensions)}
+      </div>
+    </div>
+
+    <div class="comprehensive-career-analysis">
+      <h2>🚀 Comprehensive Career Fit Analysis</h2>
+      
+      <div class="career-fit">
+        <h3>💼 Ideal Role Characteristics</h3>
+        ${careerFitAnalysis}
+      </div>
+      
+      <div class="work-environment">
+        <h3>🌟 Optimal Work Environment</h3>
+        ${workStylePreferences}
+      </div>
+      
+      <div class="leadership-analysis">
+        <h3>👑 Leadership Readiness Assessment</h3>
+        ${leadershipReadiness}
+      </div>
+      
+      <div class="team-dynamics">
+        <h3>🤝 Team Contribution Style</h3>
+        ${teamContributions}
+      </div>
+      
+      <div class="career-growth-path">
+        <h3>📈 Recommended Career Growth Trajectory</h3>
+        ${generateCareerGrowthPath(allDimensions)}
+      </div>
+    </div>
+
+    <div class="enhanced-development-section">
+      <h2>🎯 Comprehensive Development Planning</h2>
+      
+      <div class="90-day-plan">
+        <h3>📅 90-Day Development Roadmap</h3>
+        ${generate90DayDevelopmentPlan(topStrengths, developmentAreas)}
+      </div>
+      
+      <div class="skill-building-matrix">
+        <h3>🔧 Skill Development Matrix</h3>
+        ${generateSkillBuildingMatrix(allDimensions)}
+      </div>
+      
+      <div class="mentoring-coaching">
+        <h3>👥 Mentoring & Coaching Recommendations</h3>
+        ${generateMentoringRecommendations(allDimensions)}
+      </div>
+    </div>
+
+    <div class="interview-assessment-guide">
+      <h2>❓ Enhanced Interview & Assessment Guide</h2>
+      
+      <div class="behavioral-questions">
+        <h3>🎤 Targeted Behavioral Interview Questions</h3>
+        ${generateEnhancedInterviewQuestions(allDimensions)}
+      </div>
+      
+      <div class="assessment-criteria">
+        <h3>📋 Performance Assessment Criteria</h3>
+        ${generateAssessmentCriteria(allDimensions)}
+      </div>
+      
+      <div class="onboarding-recommendations">
+        <h3>🎯 Onboarding & Integration Recommendations</h3>
+        ${generateOnboardingRecommendations(allDimensions)}
+      </div>
+    </div>
+
     <div class="career-fit">
-      <h2>🚀 Career Fit Analysis</h2>
+      <h2>🚀 Strategic Career Positioning</h2>
       <h3>Ideal Role Characteristics</h3>
       <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
         ${generateCareerFitRecommendations(dimensionScores)}
@@ -2950,7 +3049,936 @@ function generateCAIRChartScript(dimensionScores: any): string {
   `;
 }
 
-function generatePersonalityChartScript(scores: any): string {
+// Enhanced CAIR+ Helper Functions for Rich Content
+
+function generateEnhancedCareerFitAnalysis(dimensions: any[]): string {
+  const highestDimensions = dimensions.filter(d => d.percentile >= 75).sort((a, b) => b.percentile - a.percentile);
+  const roleRecommendations = [];
+  
+  for (const dimension of highestDimensions) {
+    const roles = getSpecificRoleRecommendations(dimension.rawName, dimension.level);
+    roleRecommendations.push(`<div class="role-recommendation">
+      <h4>${dimension.name} Strength (${dimension.percentile}th percentile)</h4>
+      <p><strong>Ideal Roles:</strong> ${roles.roles}</p>
+      <p><strong>Key Responsibilities:</strong> ${roles.responsibilities}</p>
+      <p><strong>Industry Fit:</strong> ${roles.industries}</p>
+    </div>`);
+  }
+  
+  return roleRecommendations.length > 0 ? roleRecommendations.join('') : 
+    '<div>Your balanced profile makes you adaptable to various professional roles across multiple industries.</div>';
+}
+
+function getSpecificRoleRecommendations(dimension: string, level: string): any {
+  const roleMap: Record<string, any> = {
+    conscientiousness: {
+      roles: 'Project Manager, Operations Director, Quality Assurance Lead, Compliance Officer, Financial Analyst',
+      responsibilities: 'Process optimization, risk management, quality control, regulatory compliance, detailed analysis',
+      industries: 'Healthcare, Finance, Manufacturing, Government, Legal Services'
+    },
+    agreeableness: {
+      roles: 'HR Director, Customer Success Manager, Team Lead, Counselor, Account Manager',
+      responsibilities: 'Team building, conflict resolution, client relationships, employee development, stakeholder management',
+      industries: 'Human Resources, Healthcare, Education, Non-profit, Customer Service'
+    },
+    innovation: {
+      roles: 'Product Manager, R&D Director, Strategy Consultant, Design Lead, Innovation Manager',
+      responsibilities: 'Product development, strategic planning, creative solutions, change management, future visioning',
+      industries: 'Technology, Consulting, Design, Startups, Research & Development'
+    },
+    resilience: {
+      roles: 'Crisis Manager, Executive Leader, Emergency Response Coordinator, Turnaround Specialist, High-Stakes Negotiator',
+      responsibilities: 'Crisis management, high-pressure decision making, organizational recovery, stress leadership, emergency planning',
+      industries: 'Emergency Services, Executive Leadership, Consulting, Healthcare, Military/Defense'
+    }
+  };
+  
+  return roleMap[dimension] || {
+    roles: 'Various leadership and specialist roles',
+    responsibilities: 'Balanced contribution across multiple areas',
+    industries: 'Adaptable to most industries'
+  };
+}
+
+function generateWorkStylePreferences(dimensions: any[]): string {
+  const preferences = [];
+  
+  dimensions.forEach(dim => {
+    if (dim.percentile >= 75) {
+      const prefs = getWorkStylePreferences(dim.rawName);
+      preferences.push(`<div class="work-style-item">
+        <h4>${dim.name} Preference</h4>
+        <p>${prefs}</p>
+      </div>`);
+    }
+  });
+  
+  return preferences.join('');
+}
+
+function getWorkStylePreferences(dimension: string): string {
+  const preferences: Record<string, string> = {
+    conscientiousness: 'Structured environments with clear processes, defined deadlines, and systematic approaches. Prefers detailed planning and organized workflows.',
+    agreeableness: 'Collaborative settings with strong team dynamics, open communication, and consensus-building opportunities. Values harmony and mutual support.',
+    innovation: 'Dynamic environments that encourage creativity, experimentation, and change. Thrives in settings with autonomy and creative freedom.',
+    resilience: 'High-energy environments with challenging goals and fast-paced demands. Comfortable with pressure and changing priorities.'
+  };
+  
+  return preferences[dimension] || 'Balanced work environment accommodating various working styles and preferences.';
+}
+
+function calculateLeadershipReadiness(dimensions: any[]): string {
+  const leadershipFactors = {
+    conscientiousness: dimensions.find(d => d.rawName === 'conscientiousness')?.percentile || 0,
+    agreeableness: dimensions.find(d => d.rawName === 'agreeableness')?.percentile || 0,
+    resilience: dimensions.find(d => d.rawName === 'resilience')?.percentile || 0,
+    innovation: dimensions.find(d => d.rawName === 'innovation')?.percentile || 0
+  };
+  
+  const overallLeadershipScore = (leadershipFactors.conscientiousness + leadershipFactors.agreeableness + leadershipFactors.resilience) / 3;
+  
+  let readinessLevel = '';
+  let recommendations = '';
+  
+  if (overallLeadershipScore >= 80) {
+    readinessLevel = 'Executive Leadership Ready';
+    recommendations = 'Ready for senior leadership roles. Consider C-suite or VP positions. Focus on strategic vision and organizational transformation.';
+  } else if (overallLeadershipScore >= 65) {
+    readinessLevel = 'Management Leadership Ready';
+    recommendations = 'Ready for management and team leadership roles. Consider director or senior manager positions. Develop strategic thinking skills.';
+  } else if (overallLeadershipScore >= 50) {
+    readinessLevel = 'Emerging Leader Potential';
+    recommendations = 'Shows leadership potential with development. Consider team lead or supervisor roles. Focus on leadership skill development.';
+  } else {
+    readinessLevel = 'Individual Contributor Strength';
+    recommendations = 'Strongest as individual contributor or specialist. Consider subject matter expert or technical lead roles.';
+  }
+  
+  return `<div class="leadership-assessment">
+    <p><strong>Leadership Readiness Level:</strong> ${readinessLevel}</p>
+    <p><strong>Overall Leadership Score:</strong> ${overallLeadershipScore.toFixed(1)}/100</p>
+    <p><strong>Recommendations:</strong> ${recommendations}</p>
+    <div class="leadership-breakdown">
+      <p>• Reliability & Organization: ${leadershipFactors.conscientiousness}th percentile</p>
+      <p>• Team Building & Collaboration: ${leadershipFactors.agreeableness}th percentile</p>
+      <p>• Stress Management & Resilience: ${leadershipFactors.resilience}th percentile</p>
+      <p>• Innovation & Change Leadership: ${leadershipFactors.innovation}th percentile</p>
+    </div>
+  </div>`;
+}
+
+function generateTeamContributionAnalysis(dimensions: any[]): string {
+  const contributions = [];
+  
+  dimensions.forEach(dim => {
+    if (dim.percentile >= 65) {
+      const contribution = getTeamContribution(dim.rawName, dim.percentile);
+      contributions.push(`<div class="team-contribution">
+        <h4>${dim.name} Contribution</h4>
+        <p>${contribution}</p>
+      </div>`);
+    }
+  });
+  
+  return contributions.length > 0 ? contributions.join('') : 
+    '<div>Provides balanced contribution to teams across multiple dimensions.</div>';
+}
+
+function getTeamContribution(dimension: string, percentile: number): string {
+  const contributions: Record<string, string> = {
+    conscientiousness: `Serves as the team's organizational backbone, ensuring processes are followed and deadlines met. Brings structure and reliability that others depend on.`,
+    agreeableness: `Acts as the team harmonizer and conflict resolver. Builds bridges between team members and maintains positive group dynamics.`,
+    innovation: `Drives creative thinking and challenges conventional approaches. Introduces fresh perspectives and helps teams adapt to change.`,
+    resilience: `Provides stability during stressful periods and helps team maintain momentum through challenges. Acts as emotional anchor during difficult times.`
+  };
+  
+  return contributions[dimension] || 'Contributes balanced value to team effectiveness and dynamics.';
+}
+
+function generateWorkplaceScenarios(dimensions: any[]): string {
+  const scenarios = [];
+  
+  for (const dim of dimensions.slice(0, 2)) { // Focus on top 2 dimensions
+    const scenario = getWorkplaceScenario(dim.rawName, dim.level);
+    scenarios.push(`<div class="scenario-analysis">
+      <h4>${dim.name} in Action</h4>
+      <div class="scenario-content">
+        <p><strong>Scenario:</strong> ${scenario.situation}</p>
+        <p><strong>Likely Response:</strong> ${scenario.response}</p>
+        <p><strong>Outcome:</strong> ${scenario.outcome}</p>
+      </div>
+    </div>`);
+  }
+  
+  return scenarios.join('');
+}
+
+function getWorkplaceScenario(dimension: string, level: string): any {
+  const scenarios: Record<string, any> = {
+    conscientiousness: {
+      situation: 'Given a complex project with multiple deadlines and stakeholders, while managing regular responsibilities.',
+      response: 'Creates detailed project timeline, establishes clear checkpoints, and proactively communicates progress to all stakeholders.',
+      outcome: 'Delivers high-quality results on time while maintaining attention to detail and managing expectations effectively.'
+    },
+    agreeableness: {
+      situation: 'Mediating between two team members who have conflicting approaches to solving a critical business problem.',
+      response: 'Facilitates discussion to understand both perspectives, identifies common ground, and helps develop a collaborative solution.',
+      outcome: 'Resolves conflict while preserving relationships and creates a stronger, more unified team approach.'
+    },
+    innovation: {
+      situation: 'Tasked with improving an established process that has worked well but may be outdated given new market conditions.',
+      response: 'Analyzes current process thoroughly, researches best practices, and proposes creative improvements with clear implementation plan.',
+      outcome: 'Successfully modernizes the process, improving efficiency while managing change adoption across the organization.'
+    },
+    resilience: {
+      situation: 'Leading a critical project during organizational restructuring with tight deadlines and uncertain resource availability.',
+      response: 'Maintains focus on deliverables, adapts quickly to changing conditions, and keeps team motivated despite uncertainty.',
+      outcome: 'Delivers successful project outcomes while supporting team through transition and building stronger organizational confidence.'
+    }
+  };
+  
+  return scenarios[dimension] || {
+    situation: 'Handling typical workplace challenges and opportunities',
+    response: 'Applies balanced approach drawing on multiple strengths',
+    outcome: 'Achieves positive results through adaptable problem-solving'
+  };
+}
+
+function generateDecisionMakingProfile(dimensions: any[]): string {
+  const topDimension = dimensions.sort((a, b) => b.percentile - a.percentile)[0];
+  const profile = getDecisionMakingStyle(topDimension.rawName);
+  
+  return `<div class="decision-profile">
+    <p><strong>Primary Decision Style:</strong> ${profile.style}</p>
+    <p><strong>Decision Process:</strong> ${profile.process}</p>
+    <p><strong>Information Gathering:</strong> ${profile.information}</p>
+    <p><strong>Risk Approach:</strong> ${profile.risk}</p>
+    <p><strong>Implementation:</strong> ${profile.implementation}</p>
+  </div>`;
+}
+
+function getDecisionMakingStyle(dimension: string): any {
+  const styles: Record<string, any> = {
+    conscientiousness: {
+      style: 'Analytical Deliberator',
+      process: 'Systematic evaluation with thorough research and detailed planning',
+      information: 'Gathers comprehensive data, seeks multiple sources, validates information',
+      risk: 'Conservative approach, prefers proven solutions with predictable outcomes',
+      implementation: 'Careful execution with monitoring systems and contingency plans'
+    },
+    agreeableness: {
+      style: 'Collaborative Consensus Builder',
+      process: 'Inclusive approach seeking input from all stakeholders',
+      information: 'Values diverse perspectives, considers impact on relationships',
+      risk: 'Moderate risk tolerance, balances innovation with stakeholder comfort',
+      implementation: 'Ensures buy-in through communication and gradual implementation'
+    },
+    innovation: {
+      style: 'Creative Visionary',
+      process: 'Intuitive and experimental, explores multiple creative alternatives',
+      information: 'Seeks diverse and unconventional sources, questions assumptions',
+      risk: 'Higher risk tolerance, willing to try new approaches',
+      implementation: 'Rapid prototyping and iterative improvement approach'
+    },
+    resilience: {
+      style: 'Decisive Pragmatist',
+      process: 'Quick assessment focusing on practical outcomes and immediate needs',
+      information: 'Gathers essential information quickly, comfortable with incomplete data',
+      risk: 'Calculated risk-taking, confident in ability to handle consequences',
+      implementation: 'Swift execution with adaptation based on real-time feedback'
+    }
+  };
+  
+  return styles[dimension] || {
+    style: 'Balanced Decision Maker',
+    process: 'Flexible approach adapting to situation requirements',
+    information: 'Gathers appropriate level of information for the decision',
+    risk: 'Situational risk assessment',
+    implementation: 'Adaptable implementation based on context'
+  };
+}
+
+function generateStressResponseAnalysis(dimensions: any[]): string {
+  const resilience = dimensions.find(d => d.rawName === 'resilience');
+  const conscientiousness = dimensions.find(d => d.rawName === 'conscientiousness');
+  
+  const stressProfile = getStressResponseProfile(resilience?.percentile || 50, conscientiousness?.percentile || 50);
+  
+  return `<div class="stress-analysis">
+    <div class="stress-tolerance">
+      <h4>Stress Tolerance Level: ${stressProfile.tolerance}</h4>
+      <p>${stressProfile.description}</p>
+    </div>
+    <div class="stress-indicators">
+      <h4>Early Warning Signs:</h4>
+      <ul>${stressProfile.earlyWarnings.map(w => `<li>${w}</li>`).join('')}</ul>
+    </div>
+    <div class="stress-support">
+      <h4>Optimal Support Strategies:</h4>
+      <ul>${stressProfile.supports.map(s => `<li>${s}</li>`).join('')}</ul>
+    </div>
+  </div>`;
+}
+
+function getStressResponseProfile(resilienceScore: number, conscientiousnessScore: number): any {
+  const combinedScore = (resilienceScore + conscientiousnessScore) / 2;
+  
+  if (combinedScore >= 75) {
+    return {
+      tolerance: 'High Stress Resilience',
+      description: 'Thrives under pressure and maintains high performance during challenging periods. Natural ability to manage complex, high-stakes situations.',
+      earlyWarnings: [
+        'May take on too much responsibility during crises',
+        'Could underestimate stress impact on team members',
+        'Might skip necessary recovery periods'
+      ],
+      supports: [
+        'Provide challenging, high-responsibility assignments',
+        'Ensure adequate recovery time between intense periods',
+        'Leverage as crisis leader and mentor for others'
+      ]
+    };
+  } else if (combinedScore >= 50) {
+    return {
+      tolerance: 'Moderate Stress Management',
+      description: 'Handles typical workplace stress well with good coping strategies. May need additional support during peak stress periods.',
+      earlyWarnings: [
+        'Decreased attention to detail during high-pressure periods',
+        'May become less collaborative when overwhelmed',
+        'Could experience decision fatigue with complex choices'
+      ],
+      supports: [
+        'Provide clear priorities during busy periods',
+        'Offer stress management resources and training',
+        'Ensure workload balance and realistic deadlines'
+      ]
+    };
+  } else {
+    return {
+      tolerance: 'Developing Stress Resilience',
+      description: 'Benefits from structured support during stressful periods. Performs best in stable, predictable environments.',
+      earlyWarnings: [
+        'May become overwhelmed by multiple competing priorities',
+        'Could experience analysis paralysis under pressure',
+        'Might avoid making decisions when stressed'
+      ],
+      supports: [
+        'Provide clear structure and step-by-step guidance',
+        'Offer regular check-ins and emotional support',
+        'Gradually build exposure to challenging situations'
+      ]
+    };
+  }
+}
+
+function generateCareerGrowthPath(dimensions: any[]): string {
+  const topDimensions = dimensions.sort((a, b) => b.percentile - a.percentile).slice(0, 2);
+  const pathRecommendations = [];
+  
+  for (const dim of topDimensions) {
+    const path = getCareerGrowthPath(dim.rawName, dim.percentile);
+    pathRecommendations.push(`<div class="growth-path">
+      <h4>${dim.name} Development Track</h4>
+      <div class="path-timeline">
+        <div class="path-stage">
+          <h5>6-Month Goals:</h5>
+          <p>${path.sixMonth}</p>
+        </div>
+        <div class="path-stage">
+          <h5>1-Year Targets:</h5>
+          <p>${path.oneYear}</p>
+        </div>
+        <div class="path-stage">
+          <h5>3-Year Vision:</h5>
+          <p>${path.threeYear}</p>
+        </div>
+      </div>
+    </div>`);
+  }
+  
+  return pathRecommendations.join('');
+}
+
+function getCareerGrowthPath(dimension: string, percentile: number): any {
+  const paths: Record<string, any> = {
+    conscientiousness: {
+      sixMonth: 'Lead process improvement initiative, obtain project management certification, mentor junior team members',
+      oneYear: 'Manage cross-functional project, develop advanced organizational systems, take on quality assurance responsibilities',
+      threeYear: 'Director of Operations, Head of Quality Assurance, or Senior Project Management role with P&L responsibility'
+    },
+    agreeableness: {
+      sixMonth: 'Lead team integration project, develop conflict resolution skills, facilitate cross-departmental collaboration',
+      oneYear: 'Manage larger team, obtain coaching/leadership certification, drive culture initiatives',
+      threeYear: 'Head of People Operations, VP of Human Resources, or Senior Leadership role focused on organizational development'
+    },
+    innovation: {
+      sixMonth: 'Lead innovation project, present creative solutions to leadership, develop design thinking skills',
+      oneYear: 'Drive digital transformation initiative, obtain relevant technology certifications, mentor others in creative thinking',
+      threeYear: 'Chief Innovation Officer, VP of Strategy, or Head of Product Development role leading organizational transformation'
+    },
+    resilience: {
+      sixMonth: 'Take on high-visibility challenging assignment, develop crisis management skills, mentor others through difficult situations',
+      oneYear: 'Lead organizational change initiative, obtain executive leadership training, manage turnaround project',
+      threeYear: 'C-suite executive role, Division President, or Crisis Management Specialist leading organizational resilience'
+    }
+  };
+  
+  return paths[dimension] || {
+    sixMonth: 'Develop specialized expertise in your strongest areas',
+    oneYear: 'Take on leadership responsibilities leveraging your strengths',
+    threeYear: 'Senior leadership or specialist expert role maximizing your unique capabilities'
+  };
+}
+
+function generate90DayDevelopmentPlan(strengths: any[], developmentAreas: any[]): string {
+  return `<div class="development-roadmap">
+    <div class="roadmap-phase">
+      <h4>Days 1-30: Foundation Building</h4>
+      <div class="phase-content">
+        <div class="strengths-focus">
+          <h5>Leverage Strengths:</h5>
+          <ul>
+            ${strengths.slice(0, 2).map(s => `<li>Apply ${s.name} expertise to current projects and challenges</li>`).join('')}
+            <li>Seek opportunities to mentor others in your strength areas</li>
+            <li>Document and share best practices from your strong dimensions</li>
+          </ul>
+        </div>
+        <div class="development-focus">
+          <h5>Begin Development:</h5>
+          <ul>
+            ${developmentAreas.slice(0, 1).map(d => `<li>Start foundational training in ${d.name}</li>`).join('')}
+            <li>Identify mentors or coaches for development areas</li>
+            <li>Establish baseline measurements for growth tracking</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="roadmap-phase">
+      <h4>Days 31-60: Skill Application</h4>
+      <div class="phase-content">
+        <ul>
+          <li>Apply new learning to real workplace situations</li>
+          <li>Seek feedback on development progress from supervisor and peers</li>
+          <li>Take on stretch assignments that challenge development areas</li>
+          <li>Continue strengthening and applying existing strengths</li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="roadmap-phase">
+      <h4>Days 61-90: Integration & Assessment</h4>
+      <div class="phase-content">
+        <ul>
+          <li>Integrate new skills with existing strengths for enhanced performance</li>
+          <li>Conduct formal progress review with manager or mentor</li>
+          <li>Plan next 90-day development cycle based on growth achieved</li>
+          <li>Consider advanced training or certification in strongest areas</li>
+        </ul>
+      </div>
+    </div>
+  </div>`;
+}
+
+function generateSkillBuildingMatrix(dimensions: any[]): string {
+  return `<div class="skill-matrix">
+    <table class="development-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Current Level</th>
+          <th>Training Priority</th>
+          <th>Recommended Learning</th>
+          <th>Practice Opportunities</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${dimensions.map(dim => `
+          <tr>
+            <td><strong>${dim.name}</strong></td>
+            <td>${dim.level} (${dim.percentile}%)</td>
+            <td>${getTrainingPriority(dim.percentile)}</td>
+            <td>${getRecommendedLearning(dim.rawName, dim.percentile)}</td>
+            <td>${getPracticeOpportunities(dim.rawName)}</td>
+          </tr>
+        `).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function getTrainingPriority(percentile: number): string {
+  if (percentile >= 75) return 'Maintenance/Advanced';
+  if (percentile >= 50) return 'Enhancement';
+  if (percentile >= 25) return 'Development';
+  return 'Priority Focus';
+}
+
+function getRecommendedLearning(dimension: string, percentile: number): string {
+  const learningMap: Record<string, Record<string, string>> = {
+    conscientiousness: {
+      high: 'Advanced project management, lean methodology, leadership training',
+      medium: 'Time management, organization systems, quality management',
+      low: 'Basic planning skills, deadline management, organizational tools'
+    },
+    agreeableness: {
+      high: 'Advanced facilitation, executive coaching, organizational psychology',
+      medium: 'Conflict resolution, team building, communication skills',
+      low: 'Basic interpersonal skills, active listening, collaboration training'
+    },
+    innovation: {
+      high: 'Design thinking mastery, innovation management, strategic foresight',
+      medium: 'Creative problem solving, change management, brainstorming techniques',
+      low: 'Basic creativity training, openness to change, flexibility development'
+    },
+    resilience: {
+      high: 'Crisis leadership, organizational psychology, executive stress management',
+      medium: 'Stress management, emotional regulation, pressure performance',
+      low: 'Basic resilience building, coping strategies, stress awareness'
+    }
+  };
+  
+  const level = percentile >= 75 ? 'high' : percentile >= 50 ? 'medium' : 'low';
+  return learningMap[dimension]?.[level] || 'General professional development';
+}
+
+function getPracticeOpportunities(dimension: string): string {
+  const opportunities: Record<string, string> = {
+    conscientiousness: 'Lead complex projects, implement new processes, quality audits',
+    agreeableness: 'Facilitate team meetings, mediate conflicts, mentor new employees',
+    innovation: 'Lead brainstorming sessions, pilot new technologies, drive change initiatives',
+    resilience: 'Handle crisis situations, manage tight deadlines, support stressed colleagues'
+  };
+  
+  return opportunities[dimension] || 'Various professional challenges and stretch assignments';
+}
+
+function generateMentoringRecommendations(dimensions: any[]): string {
+  const topDimensions = dimensions.sort((a, b) => b.percentile - a.percentile).slice(0, 2);
+  const developmentDimensions = dimensions.filter(d => d.percentile < 60);
+  
+  return `<div class="mentoring-recommendations">
+    <div class="mentor-others">
+      <h4>Areas Where You Can Mentor Others:</h4>
+      <ul>
+        ${topDimensions.map(d => `<li><strong>${d.name}:</strong> Share expertise in ${getMentoringAreas(d.rawName)}</li>`).join('')}
+      </ul>
+    </div>
+    
+    <div class="seek-mentoring">
+      <h4>Areas Where You Should Seek Mentoring:</h4>
+      <ul>
+        ${developmentDimensions.map(d => `<li><strong>${d.name}:</strong> Find mentors who excel in ${getMentoringAreas(d.rawName)}</li>`).join('')}
+      </ul>
+    </div>
+    
+    <div class="coaching-style">
+      <h4>Your Optimal Coaching Style:</h4>
+      <p>${getOptimalCoachingStyle(topDimensions[0]?.rawName)}</p>
+    </div>
+  </div>`;
+}
+
+function getMentoringAreas(dimension: string): string {
+  const areas: Record<string, string> = {
+    conscientiousness: 'project management, organizational systems, quality standards, attention to detail',
+    agreeableness: 'team building, conflict resolution, relationship management, collaboration',
+    innovation: 'creative thinking, change management, problem-solving, strategic thinking',
+    resilience: 'stress management, crisis handling, emotional regulation, performance under pressure'
+  };
+  
+  return areas[dimension] || 'general professional development';
+}
+
+function getOptimalCoachingStyle(dimension: string): string {
+  const styles: Record<string, string> = {
+    conscientiousness: 'Structured, systematic coaching with clear goals, regular check-ins, and detailed action plans. Prefer step-by-step guidance with measurable outcomes.',
+    agreeableness: 'Collaborative, supportive coaching that builds relationships and considers emotional needs. Value coaches who create safe environments and provide encouragement.',
+    innovation: 'Dynamic, creative coaching that challenges thinking and explores possibilities. Prefer coaches who encourage experimentation and out-of-the-box approaches.',
+    resilience: 'Direct, challenging coaching that pushes comfort zones and builds confidence. Value coaches who provide honest feedback and stretch assignments.'
+  };
+  
+  return styles[dimension] || 'Balanced coaching approach that adapts to your learning style and development needs.';
+}
+
+function generateEnhancedInterviewQuestions(dimensions: any[]): string {
+  const questionSets = [];
+  
+  dimensions.forEach(dim => {
+    const questions = getEnhancedInterviewQuestions(dim.rawName, dim.level);
+    questionSets.push(`<div class="interview-dimension">
+      <h4>${dim.name} Assessment Questions</h4>
+      <div class="question-categories">
+        <div class="behavioral-questions">
+          <h5>Behavioral Questions:</h5>
+          <ul>${questions.behavioral.map(q => `<li>${q}</li>`).join('')}</ul>
+        </div>
+        <div class="situational-questions">
+          <h5>Situational Questions:</h5>
+          <ul>${questions.situational.map(q => `<li>${q}</li>`).join('')}</ul>
+        </div>
+        <div class="follow-up-questions">
+          <h5>Follow-up Probes:</h5>
+          <ul>${questions.followUp.map(q => `<li>${q}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>`);
+  });
+  
+  return questionSets.join('');
+}
+
+function getEnhancedInterviewQuestions(dimension: string, level: string): any {
+  const questions: Record<string, any> = {
+    conscientiousness: {
+      behavioral: [
+        'Describe the most complex project you\'ve managed. How did you ensure nothing fell through the cracks?',
+        'Tell me about a time when your attention to detail prevented a significant problem.',
+        'Give me an example of how you organize your work when managing multiple competing priorities.'
+      ],
+      situational: [
+        'How would you handle a situation where you discovered a process error just before a major deadline?',
+        'If you were asked to implement a new quality control system, what steps would you take?',
+        'How would you approach training a team member who struggles with organization?'
+      ],
+      followUp: [
+        'What specific tools or systems did you use?',
+        'How did stakeholders react to your approach?',
+        'What would you do differently next time?'
+      ]
+    },
+    agreeableness: {
+      behavioral: [
+        'Describe a time when you had to build consensus among team members with very different viewpoints.',
+        'Tell me about a situation where you had to deliver difficult feedback while maintaining the relationship.',
+        'Give me an example of how you\'ve helped resolve a conflict between colleagues.'
+      ],
+      situational: [
+        'How would you handle a team member who consistently undermines group decisions?',
+        'If you had to implement an unpopular policy change, how would you approach it?',
+        'How would you build trust with a new team that has experienced conflict?'
+      ],
+      followUp: [
+        'How did all parties feel about the outcome?',
+        'What relationship-building strategies did you use?',
+        'How do you maintain harmony while ensuring accountability?'
+      ]
+    },
+    innovation: {
+      behavioral: [
+        'Describe the most innovative solution you\'ve developed to solve a business problem.',
+        'Tell me about a time when you successfully led a significant change initiative.',
+        'Give me an example of how you\'ve challenged conventional thinking in your organization.'
+      ],
+      situational: [
+        'How would you encourage innovation in a team that\'s resistant to change?',
+        'If you had to modernize an outdated but functional system, how would you approach it?',
+        'How would you balance innovation with risk management?'
+      ],
+      followUp: [
+        'What inspired your creative approach?',
+        'How did you handle resistance to your ideas?',
+        'What metrics did you use to measure success?'
+      ]
+    },
+    resilience: {
+      behavioral: [
+        'Describe the most stressful period in your career and how you maintained performance.',
+        'Tell me about a time when you had to lead through a major crisis or setback.',
+        'Give me an example of how you\'ve bounced back from a significant failure.'
+      ],
+      situational: [
+        'How would you maintain team morale during a period of organizational uncertainty?',
+        'If you were facing impossible deadlines with insufficient resources, how would you proceed?',
+        'How would you handle a situation where multiple critical issues arose simultaneously?'
+      ],
+      followUp: [
+        'What coping strategies did you use?',
+        'How did you support others during this difficult time?',
+        'What did you learn about yourself from this experience?'
+      ]
+    }
+  };
+  
+  return questions[dimension] || {
+    behavioral: ['Can you give me examples of your experience in this area?'],
+    situational: ['How would you handle typical challenges in this dimension?'],
+    followUp: ['What specific strategies would you use?']
+  };
+}
+
+function generateAssessmentCriteria(dimensions: any[]): string {
+  return `<div class="assessment-criteria">
+    <div class="performance-indicators">
+      <h4>Performance Assessment Framework</h4>
+      <table class="criteria-table">
+        <thead>
+          <tr>
+            <th>Dimension</th>
+            <th>Exceeds Expectations</th>
+            <th>Meets Expectations</th>
+            <th>Below Expectations</th>
+            <th>Key Metrics</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${dimensions.map(dim => {
+            const criteria = getAssessmentCriteria(dim.rawName);
+            return `<tr>
+              <td><strong>${dim.name}</strong></td>
+              <td>${criteria.exceeds}</td>
+              <td>${criteria.meets}</td>
+              <td>${criteria.below}</td>
+              <td>${criteria.metrics}</td>
+            </tr>`;
+          }).join('')}
+        </tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function getAssessmentCriteria(dimension: string): any {
+  const criteria: Record<string, any> = {
+    conscientiousness: {
+      exceeds: 'Consistently delivers ahead of schedule with exceptional quality. Proactively identifies and prevents issues.',
+      meets: 'Meets all deadlines with good quality work. Follows processes and maintains organization.',
+      below: 'Occasional missed deadlines or quality issues. Needs reminders for process adherence.',
+      metrics: 'On-time delivery, error rates, process compliance, organization scores'
+    },
+    agreeableness: {
+      exceeds: 'Builds strong relationships across all levels. Successfully resolves complex conflicts and builds consensus.',
+      meets: 'Works well with others. Contributes positively to team dynamics and collaboration.',
+      below: 'Occasional interpersonal challenges. May struggle with conflict resolution or team integration.',
+      metrics: '360 feedback, team satisfaction, conflict resolution success, collaboration ratings'
+    },
+    innovation: {
+      exceeds: 'Regularly generates valuable new ideas. Successfully leads change initiatives and drives innovation.',
+      meets: 'Contributes creative solutions. Adapts well to change and supports improvement initiatives.',
+      below: 'Limited creative contribution. May resist change or struggle with new approaches.',
+      metrics: 'Innovation contributions, change adaptation, creative problem-solving, improvement suggestions'
+    },
+    resilience: {
+      exceeds: 'Thrives under pressure. Maintains peak performance during crises and helps others stay resilient.',
+      meets: 'Handles normal stress well. Maintains consistent performance despite challenges.',
+      below: 'Performance declines under pressure. May need additional support during stressful periods.',
+      metrics: 'Performance under pressure, stress recovery time, crisis leadership, consistency ratings'
+    }
+  };
+  
+  return criteria[dimension] || {
+    exceeds: 'Demonstrates exceptional capability in this area',
+    meets: 'Shows solid competence and consistent performance',
+    below: 'Needs development and additional support',
+    metrics: 'Various performance indicators and feedback measures'
+  };
+}
+
+function generateOnboardingRecommendations(dimensions: any[]): string {
+  const topDimension = dimensions.sort((a, b) => b.percentile - a.percentile)[0];
+  const recommendations = getOnboardingApproach(topDimension.rawName);
+  
+  return `<div class="onboarding-guide">
+    <div class="onboarding-approach">
+      <h4>Recommended Onboarding Approach</h4>
+      <p><strong>Primary Style:</strong> ${recommendations.style}</p>
+      <p><strong>Focus Areas:</strong> ${recommendations.focus}</p>
+    </div>
+    
+    <div class="first-30-days">
+      <h4>First 30 Days Priority Areas:</h4>
+      <ul>${recommendations.firstMonth.map(item => `<li>${item}</li>`).join('')}</ul>
+    </div>
+    
+    <div class="integration-strategy">
+      <h4>Team Integration Strategy:</h4>
+      <p>${recommendations.integration}</p>
+    </div>
+    
+    <div class="success-metrics">
+      <h4>Early Success Indicators:</h4>
+      <ul>${recommendations.successMetrics.map(metric => `<li>${metric}</li>`).join('')}</ul>
+    </div>
+  </div>`;
+}
+
+function getOnboardingApproach(dimension: string): any {
+  const approaches: Record<string, any> = {
+    conscientiousness: {
+      style: 'Structured and Systematic',
+      focus: 'Clear processes, detailed documentation, organized workspace setup',
+      firstMonth: [
+        'Comprehensive process documentation and training',
+        'Detailed role expectations and performance standards',
+        'Systematic introduction to tools and systems',
+        'Clear 30-60-90 day goal setting'
+      ],
+      integration: 'Pair with organized mentor, provide detailed team structure information, emphasize quality standards and procedures',
+      successMetrics: [
+        'Quick mastery of processes and procedures',
+        'High attention to detail in early assignments',
+        'Proactive organization of workspace and materials',
+        'Consistent meeting of initial deadlines and standards'
+      ]
+    },
+    agreeableness: {
+      style: 'Relationship-Focused and Collaborative',
+      focus: 'Team relationships, cultural integration, collaborative opportunities',
+      firstMonth: [
+        'Team introductions and relationship building activities',
+        'Cultural orientation and values alignment',
+        'Collaborative project assignments',
+        'Regular check-ins and feedback sessions'
+      ],
+      integration: 'Focus on team bonding, introduce to key stakeholders, emphasize company culture and values',
+      successMetrics: [
+        'Quick development of positive relationships',
+        'Active participation in team activities',
+        'Positive feedback from colleagues',
+        'Cultural alignment and value demonstration'
+      ]
+    },
+    innovation: {
+      style: 'Dynamic and Exploratory',
+      focus: 'Creative challenges, learning opportunities, innovation exposure',
+      firstMonth: [
+        'Exposure to current innovation projects',
+        'Creative problem-solving assignments',
+        'Cross-functional learning opportunities',
+        'Introduction to company innovation processes'
+      ],
+      integration: 'Connect with creative thinkers, provide challenging assignments, encourage idea sharing',
+      successMetrics: [
+        'Quick adaptation to new environment',
+        'Early contribution of fresh ideas',
+        'Enthusiasm for learning and exploration',
+        'Positive response to change and challenges'
+      ]
+    },
+    resilience: {
+      style: 'Challenge-Based and Results-Oriented',
+      focus: 'Meaningful challenges, performance expectations, growth opportunities',
+      firstMonth: [
+        'Progressively challenging assignments',
+        'Clear performance expectations and metrics',
+        'Exposure to high-impact projects',
+        'Regular achievement recognition'
+      ],
+      integration: 'Provide stretch assignments, connect with high performers, emphasize growth and achievement',
+      successMetrics: [
+        'Strong performance under initial pressure',
+        'Quick assumption of responsibilities',
+        'Positive response to challenging assignments',
+        'Demonstration of stress management skills'
+      ]
+    }
+  };
+  
+  return approaches[dimension] || {
+    style: 'Balanced and Adaptive',
+    focus: 'Well-rounded integration across all areas',
+    firstMonth: ['Comprehensive orientation covering all key areas'],
+    integration: 'Balanced approach addressing multiple integration needs',
+    successMetrics: ['Consistent progress across all onboarding areas']
+  };
+}
+
+function generateBehavioralIndicators(dimensions: any[]): string {
+  const indicators = [];
+  
+  dimensions.forEach(dim => {
+    const behaviorList = getBehavioralIndicators(dim.rawName, dim.level);
+    indicators.push(`<div class="behavioral-dimension">
+      <h4>${dim.name} Behavioral Indicators</h4>
+      <div class="indicator-grid">
+        <div class="positive-indicators">
+          <h5>Observable Strengths:</h5>
+          <ul>${behaviorList.positive.map(b => `<li>${b}</li>`).join('')}</ul>
+        </div>
+        <div class="development-indicators">
+          <h5>Development Signals:</h5>
+          <ul>${behaviorList.development.map(b => `<li>${b}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>`);
+  });
+  
+  return indicators.join('');
+}
+
+function getBehavioralIndicators(dimension: string, level: string): any {
+  const indicators: Record<string, any> = {
+    conscientiousness: {
+      positive: [
+        'Consistently meets deadlines without reminders',
+        'Maintains organized workspace and documentation',
+        'Follows procedures and protocols systematically',
+        'Demonstrates attention to detail in all work',
+        'Takes initiative in planning and preparation'
+      ],
+      development: [
+        'May become overly focused on minor details',
+        'Could struggle when procedures are unclear',
+        'Might resist when asked to work faster than preferred pace',
+        'May become frustrated with disorganized environments',
+        'Could over-plan at the expense of quick execution'
+      ]
+    },
+    agreeableness: {
+      positive: [
+        'Actively listens and shows empathy in conversations',
+        'Seeks win-win solutions in conflicts',
+        'Offers help to colleagues without being asked',
+        'Builds consensus before moving forward with decisions',
+        'Maintains positive relationships across all levels'
+      ],
+      development: [
+        'May avoid necessary confrontations or difficult conversations',
+        'Could agree too quickly to maintain harmony',
+        'Might take on too much work to help others',
+        'May struggle to give direct negative feedback',
+        'Could become overwhelmed by others\' emotions'
+      ]
+    },
+    innovation: {
+      positive: [
+        'Regularly proposes new ideas and solutions',
+        'Adapts quickly to changing requirements',
+        'Questions existing processes for improvement opportunities',
+        'Embraces new technologies and methods',
+        'Thinks strategically about future possibilities'
+      ],
+      development: [
+        'May become bored with routine or repetitive tasks',
+        'Could pursue too many ideas without full completion',
+        'Might resist when asked to follow established procedures',
+        'May overlook practical implementation challenges',
+        'Could move too quickly without considering all stakeholders'
+      ]
+    },
+    resilience: {
+      positive: [
+        'Maintains composure during high-pressure situations',
+        'Bounces back quickly from setbacks or failures',
+        'Stays optimistic and energetic during challenges',
+        'Performs consistently despite workload fluctuations',
+        'Helps others stay calm during stressful periods'
+      ],
+      development: [
+        'May underestimate the impact of stress on others',
+        'Could take on too much responsibility during crises',
+        'Might not recognize when to seek help or support',
+        'May push through when rest or recovery is needed',
+        'Could become impatient with others\' stress reactions'
+      ]
+    }
+  };
+  
+  return indicators[dimension] || {
+    positive: ['Demonstrates balanced capabilities in this area'],
+    development: ['Continue developing skills in this dimension']
+  };
+}
   return `
     document.addEventListener('DOMContentLoaded', function() {
       const ctx = document.getElementById('personalityChart');
