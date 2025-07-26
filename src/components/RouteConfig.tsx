@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
 import NotFound from "@/pages/NotFound";
+import CAIRPersonalityDescription from "@/pages/CAIRPersonalityDescription";
 
 // Lazy load - Assessment pages (large components)
 const Assessment = lazy(() => import("@/pages/Assessment"));
@@ -57,7 +58,7 @@ const AuthenticLeadershipDescription = lazy(() => import("@/pages/AuthenticLeade
 const BurnoutPreventionDescription = lazy(() => import("@/pages/BurnoutPreventionDescription"));
 const CAIRCulturalDescription = lazy(() => import("@/pages/CAIRCulturalDescription"));
 const CulturalIntelligenceDescription = lazy(() => import("@/pages/CulturalIntelligenceDescription"));
-const CAIRPersonalityDescription = lazy(() => import("@/pages/CAIRPersonalityDescription"));
+
 const CareerLaunchDescription = lazy(() => import("@/pages/CareerLaunchDescription"));
 const CommunicationStyleDescription = lazy(() => import("@/pages/CommunicationStyleDescription"));
 const DigitalWellnessDescription = lazy(() => import("@/pages/DigitalWellnessDescription"));
@@ -223,11 +224,7 @@ const RouteConfig = () => {
           <CulturalIntelligenceDescription />
         </Suspense>
       } />
-      <Route path="/cair-personality-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <CAIRPersonalityDescription />
-        </Suspense>
-      } />
+      <Route path="/cair-personality-info" element={<CAIRPersonalityDescription />} />
       <Route path="/career-launch-info" element={
         <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
           <CareerLaunchDescription />
