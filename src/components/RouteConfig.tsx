@@ -4,11 +4,21 @@ import ProtectedAdminRoute from "@/components/ProtectedAdminRoute";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 
-// Immediate load - Critical pages
+// Immediate load - Critical pages and description pages
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
 import NotFound from "@/pages/NotFound";
 import CAIRPersonalityDescription from "@/pages/CAIRPersonalityDescription";
+import AuthenticLeadershipDescription from "@/pages/AuthenticLeadershipDescription";
+import BurnoutPreventionDescription from "@/pages/BurnoutPreventionDescription";
+import CAIRCulturalDescription from "@/pages/CAIRCulturalDescription";
+import CulturalIntelligenceDescription from "@/pages/CulturalIntelligenceDescription";
+import CareerLaunchDescription from "@/pages/CareerLaunchDescription";
+import CommunicationStyleDescription from "@/pages/CommunicationStyleDescription";
+import DigitalWellnessDescription from "@/pages/DigitalWellnessDescription";
+import EmotionalIntelligenceDescription from "@/pages/EmotionalIntelligenceDescription";
+import FaithValuesDescription from "@/pages/FaithValuesDescription";
+import GenZWorkplaceDescription from "@/pages/GenZWorkplaceDescription";
 
 // Lazy load - Assessment pages (large components)
 const Assessment = lazy(() => import("@/pages/Assessment"));
@@ -53,18 +63,7 @@ const SampleCareerLaunchReport = lazy(() => import("@/pages/SampleCareerLaunchRe
 const SampleReports = lazy(() => import("@/pages/SampleReports"));
 const Payment = lazy(() => import("@/pages/Payment"));
 
-// Lazy load - Description pages (content heavy)
-const AuthenticLeadershipDescription = lazy(() => import("@/pages/AuthenticLeadershipDescription"));
-const BurnoutPreventionDescription = lazy(() => import("@/pages/BurnoutPreventionDescription"));
-const CAIRCulturalDescription = lazy(() => import("@/pages/CAIRCulturalDescription"));
-const CulturalIntelligenceDescription = lazy(() => import("@/pages/CulturalIntelligenceDescription"));
-
-const CareerLaunchDescription = lazy(() => import("@/pages/CareerLaunchDescription"));
-const CommunicationStyleDescription = lazy(() => import("@/pages/CommunicationStyleDescription"));
-const DigitalWellnessDescription = lazy(() => import("@/pages/DigitalWellnessDescription"));
-const EmotionalIntelligenceDescription = lazy(() => import("@/pages/EmotionalIntelligenceDescription"));
-const FaithValuesDescription = lazy(() => import("@/pages/FaithValuesDescription"));
-const GenZWorkplaceDescription = lazy(() => import("@/pages/GenZWorkplaceDescription"));
+// Note: Description pages moved to immediate imports to prevent chunk loading errors
 
 // Loading component for Suspense fallbacks
 const LoadingFallback = ({ message = "Loading..." }: { message?: string }) => (
@@ -203,58 +202,18 @@ const RouteConfig = () => {
         </Suspense>
       } />
       
-      {/* Assessment Description Pages - Lazy Loaded */}
-      <Route path="/authentic-leadership-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <AuthenticLeadershipDescription />
-        </Suspense>
-      } />
-      <Route path="/burnout-prevention-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <BurnoutPreventionDescription />
-        </Suspense>
-      } />
-      <Route path="/cair-cultural-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <CAIRCulturalDescription />
-        </Suspense>
-      } />
-      <Route path="/cultural-intelligence-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <CulturalIntelligenceDescription />
-        </Suspense>
-      } />
+      {/* Assessment Description Pages - Immediate Load (prevents chunk errors) */}
+      <Route path="/authentic-leadership-info" element={<AuthenticLeadershipDescription />} />
+      <Route path="/burnout-prevention-info" element={<BurnoutPreventionDescription />} />
+      <Route path="/cair-cultural-info" element={<CAIRCulturalDescription />} />
+      <Route path="/cultural-intelligence-info" element={<CulturalIntelligenceDescription />} />
       <Route path="/cair-personality-info" element={<CAIRPersonalityDescription />} />
-      <Route path="/career-launch-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <CareerLaunchDescription />
-        </Suspense>
-      } />
-      <Route path="/communication-style-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <CommunicationStyleDescription />
-        </Suspense>
-      } />
-      <Route path="/digital-wellness-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <DigitalWellnessDescription />
-        </Suspense>
-      } />
-      <Route path="/emotional-intelligence-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <EmotionalIntelligenceDescription />
-        </Suspense>
-      } />
-      <Route path="/faith-values-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <FaithValuesDescription />
-        </Suspense>
-      } />
-      <Route path="/genz-workplace-info" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessment Information..." />}>
-          <GenZWorkplaceDescription />
-        </Suspense>
-      } />
+      <Route path="/career-launch-info" element={<CareerLaunchDescription />} />
+      <Route path="/communication-style-info" element={<CommunicationStyleDescription />} />
+      <Route path="/digital-wellness-info" element={<DigitalWellnessDescription />} />
+      <Route path="/emotional-intelligence-info" element={<EmotionalIntelligenceDescription />} />
+      <Route path="/faith-values-info" element={<FaithValuesDescription />} />
+      <Route path="/genz-workplace-info" element={<GenZWorkplaceDescription />} />
       
       {/* Partner Routes - Lazy Loaded */}
       <Route path="/partner-login" element={
