@@ -138,14 +138,11 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         assessmentType: assessmentType,
         candidateInfo: candidateInfo || { name: '', email: '' },
         dimensionScores: results.dimensions,
-        developmentAreas: results.improvements.map(imp => imp.category),
+        developmentAreas: results.improvements?.map(imp => imp.category) || [],
         overallScore: results.overallScore,
         timestamp: new Date().toISOString(),
         validityIndicators: { consistencyScore: 0.8, fakeGoodIndicator: 0.2, flaggedQuestions: [] },
-        reportData: { summary: '', insights: [], recommendations: [] },
-        profile: results.profile,
-        strengths: results.strengths,
-        recommendations: results.recommendations
+        reportData: { summary: '', insights: [], recommendations: [] }
       };
       await reportService.generateComprehensiveReport(unifiedResult);
     } catch (error) {
