@@ -219,7 +219,7 @@ const FAQ = () => {
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">Professional PDF report (15+ pages)</span>
+                              <span className="text-sm">Professional PDF report with comprehensive analysis</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
