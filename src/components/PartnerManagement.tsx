@@ -425,7 +425,7 @@ Password: ${newPassword}
 📋 AVAILABLE ASSESSMENTS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Your account includes access to the following professional assessments:
+Your account includes access to the following professional assessments (${partner.permissions.length} assessments):
 
 ${partner.permissions.map(p => `• ${p.charAt(0).toUpperCase() + p.slice(1).replace('-', ' ')} Assessment`).join('\n')}
 
