@@ -4446,3 +4446,5 @@ function generateDigitalWellnessChartScript(dimensions: any[]): string {
     });
   `;
 }
+
+// End of enhanced CAIR+ report functions
