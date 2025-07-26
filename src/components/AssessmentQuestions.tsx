@@ -464,7 +464,7 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
     return (
       <AssessmentProgressManager
         assessmentType="stress-resilience"
-        assessmentTitle="Stress Resilience Assessment"
+        assessmentTitle="Burnout Prevention Index"
         onRestore={handleRestoreProgress}
         onStartFresh={handleStartFresh}
       />

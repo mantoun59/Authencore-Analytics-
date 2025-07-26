@@ -402,13 +402,13 @@ export const assessmentsData: AssessmentData[] = [
   },
   {
     id: 'leadership-assessment',
-    title: 'Leadership Assessment',
+    title: 'Authentic Leadership Assessment',
     subtitle: 'Comprehensive Leadership Evaluation',
     price: '$34.99',
     duration: '25-30 minutes',
     questions: 120,
-    description: 'Comprehensive leadership assessment evaluating management style, team effectiveness, and leadership potential',
-    detailedDescription: 'The Leadership Assessment provides a comprehensive evaluation of leadership capabilities across multiple dimensions. This assessment combines behavioral analysis, situational judgment, and 360-degree perspectives to provide insights into current leadership effectiveness and development opportunities.',
+    description: 'Comprehensive authentic leadership assessment evaluating management style, team effectiveness, and leadership potential',
+    detailedDescription: 'The Authentic Leadership Assessment provides a comprehensive evaluation of leadership capabilities across multiple dimensions. This assessment combines behavioral analysis, situational judgment, and 360-degree perspectives to provide insights into current leadership effectiveness and development opportunities.',
     whatItMeasures: [
       'Leadership style and approach',
       'Team management effectiveness',

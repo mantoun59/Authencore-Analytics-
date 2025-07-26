@@ -288,7 +288,7 @@ export const BiasMonitoringDashboard: React.FC = () => {
               className="px-3 py-2 border rounded-md"
             >
               <option value="career-launch">Career Launch</option>
-              <option value="stress-resilience">Stress Resilience</option>
+              <option value="stress-resilience">Burnout Prevention Index</option>
               <option value="communication-styles">Communication Styles</option>
             </select>
             <select

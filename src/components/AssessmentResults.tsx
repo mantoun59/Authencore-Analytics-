@@ -549,7 +549,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
           };
         case 'leadership':
           return {
-            title: 'Leadership Assessment Report',
+            title: 'Authentic Leadership Assessment Report',
             scoreLabel: 'Overall Leadership Score',
             profileLabel: `Leadership Profile: ${currentProfile}`,
             filename: `leadership-assessment-report-${new Date().toISOString().split('T')[0]}.pdf`
@@ -739,7 +739,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       case 'faith-values':
         return 'Based on your responses across faith values scenarios and workplace situations, here\'s your comprehensive values alignment assessment.';
       case 'leadership':
-        return 'Based on your leadership scenarios and decision-making patterns, here\'s your comprehensive leadership assessment.';
+        return 'Based on your leadership scenarios and decision-making patterns, here\'s your comprehensive authentic leadership assessment.';
       case 'career':
       case 'career-launch':
         return 'Based on your career interests, aptitudes, and values, here\'s your comprehensive career readiness assessment.';

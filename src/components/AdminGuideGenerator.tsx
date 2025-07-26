@@ -188,7 +188,7 @@ const AdminGuideGenerator = () => {
           '• Faith & Values - Comprehensive Values Alignment',
           '• Gen Z Workplace - Generational Workplace Assessment',
           '• Digital Wellness - Digital Health & Productivity',
-          '• Leadership Assessment - Authentic Leadership Development'
+          '• Authentic Leadership Assessment - Authentic Leadership Development'
         ]
       },
       {

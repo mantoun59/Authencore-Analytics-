@@ -125,7 +125,7 @@ const FAQ = () => {
                               <p className="text-sm text-muted-foreground">EQ assessment and emotional development</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">Leadership Assessment</h5>
+                              <h5 className="font-medium">Authentic Leadership Assessment</h5>
                               <p className="text-sm text-muted-foreground">Leadership style analysis and development</p>
                             </div>
                             <div className="p-3 border rounded-lg">

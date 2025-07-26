@@ -50,7 +50,7 @@ export const QuickPurchaseButton: React.FC<{ assessmentType: string }> = ({ asse
     switch (type) {
       case 'career-launch': return { name: 'CareerLaunch', price: '$9.99' };
       case 'cair-personality': return { name: 'CAIR+ Personality', price: '$29.99' };
-      case 'stress-resilience': return { name: 'Burnout Prevention', price: '$39.99' };
+      case 'stress-resilience': return { name: 'Burnout Prevention Index', price: '$39.99' };
       case 'cultural-intelligence': return { name: 'Cultural Intelligence', price: '$19.99' };
       case 'communication-styles': return { name: 'Communication Styles', price: '$24.99' };
       case 'emotional-intelligence': return { name: 'Emotional Intelligence', price: '$24.99' };

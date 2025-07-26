@@ -73,7 +73,7 @@ const AIChat = () => {
         } else if (hasKeyword(['personality', 'traits', 'character'])) {
           aiResponse = "Our CAIR+ Personality Assessment at $29.99 represents premium psychological evaluation with advanced validity detection. This 100-question assessment features sophisticated percentile scoring, dual reporting capabilities, and comprehensive personality insights that exceed industry standards.";
         } else if (hasKeyword(['leadership', 'manager', 'executive', 'management'])) {
-          aiResponse = "The Leadership Assessment at $34.99 is our executive-level evaluation designed for current and aspiring leaders. It includes 90 comprehensive questions with 360-degree feedback integration, advanced leadership competency mapping, and strategic development recommendations.";
+          aiResponse = "The Authentic Leadership Assessment at $34.99 is our executive-level evaluation designed for current and aspiring leaders. It includes 90 comprehensive questions with 360-degree feedback integration, advanced leadership competency mapping, and strategic development recommendations.";
         } else {
           aiResponse = "Our assessment portfolio ranges from $9.99 to $34.99, strategically priced for maximum accessibility while maintaining scientific rigor. The CareerLaunch Assessment ($9.99) offers exceptional value for comprehensive career discovery, while specialized assessments like Leadership ($34.99) provide executive-level insights. All assessments include detailed reports and actionable recommendations.";
         }
@@ -100,7 +100,7 @@ const AIChat = () => {
           aiResponse = "The Communication Styles Assessment ($24.99) provides deep analysis of your interpersonal communication patterns using 80 questions with advanced linguistic analysis. It evaluates verbal and non-verbal communication styles, identifies optimization opportunities, and offers personalized strategies for enhanced relationship building.";
         }
       } else if (hasKeyword(['leadership', 'manager', 'executive', 'management', 'supervisor', 'director'])) {
-        aiResponse = "Executive leadership assessment requires sophisticated evaluation tools. Our Leadership Assessment ($34.99) is designed for current and aspiring leaders, featuring 90 comprehensive questions with 360-degree feedback capabilities. It evaluates leadership competencies, emotional intelligence in leadership contexts, and provides strategic development recommendations for executive growth.";
+        aiResponse = "Executive leadership assessment requires sophisticated evaluation tools. Our Authentic Leadership Assessment ($34.99) is designed for current and aspiring leaders, featuring 90 comprehensive questions with 360-degree feedback capabilities. It evaluates leadership competencies, emotional intelligence in leadership contexts, and provides strategic development recommendations for executive growth.";
       } else if (hasKeyword(['emotional', 'eq', 'emotions', 'feelings', 'empathy'])) {
         aiResponse = "Emotional Intelligence is foundational to personal and professional success. Our EQ Assessment ($24.99) measures emotional intelligence across five core dimensions through 65 specialized questions. It evaluates self-awareness, self-regulation, motivation, empathy, and social skills with detailed development recommendations.";
       } else if (hasKeyword(['digital', 'technology', 'screen', 'online', 'wellness', 'balance'])) {
@@ -114,7 +114,7 @@ const AIChat = () => {
       } else if (hasKeyword(['help', 'support', 'guidance', 'assistance', 'question', 'information'])) {
         aiResponse = "I'm here to provide expert guidance on our comprehensive assessment portfolio. AuthenCore Analytics offers scientifically-validated psychological assessments designed to unlock human potential. Whether you're seeking career clarity, personality insights, leadership development, or specialized evaluations, I can recommend the optimal assessment based on your specific goals and circumstances.";
       } else if (hasKeyword(['recommend', 'suggest', 'best', 'which', 'what should', 'advice'])) {
-        aiResponse = "Optimal assessment selection depends on your specific objectives. For comprehensive career exploration, the CareerLaunch Assessment ($9.99) provides exceptional value. For leadership development, consider our Leadership Assessment ($34.99). For personal development, the CAIR+ Personality Assessment ($29.99) offers deep insights. I'd be happy to provide personalized recommendations based on your specific goals - what area of development interests you most?";
+        aiResponse = "Optimal assessment selection depends on your specific objectives. For comprehensive career exploration, the CareerLaunch Assessment ($9.99) provides exceptional value. For leadership development, consider our Authentic Leadership Assessment ($34.99). For personal development, the CAIR+ Personality Assessment ($29.99) offers deep insights. I'd be happy to provide personalized recommendations based on your specific goals - what area of development interests you most?";
       } else if (hasKeyword(['science', 'research', 'valid', 'reliable', 'evidence', 'study'])) {
         aiResponse = "All AuthenCore Analytics assessments are built on rigorous scientific foundations with established validity and reliability. Our instruments utilize psychometrically sound methodologies, normative populations, and evidence-based frameworks. Each assessment undergoes continuous validation studies to ensure accuracy and meaningful insights for professional and personal development.";
       } else {
@@ -122,7 +122,7 @@ const AIChat = () => {
         if (input.length > 50) {
           aiResponse = "Thank you for your detailed inquiry. AuthenCore Analytics specializes in comprehensive psychological assessment solutions that provide actionable insights for personal and professional development. Our scientifically-validated assessments range from career discovery to executive leadership evaluation. Could you share more about your specific development goals so I can provide targeted recommendations?";
         } else {
-          aiResponse = "Welcome to AuthenCore Analytics - where we're 'Measuring Minds, Shaping Futures.' Our comprehensive assessment portfolio includes 10 scientifically-validated evaluations designed to unlock human potential. From career discovery ($9.99) to executive leadership assessment ($34.99), we provide insights that drive meaningful development. What specific area of growth interests you most?";
+          aiResponse = "Welcome to AuthenCore Analytics - where we're 'Measuring Minds, Shaping Futures.' Our comprehensive assessment portfolio includes 10 scientifically-validated evaluations designed to unlock human potential. From career discovery ($9.99) to executive authentic leadership assessment ($34.99), we provide insights that drive meaningful development. What specific area of growth interests you most?";
         }
       }
 

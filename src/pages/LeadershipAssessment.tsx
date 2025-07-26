@@ -258,7 +258,7 @@ const LeadershipAssessment = () => {
           {currentStep === 'language' && (
             <Card className="text-center">
               <CardHeader>
-                <CardTitle className="text-3xl font-bold">Leadership Assessment</CardTitle>
+                <CardTitle className="text-3xl font-bold">Authentic Leadership Assessment</CardTitle>
                 <CardDescription className="text-lg">
                   Comprehensive Leadership Effectiveness Evaluation
                 </CardDescription>
