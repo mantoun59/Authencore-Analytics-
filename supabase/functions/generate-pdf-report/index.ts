@@ -1646,15 +1646,16 @@ function generateCulturalReport(results: any, userData: any): string {
 
 // Stress Resilience (Burnout Prevention) Assessment Report Generator
 function generateStressReport(results: any, userData: any): string {
-  const dimensionScores = results?.dimensionScores || [];
+  // Ensure dimensionScores is always an array
+  const dimensionScores = Array.isArray(results?.dimensionScores) ? results.dimensionScores : [];
   const overallScore = results?.overallScore || 0;
   const percentileScore = results?.percentileScore || 0;
   const resilienceProfile = results?.resilienceProfile || 'Developing';
   const burnoutRisk = results?.burnoutRisk || 'medium';
   const stressManagementLevel = results?.stressManagementLevel || 'fair';
-  const strengths = results?.strengths || [];
-  const challenges = results?.challenges || [];
-  const recommendations = results?.recommendations || [];
+  const strengths = Array.isArray(results?.strengths) ? results.strengths : [];
+  const challenges = Array.isArray(results?.challenges) ? results.challenges : [];
+  const recommendations = Array.isArray(results?.recommendations) ? results.recommendations : [];
   
   return `
   <!DOCTYPE html>

@@ -466,7 +466,41 @@ const StressResilience = () => {
 
                 {/* Actions */}
                 <div className="flex flex-wrap justify-center gap-4">
-                  <Button className="bg-green-600 hover:bg-green-700 text-white">
+                  <Button 
+                    className="bg-green-600 hover:bg-green-700 text-white"
+                    onClick={async () => {
+                      try {
+                        const reportData = {
+                          assessmentType: 'stress_resilience',
+                          results: currentResults,
+                          userData: {
+                            name: userProfile?.name || 'Anonymous',
+                            email: userProfile?.email || 'unknown@example.com',
+                            date: new Date().toLocaleDateString()
+                          }
+                        };
+
+                        const response = await supabase.functions.invoke('generate-pdf-report', {
+                          body: reportData
+                        });
+
+                        if (response.data) {
+                          const newWindow = window.open('', '_blank');
+                          if (newWindow) {
+                            newWindow.document.write(response.data);
+                            newWindow.document.close();
+                          }
+                        }
+                      } catch (error) {
+                        console.error('Error generating PDF:', error);
+                        toast({
+                          title: "Error",
+                          description: "Failed to generate PDF report. Please try again.",
+                          variant: "destructive"
+                        });
+                      }
+                    }}
+                  >
                     <FileText className="mr-2 w-4 h-4" />
                     Download Detailed Report
                   </Button>
