@@ -249,19 +249,37 @@ export const PartnerManagement = () => {
           });
 
           toast({
-            title: 'Success',
-            description: 'Partner created and credentials sent via email'
+            title: 'Partner Created Successfully! 🎉',
+            description: `Partner account created and login credentials have been sent to ${formData.contact_email}. They can now access assessments at ${window.location.origin}/partner-login`
           });
         } catch (emailError) {
           // Log for debugging in development only
           if (process.env.NODE_ENV === 'development') {
             console.error('Failed to send credentials email:', emailError);
           }
+          
+          // Show detailed manual instructions since email failed
           toast({
-            title: 'Partner Created',
-            description: 'Partner created successfully, but failed to send credentials email. Please share credentials manually.',
-            variant: 'destructive'
+            title: 'Partner Created - Manual Setup Required',
+            description: `Partner account created successfully! Email delivery failed. Please manually share these credentials: Username: ${formData.username}, Password: ${formData.password}, Login URL: ${window.location.origin}/partner-login`,
+            variant: 'destructive',
+            duration: 10000 // Show longer for manual copying
           });
+          
+          // Also show an alert dialog with copy-friendly information
+          setTimeout(() => {
+            alert(`PARTNER CREDENTIALS (Please copy and send manually):
+            
+Organization: ${formData.organization_name}
+Username: ${formData.username}
+Password: ${formData.password}
+Contact Email: ${formData.contact_email}
+Login URL: ${window.location.origin}/partner-login
+Access Expires: ${accessExpiresAt.toLocaleDateString()}
+Permissions: ${formData.permissions.join(', ')}
+
+Note: The partner should bookmark the login URL and use these exact credentials.`);
+          }, 1000);
         }
       }
 
