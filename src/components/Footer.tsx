@@ -1,6 +1,7 @@
 import { Mail, Phone, MapPin, ExternalLink, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import LogoDisplay from "@/components/LogoDisplay";
+import { formatCopyrightLine } from "@/utils/legalNotices";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -170,7 +171,7 @@ const Footer = () => {
         <div className="border-t border-border pt-8 mt-12">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-foreground text-sm">
-              &copy; 2024 Authencore Analytics. All rights reserved. | Advanced AI-Powered Talent Assessment Solutions
+              {formatCopyrightLine()} | Advanced AI-Powered Talent Assessment Solutions
             </p>
             <div className="flex items-center space-x-6 text-sm">
               <Link to="/privacy" className="text-foreground hover:text-primary transition-colors">

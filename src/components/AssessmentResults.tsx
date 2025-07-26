@@ -31,6 +31,7 @@ import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator
 import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
 import InteractiveResultsVisualization from "@/components/InteractiveResultsVisualization";
 import ProgressTracker from "@/components/ProgressTracker";
+import LegalNotices from "@/components/LegalNotices";
 import { toast } from "sonner";
 import UnifiedAssessmentService from "@/services/unifiedAssessmentService";
 import ConsolidatedReportService from "@/services/consolidatedReportService";
@@ -1228,6 +1229,11 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
               Retake Assessment
             </Button>
           </div>
+        </div>
+        
+        {/* Legal Notices */}
+        <div className="container mx-auto px-4 max-w-6xl">
+          <LegalNotices variant="short" className="mt-8 pb-8" />
         </div>
       </div>
 

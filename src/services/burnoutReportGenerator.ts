@@ -1,4 +1,5 @@
 import jsPDF from 'jspdf';
+import { formatPDFLegalFooter } from '@/utils/legalNotices';
 
 export interface BurnoutReportConfig {
   candidateInfo: {
@@ -202,10 +203,45 @@ export const generateDetailedBurnoutReport = async (config: BurnoutReportConfig)
     currentY += weekHeight + 8;
   });
 
-  // Footer
+  // Add legal footer
+  checkPageBreak(50);
+  const currentPageHeight = pdf.internal.pageSize.getHeight();
+  const footerY = currentPageHeight - 40;
+  
+  // Add separator line
+  pdf.setDrawColor(200, 200, 200);
+  pdf.line(20, footerY - 10, pageWidth - 20, footerY - 10);
+
+  // Add legal notices
+  const legalLines = formatPDFLegalFooter();
+  
   pdf.setFontSize(8);
-  pdf.setFont('helvetica', 'italic');
-  pdf.text('This report is confidential and intended for the named recipient only.', pageWidth / 2, pageHeight - 10, { align: 'center' });
+  pdf.setFont('helvetica', 'normal');
+  pdf.setTextColor(100, 100, 100);
+
+  let footerCurrentY = footerY;
+  legalLines.forEach((line, index) => {
+    if (line.trim()) {
+      if (index === 0 || index === 1) {
+        pdf.setFont('helvetica', 'bold');
+      } else {
+        pdf.setFont('helvetica', 'normal');
+      }
+      
+      if (line.length > 80) {
+        const wrappedLines = pdf.splitTextToSize(line, pageWidth - 40);
+        wrappedLines.forEach((wrappedLine: string) => {
+          pdf.text(wrappedLine, 20, footerCurrentY);
+          footerCurrentY += 8;
+        });
+      } else {
+        pdf.text(line, 20, footerCurrentY);
+        footerCurrentY += 8;
+      }
+    } else {
+      footerCurrentY += 4;
+    }
+  });
   
   // Download the PDF
   const fileName = `Burnout-Prevention-Report-${config.candidateInfo.name.replace(/\s+/g, '-')}.pdf`;

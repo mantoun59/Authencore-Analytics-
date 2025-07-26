@@ -9,6 +9,7 @@ import {
   SummaryTableData,
   AssessmentLogger 
 } from '@/types/assessment.enhanced';
+import { formatPDFLegalFooter, formatCopyrightLine } from '@/utils/legalNotices';
 
 export interface AIReportRequest {
   assessmentResultId: string;
@@ -286,6 +287,9 @@ export class AIReportGenerator {
         currentY = this.addEmployerInterviewQuestions(doc, reportContent, currentY);
       }
       
+      // Add legal footer before saving
+      this.addLegalFooter(doc);
+      
       const fileName = `${reportContent.candidateInfo.assessmentType}_Candidate_Report_for_Employers_${reportContent.candidateInfo.name.replace(/\s+/g, '_')}.pdf`;
       doc.save(fileName);
       toast.success('Employer PDF Report generated successfully!');
@@ -309,6 +313,9 @@ export class AIReportGenerator {
       
       // Action Plan
       this.addApplicantActionPlan(doc, reportContent, currentY);
+      
+      // Add legal footer before saving
+      this.addLegalFooter(doc);
       
       const fileName = `${reportContent.candidateInfo.assessmentType}_Adaptation_Readiness_Report_${reportContent.candidateInfo.name.replace(/\s+/g, '_')}.pdf`;
       doc.save(fileName);
@@ -762,6 +769,50 @@ export class AIReportGenerator {
     doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
     doc.text('AC', margin + 13, 30);
+  }
+
+  private addLegalFooter(doc: jsPDF): void {
+    const pageHeight = doc.internal.pageSize.height;
+    const pageWidth = doc.internal.pageSize.width;
+    const margin = 15;
+    const footerY = pageHeight - 40;
+
+    // Add separator line
+    doc.setDrawColor(200, 200, 200);
+    doc.line(margin, footerY - 10, pageWidth - margin, footerY - 10);
+
+    // Add legal notices
+    const legalLines = formatPDFLegalFooter();
+    
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(100, 100, 100);
+
+    let currentY = footerY;
+    legalLines.forEach((line, index) => {
+      if (line.trim()) {
+        if (index === 0 || index === 1) {
+          // Copyright and trademark - make them bold
+          doc.setFont('helvetica', 'bold');
+        } else {
+          doc.setFont('helvetica', 'normal');
+        }
+        
+        if (line.length > 80) {
+          // Wrap long lines
+          const wrappedLines = doc.splitTextToSize(line, pageWidth - 2 * margin);
+          wrappedLines.forEach((wrappedLine: string) => {
+            doc.text(wrappedLine, margin, currentY);
+            currentY += 8;
+          });
+        } else {
+          doc.text(line, margin, currentY);
+          currentY += 8;
+        }
+      } else {
+        currentY += 4; // Empty line spacing
+      }
+    });
   }
 }
 

@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
 import { Download, User, Building2, Shield, Users } from 'lucide-react';
 import jsPDF from 'jspdf';
+import { formatPDFLegalFooter, formatCopyrightLine } from '@/utils/legalNotices';
 
 const AdminGuideGenerator = () => {
   const generatePDF = () => {
@@ -486,6 +487,52 @@ const AdminGuideGenerator = () => {
       yPosition = addWrappedText(info, margin, yPosition, pageWidth - margin * 2, 10);
       yPosition += 8;
     });
+
+    // Add legal footer
+    addLegalFooter();
+
+    // Helper function to add legal footer
+    function addLegalFooter() {
+      const pageHeight = doc.internal.pageSize.height;
+      const footerY = pageHeight - 40;
+      
+      // Add separator line
+      doc.setDrawColor(200, 200, 200);
+      doc.line(margin, footerY - 10, pageWidth - margin, footerY - 10);
+
+      // Add legal notices
+      const legalLines = formatPDFLegalFooter();
+      
+      doc.setFontSize(8);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 100);
+
+      let currentY = footerY;
+      legalLines.forEach((line, index) => {
+        if (line.trim()) {
+          if (index === 0 || index === 1) {
+            // Copyright and trademark - make them bold
+            doc.setFont('helvetica', 'bold');
+          } else {
+            doc.setFont('helvetica', 'normal');
+          }
+          
+          if (line.length > 80) {
+            // Wrap long lines
+            const wrappedLines = doc.splitTextToSize(line, pageWidth - 2 * margin);
+            wrappedLines.forEach((wrappedLine: string) => {
+              doc.text(wrappedLine, margin, currentY);
+              currentY += 8;
+            });
+          } else {
+            doc.text(line, margin, currentY);
+            currentY += 8;
+          }
+        } else {
+          currentY += 4; // Empty line spacing
+        }
+      });
+    }
 
     // Save the PDF
     doc.save('AuthenCore-Admin-Setup-Guide.pdf');
