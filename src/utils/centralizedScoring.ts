@@ -3,22 +3,36 @@
  * Provides consistent scoring logic across all assessments with improved methodologies
  */
 
+import type { DemographicProfile } from '../services/normativeDatabaseService';
+
 export interface ScoringConfig {
   assessmentType: string;
   responses: any[];
   metadata?: Record<string, any>;
-  demographics?: Record<string, any>;
+  demographics?: Partial<DemographicProfile>;
+  enableBiasDetection?: boolean;
+  enableNormativeComparison?: boolean;
 }
 
 export interface ScoringResult {
   scores: Record<string, number>;
   percentiles?: Record<string, number>;
+  normativeComparisons?: Record<string, any>;
   categories?: Record<string, string>;
   insights?: string[];
   validity?: {
     isValid: boolean;
     warnings: string[];
     confidence: number;
+  };
+  biasAnalysis?: {
+    hasPotentialBias: boolean;
+    biasFlags: string[];
+    confidenceLevel: number;
+  };
+  fairnessMetrics?: {
+    overallFairnessScore: number;
+    groupComparisons: Record<string, any>;
   };
   recommendations?: string[];
   dimensionBreakdown?: Record<string, any>;
@@ -338,8 +352,8 @@ export const ScoringEngine = {
   /**
    * Generate comprehensive scoring result with advanced features
    */
-  generateAdvancedScoringResult: (config: ScoringConfig): ScoringResult => {
-    const { assessmentType, responses, metadata = {} } = config;
+  generateAdvancedScoringResult: async (config: ScoringConfig): Promise<ScoringResult> => {
+    const { assessmentType, responses, metadata = {}, demographics, enableBiasDetection = false, enableNormativeComparison = false } = config;
     const dimensions = ScoringEngine.getAssessmentDimensions(assessmentType);
     const scores = ScoringEngine.calculateWeightedScores(responses, dimensions);
     const patterns = ScoringEngine.detectAdvancedPatterns(responses);
@@ -364,19 +378,69 @@ export const ScoringEngine = {
       confidence: validityScore
     };
 
-    // Generate insights based on scores and patterns
+    // Enhanced analysis with normative and bias detection
+    let normativeComparisons: Record<string, any> = {};
+    let biasAnalysis: any = undefined;
+    let fairnessMetrics: any = undefined;
+
+    // Perform normative comparison if enabled
+    if (enableNormativeComparison && typeof window !== 'undefined') {
+      try {
+        const { normativeService } = await import('../services/normativeDatabaseService');
+        normativeComparisons = await normativeService.getEnrichedPercentiles(
+          assessmentType,
+          scores,
+          demographics
+        );
+      } catch (error) {
+        console.warn('Normative comparison unavailable:', error);
+      }
+    }
+
+    // Perform bias detection if enabled and demographics provided
+    if (enableBiasDetection && demographics && typeof window !== 'undefined') {
+      try {
+        const { biasDetectionService } = await import('../services/biasDetectionService');
+        // Check if we have the required fields for bias detection
+        if (demographics.gender && demographics.ageRange) {
+          biasAnalysis = await biasDetectionService.performRealTimeBiasCheck(
+            assessmentType,
+            scores,
+            demographics as any
+          );
+        }
+        
+        const monitoringData = await biasDetectionService.getBiasMonitoringData([assessmentType]);
+        fairnessMetrics = {
+          overallFairnessScore: monitoringData.overallFairnessScore,
+          groupComparisons: monitoringData.assessmentFairness
+        };
+      } catch (error) {
+        console.warn('Bias detection unavailable:', error);
+      }
+    }
+
+    // Generate enhanced insights
     const insights = [
       `Assessment completed with ${responses.length} responses`,
       `Validity confidence: ${Math.round(validityScore * 100)}%`,
       ...Object.entries(scores).map(([dim, score]) => {
         const config = dimensions.find(d => d.name === dim);
         const level = score >= 70 ? 'high' : score >= 40 ? 'medium' : 'low';
-        return config ? `${dim}: ${config.interpretation[level]}` : `${dim}: ${score}%`;
-      })
+        const normativeInfo = normativeComparisons[dim];
+        const percentileInfo = normativeInfo?.dataAvailable ? 
+          ` (${normativeInfo.percentile}th percentile)` : '';
+        return config ? `${dim}: ${config.interpretation[level]}${percentileInfo}` : `${dim}: ${score}%`;
+      }),
+      ...(biasAnalysis?.biasFlags || [])
     ];
 
     return {
       scores,
+      percentiles: Object.fromEntries(
+        Object.entries(normativeComparisons).map(([dim, data]) => [dim, data.percentile || 50])
+      ),
+      normativeComparisons,
       categories: {
         assessment: assessmentType,
         primary: Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b, ''),
@@ -384,11 +448,14 @@ export const ScoringEngine = {
       },
       insights,
       validity,
+      biasAnalysis,
+      fairnessMetrics,
       recommendations: ScoringEngine.generateRecommendations(scores, dimensions, patterns),
       dimensionBreakdown: {
         reliability,
         patterns,
-        rawScores: scores
+        rawScores: scores,
+        normativeData: normativeComparisons
       }
     };
   },

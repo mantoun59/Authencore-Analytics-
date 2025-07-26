@@ -95,6 +95,68 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_demographics: {
+        Row: {
+          age_range: string | null
+          assessment_result_id: string | null
+          consent_for_research: boolean | null
+          country: string | null
+          created_at: string
+          cultural_background: string | null
+          disability_accommodations: boolean | null
+          education_level: string | null
+          gender: string | null
+          id: string
+          industry: string | null
+          primary_language: string | null
+          socioeconomic_background: string | null
+          user_id: string | null
+          work_experience: string | null
+        }
+        Insert: {
+          age_range?: string | null
+          assessment_result_id?: string | null
+          consent_for_research?: boolean | null
+          country?: string | null
+          created_at?: string
+          cultural_background?: string | null
+          disability_accommodations?: boolean | null
+          education_level?: string | null
+          gender?: string | null
+          id?: string
+          industry?: string | null
+          primary_language?: string | null
+          socioeconomic_background?: string | null
+          user_id?: string | null
+          work_experience?: string | null
+        }
+        Update: {
+          age_range?: string | null
+          assessment_result_id?: string | null
+          consent_for_research?: boolean | null
+          country?: string | null
+          created_at?: string
+          cultural_background?: string | null
+          disability_accommodations?: boolean | null
+          education_level?: string | null
+          gender?: string | null
+          id?: string
+          industry?: string | null
+          primary_language?: string | null
+          socioeconomic_background?: string | null
+          user_id?: string | null
+          work_experience?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_demographics_assessment_result_id_fkey"
+            columns: ["assessment_result_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_results"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       assessment_results: {
         Row: {
           assessment_type: string
@@ -124,6 +186,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      bias_analysis_results: {
+        Row: {
+          analysis_metadata: Json | null
+          assessment_result_id: string | null
+          assessment_type: string
+          bias_indicators: Json
+          bias_severity: string | null
+          created_at: string
+          demographic_data: Json
+          dimension_scores: Json
+          fairness_metrics: Json
+          flagged_dimensions: string[] | null
+          id: string
+          recommended_actions: string[] | null
+        }
+        Insert: {
+          analysis_metadata?: Json | null
+          assessment_result_id?: string | null
+          assessment_type: string
+          bias_indicators: Json
+          bias_severity?: string | null
+          created_at?: string
+          demographic_data: Json
+          dimension_scores: Json
+          fairness_metrics: Json
+          flagged_dimensions?: string[] | null
+          id?: string
+          recommended_actions?: string[] | null
+        }
+        Update: {
+          analysis_metadata?: Json | null
+          assessment_result_id?: string | null
+          assessment_type?: string
+          bias_indicators?: Json
+          bias_severity?: string | null
+          created_at?: string
+          demographic_data?: Json
+          dimension_scores?: Json
+          fairness_metrics?: Json
+          flagged_dimensions?: string[] | null
+          id?: string
+          recommended_actions?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bias_analysis_results_assessment_result_id_fkey"
+            columns: ["assessment_result_id"]
+            isOneToOne: false
+            referencedRelation: "assessment_results"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       employer_accounts: {
         Row: {
@@ -498,6 +613,66 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      normative_databases: {
+        Row: {
+          assessment_type: string
+          collected_date: string
+          created_at: string
+          data_points: number[]
+          data_quality_score: number | null
+          demographic_group: Json
+          dimension: string
+          id: string
+          is_active: boolean | null
+          mean_score: number
+          percentile_25: number
+          percentile_50: number
+          percentile_75: number
+          percentile_90: number
+          sample_size: number
+          std_deviation: number
+          updated_at: string
+        }
+        Insert: {
+          assessment_type: string
+          collected_date?: string
+          created_at?: string
+          data_points: number[]
+          data_quality_score?: number | null
+          demographic_group: Json
+          dimension: string
+          id?: string
+          is_active?: boolean | null
+          mean_score: number
+          percentile_25: number
+          percentile_50: number
+          percentile_75: number
+          percentile_90: number
+          sample_size: number
+          std_deviation: number
+          updated_at?: string
+        }
+        Update: {
+          assessment_type?: string
+          collected_date?: string
+          created_at?: string
+          data_points?: number[]
+          data_quality_score?: number | null
+          demographic_group?: Json
+          dimension?: string
+          id?: string
+          is_active?: boolean | null
+          mean_score?: number
+          percentile_25?: number
+          percentile_50?: number
+          percentile_75?: number
+          percentile_90?: number
+          sample_size?: number
+          std_deviation?: number
+          updated_at?: string
+        }
+        Relationships: []
       }
       order_items: {
         Row: {
@@ -1149,6 +1324,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      analyze_assessment_bias: {
+        Args: { p_assessment_type: string; p_time_period_days?: number }
+        Returns: Json
+      }
       assign_admin_role: {
         Args: { p_email: string }
         Returns: undefined
@@ -1206,6 +1385,15 @@ export type Database = {
       generate_guest_token: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_normative_percentiles: {
+        Args: {
+          p_assessment_type: string
+          p_dimension: string
+          p_score: number
+          p_demographics?: Json
+        }
+        Returns: Json
       }
       get_security_status: {
         Args: Record<PropertyKey, never>
