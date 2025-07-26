@@ -102,43 +102,43 @@ const FAQ = () => {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">CareerLaunch Assessment</h5>
-                              <p className="text-sm text-muted-foreground">$9.99 • Career discovery and planning</p>
+                              <p className="text-sm text-muted-foreground">Career discovery and planning</p>
                             </div>
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">CAIR+ Personality</h5>
-                              <p className="text-sm text-muted-foreground">$29.99 • Advanced personality analysis</p>
+                              <p className="text-sm text-muted-foreground">Advanced personality analysis with cultural intelligence</p>
                             </div>
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">Stress Resilience</h5>
-                              <p className="text-sm text-muted-foreground">$19.99 • Burnout prevention</p>
+                              <p className="text-sm text-muted-foreground">Burnout prevention and stress management</p>
                             </div>
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">Cultural Intelligence</h5>
-                              <p className="text-sm text-muted-foreground">$19.99 • Global workplace readiness</p>
+                              <p className="text-sm text-muted-foreground">Global workplace readiness and cross-cultural competency</p>
                             </div>
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">Communication Styles</h5>
-                              <p className="text-sm text-muted-foreground">$24.99 • Communication analysis</p>
+                              <p className="text-sm text-muted-foreground">Professional communication analysis and development</p>
                             </div>
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">Emotional Intelligence</h5>
-                              <p className="text-sm text-muted-foreground">$19.99 • EQ assessment and development</p>
+                              <p className="text-sm text-muted-foreground">EQ assessment and emotional development</p>
                             </div>
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">Leadership Assessment</h5>
-                              <p className="text-sm text-muted-foreground">$24.99 • Leadership style analysis</p>
+                              <p className="text-sm text-muted-foreground">Leadership style analysis and development</p>
                             </div>
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">Digital Wellness</h5>
-                              <p className="text-sm text-muted-foreground">$14.99 • Digital habits analysis</p>
+                              <p className="text-sm text-muted-foreground">Digital habits and technology relationship analysis</p>
                             </div>
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">Faith & Values</h5>
-                              <p className="text-sm text-muted-foreground">$19.99 • Values alignment assessment</p>
+                              <p className="text-sm text-muted-foreground">Values alignment and faith-based decision making</p>
                             </div>
                             <div className="p-3 border rounded-lg">
                               <h5 className="font-medium">Gen Z Workplace</h5>
-                              <p className="text-sm text-muted-foreground">$16.99 • Modern workplace readiness</p>
+                              <p className="text-sm text-muted-foreground">Modern workplace readiness and generational preferences</p>
                             </div>
                           </div>
                         </div>
