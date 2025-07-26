@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, CalendarDays, Plus, Edit, Trash2, Eye, Users, Shield, Activity } from 'lucide-react';
+import { Calendar, CalendarDays, Plus, Edit, Trash2, Eye, Users, Shield, Activity, Copy, Send, Mail } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/components/ui/use-toast';
 import { ConfirmDialog } from '@/components/ui/dialog-components';
@@ -379,6 +379,51 @@ Note: The partner should bookmark the login URL and use these exact credentials.
     }
   };
 
+  const getPartnerCredentials = (partner: Partner) => {
+    const credentialsText = `PARTNER LOGIN CREDENTIALS
+    
+Organization: ${partner.organization_name}
+Contact Email: ${partner.contact_email}
+Username: ${partner.username}
+Password: [PASSWORD STORED IN DATABASE - Contact system admin]
+
+🔗 LOGIN INSTRUCTIONS:
+1. Visit: ${window.location.origin}/partner-login
+2. Enter your username and password exactly as provided
+3. Bookmark this login page for future access
+
+📋 AVAILABLE ASSESSMENTS:
+${partner.permissions.map(p => `• ${p.replace('-', ' ')}`).join('\n')}
+
+⏰ ACCESS DETAILS:
+• Account Status: ${partner.is_active ? 'Active' : 'Inactive'}
+• Access Expires: ${format(new Date(partner.access_expires_at), 'PPP')}
+• Created: ${format(new Date(partner.created_at), 'PPP')}
+
+📞 SUPPORT:
+If you experience any issues accessing the platform:
+• Ensure you're using the exact username provided
+• Check that your access hasn't expired
+• Contact your administrator for assistance
+
+⚠️ IMPORTANT NOTES:
+• Keep your login credentials secure
+• Do not share your account with others
+• Each assessment can only be taken once per account
+• Your access is time-limited as shown above`;
+
+    // Copy to clipboard
+    navigator.clipboard.writeText(credentialsText).then(() => {
+      toast({
+        title: 'Credentials Copied! 📋',
+        description: 'Partner credentials have been copied to clipboard. You can now paste and send to the partner.'
+      });
+    }).catch(() => {
+      // Fallback: show in alert dialog for manual copy
+      alert(credentialsText);
+    });
+  };
+
   if (loading) {
     return <div className="flex justify-center p-8">Loading...</div>;
   }
@@ -561,7 +606,16 @@ Note: The partner should bookmark the login URL and use these exact credentials.
                       <Button
                         variant="outline"
                         size="sm"
+                        onClick={() => getPartnerCredentials(partner)}
+                        title="Copy partner credentials and instructions"
+                      >
+                        <Send className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
                         onClick={() => togglePartnerStatus(partner.id, partner.is_active)}
+                        title={partner.is_active ? "Deactivate partner" : "Activate partner"}
                       >
                         <Shield className="h-4 w-4" />
                       </Button>
@@ -569,6 +623,7 @@ Note: The partner should bookmark the login URL and use these exact credentials.
                         variant="outline"
                         size="sm"
                         onClick={() => handleEdit(partner)}
+                        title="Edit partner"
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
@@ -576,6 +631,7 @@ Note: The partner should bookmark the login URL and use these exact credentials.
                         variant="outline"
                         size="sm"
                         onClick={() => handleDelete(partner.id)}
+                        title="Delete partner"
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
