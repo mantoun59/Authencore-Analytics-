@@ -480,6 +480,12 @@ const StressResilience = () => {
                           }
                         };
 
+                        // Show loading state
+                        toast({
+                          title: "Generating Report",
+                          description: "Please wait while we create your detailed report...",
+                        });
+
                         const response = await supabase.functions.invoke('generate-pdf-report', {
                           body: reportData
                         });
@@ -489,15 +495,42 @@ const StressResilience = () => {
                           if (newWindow) {
                             newWindow.document.write(response.data);
                             newWindow.document.close();
+                            toast({
+                              title: "Success",
+                              description: "Your report has been generated successfully!",
+                            });
+                          } else {
+                            // Fallback: Download as HTML file
+                            const blob = new Blob([response.data], { type: 'text/html' });
+                            const url = URL.createObjectURL(blob);
+                            const a = document.createElement('a');
+                            a.href = url;
+                            a.download = `Stress-Resilience-Report-${new Date().toISOString().split('T')[0]}.html`;
+                            document.body.appendChild(a);
+                            a.click();
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                            
+                            toast({
+                              title: "Report Downloaded",
+                              description: "Your report has been downloaded as an HTML file.",
+                            });
                           }
+                        } else {
+                          throw new Error('No report data received');
                         }
                       } catch (error) {
                         console.error('Error generating PDF:', error);
+                        
+                        // Fallback: Show results in current page with print option
                         toast({
-                          title: "Error",
-                          description: "Failed to generate PDF report. Please try again.",
+                          title: "Report Generation Failed",
+                          description: "Showing results below. Use your browser's print function to save as PDF.",
                           variant: "destructive"
                         });
+                        
+                        // Scroll to results for easy printing
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
                       }
                     }}
                   >
