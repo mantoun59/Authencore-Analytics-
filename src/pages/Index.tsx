@@ -10,8 +10,6 @@ import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 
 const Index = () => {
-  console.log('🏠 Index.tsx: Home page component loading...');
-  console.log('🏗️ Index.tsx: Rendering home page components...');
   
   return (
     <div className="min-h-screen bg-background">

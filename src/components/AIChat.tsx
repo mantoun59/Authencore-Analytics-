@@ -143,7 +143,6 @@ const AIChat = () => {
         }
       } catch (edgeFunctionError) {
         // Fall back to rule-based response if edge function fails
-        console.log('Using fallback response');
       }
 
       const assistantMessage: Message = {

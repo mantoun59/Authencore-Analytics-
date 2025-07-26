@@ -70,7 +70,6 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
       userId: localStorage.getItem('userId') || 'anonymous'
     };
 
-    console.log('Error Report:', errorReport);
   };
 
   private handleRetry = () => {
@@ -247,7 +246,7 @@ export const useErrorHandler = () => {
       url: window.location.href
     };
 
-    console.log('Error Report:', errorReport);
+    
   };
 
   return { reportError };

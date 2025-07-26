@@ -23,10 +23,6 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
-  console.log('🏗️ App.tsx: App component initializing...');
-  
-  console.log('📦 App.tsx: Setting up providers...');
-  
   return (
     <ErrorBoundary level="critical">
       <QueryClientProvider client={queryClient}>

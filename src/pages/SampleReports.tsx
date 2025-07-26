@@ -74,16 +74,11 @@ const SampleReports = () => {
   }, []);
 
   const generateSamplePDF = async () => {
-    console.log('🎯 SAMPLE REPORT: Function called', { selectedAssessment, reportType });
     setIsGenerating(true);
     try {
-      console.log('🚀 Starting sample PDF generation...', { selectedAssessment, reportType });
-      
       const sampleData = reportType === 'employer' 
         ? getSampleEmployerReport(selectedAssessment)
         : getSampleCandidateReport(selectedAssessment);
-        
-      console.log('📊 Sample data generated:', sampleData);
       
       // Format data for PDF generation function
       const pdfRequestData = {
@@ -96,20 +91,20 @@ const SampleReports = () => {
         }
       };
       
-      console.log('📝 PDF request data formatted:', pdfRequestData);
+      
       
       toast.info(`Generating sample ${reportType} PDF report...`);
       
       try {
-        console.log('📡 Calling Supabase PDF generation function...');
+        
         const response = await supabase.functions.invoke('generate-pdf-report', {
           body: pdfRequestData
         });
 
-        console.log('✅ PDF function response:', response);
+        
 
         if (response.data) {
-          console.log('📄 Opening PDF report in new window...');
+          
           // Open HTML report in new window for PDF printing
           const newWindow = window.open('', '_blank');
           if (newWindow) {
@@ -447,7 +442,7 @@ const SampleReports = () => {
       
       case 'career':
       case 'career-launch':
-        console.log('✅ Matched career-launch case');
+        
         return {
           ...baseReport,
           executiveSummary: {

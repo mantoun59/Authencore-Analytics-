@@ -35,7 +35,7 @@ import LegalNotices from "@/components/LegalNotices";
 import { toast } from "sonner";
 import UnifiedAssessmentService from "@/services/unifiedAssessmentService";
 import ConsolidatedReportService from "@/services/consolidatedReportService";
-import type { AssessmentData, CandidateInfo, AssessmentResult, UnifiedAssessmentResult } from "@/types/assessment.types";
+import type { AssessmentData, CandidateInfo, AssessmentResult, UnifiedAssessmentResult, DimensionScore } from "@/types/assessment.types";
 
 interface AssessmentResultsProps {
   data: AssessmentData | Record<string, unknown>; // Flexible type for different assessment formats
@@ -81,7 +81,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       // Assessment result generated successfully
       if (typeof result === 'object' && 'overallScore' in result) {
         // Create dimension scores array with proper structure
-        const dimensionScores: any[] = [];
+        const dimensionScores: DimensionScore[] = [];
         if (result.dimensionScores && typeof result.dimensionScores === 'object') {
           Object.entries(result.dimensionScores).forEach(([key, value]) => {
             dimensionScores.push({
@@ -133,7 +133,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     }
 
     try {
-      const unifiedResult: any = {
+      const unifiedResult: UnifiedAssessmentResult = {
         assessmentId: 'assessment-' + Date.now(),
         assessmentType: assessmentType,
         candidateInfo: candidateInfo || { name: '', email: '' },
