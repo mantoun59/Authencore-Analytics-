@@ -150,10 +150,25 @@ const Assessment = () => {
           {/* Hero Image */}
           <div className="mb-8">
             <img 
-              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-              alt="Professional woman taking assessment on laptop"
+              src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+              alt="Professional using MacBook Pro for business assessment"
               className="w-full max-w-4xl h-64 object-cover rounded-lg shadow-xl mx-auto"
             />
+          </div>
+          
+          {/* Mis-hiring Cost Quotes */}
+          <div className="mb-8 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 rounded-lg p-6 max-w-4xl mx-auto">
+            <h3 className="text-lg font-semibold mb-4 text-center text-red-800 dark:text-red-200">The Cost of Mis-hiring</h3>
+            <div className="grid md:grid-cols-2 gap-4 text-sm">
+              <div className="text-center p-4 bg-white/50 dark:bg-black/20 rounded-lg">
+                <p className="font-medium text-red-700 dark:text-red-300">"Bad hires cost companies up to $240,000 in expenses related to hiring, compensation, and retention"</p>
+                <p className="text-xs text-muted-foreground mt-2">- U.S. Department of Labor</p>
+              </div>
+              <div className="text-center p-4 bg-white/50 dark:bg-black/20 rounded-lg">
+                <p className="font-medium text-red-700 dark:text-red-300">"75% of employers admit to hiring the wrong person for a position, costing an average of $17,000 per mis-hire"</p>
+                <p className="text-xs text-muted-foreground mt-2">- CareerBuilder Survey</p>
+              </div>
+            </div>
           </div>
           
           <Badge className="mb-6 bg-primary/10 text-primary hover:bg-primary/20">
