@@ -38,6 +38,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_content_validation: {
+        Row: {
+          bias_flags: string[] | null
+          created_at: string
+          human_review_required: boolean
+          id: string
+          is_valid: boolean
+          issues: string[] | null
+          recommendations: string[] | null
+          report_id: string
+          review_notes: string | null
+          reviewed_by: string | null
+          updated_at: string
+          validated_at: string
+          validation_score: number
+        }
+        Insert: {
+          bias_flags?: string[] | null
+          created_at?: string
+          human_review_required?: boolean
+          id?: string
+          is_valid?: boolean
+          issues?: string[] | null
+          recommendations?: string[] | null
+          report_id: string
+          review_notes?: string | null
+          reviewed_by?: string | null
+          updated_at?: string
+          validated_at?: string
+          validation_score?: number
+        }
+        Update: {
+          bias_flags?: string[] | null
+          created_at?: string
+          human_review_required?: boolean
+          id?: string
+          is_valid?: boolean
+          issues?: string[] | null
+          recommendations?: string[] | null
+          report_id?: string
+          review_notes?: string | null
+          reviewed_by?: string | null
+          updated_at?: string
+          validated_at?: string
+          validation_score?: number
+        }
+        Relationships: []
+      }
       analytics_events: {
         Row: {
           created_at: string | null
@@ -1114,6 +1162,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      professional_standards_compliance: {
+        Row: {
+          assessment_type: string
+          compliance_score: number
+          compliance_status: string
+          created_at: string
+          id: string
+          last_review_date: string
+          next_review_due: string | null
+          remediation_plan: string[] | null
+          requirements_met: string[] | null
+          requirements_missing: string[] | null
+          reviewer_notes: string | null
+          standard_type: string
+          updated_at: string
+        }
+        Insert: {
+          assessment_type: string
+          compliance_score?: number
+          compliance_status?: string
+          created_at?: string
+          id?: string
+          last_review_date?: string
+          next_review_due?: string | null
+          remediation_plan?: string[] | null
+          requirements_met?: string[] | null
+          requirements_missing?: string[] | null
+          reviewer_notes?: string | null
+          standard_type: string
+          updated_at?: string
+        }
+        Update: {
+          assessment_type?: string
+          compliance_score?: number
+          compliance_status?: string
+          created_at?: string
+          id?: string
+          last_review_date?: string
+          next_review_due?: string | null
+          remediation_plan?: string[] | null
+          requirements_met?: string[] | null
+          requirements_missing?: string[] | null
+          reviewer_notes?: string | null
+          standard_type?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
