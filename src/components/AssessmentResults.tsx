@@ -137,15 +137,17 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         assessmentId: 'assessment-' + Date.now(),
         assessmentType: assessmentType,
         candidateInfo: candidateInfo || { name: '', email: '' },
-        dimensionScores: results.dimensions,
+        dimensionScores: results.dimensions.reduce((acc, dim) => ({ ...acc, [dim.name]: dim.score }), {}),
         developmentAreas: results.improvements?.map(imp => imp.category) || [],
         overallScore: results.overallScore,
         timestamp: new Date().toISOString(),
         validityIndicators: { consistencyScore: 0.8, fakeGoodIndicator: 0.2, flaggedQuestions: [] },
         reportData: { summary: '', insights: [], recommendations: [] },
-        profile: results.profile || {},
+        profile: typeof results.profile === 'string' ? results.profile : '',
         strengths: results.strengths || [],
-        recommendations: results.recommendations || []
+        recommendations: results.recommendations?.flatMap(r => 
+          typeof r === 'string' ? [r] : r.items || []
+        ) || []
       };
       await reportService.generateComprehensiveReport(unifiedResult);
     } catch (error) {
