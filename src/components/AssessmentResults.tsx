@@ -133,7 +133,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     }
 
     try {
-      const unifiedResult: UnifiedAssessmentResult = {
+      const unifiedResult = {
         assessmentId: 'assessment-' + Date.now(),
         assessmentType: assessmentType,
         candidateInfo: candidateInfo || { name: '', email: '' },
@@ -142,7 +142,10 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         overallScore: results.overallScore,
         timestamp: new Date().toISOString(),
         validityIndicators: { consistencyScore: 0.8, fakeGoodIndicator: 0.2, flaggedQuestions: [] },
-        reportData: { summary: '', insights: [], recommendations: [] }
+        reportData: { summary: '', insights: [], recommendations: [] },
+        profile: results.profile || {},
+        strengths: results.strengths || [],
+        recommendations: results.recommendations || []
       };
       await reportService.generateComprehensiveReport(unifiedResult);
     } catch (error) {
