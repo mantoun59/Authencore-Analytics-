@@ -150,8 +150,8 @@ const Assessment = () => {
           {/* Hero Image */}
           <div className="mb-8">
             <img 
-              src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-              alt="Professional using MacBook Pro for business assessment"
+              src="/lovable-uploads/d6159e3c-9371-41c3-969b-c4b47bf4f0b5.png" 
+              alt="Digital assessment technology interface with hand interaction"
               className="w-full max-w-4xl h-64 object-cover rounded-lg shadow-xl mx-auto"
             />
           </div>
