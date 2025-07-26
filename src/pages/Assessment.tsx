@@ -146,6 +146,16 @@ const Assessment = () => {
           <div className="text-center mb-12">
             <LogoDisplay size="lg" showTagline={true} className="justify-center" />
           </div>
+          
+          {/* Hero Image */}
+          <div className="mb-8">
+            <img 
+              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+              alt="Professional woman taking assessment on laptop"
+              className="w-full max-w-4xl h-64 object-cover rounded-lg shadow-xl mx-auto"
+            />
+          </div>
+          
           <Badge className="mb-6 bg-primary/10 text-primary hover:bg-primary/20">
             🎯 Assessment Center
           </Badge>
