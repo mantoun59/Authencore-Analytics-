@@ -206,12 +206,12 @@ export const PartnerManagement = () => {
           description: 'Partner updated successfully'
         });
       } else {
-        // Create new partner
+        // Create new partner - store plain password temporarily
         const { data: partnerData, error } = await supabase
           .from('partner_accounts')
           .insert({
             username: formData.username,
-            password_hash: `crypt('${formData.password}', gen_salt('bf'))`,
+            password_hash: formData.password, // Will be updated after permissions
             organization_name: formData.organization_name,
             contact_email: formData.contact_email,
             access_expires_at: accessExpiresAt.toISOString()
