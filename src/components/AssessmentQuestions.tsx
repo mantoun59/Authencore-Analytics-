@@ -5,10 +5,13 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Clock, Brain, Heart, Users, Zap, Target, ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Clock, Brain, Heart, Users, Zap, Target, ArrowLeft, ArrowRight, CheckCircle2, Save } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AssessmentErrorBoundary from "@/components/AssessmentErrorBoundary";
+import AssessmentProgressManager from "@/components/AssessmentProgressManager";
+import SaveProgressIndicator from "@/components/SaveProgressIndicator";
+import { useAssessmentProgress } from "@/hooks/useAssessmentProgress";
 import type { AssessmentData } from "@/types/assessment.types";
 
 interface AssessmentQuestionsProps {
@@ -26,6 +29,15 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
   const [quickAdvanceTimer, setQuickAdvanceTimer] = useState<NodeJS.Timeout | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isRecovering, setIsRecovering] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | undefined>();
+  const [showProgressManager, setShowProgressManager] = useState(true);
+  
+  const {
+    isSaving,
+    saveProgress,
+    markCompleted,
+    restoreProgress
+  } = useAssessmentProgress('stress-resilience');
 
   const phases = [
     {
@@ -188,58 +200,42 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
   const allQuestions = Object.values(questionBank).flat();
   const currentPhaseQuestions = allQuestions.filter(q => q.phase === currentPhase);
 
-  // Auto-save progress to localStorage
+  // Auto-save progress to Supabase
   useEffect(() => {
-    const saveProgress = () => {
-      try {
-        const progressData = {
-          currentPhase,
-          currentQuestion,
-          responses,
-          responseTime,
-          stressLevel,
-          timestamp: Date.now()
-        };
-        localStorage.setItem('assessment-progress', JSON.stringify(progressData));
-      } catch (err) {
-        // Could not save assessment progress (development only)
-      }
-    };
-    
-    if (Object.keys(responses).length > 0) {
-      saveProgress();
+    if (Object.keys(responses).length > 0 && !showProgressManager) {
+      const totalQuestions = allQuestions.length;
+      const answeredQuestions = Object.keys(responses).length;
+      const progressPercentage = Math.round((answeredQuestions / totalQuestions) * 100);
+      
+      const progressData = {
+        currentPhase,
+        currentQuestion,
+        responses,
+        phaseData: { responseTime, stressLevel },
+        progressPercentage,
+        assessmentType: 'stress-resilience'
+      };
+      
+      saveProgress(progressData);
+      setLastSaved(new Date());
     }
-  }, [currentPhase, currentQuestion, responses, responseTime, stressLevel]);
+  }, [currentPhase, currentQuestion, responses, responseTime, stressLevel, saveProgress, showProgressManager]);
 
-  // Load saved progress on component mount
-  useEffect(() => {
-    const loadSavedProgress = () => {
-      try {
-        const saved = localStorage.getItem('assessment-progress');
-        if (saved) {
-          const progressData = JSON.parse(saved);
-          // Only restore if saved within last 24 hours
-          if (Date.now() - progressData.timestamp < 24 * 60 * 60 * 1000) {
-            setIsRecovering(true);
-            setCurrentPhase(progressData.currentPhase);
-            setCurrentQuestion(progressData.currentQuestion);
-            setResponses(progressData.responses);
-            setResponseTime(progressData.responseTime);
-            setStressLevel(progressData.stressLevel);
-            setTimeout(() => setIsRecovering(false), 1000);
-          } else {
-            // Clear old data
-            localStorage.removeItem('assessment-progress');
-          }
-        }
-      } catch (err) {
-        // Could not load saved progress (development only)
-        setError('Error loading saved progress');
-      }
-    };
-    
-    loadSavedProgress();
-  }, []);
+  // Handle progress restoration
+  const handleRestoreProgress = (progressData: any) => {
+    setIsRecovering(true);
+    setCurrentPhase(progressData.currentPhase);
+    setCurrentQuestion(progressData.currentQuestion);
+    setResponses(progressData.responses);
+    setResponseTime(progressData.phaseData?.responseTime || []);
+    setStressLevel(progressData.phaseData?.stressLevel || 1);
+    setShowProgressManager(false);
+    setTimeout(() => setIsRecovering(false), 1000);
+  };
+
+  const handleStartFresh = () => {
+    setShowProgressManager(false);
+  };
 
   useEffect(() => {
     setStartTime(Date.now());
@@ -383,7 +379,7 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
     }
   };
 
-  const completeAssessment = () => {
+  const completeAssessment = async () => {
     try {
       const assessmentData: AssessmentData = {
         responses: Object.keys(responses).map(questionId => ({
@@ -405,8 +401,8 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
           }))
         }
       };
-      // Clear saved progress on completion
-      localStorage.removeItem('assessment-progress');
+      // Mark assessment as completed in database
+      await markCompleted();
       onComplete(assessmentData);
     } catch (err) {
       // Error completing assessment
@@ -463,6 +459,18 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
     );
   }
 
+  // Show progress manager if needed
+  if (showProgressManager) {
+    return (
+      <AssessmentProgressManager
+        assessmentType="stress-resilience"
+        assessmentTitle="Stress Resilience Assessment"
+        onRestore={handleRestoreProgress}
+        onStartFresh={handleStartFresh}
+      />
+    );
+  }
+
   return (
     <AssessmentErrorBoundary>
       <div className="min-h-screen bg-background">
@@ -497,8 +505,15 @@ const AssessmentQuestions = ({ onComplete }: AssessmentQuestionsProps) => {
             
             <Progress value={progress} className="h-2 mb-2" />
             
-            <div className="flex justify-between text-sm text-muted-foreground">
-              <span>Phase {currentPhase + 1} of {phases.length}</span>
+            <div className="flex justify-between items-center text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                <span>Phase {currentPhase + 1} of {phases.length}</span>
+                <SaveProgressIndicator 
+                  isSaving={isSaving} 
+                  lastSaved={lastSaved}
+                  className="text-xs"
+                />
+              </div>
               <span>{Math.round(progress)}% Complete</span>
             </div>
 

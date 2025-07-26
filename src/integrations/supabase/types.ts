@@ -157,6 +157,60 @@ export type Database = {
           },
         ]
       }
+      assessment_progress: {
+        Row: {
+          assessment_type: string
+          created_at: string
+          current_phase: number | null
+          current_question: number | null
+          expires_at: string
+          guest_token: string | null
+          id: string
+          is_completed: boolean | null
+          last_saved_at: string
+          phase_data: Json
+          progress_percentage: number | null
+          responses: Json
+          started_at: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          assessment_type: string
+          created_at?: string
+          current_phase?: number | null
+          current_question?: number | null
+          expires_at?: string
+          guest_token?: string | null
+          id?: string
+          is_completed?: boolean | null
+          last_saved_at?: string
+          phase_data?: Json
+          progress_percentage?: number | null
+          responses?: Json
+          started_at?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          assessment_type?: string
+          created_at?: string
+          current_phase?: number | null
+          current_question?: number | null
+          expires_at?: string
+          guest_token?: string | null
+          id?: string
+          is_completed?: boolean | null
+          last_saved_at?: string
+          phase_data?: Json
+          progress_percentage?: number | null
+          responses?: Json
+          started_at?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       assessment_results: {
         Row: {
           assessment_type: string
@@ -1368,6 +1422,10 @@ export type Database = {
           p_window_minutes?: number
         }
         Returns: boolean
+      }
+      cleanup_expired_assessment_progress: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
       }
       cleanup_old_rate_limits: {
         Args: Record<PropertyKey, never>
