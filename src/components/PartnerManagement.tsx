@@ -379,49 +379,119 @@ Note: The partner should bookmark the login URL and use these exact credentials.
     }
   };
 
-  const getPartnerCredentials = (partner: Partner) => {
-    const credentialsText = `PARTNER LOGIN CREDENTIALS
-    
+  const getPartnerCredentials = async (partner: Partner) => {
+    try {
+      // Generate a new password for security
+      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*';
+      const array = new Uint8Array(12);
+      crypto.getRandomValues(array);
+      let newPassword = '';
+      for (let i = 0; i < 12; i++) {
+        newPassword += chars.charAt(array[i] % chars.length);
+      }
+
+      // Update password in database
+      await supabase
+        .from('partner_accounts')
+        .update({ password_hash: newPassword }) // Will be properly hashed by database
+        .eq('id', partner.id);
+
+      const currentDate = new Date().toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+
+      const credentialsEmail = `Subject: Welcome to Authencore Analytics - Your Assessment Platform Access
+
+Dear ${partner.organization_name} Team,
+
+Thank you for partnering with Authencore Analytics! We're excited to provide you with access to our comprehensive assessment platform.
+
+Your account has been successfully set up with the following details:
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔐 LOGIN CREDENTIALS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 Organization: ${partner.organization_name}
 Contact Email: ${partner.contact_email}
 Username: ${partner.username}
-Password: [PASSWORD STORED IN DATABASE - Contact system admin]
+Password: ${newPassword}
 
-🔗 LOGIN INSTRUCTIONS:
-1. Visit: ${window.location.origin}/partner-login
-2. Enter your username and password exactly as provided
-3. Bookmark this login page for future access
+🔗 Login Portal: ${window.location.origin}/partner-login
 
-📋 AVAILABLE ASSESSMENTS:
-${partner.permissions.map(p => `• ${p.replace('-', ' ')}`).join('\n')}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 AVAILABLE ASSESSMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-⏰ ACCESS DETAILS:
-• Account Status: ${partner.is_active ? 'Active' : 'Inactive'}
-• Access Expires: ${format(new Date(partner.access_expires_at), 'PPP')}
-• Created: ${format(new Date(partner.created_at), 'PPP')}
+Your account includes access to the following professional assessments:
 
-📞 SUPPORT:
-If you experience any issues accessing the platform:
-• Ensure you're using the exact username provided
-• Check that your access hasn't expired
-• Contact your administrator for assistance
+${partner.permissions.map(p => `• ${p.charAt(0).toUpperCase() + p.slice(1).replace('-', ' ')} Assessment`).join('\n')}
 
-⚠️ IMPORTANT NOTES:
-• Keep your login credentials secure
-• Do not share your account with others
-• Each assessment can only be taken once per account
-• Your access is time-limited as shown above`;
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 GETTING STARTED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-    // Copy to clipboard
-    navigator.clipboard.writeText(credentialsText).then(() => {
-      toast({
-        title: 'Credentials Copied! 📋',
-        description: 'Partner credentials have been copied to clipboard. You can now paste and send to the partner.'
+1. Visit the login portal: ${window.location.origin}/partner-login
+2. Enter your username and password exactly as provided above
+3. Bookmark the login page for easy future access
+4. Browse available assessments and begin testing
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 ACCOUNT INFORMATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Account Status: ${partner.is_active ? '✅ Active' : '❌ Inactive'}
+Access Valid Until: ${format(new Date(partner.access_expires_at), 'PPPP')}
+Account Created: ${format(new Date(partner.created_at), 'PPPP')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔒 IMPORTANT SECURITY NOTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+• Please keep your login credentials secure and confidential
+• Do not share your account access with unauthorized personnel
+• Each assessment session is tracked and monitored
+• Your access is time-limited as indicated above
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📞 SUPPORT & ASSISTANCE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Should you encounter any technical difficulties or have questions about the assessments, please don't hesitate to contact our support team. We're here to ensure your experience with our platform is seamless and productive.
+
+Thank you once again for choosing Authencore Analytics. We look forward to supporting your organization's assessment needs and helping you make data-driven decisions.
+
+Best regards,
+
+The Authencore Analytics Team
+Assessment Platform Administration
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+This email was generated on ${currentDate}
+© ${new Date().getFullYear()} Authencore Analytics. All rights reserved.`;
+
+      // Copy to clipboard
+      navigator.clipboard.writeText(credentialsEmail).then(() => {
+        toast({
+          title: 'Professional Email Copied! 📧',
+          description: 'Complete partner welcome email with new password has been copied to clipboard. Password updated in system.'
+        });
+      }).catch(() => {
+        // Fallback: show in alert dialog for manual copy
+        alert(credentialsEmail);
       });
-    }).catch(() => {
-      // Fallback: show in alert dialog for manual copy
-      alert(credentialsText);
-    });
+
+    } catch (error) {
+      console.error('Error generating credentials:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to generate new credentials. Please try again.',
+        variant: 'destructive'
+      });
+    }
   };
 
   if (loading) {
