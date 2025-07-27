@@ -1,7 +1,10 @@
 // Comprehensive assessment data with descriptions and dimensions
+import { supabase } from '@/integrations/supabase/client';
 
-// Function to get logo URL for an assessment
+// Function to get logo URL for an assessment - tries multiple file extensions
 export const getAssessmentLogoUrl = (assessmentId: string): string => {
+  // This is a synchronous function, so we'll return the base URL pattern
+  // The actual extension checking will happen in components that use this
   return `https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${assessmentId}-logo.png`;
 };
 

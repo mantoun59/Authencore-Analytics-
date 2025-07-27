@@ -26,6 +26,7 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
   // Find the correct logo URL on component mount
   useEffect(() => {
     const findLogoUrl = async () => {
+      console.log(`🔍 Looking for logo for assessment: ${assessmentId}`);
       const extensions = ['png', 'jpg', 'jpeg', 'svg'];
       
       for (const ext of extensions) {
@@ -34,19 +35,26 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
           .from('assessment-logos')
           .getPublicUrl(fileName);
         
+        console.log(`⚡ Checking: ${data.publicUrl}`);
+        
         // Check if file exists by trying to fetch it
         try {
           const response = await fetch(data.publicUrl, { method: 'HEAD' });
           if (response.ok) {
+            console.log(`✅ Found logo: ${data.publicUrl}`);
             setLogoUrl(data.publicUrl);
             return; // Found a logo, stop checking other extensions
+          } else {
+            console.log(`❌ Not found (${response.status}): ${data.publicUrl}`);
           }
         } catch (error) {
+          console.log(`❌ Error checking: ${data.publicUrl}`, error);
           // Continue to next extension
         }
       }
       
       // No logo found, set error state
+      console.log(`🚫 No logo found for ${assessmentId}, using fallback`);
       setImageError(true);
       setIsLoading(false);
     };
