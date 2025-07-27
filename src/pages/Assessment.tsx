@@ -201,7 +201,7 @@ const Assessment = () => {
                       <AssessmentLogo 
                         assessmentId={assessment.id}
                         title={assessment.title}
-                        size="md"
+                        size="lg"
                         fallbackIcon={assessment.icon}
                       />
                       <div>
