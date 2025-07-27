@@ -162,12 +162,15 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
                 margin-bottom: 40px; 
                 border-bottom: 3px solid #2563eb;
                 padding-bottom: 20px;
+                background: #ffffff;
             }
             .logo { 
                 font-size: 28px; 
                 font-weight: bold; 
                 color: #2563eb; 
                 margin-bottom: 10px;
+                background: #ffffff;
+                padding: 10px;
             }
             .subtitle { color: #6b7280; font-size: 16px; }
             .report-info {
