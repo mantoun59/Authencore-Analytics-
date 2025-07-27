@@ -6,6 +6,7 @@ import { CheckCircle, Smartphone, MessageSquare, Brain, Shield, Heart, Scale } f
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
+import { AssessmentLogo } from '@/components/AssessmentLogo';
 
 const DigitalWellnessDescription = () => {
   const dimensions = [
@@ -52,6 +53,15 @@ const DigitalWellnessDescription = () => {
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
               60 Questions | 6 Dimensions | $12.99
             </Badge>
+          </div>
+          
+          <div className="flex justify-center mb-8">
+            <AssessmentLogo 
+              assessmentId="digital-wellness"
+              title="Digital Wellness Quotient"
+              size="2xl"
+              fallbackIcon="Smartphone"
+            />
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">

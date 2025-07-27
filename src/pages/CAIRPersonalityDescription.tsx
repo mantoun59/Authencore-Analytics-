@@ -74,7 +74,7 @@ const CAIRPersonalityDescription = () => {
             
             <div className="flex justify-center mb-8">
               <AssessmentLogo 
-                assessmentId="leadership-assessment"
+                assessmentId="cair-personality"
                 title="CAIR+ Personality Assessment"
                 size="2xl"
                 fallbackIcon="Brain"
