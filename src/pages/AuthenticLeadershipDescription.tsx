@@ -6,6 +6,7 @@ import { CheckCircle, Users, Target, Brain, Heart, Lightbulb, Star } from 'lucid
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
+import { AssessmentLogo } from '@/components/AssessmentLogo';
 
 const AuthenticLeadershipDescription = () => {
   const dimensions = [
@@ -52,6 +53,15 @@ const AuthenticLeadershipDescription = () => {
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
               120 Questions | 8 Dimensions | $34.99
             </Badge>
+          </div>
+          
+          <div className="flex justify-center mb-6">
+            <AssessmentLogo 
+              assessmentId="leadership-assessment"
+              title="Authentic Leadership Assessment"
+              size="xl"
+              fallbackIcon="Users"
+            />
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
