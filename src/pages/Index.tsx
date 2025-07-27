@@ -5,6 +5,7 @@ import PsychometricsInfo from "@/components/PsychometricsInfo";
 import HowItWorks from "@/components/HowItWorks";
 import Gallery from "@/components/Gallery";
 import Features from "@/components/Features";
+import FeaturedAssessments from "@/components/FeaturedAssessments";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
@@ -18,6 +19,7 @@ const Index = () => {
       <WhyChooseUs />
       <PsychometricsInfo />
       <HowItWorks />
+      <FeaturedAssessments />
       <Gallery />
       <Features />
       <CTA />
