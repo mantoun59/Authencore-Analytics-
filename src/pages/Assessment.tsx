@@ -197,19 +197,19 @@ const Assessment = () => {
               return (
                 <Card key={assessment.id} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
                   <CardHeader>
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex justify-center mb-6">
                       <AssessmentLogo 
                         assessmentId={assessment.id}
                         title={assessment.title}
-                        size="lg"
+                        size="xl"
                         fallbackIcon={assessment.icon}
                       />
-                      <div>
-                        <CardTitle className="text-xl">{assessment.title}</CardTitle>
-                        <Badge className="mt-1" variant="secondary">{assessment.badges[0]}</Badge>
-                      </div>
                     </div>
-                    <CardDescription className="text-base">
+                    <div className="text-center mb-4">
+                      <CardTitle className="text-xl">{assessment.title}</CardTitle>
+                      <Badge className="mt-2" variant="secondary">{assessment.badges[0]}</Badge>
+                    </div>
+                    <CardDescription className="text-base text-center">
                       {assessment.description}
                     </CardDescription>
                   </CardHeader>
