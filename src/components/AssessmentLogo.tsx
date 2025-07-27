@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/integrations/supabase/client';
 
 interface AssessmentLogoProps {
   assessmentId: string;
@@ -20,8 +21,38 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
 }) => {
   const [imageError, setImageError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [logoUrl, setLogoUrl] = useState<string | null>(null);
 
-  const logoUrl = `https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${assessmentId}-logo.png`;
+  // Find the correct logo URL on component mount
+  useEffect(() => {
+    const findLogoUrl = async () => {
+      const extensions = ['png', 'jpg', 'jpeg', 'svg'];
+      
+      for (const ext of extensions) {
+        const fileName = `${assessmentId}-logo.${ext}`;
+        const { data } = supabase.storage
+          .from('assessment-logos')
+          .getPublicUrl(fileName);
+        
+        // Check if file exists by trying to fetch it
+        try {
+          const response = await fetch(data.publicUrl, { method: 'HEAD' });
+          if (response.ok) {
+            setLogoUrl(data.publicUrl);
+            return; // Found a logo, stop checking other extensions
+          }
+        } catch (error) {
+          // Continue to next extension
+        }
+      }
+      
+      // No logo found, set error state
+      setImageError(true);
+      setIsLoading(false);
+    };
+    
+    findLogoUrl();
+  }, [assessmentId]);
 
   const sizeClasses = {
     sm: 'w-6 h-6',
