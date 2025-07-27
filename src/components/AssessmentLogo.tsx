@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
+import { Rocket, Brain, Shield, Globe, MessageSquare, Heart, Lightbulb, Zap, Monitor, Users, Target, CheckCircle2 } from 'lucide-react';
 
 interface AssessmentLogoProps {
   assessmentId: string;
@@ -22,6 +23,15 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
   const [imageError, setImageError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [logoUrl, setLogoUrl] = useState<string | null>(null);
+
+  // Get the proper Lucide icon component
+  const getIconComponent = (iconName: string) => {
+    const icons: { [key: string]: any } = {
+      Rocket, Brain, Shield, Globe, MessageSquare, Heart, 
+      Lightbulb, Zap, Monitor, Users, Target, CheckCircle2
+    };
+    return icons[iconName] || Target;
+  };
 
   // Find the correct logo URL on component mount
   useEffect(() => {
@@ -78,6 +88,22 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
 
   if (imageError || !logoUrl) {
     if (!showFallback) return null;
+    
+    // Check if fallbackIcon is a Lucide icon name or emoji
+    const isLucideIcon = /^[A-Z][a-zA-Z]*$/.test(fallbackIcon);
+    
+    if (isLucideIcon) {
+      const IconComponent = getIconComponent(fallbackIcon);
+      return (
+        <div className={cn(
+          'flex items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20',
+          sizeClasses[size],
+          className
+        )}>
+          <IconComponent className={cn('text-primary', sizeClasses[size])} />
+        </div>
+      );
+    }
     
     return (
       <div className={cn(
