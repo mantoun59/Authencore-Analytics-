@@ -55,11 +55,11 @@ const AuthenticLeadershipDescription = () => {
             </Badge>
           </div>
           
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-8">
             <AssessmentLogo 
               assessmentId="leadership-assessment"
               title="Authentic Leadership Assessment"
-              size="xl"
+              size="2xl"
               fallbackIcon="Users"
             />
           </div>

@@ -65,11 +65,11 @@ const CareerLaunchDescription = () => {
             </Badge>
           </div>
           
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-8">
             <AssessmentLogo 
               assessmentId="career-launch"
               title="CareerLaunch"
-              size="xl"
+              size="2xl"
               fallbackIcon="Rocket"
             />
           </div>

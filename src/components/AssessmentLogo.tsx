@@ -7,7 +7,7 @@ interface AssessmentLogoProps {
   assessmentId: string;
   title: string;
   className?: string;
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | '2xl';
   fallbackIcon?: string;
   showFallback?: boolean;
 }
@@ -76,14 +76,16 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
     sm: 'w-8 h-8',
     md: 'w-12 h-12', 
     lg: 'w-16 h-16',
-    xl: 'w-20 h-20'
+    xl: 'w-32 h-32',
+    '2xl': 'w-48 h-48'
   };
 
   const fallbackClasses = {
     sm: 'text-xs',
     md: 'text-lg',
     lg: 'text-2xl',
-    xl: 'text-4xl'
+    xl: 'text-6xl',
+    '2xl': 'text-8xl'
   };
 
   if (imageError || !logoUrl) {
