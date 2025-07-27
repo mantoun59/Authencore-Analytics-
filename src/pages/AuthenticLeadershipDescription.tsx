@@ -57,7 +57,7 @@ const AuthenticLeadershipDescription = () => {
           
           <div className="flex justify-center mb-8">
             <AssessmentLogo 
-              assessmentId="communication-styles"
+              assessmentId="leadership-assessment"
               title="Authentic Leadership Assessment"
               size="2xl"
               fallbackIcon="Users"

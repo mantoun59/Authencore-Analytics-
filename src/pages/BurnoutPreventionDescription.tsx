@@ -62,7 +62,7 @@ const BurnoutPreventionDescription = () => {
           
           <div className="flex justify-center mb-8">
             <AssessmentLogo 
-              assessmentId="faith-values"
+              assessmentId="stress-resilience"
               title="Burnout Prevention Index"
               size="2xl"
               fallbackIcon="Shield"
