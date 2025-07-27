@@ -77,7 +77,7 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
     md: 'w-12 h-12', 
     lg: 'w-16 h-16',
     xl: 'w-32 h-32',
-    '2xl': 'w-48 h-48'
+    '2xl': 'w-48 h-48 min-w-48 min-h-48'
   };
 
   const fallbackClasses = {
@@ -137,7 +137,7 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
         src={logoUrl}
         alt={`${title} logo`}
         className={cn(
-          'w-full h-full object-contain rounded-lg transition-opacity duration-200',
+          'w-full h-full object-contain rounded-lg transition-opacity duration-200 p-2',
           isLoading ? 'opacity-0' : 'opacity-100'
         )}
         onLoad={() => setIsLoading(false)}
