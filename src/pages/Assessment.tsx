@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare, Globe, BarChart3, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
 import { assessmentsData } from "@/data/assessmentsData";
+import { AssessmentLogo } from "@/components/AssessmentLogo";
 import assessmentConceptImage from "@/assets/assessment-concept.jpg";
 import LogoDisplay from "@/components/LogoDisplay";
 import { PaymentButton } from "@/components/PaymentButton";
@@ -197,7 +198,12 @@ const Assessment = () => {
                 <Card key={assessment.id} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
                   <CardHeader>
                     <div className="flex items-center gap-3 mb-4">
-                      <IconComponent className={`h-8 w-8 ${colorClasses.icon}`} />
+                      <AssessmentLogo 
+                        assessmentId={assessment.id}
+                        title={assessment.title}
+                        size="md"
+                        fallbackIcon={assessment.icon}
+                      />
                       <div>
                         <CardTitle className="text-xl">{assessment.title}</CardTitle>
                         <Badge className="mt-1" variant="secondary">{assessment.badges[0]}</Badge>
