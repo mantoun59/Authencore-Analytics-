@@ -1,4 +1,10 @@
 // Comprehensive assessment data with descriptions and dimensions
+
+// Function to get logo URL for an assessment
+export const getAssessmentLogoUrl = (assessmentId: string): string => {
+  return `https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${assessmentId}-logo.png`;
+};
+
 export interface AssessmentDimension {
   name: string;
   description: string;
@@ -21,6 +27,7 @@ export interface AssessmentData {
   icon: string;
   color: string;
   gradient: string;
+  logoUrl?: string;
 }
 
 export const assessmentsData: AssessmentData[] = [
@@ -33,6 +40,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 144,
     description: 'Comprehensive career discovery assessment analyzing interests, aptitudes, personality, and values with personalized insights',
     detailedDescription: 'The CareerLaunch assessment is a comprehensive career discovery tool that combines multiple validated instruments to provide deep insights into your career potential. Using the RIASEC model (Realistic, Investigative, Artistic, Social, Enterprising, Conventional), this assessment evaluates your interests, aptitudes, personality traits, and work values to generate personalized career recommendations.',
+    logoUrl: getAssessmentLogoUrl('career-launch'),
     whatItMeasures: [
       'Career interests using the RIASEC framework',
       'Cognitive aptitudes and problem-solving abilities',
@@ -77,6 +85,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 120,
     description: 'Comprehensive personality assessment with 100 personality questions + 20 validity checks across 4 key dimensions',
     detailedDescription: 'The CAIR+ Personality Assessment is a scientifically validated personality evaluation tool that measures four core dimensions crucial for workplace success. With 100 personality questions and 20 validity detection mechanisms, this comprehensive assessment provides reliable insights into personality traits that predict performance, job satisfaction, and team dynamics.',
+    logoUrl: getAssessmentLogoUrl('cair-personality'),
     whatItMeasures: [
       'Conscientiousness and work ethic',
       'Agreeableness and interpersonal effectiveness',
@@ -118,6 +127,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 102,
     description: 'Comprehensive burnout prevention assessment evaluating stress levels, risk factors, and resilience capabilities across 7 dimensions',
     detailedDescription: 'The Burnout Prevention Index assessment evaluates your current stress levels, risk factors, and resilience capabilities to prevent burnout proactively. Covering 7 dimensions, it empowers you to maintain high performance with optimal health and wellbeing.',
+    logoUrl: getAssessmentLogoUrl('stress-resilience'),
     whatItMeasures: [
       'Current stress levels and burnout risk factors',
       'Workload management and task prioritization abilities',
@@ -161,6 +171,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 60,
     description: 'Comprehensive cultural intelligence assessment with real-world scenarios and global business challenges',
     detailedDescription: 'The Cultural Intelligence Assessment measures your ability to function effectively in culturally diverse environments. Through real-world business scenarios, email adaptation challenges, and cross-cultural problem-solving tasks, this assessment evaluates your cultural competency across multiple dimensions.',
+    logoUrl: getAssessmentLogoUrl('cultural-intelligence'),
     whatItMeasures: [
       'Cultural knowledge and awareness',
       'Cross-cultural communication effectiveness',
@@ -202,6 +213,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 80,
     description: 'Comprehensive communication assessment with linguistic analysis and real-time simulations',
     detailedDescription: 'The Communication Styles Assessment provides deep insights into your communication DNA, analyzing how you express ideas, process information, and interact with others. Using advanced linguistic analysis and interactive simulations, this assessment reveals your unique communication patterns and effectiveness across different channels and contexts.',
+    logoUrl: getAssessmentLogoUrl('communication-styles'),
     whatItMeasures: [
       'Communication style preferences',
       'Channel effectiveness patterns',
@@ -245,6 +257,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 60,
     description: 'Comprehensive emotional intelligence assessment measuring self-awareness, empathy, and social skills',
     detailedDescription: 'The Emotional Intelligence Assessment evaluates your ability to understand, manage, and effectively use emotions in yourself and others. This scientifically-based assessment measures key EQ competencies that are critical for leadership, teamwork, and professional success.',
+    logoUrl: getAssessmentLogoUrl('emotional-intelligence'),
     whatItMeasures: [
       'Self-awareness and emotional recognition',
       'Self-regulation and impulse control',
@@ -286,6 +299,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 90,
     description: 'Comprehensive 90-question assessment using validated instruments to analyze faith-based values alignment across 42 dimensions',
     detailedDescription: 'The Faith & Values Alignment Index (FVAI) is a comprehensive 90-question assessment using validated psychological instruments to understand how your daily thoughts, decisions, and behaviours align with your core faith-based values. Covering 42 detailed dimensions across spiritual foundations, moral values, workplace ethics, and life integration, FVAI empowers personal growth, spiritual coaching, and faith-based leadership development through evidence-based insights.',
+    logoUrl: getAssessmentLogoUrl('faith-values'),
     whatItMeasures: [
       'Spiritual/Faith foundations and practices (12 dimensions)',
       'Universal human values and moral frameworks (8 dimensions)',
@@ -327,6 +341,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 45,
     description: 'Specialized assessment for Gen Z workplace preferences, values, and career expectations',
     detailedDescription: 'The Gen Z Workplace Assessment is specifically designed to understand the unique workplace preferences, communication styles, and career expectations of Generation Z professionals. This assessment provides insights into how Gen Z individuals thrive in modern workplace environments.',
+    logoUrl: getAssessmentLogoUrl('genz-assessment'),
     whatItMeasures: [
       'Digital-first work preferences',
       'Work-life balance priorities',
@@ -368,6 +383,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 60,
     description: 'Assessment of digital habits, screen time impact, and technology wellness in professional settings',
     detailedDescription: 'The Digital Wellness Assessment evaluates your relationship with technology and its impact on productivity, well-being, and professional performance. This assessment provides insights into digital habits and offers strategies for optimizing technology use in work environments.',
+    logoUrl: getAssessmentLogoUrl('digital-wellness'),
     whatItMeasures: [
       'Digital usage patterns and habits',
       'Technology impact on productivity',
@@ -409,6 +425,7 @@ export const assessmentsData: AssessmentData[] = [
     questions: 120,
     description: 'Comprehensive authentic leadership assessment evaluating management style, team effectiveness, and leadership potential',
     detailedDescription: 'The Authentic Leadership Assessment provides a comprehensive evaluation of leadership capabilities across multiple dimensions. This assessment combines behavioral analysis, situational judgment, and 360-degree perspectives to provide insights into current leadership effectiveness and development opportunities.',
+    logoUrl: getAssessmentLogoUrl('leadership-assessment'),
     whatItMeasures: [
       'Leadership style and approach',
       'Team management effectiveness',
