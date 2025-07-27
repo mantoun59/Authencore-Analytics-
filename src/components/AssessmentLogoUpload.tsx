@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, Image, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -11,6 +11,40 @@ export const AssessmentLogoUpload = () => {
   const [uploading, setUploading] = useState<Record<string, boolean>>({});
   const [uploadedLogos, setUploadedLogos] = useState<Record<string, string>>({});
   const { toast } = useToast();
+
+  // Load existing logos on component mount
+  useEffect(() => {
+    const loadExistingLogos = async () => {
+      const logoUrls: Record<string, string> = {};
+      
+      for (const assessment of assessmentsData) {
+        // Try common file extensions
+        const extensions = ['png', 'jpg', 'jpeg', 'svg'];
+        
+        for (const ext of extensions) {
+          const fileName = `${assessment.id}-logo.${ext}`;
+          const { data } = supabase.storage
+            .from('assessment-logos')
+            .getPublicUrl(fileName);
+          
+          // Check if file exists by trying to fetch it
+          try {
+            const response = await fetch(data.publicUrl, { method: 'HEAD' });
+            if (response.ok) {
+              logoUrls[assessment.id] = data.publicUrl;
+              break; // Found a logo, stop checking other extensions
+            }
+          } catch (error) {
+            // Continue to next extension
+          }
+        }
+      }
+      
+      setUploadedLogos(logoUrls);
+    };
+    
+    loadExistingLogos();
+  }, []);
 
   const handleFileUpload = async (file: File, assessmentId: string) => {
     try {
