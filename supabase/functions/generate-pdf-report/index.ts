@@ -389,12 +389,14 @@ serve(async (req) => {
             <p><strong>Assessment Framework:</strong> ${displayName} utilizes validated psychometric principles measuring key professional competencies.</p>
             <p><strong>Dimensions Measured:</strong> ${Object.keys(dimensionScores).map(d => d.replace(/_/g, ' ')).join(', ')}</p>
             <p><strong>Scoring Method:</strong> Normative scoring based on professional population benchmarks</p>
+            ${reportType === 'employer' ? `
             <p><strong>Reliability Metrics:</strong></p>
             <ul style="margin: 10px 0;">
                 <li><strong>Internal Consistency:</strong> α = ${reliabilityMetrics.consistencyIndex}</li>
                 <li><strong>Completion Time:</strong> ${reliabilityMetrics.completionTime}</li>
                 <li><strong>Response Pattern:</strong> ${reliabilityMetrics.responsePattern}</li>
             </ul>
+            ` : ''}
         </div>
     </div>
 
@@ -542,6 +544,7 @@ serve(async (req) => {
         </div>
     </div>
 
+    ${reportType === 'employer' ? `
     <div class="section">
         <h2>Quality Assurance & Validity Indicators</h2>
         <div style="background: #E8F5E8; padding: 20px; border-radius: 8px; border-left: 4px solid #4CAF50;">
@@ -561,6 +564,7 @@ serve(async (req) => {
             </div>
         </div>
     </div>
+    ` : ''}
 
     <!-- Enhanced Interview Guide & Assessment Questions (Employer Reports Only) -->
     ${reportType === 'employer' ? `
