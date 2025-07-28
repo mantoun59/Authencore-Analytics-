@@ -125,7 +125,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   const getDevelopmentAreas = () => results?.improvements || [];
   const getRecommendations = () => results?.recommendations || [];
 
-  // Generate simple PDF report
+  // Generate simple PDF report with debugging
   const downloadReport = async () => {
     if (!results) {
       toast.error('No assessment data available');
@@ -133,6 +133,9 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     }
 
     try {
+      console.log('Results data:', results);
+      console.log('Dimensions data:', results.dimensions);
+      
       const doc = new jsPDF();
       let yPosition = 20;
 
@@ -159,7 +162,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       // Overall Score
       doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
-      doc.text(`Overall Score: ${results.overallScore}/100`, 20, yPosition);
+      const overallScore = typeof results.overallScore === 'number' ? results.overallScore : 0;
+      doc.text(`Overall Score: ${overallScore}/100`, 20, yPosition);
       yPosition += 15;
 
       // Dimensions
@@ -169,14 +173,35 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
       doc.setFontSize(12);
       doc.setFont('helvetica', 'normal');
-      results.dimensions.forEach((dim) => {
-        if (yPosition > 250) {
-          doc.addPage();
-          yPosition = 20;
-        }
-        doc.text(`${dim.name}: ${dim.score}/100`, 25, yPosition);
+      
+      // Check if dimensions is an array or object
+      if (Array.isArray(results.dimensions)) {
+        results.dimensions.forEach((dim) => {
+          if (yPosition > 250) {
+            doc.addPage();
+            yPosition = 20;
+          }
+          const dimensionName = String(dim.name || 'Unknown Dimension');
+          const dimensionScore = typeof dim.score === 'number' ? dim.score : 0;
+          doc.text(`${dimensionName}: ${dimensionScore}/100`, 25, yPosition);
+          yPosition += 8;
+        });
+      } else if (typeof results.dimensions === 'object') {
+        // Handle object format
+        Object.entries(results.dimensions).forEach(([key, value]) => {
+          if (yPosition > 250) {
+            doc.addPage();
+            yPosition = 20;
+          }
+          const dimensionName = String(key).replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+          const dimensionScore = typeof value === 'number' ? value : (typeof value === 'object' && value && 'score' in value ? value.score : 0);
+          doc.text(`${dimensionName}: ${dimensionScore}/100`, 25, yPosition);
+          yPosition += 8;
+        });
+      } else {
+        doc.text('No dimension data available', 25, yPosition);
         yPosition += 8;
-      });
+      }
 
       // Save PDF
       const fileName = `${assessmentType}-report-${new Date().toISOString().split('T')[0]}.pdf`;
