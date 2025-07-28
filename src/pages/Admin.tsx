@@ -6,7 +6,6 @@ import AdminGuideGenerator from "@/components/AdminGuideGenerator";
 import PurchaseAnalyticsDashboard from "@/components/PurchaseAnalyticsDashboard";
 import SEOOptimizer from "@/components/SEOOptimizer";
 import { EnhancedAIControls } from "@/components/EnhancedAIControls";
-import { AssessmentLogoUpload } from "@/components/AssessmentLogoUpload";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 const AdminPage = () => {
   return (
@@ -22,7 +21,7 @@ const AdminPage = () => {
             </div>
 
             <Tabs defaultValue="partners" className="w-full">
-              <TabsList className="grid w-full grid-cols-9">
+              <TabsList className="grid w-full grid-cols-8">
                 <TabsTrigger value="partners">Partners</TabsTrigger>
                 <TabsTrigger value="testing">Testing</TabsTrigger>
                 <TabsTrigger value="ai-engine">AI Engine</TabsTrigger>
@@ -30,7 +29,6 @@ const AdminPage = () => {
                 <TabsTrigger value="purchases">Purchase Reports</TabsTrigger>
                 <TabsTrigger value="seo-marketing">SEO & Marketing</TabsTrigger>
                 <TabsTrigger value="setup-guide">Setup Guide</TabsTrigger>
-                <TabsTrigger value="logos">Assessment Logos</TabsTrigger>
                 <TabsTrigger value="images">Images</TabsTrigger>
               </TabsList>
               
@@ -121,10 +119,6 @@ const AdminPage = () => {
               
               <TabsContent value="setup-guide" className="mt-6">
                 <AdminGuideGenerator />
-              </TabsContent>
-              
-              <TabsContent value="logos" className="mt-6">
-                <AssessmentLogoUpload />
               </TabsContent>
               
               <TabsContent value="images" className="mt-6">

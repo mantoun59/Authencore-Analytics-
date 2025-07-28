@@ -6,7 +6,6 @@ import { CheckCircle, Eye, Settings, Users, Handshake } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
-import { AssessmentLogo } from '@/components/AssessmentLogo';
 
 const EmotionalIntelligenceDescription = () => {
   const dimensions = [
@@ -43,15 +42,6 @@ const EmotionalIntelligenceDescription = () => {
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
               60 Questions | 4 Dimensions | $24.99
             </Badge>
-          </div>
-          
-          <div className="flex justify-center mb-8">
-            <AssessmentLogo 
-              assessmentId="emotional-intelligence"
-              title="Emotional Intelligence Profiler"
-              size="2xl"
-              fallbackIcon="Heart"
-            />
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">

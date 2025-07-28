@@ -23,7 +23,6 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { AssessmentLogo } from "@/components/AssessmentLogo";
 import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -50,10 +49,7 @@ const getAssessmentTypeForPDF = (assessmentType: string): string => {
     'digital-wellness': 'digital_wellness',
     'digital': 'digital_wellness',
     'faith-values': 'faith_values',
-    'faith': 'faith_values',
-    'genz-workplace': 'genz_workplace',
-    'genz-assessment': 'genz_workplace',
-    'genz': 'genz_workplace'
+    'genz': 'genz_assessment'
   };
   
   return typeMapping[assessmentType] || assessmentType;
@@ -80,84 +76,53 @@ const SampleReports = () => {
   const generateSamplePDF = async () => {
     setIsGenerating(true);
     try {
-      console.log("🔄 Starting PDF generation for:", selectedAssessment, "type:", reportType);
-      
       const sampleData = reportType === 'employer' 
         ? getSampleEmployerReport(selectedAssessment)
         : getSampleCandidateReport(selectedAssessment);
       
-      // AUDIT FIX 1: Explicit serialization and data inspection
-      console.log("📊 Sample data structure:", JSON.stringify(sampleData, null, 2));
-      
-      // AUDIT FIX 2: Ensure all data is properly formatted for PDF
-      const sanitizedData = {
-        ...sampleData,
-        // Ensure all scores are numbers, not objects
-        dimensionScores: Object.fromEntries(
-          Object.entries(sampleData.dimensionScores || {}).map(([key, value]: [string, any]) => [
-            key, 
-            {
-              ...value,
-              score: typeof value.score === 'number' ? value.score : parseInt(String(value.score)) || 0
-            }
-          ])
-        )
-      };
-      
-      console.log("🧹 Sanitized data:", JSON.stringify(sanitizedData, null, 2));
-      
       // Format data for PDF generation function
       const pdfRequestData = {
         assessmentType: getAssessmentTypeForPDF(selectedAssessment),
-        results: sanitizedData,
+        results: sampleData,
         userData: {
-          name: sanitizedData.candidateInfo.name,
-          email: sanitizedData.candidateInfo.email,
-          date: sanitizedData.candidateInfo.completionDate
+          name: sampleData.candidateInfo.name,
+          email: sampleData.candidateInfo.email,
+          date: sampleData.candidateInfo.completionDate
         }
       };
       
-      console.log("📋 PDF request data:", JSON.stringify(pdfRequestData, null, 2));
+      
       
       toast.info(`Generating sample ${reportType} PDF report...`);
       
       try {
-        console.log("🚀 Calling PDF generation function...");
+        
         const response = await supabase.functions.invoke('generate-pdf-report', {
           body: pdfRequestData
         });
 
-        console.log("📥 PDF generation response:", response);
+        
 
-        if (response.data?.reportHtml) {
-          console.log("✅ PDF generation successful, opening report");
-          
-          // AUDIT FIX: Ensure async HTML content is fully loaded before display
-          const htmlContent = response.data.reportHtml;
-          console.log("📄 HTML content length:", htmlContent.length);
-          console.log("🔍 HTML content preview:", htmlContent.substring(0, 200));
+        if (response.data) {
           
           // Open HTML report in new window for PDF printing
           const newWindow = window.open('', '_blank');
           if (newWindow) {
-            newWindow.document.write(htmlContent);
+            newWindow.document.write(response.data);
             newWindow.document.close();
             
-            // AUDIT FIX: Wait for images to load before triggering print
             setTimeout(() => {
-              console.log("🖨️ Triggering print dialog...");
               newWindow.focus();
               newWindow.print();
-            }, 2000); // Increased timeout to allow image loading
+            }, 1000);
           }
           toast.success(`Sample ${reportType} PDF report generated successfully!`);
         } else if (response.error) {
           console.error('❌ PDF generation error:', response.error);
           throw new Error(`PDF generation failed: ${response.error.message}`);
         } else {
-          console.error('❌ No HTML content returned from PDF service');
-          console.log('🔍 Full response:', JSON.stringify(response, null, 2));
-          throw new Error('No HTML content returned from PDF service');
+          console.error('❌ No data returned from PDF service');
+          throw new Error('No data returned from PDF service');
         }
       } catch (pdfError) {
         console.error('❌ PDF service failed, using HTML fallback:', pdfError);
@@ -1337,12 +1302,12 @@ const SampleReports = () => {
           <Card className="mb-8">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <AssessmentLogo 
-                  assessmentId={selectedAssessment}
-                  title={currentAssessment?.title || 'Assessment Report'}
-                  size="lg"
-                  fallbackIcon={currentAssessment?.icon?.name || "Target"}
-                />
+                <div className={`p-2 rounded-lg ${currentAssessment?.bgColor || 'bg-gray-50'}`}>
+                  {currentAssessment?.icon && (() => {
+                    const IconComponent = currentAssessment.icon;
+                    return <IconComponent className={`h-6 w-6 ${currentAssessment.color || 'text-gray-600'}`} />;
+                  })()}
+                </div>
                 <div>
                   <CardTitle>{currentAssessment?.title || 'Assessment Report'}</CardTitle>
                   <CardDescription>{currentAssessment?.description || 'Sample assessment report'}</CardDescription>

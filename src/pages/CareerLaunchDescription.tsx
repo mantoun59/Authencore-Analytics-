@@ -6,7 +6,6 @@ import { CheckCircle, Heart, Brain, Briefcase, User, Zap, BookOpen, Users, Trend
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
-import { AssessmentLogo } from '@/components/AssessmentLogo';
 
 const CareerLaunchDescription = () => {
   const dimensions = [
@@ -63,15 +62,6 @@ const CareerLaunchDescription = () => {
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
               144 Questions | 8 Dimensions | $9.99
             </Badge>
-          </div>
-          
-          <div className="flex justify-center mb-8">
-            <AssessmentLogo 
-              assessmentId="career-launch"
-              title="CareerLaunch"
-              size="2xl"
-              fallbackIcon="Rocket"
-            />
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">

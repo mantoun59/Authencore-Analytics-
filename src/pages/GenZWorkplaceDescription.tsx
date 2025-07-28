@@ -6,7 +6,6 @@ import { CheckCircle, Smartphone, Target, Heart, MessageSquare, Scale, TrendingU
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
-import { AssessmentLogo } from '@/components/AssessmentLogo';
 
 const GenZWorkplaceDescription = () => {
   const dimensions = [
@@ -53,15 +52,6 @@ const GenZWorkplaceDescription = () => {
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
               45 Questions | 6 Dimensions | $9.99
             </Badge>
-          </div>
-          
-          <div className="flex justify-center mb-8">
-            <AssessmentLogo 
-              assessmentId="genz-assessment"
-              title="Gen Z Workplace Assessment"
-              size="2xl"
-              fallbackIcon="Users"
-            />
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">

@@ -6,7 +6,6 @@ import { Brain, Users, Target, Shield, TrendingUp, CheckCircle, ArrowRight, Cloc
 import { Link } from "react-router-dom";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { AssessmentLogo } from '@/components/AssessmentLogo';
 
 const CAIRPersonalityDescription = () => {
   const dimensions = [
@@ -71,16 +70,6 @@ const CAIRPersonalityDescription = () => {
               <Brain className="h-4 w-4 mr-2" />
               Premium Personality Assessment
             </Badge>
-            
-            <div className="flex justify-center mb-8">
-              <AssessmentLogo 
-                assessmentId="cair-personality"
-                title="CAIR+ Personality Assessment"
-                size="2xl"
-                fallbackIcon="Brain"
-              />
-            </div>
-            
             <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">
               CAIR+ Personality Assessment
             </h1>

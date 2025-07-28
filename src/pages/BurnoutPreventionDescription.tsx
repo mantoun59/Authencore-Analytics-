@@ -6,7 +6,6 @@ import { CheckCircle, Briefcase, Battery, Shield, Users, Scale, Brain, Heart } f
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
-import { AssessmentLogo } from '@/components/AssessmentLogo';
 
 const BurnoutPreventionDescription = () => {
   const dimensions = [
@@ -58,15 +57,6 @@ const BurnoutPreventionDescription = () => {
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
               102 Questions | 7 Dimensions | $39.99
             </Badge>
-          </div>
-          
-          <div className="flex justify-center mb-8">
-            <AssessmentLogo 
-              assessmentId="stress-resilience"
-              title="Burnout Prevention Index"
-              size="2xl"
-              fallbackIcon="Shield"
-            />
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">

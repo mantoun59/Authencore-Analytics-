@@ -6,7 +6,6 @@ import { CheckCircle, Eye, Megaphone, Heart, Ear, Users, Target } from 'lucide-r
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
-import { AssessmentLogo } from '@/components/AssessmentLogo';
 
 const CommunicationStyleDescription = () => {
   const dimensions = [
@@ -53,15 +52,6 @@ const CommunicationStyleDescription = () => {
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
               80 Questions | 6 Dimensions | $24.99
             </Badge>
-          </div>
-          
-          <div className="flex justify-center mb-8">
-            <AssessmentLogo 
-              assessmentId="communication-styles"
-              title="Communication Style Profiler"
-              size="2xl"
-              fallbackIcon="MessageSquare"
-            />
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">

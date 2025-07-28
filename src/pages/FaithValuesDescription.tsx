@@ -6,7 +6,6 @@ import { CheckCircle, Brain, Scale, User, Heart, Users, Globe, CheckSquare } fro
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { Link } from 'react-router-dom';
-import { AssessmentLogo } from '@/components/AssessmentLogo';
 
 const FaithValuesDescription = () => {
   const dimensions = [
@@ -53,15 +52,6 @@ const FaithValuesDescription = () => {
             <Badge variant="secondary" className="px-4 py-2 text-lg font-semibold">
               90 Questions | 42 Dimensions | $19.99
             </Badge>
-          </div>
-          
-          <div className="flex justify-center mb-8">
-            <AssessmentLogo 
-              assessmentId="faith-values"
-              title="FVAI Faith & Values Alignment Index"
-              size="2xl"
-              fallbackIcon="Heart"
-            />
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-primary mb-6">
