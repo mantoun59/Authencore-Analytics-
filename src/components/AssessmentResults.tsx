@@ -125,7 +125,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   const getDevelopmentAreas = () => results?.improvements || [];
   const getRecommendations = () => results?.recommendations || [];
 
-  // Generate PDF using consolidated report service
+  // Generate simple PDF report
   const downloadReport = async () => {
     if (!results) {
       toast.error('No assessment data available');
@@ -133,25 +133,57 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     }
 
     try {
-      const unifiedResult = {
-        assessmentId: 'assessment-' + Date.now(),
-        assessmentType: assessmentType,
-        candidateInfo: candidateInfo || { name: '', email: '' },
-        dimensionScores: results.dimensions.reduce((acc, dim) => ({ ...acc, [dim.name]: dim.score }), {}),
-        developmentAreas: results.improvements?.map(imp => imp.category) || [],
-        overallScore: results.overallScore,
-        timestamp: new Date().toISOString(),
-        validityIndicators: { consistencyScore: 0.8, fakeGoodIndicator: 0.2, flaggedQuestions: [] },
-        reportData: { summary: '', insights: [], recommendations: [] },
-        profile: typeof results.profile === 'string' ? results.profile : '',
-        strengths: results.strengths || [],
-        recommendations: results.recommendations?.flatMap(r => 
-          typeof r === 'string' ? [r] : r.items || []
-        ) || []
-      };
-      await reportService.generateComprehensiveReport(unifiedResult);
+      const doc = new jsPDF();
+      let yPosition = 20;
+
+      // Header
+      doc.setFontSize(20);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`${assessmentType.toUpperCase()} Assessment Report`, 20, yPosition);
+      yPosition += 20;
+
+      // Candidate info
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      if (candidateInfo?.name) {
+        doc.text(`Candidate: ${candidateInfo.name}`, 20, yPosition);
+        yPosition += 8;
+      }
+      if (candidateInfo?.email) {
+        doc.text(`Email: ${candidateInfo.email}`, 20, yPosition);
+        yPosition += 8;
+      }
+      doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, yPosition);
+      yPosition += 15;
+
+      // Overall Score
+      doc.setFontSize(16);
+      doc.setFont('helvetica', 'bold');
+      doc.text(`Overall Score: ${results.overallScore}/100`, 20, yPosition);
+      yPosition += 15;
+
+      // Dimensions
+      doc.setFontSize(14);
+      doc.text('Dimension Scores:', 20, yPosition);
+      yPosition += 10;
+
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'normal');
+      results.dimensions.forEach((dim) => {
+        if (yPosition > 250) {
+          doc.addPage();
+          yPosition = 20;
+        }
+        doc.text(`${dim.name}: ${dim.score}/100`, 25, yPosition);
+        yPosition += 8;
+      });
+
+      // Save PDF
+      const fileName = `${assessmentType}-report-${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(fileName);
+      toast.success('PDF report downloaded successfully!');
     } catch (error) {
-      // Error generating PDF
+      console.error('PDF generation error:', error);
       toast.error('Failed to generate PDF report');
     }
   };
