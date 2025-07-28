@@ -1,0 +1,153 @@
+{
+  "common": {
+    "loading": "Laden...",
+    "submit": "Absenden",
+    "cancel": "Abbrechen", 
+    "save": "Speichern",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "close": "Schließen",
+    "yes": "Ja",
+    "no": "Nein",
+    "email": "E-Mail",
+    "password": "Passwort",
+    "name": "Name",
+    "phone": "Telefon",
+    "address": "Adresse",
+    "age": "Alter",
+    "gender": "Geschlecht",
+    "male": "Männlich",
+    "female": "Weiblich",
+    "other": "Anderes",
+    "preferNotToSay": "Möchte nicht angeben",
+    "selectLanguage": "Sprache auswählen"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "about": "Über uns",
+    "assessments": "Bewertungen",
+    "partnerEmployer": "Partner/Arbeitgeber",
+    "admin": "Admin",
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "signOut": "Abmelden",
+    "dashboard": "Dashboard"
+  },
+  "hero": {
+    "title": "Fortgeschrittene KI-gestützte Psychometrie",
+    "subtitle": "Entschlüsseln Sie Persönlichkeit, Verhalten und Potenzial mit wissenschaftlich validierten Bewertungen und KI-gestützten Erkenntnissen",
+    "getStarted": "Loslegen",
+    "learnMore": "Mehr erfahren",
+    "tagline": "Gedanken messen. Zukunft gestalten."
+  },
+  "features": {
+    "title": "Bewertungsmerkmale",
+    "subtitle": "Professionelle psychologische Bewertungstools zur genauen Erkennung von Persönlichkeit, Verhalten und kognitiven Fähigkeiten",
+    "comprehensive": {
+      "title": "Umfassende Bewertungen",
+      "description": "Professionelle psychologische Bewertungen zu Persönlichkeit, kognitiven Fähigkeiten, emotionaler Intelligenz und Verhaltensmustern."
+    },
+    "reports": {
+      "title": "Detaillierte Berichte",
+      "description": "Tiefgreifende Analyseberichte mit umsetzbaren Erkenntnissen, Empfehlungen und auf individuelle Ergebnisse zugeschnittene Entwicklungsmöglichkeiten."
+    },
+    "secure": {
+      "title": "Sicher und vertraulich",
+      "description": "Ihre Bewertungsdaten sind durch Sicherheit auf Unternehmensebene geschützt. Alle Informationen bleiben streng vertraulich."
+    },
+    "realTime": {
+      "title": "Sofortige Ergebnisse",
+      "description": "Erhalten Sie Ihre umfassenden Bewertungsergebnisse sofort nach Abschluss mit herunterladbaren PDF-Berichten."
+    },
+    "aiPowered": {
+      "title": "KI-gestützt",
+      "description": "Fortschrittliche künstliche Intelligenz analysiert Ihre Antworten für tiefere Erkenntnisse und personalisierte Empfehlungen."
+    }
+  },
+  "assessments": {
+    "careerLaunch": {
+      "title": "Karrierestart",
+      "description": "Umfassende Bewertung der Arbeitsbereitschaft für Berufseinsteiger",
+      "duration": "25-30 Minuten"
+    },
+    "culturalIntelligence": {
+      "title": "Kulturelle Intelligenz",
+      "description": "Bewerten Sie Ihre Fähigkeit, effektiv in multikulturellen Umgebungen zu arbeiten",
+      "duration": "20-25 Minuten"
+    },
+    "emotionalIntelligence": {
+      "title": "Emotionale Intelligenz",
+      "description": "Messen Sie Ihre Fähigkeit, Emotionen zu verstehen und zu verwalten",
+      "duration": "20-25 Minuten"
+    },
+    "communication": {
+      "title": "Kommunikationsstile",
+      "description": "Entdecken Sie Ihre bevorzugten Kommunikationsmuster und -stile",
+      "duration": "15-20 Minuten"
+    },
+    "leadership": {
+      "title": "Authentische Führung",
+      "description": "Bewerten Sie Ihren Führungsstil und Ihr Potenzial",
+      "duration": "25-30 Minuten"
+    },
+    "stress": {
+      "title": "Stressresilienz",
+      "description": "Verstehen Sie Ihre Stressbewältigungsstrategien und Widerstandsfähigkeit",
+      "duration": "20-25 Minuten"
+    },
+    "genZ": {
+      "title": "GenZ Arbeitsplatz",
+      "description": "Speziell für die Generation Z entwickelte Arbeitsplatzbewertung",
+      "duration": "20-25 Minuten"
+    },
+    "digitalWellness": {
+      "title": "Digitales Wohlbefinden",
+      "description": "Bewerten Sie Ihre digitalen Gewohnheiten und ihr Wohlbefinden",
+      "duration": "15-20 Minuten"
+    },
+    "faithValues": {
+      "title": "Glaube und Werte",
+      "description": "Erkunden Sie Ihre Kernwerte und Überzeugungen",
+      "duration": "20-25 Minuten"
+    },
+    "burnoutPrevention": {
+      "title": "Burnout-Prävention",
+      "description": "Identifizieren Sie Burnout-Risiken und Präventionsstrategien",
+      "duration": "25-30 Minuten"
+    }
+  },
+  "about": {
+    "mission": "Unsere Mission ist es, fortschrittliche psychometrische Bewertungen zugänglich zu machen",
+    "vision": "Eine Welt zu schaffen, in der jeder sein volles Potenzial verstehen kann",
+    "values": "Wissenschaftliche Genauigkeit, Privatsphäre und persönliche Entwicklung"
+  },
+  "footer": {
+    "company": "Unternehmen",
+    "resources": "Ressourcen",
+    "legal": "Rechtliches",
+    "contact": "Kontakt",
+    "tagline": "Gedanken messen. Zukunft gestalten.",
+    "copyright": "Alle Rechte vorbehalten. Fortgeschrittene KI-gestützte Talentbewertungslösungen"
+  },
+  "auth": {
+    "signIn": "Anmelden",
+    "signUp": "Registrieren",
+    "signOut": "Abmelden",
+    "password": "Passwort",
+    "forgotPassword": "Passwort vergessen?",
+    "createAccount": "Konto erstellen",
+    "alreadyHaveAccount": "Haben Sie bereits ein Konto?"
+  },
+  "errors": {
+    "generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+    "network": "Netzwerkfehler. Überprüfen Sie Ihre Verbindung.",
+    "validation": "Bitte füllen Sie alle erforderlichen Felder aus.",
+    "authentication": "Authentifizierungsfehler. Bitte melden Sie sich erneut an."
+  },
+  "success": {
+    "saved": "Erfolgreich gespeichert",
+    "submitted": "Erfolgreich eingereicht",
+    "updated": "Erfolgreich aktualisiert",
+    "deleted": "Erfolgreich gelöscht"
+  }
+}
