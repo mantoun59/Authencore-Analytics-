@@ -1,10 +1,12 @@
 import { Mail, Phone, MapPin, ExternalLink, Facebook, Twitter, Instagram, Linkedin } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import LogoDisplay from "@/components/LogoDisplay";
 import { formatCopyrightLine } from "@/utils/legalNotices";
 
 const Footer = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleHashNavigation = (hash: string) => {
     navigate('/compliance');
@@ -22,7 +24,7 @@ const Footer = () => {
               <LogoDisplay size="sm" showTagline={true} />
             </div>
             <p className="text-sm text-foreground mb-4">
-              Measuring Minds. Shaping Futures.
+              {t("footer.tagline")}
             </p>
             
             <div className="space-y-4">
@@ -91,26 +93,26 @@ const Footer = () => {
           {/* Middle Section - Quick Links */}
           <div className="space-y-6">
             <h4 className="text-xl font-semibold text-foreground">
-              Quick Links
+              {t("footer.resources")}
             </h4>
             <div className="space-y-2">
               <Link
                 to="/"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                Home
+                {t("navigation.home")}
               </Link>
               <Link
                 to="/assessment"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                Assessments
+                {t("navigation.assessments")}
               </Link>
               <Link
                 to="/about"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                About Us
+                {t("navigation.about")}
               </Link>
               <Link
                 to="/faq"
@@ -130,7 +132,7 @@ const Footer = () => {
           {/* Right Section - Contact */}
           <div className="space-y-6">
             <h4 className="text-xl font-semibold text-foreground">
-              Contact
+              {t("footer.contact")}
             </h4>
             
             <div className="space-y-4">

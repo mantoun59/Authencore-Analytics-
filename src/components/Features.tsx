@@ -1,43 +1,46 @@
 import { Brain, FileText, Shield, Zap, Users, Target, BarChart3, Award } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 import analyticsWorkspaceImage from "@/assets/analytics-workspace.jpg";
 
 const Features = () => {
+  const { t } = useTranslation();
+  
   const features = [
     {
       icon: Brain,
-      title: "Comprehensive Assessments",
-      description: "Professional psychological assessments covering personality, cognitive abilities, emotional intelligence, and behavioral patterns.",
+      title: t("features.comprehensive.title"),
+      description: t("features.comprehensive.description"),
       gradient: "from-blue-500 to-purple-600"
     },
     {
       icon: FileText,
-      title: "Detailed Reports",
-      description: "In-depth analysis reports with actionable insights, recommendations, and development opportunities tailored to individual results.",
+      title: t("features.reports.title"),
+      description: t("features.reports.description"),
       gradient: "from-green-500 to-teal-600"
     },
     {
       icon: Shield,
-      title: "Secure & Confidential",
-      description: "Your assessment data is protected with enterprise-grade security. All information remains strictly confidential.",
+      title: t("features.secure.title"),
+      description: t("features.secure.description"),
       gradient: "from-orange-500 to-red-600"
     },
     {
       icon: Zap,
-      title: "Instant Results",
-      description: "Receive your comprehensive assessment results immediately upon completion with downloadable PDF reports.",
+      title: t("features.realTime.title"),
+      description: t("features.realTime.description"),
       gradient: "from-yellow-500 to-orange-600"
     },
     {
       icon: Users,
-      title: "Organization Insights",
-      description: "Team assessment capabilities for organizations looking to understand group dynamics and optimize team performance.",
+      title: t("features.aiPowered.title"),
+      description: t("features.aiPowered.description"),
       gradient: "from-purple-500 to-pink-600"
     },
     {
       icon: Target,
-      title: "Development Tracking",
-      description: "Monitor personal or professional development progress with follow-up assessments and growth tracking tools.",
+      title: t("features.comprehensive.title"),
+      description: t("features.comprehensive.description"),
       gradient: "from-indigo-500 to-blue-600"
     }
   ];
@@ -47,10 +50,10 @@ const Features = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
-            Assessment Features
+            {t("features.title")}
           </h2>
           <p className="text-xl text-foreground max-w-2xl mx-auto">
-            Professional psychological assessment tools designed to provide accurate insights into personality, behavior, and cognitive abilities.
+            {t("features.subtitle")}
           </p>
         </div>
 
