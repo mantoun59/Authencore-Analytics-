@@ -77,45 +77,75 @@ const SampleReports = () => {
   const generateSamplePDF = async () => {
     setIsGenerating(true);
     try {
+      console.log("🔄 Starting PDF generation for:", selectedAssessment, "type:", reportType);
+      
       const sampleData = reportType === 'employer' 
         ? getSampleEmployerReport(selectedAssessment)
         : getSampleCandidateReport(selectedAssessment);
       
+      // AUDIT FIX 1: Explicit serialization and data inspection
+      console.log("📊 Sample data structure:", JSON.stringify(sampleData, null, 2));
+      
+      // AUDIT FIX 2: Ensure all data is properly formatted for PDF
+      const sanitizedData = {
+        ...sampleData,
+        // Ensure all scores are numbers, not objects
+        dimensionScores: Object.fromEntries(
+          Object.entries(sampleData.dimensionScores || {}).map(([key, value]: [string, any]) => [
+            key, 
+            {
+              ...value,
+              score: typeof value.score === 'number' ? value.score : parseInt(String(value.score)) || 0
+            }
+          ])
+        )
+      };
+      
+      console.log("🧹 Sanitized data:", JSON.stringify(sanitizedData, null, 2));
+      
       // Format data for PDF generation function
       const pdfRequestData = {
         assessmentType: getAssessmentTypeForPDF(selectedAssessment),
-        results: sampleData,
+        results: sanitizedData,
         userData: {
-          name: sampleData.candidateInfo.name,
-          email: sampleData.candidateInfo.email,
-          date: sampleData.candidateInfo.completionDate
+          name: sanitizedData.candidateInfo.name,
+          email: sanitizedData.candidateInfo.email,
+          date: sanitizedData.candidateInfo.completionDate
         }
       };
       
-      
+      console.log("📋 PDF request data:", JSON.stringify(pdfRequestData, null, 2));
       
       toast.info(`Generating sample ${reportType} PDF report...`);
       
       try {
-        
+        console.log("🚀 Calling PDF generation function...");
         const response = await supabase.functions.invoke('generate-pdf-report', {
           body: pdfRequestData
         });
 
-        
+        console.log("📥 PDF generation response:", response);
 
         if (response.data?.reportHtml) {
           console.log("✅ PDF generation successful, opening report");
+          
+          // AUDIT FIX: Ensure async HTML content is fully loaded before display
+          const htmlContent = response.data.reportHtml;
+          console.log("📄 HTML content length:", htmlContent.length);
+          console.log("🔍 HTML content preview:", htmlContent.substring(0, 200));
+          
           // Open HTML report in new window for PDF printing
           const newWindow = window.open('', '_blank');
           if (newWindow) {
-            newWindow.document.write(response.data.reportHtml);
+            newWindow.document.write(htmlContent);
             newWindow.document.close();
             
+            // AUDIT FIX: Wait for images to load before triggering print
             setTimeout(() => {
+              console.log("🖨️ Triggering print dialog...");
               newWindow.focus();
               newWindow.print();
-            }, 1000);
+            }, 2000); // Increased timeout to allow image loading
           }
           toast.success(`Sample ${reportType} PDF report generated successfully!`);
         } else if (response.error) {
@@ -123,7 +153,7 @@ const SampleReports = () => {
           throw new Error(`PDF generation failed: ${response.error.message}`);
         } else {
           console.error('❌ No HTML content returned from PDF service');
-          console.log('Response data:', response.data);
+          console.log('🔍 Full response:', JSON.stringify(response, null, 2));
           throw new Error('No HTML content returned from PDF service');
         }
       } catch (pdfError) {

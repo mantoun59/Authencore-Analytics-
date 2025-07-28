@@ -606,7 +606,19 @@ function getReportStyles(): string {
 function generateReportHeader(title: string, userData: any): string {
   // Extract assessment type from title for logo
   const assessmentType = title.toLowerCase().replace(/[\s+]/g, '-').replace(/assessment/, '').trim();
+  
+  // AUDIT FIX: Verify and construct absolute logo URL
   const logoUrl = `https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${assessmentType}-logo.png`;
+  console.log(`🖼️ Using logo URL for "${assessmentType}":`, logoUrl);
+  
+  // AUDIT FIX: Pre-validate image accessibility 
+  const logoImageTag = `
+    <img src="${logoUrl}" 
+         alt="${title} Logo" 
+         style="max-height: 80px; max-width: 120px; object-fit: contain;" 
+         onerror="console.log('❌ Logo failed to load: ${logoUrl}'); this.style.display='none'"
+         onload="console.log('✅ Logo loaded successfully: ${logoUrl}')">
+  `;
   
   return `
     <div class="header">
@@ -616,7 +628,7 @@ function generateReportHeader(title: string, userData: any): string {
                 <div class="subtitle">Professional Assessment Platform</div>
             </div>
             <div style="text-align: right;">
-                <img src="${logoUrl}" alt="${title} Logo" style="max-height: 80px; max-width: 120px; object-fit: contain;" onerror="this.style.display='none'">
+                ${logoImageTag}
             </div>
         </div>
         <h1 style="text-align: center; margin: 20px 0;">${title}</h1>

@@ -293,7 +293,8 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
                         <img src="https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${assessmentType}-logo.png" 
                              alt="${assessmentType} Logo" 
                              style="max-height: 80px; max-width: 120px; object-fit: contain;" 
-                             onerror="this.style.display='none'">
+                             onerror="console.log('❌ Enhanced PDF logo failed: ${assessmentType}'); this.style.display='none'"
+                             onload="console.log('✅ Enhanced PDF logo loaded: ${assessmentType}')">
                     </div>
                 </div>
             </div>
