@@ -1,0 +1,83 @@
+version: '3.8'
+
+services:
+  # Development setup
+  authencore-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - VITE_SUPABASE_URL=https://jlbftyjewxgetxcihban.supabase.co
+      - VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpsYmZ0eWpld3hnZXR4Y2loYmFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2NDA4MzgsImV4cCI6MjA2ODIxNjgzOH0.g_SBYZPefuFcCQfG_Un3PEASxycvoa65bG1DmGtXfrg
+    command: bun run dev --host 0.0.0.0
+    profiles:
+      - dev
+
+  # Production setup
+  authencore-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+    profiles:
+      - prod
+
+  # Nginx reverse proxy (optional)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - authencore-app
+    profiles:
+      - prod
+      - nginx
+
+  # Local Supabase (optional for local development)
+  supabase-db:
+    image: supabase/postgres:15.1.0.147
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_PORT: 5432
+    volumes:
+      - supabase-db-data:/var/lib/postgresql/data
+    profiles:
+      - local-supabase
+
+  supabase-studio:
+    image: supabase/studio:20231130-a5b96d9
+    ports:
+      - "3001:3000"
+    environment:
+      SUPABASE_URL: http://supabase-kong:8000
+      SUPABASE_REST_URL: http://localhost:8000/rest/v1/
+      SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpsYmZ0eWpld3hnZXR4Y2loYmFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2NDA4MzgsImV4cCI6MjA2ODIxNjgzOH0.g_SBYZPefuFcCQfG_Un3PEASxycvoa65bG1DmGtXfrg
+      SUPABASE_SERVICE_KEY: your-service-role-key-here
+    depends_on:
+      - supabase-db
+    profiles:
+      - local-supabase
+
+volumes:
+  supabase-db-data:
+
+networks:
+  default:
+    name: authencore-network
