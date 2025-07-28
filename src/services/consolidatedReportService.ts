@@ -37,22 +37,32 @@ export class ConsolidatedReportService {
       try {
         // Attempting server-side PDF generation
         const { data: pdfData, error } = await supabase.functions.invoke('generate-pdf-report', {
-          body: { result, config }
+          body: {
+            assessmentType: result.assessmentType,
+            results: {
+              scores: result.dimensionScores,
+              overallScore: result.overallScore,
+              profile: result.profile,
+              recommendations: result.recommendations,
+              interests: result.dimensionScores,
+              aptitudes: result.dimensionScores
+            },
+            userData: result.candidateInfo
+          }
         });
 
-        if (!error && pdfData && pdfData.pdf) {
-          // Download the server-generated PDF
-          const blob = new Blob([Uint8Array.from(atob(pdfData.pdf), c => c.charCodeAt(0))], 
-            { type: 'application/pdf' });
+        if (!error && pdfData && pdfData.reportHtml) {
+          // Create PDF from HTML report
+          const blob = new Blob([pdfData.reportHtml], { type: 'text/html' });
           const url = URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = this.generateFileName(result, config);
+          a.download = this.generateFileName(result, config).replace('.pdf', '.html');
           a.click();
           URL.revokeObjectURL(url);
           
           await this.logReportGeneration(result, config);
-          toast.success('Report generated on server successfully!');
+          toast.success('Report generated successfully!');
           return;
         }
         
