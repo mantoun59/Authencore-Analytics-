@@ -59,7 +59,7 @@ const EmployerAnalytics = lazy(() => import("@/pages/EmployerAnalytics"));
 const PartnerAnalytics = lazy(() => import("@/pages/PartnerAnalytics"));
 
 // Lazy load - Reports & Materials
-const SampleCareerLaunchReport = lazy(() => import("@/pages/SampleCareerLaunchReport"));
+import SampleCareerLaunchReport from "@/pages/SampleCareerLaunchReport";
 const SampleReports = lazy(() => import("@/pages/SampleReports"));
 const Payment = lazy(() => import("@/pages/Payment"));
 
@@ -272,11 +272,7 @@ const RouteConfig = () => {
           <Payment />
         </Suspense>
       } />
-      <Route path="/sample-career-launch-report" element={
-        <Suspense fallback={<LoadingFallback message="Generating Sample Report..." />}>
-          <SampleCareerLaunchReport />
-        </Suspense>
-      } />
+      <Route path="/sample-career-launch-report" element={<SampleCareerLaunchReport />} />
       <Route path="/sample-reports" element={
         <Suspense fallback={<LoadingFallback message="Loading Sample Reports..." />}>
           <SampleReports />
