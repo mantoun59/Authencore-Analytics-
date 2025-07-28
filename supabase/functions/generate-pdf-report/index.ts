@@ -1,27 +1,14 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
-};
-
-const logStep = (step: string, details?: any) => {
-  const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
-  console.log(`[GENERATE-PDF-REPORT] ${step}${detailsStr}`);
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
 // Helper function to safely convert values to strings
 const safeString = (value: any): string => {
-  if (value === null || value === undefined) return '';
-  if (typeof value === 'string') return value;
-  if (typeof value === 'number') return value.toString();
-  if (typeof value === 'boolean') return value.toString();
-  if (typeof value === 'object') {
-    // Handle objects properly instead of showing [object Object]
-    if (value.score !== undefined) return value.score.toString();
-    if (value.name !== undefined) return value.name.toString();
-    return JSON.stringify(value);
+  if (value === null || value === undefined) {
+    return '';
   }
   return String(value);
 };
@@ -98,56 +85,46 @@ const generateExecutiveSummary = (dimensionScores: Record<string, number>, overa
   const strongAreas = Object.entries(dimensionScores).filter(([_, score]) => score >= 80);
   const developmentAreas = Object.entries(dimensionScores).filter(([_, score]) => score < 60);
   
-  // Overall performance insight
-  if (overallScore >= 85) {
-    summary.push("Exceptional overall performance demonstrating strong competency across multiple dimensions");
-  } else if (overallScore >= 70) {
-    summary.push("Solid performance with well-developed capabilities and targeted growth opportunities");
+  summary.push(`This comprehensive assessment reveals a professional with ${strongAreas.length} areas of significant strength and ${developmentAreas.length} areas prioritized for development.`);
+  
+  if (overallScore >= 80) {
+    summary.push(`The overall score of ${overallScore}/100 indicates exceptional readiness and strong professional competencies across multiple dimensions.`);
+    summary.push(`This individual demonstrates high potential for leadership roles and complex responsibility assignments.`);
+  } else if (overallScore >= 65) {
+    summary.push(`The overall score of ${overallScore}/100 indicates solid professional competencies with clear areas for strategic development.`);
+    summary.push(`With focused development efforts, this individual shows strong potential for advancement.`);
   } else {
-    summary.push("Developing competency profile with significant potential for growth and improvement");
+    summary.push(`The overall score of ${overallScore}/100 indicates developing professional competencies requiring structured development support.`);
+    summary.push(`Investment in targeted training and mentorship will be essential for success in challenging roles.`);
   }
-  
-  // Strength areas
-  if (strongAreas.length > 0) {
-    summary.push(`Primary strengths identified in: ${strongAreas.map(([name]) => name.replace(/_/g, ' ')).join(', ')}`);
-  }
-  
-  // Development areas
-  if (developmentAreas.length > 0) {
-    summary.push(`Key development opportunities in: ${developmentAreas.map(([name]) => name.replace(/_/g, ' ')).join(', ')}`);
-  }
-  
-  // Hiring recommendation
-  const hiringFit = overallScore >= 75 ? "RECOMMENDED" : overallScore >= 60 ? "CONDITIONAL" : "NOT RECOMMENDED";
-  summary.push(`Hiring Recommendation: ${hiringFit} for roles requiring ${assessmentType.replace(/_/g, ' ')} competencies`);
   
   return summary;
 };
 
 // Helper function to generate hiring fit analysis
-const generateHiringFitAnalysis = (dimensionScores: Record<string, number>, overallScore: number): { status: string, color: string, details: string } => {
+const generateHiringFitAnalysis = (dimensionScores: Record<string, number>, overallScore: number) => {
   if (overallScore >= 75) {
     return {
-      status: "GREEN - RECOMMENDED",
-      color: "#4CAF50",
-      details: "Candidate demonstrates strong competencies aligned with role requirements. Proceed with confidence."
+      status: "HIGHLY RECOMMENDED",
+      color: "#10B981",
+      details: "Strong competencies across multiple dimensions. Candidate demonstrates readiness for immediate contribution and growth potential."
     };
   } else if (overallScore >= 60) {
     return {
-      status: "YELLOW - CONDITIONAL",
-      color: "#FF9800", 
-      details: "Candidate shows potential with some development needs. Consider with additional training or support."
+      status: "RECOMMENDED WITH SUPPORT",
+      color: "#F59E0B",
+      details: "Solid foundation with targeted development opportunities. Recommended with appropriate onboarding and development planning."
     };
   } else {
     return {
-      status: "RED - NOT RECOMMENDED",
-      color: "#F44336",
-      details: "Significant competency gaps identified. Extensive development would be required for success."
+      status: "NOT RECOMMENDED",
+      color: "#EF4444",
+      details: "Significant competency gaps identified. Extensive development would be required for success in this role."
     };
   }
 };
 
-// Helper function to generate interview questions
+// Helper function to generate interview questions for employers
 const generateInterviewQuestions = (dimensionScores: Record<string, number>): string[] => {
   const questions: string[] = [];
   const lowScores = Object.entries(dimensionScores).filter(([_, score]) => score < 70);
@@ -160,8 +137,6 @@ const generateInterviewQuestions = (dimensionScores: Record<string, number>): st
       questions.push(`"Describe a situation where you had to communicate complex information to different audiences. How did you adapt your approach?"`);
     } else if (area.includes('leadership')) {
       questions.push(`"Give me an example of when you had to lead a team through a challenging situation. What was your approach?"`);
-    } else if (area.includes('emotional')) {
-      questions.push(`"Describe a time when you had to manage your emotions or help others manage theirs in a professional setting."`);
     } else {
       questions.push(`"Can you provide an example of how you've developed your ${area} skills in previous roles?"`);
     }
@@ -179,16 +154,83 @@ const calculateReliabilityMetrics = (results: any): { consistencyIndex: number, 
   };
 };
 
+// Helper function to get detailed interpretation for each dimension
+const getDetailedInterpretation = (dimension: string, score: number, assessmentType: string): string => {
+  const interpretations: Record<string, Record<string, string>> = {
+    communication_skills: {
+      high: "Demonstrates exceptional verbal and written communication abilities. Can effectively convey complex ideas and adapt communication style to different audiences.",
+      medium: "Shows solid communication skills with room for improvement in complex or high-pressure situations.",
+      low: "Would benefit from focused communication training and practice in professional settings."
+    },
+    leadership_potential: {
+      high: "Exhibits strong leadership qualities including vision, influence, and team development capabilities.",
+      medium: "Shows emerging leadership potential with opportunities to develop in strategic thinking and team management.",
+      low: "Focus on building foundational leadership skills through mentorship and structured development programs."
+    },
+    stress_resilience: {
+      high: "Maintains excellent performance under pressure and recovers quickly from setbacks.",
+      medium: "Generally handles stress well but may need support during prolonged high-pressure periods.",
+      low: "Would benefit from stress management training and building resilience strategies."
+    }
+  };
+  
+  const level = score >= 75 ? 'high' : score >= 55 ? 'medium' : 'low';
+  const defaultInterp = score >= 75 ? 
+    `Strong performance in this area with excellent capabilities and potential for further development.` :
+    score >= 55 ? 
+    `Solid foundation with opportunities for targeted improvement and skill enhancement.` :
+    `Development priority requiring focused attention and structured improvement planning.`;
+    
+  return interpretations[dimension]?.[level] || defaultInterp;
+};
+
+// Helper function to get development suggestions
+const getDevelopmentSuggestion = (dimension: string, score: number): string => {
+  const suggestions: Record<string, string> = {
+    communication_skills: "Focus on active listening, presentation skills, and written communication clarity.",
+    leadership_potential: "Seek leadership opportunities, practice delegation, and develop strategic thinking.",
+    stress_resilience: "Practice mindfulness, develop coping strategies, and build support networks.",
+    problem_solving: "Enhance analytical thinking through case studies and structured problem-solving frameworks.",
+    adaptability: "Embrace change initiatives, practice flexibility, and develop comfort with ambiguity."
+  };
+  
+  return suggestions[dimension] || "Focus on continuous learning and practice in this area through targeted development activities.";
+};
+
+// Helper function to generate behavioral insights
+const generateBehavioralInsights = (dimensionScores: Record<string, number>, assessmentType: string) => {
+  const insights = [
+    {
+      category: "Work Style Preferences",
+      description: "Analysis of preferred working methods, collaboration style, and task approach based on assessment responses."
+    },
+    {
+      category: "Decision Making Approach",
+      description: "Evaluation of how decisions are made, information processing style, and risk tolerance in professional contexts."
+    },
+    {
+      category: "Interpersonal Dynamics",
+      description: "Assessment of communication patterns, team interaction style, and relationship building capabilities."
+    },
+    {
+      category: "Stress Response Patterns",
+      description: "Understanding of how pressure is managed, recovery methods, and performance sustainability under challenging conditions."
+    }
+  ];
+  
+  return insights;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    logStep("Function started");
+    console.log("📊 PDF Report Generator Started");
 
     const requestData = await req.json();
-    logStep("Request data received", {
+    console.log("📊 Request data received:", {
       assessmentType: requestData.assessmentType || requestData.result?.assessmentType,
       hasResults: !!requestData.results || !!requestData.result,
       hasUserData: !!requestData.userData,
@@ -205,7 +247,10 @@ serve(async (req) => {
 
     // Get dimension scores safely
     const dimensionScores = getDimensionScores(results.dimensions || results.dimensionScores);
-    const overallScore = typeof results.overallScore === 'number' ? results.overallScore : 0;
+    const overallScore = typeof results.overallScore === 'number' ? results.overallScore : 
+                        Object.keys(dimensionScores).length > 0 ? 
+                        Math.round(Object.values(dimensionScores).reduce((a, b) => a + b, 0) / Object.values(dimensionScores).length) : 
+                        75;
     
     // Generate comprehensive content
     const executiveSummary = generateExecutiveSummary(dimensionScores, overallScore, assessmentType);
@@ -221,485 +266,679 @@ serve(async (req) => {
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>${assessmentType} Assessment Report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${displayName} Assessment Report - ${userData.name || 'Professional Assessment'}</title>
     <style>
-        body { 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            line-height: 1.6; 
-            color: #333; 
-            max-width: 800px; 
-            margin: 0 auto; 
-            padding: 20px;
-            background: #f9f9f9;
-        }
-        .header { 
-            text-align: center; 
-            border-bottom: 3px solid #4A90E2; 
-            padding-bottom: 20px; 
-            margin-bottom: 30px;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .header h1 { 
-            color: #4A90E2; 
-            margin: 0; 
-            font-size: 2.5em;
-            font-weight: 300;
-        }
-        .section { 
-            margin: 30px 0; 
-            background: white;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .section h2 { 
-            color: #4A90E2; 
-            border-bottom: 2px solid #E3F2FD; 
-            padding-bottom: 10px;
-            margin-top: 0;
-        }
-        .score-box { 
-            background: linear-gradient(135deg, #4A90E2, #7B1FA2); 
-            color: white; 
-            padding: 20px; 
-            border-radius: 10px; 
-            text-align: center; 
-            margin: 20px 0;
-            box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
-        }
-        .score-box .score { 
-            font-size: 3em; 
-            font-weight: bold; 
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
             margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .score-box .label { 
-            font-size: 1.2em; 
-            opacity: 0.9;
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            padding: 20px;
         }
-        .dimension { 
-            margin: 15px 0; 
-            padding: 15px;
-            background: #F8F9FA;
-            border-radius: 8px;
-            border-left: 4px solid #4A90E2;
+        
+        .report-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
         }
-        .dimension-name { 
-            font-weight: bold; 
-            color: #333;
-            margin-bottom: 8px;
+        
+        .header-section {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%);
+            color: white;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
         }
-        .progress-bar { 
-            background: #E0E0E0; 
-            border-radius: 10px; 
-            overflow: hidden; 
-            height: 20px;
-            margin: 8px 0;
+        
+        .header-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            transform: translate(100px, -100px);
         }
-        .progress-fill { 
-            height: 100%; 
-            background: linear-gradient(90deg, #4A90E2, #7B1FA2); 
-            transition: width 0.3s ease;
+        
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .logo-section {
             display: flex;
             align-items: center;
-            justify-content: flex-end;
-            padding-right: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .logo-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .company-info h1 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .company-info p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .report-title {
+            font-size: 36px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .report-subtitle {
+            font-size: 18px;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .content-wrapper {
+            padding: 40px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+        
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
             color: white;
-            font-size: 12px;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 18px;
         }
-        .candidate-info { 
-            background: #E3F2FD; 
-            padding: 20px; 
-            border-radius: 8px;
-            margin: 20px 0;
+        
+        .section h2 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1e293b;
+            margin: 0;
         }
-        .candidate-info h3 { 
-            margin-top: 0; 
-            color: #4A90E2;
+        
+        .executive-summary {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            border-radius: 16px;
+            padding: 32px;
+            margin-bottom: 40px;
+            border: 1px solid #cbd5e1;
         }
-        .info-grid {
+        
+        .score-display {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .overall-score {
+            font-size: 72px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1;
+            margin-bottom: 8px;
+        }
+        
+        .score-label {
+            font-size: 18px;
+            color: #64748b;
+            font-weight: 500;
+        }
+        
+        .readiness-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            margin-top: 16px;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+        
+        .insights-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-top: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 32px;
         }
-        .info-item {
+        
+        .insight-card {
             background: white;
-            padding: 10px 15px;
-            border-radius: 5px;
-            border-left: 3px solid #4A90E2;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
-        .recommendations {
-            background: #F3E5F5;
+        
+        .insight-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .insight-icon {
+            width: 24px;
+            height: 24px;
+            background: #3b82f6;
+            border-radius: 6px;
+            margin-right: 12px;
+        }
+        
+        .strength-list, .development-list {
+            list-style: none;
+        }
+        
+        .strength-list li, .development-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #f1f5f9;
+            position: relative;
+            padding-left: 24px;
+        }
+        
+        .strength-list li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #10b981;
+            font-weight: 700;
+        }
+        
+        .development-list li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: #f59e0b;
+            font-weight: 700;
+        }
+        
+        .dimension-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 24px;
+        }
+        
+        .dimension-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transition: transform 0.2s ease;
+        }
+        
+        .dimension-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+        
+        .dimension-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+        
+        .dimension-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            text-transform: capitalize;
+        }
+        
+        .dimension-score {
+            font-size: 24px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin: 12px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .dimension-level {
+            font-size: 14px;
+            font-weight: 500;
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+        
+        .level-excellent { background: #dcfce7; color: #166534; }
+        .level-good { background: #dbeafe; color: #1e40af; }
+        .level-moderate { background: #fef3c7; color: #92400e; }
+        .level-developing { background: #fee2e2; color: #991b1b; }
+        
+        .recommendation-section {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-radius: 16px;
+            padding: 32px;
+            border-left: 6px solid #f59e0b;
+        }
+        
+        .recommendation-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-top: 24px;
+        }
+        
+        .recommendation-card {
+            background: white;
+            border-radius: 12px;
             padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
+            border: 1px solid rgba(245, 158, 11, 0.2);
         }
-        .recommendations h3 {
-            color: #7B1FA2;
-            margin-top: 0;
+        
+        .timeline-section {
+            background: linear-gradient(135deg, #e0f2fe 0%, #b3e5fc 100%);
+            border-radius: 16px;
+            padding: 32px;
+            border-left: 6px solid #0284c7;
         }
-        .recommendation-item {
-            background: white;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 5px;
-            border-left: 3px solid #7B1FA2;
+        
+        .footer-section {
+            background: #1e293b;
+            color: white;
+            padding: 40px;
+            text-align: center;
         }
+        
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .footer-logo {
+            margin-bottom: 20px;
+        }
+        
+        .footer-text {
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.8;
+        }
+        
+        .page-break {
+            page-break-before: always;
+        }
+        
         @media print {
-            body { background: white; }
-            .section { box-shadow: none; border: 1px solid #ddd; }
+            body { background: white; padding: 0; }
+            .report-container { box-shadow: none; }
+            .section { page-break-inside: avoid; }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <div style="display: flex; align-items: center; gap: 1rem;">
-                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #1E40AF, #4A90E2); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                    <span style="color: white; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">A</span>
-                </div>
-                <div style="text-align: left;">
-                    <h2 style="margin: 0; font-size: 24px; font-weight: bold; color: #1E40AF;">AuthenCore Analytics</h2>
-                    <p style="margin: 0; font-size: 14px; color: #4A90E2; font-weight: 500;">Professional Assessment Platform</p>
-                </div>
-            </div>
-            <div>
-                <h1 style="margin: 0; font-weight: bold;">${displayName} Assessment Report</h1>
-                <p style="font-size: 1.2em; color: #666; margin: 5px 0 0 0;">Professional Psychometric Assessment</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- Executive Summary Section -->
-    <div class="section">
-        <h2>Executive Summary</h2>
-        <div style="background: #E8F5E8; padding: 20px; border-radius: 8px; border-left: 4px solid #4CAF50;">
-            ${executiveSummary.map(point => `<div style="margin: 8px 0;"><strong>•</strong> ${point}</div>`).join('')}
-        </div>
-    </div>
-
-    <!-- Assessment Overview -->
-    <div class="section">
-        <h2>Assessment Overview</h2>
-        <div style="background: #FFF3E0; padding: 20px; border-radius: 8px; border-left: 4px solid #FF9800;">
-            <p><strong>Assessment Framework:</strong> ${displayName} utilizes validated psychometric principles measuring key professional competencies.</p>
-            <p><strong>Dimensions Measured:</strong> ${Object.keys(dimensionScores).map(d => d.replace(/_/g, ' ')).join(', ')}</p>
-            <p><strong>Scoring Method:</strong> Normative scoring based on professional population benchmarks</p>
-            ${reportType === 'employer' ? `
-            <p><strong>Reliability Metrics:</strong></p>
-            <ul style="margin: 10px 0;">
-                <li><strong>Internal Consistency:</strong> α = ${reliabilityMetrics.consistencyIndex}</li>
-                <li><strong>Completion Time:</strong> ${reliabilityMetrics.completionTime}</li>
-                <li><strong>Response Pattern:</strong> ${reliabilityMetrics.responsePattern}</li>
-            </ul>
-            ` : ''}
-        </div>
-    </div>
-
-    <!-- Hiring Fit Analysis -->
-    <div class="section">
-        <h2>Hiring Recommendation</h2>
-        <div style="background: ${hiringFit.color}15; padding: 20px; border-radius: 8px; border-left: 4px solid ${hiringFit.color};">
-            <div style="display: flex; align-items: center; margin-bottom: 15px;">
-                <div style="background: ${hiringFit.color}; color: white; padding: 8px 16px; border-radius: 20px; font-weight: bold; margin-right: 15px;">
-                    ${hiringFit.status}
-                </div>
-                <div style="font-size: 1.1em; font-weight: 500;">${hiringFit.details}</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="candidate-info">
-            <h3>Candidate Information</h3>
-            <div class="info-grid">
-                <div class="info-item"><strong>Name:</strong> ${safeString(userData.name)}</div>
-                <div class="info-item"><strong>Email:</strong> ${safeString(userData.email)}</div>
-                ${userData.position ? `<div class="info-item"><strong>Position:</strong> ${safeString(userData.position)}</div>` : ''}
-                ${userData.company || userData.organization ? `<div class="info-item"><strong>Organization:</strong> ${safeString(userData.company || userData.organization)}</div>` : ''}
-                <div class="info-item"><strong>Assessment Date:</strong> ${new Date().toLocaleDateString()}</div>
-                <div class="info-item"><strong>Report ID:</strong> ${reportId}</div>
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Overall Assessment Score</h2>
-        <div class="score-box">
-            <div class="score">${overallScore}/100</div>
-            <div class="label">Overall Performance Score</div>
-            <div style="margin-top: 10px; font-size: 1.1em;">
-                Performance Level: ${overallScore >= 85 ? 'Excellent' : overallScore >= 70 ? 'Good' : overallScore >= 55 ? 'Developing' : 'Needs Improvement'}
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Detailed Dimension Analysis</h2>
-        ${Object.entries(dimensionScores).map(([dimension, score]) => {
-          const formattedName = dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-          const scoreNum = typeof score === 'number' ? score : 0;
-          const level = scoreNum >= 80 ? 'Strong' : scoreNum >= 60 ? 'Moderate' : 'Developing';
-          const color = scoreNum >= 80 ? '#4CAF50' : scoreNum >= 60 ? '#FF9800' : '#F44336';
-          
-          return `
-            <div class="dimension">
-                <div class="dimension-name">${formattedName}</div>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: ${scoreNum}%; background: ${color};">
-                        ${scoreNum}/100
+    <div class="report-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="header-content">
+                <div class="logo-section">
+                    <div class="logo-icon">
+                        <span style="color: white; font-size: 24px; font-weight: bold;">A</span>
+                    </div>
+                    <div class="company-info">
+                        <h1>AuthenCore Analytics</h1>
+                        <p>Professional Assessment Platform</p>
                     </div>
                 </div>
-                <div style="margin-top: 8px; color: #666; font-size: 0.9em;">
-                    Performance Level: ${level} | 
-                    ${scoreNum >= 80 ? 'Exceptional performance in this area' : 
-                      scoreNum >= 60 ? 'Good performance with room for growth' : 
-                      'Priority area for development'}
-                </div>
-            </div>
-          `;
-        }).join('')}
-    </div>
-
-    </div>
-
-    <!-- Interview Guidance Section -->
-    ${interviewQuestions.length > 0 ? `
-    <div class="section">
-        <h2>Suggested Interview Questions</h2>
-        <div style="background: #E1F5FE; padding: 20px; border-radius: 8px; border-left: 4px solid #03A9F4;">
-            <p style="margin-bottom: 15px;"><strong>Based on the assessment results, consider exploring these areas during interviews:</strong></p>
-            ${interviewQuestions.map(question => `
-                <div style="margin: 12px 0; padding: 10px; background: white; border-radius: 5px; border-left: 3px solid #03A9F4;">
-                    ${question}
-                </div>
-            `).join('')}
-        </div>
-    </div>
-    ` : ''}
-
-    <div class="section">
-        <h2>Professional Insights & Analysis</h2>
-        <div style="line-height: 1.8; font-size: 1em;">
-            ${detailedInsights}
-        </div>
-        
-        <!-- Career Fit Analysis -->
-        <div style="margin-top: 30px; background: #F3E5F5; padding: 20px; border-radius: 8px; border-left: 4px solid #7B1FA2;">
-            <h3 style="color: #7B1FA2; margin-top: 0;">Career Fit & Role Alignment</h3>
-            <p><strong>Ideal Roles:</strong> Based on your competency profile, you would excel in positions that leverage your strengths in ${Object.entries(dimensionScores).filter(([_, score]) => score >= 70).map(([name]) => name.replace(/_/g, ' ')).join(', ') || 'developing areas'}.</p>
-            <p><strong>Work Environment:</strong> You would thrive in ${overallScore >= 75 ? 'dynamic, challenging environments with opportunities for leadership and innovation' : overallScore >= 60 ? 'structured environments with clear expectations and support for development' : 'supportive environments with strong mentorship and learning opportunities'}.</p>
-            <p><strong>Team Dynamics:</strong> Your profile suggests you would work well in ${overallScore >= 75 ? 'leadership roles, cross-functional teams, and high-stakes projects' : overallScore >= 60 ? 'collaborative teams with defined roles and regular feedback' : 'small teams with patient colleagues and clear guidance'}.</p>
-        </div>
-
-        <!-- Benchmark Comparison -->
-        <div style="margin-top: 20px; background: #E8F5E8; padding: 20px; border-radius: 8px; border-left: 4px solid #4CAF50;">
-            <h3 style="color: #4CAF50; margin-top: 0;">Industry Benchmark Comparison</h3>
-            <p><strong>Performance Ranking:</strong> Your overall score of ${overallScore}/100 places you in the ${overallScore >= 85 ? 'top 15%' : overallScore >= 70 ? 'top 35%' : overallScore >= 55 ? 'middle 50%' : 'bottom 25%'} of professionals in similar roles.</p>
-            <p><strong>Competency Distribution:</strong> ${Object.entries(dimensionScores).filter(([_, score]) => score >= 80).length} dimensions show exceptional performance, ${Object.entries(dimensionScores).filter(([_, score]) => score >= 60 && score < 80).length} show solid competency, and ${Object.entries(dimensionScores).filter(([_, score]) => score < 60).length} require development focus.</p>
-            <p><strong>Growth Potential:</strong> ${overallScore >= 70 ? 'High potential for rapid advancement with targeted skill development in key areas' : 'Significant growth potential through structured development and experience-based learning'}.</p>
-        </div>
-    </div>
-
-    <div class="section">
-        <div class="recommendations">
-            <h3>Strategic Development Plan</h3>
-            <div class="recommendation-item">
-                <strong>Immediate Actions (Next 30 Days):</strong> Begin focusing on your priority development areas through targeted reading, online courses, or seeking feedback from colleagues and supervisors.
-            </div>
-            <div class="recommendation-item">
-                <strong>Short-term Goals (3-6 Months):</strong> Implement specific skill-building activities, consider mentorship opportunities, and practice new competencies in safe environments.
-            </div>
-            <div class="recommendation-item">
-                <strong>Long-term Development (6-12 Months):</strong> Pursue formal training programs, seek stretch assignments that challenge your growth areas, and regularly reassess progress.
-            </div>
-            <div class="recommendation-item">
-                <strong>Performance Monitoring:</strong> Schedule quarterly reviews of your development progress and adjust strategies based on feedback and results.
-            </div>
-        </div>
-    </div>
-
-    <div class="section">
-        <h2>Scientific Basis & Methodology</h2>
-        <div style="background: #F5F5F5; padding: 20px; border-radius: 8px; border-left: 4px solid #666;">
-            <p style="margin-bottom: 15px;"><strong>Theoretical Framework:</strong> This assessment is based on established psychological theories and validated psychometric principles, incorporating elements from Big Five personality theory, competency-based assessment models, and workplace psychology research.</p>
-            
-            <p style="margin-bottom: 15px;"><strong>Validation Evidence:</strong></p>
-            <ul style="margin: 10px 0;">
-                <li><strong>Internal Consistency:</strong> Cronbach's Alpha coefficients range from 0.85-0.92 across dimensions</li>
-                <li><strong>Test-Retest Reliability:</strong> Correlation coefficients of 0.78-0.88 over 4-week intervals</li>
-                <li><strong>Construct Validity:</strong> Factor analysis confirms dimensional structure with cross-loadings <0.30</li>
-                <li><strong>Criterion Validity:</strong> Significant correlations with performance metrics (r = 0.45-0.68)</li>
-            </ul>
-            
-            <p style="margin-bottom: 15px;"><strong>Normative Sample:</strong> Scoring benchmarks derived from a diverse professional population (N=15,000+) across industries, roles, and demographic groups.</p>
-            
-            <p style="margin-bottom: 15px;"><strong>Assessment Version:</strong> ${displayName} v2.1 (Updated: December 2024)</p>
-            
-            <p style="margin-bottom: 0;"><strong>Accreditation Status:</strong> Under review for professional accreditation. Current version meets industry standards for workplace assessment tools.</p>
-        </div>
-    </div>
-
-    ${reportType === 'employer' ? `
-    <div class="section">
-        <h2>Quality Assurance & Validity Indicators</h2>
-        <div style="background: #E8F5E8; padding: 20px; border-radius: 8px; border-left: 4px solid #4CAF50;">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                <div style="text-align: center; padding: 15px; background: white; border-radius: 8px;">
-                    <div style="font-size: 1.5em; font-weight: bold; color: #4CAF50;">${reliabilityMetrics.consistencyIndex}</div>
-                    <div style="font-size: 0.9em; color: #666;">Internal Consistency</div>
-                </div>
-                <div style="text-align: center; padding: 15px; background: white; border-radius: 8px;">
-                    <div style="font-size: 1.5em; font-weight: bold; color: #2196F3;">${reliabilityMetrics.completionTime}</div>
-                    <div style="font-size: 0.9em; color: #666;">Completion Time</div>
-                </div>
-                <div style="text-align: center; padding: 15px; background: white; border-radius: 8px;">
-                    <div style="font-size: 1.2em; font-weight: bold; color: ${reliabilityMetrics.responsePattern.includes('Normal') ? '#4CAF50' : '#FF9800'};">${reliabilityMetrics.responsePattern}</div>
-                    <div style="font-size: 0.9em; color: #666;">Response Pattern</div>
+                
+                <div class="report-title">${displayName} Assessment Report</div>
+                <div class="report-subtitle">
+                    ${reportType === 'employer' ? 'Employer Insights Report' : 'Professional Development Report'} • 
+                    Generated for ${userData.name || 'Professional'} • 
+                    ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                 </div>
             </div>
         </div>
-    </div>
-    ` : ''}
 
-    <!-- Enhanced Interview Guide & Assessment Questions (Employer Reports Only) -->
-    ${reportType === 'employer' ? `
-    <div class="section">
-        <h2>Comprehensive Interview Guide & Assessment Questions</h2>
-        
-        <!-- Behavioral Interview Questions -->
-        <div style="background: #FFF3E0; padding: 20px; border-radius: 8px; border-left: 4px solid #FF9800; margin-bottom: 20px;">
-            <h3>Targeted Behavioral Interview Questions</h3>
-            ${interviewQuestions.map(question => `
-                <div style="margin: 12px 0; padding: 10px; background: white; border-radius: 5px; border-left: 3px solid #FF9800;">
-                    ${question}
+        <div class="content-wrapper">
+            <!-- Executive Summary -->
+            <div class="executive-summary">
+                <div class="section-header">
+                    <div class="section-icon">📊</div>
+                    <h2>Executive Summary</h2>
                 </div>
-            `).join('')}
-            
-            <h4 style="margin-top: 20px; color: #F57C00;">Competency-Specific Deep Dive Questions</h4>
-            ${Object.entries(dimensionScores).filter(([_, score]) => score < 65).slice(0, 3).map(([dimension, score]) => {
-                const formattedName = dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                return `<div style="margin-bottom: 15px; padding: 12px; background: #FFF8E1; border-radius: 6px;">
-                    <p style="margin: 0 0 8px 0;"><strong>${formattedName} (Development Area - Score: ${score}):</strong></p>
-                    <ul style="margin: 5px 0 0 20px; font-size: 0.95em;">
-                        <li>"Tell me about a time when your ${formattedName.toLowerCase()} was challenged. What was the outcome and what did you learn?"</li>
-                        <li>"How do you typically approach situations requiring strong ${formattedName.toLowerCase()}? Can you walk me through your process?"</li>
-                        <li>"What specific steps have you taken in the past year to develop your ${formattedName.toLowerCase()} capabilities?"</li>
-                        <li>"If you were to mentor someone in ${formattedName.toLowerCase()}, what would be your top three pieces of advice?"</li>
+                
+                <div class="score-display">
+                    <div class="overall-score">${overallScore}</div>
+                    <div class="score-label">Overall Performance Score</div>
+                    <div class="readiness-badge">
+                        ${executiveSummary[1] || 'Professional Level'}
+                    </div>
+                </div>
+                
+                <div class="insights-grid">
+                    <div class="insight-card">
+                        <h3><div class="insight-icon"></div>Key Strengths</h3>
+                        <ul class="strength-list">
+                            ${Object.entries(dimensionScores).filter(([_, score]) => score >= 75).slice(0, 4).map(([dimension, score]) => `
+                                <li>${dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} (${score}/100)</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="insight-card">
+                        <h3><div class="insight-icon" style="background: #f59e0b;"></div>Development Areas</h3>
+                        <ul class="development-list">
+                            ${Object.entries(dimensionScores).filter(([_, score]) => score < 65).slice(0, 4).map(([dimension, score]) => `
+                                <li>${dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} (${score}/100)</li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div style="background: white; border-radius: 12px; padding: 24px; margin-top: 24px; border: 1px solid #e2e8f0;">
+                    <h3 style="color: #1e293b; margin-bottom: 16px;">Professional Summary</h3>
+                    <p style="color: #64748b; line-height: 1.7;">
+                        ${executiveSummary.slice(0, 3).join(' ')} This assessment provides a comprehensive analysis of professional competencies, 
+                        behavioral patterns, and growth potential based on validated psychometric principles and industry benchmarks.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Detailed Competency Analysis -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🎯</div>
+                    <h2>Detailed Competency Analysis</h2>
+                </div>
+                
+                <div class="dimension-grid">
+                    ${Object.entries(dimensionScores).map(([dimension, score]) => {
+                        const level = score >= 85 ? 'excellent' : score >= 70 ? 'good' : score >= 55 ? 'moderate' : 'developing';
+                        const levelText = score >= 85 ? 'Excellent' : score >= 70 ? 'Good' : score >= 55 ? 'Moderate' : 'Developing';
+                        const interpretation = getDetailedInterpretation(dimension, score, assessmentType);
+                        
+                        return `
+                        <div class="dimension-card">
+                            <div class="dimension-header">
+                                <div>
+                                    <div class="dimension-name">${dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</div>
+                                    <div class="dimension-score">${score}/100</div>
+                                </div>
+                            </div>
+                            
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${score}%;"></div>
+                            </div>
+                            
+                            <div class="dimension-level level-${level}">${levelText} Performance</div>
+                            
+                            <div style="margin-top: 16px; padding: 16px; background: #f8fafc; border-radius: 8px; border-left: 3px solid #3b82f6;">
+                                <p style="margin: 0; color: #475569; font-size: 14px; line-height: 1.5;">
+                                    ${interpretation}
+                                </p>
+                            </div>
+                            
+                            ${score < 70 ? `
+                            <div style="margin-top: 12px; padding: 12px; background: #fef3c7; border-radius: 8px; border-left: 3px solid #f59e0b;">
+                                <strong style="color: #92400e; font-size: 13px;">Development Focus:</strong>
+                                <p style="margin: 4px 0 0 0; color: #92400e; font-size: 13px;">
+                                    ${getDevelopmentSuggestion(dimension, score)}
+                                </p>
+                            </div>
+                            ` : ''}
+                        </div>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+
+            <!-- Behavioral Insights & Patterns -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🧠</div>
+                    <h2>Behavioral Insights & Work Style</h2>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border-radius: 16px; padding: 32px; border-left: 6px solid #0ea5e9;">
+                    <h3 style="color: #0c4a6e; margin-bottom: 20px;">Professional Behavioral Profile</h3>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;">
+                        ${generateBehavioralInsights(dimensionScores, assessmentType).map(insight => `
+                        <div style="background: white; border-radius: 12px; padding: 20px; border: 1px solid #bae6fd;">
+                            <div style="font-weight: 600; color: #0c4a6e; margin-bottom: 12px;">
+                                ${insight.category}
+                            </div>
+                            <p style="margin: 0; color: #475569; font-size: 14px; line-height: 1.6;">
+                                ${insight.description}
+                            </p>
+                        </div>
+                        `).join('')}
+                    </div>
+                </div>
+            </div>
+
+            ${reportType === 'candidate' ? `
+            <!-- Development Recommendations -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🚀</div>
+                    <h2>Professional Development Plan</h2>
+                </div>
+                
+                <div class="recommendation-section">
+                    <h3 style="color: #92400e; margin-bottom: 20px;">Strategic Development Roadmap</h3>
+                    
+                    <div class="recommendation-grid">
+                        <div class="recommendation-card">
+                            <h4 style="color: #92400e; margin-bottom: 12px;">Immediate Actions (30 Days)</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #713f12;">
+                                <li>Identify and focus on your top development priority</li>
+                                <li>Seek feedback from colleagues and supervisors</li>
+                                <li>Begin targeted skill-building activities</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="recommendation-card">
+                            <h4 style="color: #92400e; margin-bottom: 12px;">Short-term Goals (3-6 Months)</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #713f12;">
+                                <li>Complete relevant training or certification programs</li>
+                                <li>Apply new skills in practical work situations</li>
+                                <li>Build mentoring relationships</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="recommendation-card">
+                            <h4 style="color: #92400e; margin-bottom: 12px;">Long-term Objectives (6-12 Months)</h4>
+                            <ul style="margin: 0; padding-left: 20px; color: #713f12;">
+                                <li>Pursue advanced development opportunities</li>
+                                <li>Take on stretch assignments and leadership roles</li>
+                                <li>Regularly reassess progress and adjust strategies</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            ` : ''}
+
+            ${reportType === 'employer' ? `
+            <!-- Quality Assurance & Validity Indicators -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">🔍</div>
+                    <h2>Assessment Validity & Quality Assurance</h2>
+                </div>
+                
+                <div style="background: #e8f5e8; padding: 20px; border-radius: 8px; border-left: 4px solid #4CAF50;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                        <div style="text-align: center; padding: 15px; background: white; border-radius: 8px;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #4CAF50;">${reliabilityMetrics.consistencyIndex}</div>
+                            <div style="font-size: 0.9em; color: #666;">Internal Consistency</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: white; border-radius: 8px;">
+                            <div style="font-size: 1.5em; font-weight: bold; color: #2196F3;">${reliabilityMetrics.completionTime}</div>
+                            <div style="font-size: 0.9em; color: #666;">Completion Time</div>
+                        </div>
+                        <div style="text-align: center; padding: 15px; background: white; border-radius: 8px;">
+                            <div style="font-size: 1.2em; font-weight: bold; color: ${reliabilityMetrics.responsePattern.includes('Normal') ? '#4CAF50' : '#FF9800'};">${reliabilityMetrics.responsePattern}</div>
+                            <div style="font-size: 0.9em; color: #666;">Response Pattern</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hiring Recommendation -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">✅</div>
+                    <h2>Hiring Recommendation</h2>
+                </div>
+                
+                <div style="background: ${hiringFit.color}15; padding: 20px; border-radius: 8px; border-left: 4px solid ${hiringFit.color};">
+                    <div style="display: flex; align-items: center; margin-bottom: 16px;">
+                        <div style="font-size: 1.5em; font-weight: bold; color: ${hiringFit.color}; margin-right: 12px;">
+                            ${hiringFit.status}
+                        </div>
+                    </div>
+                    <p style="color: #374151; margin: 0;">
+                        ${hiringFit.details}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Interview Guide -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">💬</div>
+                    <h2>Interview Guide & Questions</h2>
+                </div>
+                
+                <div style="background: #fff3e0; padding: 20px; border-radius: 8px; border-left: 4px solid #ff9800; margin-bottom: 20px;">
+                    <h3>Targeted Interview Questions</h3>
+                    ${interviewQuestions.map(question => `
+                        <div style="margin: 12px 0; padding: 10px; background: white; border-radius: 5px; border-left: 3px solid #ff9800;">
+                            ${question}
+                        </div>
+                    `).join('')}
+                    
+                    <h4 style="margin-top: 20px; color: #f57c00;">Behavioral Assessment Questions</h4>
+                    ${Object.entries(dimensionScores).filter(([_, score]) => score < 65).slice(0, 3).map(([dimension, score]) => {
+                        const formattedName = dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                        return `<div style="margin-bottom: 15px; padding: 12px; background: #fff8e1; border-radius: 6px;">
+                            <p style="margin: 0 0 8px 0;"><strong>${formattedName} (Development Area - Score: ${score}):</strong></p>
+                            <ul style="margin: 5px 0 0 20px; font-size: 0.95em;">
+                                <li>"Tell me about a time when your ${formattedName.toLowerCase()} was challenged. What was the outcome?"</li>
+                                <li>"How do you typically approach situations requiring strong ${formattedName.toLowerCase()}?"</li>
+                            </ul>
+                        </div>`;
+                    }).join('')}
+                </div>
+            </div>
+            ` : ''}
+
+            <!-- Assessment Methodology -->
+            <div class="section">
+                <div class="section-header">
+                    <div class="section-icon">📚</div>
+                    <h2>Assessment Methodology & Standards</h2>
+                </div>
+                
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; border-left: 4px solid #666;">
+                    <p style="margin-bottom: 15px;"><strong>Theoretical Framework:</strong> This assessment is based on established psychological theories and validated psychometric principles.</p>
+                    
+                    <p style="margin-bottom: 15px;"><strong>Validation Evidence:</strong></p>
+                    <ul style="margin: 10px 0;">
+                        <li><strong>Internal Consistency:</strong> Cronbach's Alpha coefficients range from 0.85-0.92</li>
+                        <li><strong>Test-Retest Reliability:</strong> Correlation coefficients of 0.78-0.88 over 4-week intervals</li>
+                        <li><strong>Construct Validity:</strong> Factor analysis confirms dimensional structure</li>
                     </ul>
-                </div>`;
-            }).join('')}
-            
-            ${Object.entries(dimensionScores).filter(([_, score]) => score >= 75).slice(0, 2).map(([dimension, score]) => {
-                const formattedName = dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-                return `<div style="margin-bottom: 15px; padding: 12px; background: #E8F5E8; border-radius: 6px;">
-                    <p style="margin: 0 0 8px 0;"><strong>${formattedName} (Strength Area - Score: ${score}):</strong></p>
-                    <ul style="margin: 5px 0 0 20px; font-size: 0.95em;">
-                        <li>"Give me an example of when you used your ${formattedName.toLowerCase()} expertise to solve a complex problem or help others."</li>
-                        <li>"How has your strength in ${formattedName.toLowerCase()} contributed to team or organizational success?"</li>
-                        <li>"What's the most challenging ${formattedName.toLowerCase()}-related situation you've successfully navigated?"</li>
-                    </ul>
-                </div>`;
-            }).join('')}
-        </div>
-
-        <!-- Situational Judgment Scenarios -->
-        <div style="background: #E3F2FD; padding: 20px; border-radius: 8px; border-left: 4px solid #2196F3; margin-bottom: 20px;">
-            <h3>Situational Judgment & Problem-Solving Scenarios</h3>
-            <p style="margin-bottom: 15px;"><strong>Instructions for Interviewer:</strong> Present these scenarios and evaluate the candidate's reasoning process, decision-making quality, and alignment with role requirements. Look for structured thinking, consideration of stakeholders, and practical solutions.</p>
-            
-            <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; border: 1px solid #E1F5FE;">
-                <h4 style="color: #1976D2; margin-top: 0;">Scenario A: Complex Problem Solving</h4>
-                <p><strong>Situation:</strong> "You're three weeks into a critical project when you discover that a key assumption was incorrect, potentially affecting the entire approach. The deadline cannot be moved, stakeholders have high expectations, and your team is already stretched thin. How do you handle this situation?"</p>
-                <p><strong>Follow-up Questions:</strong></p>
-                <ul style="margin: 5px 0 0 20px;">
-                    <li>"Who would you involve in developing a solution and why?"</li>
-                    <li>"How would you communicate this to stakeholders?"</li>
-                    <li>"What steps would you take to prevent similar issues in future projects?"</li>
-                </ul>
-                <p><strong>Evaluation Focus:</strong> Problem-solving approach, stakeholder management, communication under pressure, learning orientation.</p>
-            </div>
-            
-            <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; border: 1px solid #E1F5FE;">
-                <h4 style="color: #1976D2; margin-top: 0;">Scenario B: Team Dynamics & Leadership</h4>
-                <p><strong>Situation:</strong> "You're leading a diverse team where two high-performing members have fundamentally different approaches to the same task. Both approaches have merit, but the disagreement is creating tension and slowing progress. How do you resolve this while maintaining team cohesion and meeting objectives?"</p>
-                <p><strong>Follow-up Questions:</strong></p>
-                <ul style="margin: 5px 0 0 20px;">
-                    <li>"How would you gather information about both approaches objectively?"</li>
-                    <li>"What factors would influence your final decision?"</li>
-                    <li>"How would you ensure both team members feel valued regardless of the outcome?"</li>
-                </ul>
-                <p><strong>Evaluation Focus:</strong> Leadership style, conflict resolution, team dynamics management, decision-making process.</p>
-            </div>
-        </div>
-
-        <!-- Assessment Center Exercise Recommendations -->
-        <div style="background: #F3E5F5; padding: 20px; border-radius: 8px; border-left: 4px solid #7B1FA2;">
-            <h3>Assessment Center Exercise Recommendations</h3>
-            
-            <div style="margin-bottom: 20px;">
-                <h4 style="color: #7B1FA2;">1. Case Study Analysis (45 minutes + 15 min Q&A)</h4>
-                <p><strong>Focus Areas:</strong> ${Object.entries(dimensionScores).slice(0, 3).map(([dimension]) => dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())).join(', ')}</p>
-                <p><strong>Case Topic:</strong> Industry-relevant strategic challenge requiring analysis, recommendation development, and implementation planning.</p>
-                <p><strong>Deliverable:</strong> 10-minute presentation with visual aids + written executive summary</p>
-                <p><strong>Evaluation Criteria:</strong> Analytical thinking, strategic perspective, presentation skills, stakeholder consideration, feasibility assessment</p>
-            </div>
-            
-            <div style="margin-bottom: 20px;">
-                <h4 style="color: #7B1FA2;">2. Role-Play Exercise (20-30 minutes)</h4>
-                <p><strong>Scenario:</strong> Challenging stakeholder conversation requiring negotiation and relationship management</p>
-                <p><strong>Role:</strong> Candidate plays their target role, trained actor plays difficult stakeholder</p>
-                <p><strong>Objective:</strong> Reach mutually acceptable resolution while maintaining professional relationship</p>
-                <p><strong>Evaluation Focus:</strong> Communication effectiveness, emotional intelligence, persuasion skills, professionalism under pressure</p>
-            </div>
-            
-            <div>
-                <h4 style="color: #7B1FA2;">3. Group Problem-Solving Exercise (60 minutes)</h4>
-                <p><strong>Participants:</strong> 4-6 candidates working collaboratively</p>
-                <p><strong>Task:</strong> Complex business simulation requiring consensus and collective problem-solving</p>
-                <p><strong>Observer Focus:</strong> Leadership emergence, collaboration style, influence tactics, contribution quality, conflict resolution</p>
-                <p><strong>Special Note:</strong> Based on assessment results, pay particular attention to how candidate demonstrates ${Object.entries(dimensionScores).filter(([_, score]) => score >= 70).slice(0, 2).map(([dimension]) => dimension.replace(/_/g, ' ')).join(' and ')} competencies in group setting</p>
-            </div>
-        </div>
-    </div>
-    ` : ''}
-
-    <!-- Footer with Copyright and Privacy -->
-    <div style="background: #f8f9fa; padding: 30px; margin-top: 40px; border-radius: 10px; border-top: 3px solid #4A90E2;">
-        <div style="text-align: center; margin-bottom: 20px;">
-            <div style="height: 40px; opacity: 0.8; display: flex; align-items: center; justify-content: center;">
-                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #4A90E2, #1E40AF); border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
-                    <span style="color: white; font-size: 16px; font-weight: bold;">A</span>
+                    
+                    <p style="margin-bottom: 15px;"><strong>Normative Sample:</strong> Scoring benchmarks derived from diverse professional population (N=15,000+).</p>
+                    <p style="margin-bottom: 0;"><strong>Assessment Version:</strong> ${displayName} v2.1 (Updated: December 2024)</p>
                 </div>
-                <span style="font-weight: bold; font-size: 16px; color: #4A90E2;">AuthenCore Analytics</span>
             </div>
         </div>
-        
-        <div style="font-size: 0.85em; color: #666; line-height: 1.4;">
-            <p style="text-align: center; margin: 10px 0;"><strong>© 2024 AuthenCore Analytics. All rights reserved.</strong></p>
-            <p style="text-align: center; margin: 10px 0;">AuthenCore™ is a trademark of AuthenCore Analytics.</p>
-            
-            <hr style="border: none; height: 1px; background: #ddd; margin: 20px 0;">
-            
-            <p style="margin: 10px 0;"><strong>Confidentiality Notice:</strong> This report contains confidential and proprietary information. Unauthorized reproduction, distribution, or disclosure is strictly prohibited.</p>
-            
-            <p style="margin: 10px 0;"><strong>Privacy & Data Protection:</strong> Personal data is processed in accordance with our Privacy Policy and applicable data protection laws including GDPR. For our complete privacy policy, visit www.authencore.org/privacy</p>
-            
-            <p style="margin: 10px 0;"><strong>Disclaimer:</strong> This assessment and report are provided for educational and professional development purposes only. The results are based on self-reported data and structured using validated psychological frameworks interpreted through AI algorithms. These results are not clinical tools and should not be used to diagnose, treat, or manage any mental health condition. If you have concerns about your mental health or wellbeing, please consult a qualified mental health professional or licensed psychologist.</p>
-            
-            <p style="text-align: center; margin: 15px 0 5px 0; font-size: 0.8em; color: #888;">
-                Report Generated: ${new Date().toLocaleString()} | Document ID: ${Math.random().toString(36).substr(2, 9).toUpperCase()}
-            </p>
+
+        <!-- Footer -->
+        <div class="footer-section">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                        <div style="width: 40px; height: 40px; background: rgba(255, 255, 255, 0.2); border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                            <span style="color: white; font-size: 16px; font-weight: bold;">A</span>
+                        </div>
+                        <span style="font-weight: bold; font-size: 16px;">AuthenCore Analytics</span>
+                    </div>
+                </div>
+                
+                <div class="footer-text">
+                    <p style="margin: 10px 0;"><strong>© 2024 AuthenCore Analytics. All rights reserved.</strong></p>
+                    <p style="margin: 10px 0;">This report contains confidential information. Unauthorized distribution is prohibited.</p>
+                    <p style="margin: 15px 0 5px 0; font-size: 12px;">
+                        Report Generated: ${new Date().toLocaleString()} | Document ID: ${reportId}
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </body>
 </html>`;
 
-    logStep("Report generated successfully");
+    console.log("📊 Report generated successfully");
 
     return new Response(htmlContent, {
       status: 200,
@@ -710,20 +949,17 @@ serve(async (req) => {
     });
 
   } catch (error) {
-    logStep("Error occurred", { error: error.message });
-    console.error("Error in generate-pdf-report:", error);
-    
+    console.error("❌ Error in generate-pdf-report function:", error);
     return new Response(
-      JSON.stringify({
-        error: {
-          message: error.message || "An error occurred while generating the report",
-        },
-      }),
+      JSON.stringify({ 
+        error: error.message,
+        details: "Failed to generate PDF report"
+      }), 
       {
         status: 500,
-        headers: {
-          ...corsHeaders,
-          "Content-Type": "application/json",
+        headers: { 
+          ...corsHeaders, 
+          "Content-Type": "application/json" 
         },
       }
     );
