@@ -37,6 +37,19 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
   useEffect(() => {
     const findLogoUrl = async () => {
       console.log(`🔍 Looking for logo for assessment: ${assessmentId}`);
+      
+      // First, try to import from local assets
+      try {
+        const localLogo = await import(`@/assets/${assessmentId}-logo.png`);
+        console.log(`✅ Found local logo: ${localLogo.default}`);
+        setLogoUrl(localLogo.default);
+        setIsLoading(false);
+        return;
+      } catch (error) {
+        console.log(`❌ No local logo found for ${assessmentId}, checking storage`);
+      }
+      
+      // If no local logo, check Supabase storage
       const extensions = ['png', 'jpg', 'jpeg', 'svg'];
       
       for (const ext of extensions) {
@@ -45,14 +58,15 @@ export const AssessmentLogo: React.FC<AssessmentLogoProps> = ({
           .from('assessment-logos')
           .getPublicUrl(fileName);
         
-        console.log(`⚡ Checking: ${data.publicUrl}`);
+        console.log(`⚡ Checking storage: ${data.publicUrl}`);
         
         // Check if file exists by trying to fetch it
         try {
           const response = await fetch(data.publicUrl, { method: 'HEAD' });
           if (response.ok) {
-            console.log(`✅ Found logo: ${data.publicUrl}`);
+            console.log(`✅ Found storage logo: ${data.publicUrl}`);
             setLogoUrl(data.publicUrl);
+            setIsLoading(false);
             return; // Found a logo, stop checking other extensions
           } else {
             console.log(`❌ Not found (${response.status}): ${data.publicUrl}`);
