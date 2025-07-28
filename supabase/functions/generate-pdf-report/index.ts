@@ -11,6 +11,19 @@ const logStep = (step: string, details?: any) => {
   console.log(`[GENERATE-PDF-REPORT] ${step}${detailsStr}`);
 };
 
+// Helper function to safely extract score values
+const getScoreValue = (score: any): number => {
+  if (typeof score === 'number') return Math.round(score);
+  if (typeof score === 'object' && score !== null) {
+    return Math.round(score.value || score.score || score.percentage || 0);
+  }
+  if (typeof score === 'string') {
+    const parsed = parseFloat(score);
+    return isNaN(parsed) ? 0 : Math.round(parsed);
+  }
+  return 0;
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -20,7 +33,13 @@ serve(async (req) => {
     logStep("Function started");
 
     const { assessmentType, results, userData } = await req.json();
-    logStep("Request data received", { assessmentType, hasResults: !!results, hasUserData: !!userData });
+    logStep("Request data received", { 
+      assessmentType, 
+      hasResults: !!results, 
+      hasUserData: !!userData,
+      resultsType: typeof results,
+      userDataType: typeof userData
+    });
 
     // Generate comprehensive professional report based on assessment type
     let reportHtml = '';
@@ -103,15 +122,17 @@ function generateCommunicationReport(results: any, userData: any): string {
                 <p>Your communication style reflects how you naturally express ideas, listen to others, and engage in conversations.</p>
                 
                 <div class="score-grid">
-                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => `
+                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${formatDimensionName(dimension)}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
 
@@ -151,15 +172,17 @@ function generateCareerLaunchReport(results: any, userData: any): string {
             <div class="section">
                 <h2>Interest Profile (RIASEC)</h2>
                 <div class="score-grid">
-                    ${Object.entries(interests).map(([type, score]: [string, any]) => `
+                    ${Object.entries(interests).map(([type, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${type}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
 
@@ -168,9 +191,9 @@ function generateCareerLaunchReport(results: any, userData: any): string {
                 <div class="recommendations">
                     ${recommendations.slice(0, 5).map((career: any) => `
                         <div class="recommendation-item">
-                            <h3>${career.title}</h3>
-                            <p><strong>Match Score:</strong> ${career.score}%</p>
-                            <p>${career.description}</p>
+                            <h3>${career.title || 'Career Option'}</h3>
+                            <p><strong>Match Score:</strong> ${getScoreValue(career.score)}%</p>
+                            <p>${career.description || 'No description available'}</p>
                         </div>
                     `).join('')}
                 </div>
@@ -210,15 +233,17 @@ function generateCAIRReport(results: any, userData: any): string {
             <div class="section">
                 <h2>Personality Dimensions</h2>
                 <div class="score-grid">
-                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => `
+                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${formatDimensionName(dimension)}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
 
@@ -251,15 +276,17 @@ function generateEQReport(results: any, userData: any): string {
             <div class="section">
                 <h2>Emotional Intelligence Dimensions</h2>
                 <div class="score-grid">
-                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => `
+                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${formatDimensionName(dimension)}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
         </div>
@@ -287,15 +314,17 @@ function generateCulturalReport(results: any, userData: any): string {
             <div class="section">
                 <h2>Cultural Intelligence Dimensions</h2>
                 <div class="score-grid">
-                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => `
+                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${formatDimensionName(dimension)}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
         </div>
@@ -323,15 +352,17 @@ function generateStressReport(results: any, userData: any): string {
             <div class="section">
                 <h2>Stress Resilience Profile</h2>
                 <div class="score-grid">
-                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => `
+                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${formatDimensionName(dimension)}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
         </div>
@@ -359,15 +390,17 @@ function generateLeadershipReport(results: any, userData: any): string {
             <div class="section">
                 <h2>Leadership Dimensions</h2>
                 <div class="score-grid">
-                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => `
+                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${formatDimensionName(dimension)}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
         </div>
@@ -395,15 +428,17 @@ function generateFaithValuesReport(results: any, userData: any): string {
             <div class="section">
                 <h2>Faith & Values Profile</h2>
                 <div class="score-grid">
-                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => `
+                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${formatDimensionName(dimension)}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
         </div>
@@ -431,15 +466,17 @@ function generateGenZReport(results: any, userData: any): string {
             <div class="section">
                 <h2>Workplace Preferences</h2>
                 <div class="score-grid">
-                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => `
+                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${formatDimensionName(dimension)}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
         </div>
@@ -467,15 +504,17 @@ function generateDigitalWellnessReport(results: any, userData: any): string {
             <div class="section">
                 <h2>Digital Wellness Profile</h2>
                 <div class="score-grid">
-                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => `
+                    ${Object.entries(scores).map(([dimension, score]: [string, any]) => {
+                        const displayScore = getScoreValue(score);
+                        return `
                         <div class="score-card">
                             <h3>${formatDimensionName(dimension)}</h3>
-                            <div class="score-value">${score}%</div>
+                            <div class="score-value">${displayScore}%</div>
                             <div class="score-bar">
-                                <div class="score-fill" style="width: ${score}%"></div>
+                                <div class="score-fill" style="width: ${displayScore}%"></div>
                             </div>
                         </div>
-                    `).join('')}
+                    `}).join('')}
                 </div>
             </div>
         </div>
@@ -582,8 +621,8 @@ function generateReportHeader(title: string, userData: any): string {
         </div>
         <h1 style="text-align: center; margin: 20px 0;">${title}</h1>
         <div style="text-align: center; margin-bottom: 20px;">
-            <p><strong>Candidate:</strong> ${userData.name || 'N/A'}</p>
-            <p><strong>Email:</strong> ${userData.email || 'N/A'}</p>
+            <p><strong>Candidate:</strong> ${userData?.name || 'N/A'}</p>
+            <p><strong>Email:</strong> ${userData?.email || 'N/A'}</p>
             <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
         </div>
     </div>

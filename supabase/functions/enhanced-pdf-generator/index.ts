@@ -34,6 +34,9 @@ const handler = async (req: Request): Promise<Response> => {
 
     const requestData: GeneratePDFRequest = await req.json();
     console.log("Generating PDF for:", requestData.userInfo.name);
+    console.log("Assessment type:", requestData.assessmentType);
+    console.log("Assessment data type:", typeof requestData.assessmentData);
+    console.log("Assessment data keys:", requestData.assessmentData ? Object.keys(requestData.assessmentData) : 'null');
 
     // Enhanced HTML template with language support
     const htmlContent = generateEnhancedHTML(requestData);
