@@ -357,21 +357,7 @@ serve(async (req) => {
 <body>
     <div class="header">
         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <div style="height: 60px; margin-right: 20px; display: flex; align-items: center;">
-                <svg width="60" height="60" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
-                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
-                        </linearGradient>
-                    </defs>
-                    <!-- Stylized A shape -->
-                    <path d="M150 350L250 150L350 350L325 350L300 290L200 290L175 350Z" fill="url(#logoGradient)"/>
-                    <path d="M220 240L280 240L250 180Z" fill="white"/>
-                    <!-- Underline accent -->
-                    <path d="M180 380L320 380" stroke="url(#logoGradient)" stroke-width="8" stroke-linecap="round"/>
-                </svg>
-            </div>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAEAAElEQVR4nJxd26LsuokEz/9/csw8QBUFknvtpJOzdrcvEtdCAln2iDAzs7Bwc9NPmFmYu9lr9oSZW5hew196OPIW+RYWZvatX1oIMw973R49GOY+Lg4..." alt="AuthenCore Analytics" style="height: 60px; margin-right: 20px;">
             <div>
                 <h1 style="margin: 0; font-weight: bold;">${displayName} Assessment Report</h1>
                 <p style="font-size: 1.2em; color: #666; margin: 5px 0 0 0;">Professional Psychometric Assessment</p>
@@ -666,20 +652,7 @@ serve(async (req) => {
     <!-- Footer with Copyright and Privacy -->
     <div style="background: #f8f9fa; padding: 30px; margin-top: 40px; border-radius: 10px; border-top: 3px solid #4A90E2;">
         <div style="text-align: center; margin-bottom: 20px;">
-            <div style="height: 40px; opacity: 0.8; display: flex; align-items: center; justify-content: center;">
-                <svg width="40" height="40" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <linearGradient id="footerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:0.8" />
-                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:0.8" />
-                        </linearGradient>
-                    </defs>
-                    <path d="M150 350L250 150L350 350L325 350L300 290L200 290L175 350Z" fill="url(#footerLogoGradient)"/>
-                    <path d="M220 240L280 240L250 180Z" fill="white"/>
-                    <path d="M180 380L320 380" stroke="url(#footerLogoGradient)" stroke-width="8" stroke-linecap="round"/>
-                </svg>
-                <span style="margin-left: 10px; font-weight: bold; font-size: 16px; color: #4A90E2;">AuthenCore Analytics</span>
-            </div>
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAEAAElEQVR4nJxd26LsuokEz/9/csw8QBUFknvtpJOzdrcvEtcCAln2iDAzs7Bwc9NPmFmYu9lr9oSZW5hew196OPIW+RYWZnatX1oIMw973R49GOY+Lg4..." alt="AuthenCore Analytics" style="height: 40px; opacity: 0.8;">
         </div>
         
         <div style="font-size: 0.85em; color: #666; line-height: 1.4;">
