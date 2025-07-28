@@ -652,7 +652,12 @@ serve(async (req) => {
     <!-- Footer with Copyright and Privacy -->
     <div style="background: #f8f9fa; padding: 30px; margin-top: 40px; border-radius: 10px; border-top: 3px solid #4A90E2;">
         <div style="text-align: center; margin-bottom: 20px;">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAEAAElEQVR4nJxd26LsuokEz/9/csw8QBUFknvtpJOzdrcvEtcCAln2iDAzs7Bwc9NPmFmYu9lr9oSZW5hew196OPIW+RYWZnatX1oIMw973R49GOY+Lg4..." alt="AuthenCore Analytics" style="height: 40px; opacity: 0.8;">
+            <div style="height: 40px; opacity: 0.8; display: flex; align-items: center; justify-content: center;">
+                <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #4A90E2, #1E40AF); border-radius: 6px; display: flex; align-items: center; justify-content: center; margin-right: 10px;">
+                    <span style="color: white; font-size: 16px; font-weight: bold;">A</span>
+                </div>
+                <span style="font-weight: bold; font-size: 16px; color: #4A90E2;">AuthenCore Analytics</span>
+            </div>
         </div>
         
         <div style="font-size: 0.85em; color: #666; line-height: 1.4;">
