@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { CheckCircle2, Play, Clock, Brain, Users, Target } from "lucide-react";
+import { AssessmentLogo } from "@/components/AssessmentLogo";
 
 interface AssessmentPreviewModalProps {
   isOpen: boolean;
@@ -56,13 +57,20 @@ const AssessmentPreviewModal = ({
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
-          <div className="flex items-center gap-3 mb-2">
-            <IconComponent className="h-6 w-6 text-primary" />
-            <DialogTitle className="text-xl">{assessmentTitle} Preview</DialogTitle>
+          <div className="flex flex-col items-center gap-4 mb-4">
+            <AssessmentLogo 
+              assessmentId={assessmentType}
+              title={assessmentTitle}
+              size="lg"
+              fallbackIcon="Target"
+            />
+            <div className="text-center">
+              <DialogTitle className="text-xl">{assessmentTitle} Preview</DialogTitle>
+              <DialogDescription className="mt-2">
+                {assessmentDescription}
+              </DialogDescription>
+            </div>
           </div>
-          <DialogDescription>
-            {assessmentDescription}
-          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
