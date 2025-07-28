@@ -33,33 +33,8 @@ export class ConsolidatedReportService {
     config: ReportConfig = this.getDefaultConfig()
   ): Promise<void> {
     try {
-      // Try server-side PDF generation for better performance
-      try {
-        // Attempting server-side PDF generation
-        const { data: pdfData, error } = await supabase.functions.invoke('generate-pdf-report', {
-          body: { result, config }
-        });
-
-        if (!error && pdfData && pdfData.pdf) {
-          // Download the server-generated PDF
-          const blob = new Blob([Uint8Array.from(atob(pdfData.pdf), c => c.charCodeAt(0))], 
-            { type: 'application/pdf' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = this.generateFileName(result, config);
-          a.click();
-          URL.revokeObjectURL(url);
-          
-          await this.logReportGeneration(result, config);
-          toast.success('Report generated on server successfully!');
-          return;
-        }
-        
-        // Server-side PDF generation failed, falling back to client-side
-      } catch (error) {
-        console.warn('Server-side PDF generation error, using fallback:', error);
-      }
+      // Skip server-side generation and use client-side only to avoid "object object" issues
+      console.log('Using client-side PDF generation only');
 
       // Fallback to client-side generation
       const doc = new jsPDF();
@@ -205,7 +180,7 @@ export class ConsolidatedReportService {
     doc.text('Dimension Analysis', 20, yPosition);
     yPosition += 15;
 
-    // Create dimension breakdown
+    // Create dimension breakdown with proper error handling
     Object.entries(result.dimensionScores).forEach(([dimension, score]) => {
       if (yPosition > 250) {
         doc.addPage();
@@ -215,11 +190,13 @@ export class ConsolidatedReportService {
       doc.setFontSize(12);
       doc.setFont('helvetica', 'bold');
       const formattedDimension = this.formatDimensionName(dimension);
-      doc.text(`${formattedDimension}: ${score}/100`, 25, yPosition);
+      // Ensure score is a number, not an object
+      const numericScore = typeof score === 'number' ? score : (typeof score === 'object' && score && typeof score === 'object' && 'score' in score ? (score as any).score : 0);
+      doc.text(`${formattedDimension}: ${numericScore}/100`, 25, yPosition);
       
       // Score bar
-      const barWidth = (score / 100) * 120;
-      const barColor = this.getScoreColor(score);
+      const barWidth = (numericScore / 100) * 120;
+      const barColor = this.getScoreColor(numericScore);
       doc.setFillColor(...barColor);
       doc.rect(25, yPosition + 3, barWidth, 6, 'F');
       doc.setDrawColor(200, 200, 200);
@@ -228,7 +205,7 @@ export class ConsolidatedReportService {
       // Interpretation
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(10);
-      const interpretation = this.getDimensionInterpretation(dimension, score);
+      const interpretation = this.getDimensionInterpretation(dimension, numericScore);
       const interpretationLines = doc.splitTextToSize(interpretation, 160);
       doc.text(interpretationLines, 25, yPosition + 15);
       yPosition += 15 + interpretationLines.length * 5 + 8;
