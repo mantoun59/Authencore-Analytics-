@@ -66,6 +66,10 @@
     "aiPowered": {
       "title": "KI-gestützte Analyse",
       "description": "Fortschrittliche künstliche Intelligenz analysiert Ihre Antworten für tiefere Erkenntnisse und personalisierte Empfehlungen."
+    },
+    "whyChoose": {
+      "title": "Warum AuthenCore Analytics Wählen",
+      "subtitle": "Erleben Sie psychologische Bewertungen auf professionellem Niveau, die durch wissenschaftliche Forschung unterstützt und darauf ausgelegt sind, bedeutungsvolle Erkenntnisse für die persönliche und berufliche Entwicklung zu liefern"
     }
   },
   "assessments": {
@@ -121,7 +125,7 @@
     }
   },
   "about": {
-    "mission": "Unsere Mission ist es, fortschrittliche psychometrische Bewertungen zugänglich zu machen",
+    "mission": "Über Uns – Authencore Analytics",
     "vision": "Eine Welt zu schaffen, in der jeder sein volles Potenzial verstehen kann",
     "values": "Wissenschaftliche Genauigkeit, Privatsphäre und persönliche Entwicklung"
   },

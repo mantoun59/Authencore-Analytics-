@@ -59,6 +59,10 @@
     "secure": {
       "title": "Sécurisé et Privé",
       "description": "Chiffrement de niveau entreprise et politiques de confidentialité strictes protègent toutes les données utilisateur."
+    },
+    "whyChoose": {
+      "title": "Pourquoi Choisir AuthenCore Analytics",
+      "subtitle": "Découvrez des évaluations psychologiques de niveau professionnel soutenues par la recherche scientifique et conçues pour fournir des insights significatifs pour le développement personnel et professionnel"
     }
   },
   "assessments": {
@@ -117,7 +121,7 @@
   "about": {
     "title": "À propos d'AuthenCore Analytics",
     "subtitle": "Pionniers de l'évaluation psychométrique moderne",
-    "mission": "Notre Mission",
+    "mission": "À Propos de Nous – Authencore Analytics",
     "missionText": "Révolutionner l'évaluation des talents grâce à la science psychométrique avancée et l'intelligence artificielle.",
     "vision": "Notre Vision",
     "visionText": "Un monde où chaque individu atteint son plein potentiel grâce à des insights précis et un développement personnalisé.",
