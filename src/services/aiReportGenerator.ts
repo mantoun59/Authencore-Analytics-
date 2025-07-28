@@ -768,9 +768,27 @@ export class AIReportGenerator {
   }
 
   private addLogoPlaceholder(doc: jsPDF, margin: number) {
-    // Create a professional logo placeholder
-    doc.setFillColor(59, 130, 246); // Blue brand color
-    doc.circle(margin + 17.5, 27.5, 15, 'F');
+    // Add AuthenCore Analytics branding
+    doc.setFillColor(74, 144, 226); // Brand blue
+    
+    // Create stylized "A" shape
+    const centerX = margin + 17.5;
+    const centerY = 27.5;
+    
+    // Main triangle shape
+    doc.triangle(centerX - 10, centerY + 8, centerX, centerY - 8, centerX + 10, centerY + 8, 'F');
+    
+    // Inner triangle (white)
+    doc.setFillColor(255, 255, 255);
+    doc.triangle(centerX - 4, centerY + 2, centerX, centerY - 2, centerX + 4, centerY + 2, 'F');
+    
+    // Add company name
+    doc.setFontSize(8);
+    doc.setTextColor(74, 144, 226);
+    doc.text('AuthenCore Analytics', centerX + 20, centerY - 2);
+    doc.setFontSize(6);
+    doc.setTextColor(100, 100, 100);
+    doc.text('Professional Assessment Platform', centerX + 20, centerY + 5);
     
     // Add inner circle
     doc.setFillColor(255, 255, 255);

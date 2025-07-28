@@ -357,8 +357,20 @@ serve(async (req) => {
 <body>
     <div class="header">
         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <div style="height: 60px; margin-right: 20px; display: flex; align-items: center; font-weight: bold; font-size: 24px; color: #4A90E2;">
-                AuthenCore Analytics
+            <div style="height: 60px; margin-right: 20px; display: flex; align-items: center;">
+                <svg width="60" height="60" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <!-- Stylized A shape -->
+                    <path d="M150 350L250 150L350 350L325 350L300 290L200 290L175 350Z" fill="url(#logoGradient)"/>
+                    <path d="M220 240L280 240L250 180Z" fill="white"/>
+                    <!-- Underline accent -->
+                    <path d="M180 380L320 380" stroke="url(#logoGradient)" stroke-width="8" stroke-linecap="round"/>
+                </svg>
             </div>
             <div>
                 <h1 style="margin: 0; font-weight: bold;">${displayName} Assessment Report</h1>
@@ -478,6 +490,22 @@ serve(async (req) => {
         <div style="line-height: 1.8; font-size: 1em;">
             ${detailedInsights}
         </div>
+        
+        <!-- Career Fit Analysis -->
+        <div style="margin-top: 30px; background: #F3E5F5; padding: 20px; border-radius: 8px; border-left: 4px solid #7B1FA2;">
+            <h3 style="color: #7B1FA2; margin-top: 0;">Career Fit & Role Alignment</h3>
+            <p><strong>Ideal Roles:</strong> Based on your competency profile, you would excel in positions that leverage your strengths in ${Object.entries(dimensionScores).filter(([_, score]) => score >= 70).map(([name]) => name.replace(/_/g, ' ')).join(', ') || 'developing areas'}.</p>
+            <p><strong>Work Environment:</strong> You would thrive in ${overallScore >= 75 ? 'dynamic, challenging environments with opportunities for leadership and innovation' : overallScore >= 60 ? 'structured environments with clear expectations and support for development' : 'supportive environments with strong mentorship and learning opportunities'}.</p>
+            <p><strong>Team Dynamics:</strong> Your profile suggests you would work well in ${overallScore >= 75 ? 'leadership roles, cross-functional teams, and high-stakes projects' : overallScore >= 60 ? 'collaborative teams with defined roles and regular feedback' : 'small teams with patient colleagues and clear guidance'}.</p>
+        </div>
+
+        <!-- Benchmark Comparison -->
+        <div style="margin-top: 20px; background: #E8F5E8; padding: 20px; border-radius: 8px; border-left: 4px solid #4CAF50;">
+            <h3 style="color: #4CAF50; margin-top: 0;">Industry Benchmark Comparison</h3>
+            <p><strong>Performance Ranking:</strong> Your overall score of ${overallScore}/100 places you in the ${overallScore >= 85 ? 'top 15%' : overallScore >= 70 ? 'top 35%' : overallScore >= 55 ? 'middle 50%' : 'bottom 25%'} of professionals in similar roles.</p>
+            <p><strong>Competency Distribution:</strong> ${Object.entries(dimensionScores).filter(([_, score]) => score >= 80).length} dimensions show exceptional performance, ${Object.entries(dimensionScores).filter(([_, score]) => score >= 60 && score < 80).length} show solid competency, and ${Object.entries(dimensionScores).filter(([_, score]) => score < 60).length} require development focus.</p>
+            <p><strong>Growth Potential:</strong> ${overallScore >= 70 ? 'High potential for rapid advancement with targeted skill development in key areas' : 'Significant growth potential through structured development and experience-based learning'}.</p>
+        </div>
     </div>
 
     <div class="section">
@@ -539,11 +567,118 @@ serve(async (req) => {
         </div>
     </div>
 
+    <!-- Enhanced Interview Guide & Assessment Questions -->
+    <div class="section">
+        <h2>Comprehensive Interview Guide & Assessment Questions</h2>
+        
+        <!-- Behavioral Interview Questions -->
+        <div style="background: #FFF3E0; padding: 20px; border-radius: 8px; border-left: 4px solid #FF9800; margin-bottom: 20px;">
+            <h3>Targeted Behavioral Interview Questions</h3>
+            ${interviewQuestions}
+            
+            <h4 style="margin-top: 20px; color: #F57C00;">Competency-Specific Deep Dive Questions</h4>
+            ${Object.entries(dimensionScores).filter(([_, score]) => score < 65).slice(0, 3).map(([dimension, score]) => {
+                const formattedName = dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                return `<div style="margin-bottom: 15px; padding: 12px; background: #FFF8E1; border-radius: 6px;">
+                    <p style="margin: 0 0 8px 0;"><strong>${formattedName} (Development Area - Score: ${score}):</strong></p>
+                    <ul style="margin: 5px 0 0 20px; font-size: 0.95em;">
+                        <li>"Tell me about a time when your ${formattedName.toLowerCase()} was challenged. What was the outcome and what did you learn?"</li>
+                        <li>"How do you typically approach situations requiring strong ${formattedName.toLowerCase()}? Can you walk me through your process?"</li>
+                        <li>"What specific steps have you taken in the past year to develop your ${formattedName.toLowerCase()} capabilities?"</li>
+                        <li>"If you were to mentor someone in ${formattedName.toLowerCase()}, what would be your top three pieces of advice?"</li>
+                    </ul>
+                </div>`;
+            }).join('')}
+            
+            ${Object.entries(dimensionScores).filter(([_, score]) => score >= 75).slice(0, 2).map(([dimension, score]) => {
+                const formattedName = dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                return `<div style="margin-bottom: 15px; padding: 12px; background: #E8F5E8; border-radius: 6px;">
+                    <p style="margin: 0 0 8px 0;"><strong>${formattedName} (Strength Area - Score: ${score}):</strong></p>
+                    <ul style="margin: 5px 0 0 20px; font-size: 0.95em;">
+                        <li>"Give me an example of when you used your ${formattedName.toLowerCase()} expertise to solve a complex problem or help others."</li>
+                        <li>"How has your strength in ${formattedName.toLowerCase()} contributed to team or organizational success?"</li>
+                        <li>"What's the most challenging ${formattedName.toLowerCase()}-related situation you've successfully navigated?"</li>
+                    </ul>
+                </div>`;
+            }).join('')}
+        </div>
+
+        <!-- Situational Judgment Scenarios -->
+        <div style="background: #E3F2FD; padding: 20px; border-radius: 8px; border-left: 4px solid #2196F3; margin-bottom: 20px;">
+            <h3>Situational Judgment & Problem-Solving Scenarios</h3>
+            <p style="margin-bottom: 15px;"><strong>Instructions for Interviewer:</strong> Present these scenarios and evaluate the candidate's reasoning process, decision-making quality, and alignment with role requirements. Look for structured thinking, consideration of stakeholders, and practical solutions.</p>
+            
+            <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; border: 1px solid #E1F5FE;">
+                <h4 style="color: #1976D2; margin-top: 0;">Scenario A: Complex Problem Solving</h4>
+                <p><strong>Situation:</strong> "You're three weeks into a critical project when you discover that a key assumption was incorrect, potentially affecting the entire approach. The deadline cannot be moved, stakeholders have high expectations, and your team is already stretched thin. How do you handle this situation?"</p>
+                <p><strong>Follow-up Questions:</strong></p>
+                <ul style="margin: 5px 0 0 20px;">
+                    <li>"Who would you involve in developing a solution and why?"</li>
+                    <li>"How would you communicate this to stakeholders?"</li>
+                    <li>"What steps would you take to prevent similar issues in future projects?"</li>
+                </ul>
+                <p><strong>Evaluation Focus:</strong> Problem-solving approach, stakeholder management, communication under pressure, learning orientation.</p>
+            </div>
+            
+            <div style="margin-bottom: 20px; padding: 15px; background: white; border-radius: 8px; border: 1px solid #E1F5FE;">
+                <h4 style="color: #1976D2; margin-top: 0;">Scenario B: Team Dynamics & Leadership</h4>
+                <p><strong>Situation:</strong> "You're leading a diverse team where two high-performing members have fundamentally different approaches to the same task. Both approaches have merit, but the disagreement is creating tension and slowing progress. How do you resolve this while maintaining team cohesion and meeting objectives?"</p>
+                <p><strong>Follow-up Questions:</strong></p>
+                <ul style="margin: 5px 0 0 20px;">
+                    <li>"How would you gather information about both approaches objectively?"</li>
+                    <li>"What factors would influence your final decision?"</li>
+                    <li>"How would you ensure both team members feel valued regardless of the outcome?"</li>
+                </ul>
+                <p><strong>Evaluation Focus:</strong> Leadership style, conflict resolution, team dynamics management, decision-making process.</p>
+            </div>
+        </div>
+
+        <!-- Assessment Center Exercise Recommendations -->
+        <div style="background: #F3E5F5; padding: 20px; border-radius: 8px; border-left: 4px solid #7B1FA2;">
+            <h3>Assessment Center Exercise Recommendations</h3>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="color: #7B1FA2;">1. Case Study Analysis (45 minutes + 15 min Q&A)</h4>
+                <p><strong>Focus Areas:</strong> ${Object.entries(dimensionScores).slice(0, 3).map(([dimension]) => dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())).join(', ')}</p>
+                <p><strong>Case Topic:</strong> Industry-relevant strategic challenge requiring analysis, recommendation development, and implementation planning.</p>
+                <p><strong>Deliverable:</strong> 10-minute presentation with visual aids + written executive summary</p>
+                <p><strong>Evaluation Criteria:</strong> Analytical thinking, strategic perspective, presentation skills, stakeholder consideration, feasibility assessment</p>
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <h4 style="color: #7B1FA2;">2. Role-Play Exercise (20-30 minutes)</h4>
+                <p><strong>Scenario:</strong> Challenging stakeholder conversation requiring negotiation and relationship management</p>
+                <p><strong>Role:</strong> Candidate plays their target role, trained actor plays difficult stakeholder</p>
+                <p><strong>Objective:</strong> Reach mutually acceptable resolution while maintaining professional relationship</p>
+                <p><strong>Evaluation Focus:</strong> Communication effectiveness, emotional intelligence, persuasion skills, professionalism under pressure</p>
+            </div>
+            
+            <div>
+                <h4 style="color: #7B1FA2;">3. Group Problem-Solving Exercise (60 minutes)</h4>
+                <p><strong>Participants:</strong> 4-6 candidates working collaboratively</p>
+                <p><strong>Task:</strong> Complex business simulation requiring consensus and collective problem-solving</p>
+                <p><strong>Observer Focus:</strong> Leadership emergence, collaboration style, influence tactics, contribution quality, conflict resolution</p>
+                <p><strong>Special Note:</strong> Based on assessment results, pay particular attention to how candidate demonstrates ${Object.entries(dimensionScores).filter(([_, score]) => score >= 70).slice(0, 2).map(([dimension]) => dimension.replace(/_/g, ' ')).join(' and ')} competencies in group setting</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer with Copyright and Privacy -->
     <div style="background: #f8f9fa; padding: 30px; margin-top: 40px; border-radius: 10px; border-top: 3px solid #4A90E2;">
         <div style="text-align: center; margin-bottom: 20px;">
-            <div style="height: 40px; opacity: 0.8; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: #4A90E2;">
-                AuthenCore Analytics
+            <div style="height: 40px; opacity: 0.8; display: flex; align-items: center; justify-content: center;">
+                <svg width="40" height="40" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="footerLogoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#4A90E2;stop-opacity:0.8" />
+                            <stop offset="100%" style="stop-color:#1E40AF;stop-opacity:0.8" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M150 350L250 150L350 350L325 350L300 290L200 290L175 350Z" fill="url(#footerLogoGradient)"/>
+                    <path d="M220 240L280 240L250 180Z" fill="white"/>
+                    <path d="M180 380L320 380" stroke="url(#footerLogoGradient)" stroke-width="8" stroke-linecap="round"/>
+                </svg>
+                <span style="margin-left: 10px; font-weight: bold; font-size: 16px; color: #4A90E2;">AuthenCore Analytics</span>
             </div>
         </div>
         

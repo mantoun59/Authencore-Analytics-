@@ -438,7 +438,45 @@ export class ProfessionalReportGenerator {
           reject(error);
         }
       };
-      img.onerror = () => reject(new Error('Failed to load logo image'));
+      img.onerror = () => {
+        // If image fails to load, create a fallback logo
+        const canvas = document.createElement('canvas');
+        canvas.width = 200;
+        canvas.height = 60;
+        const ctx = canvas.getContext('2d')!;
+        
+        // Create gradient background
+        const gradient = ctx.createLinearGradient(0, 0, 200, 60);
+        gradient.addColorStop(0, '#4A90E2');
+        gradient.addColorStop(1, '#1E40AF');
+        
+        // Draw stylized A
+        ctx.fillStyle = gradient;
+        ctx.beginPath();
+        ctx.moveTo(30, 45);
+        ctx.lineTo(50, 15);
+        ctx.lineTo(70, 45);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Inner triangle
+        ctx.fillStyle = 'white';
+        ctx.beginPath();
+        ctx.moveTo(42, 35);
+        ctx.lineTo(50, 25);
+        ctx.lineTo(58, 35);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Add text
+        ctx.fillStyle = '#1E40AF';
+        ctx.font = 'bold 16px Arial';
+        ctx.fillText('AuthenCore', 80, 25);
+        ctx.font = '12px Arial';
+        ctx.fillText('Analytics', 80, 40);
+        
+        resolve(canvas.toDataURL());
+      };
       
       // Try to get logo from LogoContext first, then fallback to static paths
       try {
@@ -446,11 +484,11 @@ export class ProfessionalReportGenerator {
           img.src = module.default;
         }).catch(() => {
           // Fallback to public path
-          img.src = './src/assets/final-logo.png';
+          img.src = '/final-logo.png';
         });
       } catch {
-        // Final fallback
-        img.src = './src/assets/final-logo.png';
+        // This will trigger the error handler above
+        img.src = 'invalid-path-to-trigger-fallback';
       }
     });
   }
