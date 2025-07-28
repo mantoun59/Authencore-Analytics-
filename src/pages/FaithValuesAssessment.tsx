@@ -12,6 +12,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useFaithValuesScoring } from '@/hooks/useFaithValuesScoring';
 import { faithValuesData } from '@/data/faithValuesQuestions';
+import { generateClientSidePdf } from '@/utils/clientPdfGenerator';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -101,17 +102,26 @@ export default function FaithValuesAssessment() {
         }
       };
 
-      const response = await supabase.functions.invoke('generate-pdf-report', {
-        body: reportData
+      generateClientSidePdf({
+        assessmentType: 'Faith & Values',
+        userInfo: {
+          name: userProfile.name,
+          email: userProfile.email,
+          position: userProfile.position,
+          organization: userProfile.organization,
+          faithBackground: userProfile.faithBackground
+        },
+        overallScore: results?.overallScore || 0,
+        dimensions: results?.dimensionScores ? Object.entries(results.dimensionScores).map(([key, value]: [string, any]) => ({
+          name: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          score: typeof value === 'number' ? value : (value?.score || 0)
+        })) : []
       });
-
-      if (response.data) {
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(response.data);
-          newWindow.document.close();
-        }
-      }
+      
+      toast({
+        title: "Report Generated",
+        description: "PDF report downloaded successfully!",
+      });
     } catch (error) {
       console.error('Error generating PDF:', error);
       toast({

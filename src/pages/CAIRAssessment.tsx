@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { generateClientSidePdf } from '@/utils/clientPdfGenerator';
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -364,47 +365,36 @@ export default function CAIRAssessment() {
         }
       };
 
-      const response = await supabase.functions.invoke('generate-pdf-report', {
-        body: reportData
-      });
-
-      if (response.data) {
-        // Open HTML report in new window for PDF printing
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(response.data);
-          newWindow.document.close();
-          
-          // Add print-friendly styles and auto-print
-          setTimeout(() => {
-            newWindow.focus();
-            newWindow.print();
-          }, 1000);
-
-          toast({
-            title: "Report Generated",
-            description: "Use your browser's Print dialog to save as PDF. Select 'Save as PDF' as destination.",
-          });
-        } else {
-          // Fallback: download as HTML if popup blocked
-          const blob = new Blob([response.data], { type: 'text/html' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `CAIR_Report_${userProfile.name.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.html`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-
-          toast({
-            title: "HTML Report Downloaded",
-            description: "Open the HTML file and use your browser's Print to PDF feature.",
-          });
-        }
+      try {
+        generateClientSidePdf({
+          assessmentType: 'CAIR+ Personality',
+          userInfo: {
+            name: userProfile.name,
+            email: userProfile.email,
+            position: userProfile.position,
+            company: userProfile.company
+          },
+          overallScore: Math.round(Object.values(scores).reduce((sum, s) => sum + s.percentile, 0) / Object.keys(scores).length),
+          dimensions: Object.entries(scores).map(([key, value]) => ({
+            name: personalityDimensions[key as keyof typeof personalityDimensions]?.name || key,
+            score: value.percentile
+          }))
+        });
+        
+        toast({
+          title: "Report Generated",
+          description: "PDF report downloaded successfully!",
+        });
+      } catch (error) {
+        console.error('PDF generation error:', error);
+        toast({
+          title: "Report Generation Error",
+          description: "Failed to generate report. Please try again.",
+          variant: "destructive",
+        });
       }
     } catch (error) {
-      console.error('Error generating report:', error);
+      console.error('Error in report generation:', error);
       toast({
         title: "Report Generation Error",
         description: "Failed to generate report. Please try again.",

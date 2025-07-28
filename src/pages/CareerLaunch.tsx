@@ -8,6 +8,7 @@ import AssessmentResults from "@/components/AssessmentResults";
 import { PaymentProtection } from "@/components/PaymentProtection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { generateClientSidePdf } from '@/utils/clientPdfGenerator';
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -60,61 +61,26 @@ const CareerLaunch = () => {
 
   const downloadReport = async () => {
     try {
-      const reportData = {
-        assessmentType: 'career_launch',
-        results: assessmentResults,
-        userData: {
+      generateClientSidePdf({
+        assessmentType: 'CareerLaunch',
+        userInfo: {
           name: userProfile.name,
-          email: userProfile.email,
-          date: new Date().toLocaleDateString()
-        }
-      };
-
-      const response = await supabase.functions.invoke('generate-pdf-report', {
-        body: reportData
+          email: userProfile.email
+        },
+        overallScore: assessmentResults?.overallScore || 0,
+        dimensions: assessmentResults?.dimensions || []
       });
-
-      if (response.data) {
-        // Open HTML report in new window for PDF printing
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(response.data);
-          newWindow.document.close();
-          
-          // Add print-friendly styles and auto-print
-          setTimeout(() => {
-            newWindow.focus();
-            newWindow.print();
-          }, 1000);
-
-          toast({
-            title: "Report Generated",
-            description: "Use your browser's Print dialog to save as PDF. Select 'Save as PDF' as destination.",
-          });
-        } else {
-          // Fallback: download as HTML if popup blocked
-          const blob = new Blob([response.data], { type: 'text/html' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `CareerLaunch-Report-${userProfile.name.replace(/\s+/g, '-')}.html`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-
-          toast({
-            title: "HTML Report Downloaded",
-            description: "Open the HTML file and use your browser's Print to PDF feature.",
-          });
-        }
-      }
-    } catch (error) {
-      console.error('Error downloading report:', error);
+      
       toast({
-        title: "Download Error",
-        description: "Failed to download report. Please try again.",
-        variant: "destructive"
+        title: "Report Generated",
+        description: "PDF report downloaded successfully!",
+      });
+    } catch (error) {
+      console.error('PDF generation error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to generate PDF report. Please try again.",
+        variant: "destructive",
       });
     }
   };
