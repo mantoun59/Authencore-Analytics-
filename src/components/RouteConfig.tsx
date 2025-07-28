@@ -7,6 +7,7 @@ import { Loader2 } from "lucide-react";
 // Immediate load - Critical pages and description pages
 import Index from "@/pages/Index";
 import Auth from "@/pages/Auth";
+import Assessment from "@/pages/Assessment";
 import NotFound from "@/pages/NotFound";
 import CAIRPersonalityDescription from "@/pages/CAIRPersonalityDescription";
 import AuthenticLeadershipDescription from "@/pages/AuthenticLeadershipDescription";
@@ -21,7 +22,6 @@ import FaithValuesDescription from "@/pages/FaithValuesDescription";
 import GenZWorkplaceDescription from "@/pages/GenZWorkplaceDescription";
 
 // Lazy load - Assessment pages (large components)
-const Assessment = lazy(() => import("@/pages/Assessment"));
 const CareerLaunch = lazy(() => import("@/pages/CareerLaunch"));
 const CAIRAssessment = lazy(() => import("@/pages/CAIRAssessment"));
 const StressResilience = lazy(() => import("@/pages/StressResilience"));
@@ -118,12 +118,8 @@ const RouteConfig = () => {
         </Suspense>
       } />
       
-      {/* Assessment Overview - Lazy Loaded */}
-      <Route path="/assessment" element={
-        <Suspense fallback={<LoadingFallback message="Loading Assessments..." />}>
-          <Assessment />
-        </Suspense>
-      } />
+      {/* Assessment Overview - Immediate Load */}
+      <Route path="/assessment" element={<Assessment />} />
       
       {/* Assessment Pages - Lazy Loaded with Custom Messages */}
       <Route path="/career-launch" element={
