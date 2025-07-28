@@ -565,14 +565,27 @@ function getReportStyles(): string {
 }
 
 function generateReportHeader(title: string, userData: any): string {
+  // Extract assessment type from title for logo
+  const assessmentType = title.toLowerCase().replace(/[\s+]/g, '-').replace(/assessment/, '').trim();
+  const logoUrl = `https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${assessmentType}-logo.png`;
+  
   return `
     <div class="header">
-        <div class="logo">AuthenCore</div>
-        <div class="subtitle">Professional Assessment Platform</div>
-        <h1>${title}</h1>
-        <p><strong>Candidate:</strong> ${userData.name || 'N/A'}</p>
-        <p><strong>Email:</strong> ${userData.email || 'N/A'}</p>
-        <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; background: #ffffff; padding: 10px;">
+            <div>
+                <div class="logo">AuthenCore</div>
+                <div class="subtitle">Professional Assessment Platform</div>
+            </div>
+            <div style="text-align: right;">
+                <img src="${logoUrl}" alt="${title} Logo" style="max-height: 80px; max-width: 120px; object-fit: contain;" onerror="this.style.display='none'">
+            </div>
+        </div>
+        <h1 style="text-align: center; margin: 20px 0;">${title}</h1>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <p><strong>Candidate:</strong> ${userData.name || 'N/A'}</p>
+            <p><strong>Email:</strong> ${userData.email || 'N/A'}</p>
+            <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+        </div>
     </div>
   `;
 }

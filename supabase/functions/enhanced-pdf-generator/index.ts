@@ -281,8 +281,18 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
     <body>
         <div class="container">
             <div class="header">
-                <div class="logo">AuthenCore</div>
-                <div class="subtitle">Professional Assessment Platform</div>
+                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; background: #ffffff; padding: 10px;">
+                    <div>
+                        <div class="logo">AuthenCore</div>
+                        <div class="subtitle">Professional Assessment Platform</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <img src="https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${assessmentType}-logo.png" 
+                             alt="${assessmentType} Logo" 
+                             style="max-height: 80px; max-width: 120px; object-fit: contain;" 
+                             onerror="this.style.display='none'">
+                    </div>
+                </div>
             </div>
 
             ${reportType === 'employer' ? `<div class="confidential">${texts.confidentialNotice}</div>` : ''}
