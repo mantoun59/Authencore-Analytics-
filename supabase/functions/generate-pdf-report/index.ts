@@ -357,8 +357,9 @@ serve(async (req) => {
 <body>
     <div class="header">
         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xNTAgMzAwTDI1MCAyMDBMMzUwIDMwMEwyNTAgNDAwWiIgZmlsbD0iIzRBOTBFMiIvPgo8dGV4dCB4PSIyNTAiIHk9IjQ1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzFBMjMzNCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QXV0aGVuQ29yZTwvdGV4dD4KPC9zdmc+Cg==" 
-                 alt="AuthenCore Analytics" style="height: 60px; margin-right: 20px;">
+            <div style="height: 60px; margin-right: 20px; display: flex; align-items: center; font-weight: bold; font-size: 24px; color: #4A90E2;">
+                AuthenCore Analytics
+            </div>
             <div>
                 <h1 style="margin: 0; font-weight: bold;">${displayName} Assessment Report</h1>
                 <p style="font-size: 1.2em; color: #666; margin: 5px 0 0 0;">Professional Psychometric Assessment</p>
@@ -541,8 +542,9 @@ serve(async (req) => {
     <!-- Footer with Copyright and Privacy -->
     <div style="background: #f8f9fa; padding: 30px; margin-top: 40px; border-radius: 10px; border-top: 3px solid #4A90E2;">
         <div style="text-align: center; margin-bottom: 20px;">
-            <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjUwMCIgdmlld0JveD0iMCAwIDUwMCA1MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik0xNTAgMzAwTDI1MCAyMDBMMzUwIDMwMEwyNTAgNDAwWiIgZmlsbD0iIzRBOTBFMiIvPgo8dGV4dCB4PSIyNTAiIHk9IjQ1MCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjM2IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzFBMjMzNCIgdGV4dC1hbmNob3I9Im1pZGRsZSI+QXV0aGVuQ29yZTwvdGV4dD4KPC9zdmc+Cg==" 
-                 alt="AuthenCore Analytics" style="height: 40px; opacity: 0.8;">
+            <div style="height: 40px; opacity: 0.8; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; color: #4A90E2;">
+                AuthenCore Analytics
+            </div>
         </div>
         
         <div style="font-size: 0.85em; color: #666; line-height: 1.4;">
