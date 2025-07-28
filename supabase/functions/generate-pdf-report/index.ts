@@ -46,34 +46,45 @@ serve(async (req) => {
 
     switch (assessmentType) {
       case 'communication_styles':
+      case 'communication-styles':
         reportHtml = generateCommunicationReport(results, userData);
         break;
       case 'career_launch':
+      case 'career-launch':
         reportHtml = generateCareerLaunchReport(results, userData);
         break;
       case 'cair_plus':
       case 'cair_personality':
+      case 'cair-personality':
         reportHtml = generateCAIRReport(results, userData);
         break;
       case 'emotional_intelligence':
+      case 'emotional-intelligence':
         reportHtml = generateEQReport(results, userData);
         break;
       case 'cultural_intelligence':
+      case 'cultural-intelligence':
         reportHtml = generateCulturalReport(results, userData);
         break;
       case 'stress_resilience':
+      case 'stress-resilience':
         reportHtml = generateStressReport(results, userData);
         break;
       case 'leadership_assessment':
+      case 'leadership-assessment':
         reportHtml = generateLeadershipReport(results, userData);
         break;
       case 'faith_values':
+      case 'faith-values':
         reportHtml = generateFaithValuesReport(results, userData);
         break;
       case 'genz_workplace':
+      case 'genz-workplace':
+      case 'genz-assessment':
         reportHtml = generateGenZReport(results, userData);
         break;
       case 'digital_wellness':
+      case 'digital-wellness':
         reportHtml = generateDigitalWellnessReport(results, userData);
         break;
       default:
@@ -614,9 +625,11 @@ function generateReportHeader(title: string, userData: any): string {
     'emotional intelligence assessment': 'emotional-intelligence-logo.png',
     'cultural intelligence assessment': 'cultural-intelligence-logo.png',
     'faith & values assessment': 'faith-values-logo.png',
-    'gen z workplace assessment': 'genz-workplace-logo.png',
+    'gen z workplace assessment': 'genz-assessment-logo.png',
     'digital wellness assessment': 'digital-wellness-logo.png',
-    'stress & resilience assessment': 'stress-resilience-logo.png'
+    'stress & resilience assessment': 'stress-resilience-logo.png',
+    'authentic leadership assessment': 'leadership-assessment-logo.png',
+    'burnout prevention index': 'stress-resilience-logo.png'
   };
   
   const titleKey = title.toLowerCase();

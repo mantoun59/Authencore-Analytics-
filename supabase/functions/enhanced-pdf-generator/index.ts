@@ -138,6 +138,39 @@ const handler = async (req: Request): Promise<Response> => {
   }
 };
 
+// Logo URL mapping function
+function getLogoUrl(assessmentType: string): string {
+  const logoMapping: { [key: string]: string } = {
+    'career_launch': 'career-launch-logo.png',
+    'career-launch': 'career-launch-logo.png',
+    'cair_plus': 'cair--personality--logo.png',
+    'cair_personality': 'cair--personality--logo.png',
+    'cair-personality': 'cair--personality--logo.png',
+    'communication_styles': 'communication-styles-logo.png',
+    'communication-styles': 'communication-styles-logo.png',
+    'emotional_intelligence': 'emotional-intelligence-logo.png',
+    'emotional-intelligence': 'emotional-intelligence-logo.png',
+    'cultural_intelligence': 'cultural-intelligence-logo.png',
+    'cultural-intelligence': 'cultural-intelligence-logo.png',
+    'stress_resilience': 'stress-resilience-logo.png',
+    'stress-resilience': 'stress-resilience-logo.png',
+    'leadership_assessment': 'leadership-assessment-logo.png',
+    'leadership-assessment': 'leadership-assessment-logo.png',
+    'faith_values': 'faith-values-logo.png',
+    'faith-values': 'faith-values-logo.png',
+    'genz_workplace': 'genz-assessment-logo.png',
+    'genz-workplace': 'genz-assessment-logo.png',
+    'genz-assessment': 'genz-assessment-logo.png',
+    'digital_wellness': 'digital-wellness-logo.png',
+    'digital-wellness': 'digital-wellness-logo.png'
+  };
+  
+  const logoFileName = logoMapping[assessmentType] || 'default-logo.png';
+  const logoUrl = `https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${logoFileName}`;
+  console.log(`🖼️ Enhanced PDF using logo URL for "${assessmentType}":`, logoUrl);
+  return logoUrl;
+}
+
 function generateEnhancedHTML(data: GeneratePDFRequest): string {
   const { assessmentData, reportType, userInfo, assessmentType, language = 'en' } = data;
   
@@ -290,11 +323,11 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
                         <div class="subtitle">Professional Assessment Platform</div>
                     </div>
                     <div style="text-align: right;">
-                        <img src="https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${assessmentType}-logo.png" 
+                        <img src="${getLogoUrl(assessmentType)}" 
                              alt="${assessmentType} Logo" 
                              style="max-height: 80px; max-width: 120px; object-fit: contain;" 
                              onerror="console.log('❌ Enhanced PDF logo failed: ${assessmentType}'); this.style.display='none'"
-                             onload="console.log('✅ Enhanced PDF logo loaded: ${assessmentType}')">
+                             onload="console.log('✅ Enhanced PDF logo loaded: ${assessmentType}')"&gt;
                     </div>
                 </div>
             </div>

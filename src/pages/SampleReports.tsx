@@ -50,7 +50,10 @@ const getAssessmentTypeForPDF = (assessmentType: string): string => {
     'digital-wellness': 'digital_wellness',
     'digital': 'digital_wellness',
     'faith-values': 'faith_values',
-    'genz': 'genz_assessment'
+    'faith': 'faith_values',
+    'genz-workplace': 'genz_workplace',
+    'genz-assessment': 'genz_workplace',
+    'genz': 'genz_workplace'
   };
   
   return typeMapping[assessmentType] || assessmentType;
