@@ -357,7 +357,15 @@ serve(async (req) => {
 <body>
     <div class="header">
         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABAAAAAQACAIAAADwf7zUAAEAAElEQVR4nJxd26LsuokEz/9/csw8QBUFknvtpJOzdrcvEtdCAln2iDAzs7Bwc9NPmFmYu9lr9oSZW5hew196OPIW+RYWZvatX1oIMw973R49GOY+Lg4..." alt="AuthenCore Analytics" style="height: 60px; margin-right: 20px;">
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #1E40AF, #4A90E2); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <span style="color: white; font-size: 28px; font-weight: bold; font-family: Arial, sans-serif;">A</span>
+                </div>
+                <div style="text-align: left;">
+                    <h2 style="margin: 0; font-size: 24px; font-weight: bold; color: #1E40AF;">AuthenCore Analytics</h2>
+                    <p style="margin: 0; font-size: 14px; color: #4A90E2; font-weight: 500;">Professional Assessment Platform</p>
+                </div>
+            </div>
             <div>
                 <h1 style="margin: 0; font-weight: bold;">${displayName} Assessment Report</h1>
                 <p style="font-size: 1.2em; color: #666; margin: 5px 0 0 0;">Professional Psychometric Assessment</p>
