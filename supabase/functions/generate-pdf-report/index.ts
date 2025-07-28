@@ -604,12 +604,25 @@ function getReportStyles(): string {
 }
 
 function generateReportHeader(title: string, userData: any): string {
-  // Extract assessment type from title for logo
-  const assessmentType = title.toLowerCase().replace(/[\s+]/g, '-').replace(/assessment/, '').trim();
+  // Map assessment titles to correct logo filenames
+  const logoMapping: { [key: string]: string } = {
+    'cair+ personality assessment': 'cair--personality--logo.png',
+    'cair personality assessment': 'cair--personality--logo.png', 
+    'careerlaunch assessment': 'career-launch-logo.png',
+    'career launch assessment': 'career-launch-logo.png',
+    'communication styles assessment': 'communication-styles-logo.png',
+    'emotional intelligence assessment': 'emotional-intelligence-logo.png',
+    'cultural intelligence assessment': 'cultural-intelligence-logo.png',
+    'faith & values assessment': 'faith-values-logo.png',
+    'gen z workplace assessment': 'genz-workplace-logo.png',
+    'digital wellness assessment': 'digital-wellness-logo.png',
+    'stress & resilience assessment': 'stress-resilience-logo.png'
+  };
   
-  // AUDIT FIX: Verify and construct absolute logo URL
-  const logoUrl = `https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${assessmentType}-logo.png`;
-  console.log(`🖼️ Using logo URL for "${assessmentType}":`, logoUrl);
+  const titleKey = title.toLowerCase();
+  const logoFileName = logoMapping[titleKey] || 'default-logo.png';
+  const logoUrl = `https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/${logoFileName}`;
+  console.log(`🖼️ Using logo URL for "${title}":`, logoUrl);
   
   // AUDIT FIX: Pre-validate image accessibility 
   const logoImageTag = `
