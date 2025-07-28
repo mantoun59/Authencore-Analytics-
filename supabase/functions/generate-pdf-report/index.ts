@@ -357,7 +357,7 @@ serve(async (req) => {
 <body>
     <div class="header">
         <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-            <img src="https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/authencore-logo-transparent.png" 
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" 
                  alt="AuthenCore Analytics" style="height: 60px; margin-right: 20px;">
             <div>
                 <h1 style="margin: 0; font-weight: bold;">${displayName} Assessment Report</h1>
@@ -541,7 +541,7 @@ serve(async (req) => {
     <!-- Footer with Copyright and Privacy -->
     <div style="background: #f8f9fa; padding: 30px; margin-top: 40px; border-radius: 10px; border-top: 3px solid #4A90E2;">
         <div style="text-align: center; margin-bottom: 20px;">
-            <img src="https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/authencore-logo-transparent.png" 
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==" 
                  alt="AuthenCore Analytics" style="height: 40px; opacity: 0.8;">
         </div>
         
