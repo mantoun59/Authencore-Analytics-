@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { AssessmentLogo } from "@/components/AssessmentLogo";
 import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -103,12 +104,12 @@ const SampleReports = () => {
 
         
 
-        if (response.data) {
-          
+        if (response.data?.reportHtml) {
+          console.log("✅ PDF generation successful, opening report");
           // Open HTML report in new window for PDF printing
           const newWindow = window.open('', '_blank');
           if (newWindow) {
-            newWindow.document.write(response.data);
+            newWindow.document.write(response.data.reportHtml);
             newWindow.document.close();
             
             setTimeout(() => {
@@ -121,8 +122,9 @@ const SampleReports = () => {
           console.error('❌ PDF generation error:', response.error);
           throw new Error(`PDF generation failed: ${response.error.message}`);
         } else {
-          console.error('❌ No data returned from PDF service');
-          throw new Error('No data returned from PDF service');
+          console.error('❌ No HTML content returned from PDF service');
+          console.log('Response data:', response.data);
+          throw new Error('No HTML content returned from PDF service');
         }
       } catch (pdfError) {
         console.error('❌ PDF service failed, using HTML fallback:', pdfError);
@@ -1302,12 +1304,12 @@ const SampleReports = () => {
           <Card className="mb-8">
             <CardHeader>
               <div className="flex items-center gap-3">
-                <div className={`p-2 rounded-lg ${currentAssessment?.bgColor || 'bg-gray-50'}`}>
-                  {currentAssessment?.icon && (() => {
-                    const IconComponent = currentAssessment.icon;
-                    return <IconComponent className={`h-6 w-6 ${currentAssessment.color || 'text-gray-600'}`} />;
-                  })()}
-                </div>
+                <AssessmentLogo 
+                  assessmentId={selectedAssessment}
+                  title={currentAssessment?.title || 'Assessment Report'}
+                  size="lg"
+                  fallbackIcon={currentAssessment?.icon?.name || "Target"}
+                />
                 <div>
                   <CardTitle>{currentAssessment?.title || 'Assessment Report'}</CardTitle>
                   <CardDescription>{currentAssessment?.description || 'Sample assessment report'}</CardDescription>
