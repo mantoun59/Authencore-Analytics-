@@ -439,7 +439,19 @@ export class ProfessionalReportGenerator {
         }
       };
       img.onerror = () => reject(new Error('Failed to load logo image'));
-      img.src = '/src/assets/final-logo.png';
+      
+      // Try to get logo from LogoContext first, then fallback to static paths
+      try {
+        import('../assets/final-logo.png').then(module => {
+          img.src = module.default;
+        }).catch(() => {
+          // Fallback to public path
+          img.src = './src/assets/final-logo.png';
+        });
+      } catch {
+        // Final fallback
+        img.src = './src/assets/final-logo.png';
+      }
     });
   }
 }
