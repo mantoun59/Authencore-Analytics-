@@ -200,6 +200,7 @@ serve(async (req) => {
     const userData = requestData.userData || {};
     const results = requestData.results || requestData.result || {};
     const assessmentType = safeString(requestData.assessmentType || results.assessmentType || 'Assessment');
+    const reportType = safeString(requestData.reportType || 'candidate'); // Add report type
     const displayName = getAssessmentDisplayName(assessmentType);
 
     // Get dimension scores safely
@@ -561,14 +562,19 @@ serve(async (req) => {
         </div>
     </div>
 
-    <!-- Enhanced Interview Guide & Assessment Questions -->
+    <!-- Enhanced Interview Guide & Assessment Questions (Employer Reports Only) -->
+    ${reportType === 'employer' ? `
     <div class="section">
         <h2>Comprehensive Interview Guide & Assessment Questions</h2>
         
         <!-- Behavioral Interview Questions -->
         <div style="background: #FFF3E0; padding: 20px; border-radius: 8px; border-left: 4px solid #FF9800; margin-bottom: 20px;">
             <h3>Targeted Behavioral Interview Questions</h3>
-            ${interviewQuestions}
+            ${interviewQuestions.map(question => `
+                <div style="margin: 12px 0; padding: 10px; background: white; border-radius: 5px; border-left: 3px solid #FF9800;">
+                    ${question}
+                </div>
+            `).join('')}
             
             <h4 style="margin-top: 20px; color: #F57C00;">Competency-Specific Deep Dive Questions</h4>
             ${Object.entries(dimensionScores).filter(([_, score]) => score < 65).slice(0, 3).map(([dimension, score]) => {
@@ -656,6 +662,7 @@ serve(async (req) => {
             </div>
         </div>
     </div>
+    ` : ''}
 
     <!-- Footer with Copyright and Privacy -->
     <div style="background: #f8f9fa; padding: 30px; margin-top: 40px; border-radius: 10px; border-top: 3px solid #4A90E2;">

@@ -83,6 +83,7 @@ const SampleReports = () => {
       // Format data for PDF generation function
       const pdfRequestData = {
         assessmentType: getAssessmentTypeForPDF(selectedAssessment),
+        reportType: reportType, // Add report type to request
         results: sampleData,
         userData: {
           name: sampleData.candidateInfo.name,
