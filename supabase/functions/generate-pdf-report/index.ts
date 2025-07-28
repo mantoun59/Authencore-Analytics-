@@ -26,6 +26,23 @@ const safeString = (value: any): string => {
   return String(value);
 };
 
+// Helper function to get proper assessment name
+const getAssessmentDisplayName = (assessmentType: string): string => {
+  const nameMap: Record<string, string> = {
+    'stress_resilience': 'Stress & Resilience',
+    'career_launch': 'Career Launch',
+    'cair_plus': 'CAIR+ Cultural Intelligence',
+    'emotional_intelligence': 'Emotional Intelligence',
+    'leadership': 'Leadership Assessment',
+    'communication_styles': 'Communication Styles',
+    'digital_wellness': 'Digital Wellness',
+    'faith_values': 'Faith & Values',
+    'gen_z_workplace': 'Gen Z Workplace'
+  };
+  
+  return nameMap[assessmentType] || assessmentType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+};
+
 // Helper function to safely get dimension scores
 const getDimensionScores = (dimensions: any): Record<string, number> => {
   if (!dimensions) return {};
@@ -54,6 +71,46 @@ const getDimensionScores = (dimensions: any): Record<string, number> => {
   return {};
 };
 
+// Helper function to generate detailed insights
+const generateDetailedInsights = (dimensionScores: Record<string, number>, assessmentType: string): string => {
+  const insights: string[] = [];
+  
+  Object.entries(dimensionScores).forEach(([dimension, score]) => {
+    const formattedName = dimension.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    
+    if (score >= 85) {
+      insights.push(`<strong>${formattedName}:</strong> Exceptional performance demonstrates mastery in this area. This represents a significant competitive advantage and core strength that should be leveraged in career development and role assignments.`);
+    } else if (score >= 70) {
+      insights.push(`<strong>${formattedName}:</strong> Strong performance with solid foundational skills. Continue to build upon this strength while maintaining current competency levels through regular practice and application.`);
+    } else if (score >= 55) {
+      insights.push(`<strong>${formattedName}:</strong> Developing competency with room for growth. Focus on targeted skill development through training, mentorship, and practical application opportunities.`);
+    } else {
+      insights.push(`<strong>${formattedName}:</strong> Priority development area requiring immediate attention. Consider structured learning programs, coaching, and regular feedback to build fundamental skills in this critical area.`);
+    }
+  });
+  
+  return insights.join('<br><br>');
+};
+
+// Helper function to generate career recommendations
+const generateCareerRecommendations = (dimensionScores: Record<string, number>, assessmentType: string): string => {
+  const recommendations: string[] = [];
+  const strongAreas = Object.entries(dimensionScores).filter(([_, score]) => score >= 75);
+  const developmentAreas = Object.entries(dimensionScores).filter(([_, score]) => score < 60);
+  
+  if (strongAreas.length > 0) {
+    recommendations.push(`<strong>Leverage Your Strengths:</strong> Your exceptional performance in ${strongAreas.map(([name]) => name.replace(/_/g, ' ')).join(', ')} suggests excellent fit for roles requiring these competencies.`);
+  }
+  
+  if (developmentAreas.length > 0) {
+    recommendations.push(`<strong>Development Focus:</strong> Prioritize growth in ${developmentAreas.map(([name]) => name.replace(/_/g, ' ')).join(', ')} through targeted learning and practice.`);
+  }
+  
+  recommendations.push(`<strong>Career Progression:</strong> Based on your assessment profile, consider roles that utilize your strengths while providing opportunities to develop emerging competencies.`);
+  
+  return recommendations.join('<br><br>');
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -75,10 +132,13 @@ serve(async (req) => {
     const userData = requestData.userData || {};
     const results = requestData.results || requestData.result || {};
     const assessmentType = safeString(requestData.assessmentType || results.assessmentType || 'Assessment');
+    const displayName = getAssessmentDisplayName(assessmentType);
 
     // Get dimension scores safely
     const dimensionScores = getDimensionScores(results.dimensions || results.dimensionScores);
     const overallScore = typeof results.overallScore === 'number' ? results.overallScore : 0;
+    const detailedInsights = generateDetailedInsights(dimensionScores, assessmentType);
+    const careerRecommendations = generateCareerRecommendations(dimensionScores, assessmentType);
 
     // Build comprehensive HTML report
     const htmlContent = `
@@ -222,8 +282,14 @@ serve(async (req) => {
 </head>
 <body>
     <div class="header">
-        <h1>${assessmentType} Assessment Report</h1>
-        <p style="font-size: 1.2em; color: #666; margin: 10px 0 0 0;">Comprehensive Professional Assessment</p>
+        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+            <img src="https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/authencore-logo-transparent.png" 
+                 alt="AuthenCore Analytics" style="height: 60px; margin-right: 20px;">
+            <div>
+                <h1 style="margin: 0; font-weight: bold;">${displayName} Assessment Report</h1>
+                <p style="font-size: 1.2em; color: #666; margin: 5px 0 0 0;">Professional Psychometric Assessment</p>
+            </div>
+        </div>
     </div>
 
     <div class="section">
@@ -278,26 +344,69 @@ serve(async (req) => {
     </div>
 
     <div class="section">
+        <h2>Professional Insights & Analysis</h2>
+        <div style="line-height: 1.8; font-size: 1em;">
+            ${detailedInsights}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Career Development Recommendations</h2>
+        <div style="line-height: 1.8; font-size: 1em;">
+            ${careerRecommendations}
+        </div>
+    </div>
+
+    <div class="section">
         <div class="recommendations">
-            <h3>Key Recommendations</h3>
+            <h3>Strategic Development Plan</h3>
             <div class="recommendation-item">
-                <strong>Strengths to Leverage:</strong> Focus on your highest-scoring dimensions as these represent your core competencies and competitive advantages.
+                <strong>Immediate Actions (Next 30 Days):</strong> Begin focusing on your priority development areas through targeted reading, online courses, or seeking feedback from colleagues and supervisors.
             </div>
             <div class="recommendation-item">
-                <strong>Development Priorities:</strong> Concentrate on improving dimensions with scores below 70 through targeted learning and practice.
+                <strong>Short-term Goals (3-6 Months):</strong> Implement specific skill-building activities, consider mentorship opportunities, and practice new competencies in safe environments.
             </div>
             <div class="recommendation-item">
-                <strong>Career Alignment:</strong> Seek roles and opportunities that align with your strengths while providing growth in development areas.
+                <strong>Long-term Development (6-12 Months):</strong> Pursue formal training programs, seek stretch assignments that challenge your growth areas, and regularly reassess progress.
             </div>
             <div class="recommendation-item">
-                <strong>Next Steps:</strong> Create a development plan focusing on 2-3 specific areas for improvement over the next 6 months.
+                <strong>Performance Monitoring:</strong> Schedule quarterly reviews of your development progress and adjust strategies based on feedback and results.
             </div>
         </div>
     </div>
 
-    <div class="section" style="text-align: center; color: #666; font-size: 0.9em; margin-top: 40px;">
-        <p><strong>Confidential Assessment Report</strong></p>
-        <p>Generated on ${new Date().toLocaleString()} | This report is confidential and intended solely for the named candidate.</p>
+    <div class="section">
+        <h2>Assessment Methodology & Reliability</h2>
+        <p style="line-height: 1.6; color: #555;">
+            This assessment utilizes validated psychometric instruments based on established psychological frameworks. 
+            The scoring algorithms incorporate normative data from diverse professional populations to ensure accuracy and relevance. 
+            Results should be interpreted by qualified professionals and used in conjunction with other assessment methods for comprehensive evaluation.
+        </p>
+    </div>
+
+    <!-- Footer with Copyright and Privacy -->
+    <div style="background: #f8f9fa; padding: 30px; margin-top: 40px; border-radius: 10px; border-top: 3px solid #4A90E2;">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="https://jlbftyjewxgetxcihban.supabase.co/storage/v1/object/public/assessment-logos/authencore-logo-transparent.png" 
+                 alt="AuthenCore Analytics" style="height: 40px; opacity: 0.8;">
+        </div>
+        
+        <div style="font-size: 0.85em; color: #666; line-height: 1.4;">
+            <p style="text-align: center; margin: 10px 0;"><strong>© 2024 AuthenCore Analytics. All rights reserved.</strong></p>
+            <p style="text-align: center; margin: 10px 0;">AuthenCore™ is a trademark of AuthenCore Analytics.</p>
+            
+            <hr style="border: none; height: 1px; background: #ddd; margin: 20px 0;">
+            
+            <p style="margin: 10px 0;"><strong>Confidentiality Notice:</strong> This report contains confidential and proprietary information. Unauthorized reproduction, distribution, or disclosure is strictly prohibited.</p>
+            
+            <p style="margin: 10px 0;"><strong>Privacy & Data Protection:</strong> Personal data is processed in accordance with our Privacy Policy and applicable data protection laws including GDPR. For our complete privacy policy, visit www.authencore.org/privacy</p>
+            
+            <p style="margin: 10px 0;"><strong>Disclaimer:</strong> This assessment and report are provided for educational and professional development purposes only. The results are based on self-reported data and structured using validated psychological frameworks interpreted through AI algorithms. These results are not clinical tools and should not be used to diagnose, treat, or manage any mental health condition. If you have concerns about your mental health or wellbeing, please consult a qualified mental health professional or licensed psychologist.</p>
+            
+            <p style="text-align: center; margin: 15px 0 5px 0; font-size: 0.8em; color: #888;">
+                Report Generated: ${new Date().toLocaleString()} | Document ID: ${Math.random().toString(36).substr(2, 9).toUpperCase()}
+            </p>
+        </div>
     </div>
 </body>
 </html>`;
