@@ -2,10 +2,12 @@ import { BarChart3, Shield, Target, Trophy, Users, Zap, Star, Award, TrendingUp,
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import professionalMeeting from "@/assets/professional-meeting.jpg";
 
 const WhyChooseUs = () => {
+  const { t } = useTranslation();
   const features = [
     {
       icon: BarChart3,
@@ -40,10 +42,9 @@ const WhyChooseUs = () => {
           <Badge className="mb-4 bg-primary/10 text-primary hover:bg-primary/20">
             🏆 Professional Assessment Solutions
           </Badge>
-          <h2 className="text-4xl font-bold text-foreground mb-6">Why Choose AuthenCore Analytics</h2>
+          <h2 className="text-4xl font-bold text-foreground mb-6">{t("features.whyChoose.title")}</h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Experience professional-grade psychological assessments backed by scientific research 
-            and designed to provide meaningful insights for personal and professional development.
+            {t("features.whyChoose.subtitle")}
           </p>
         </div>
 

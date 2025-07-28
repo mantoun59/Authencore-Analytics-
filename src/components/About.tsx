@@ -1,8 +1,10 @@
 import { AlertTriangle, Lightbulb, Sparkles, Users, Target, Brain, Shield } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import businessPresentationImage from "@/assets/business-presentation.jpg";
 import professionalAssessmentImage from "@/assets/professional-assessment.jpg";
 
 const About = () => {
+  const { t } = useTranslation();
   return (
     <section id="about" className="py-20 bg-muted/50">
       <div className="container mx-auto px-4">
@@ -18,7 +20,7 @@ const About = () => {
         <div className="text-center mb-16">
           <div className="flex items-center justify-center gap-3 mb-4">
             <Lightbulb className="w-8 h-8 text-primary" />
-            <h2 className="text-4xl font-bold text-foreground">About Us – Authencore Analytics</h2>
+            <h2 className="text-4xl font-bold text-foreground">{t("about.mission")}</h2>
           </div>
         </div>
 

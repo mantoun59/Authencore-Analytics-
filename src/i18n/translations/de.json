@@ -43,6 +43,10 @@
   "features": {
     "title": "Bewertungsmerkmale",
     "subtitle": "Professionelle psychologische Bewertungstools zur genauen Erkennung von Persönlichkeit, Verhalten und kognitiven Fähigkeiten",
+    "whyChoose": {
+      "title": "Warum AuthenCore Analytics Wählen",
+      "subtitle": "Erleben Sie psychologische Bewertungen auf professionellem Niveau, die durch wissenschaftliche Forschung unterstützt und darauf ausgelegt sind, bedeutungsvolle Erkenntnisse für die persönliche und berufliche Entwicklung zu liefern"
+    },
     "comprehensive": {
       "title": "Umfassende Bewertungen",
       "description": "Professionelle psychologische Bewertungen zu Persönlichkeit, kognitiven Fähigkeiten, emotionaler Intelligenz und Verhaltensmustern."
@@ -60,7 +64,7 @@
       "description": "Erhalten Sie Ihre umfassenden Bewertungsergebnisse sofort nach Abschluss mit herunterladbaren PDF-Berichten."
     },
     "aiPowered": {
-      "title": "KI-gestützt",
+      "title": "KI-gestützte Analyse",
       "description": "Fortschrittliche künstliche Intelligenz analysiert Ihre Antworten für tiefere Erkenntnisse und personalisierte Empfehlungen."
     }
   },

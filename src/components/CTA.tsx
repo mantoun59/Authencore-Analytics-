@@ -1,8 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Star, CheckCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 const CTA = () => {
+  const { t } = useTranslation();
   const benefits = [
     "Professional reports",
     "Validated assessments", 
