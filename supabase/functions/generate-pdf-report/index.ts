@@ -1,14 +1,4 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import puppeteer from "https://deno.land/x/puppeteer@16.2.0/mod.ts";
-
-// Base64 encoded AuthenCore logo (minimal example for testing)
-const LOGO_BASE64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAYAAACtWK6eAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAApSSURBVHgB7Z1NThsxFMefJwSJqlKbbtqNRXfNEcId6A3oDcgN2h6g7a7qCdod1U26aw9Qb0BvQG9AuEG7qZBYJJVE83/kR2aIHduzb97Y/v0kKxNnPGP7/ef3/jyPmDOSJMmOUrJijKl2d3dtHpA5J0mSHSV/JUmylw/AEQgQ4AgECHAEAgQ4AgECHIEAAY5AgABHIECAIxAgwBEIEOAIBAhwBAIEOAIBAhyBAAGOQIAAR1o+AGhY/sB+pZTaUUptK1c7yj9Xyq0ppZaUX0ub1xN8M0x2/f/rPc2apdf8P5X//5xSakMptSGdG2Lj4XqCL4cJBAgAgGBh35Ky6f7r6LZf6f8v2QaR+X8dfuoWE2bfhwAAQJCJH4kAABDAAAA=";
-
-// Chromium binary import for Deno/Supabase edge functions
-const getExecutablePath = (): string => {
-  // Use system chromium on Linux (typical for Supabase edge functions)
-  return "/usr/bin/chromium-browser";
-};
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -270,24 +260,6 @@ serve(async (req) => {
     const reliabilityMetrics = calculateReliabilityMetrics(results);
     const reportId = Math.random().toString(36).substr(2, 9).toUpperCase();
 
-    // Test minimal HTML with logo first
-    const testHtml = `
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <style>
-          body { font-family: Arial, sans-serif; padding: 40px; }
-          img { width: 180px; }
-        </style>
-      </head>
-      <body>
-        <h1>PDF Test: Logo Rendering</h1>
-        <img src="${LOGO_BASE64}" alt="AuthenCore Logo" />
-        <p>If you see the logo above, the Base64 method works ✅</p>
-      </body>
-    </html>
-    `;
-
     // Build comprehensive HTML report
     const htmlContent = `
 <!DOCTYPE html>
@@ -354,9 +326,15 @@ serve(async (req) => {
         }
         
         .logo-icon {
-            width: 180px;
-            height: auto;
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             margin-right: 20px;
+            backdrop-filter: blur(10px);
         }
         
         .company-info h1 {
@@ -658,7 +636,9 @@ serve(async (req) => {
         <div class="header-section">
             <div class="header-content">
                 <div class="logo-section">
-                    <img src="${LOGO_BASE64}" alt="AuthenCore Analytics" class="logo-icon" />
+                    <div class="logo-icon">
+                        <span style="color: white; font-size: 24px; font-weight: bold;">A</span>
+                    </div>
                     <div class="company-info">
                         <h1>AuthenCore Analytics</h1>
                         <p>Professional Assessment Platform</p>
@@ -958,71 +938,29 @@ serve(async (req) => {
 </body>
 </html>`;
 
-    console.log("[DEBUG] Injecting HTML into Puppeteer page");
-    console.log("HTML sample:", htmlContent.substring(0, 500) + "...");
+    console.log("📊 Report generated successfully");
 
-    // Launch Puppeteer with proper configuration
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: [
-        '--no-sandbox',
-        '--disable-setuid-sandbox',
-        '--disable-dev-shm-usage',
-        '--disable-accelerated-2d-canvas',
-        '--no-first-run',
-        '--no-zygote',
-        '--disable-gpu'
-      ]
+    return new Response(htmlContent, {
+      status: 200,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "text/html",
+      },
     });
 
-    try {
-      const page = await browser.newPage();
-      
-      // Set content with network idle wait
-      await page.setContent(htmlContent, { 
-        waitUntil: 'networkidle0',
-        timeout: 30000
-      });
-
-      // Generate PDF
-      const pdf = await page.pdf({ 
-        format: 'A4',
-        printBackground: true,
-        margin: {
-          top: '20px',
-          right: '20px',
-          bottom: '20px',
-          left: '20px'
-        }
-      });
-
-      console.log("[DEBUG] PDF generation succeeded");
-
-      return new Response(pdf, {
-        headers: {
-          ...corsHeaders,
-          'Content-Type': 'application/pdf',
-          'Content-Disposition': `attachment; filename="${displayName}_Assessment_Report.pdf"`
-        },
-      });
-
-    } finally {
-      await browser.close();
-    }
-
   } catch (error) {
-    console.error("📊 Error generating PDF report:", error);
+    console.error("❌ Error in generate-pdf-report function:", error);
     return new Response(
       JSON.stringify({ 
-        error: 'Failed to generate PDF report',
-        details: error.message
-      }),
-      { 
-        status: 500, 
+        error: error.message,
+        details: "Failed to generate PDF report"
+      }), 
+      {
+        status: 500,
         headers: { 
           ...corsHeaders, 
-          'Content-Type': 'application/json' 
-        } 
+          "Content-Type": "application/json" 
+        },
       }
     );
   }
