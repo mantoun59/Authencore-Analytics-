@@ -6,10 +6,10 @@ import { Link } from "react-router-dom";
 const CTA = () => {
   const { t } = useTranslation();
   const benefits = [
-    "Professional reports",
-    "Validated assessments", 
-    "Secure & confidential",
-    "Immediate results"
+    t("features.reports.title"),
+    t("landing.feature1Title"),
+    t("features.secure.title"),
+    t("features.realTime.title")
   ];
 
   return (
@@ -27,7 +27,7 @@ const CTA = () => {
                 <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
               ))}
             </div>
-            <span className="ml-3 text-white/90">Professional psychological assessments</span>
+            <span className="ml-3 text-white/90">{t("about.subtitle")}</span>
           </div>
 
           {/* Main heading */}
@@ -57,24 +57,24 @@ const CTA = () => {
                 size="xl" 
                 className="bg-white text-primary hover:bg-white/90 hover:scale-110 shadow-glow group font-bold"
               >
-                Start Assessment
+                {t("assessments.takeAssessment")}
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
             <div className="text-white/80 text-sm">
-              <span className="block">Professional assessments</span>
-              <span className="block">Immediate results</span>
+              <span className="block">{t("about.subtitle")}</span>
+              <span className="block">{t("features.realTime.title")}</span>
             </div>
           </div>
 
           {/* Social proof */}
           <div className="mt-12 pt-8 border-t border-white/20">
-            <p className="text-white/70 text-sm mb-4">Suitable for individuals and organizations</p>
+            <p className="text-white/70 text-sm mb-4">{t("footer.tagline")}</p>
             <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-              <div className="text-white font-semibold">HR Departments</div>
-              <div className="text-white font-semibold">Educational Institutions</div>
-              <div className="text-white font-semibold">Healthcare Professionals</div>
-              <div className="text-white font-semibold">Career Counselors</div>
+              <div className="text-white font-semibold">{t("navigation.admin")}</div>
+              <div className="text-white font-semibold">{t("footer.company")}</div>
+              <div className="text-white font-semibold">{t("about.title")}</div>
+              <div className="text-white font-semibold">{t("footer.support")}</div>
             </div>
           </div>
         </div>

@@ -39,7 +39,7 @@ const Footer = () => {
               
               {/* Social Media Links */}
               <div className="space-y-2">
-                <h5 className="text-sm font-semibold text-foreground">Follow Us</h5>
+                <h5 className="text-sm font-semibold text-foreground">{t("footer.community")}</h5>
                 <div className="flex items-center space-x-4">
                   <a
                     href="#"
@@ -152,7 +152,7 @@ const Footer = () => {
                   href="mailto:contact@authencore.org"
                   className="text-foreground hover:text-primary transition-colors"
                 >
-                  Business Inquiries
+                  {t("footer.contact")}
                 </a>
               </div>
               
