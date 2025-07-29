@@ -4,7 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ApplicantDataForm from "@/components/ApplicantDataForm";
 import CareerLaunchAssessment from "@/components/CareerLaunchAssessment";
-import AssessmentResults from "@/components/AssessmentResults";
+import { CareerLaunchReportEnhanced } from "@/components/CareerLaunchReportEnhanced";
 import { PaymentProtection } from "@/components/PaymentProtection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -249,13 +249,18 @@ const CareerLaunch = () => {
   // Results phase - Use unified AssessmentResults component
   if (gamePhase === 'results' && assessmentResults) {
     return (
-      <AssessmentResults 
-        data={assessmentResults}
-        assessmentType="career-launch"
-        candidateInfo={{
+      <CareerLaunchReportEnhanced 
+        results={assessmentResults}
+        userProfile={{
           name: userProfile.name,
-          email: userProfile.email
+          email: userProfile.email,
+          assessmentDate: new Date().toISOString().split('T')[0],
+          questionsAnswered: 145,
+          timeSpent: "30 minutes", // Default time estimate
+          reliabilityScore: assessmentResults.assessmentQuality?.qualityScore || 92
         }}
+        enhancedAI={assessmentResults.enhancedAI}
+        viewType="candidate"
       />
     );
   }

@@ -3,24 +3,14 @@ import { useToast } from "@/hooks/use-toast";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { supabase } from "@/integrations/supabase/client";
 import { CareerLaunchReportEnhanced } from "@/components/CareerLaunchReportEnhanced";
-import { AccessibilityEnhancements } from "@/components/AccessibilityEnhancements";
+import { AccessibilityControls } from "@/components/AccessibilityControls";
+import { Badge } from "@/components/ui/badge";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Trophy, 
   Download,
-  Rocket,
-  Target,
-  Brain,
-  Zap,
-  Users,
-  Star,
-  Lightbulb,
-  CheckCircle2,
-  TrendingUp
+  Rocket
 } from "lucide-react";
 
 // Enhanced AI Sample Data
@@ -64,6 +54,7 @@ const enhancedAIFeatures = {
 
 const SampleCareerLaunchReport = () => {
   const { toast } = useToast();
+  const [accessibilityOpen, setAccessibilityOpen] = useState(false);
 
   // Humanized sample data that feels real and relatable
   const sampleResults = {
@@ -128,371 +119,69 @@ const SampleCareerLaunchReport = () => {
     reliabilityScore: 94     // High reliability due to expanded question set
   };
 
-  const downloadReport = async () => {
-    try {
-      const reportData = {
-        assessmentType: 'career_launch',
-        results: sampleResults,
-        userData: {
-          name: sampleUserProfile.name,
-          email: sampleUserProfile.email,
-          date: new Date().toLocaleDateString(),
-          questionsAnswered: sampleUserProfile.questionsAnswered,
-          timeSpent: sampleUserProfile.timeSpent,
-          reliabilityScore: sampleUserProfile.reliabilityScore
-        }
-      };
-
-      const response = await supabase.functions.invoke('generate-pdf-report', {
-        body: reportData
-      });
-
-      if (response.data) {
-        // Open HTML report in new window for PDF printing
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(response.data);
-          newWindow.document.close();
-          
-          // Add print-friendly styles and auto-print
-          setTimeout(() => {
-            newWindow.focus();
-            newWindow.print();
-          }, 1000);
-
-          toast({
-            title: "Report Opened",
-            description: "Use your browser's Print dialog to save as PDF. Select 'Save as PDF' as destination.",
-          });
-        } else {
-          // Fallback: download as HTML if popup blocked
-          const blob = new Blob([response.data], { type: 'text/html' });
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `Sample-CareerLaunch-Report.html`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-
-          toast({
-            title: "HTML Report Downloaded",
-            description: "Open the HTML file and use your browser's Print to PDF feature.",
-          });
-        }
-      }
-    } catch (error) {
-      console.error('Error downloading sample report:', error);
-      toast({
-        title: "Download Error",
-        description: "Failed to download sample report. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-primary/5 to-secondary/5">
       <Header />
       <div className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <Badge variant="secondary" className="mb-4">
               <Trophy className="h-4 w-4 mr-2" />
-              Sample Assessment Results
+              Enhanced Sample Assessment Results
             </Badge>
             <h1 className="text-4xl font-bold mb-4">
               Meet Alex: A CareerLaunch Success Story
             </h1>
             <p className="text-xl text-muted-foreground">
-              See how our assessment helped Alex discover their perfect career path
+              Experience our enhanced report with accessibility, dynamic insights, and advisor features
             </p>
             <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-800">
-                ✨ This is Alex's actual results format - imagine seeing your own unique strengths and career matches! 
-                Ready to discover what makes you tick?
+                ✨ This demonstrates the complete enhanced reporting system with accessibility features, 
+                advisor insights, interactive tooltips, and PDF generation. Try the accessibility controls!
               </p>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-600" />
-                  Alex's Career Sweet Spot
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div>
-                    <h3 className="font-semibold text-lg mb-2 text-primary">{sampleResults.career_fit.label}</h3>
-                    <p className="text-sm text-muted-foreground mb-3">{sampleResults.career_fit.description}</p>
-                    <p className="text-sm font-medium mb-3">Perfect roles for Alex:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {sampleResults.career_fit.suggestions.map((career: string, index: number) => (
-                        <Badge key={index} variant="secondary" className="text-xs">{career}</Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="h-5 w-5 text-green-600" />
-                  Alex's Natural Superpowers
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  {sampleResults.aptitudes.slice(0, 3).map((aptitude: any, index: number) => (
-                    <div key={index} className="flex justify-between items-center">
-                      <span className="text-sm font-medium">{aptitude.name}</span>
-                      <Badge variant="outline">{aptitude.score}%</Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-purple-600" />
-                  What Gets Alex Excited
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {Object.entries(sampleResults.interests)
-                    .sort(([,a], [,b]) => (b as number) - (a as number))
-                    .slice(0, 3)
-                    .map(([interest, score], index) => (
-                      <div key={index} className="flex justify-between items-center">
-                        <span className="text-sm capitalize">{interest}</span>
-                        <Badge variant="outline">{String(score)}%</Badge>
-                      </div>
-                    ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-orange-600" />
-                  How Alex Shows Up
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {Object.entries(sampleResults.personality)
-                    .sort(([,a], [,b]) => (b as number) - (a as number))
-                    .slice(0, 3)
-                    .map(([trait, score], index) => (
-                      <div key={index} className="flex justify-between items-center">
-                        <span className="text-sm capitalize">{trait}</span>
-                        <Badge variant="outline">{String(score)}%</Badge>
-                      </div>
-                    ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Star className="h-5 w-5 text-yellow-600" />
-                  What Drives Alex
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  {Object.entries(sampleResults.values)
-                    .sort(([,a], [,b]) => (b as number) - (a as number))
-                    .slice(0, 3)
-                    .map(([value, score], index) => (
-                      <div key={index} className="flex justify-between items-center">
-                        <span className="text-sm capitalize">{value}</span>
-                        <Badge variant="outline">{String(score)}%</Badge>
-                      </div>
-                    ))}
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card className="mb-8">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Lightbulb className="h-5 w-5 text-blue-600" />
-                Alex's Next Steps to Success
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                {sampleResults.action_plan.map((action: string, index: number) => (
-                  <li key={index} className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-green-600 mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">{action}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-
-          {/* Enhanced AI Features Section */}
-          <div className="space-y-6 mb-8">
-            <div className="text-center">
-              <Badge variant="default" className="mb-4">
-                <Brain className="h-4 w-4 mr-2" />
-                Enhanced AI Analysis
-              </Badge>
-              <h2 className="text-2xl font-bold mb-2">AI-Powered Insights</h2>
-              <p className="text-muted-foreground">
-                Advanced AI engine provides deeper cognitive profiling and behavioral predictions
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Target className="h-5 w-5 text-blue-600" />
-                    Validity & Distortion Analysis
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Assessment Reliability:</span>
-                    <Badge variant="default" className="bg-green-600">
-                      {enhancedAIFeatures.distortionAnalysis.reliability.toUpperCase()}
-                    </Badge>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">AI Confidence Level:</span>
-                    <span className="text-sm font-bold text-primary">
-                      {enhancedAIFeatures.distortionAnalysis.confidenceLevel}%
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="font-medium">Distortion Score:</span>
-                    <Badge variant="secondary">
-                      {enhancedAIFeatures.distortionAnalysis.score}/10
-                    </Badge>
-                  </div>
-                  <p className="text-xs text-muted-foreground mt-2">
-                    {enhancedAIFeatures.distortionAnalysis.interpretation}
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <Brain className="h-5 w-5 text-purple-600" />
-                    Cognitive Profile
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div>
-                    <span className="font-medium text-sm">Processing Style:</span>
-                    <p className="text-sm text-muted-foreground">
-                      {enhancedAIFeatures.cognitiveProfile.processingStyle}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="font-medium text-sm">Decision Making:</span>
-                    <p className="text-sm text-muted-foreground">
-                      {enhancedAIFeatures.cognitiveProfile.decisionMakingApproach}
-                    </p>
-                  </div>
-                  <div>
-                    <span className="font-medium text-sm">Learning Preferences:</span>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {enhancedAIFeatures.cognitiveProfile.learningPreferences.map((pref, index) => (
-                        <Badge key={index} variant="outline" className="text-xs">
-                          {pref}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-lg">
-                  <TrendingUp className="h-5 w-5 text-green-600" />
-                  AI-Predicted Workplace Performance
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex justify-between items-center">
-                  <span className="font-medium">Predicted Effectiveness:</span>
-                  <div className="flex items-center gap-2">
-                    <Progress value={enhancedAIFeatures.behavioralPredictions.workplacePerformance.predictedEffectiveness} className="w-24" />
-                    <span className="text-sm font-bold">
-                      {enhancedAIFeatures.behavioralPredictions.workplacePerformance.predictedEffectiveness}%
-                    </span>
-                  </div>
-                </div>
-                <div>
-                  <span className="font-medium text-sm">Key Performance Indicators:</span>
-                  <div className="mt-2 space-y-1">
-                    {enhancedAIFeatures.behavioralPredictions.workplacePerformance.performanceIndicators.map((indicator, index) => (
-                      <div key={index} className="flex items-center gap-2">
-                        <CheckCircle2 className="h-3 w-3 text-green-600" />
-                        <span className="text-xs text-muted-foreground">{indicator}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="bg-blue-50 p-3 rounded-lg">
-                  <span className="font-medium text-sm text-blue-800">Leadership Potential:</span>
-                  <div className="flex items-center gap-2 mt-1">
-                    <Progress value={enhancedAIFeatures.behavioralPredictions.teamDynamics.leadershipPotential} className="w-32" />
-                    <span className="text-sm font-bold text-blue-800">
-                      {enhancedAIFeatures.behavioralPredictions.teamDynamics.leadershipPotential}%
-                    </span>
-                  </div>
-                  <p className="text-xs text-blue-700 mt-1">
-                    {enhancedAIFeatures.behavioralPredictions.teamDynamics.collaborationStyle}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-
-          </div>
-
-          <div className="text-center space-y-6">
-            <Button onClick={downloadReport} size="lg" className="text-lg px-8 py-6">
-              <Download className="h-5 w-5 mr-2" />
-              Download Sample Report
-            </Button>
-            
-            <div className="p-6 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg border">
-              <h3 className="text-lg font-semibold mb-4">Ready to Discover Your Own Career Story?</h3>
+          {/* Enhanced Report Component */}
+          <CareerLaunchReportEnhanced 
+            results={sampleResults}
+            userProfile={sampleUserProfile}
+            enhancedAI={enhancedAIFeatures}
+            viewType="candidate"
+          />
+          
+          <div className="text-center mt-8 space-y-4">
+            <div className="bg-gradient-to-r from-primary/10 to-secondary/10 p-6 rounded-lg">
+              <h3 className="text-xl font-bold mb-2">Ready to Discover Your Own Career Path?</h3>
               <p className="text-muted-foreground mb-4">
-                Alex's journey started with our comprehensive assessment - just like yours will! In about 25 minutes, you'll uncover your unique strengths, discover careers that truly fit who you are, and get a roadmap for your professional future. No two results are the same, because no two people are the same.
+                Take the CareerLaunch Assessment and get your personalized insights with all these enhanced features.
               </p>
-              <Button variant="outline" asChild>
-                <a href="/career-launch">
-                  <Rocket className="h-4 w-4 mr-2" />
-                  Start Your Career Discovery
-                </a>
+              <Button size="lg" className="bg-gradient-to-r from-primary to-secondary">
+                <Rocket className="h-4 w-4 mr-2" />
+                Start Your Assessment
               </Button>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Accessibility Controls */}
+      <Button
+        onClick={() => setAccessibilityOpen(true)}
+        className="fixed bottom-4 right-4 z-50"
+        size="sm"
+        variant="outline"
+        aria-label="Open accessibility settings"
+      >
+        Accessibility
+      </Button>
+      
+      <AccessibilityControls 
+        isOpen={accessibilityOpen}
+        onClose={() => setAccessibilityOpen(false)}
+      />
+      
       <Footer />
     </div>
   );
