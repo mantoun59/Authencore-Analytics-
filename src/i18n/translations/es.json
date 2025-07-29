@@ -59,8 +59,8 @@
       "description": "Algoritmos avanzados de aprendizaje automático proporcionan insights profundos y recomendaciones personalizadas."
     },
     "realTime": {
-      "title": "Informes en Tiempo Real",
-      "description": "Informes instantáneos y detallados generados inmediatamente después de completar la evaluación."
+      "title": "Reportes en Tiempo Real",
+      "description": "Reportes instantáneos y detallados generados inmediatamente después de completar la evaluación."
     },
     "comprehensive": {
       "title": "Evaluaciones Integrales",
@@ -68,15 +68,23 @@
     },
     "secure": {
       "title": "Seguro y Privado",
-      "description": "Cifrado de nivel empresarial y estrictas políticas de privacidad protegen todos los datos del usuario."
+      "description": "Encriptación de nivel empresarial y estrictas políticas de privacidad protegen todos los datos del usuario."
     },
     "whyChoose": {
       "title": "Por Qué Elegir AuthenCore Analytics",
-      "subtitle": "Experimenta evaluaciones psicológicas de grado profesional respaldadas por investigación científica y diseñadas para proporcionar insights significativos para el desarrollo personal y profesional"
+      "subtitle": "Confiado por profesionales de todo el mundo para insights precisos"
     },
     "reports": {
-      "title": "Informes Profesionales",
-      "description": "Informes de evaluación detallados con perspectivas accionables."
+      "title": "Reportes Profesionales",
+      "description": "Reportes de evaluación detallados con perspectivas accionables."
+    },
+    "actionableInsights": {
+      "title": "Insights Accionables",
+      "description": "Obtén recomendaciones claras y prácticas para el desarrollo personal y profesional"
+    },
+    "scientificallyValidated": {
+      "title": "Científicamente Validado",
+      "description": "Nuestras evaluaciones están respaldadas por investigación rigurosa y metodologías probadas"
     }
   },
   "assessments": {
@@ -365,6 +373,28 @@
     "descriptionGenZ": "Comprende las preferencias del lugar de trabajo generacional y optimiza tu ambiente de trabajo para máximo compromiso.",
     "descriptionStress": "Evalúa tu resistencia al estrés y desarrolla estrategias de afrontamiento efectivas para situaciones desafiantes.",
     "descriptionFaith": "Explora cómo tus valores y creencias personales se alinean con tus metas profesionales y cultura del lugar de trabajo."
+  },
+  "homepage": {
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "step1": {
+        "title": "Seleccione una Evaluación",
+        "description": "El usuario navega y selecciona la evaluación deseada de nuestro rango integral"
+      },
+      "step2": {
+        "title": "Complete la Evaluación",
+        "description": "Proceso guiado para entrada y completación con preguntas diseñadas por expertos"
+      },
+      "step3": {
+        "title": "Ver Resultados",
+        "description": "Acceda instantáneamente y revise los resultados personalizados con insights detallados"
+      }
+    },
+    "cta": {
+      "title": "¿Listo para Transformar Su Equipo?",
+      "description": "Únase a miles de profesionales que han desbloqueado su potencial con AuthenCore Analytics",
+      "button": "Comience Hoy"
+    }
   },
   "notFound": {
     "title": "Página No Encontrada",

@@ -51,39 +51,39 @@
     "companyName": "AuthenCore Analytics"
   },
   "features": {
-    "title": "Bewertungsmerkmale",
-    "subtitle": "Professionelle psychologische Bewertungstools zur genauen Erkennung von Persönlichkeit, Verhalten und kognitiven Fähigkeiten",
+    "title": "Hauptmerkmale",
+    "subtitle": "Umfassende Bewertungstools für moderne berufliche Entwicklung",
     "whyChoose": {
       "title": "Warum AuthenCore Analytics Wählen",
-      "subtitle": "Erleben Sie psychologische Bewertungen auf professionellem Niveau, die durch wissenschaftliche Forschung unterstützt und darauf ausgelegt sind, bedeutungsvolle Erkenntnisse für die persönliche und berufliche Entwicklung zu liefern"
+      "subtitle": "Vertraut von Fachleuten weltweit für präzise Einblicke"
     },
     "comprehensive": {
       "title": "Umfassende Bewertungen",
-      "description": "Professionelle psychologische Bewertungen zu Persönlichkeit, kognitiven Fähigkeiten, emotionaler Intelligenz und Verhaltensmustern."
-    },
-    "reports": {
-      "title": "Detaillierte Berichte",
-      "description": "Tiefgreifende Analyseberichte mit umsetzbaren Erkenntnissen, Empfehlungen und auf individuelle Ergebnisse zugeschnittene Entwicklungsmöglichkeiten."
-    },
-    "secure": {
-      "title": "Sicher und vertraulich",
-      "description": "Ihre Bewertungsdaten sind durch Sicherheit auf Unternehmensebene geschützt. Alle Informationen bleiben streng vertraulich."
-    },
-    "realTime": {
-      "title": "Sofortige Ergebnisse",
-      "description": "Erhalten Sie Ihre umfassenden Bewertungsergebnisse sofort nach Abschluss mit herunterladbaren PDF-Berichten."
-    },
-    "aiPowered": {
-      "title": "KI-gestützte Analyse",
-      "description": "Fortschrittliche künstliche Intelligenz analysiert Ihre Antworten für tiefere Erkenntnisse und personalisierte Empfehlungen."
+      "description": "Breite Palette wissenschaftlich validierter psychometrischer Bewertungen für verschiedene Zwecke."
     },
     "reports": {
       "title": "Professionelle Berichte",
-      "description": "Detaillierte Bewertungsberichte mit umsetzbaren Erkenntnissen."
+      "description": "Detaillierte Bewertungsberichte mit umsetzbaren Einblicken."
     },
-    "whyChoose": {
-      "title": "Warum AuthenCore Analytics Wählen",
-      "subtitle": "Erleben Sie psychologische Bewertungen auf professionellem Niveau, die durch wissenschaftliche Forschung unterstützt und darauf ausgelegt sind, bedeutungsvolle Erkenntnisse für die persönliche und berufliche Entwicklung zu liefern"
+    "secure": {
+      "title": "Sicher & Privat",
+      "description": "Verschlüsselung auf Unternehmensebene und strenge Datenschutzrichtlinien schützen alle Benutzerdaten."
+    },
+    "realTime": {
+      "title": "Echtzeitberichterstattung",
+      "description": "Sofortige, detaillierte Berichte werden unmittelbar nach Abschluss der Bewertung generiert."
+    },
+    "aiPowered": {
+      "title": "KI-gestützte Analyse",
+      "description": "Fortgeschrittene maschinelle Lernalgorithmen bieten tiefe Einblicke und personalisierte Empfehlungen."
+    },
+    "actionableInsights": {
+      "title": "Umsetzbare Einblicke",
+      "description": "Erhalten Sie klare, praktische Empfehlungen für persönliche und berufliche Entwicklung"
+    },
+    "scientificallyValidated": {
+      "title": "Wissenschaftlich Validiert",
+      "description": "Unsere Bewertungen sind durch rigorose Forschung und bewährte Methoden unterstützt"
     }
   },
   "assessments": {
@@ -477,6 +477,28 @@
     "descriptionGenZ": "Verstehen Sie generationsspezifische Arbeitsplatzpräferenzen und optimieren Sie Ihr Arbeitsumfeld für maximales Engagement.",
     "descriptionStress": "Bewerten Sie Ihre Stressresilienz und entwickeln Sie effektive Bewältigungsstrategien für herausfordernde Situationen.",
     "descriptionFaith": "Erkunden Sie, wie Ihre persönlichen Werte und Überzeugungen mit Ihren beruflichen Zielen und der Arbeitsplatzkultur übereinstimmen."
+  },
+  "homepage": {
+    "howItWorks": {
+      "title": "Wie Es Funktioniert",
+      "step1": {
+        "title": "Wählen Sie eine Bewertung",
+        "description": "Benutzer durchsucht und wählt die gewünschte Bewertung aus unserem umfassenden Angebot"
+      },
+      "step2": {
+        "title": "Bewertung Vervollständigen",
+        "description": "Geführter Prozess für Eingabe und Vervollständigung mit von Experten entwickelten Fragen"
+      },
+      "step3": {
+        "title": "Ergebnisse Anzeigen",
+        "description": "Sofortiger Zugang und Überprüfung der personalisierten Ergebnisse mit detaillierten Einblicken"
+      }
+    },
+    "cta": {
+      "title": "Bereit, Ihr Team zu Transformieren?",
+      "description": "Schließen Sie sich Tausenden von Fachleuten an, die ihr Potenzial mit AuthenCore Analytics freigesetzt haben",
+      "button": "Heute Beginnen"
+    }
   },
   "notFound": {
     "title": "Seite Nicht Gefunden",

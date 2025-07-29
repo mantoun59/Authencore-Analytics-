@@ -55,8 +55,8 @@
     "title": "Caractéristiques Principales",
     "subtitle": "Outils d'évaluation complets pour le développement professionnel moderne",
     "aiPowered": {
-      "title": "Analyse Alimentée par l'IA",
-      "description": "Les algorithmes avancés d'apprentissage automatique fournissent des insights profonds et des recommandations personnalisées."
+      "title": "Analyse Alimentée par IA",
+      "description": "Des algorithmes d'apprentissage automatique avancés fournissent des insights profonds et des recommandations personnalisées."
     },
     "realTime": {
       "title": "Rapports en Temps Réel",
@@ -72,11 +72,19 @@
     },
     "whyChoose": {
       "title": "Pourquoi Choisir AuthenCore Analytics",
-      "subtitle": "Découvrez des évaluations psychologiques de niveau professionnel soutenues par la recherche scientifique et conçues pour fournir des insights significatifs pour le développement personnel et professionnel"
+      "subtitle": "Fait confiance par des professionnels du monde entier pour des insights précis"
     },
     "reports": {
       "title": "Rapports Professionnels",
       "description": "Rapports d'évaluation détaillés avec des insights actionnables."
+    },
+    "actionableInsights": {
+      "title": "Insights Actionnables",
+      "description": "Obtenez des recommandations claires et pratiques pour le développement personnel et professionnel"
+    },
+    "scientificallyValidated": {
+      "title": "Scientifiquement Validé",
+      "description": "Nos évaluations sont soutenues par une recherche rigoureuse et des méthodologies éprouvées"
     }
   },
   "about": {
@@ -588,6 +596,28 @@
     "descriptionGenZ": "Comprenez les préférences du lieu de travail générationnel et optimisez votre environnement de travail pour un engagement maximal.",
     "descriptionStress": "Évaluez votre résilience au stress et développez des stratégies d'adaptation efficaces pour les situations difficiles.",
     "descriptionFaith": "Explorez comment vos valeurs et croyances personnelles s'alignent avec vos objectifs professionnels et la culture du lieu de travail."
+  },
+  "homepage": {
+    "howItWorks": {
+      "title": "Comment Ça Marche",
+      "step1": {
+        "title": "Sélectionnez une Évaluation",
+        "description": "L'utilisateur parcourt et sélectionne l'évaluation désirée de notre gamme complète"
+      },
+      "step2": {
+        "title": "Complétez l'Évaluation", 
+        "description": "Processus guidé pour l'entrée et la completion avec des questions conçues par des experts"
+      },
+      "step3": {
+        "title": "Visualisez les Résultats",
+        "description": "Accédez instantanément et examinez les résultats personnalisés avec des insights détaillés"
+      }
+    },
+    "cta": {
+      "title": "Prêt à Transformer Votre Équipe ?",
+      "description": "Rejoignez des milliers de professionnels qui ont débloqué leur potentiel avec AuthenCore Analytics",
+      "button": "Commencer Aujourd'hui"
+    }
   }
 }
 }
