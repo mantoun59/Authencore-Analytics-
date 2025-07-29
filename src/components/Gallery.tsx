@@ -1,9 +1,11 @@
+import { memo } from "react";
 import businessTeamImage from "@/assets/business-team-analytics.jpg";
 import analyticsWorkspaceImage from "@/assets/analytics-workspace.jpg";
 import businessPresentationImage from "@/assets/business-presentation.jpg";
 import professionalAssessmentImage from "@/assets/professional-assessment.jpg";
 
-const Gallery = () => {
+// Memoized Gallery component for better performance
+const Gallery = memo(() => {
   const images = [
     {
       src: businessTeamImage,
@@ -47,6 +49,8 @@ const Gallery = () => {
                 <img 
                   src={image.src}
                   alt={image.alt}
+                  loading="lazy" // Add lazy loading for performance
+                  decoding="async" // Async decoding for better performance
                   className="w-full h-64 object-cover transition-transform duration-300 group-hover:scale-105"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -60,6 +64,7 @@ const Gallery = () => {
       </div>
     </section>
   );
-};
+});
+Gallery.displayName = 'Gallery';
 
 export default Gallery;

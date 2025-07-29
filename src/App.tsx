@@ -15,9 +15,15 @@ import { ErrorBoundary } from "@/components/ErrorBoundary";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      retry: 3,
-      staleTime: 5 * 60 * 1000, // 5 minutes
+      retry: 1, // Reduced retries for faster failure
+      staleTime: 10 * 60 * 1000, // 10 minutes - increased for better caching
+      gcTime: 15 * 60 * 1000, // 15 minutes garbage collection time
       refetchOnWindowFocus: false,
+      refetchOnMount: false, // Prevent unnecessary refetches
+      refetchOnReconnect: false, // Prevent refetch on reconnect
+    },
+    mutations: {
+      retry: 1, // Reduced mutation retries
     },
   },
 });
