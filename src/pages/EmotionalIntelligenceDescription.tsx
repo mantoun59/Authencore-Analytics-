@@ -164,9 +164,9 @@ const EmotionalIntelligenceDescription = () => {
                   </p>
                 </div>
                 <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🧠 EQ Development</h4>
+                  <h4 className="font-semibold mb-2">🎯 Action Plans</h4>
                   <p className="text-sm text-muted-foreground">
-                    Targeted strategies for improving emotional intelligence in workplace settings.
+                    Personalized development roadmaps with specific exercises and techniques for growth.
                   </p>
                 </div>
               </div>
