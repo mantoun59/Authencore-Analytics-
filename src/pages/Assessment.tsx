@@ -18,6 +18,9 @@ const getBadgeTranslationKey = (badge: string): string => {
     .replace(/[^a-z0-9]/g, ''); // Remove any other non-alphanumeric characters
 };
 import { assessmentsData } from "@/data/assessmentsData";
+
+// Assessments that have multilingual support
+const multilingualAssessments = ['emotional-intelligence'];
 import assessmentConceptImage from "@/assets/assessment-concept.jpg";
 import LogoDisplay from "@/components/LogoDisplay";
 import { PaymentButton } from "@/components/PaymentButton";
@@ -205,8 +208,17 @@ const Assessment = () => {
               const colorClasses = getColorClasses(assessment.color);
               
               return (
-                <Card key={assessment.id} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
+                <Card key={assessment.id} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col relative">
                   <CardHeader>
+                    {multilingualAssessments.includes(assessment.id) && (
+                      <Badge 
+                        variant="secondary" 
+                        className="absolute top-4 right-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 font-medium flex items-center gap-1 z-10"
+                      >
+                        <Globe className="w-3 h-3" />
+                        Multilingual
+                      </Badge>
+                    )}
                      <div className="flex items-center gap-3 mb-4">
                        <IconComponent className={`h-8 w-8 ${colorClasses.icon}`} />
                        <div>
