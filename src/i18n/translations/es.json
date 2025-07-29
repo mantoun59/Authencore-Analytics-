@@ -363,5 +363,31 @@
     "descriptionGenZ": "Comprende las preferencias del lugar de trabajo generacional y optimiza tu ambiente de trabajo para máximo compromiso.",
     "descriptionStress": "Evalúa tu resistencia al estrés y desarrolla estrategias de afrontamiento efectivas para situaciones desafiantes.",
     "descriptionFaith": "Explora cómo tus valores y creencias personales se alinean con tus metas profesionales y cultura del lugar de trabajo."
+  },
+  "notFound": {
+    "title": "Página No Encontrada",
+    "description": "La página que buscas no existe o ha sido movida.",
+    "requestedPath": "Ruta solicitada:",
+    "returnHome": "Volver al Inicio",
+    "goBack": "Volver",
+    "popularPages": "Páginas Populares",
+    "pages": {
+      "assessments": "Evaluaciones",
+      "careerLaunch": "Lanzamiento de Carrera",
+      "aboutUs": "Acerca de Nosotros",
+      "authentication": "Autenticación"
+    }
+  },
+  "privacy": {
+    "title": "Política de Privacidad",
+    "effectiveDate": "Fecha de vigencia:",
+    "sections": {
+      "introduction": {
+        "title": "Introducción",
+        "content1": "Bienvenido a Authencore Analytics. Estamos comprometidos a proteger su privacidad e información personal.",
+        "content2": "Nuestra misión es 'Midiendo Mentes. Moldeando Futuros.' Tomamos esta responsabilidad en serio."
+      }
+    }
+  }
   }
 }

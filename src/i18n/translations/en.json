@@ -643,7 +643,32 @@
       "assessmentPricing": "Assessment Pricing",
       "businessPartnerships": "Business Partnerships",
       "employerSolutions": "Employer Solutions"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "description": "The page you're looking for doesn't exist or has been moved.",
+    "requestedPath": "Requested path:",
+    "returnHome": "Return Home",
+    "goBack": "Go Back",
+    "popularPages": "Popular Pages",
+    "pages": {
+      "assessments": "Assessments",
+      "careerLaunch": "Career Launch", 
+      "aboutUs": "About Us",
+      "authentication": "Authentication"
     }
+  },
+  "privacy": {
+    "title": "Privacy Policy",
+    "effectiveDate": "Effective Date:",
+    "sections": {
+      "introduction": {
+        "title": "Introduction",
+        "content1": "Welcome to Authencore Analytics. We are committed to protecting your privacy and personal information.",
+        "content2": "Our mission is 'Measuring Minds. Shaping Futures.' We take this responsibility seriously."
+      }
+    }
+  }
   },
   "profile": {
     "title": "Profile",

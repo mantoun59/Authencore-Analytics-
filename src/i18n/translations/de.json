@@ -353,5 +353,31 @@
     "descriptionGenZ": "Verstehen Sie generationsspezifische Arbeitsplatzpräferenzen und optimieren Sie Ihr Arbeitsumfeld für maximales Engagement.",
     "descriptionStress": "Bewerten Sie Ihre Stressresilienz und entwickeln Sie effektive Bewältigungsstrategien für herausfordernde Situationen.",
     "descriptionFaith": "Erkunden Sie, wie Ihre persönlichen Werte und Überzeugungen mit Ihren beruflichen Zielen und der Arbeitsplatzkultur übereinstimmen."
+  },
+  "notFound": {
+    "title": "Seite Nicht Gefunden",
+    "description": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
+    "requestedPath": "Angefragter Pfad:",
+    "returnHome": "Zur Startseite",
+    "goBack": "Zurück",
+    "popularPages": "Beliebte Seiten",
+    "pages": {
+      "assessments": "Bewertungen",
+      "careerLaunch": "Karrierestart",
+      "aboutUs": "Über Uns",
+      "authentication": "Authentifizierung"
+    }
+  },
+  "privacy": {
+    "title": "Datenschutzrichtlinie",
+    "effectiveDate": "Gültigkeitsdatum:",
+    "sections": {
+      "introduction": {
+        "title": "Einführung",
+        "content1": "Willkommen bei Authencore Analytics. Wir verpflichten uns, Ihre Privatsphäre und persönlichen Informationen zu schützen.",
+        "content2": "Unsere Mission ist 'Gedanken Messen. Zukünfte Gestalten.' Wir nehmen diese Verantwortung ernst."
+      }
+    }
+  }
   }
 }
