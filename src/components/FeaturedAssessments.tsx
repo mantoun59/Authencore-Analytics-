@@ -33,10 +33,10 @@ const FeaturedAssessments = () => {
                   <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
                     <IconComponent className="w-8 h-8 text-primary" />
                   </div>
-                  <h3 className="text-xl font-semibold text-foreground mb-2">
-                    {assessment.title}
-                  </h3>
-                  <p className="text-muted-foreground mb-4">{assessment.description}</p>
+                   <h3 className="text-xl font-semibold text-foreground mb-2">
+                     {t(`assessments.cards.${assessment.title.toLowerCase().replace(/\s+/g, '').replace('+', '')}.title`)}
+                   </h3>
+                   <p className="text-muted-foreground mb-4">{t(`assessments.cards.${assessment.title.toLowerCase().replace(/\s+/g, '').replace('+', '')}.description`)}</p>
                   <div className="text-3xl font-bold text-foreground mb-6">
                     {assessment.price}
                   </div>

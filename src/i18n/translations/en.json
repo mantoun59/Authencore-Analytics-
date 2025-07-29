@@ -77,6 +77,96 @@
     "learnMore": "Learn More",
     "duration": "Duration",
     "minutes": "minutes",
+    "badges": {
+      "bestvalue": "Best Value",
+      "premium": "Premium",
+      "advanced": "Advanced",
+      "global": "Global",
+      "eqfocus": "EQ Focus",
+      "professional": "Professional",
+      "validitydetection": "Validity Detection",
+      "percentilescoring": "Percentile Scoring",
+      "burnoutprevention": "Burnout Prevention",
+      "linguisticanalysis": "Linguistic Analysis",
+      "teamcompatibility": "Team Compatibility",
+      "riasecprofile": "RIASEC Profile",
+      "pdfreports": "PDF Reports",
+      "7dimensions": "7 Dimensions",
+      "60scenarios": "60+ Scenarios",
+      "4cqdimensions": "4 CQ Dimensions",
+      "eqdimensions": "EQ Dimensions",
+      "workplaceapplications": "Workplace Applications",
+      "90questions": "90 Questions",
+      "42dimensions": "42 Dimensions",
+      "validatedinstruments": "Validated Instruments",
+      "questionsLabel": "Questions"
+    },
+    "cards": {
+      "careerlaunch": {
+        "title": "CareerLaunch",
+        "subtitle": "Career Discovery & Planning",
+        "description": "Comprehensive career discovery assessment analyzing interests, aptitudes, personality, and values with personalized insights"
+      },
+      "cairpersonality": {
+        "title": "CAIR+ Personality",
+        "subtitle": "Advanced Personality Assessment",
+        "description": "Comprehensive personality assessment with 100 personality questions + 20 validity checks across 4 key dimensions"
+      },
+      "stressresilience": {
+        "title": "Burnout Prevention Index",
+        "subtitle": "Proactive Burnout Prevention Assessment",
+        "description": "Comprehensive burnout prevention assessment evaluating stress levels, risk factors, and resilience capabilities across 7 dimensions"
+      },
+      "culturalintelligence": {
+        "title": "Cultural Intelligence",
+        "subtitle": "Global Business Competency",
+        "description": "Comprehensive cultural intelligence assessment with real-world scenarios and global business challenges"
+      },
+      "communicationstyles": {
+        "title": "Communication Styles",
+        "subtitle": "Advanced Communication Analysis",
+        "description": "Comprehensive communication assessment with linguistic analysis and real-time simulations"
+      },
+      "emotionalintelligence": {
+        "title": "Emotional Intelligence",
+        "subtitle": "EQ Assessment & Development",
+        "description": "Comprehensive emotional intelligence assessment measuring self-awareness, empathy, and social skills"
+      },
+      "faithvalues": {
+        "title": "Faith & Values",
+        "subtitle": "Comprehensive Values Alignment Assessment",
+        "description": "Comprehensive 90-question assessment using validated instruments to analyze faith-based values alignment across 42 dimensions"
+      },
+      "genzassessment": {
+        "title": "Gen Z Workplace",
+        "subtitle": "Generational Workplace Assessment",
+        "description": "Specialized assessment for Gen Z workplace preferences, values, and career expectations"
+      },
+      "digitalwellness": {
+        "title": "Digital Wellness",
+        "subtitle": "Technology Balance Assessment",
+        "description": "Comprehensive evaluation of digital habits, screen time management, and technology-life balance"
+      },
+      "leadershipassessment": {
+        "title": "Authentic Leadership",
+        "subtitle": "Leadership Development Assessment",
+        "description": "Comprehensive leadership assessment evaluating authentic leadership capabilities and development areas"
+      }
+    },
+    "comparison": {
+      "forStudents": "For Students & Early Career",
+      "forHiring": "For Hiring & Team Building",
+      "forHighStress": "For High-Stress Roles",
+      "forCommunication": "For Communication Excellence",
+      "studentsDescription": "CareerLaunch is perfect for exploring career options and building foundational skills",
+      "hiringDescription": "CAIR+ provides comprehensive personality insights for recruitment and team dynamics",
+      "stressDescription": "Stress Resilience assessment evaluates performance under pressure and burnout risk",
+      "communicationDescription": "Communication Styles assessment optimizes professional interactions and team dynamics",
+      "recommendedCareerLaunch": "Recommended: CareerLaunch",
+      "recommendedCair": "Recommended: CAIR+",
+      "recommendedStress": "Recommended: Stress Resilience",
+      "recommendedCommunication": "Recommended: Communication Styles"
+    },
     "careerLaunch": {
       "title": "Career Launch",
       "description": "Comprehensive assessment for young professionals entering the workforce.",

@@ -197,39 +197,42 @@ const Assessment = () => {
               return (
                 <Card key={assessment.id} className="hover:shadow-xl transition-all duration-300 hover:-translate-y-2 h-full flex flex-col">
                   <CardHeader>
-                    <div className="flex items-center gap-3 mb-4">
-                      <IconComponent className={`h-8 w-8 ${colorClasses.icon}`} />
-                      <div>
-                        <CardTitle className="text-xl">{assessment.title}</CardTitle>
-                        <Badge className="mt-1" variant="secondary">{assessment.badges[0]}</Badge>
-                      </div>
-                    </div>
-                    <CardDescription className="text-base">
-                      {assessment.description}
-                    </CardDescription>
+                     <div className="flex items-center gap-3 mb-4">
+                       <IconComponent className={`h-8 w-8 ${colorClasses.icon}`} />
+                       <div>
+                         <CardTitle className="text-xl">{t(`assessments.cards.${assessment.id.replace('-', '')}.title`)}</CardTitle>
+                         <Badge className="mt-1" variant="secondary">{t(`assessments.badges.${assessment.badges[0].toLowerCase().replace(/\s+/g, '')}`)}</Badge>
+                       </div>
+                     </div>
+                     <CardDescription className="text-base">
+                       {t(`assessments.cards.${assessment.id.replace('-', '')}.description`)}
+                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4 flex-grow flex flex-col">
-                    <div className="flex items-center justify-between mb-4">
-                      <span className="text-3xl font-bold text-primary">{assessment.price}</span>
-                      <Badge className={colorClasses.badge}>
-                        {assessment.badges[1] || assessment.badges[0]}
-                      </Badge>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      <Badge variant="outline">{assessment.questions} Questions</Badge>
-                      <Badge variant="outline">{assessment.duration}</Badge>
-                      {assessment.badges.slice(1, 3).map((badge, index) => (
-                        <Badge key={index} variant="outline">{badge}</Badge>
-                      ))}
-                    </div>
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      {assessment.features.slice(0, 4).map((feature, index) => (
-                        <li key={index} className="flex items-center gap-2">
-                          <CheckCircle2 className="h-4 w-4 text-green-500" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
+                     <div className="flex items-center justify-between mb-4">
+                       <span className="text-3xl font-bold text-primary">{assessment.price}</span>
+                       <Badge className={colorClasses.badge}>
+                         {t(`assessments.badges.${(assessment.badges[1] || assessment.badges[0]).toLowerCase().replace(/\s+/g, '')}`)}
+                       </Badge>
+                     </div>
+                     <div className="flex flex-wrap gap-2">
+                       <Badge variant="outline">{assessment.questions} {t("assessments.badges.questionsLabel")}</Badge>
+                       <Badge variant="outline">{assessment.duration}</Badge>
+                       {assessment.badges.slice(1, 3).map((badge, index) => (
+                         <Badge key={index} variant="outline">{t(`assessments.badges.${badge.toLowerCase().replace(/\s+/g, '')}`)}</Badge>
+                       ))}
+                     </div>
+                     <ul className="space-y-2 text-sm text-muted-foreground">
+                       {assessment.features.slice(0, 4).map((feature, index) => {
+                         const featureKey = feature.toLowerCase().replace(/[^a-zA-Z0-9]/g, '');
+                         return (
+                           <li key={index} className="flex items-center gap-2">
+                             <CheckCircle2 className="h-4 w-4 text-green-500" />
+                             {t(`assessments.features.${featureKey}`, feature)}
+                           </li>
+                         );
+                       })}
+                     </ul>
                     <div className="flex-grow"></div>
                     <div className="space-y-2">
                       <PaymentButton
@@ -331,67 +334,67 @@ const Assessment = () => {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Target className="h-5 w-5 text-blue-500" />
-                  For Students & Early Career
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  CareerLaunch is perfect for exploring career options and building foundational skills
-                </p>
-                <Badge className="bg-blue-100 text-blue-800">Recommended: CareerLaunch</Badge>
-              </CardContent>
-            </Card>
+           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+             <Card>
+               <CardHeader>
+                 <CardTitle className="flex items-center gap-2">
+                   <Target className="h-5 w-5 text-blue-500" />
+                   {t("assessments.comparison.forStudents")}
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <p className="text-muted-foreground mb-4">
+                   {t("assessments.comparison.studentsDescription")}
+                 </p>
+                 <Badge className="bg-blue-100 text-blue-800">{t("assessments.comparison.recommendedCareerLaunch")}</Badge>
+               </CardContent>
+             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Users className="h-5 w-5 text-purple-500" />
-                  For Hiring & Team Building
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  CAIR+ provides comprehensive personality insights for recruitment and team dynamics
-                </p>
-                <Badge className="bg-purple-100 text-purple-800">Recommended: CAIR+</Badge>
-              </CardContent>
-            </Card>
+             <Card>
+               <CardHeader>
+                 <CardTitle className="flex items-center gap-2">
+                   <Users className="h-5 w-5 text-purple-500" />
+                   {t("assessments.comparison.forHiring")}
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <p className="text-muted-foreground mb-4">
+                   {t("assessments.comparison.hiringDescription")}
+                 </p>
+                 <Badge className="bg-purple-100 text-purple-800">{t("assessments.comparison.recommendedCair")}</Badge>
+               </CardContent>
+             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Shield className="h-5 w-5 text-green-500" />
-                  For High-Stress Roles
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Stress Resilience assessment evaluates performance under pressure and burnout risk
-                </p>
-                <Badge className="bg-green-100 text-green-800">Recommended: Stress Resilience</Badge>
-              </CardContent>
-            </Card>
+             <Card>
+               <CardHeader>
+                 <CardTitle className="flex items-center gap-2">
+                   <Shield className="h-5 w-5 text-green-500" />
+                   {t("assessments.comparison.forHighStress")}
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <p className="text-muted-foreground mb-4">
+                   {t("assessments.comparison.stressDescription")}
+                 </p>
+                 <Badge className="bg-green-100 text-green-800">{t("assessments.comparison.recommendedStress")}</Badge>
+               </CardContent>
+             </Card>
 
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <MessageSquare className="h-5 w-5 text-indigo-500" />
-                  For Communication Excellence
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Communication Styles assessment decodes how you connect, influence, and collaborate
-                </p>
-                <Badge className="bg-indigo-100 text-indigo-800">Recommended: Communication</Badge>
-              </CardContent>
-            </Card>
-          </div>
+             <Card>
+               <CardHeader>
+                 <CardTitle className="flex items-center gap-2">
+                   <MessageSquare className="h-5 w-5 text-indigo-500" />
+                   {t("assessments.comparison.forCommunication")}
+                 </CardTitle>
+               </CardHeader>
+               <CardContent>
+                 <p className="text-muted-foreground mb-4">
+                   {t("assessments.comparison.communicationDescription")}
+                 </p>
+                 <Badge className="bg-indigo-100 text-indigo-800">{t("assessments.comparison.recommendedCommunication")}</Badge>
+               </CardContent>
+             </Card>
+           </div>
         </div>
       </section>
 
