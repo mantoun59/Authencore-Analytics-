@@ -96,32 +96,32 @@ const PsychometricsInfo = () => {
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
                 <TrendingUp className="h-8 w-8 text-purple-600" />
-                <CardTitle className="text-xl">Accuracy Standards</CardTitle>
+                <CardTitle className="text-xl">{t("psychometrics.accuracyStandards.title")}</CardTitle>
               </div>
-              <CardDescription>Proven reliability and validity metrics</CardDescription>
+              <CardDescription>{t("psychometrics.accuracyStandards.subtitle")}</CardDescription>
             </CardHeader>
             <CardContent>
             <div className="space-y-4">
               <div className="bg-purple-50 p-4 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-purple-800">Reliability</span>
-                  <span className="text-lg font-bold text-purple-600">High</span>
+                  <span className="font-semibold text-purple-800">{t("psychometrics.accuracyStandards.reliability.title")}</span>
+                  <span className="text-lg font-bold text-purple-600">{t("psychometrics.accuracyStandards.reliability.level")}</span>
                 </div>
-                <p className="text-sm text-purple-700">Consistent results across multiple testing sessions</p>
+                <p className="text-sm text-purple-700">{t("psychometrics.accuracyStandards.reliability.description")}</p>
               </div>
               <div className="bg-blue-50 p-4 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-blue-800">Validity</span>
-                  <span className="text-lg font-bold text-blue-600">Validated</span>
+                  <span className="font-semibold text-blue-800">{t("psychometrics.accuracyStandards.validity.title")}</span>
+                  <span className="text-lg font-bold text-blue-600">{t("psychometrics.accuracyStandards.validity.level")}</span>
                 </div>
-                <p className="text-sm text-blue-700">Measures what it claims to measure accurately</p>
+                <p className="text-sm text-blue-700">{t("psychometrics.accuracyStandards.validity.description")}</p>
               </div>
               <div className="bg-green-50 p-4 rounded-lg">
                 <div className="flex items-center justify-between mb-2">
-                  <span className="font-semibold text-green-800">Predictive Power</span>
-                  <span className="text-lg font-bold text-green-600">Strong</span>
+                  <span className="font-semibold text-green-800">{t("psychometrics.accuracyStandards.predictivePower.title")}</span>
+                  <span className="text-lg font-bold text-green-600">{t("psychometrics.accuracyStandards.predictivePower.level")}</span>
                 </div>
-                <p className="text-sm text-green-700">Provides meaningful insights for career and personal development</p>
+                <p className="text-sm text-green-700">{t("psychometrics.accuracyStandards.predictivePower.description")}</p>
               </div>
             </div>
             </CardContent>
@@ -145,8 +145,8 @@ const PsychometricsInfo = () => {
                     <span className="text-primary font-bold">1</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Pre-Assessment Setup</h3>
-                    <p className="text-muted-foreground">Complete your profile and receive personalized instructions. Average setup time: 5-10 minutes.</p>
+                    <h3 className="font-semibold text-foreground mb-2">{t("psychometrics.assessmentExperience.step1.title")}</h3>
+                    <p className="text-muted-foreground">{t("psychometrics.assessmentExperience.step1.description")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -154,8 +154,8 @@ const PsychometricsInfo = () => {
                     <span className="text-primary font-bold">2</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Interactive Assessment</h3>
-                    <p className="text-muted-foreground">Engage with dynamic questions, scenarios, and multimedia content. Duration: 30-90 minutes depending on assessment type.</p>
+                    <h3 className="font-semibold text-foreground mb-2">{t("psychometrics.assessmentExperience.step2.title")}</h3>
+                    <p className="text-muted-foreground">{t("psychometrics.assessmentExperience.step2.description")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -163,8 +163,8 @@ const PsychometricsInfo = () => {
                     <span className="text-primary font-bold">3</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Immediate Analysis</h3>
-                    <p className="text-muted-foreground">Our AI-powered system processes your responses in real-time, ensuring accurate scoring and interpretation.</p>
+                    <h3 className="font-semibold text-foreground mb-2">{t("psychometrics.assessmentExperience.step3.title")}</h3>
+                    <p className="text-muted-foreground">{t("psychometrics.assessmentExperience.step3.description")}</p>
                   </div>
                 </div>
               </div>
@@ -174,8 +174,8 @@ const PsychometricsInfo = () => {
                     <span className="text-primary font-bold">4</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Comprehensive Report</h3>
-                    <p className="text-muted-foreground">Receive detailed insights with visual charts, personalized recommendations, and actionable next steps.</p>
+                    <h3 className="font-semibold text-foreground mb-2">{t("psychometrics.assessmentExperience.step4.title")}</h3>
+                    <p className="text-muted-foreground">{t("psychometrics.assessmentExperience.step4.description")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -183,8 +183,8 @@ const PsychometricsInfo = () => {
                     <span className="text-primary font-bold">5</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Follow-up Support</h3>
-                    <p className="text-muted-foreground">Access to interpretation guides, career counseling resources, and optional consultation sessions.</p>
+                    <h3 className="font-semibold text-foreground mb-2">{t("psychometrics.assessmentExperience.step5.title")}</h3>
+                    <p className="text-muted-foreground">{t("psychometrics.assessmentExperience.step5.description")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-4">
@@ -192,8 +192,8 @@ const PsychometricsInfo = () => {
                     <span className="text-primary font-bold">6</span>
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground mb-2">Ongoing Development</h3>
-                    <p className="text-muted-foreground">Track your progress over time with periodic reassessments and skill development recommendations.</p>
+                    <h3 className="font-semibold text-foreground mb-2">{t("psychometrics.assessmentExperience.step6.title")}</h3>
+                    <p className="text-muted-foreground">{t("psychometrics.assessmentExperience.step6.description")}</p>
                   </div>
                 </div>
               </div>
