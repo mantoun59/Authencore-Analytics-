@@ -1331,6 +1331,36 @@ export type Database = {
         }
         Relationships: []
       }
+      security_improvements: {
+        Row: {
+          created_at: string
+          description: string
+          id: string
+          implemented_at: string
+          improvement_type: string
+          metadata: Json | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          description: string
+          id?: string
+          implemented_at?: string
+          improvement_type: string
+          metadata?: Json | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          id?: string
+          implemented_at?: string
+          improvement_type?: string
+          metadata?: Json | null
+          status?: string
+        }
+        Relationships: []
+      }
       solo_candidates: {
         Row: {
           access_token: string
@@ -1548,6 +1578,16 @@ export type Database = {
           p_demographics?: Json
         }
         Returns: Json
+      }
+      get_security_compliance_status: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          total_improvements: number
+          implemented: number
+          pending: number
+          requires_config: number
+          compliance_score: number
+        }[]
       }
       get_security_status: {
         Args: Record<PropertyKey, never>

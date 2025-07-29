@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -10,7 +11,9 @@ import { EmployerProvider } from "@/contexts/EmployerContext";
 import RouteConfig from "@/components/RouteConfig";
 import ScrollToTop from "@/components/ScrollToTop";
 import AIChat from "@/components/AIChat";
+import CookieBanner from "@/components/CookieBanner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { initializeSecurity } from "@/utils/securityEnhancements";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -29,6 +32,11 @@ const queryClient = new QueryClient({
 });
 
 const App = () => {
+  useEffect(() => {
+    // Initialize security enhancements on app start
+    initializeSecurity().catch(console.error);
+  }, []);
+
   return (
     <ErrorBoundary level="critical">
       <QueryClientProvider client={queryClient}>
@@ -43,6 +51,7 @@ const App = () => {
                     <ScrollToTop />
                     <RouteConfig />
                     <AIChat />
+                    <CookieBanner />
                   </BrowserRouter>
                 </EmployerProvider>
               </PartnerProvider>

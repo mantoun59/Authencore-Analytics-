@@ -4,14 +4,12 @@
  */
 
 import React, { Suspense, LazyExoticComponent } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 import { Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 
 interface LazyWrapperProps {
   children: React.ReactNode;
   fallback?: React.ReactNode;
-  errorFallback?: React.ComponentType<any>;
 }
 
 interface LoadingSpinnerProps {
@@ -36,6 +34,33 @@ const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
     </div>
   );
 };
+
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode; fallback: React.ComponentType<{ error: Error; resetErrorBoundary: () => void }> },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: React.ReactNode; fallback: React.ComponentType<{ error: Error; resetErrorBoundary: () => void }> }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+
+  resetErrorBoundary = () => {
+    this.setState({ hasError: false, error: null });
+  };
+
+  render() {
+    if (this.state.hasError && this.state.error) {
+      const FallbackComponent = this.props.fallback;
+      return <FallbackComponent error={this.state.error} resetErrorBoundary={this.resetErrorBoundary} />;
+    }
+
+    return this.props.children;
+  }
+}
 
 const ErrorFallback: React.FC<{ error: Error; resetErrorBoundary: () => void }> = ({ 
   error, 
@@ -71,10 +96,9 @@ const ErrorFallback: React.FC<{ error: Error; resetErrorBoundary: () => void }> 
  */
 export const LazyWrapper: React.FC<LazyWrapperProps> = ({ 
   children, 
-  fallback = <LoadingSpinner />,
-  errorFallback = ErrorFallback
+  fallback = <LoadingSpinner />
 }) => (
-  <ErrorBoundary FallbackComponent={errorFallback}>
+  <ErrorBoundary fallback={ErrorFallback}>
     <Suspense fallback={fallback}>
       {children}
     </Suspense>
@@ -88,13 +112,15 @@ export const withLazyLoading = <P extends object>(
   Component: LazyExoticComponent<React.ComponentType<P>>,
   loadingMessage?: string
 ) => {
-  return (props: P) => (
+  const LazyComponent = (props: P) => (
     <LazyWrapper 
       fallback={<LoadingSpinner message={loadingMessage} />}
     >
-      <Component {...props} />
+      <Component {...(props as any)} />
     </LazyWrapper>
   );
+  
+  return LazyComponent;
 };
 
 /**
