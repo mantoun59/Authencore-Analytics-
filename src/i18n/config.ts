@@ -29,7 +29,7 @@ i18n
     resources,
     lng: 'en', // default language
     fallbackLng: 'en',
-    debug: false,
+    debug: true, // Enable debug to see what's happening
 
     interpolation: {
       escapeValue: false,
@@ -37,7 +37,7 @@ i18n
 
     detection: {
       order: ['localStorage', 'navigator'],
-      caches: ['localStorage'],
+      caches: [], // Don't cache in localStorage to force fresh load
     },
   });
 
