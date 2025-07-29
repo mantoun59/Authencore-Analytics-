@@ -42,11 +42,14 @@ const EmotionalIntelligenceAssessment = ({ onComplete }: EmotionalIntelligenceAs
   
   // Map main app languages to component languages, default to Spanish if not supported
   const getComponentLanguage = (mainLang: string): 'es' | 'fr' | 'de' => {
+    console.log('Main app language:', mainLang);
     switch (mainLang) {
       case 'fr': return 'fr';
       case 'de': return 'de';
       case 'es': return 'es';
-      default: return 'es'; // Default to Spanish since English isn't available in this component
+      default: 
+        console.log('Language not supported, defaulting to Spanish');
+        return 'es'; // Default to Spanish since English isn't available in this component
     }
   };
   
