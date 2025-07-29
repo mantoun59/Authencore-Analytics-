@@ -1,12 +1,17 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Rocket, Brain, Shield } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Rocket, Brain, Shield, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { assessmentsData } from "@/data/assessmentsData";
 
 const FeaturedAssessments = () => {
   const { t } = useTranslation();
+  
+  // Assessments that have multilingual support
+  const multilingualAssessments = ['emotional-intelligence'];
+  
   // Use real assessment data - featuring the top 3 assessments
   const featuredAssessments = assessmentsData.slice(0, 3).map(assessment => ({
     title: assessment.title,
@@ -14,7 +19,9 @@ const FeaturedAssessments = () => {
     icon: assessment.id === 'career-launch' ? Rocket : 
           assessment.id === 'cair-personality' ? Brain : Shield,
     description: assessment.subtitle,
-    route: assessment.route
+    route: assessment.route,
+    id: assessment.id,
+    isMultilingual: multilingualAssessments.includes(assessment.id)
   }));
 
   return (
@@ -28,8 +35,17 @@ const FeaturedAssessments = () => {
           {featuredAssessments.map((assessment, index) => {
             const IconComponent = assessment.icon;
             return (
-              <Card key={index} className="text-center p-6 hover:shadow-card transition-shadow">
+              <Card key={index} className="text-center p-6 hover:shadow-card transition-shadow relative">
                 <CardContent className="p-6">
+                  {assessment.isMultilingual && (
+                    <Badge 
+                      variant="secondary" 
+                      className="absolute top-4 right-4 bg-gradient-to-r from-blue-500 to-purple-500 text-white border-0 font-medium flex items-center gap-1"
+                    >
+                      <Globe className="w-3 h-3" />
+                      Multilingual
+                    </Badge>
+                  )}
                   <div className="w-16 h-16 bg-primary/10 rounded-lg flex items-center justify-center mx-auto mb-6">
                     <IconComponent className="w-8 h-8 text-primary" />
                   </div>
