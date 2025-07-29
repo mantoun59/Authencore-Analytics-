@@ -30,11 +30,17 @@ export interface EnvironmentConfig {
  * Get environment configuration
  */
 export const getEnvironmentConfig = (): EnvironmentConfig => {
-  // Use environment variables for security
+  // Security enhancement: Remove fallback credentials in production
+  const isProduction = import.meta.env.MODE === 'production';
+  
   const config: EnvironmentConfig = {
     supabase: {
-      url: import.meta.env.VITE_SUPABASE_URL || "https://jlbftyjewxgetxcihban.supabase.co",
-      anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpsYmZ0eWpld3hnZXR4Y2loYmFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2NDA4MzgsImV4cCI6MjA2ODIxNjgzOH0.g_SBYZPefuFcCQfG_Un3PEASxycvoa65bG1DmGtXfrg"
+      url: isProduction 
+        ? import.meta.env.VITE_SUPABASE_URL! // Required in production
+        : import.meta.env.VITE_SUPABASE_URL || "https://jlbftyjewxgetxcihban.supabase.co",
+      anonKey: isProduction
+        ? import.meta.env.VITE_SUPABASE_ANON_KEY! // Required in production  
+        : import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpsYmZ0eWpld3hnZXR4Y2loYmFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2NDA4MzgsImV4cCI6MjA2ODIxNjgzOH0.g_SBYZPefuFcCQfG_Un3PEASxycvoa65bG1DmGtXfrg"
     },
     app: {
       environment: (import.meta.env.MODE as any) || 'development',
