@@ -117,26 +117,22 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
         careerFit: results.career_fit.label
       };
 
-      const response = await supabase.functions.invoke('generate-certificate', {
-        body: certificateData
+      // For now, create a simple certificate download since the edge function is optional
+      const certificateHTML = generateSimpleCertificate(certificateData);
+      const blob = new Blob([certificateHTML], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${userProfile.name.replace(/\s+/g, '_')}_Career_Launch_Certificate.html`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      toast({
+        title: "Certificate Downloaded",
+        description: "Your completion certificate has been generated.",
       });
-
-      if (response.data) {
-        const blob = new Blob([response.data], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `${userProfile.name.replace(' ', '_')}_Career_Launch_Certificate.pdf`;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        toast({
-          title: "Certificate Downloaded",
-          description: "Your completion certificate has been generated.",
-        });
-      }
     } catch (error) {
       console.error('Error generating certificate:', error);
       toast({
@@ -145,6 +141,23 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
         variant: "destructive"
       });
     }
+  };
+
+  const generateSimpleCertificate = (data: any) => {
+    return `
+    <!DOCTYPE html>
+    <html>
+    <head><title>Assessment Certificate</title></head>
+    <body style="font-family: Arial, sans-serif; padding: 40px; text-align: center;">
+      <h1 style="color: #2563eb;">Certificate of Completion</h1>
+      <h2>${data.candidateName}</h2>
+      <p>Has successfully completed the ${data.assessmentType}</p>
+      <p>Completion Date: ${data.completionDate}</p>
+      <p>Reliability Score: ${data.reliabilityScore}%</p>
+      <p>Career Profile: ${data.careerFit}</p>
+    </body>
+    </html>
+    `;
   };
 
   const TechnicalTooltip = ({ term, definition }: { term: string; definition: string }) => (

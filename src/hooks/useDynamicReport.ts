@@ -43,10 +43,7 @@ export const useDynamicReport = (options: UseDynamicReportOptions = {}) => {
           assessment_type,
           results,
           created_at,
-          profiles!inner(
-            full_name,
-            email
-          )
+          user_id
         `);
 
       if (options.assessmentId) {
@@ -66,14 +63,21 @@ export const useDynamicReport = (options: UseDynamicReportOptions = {}) => {
       }
 
       if (data) {
+        // Get user profile separately
+        const { data: profileData } = await supabase
+          .from('profiles')
+          .select('full_name, email')
+          .eq('user_id', data.user_id)
+          .single();
+
         const formattedData: ReportData = {
           id: data.id,
           assessment_type: data.assessment_type,
           results: data.results,
           created_at: data.created_at,
           user_profile: {
-            name: data.profiles?.full_name || 'Unknown User',
-            email: data.profiles?.email || ''
+            name: profileData?.full_name || 'Unknown User',
+            email: profileData?.email || ''
           }
         };
         setReportData(formattedData);
