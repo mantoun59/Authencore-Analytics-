@@ -1,21 +1,22 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Brain, Calendar, Target, TrendingUp, Shield, CheckCircle2, Users, Award } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const PsychometricsInfo = () => {
+  const { t } = useTranslation();
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <Badge className="mb-4 bg-primary/10 text-primary hover:bg-primary/20">
-            🧠 The Science Behind Our Assessments
+            🧠 {t("features.title")}
           </Badge>
           <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
-            Understanding Psychometrics
+            {t("about.title")}
           </h2>
           <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-            Discover the robust scientific foundation that powers our professional assessment platform, 
-            delivering accurate insights through decades of psychological research and validation.
+            {t("about.subtitle")}
           </p>
         </div>
 

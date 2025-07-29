@@ -32,15 +32,12 @@ const CTA = () => {
 
           {/* Main heading */}
           <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Ready to understand
-            <br />
-            <span className="text-accent">your potential?</span>
+            {t("landing.ctaTitle")}
           </h2>
           
           {/* Subtitle */}
           <p className="text-xl md:text-2xl text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Take professional psychological assessments to gain valuable insights about your personality, 
-            cognitive abilities, and behavioral patterns.
+            {t("landing.ctaDescription")}
           </p>
 
           {/* Benefits grid */}
