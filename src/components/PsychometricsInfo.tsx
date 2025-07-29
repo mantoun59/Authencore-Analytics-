@@ -4,7 +4,12 @@ import { Brain, Calendar, Target, TrendingUp, Shield, CheckCircle2, Users, Award
 import { useTranslation } from "react-i18next";
 
 const PsychometricsInfo = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  
+  // Debug: Log the current language and check if psychometrics exists
+  console.log("Current language:", i18n.language);
+  console.log("Psychometrics exists:", t("psychometrics.historicalFoundation.title", { returnObjects: true }));
+  
   return (
     <section className="py-20 bg-muted/30">
       <div className="container mx-auto px-4">
