@@ -1,0 +1,79 @@
+# Environment Variables Template
+# Copy this file to .env and fill in your actual values
+
+# ================================
+# CORE DATABASE CONFIGURATION
+# ================================
+DATABASE_URL="postgresql://username:password@localhost:5432/authencore_analytics"
+DB_HOST="localhost"
+DB_PORT="5432"
+DB_NAME="authencore_analytics"
+DB_USER="authencore_user"
+DB_PASSWORD="CHANGE_THIS_PASSWORD"
+
+# ================================
+# AI SERVICE API KEYS (REQUIRED)
+# ================================
+# Get from: https://platform.openai.com/api-keys
+OPENAI_API_KEY="sk-your-openai-api-key-here"
+
+# Get from: https://console.anthropic.com/
+ANTHROPIC_API_KEY="sk-ant-your-anthropic-key-here"
+
+# ================================
+# EMAIL SERVICE (REQUIRED)
+# ================================
+# Get from: https://resend.com/api-keys
+RESEND_API_KEY="re_your-resend-api-key-here"
+RESEND_FROM_EMAIL="noreply@yourdomain.com"
+
+# ================================
+# APPLICATION CONFIGURATION
+# ================================
+APP_ENV="production"
+APP_URL="https://yourdomain.com"
+APP_PORT="3000"
+CORS_ORIGIN="https://yourdomain.com"
+
+# ================================
+# SECURITY CONFIGURATION
+# ================================
+# Generate with: openssl rand -hex 32
+JWT_SECRET="your-32-character-jwt-secret-here"
+ENCRYPTION_KEY="your-32-character-encryption-key"
+SESSION_SECRET="your-session-secret-here"
+
+# ================================
+# FILE STORAGE (S3-COMPATIBLE)
+# ================================
+STORAGE_ENDPOINT="https://your-storage-endpoint.com"
+STORAGE_ACCESS_KEY="your-access-key"
+STORAGE_SECRET_KEY="your-secret-key"
+STORAGE_BUCKET="authencore-files"
+STORAGE_REGION="us-east-1"
+
+# ================================
+# OPTIONAL INTEGRATIONS
+# ================================
+# Stripe (for payments)
+STRIPE_SECRET_KEY="sk_live_your-stripe-secret-key"
+STRIPE_WEBHOOK_SECRET="whsec_your-webhook-secret"
+
+# Monitoring
+SENTRY_DSN="https://your-sentry-dsn"
+
+# Analytics
+GOOGLE_ANALYTICS_ID="GA_MEASUREMENT_ID"
+
+# ================================
+# RATE LIMITING
+# ================================
+RATE_LIMIT_WINDOW=900000  # 15 minutes
+RATE_LIMIT_MAX=100        # Max requests per window
+
+# ================================
+# LOGGING
+# ================================
+LOG_LEVEL="info"
+LOG_FORMAT="json"
+LOG_FILE="/var/log/authencore/app.log"
