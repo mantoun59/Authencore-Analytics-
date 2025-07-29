@@ -429,7 +429,89 @@ export const emotionalIntelligenceTranslations = {
                 de: "Ich schaffe inklusive Umgebungen für alle"
             }
         ]
+    },
+
+    // === REPORT INTERPRETATIONS ===
+    interpretations: {
+        es: {
+            high: {
+                selfAwareness: "Demuestra una excelente autoconciencia. Comprende claramente sus emociones, fortalezas, debilidades y valores.",
+                selfRegulation: "Exhibe un fuerte control emocional y puede manejar sus impulsos de manera efectiva.",
+                motivation: "Muestra una motivación interna excepcional y está impulsado por objetivos personales y valores.",
+                empathy: "Posee una capacidad sobresaliente para comprender y conectar con las emociones de otros.",
+                socialSkills: "Demuestra habilidades sociales excepcionales que le permiten construir relaciones y liderar efectivamente."
+            },
+            medium: {
+                selfAwareness: "Tiene una buena autoconciencia pero hay espacio para una comprensión más profunda.",
+                selfRegulation: "Generalmente maneja bien las emociones pero puede tener dificultades en situaciones de alto estrés.",
+                motivation: "Muestra una motivación moderada pero podría beneficiarse de establecer metas más claras.",
+                empathy: "Entiende a otros razonablemente bien pero podría desarrollar conexiones emocionales más profundas.",
+                socialSkills: "Tiene habilidades sociales decentes pero podría mejorar en ciertas áreas interpersonales."
+            },
+            low: {
+                selfAwareness: "Desarrollar una mayor autoconciencia le ayudará a comprender mejor sus emociones y reacciones.",
+                selfRegulation: "Trabajar en técnicas de regulación emocional le ayudará a manejar situaciones difíciles más efectivamente.",
+                motivation: "Construir una motivación interna más fuerte mejorará significativamente su impulso y persistencia.",
+                empathy: "Practicar la escucha activa mejorará su comprensión de otros.",
+                socialSkills: "Desarrollar habilidades de comunicación mejorará significativamente su efectividad interpersonal."
+            }
+        },
+        fr: {
+            high: {
+                selfAwareness: "Démontre une excellente conscience de soi. Comprend clairement ses émotions, forces et faiblesses.",
+                selfRegulation: "Exhibe un fort contrôle émotionnel et peut gérer efficacement ses impulsions.",
+                motivation: "Montre une motivation interne exceptionnelle guidée par des objectifs personnels.",
+                empathy: "Possède une capacité remarquable à comprendre et se connecter avec les émotions des autres.",
+                socialSkills: "Démontre des compétences sociales exceptionnelles pour construire des relations."
+            },
+            medium: {
+                selfAwareness: "A une bonne conscience de soi mais il y a place pour une compréhension plus profonde.",
+                selfRegulation: "Gère généralement bien les émotions mais peut avoir des difficultés sous stress.",
+                motivation: "Montre une motivation modérée mais pourrait bénéficier d'objectifs plus clairs.",
+                empathy: "Comprend les autres raisonnablement bien mais pourrait développer des connexions plus profondes.",
+                socialSkills: "A des compétences sociales décentes mais pourrait s'améliorer dans certains domaines."
+            },
+            low: {
+                selfAwareness: "Développer une plus grande conscience de soi aidera à mieux comprendre les émotions.",
+                selfRegulation: "Travailler sur les techniques de régulation émotionnelle sera bénéfique.",
+                motivation: "Construire une motivation interne plus forte améliorera l'élan et la persistance.",
+                empathy: "Pratiquer l'écoute active améliorera la compréhension des autres.",
+                socialSkills: "Développer les compétences de communication améliorera l'efficacité interpersonnelle."
+            }
+        },
+        de: {
+            high: {
+                selfAwareness: "Zeigt ausgezeichnete Selbstwahrnehmung. Versteht klar Emotionen, Stärken und Schwächen.",
+                selfRegulation: "Zeigt starke emotionale Kontrolle und kann Impulse effektiv verwalten.",
+                motivation: "Zeigt außergewöhnliche interne Motivation angetrieben von persönlichen Zielen.",
+                empathy: "Besitzt eine bemerkenswerte Fähigkeit, die Emotionen anderer zu verstehen.",
+                socialSkills: "Zeigt außergewöhnliche soziale Fähigkeiten zum Aufbau von Beziehungen."
+            },
+            medium: {
+                selfAwareness: "Hat gute Selbstwahrnehmung, aber es gibt Raum für tieferes Verständnis.",
+                selfRegulation: "Verwaltet Emotionen im Allgemeinen gut, kann aber unter Stress Schwierigkeiten haben.",
+                motivation: "Zeigt moderate Motivation, könnte aber von klareren Zielen profitieren.",
+                empathy: "Versteht andere vernünftig gut, könnte aber tiefere Verbindungen entwickeln.",
+                socialSkills: "Hat anständige soziale Fähigkeiten, könnte sich aber in bestimmten Bereichen verbessern."
+            },
+            low: {
+                selfAwareness: "Die Entwicklung größerer Selbstwahrnehmung wird helfen, Emotionen besser zu verstehen.",
+                selfRegulation: "Die Arbeit an emotionalen Regulationstechniken wird helfen, schwierige Situationen zu bewältigen.",
+                motivation: "Den Aufbau stärkerer interner Motivation wird Antrieb und Ausdauer verbessern.",
+                empathy: "Das Üben aktiven Zuhörens wird das Verständnis anderer verbessern.",
+                socialSkills: "Die Entwicklung von Kommunikationsfähigkeiten wird die zwischenmenschliche Effektivität verbessern."
+            }
+        }
+    },
+
+    // === SCORING THRESHOLDS ===
+    scoring: {
+        thresholds: {
+            high: 80,    // 80% and above
+            medium: 60,  // 60-79%
+            low: 0       // Below 60%
+        },
+        maxScorePerDimension: 60, // 12 questions × 5 points max
+        totalQuestions: 60
     }
 };
-
-export default emotionalIntelligenceTranslations;
