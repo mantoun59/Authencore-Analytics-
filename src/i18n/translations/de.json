@@ -85,6 +85,12 @@
     }
   },
   "assessments": {
+    "title": "Unsere Bewertungen",
+    "subtitle": "Wissenschaftlich validierte psychometrische Bewertungen",
+    "takeAssessment": "Bewertung Durchführen",
+    "learnMore": "Mehr erfahren",
+    "duration": "Dauer",
+    "minutes": "Minuten",
     "careerLaunch": {
       "title": "Karrierestart",
       "description": "Umfassende Bewertung der Arbeitsbereitschaft für Berufseinsteiger",
@@ -134,6 +140,123 @@
       "title": "Burnout-Prävention",
       "description": "Identifizieren Sie Burnout-Risiken und Präventionsstrategien",
       "duration": "25-30 Minuten"
+    },
+    "badges": {
+      "bestvalue": "Bestes Preis-Leistungs-Verhältnis",
+      "premium": "Premium",
+      "global": "Global",
+      "advanced": "Erweitert",
+      "eqfocus": "EQ-Fokus",
+      "genzfocus": "Gen Z-Fokus",
+      "digitalhealth": "Digitale Gesundheit",
+      "comprehensive": "Umfassend",
+      "validitydetection": "Validitätserkennung",
+      "burnoutprevention": "Burnout-Prävention",
+      "linguisticanalysis": "Linguistische Analyse",
+      "eqdimensions": "EQ-Dimensionen",
+      "42dimensions": "42 Dimensionen",
+      "7dimensions": "7 Dimensionen",
+      "digitalfirst": "Digital-First",
+      "purposedriven": "Zweckgetrieben",
+      "productivityfocus": "Produktivitätsfokus",
+      "wellnessbased": "Wellness-basiert",
+      "360degree": "360-Grad",
+      "60+scenarios": "60+ Szenarien",
+      "riasecprofile": "RIASEC-Profil",
+      "percentilescoring": "Perzentil-Bewertung",
+      "4cqdimensions": "4 CQ-Dimensionen",
+      "teamcompatibility": "Team-Kompatibilität",
+      "workplaceapplications": "Arbeitsplatzanwendungen",
+      "validatedinstruments": "Validierte Instrumente",
+      "professional": "Professionell",
+      "questionsLabel": "Fragen",
+      "mishiringalt": "Digitale Bewertungstechnologie-Schnittstelle mit Handinteraktion"
+    },
+    "features": {
+      "riasecinterestprofiling": "RIASEC-Interessensprofilerstellung",
+      "cognitiveaptitudeassessment": "Kognitive Eignungsbeurteilung", 
+      "personalityandworkstyleanalysis": "Persönlichkeits- und Arbeitsstilanalyse",
+      "careervaluealignmentscoring": "Karriere-Werte-Alignment-Scoring",
+      "validitydetectionalgorithms": "Algorithmen zur Validitätserkennung",
+      "percentilebasedscoring": "Perzentil-basierte Bewertung",
+      "workplacebehaviorpredictions": "Vorhersagen für Arbeitsplatzverhalten",
+      "teamcompatibilityanalysis": "Team-Kompatibilitätsanalyse",
+      "comprehensiveburnoutriskassessment": "Umfassende Burnout-Risikobeurteilung",
+      "proactivepreventionstrategies": "Proaktive Präventionsstrategien",
+      "workloadmanagementevaluation": "Arbeitsbelastungsmanagement-Bewertung",
+      "emotionalexhaustionmeasurement": "Emotionale Erschöpfungsmessung",
+      "realworldculturalscenarios": "Reale kulturelle Szenarien",
+      "emailadaptationchallenges": "E-Mail-Anpassungsherausforderungen",
+      "globalmeetingschedulingsimulations": "Globale Meeting-Planungssimulationen",
+      "crossculturalnegotiationscenarios": "Interkulturelle Verhandlungsszenarien",
+      "communicationdnaprofiling": "Kommunikations-DNA-Profilerstellung",
+      "channeleffectivenessmapping": "Channel-Effektivitätszuordnung",
+      "interactivecommunicationsimulations": "Interaktive Kommunikationssimulationen",
+      "conflictresolutionstyleanalysis": "Konfliktlösungsstil-Analyse",
+      "comprehensiveeqprofiling": "Umfassende EQ-Profilerstellung",
+      "workplaceemotionalscenarios": "Arbeitsplatz-emotionale Szenarien",
+      "leadershipeqassessment": "Führungs-EQ-Bewertung",
+      "teamemotionaldynamics": "Team-emotionale Dynamik",
+      "validatedpsychologicalinstruments": "Validierte psychologische Instrumente",
+      "multipleassessmenttechniques": "Multiple Bewertungstechniken",
+      "comprehensive42dimensionanalysis": "Umfassende 42-Dimensionen-Analyse",
+      "advanceddistortiondetection": "Erweiterte Verzerrungserkennung",
+      "generationalworkplacepreferences": "Generationelle Arbeitsplatzpräferenzen",
+      "digitalcommunicationassessment": "Digitale Kommunikationsbewertung",
+      "worklifebalanceevaluation": "Work-Life-Balance-Bewertung",
+      "careerexpectationanalysis": "Karriereerwartungsanalyse",
+      "digitalhabitsanalysis": "Analyse digitaler Gewohnheiten",
+      "screentimeimpactassessment": "Bildschirmzeit-Auswirkungsbewertung",
+      "productivityoptimizationinsights": "Produktivitätsoptimierungs-Insights",
+      "digitalstressevaluation": "Digitale Stressbewertung",
+      "comprehensiveleadershipprofiling": "Umfassende Führungsprofilerstellung",
+      "managementstyleassessment": "Management-Stil-Bewertung",
+      "teameffectivenessevaluation": "Team-Effektivitätsbewertung",
+      "strategicthinkinganalysis": "Strategische Denkanalyse",
+      "pdfreports": "PDF-Berichte"
+    },
+    "cards": {
+      "careerlaunch": {
+        "title": "CareerLaunch",
+        "description": "Umfassende Karriere-Entdeckungsbewertung zur Analyse von Interessen, Fähigkeiten, Persönlichkeit und Werten mit personalisierten Erkenntnissen"
+      },
+      "cairpersonality": {
+        "title": "CAIR+ Persönlichkeit", 
+        "description": "Umfassende Persönlichkeitsbewertung mit 100 Persönlichkeitsfragen + 20 Validitätsprüfungen über 4 Schlüsseldimensionen"
+      },
+      "burnoutpreventionindex": {
+        "title": "Burnout-Präventionsindex",
+        "description": "Umfassende Burnout-Präventionsbewertung zur Bewertung von Stressniveaus, Risikofaktoren und Belastbarkeitsfähigkeiten über 7 Dimensionen"
+      },
+      "culturalintelligence": {
+        "title": "Kulturelle Intelligenz",
+        "description": "Umfassende Bewertung der kulturellen Intelligenz mit realen Szenarien und globalen Geschäftsherausforderungen"
+      },
+      "communicationstyles": {
+        "title": "Kommunikationsstile",
+        "description": "Umfassende Kommunikationsbewertung mit linguistischer Analyse und Echtzeit-Simulationen"
+      },
+      "emotionalintelligence": {
+        "title": "Emotionale Intelligenz",
+        "description": "Umfassende Bewertung der emotionalen Intelligenz zur Messung von Selbstwahrnehmung, Empathie und sozialen Fähigkeiten"
+      },
+      "faithvalues": {
+        "title": "Glaube & Werte",
+        "description": "Umfassende 90-Fragen-Bewertung mit validierten Instrumenten zur Analyse der glaubensbasierten Werte-Ausrichtung über 42 Dimensionen"
+      },
+      "genzworkplace": {
+        "title": "Gen Z Arbeitsplatz",
+        "description": "Spezialisierte Bewertung für Gen Z-Arbeitsplatzpräferenzen, Werte und Karriereerwartungen"
+      },
+      "digitalwellness": {
+        "title": "Digitales Wohlbefinden",
+        "description": "Umfassende Bewertung digitaler Gewohnheiten, Bildschirmzeitmanagement und Technologie-Leben-Balance"
+      },
+      "authenticleadership": {
+        "title": "Authentische Führung",
+        "description": "Umfassende Führungsbewertung zur Bewertung authentischer Führungsfähigkeiten und Entwicklungsbereiche"
+      }
+    }
     }
   },
   "about": {
