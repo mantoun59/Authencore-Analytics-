@@ -36,17 +36,19 @@
   },
   "hero": {
     "title": "Fortgeschrittene KI-gestützte Psychometrie",
-    "subtitle": "Entschlüsseln Sie Persönlichkeit, Verhalten und Potenzial mit wissenschaftlich validierten Bewertungen und KI-gestützten Erkenntnissen",
-    "getStarted": "Loslegen",
+    "subtitle": "Professionelle Bewertungen von Weltklasse mit tiefgreifender Analyse und sofortiger Berichterstattung",
+    "getStarted": "Erste Schritte",
     "learnMore": "Mehr erfahren",
     "tagline": "Wo Daten auf Vertrauen treffen",
-    "logoTagline": "Gedanken lesen. Zukünfte gestalten",
+    "logoTagline": "Gedanken lesen. Zukunft gestalten",
     "imageAlt": "Digitale Bewertungstechnologie-Schnittstelle mit Handinteraktion",
     "mishiringTitle": "Die Kosten einer Fehleinstellung",
     "mishiringQuote1": "Fehleinstellungen kosten Unternehmen bis zu 240.000 $ an Ausgaben für Einstellung, Vergütung und Bindung",
     "mishiringSource1": "US-Arbeitsministerium",
     "mishiringQuote2": "75% der Arbeitgeber geben zu, die falsche Person für eine Position eingestellt zu haben, was durchschnittlich 17.000 $ pro Fehleinstellung kostet",
-    "mishiringSource2": "CareerBuilder-Umfrage"
+    "mishiringSource2": "CareerBuilder-Umfrage",
+    "trustIndicators": "Sicher & Privat • Wissenschaftlich Validiert • Umfassende Bewertungen",
+    "companyName": "AuthenCore Analytics"
   },
   "features": {
     "title": "Bewertungsmerkmale",

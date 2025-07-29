@@ -36,7 +36,7 @@
     "dashboard": "Tableau de bord"
   },
   "hero": {
-    "title": "Psychométrie Avancée Alimentée par l'IA",
+    "title": "Psychométrie Avancée Alimentée par IA",
     "subtitle": "Évaluations professionnelles de classe mondiale avec analyse approfondie et rapports instantanés",
     "getStarted": "Commencer",
     "learnMore": "En savoir plus",
@@ -47,7 +47,9 @@
     "mishiringQuote1": "Les mauvaises embauches coûtent aux entreprises jusqu'à 240 000 $ en frais de recrutement, rémunération et rétention",
     "mishiringSource1": "Département du Travail des États-Unis",
     "mishiringQuote2": "75% des employeurs admettent avoir embauché la mauvaise personne pour un poste, coûtant en moyenne 17 000 $ par mauvaise embauche",
-    "mishiringSource2": "Enquête CareerBuilder"
+    "mishiringSource2": "Enquête CareerBuilder",
+    "trustIndicators": "Sécurisé et Privé • Scientifiquement Validé • Évaluations Complètes",
+    "companyName": "AuthenCore Analytics"
   },
   "features": {
     "title": "Caractéristiques Principales",
