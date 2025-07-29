@@ -27,7 +27,7 @@ const CAIRAssessment = lazy(() => import("@/pages/CAIRAssessment"));
 const StressResilience = lazy(() => import("@/pages/StressResilience"));
 const CulturalIntelligenceAssessment = lazy(() => import("@/pages/CulturalIntelligenceAssessment"));
 const CommunicationAssessment = lazy(() => import("@/pages/CommunicationAssessment"));
-const EmotionalIntelligenceAssessment = lazy(() => import("@/pages/EmotionalIntelligenceAssessment"));
+const EmotionalIntelligenceAssessment = lazy(() => import("@/components/EmotionalIntelligenceAssessment"));
 const FaithValuesAssessment = lazy(() => import("@/pages/FaithValuesAssessment"));
 const GenZWorkplaceAssessment = lazy(() => import("@/pages/GenZWorkplaceAssessment"));
 const DigitalWellnessAssessment = lazy(() => import("@/pages/DigitalWellnessAssessment"));
