@@ -1,5 +1,6 @@
 import React from 'react';
 import { useLogo } from '@/contexts/LogoContext';
+import { useTranslation } from 'react-i18next';
 
 interface LogoDisplayProps {
   size?: 'sm' | 'md' | 'lg';
@@ -13,6 +14,7 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
   className = '' 
 }) => {
   const { selectedLogo } = useLogo();
+  const { t } = useTranslation();
 
   // Size mapping for images - adjusted for navbar height (h-24 = 96px)
   const sizeClasses = {
@@ -34,7 +36,7 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
           size === 'md' ? 'text-base' : 
           'text-sm'
         }`}>
-          Reading minds. Shaping futures
+          {t("hero.logoTagline")}
         </p>
       )}
     </div>

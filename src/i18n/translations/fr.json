@@ -40,7 +40,14 @@
     "subtitle": "Évaluations professionnelles de classe mondiale avec analyse approfondie et rapports instantanés",
     "getStarted": "Commencer",
     "learnMore": "En savoir plus",
-    "tagline": "Lire les esprits, façonner l'avenir"
+    "tagline": "Où les données rencontrent la confiance",
+    "logoTagline": "Lire les esprits. Façonner l'avenir",
+    "imageAlt": "Interface technologique d'évaluation numérique avec interaction tactile",
+    "mishiringTitle": "Le Coût d'un Mauvais Recrutement",
+    "mishiringQuote1": "Les mauvaises embauches coûtent aux entreprises jusqu'à 240 000 $ en frais de recrutement, rémunération et rétention",
+    "mishiringSource1": "Département du Travail des États-Unis",
+    "mishiringQuote2": "75% des employeurs admettent avoir embauché la mauvaise personne pour un poste, coûtant en moyenne 17 000 $ par mauvaise embauche",
+    "mishiringSource2": "Enquête CareerBuilder"
   },
   "features": {
     "title": "Caractéristiques Principales",
@@ -101,50 +108,104 @@
     "learnMore": "En savoir plus",
     "duration": "Durée",
     "minutes": "minutes",
-    "careerLaunch": {
-      "title": "Lancement de Carrière",
-      "description": "Évaluation complète pour les jeunes professionnels entrant sur le marché du travail.",
-      "duration": "25-30"
+    "badges": {
+      "bestvalue": "Meilleur Rapport Qualité-Prix",
+      "premium": "Premium",
+      "advanced": "Avancé",
+      "global": "Global",
+      "eqfocus": "Focus QE",
+      "professional": "Professionnel",
+      "validitydetection": "Détection de Validité",
+      "percentilescoring": "Score en Centiles",
+      "burnoutprevention": "Prévention d'Épuisement",
+      "linguisticanalysis": "Analyse Linguistique",
+      "teamcompatibility": "Compatibilité d'Équipe",
+      "riasecprofile": "Profil RIASEC",
+      "pdfreports": "Rapports PDF",
+      "7dimensions": "7 Dimensions",
+      "60scenarios": "60+ Scénarios",
+      "4cqdimensions": "4 Dimensions CQ",
+      "eqdimensions": "Dimensions QE",
+      "workplaceapplications": "Applications en Milieu de Travail",
+      "90questions": "90 Questions",
+      "42dimensions": "42 Dimensions",
+      "validatedinstruments": "Instruments Validés",
+      "questionsLabel": "Questions",
+      "genzfocus": "Focus Génération Z",
+      "digitalfirst": "Digital d'abord",
+      "purposedriven": "Orienté vers un but",
+      "digitalhealth": "Santé numérique",
+      "productivityfocus": "Focus productivité",
+      "wellnessbased": "Basé sur le bien-être",
+      "comprehensive": "Complet",
+      "360degree": "360 degrés",
+      "mishiringalt": "Outils d'évaluation psychologique professionnels et analyses"
     },
-    "culturalIntelligence": {
-      "title": "Intelligence Culturelle (CAIR)",
-      "description": "Évalue la capacité à travailler efficacement dans des environnements culturellement diversifiés.",
-      "duration": "20-25"
+    "cards": {
+      "careerlaunch": {
+        "title": "Lancement de Carrière",
+        "subtitle": "Découverte et Planification de Carrière",
+        "description": "Évaluation complète de découverte de carrière analysant les intérêts, aptitudes, personnalité et valeurs avec des insights personnalisés"
+      },
+      "cairpersonality": {
+        "title": "Personnalité CAIR+",
+        "subtitle": "Évaluation Avancée de Personnalité",
+        "description": "Évaluation complète de personnalité avec 100 questions de personnalité + 20 vérifications de validité sur 4 dimensions clés"
+      },
+      "stressresilience": {
+        "title": "Indice de Prévention d'Épuisement",
+        "subtitle": "Évaluation Proactive de Prévention d'Épuisement",
+        "description": "Évaluation complète de prévention d'épuisement évaluant les niveaux de stress, facteurs de risque et capacités de résilience sur 7 dimensions"
+      },
+      "culturalintelligence": {
+        "title": "Intelligence Culturelle",
+        "subtitle": "Compétence Commerciale Mondiale",
+        "description": "Évaluation complète d'intelligence culturelle avec des scénarios du monde réel et des défis commerciaux mondiaux"
+      },
+      "communicationstyles": {
+        "title": "Styles de Communication",
+        "subtitle": "Analyse Avancée de Communication",
+        "description": "Évaluation complète de communication avec analyse linguistique et simulations en temps réel"
+      },
+      "emotionalintelligence": {
+        "title": "Intelligence Émotionnelle",
+        "subtitle": "Évaluation et Développement QE",
+        "description": "Évaluation complète d'intelligence émotionnelle mesurant la conscience de soi, l'empathie et les compétences sociales"
+      },
+      "faithvalues": {
+        "title": "Foi et Valeurs",
+        "subtitle": "Évaluation Complète d'Alignement des Valeurs",
+        "description": "Évaluation complète de 90 questions utilisant des instruments validés pour analyser l'alignement des valeurs basées sur la foi sur 42 dimensions"
+      },
+      "genzassessment": {
+        "title": "Lieu de Travail Génération Z",
+        "subtitle": "Évaluation du Lieu de Travail Générationnel",
+        "description": "Évaluation spécialisée pour les préférences de lieu de travail, valeurs et attentes de carrière de la Génération Z"
+      },
+      "digitalwellness": {
+        "title": "Bien-être Numérique",
+        "subtitle": "Évaluation d'Équilibre Technologique",
+        "description": "Évaluation complète des habitudes numériques, gestion du temps d'écran et équilibre technologie-vie"
+      },
+      "leadershipassessment": {
+        "title": "Leadership Authentique",
+        "subtitle": "Évaluation de Développement du Leadership",
+        "description": "Évaluation complète du leadership évaluant les capacités de leadership authentique et les domaines de développement"
+      }
     },
-    "communication": {
-      "title": "Styles de Communication",
-      "description": "Identifie les modèles de communication et les préférences de style personnel.",
-      "duration": "15-20"
-    },
-    "emotionalIntelligence": {
-      "title": "Intelligence Émotionnelle",
-      "description": "Mesure la capacité à comprendre et gérer les émotions efficacement.",
-      "duration": "20-25"
-    },
-    "leadership": {
-      "title": "Leadership Authentique",
-      "description": "Évalue le potentiel et le style de leadership authentique.",
-      "duration": "25-30"
-    },
-    "stressResilience": {
-      "title": "Résilience au Stress",
-      "description": "Évalue la capacité à gérer le stress et la résilience au travail.",
-      "duration": "15-20"
-    },
-    "genZ": {
-      "title": "Lieu de Travail Génération Z",
-      "description": "Évaluation spécialisée pour comprendre les préférences de travail de la Génération Z.",
-      "duration": "20-25"
-    },
-    "digitalWellness": {
-      "title": "Bien-être Numérique",
-      "description": "Évalue les habitudes numériques et l'équilibre travail-vie à l'ère numérique.",
-      "duration": "15-20"
-    },
-    "faithValues": {
-      "title": "Foi et Valeurs",
-      "description": "Explore l'alignement entre les valeurs personnelles et la foi dans le contexte professionnel.",
-      "duration": "30-35"
+    "comparison": {
+      "forStudents": "Pour Étudiants et Début de Carrière",
+      "forHiring": "Pour Recrutement et Formation d'Équipe",
+      "forHighStress": "Pour Rôles à Haut Stress",
+      "forCommunication": "Pour Excellence en Communication",
+      "studentsDescription": "CareerLaunch est parfait pour explorer les options de carrière et développer les compétences fondamentales",
+      "hiringDescription": "CAIR+ fournit des insights complets de personnalité pour le recrutement et la dynamique d'équipe",
+      "stressDescription": "L'évaluation de Résilience au Stress évalue la performance sous pression et le risque d'épuisement",
+      "communicationDescription": "L'évaluation des Styles de Communication optimise les interactions professionnelles et la dynamique d'équipe",
+      "recommendedCareerLaunch": "Recommandé: CareerLaunch",
+      "recommendedCair": "Recommandé: CAIR+",
+      "recommendedStress": "Recommandé: Résilience au Stress",
+      "recommendedCommunication": "Recommandé: Styles de Communication"
     }
   },
   "about": {

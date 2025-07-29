@@ -153,22 +153,22 @@ const Assessment = () => {
           <div className="mb-8">
             <img 
               src="/lovable-uploads/d6159e3c-9371-41c3-969b-c4b47bf4f0b5.png" 
-              alt="Digital assessment technology interface with hand interaction"
+              alt={t("hero.imageAlt")}
               className="w-full max-w-4xl h-64 object-cover rounded-lg shadow-xl mx-auto"
             />
           </div>
           
           {/* Mis-hiring Cost Quotes */}
           <div className="mb-8 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-950/20 dark:to-orange-950/20 rounded-lg p-6 max-w-4xl mx-auto">
-            <h3 className="text-lg font-semibold mb-4 text-center text-red-800 dark:text-red-200">The Cost of Mis-hiring</h3>
+            <h3 className="text-lg font-semibold mb-4 text-center text-red-800 dark:text-red-200">{t("hero.mishiringTitle")}</h3>
             <div className="grid md:grid-cols-2 gap-4 text-sm">
               <div className="text-center p-4 bg-white/50 dark:bg-black/20 rounded-lg">
-                <p className="font-medium text-red-700 dark:text-red-300">"Bad hires cost companies up to $240,000 in expenses related to hiring, compensation, and retention"</p>
-                <p className="text-xs text-muted-foreground mt-2">- U.S. Department of Labor</p>
+                <p className="font-medium text-red-700 dark:text-red-300">"{t("hero.mishiringQuote1")}"</p>
+                <p className="text-xs text-muted-foreground mt-2">- {t("hero.mishiringSource1")}</p>
               </div>
               <div className="text-center p-4 bg-white/50 dark:bg-black/20 rounded-lg">
-                <p className="font-medium text-red-700 dark:text-red-300">"75% of employers admit to hiring the wrong person for a position, costing an average of $17,000 per mis-hire"</p>
-                <p className="text-xs text-muted-foreground mt-2">- CareerBuilder Survey</p>
+                <p className="font-medium text-red-700 dark:text-red-300">"{t("hero.mishiringQuote2")}"</p>
+                <p className="text-xs text-muted-foreground mt-2">- {t("hero.mishiringSource2")}</p>
               </div>
             </div>
           </div>
@@ -269,12 +269,12 @@ const Assessment = () => {
                 <div className="relative rounded-lg overflow-hidden mb-4">
                   <img 
                     src={assessmentConceptImage}
-                    alt="Professional psychological assessment tools and analytics"
+                    alt={t("assessments.badges.mishiringalt")}
                     className="w-full h-48 object-cover"
                   />
                   <div className="absolute top-4 right-4">
                     <Badge className="bg-primary text-primary-foreground">
-                      Professional
+                      {t("assessments.badges.professional")}
                     </Badge>
                   </div>
                 </div>
