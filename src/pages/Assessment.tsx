@@ -7,6 +7,16 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare, Globe, BarChart3, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+
+// Helper function to transform badge names to translation keys
+const getBadgeTranslationKey = (badge: string): string => {
+  return badge
+    .toLowerCase()
+    .replace(/\s+/g, '')     // Remove spaces
+    .replace(/[+-]/g, '')    // Remove + and - characters
+    .replace(/&/g, '')       // Remove & characters
+    .replace(/[^a-z0-9]/g, ''); // Remove any other non-alphanumeric characters
+};
 import { assessmentsData } from "@/data/assessmentsData";
 import assessmentConceptImage from "@/assets/assessment-concept.jpg";
 import LogoDisplay from "@/components/LogoDisplay";
@@ -201,7 +211,7 @@ const Assessment = () => {
                        <IconComponent className={`h-8 w-8 ${colorClasses.icon}`} />
                        <div>
                          <CardTitle className="text-xl">{t(`assessments.cards.${assessment.id.replace('-', '')}.title`)}</CardTitle>
-                         <Badge className="mt-1" variant="secondary">{t(`assessments.badges.${assessment.badges[0].toLowerCase().replace(/\s+/g, '')}`)}</Badge>
+                         <Badge className="mt-1" variant="secondary">{t(`assessments.badges.${getBadgeTranslationKey(assessment.badges[0])}`)}</Badge>
                        </div>
                      </div>
                      <CardDescription className="text-base">
@@ -212,14 +222,14 @@ const Assessment = () => {
                      <div className="flex items-center justify-between mb-4">
                        <span className="text-3xl font-bold text-primary">{assessment.price}</span>
                        <Badge className={colorClasses.badge}>
-                         {t(`assessments.badges.${(assessment.badges[1] || assessment.badges[0]).toLowerCase().replace(/\s+/g, '')}`)}
+                         {t(`assessments.badges.${getBadgeTranslationKey(assessment.badges[1] || assessment.badges[0])}`)}
                        </Badge>
                      </div>
                      <div className="flex flex-wrap gap-2">
                        <Badge variant="outline">{assessment.questions} {t("assessments.badges.questionsLabel")}</Badge>
                        <Badge variant="outline">{assessment.duration}</Badge>
                        {assessment.badges.slice(1, 3).map((badge, index) => (
-                         <Badge key={index} variant="outline">{t(`assessments.badges.${badge.toLowerCase().replace(/\s+/g, '')}`)}</Badge>
+                         <Badge key={index} variant="outline">{t(`assessments.badges.${getBadgeTranslationKey(badge)}`)}</Badge>
                        ))}
                      </div>
                      <ul className="space-y-2 text-sm text-muted-foreground">
