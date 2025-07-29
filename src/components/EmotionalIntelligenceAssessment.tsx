@@ -40,20 +40,21 @@ const EmotionalIntelligenceAssessment = ({ onComplete }: EmotionalIntelligenceAs
   const navigate = useNavigate();
   const { i18n } = useTranslation();
   
-  // Map main app languages to component languages, default to Spanish if not supported
-  const getComponentLanguage = (mainLang: string): 'es' | 'fr' | 'de' => {
+  // Map main app languages to component languages
+  const getComponentLanguage = (mainLang: string): 'en' | 'es' | 'fr' | 'de' => {
     console.log('Main app language:', mainLang);
     switch (mainLang) {
+      case 'en': return 'en';
       case 'fr': return 'fr';
       case 'de': return 'de';
       case 'es': return 'es';
       default: 
-        console.log('Language not supported, defaulting to Spanish');
-        return 'es'; // Default to Spanish since English isn't available in this component
+        console.log('Language not recognized, defaulting to English');
+        return 'en';
     }
   };
   
-  const [currentLanguage, setCurrentLanguage] = useState<'es' | 'fr' | 'de'>(getComponentLanguage(i18n.language));
+  const [currentLanguage, setCurrentLanguage] = useState<'en' | 'es' | 'fr' | 'de'>(getComponentLanguage(i18n.language));
   const [currentStep, setCurrentStep] = useState<'info' | 'assessment' | 'results'>('info');
   const [currentDimension, setCurrentDimension] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
