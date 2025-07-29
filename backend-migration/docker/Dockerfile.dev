@@ -1,0 +1,22 @@
+FROM denoland/deno:1.37.0
+
+WORKDIR /app
+
+# Copy function files
+COPY supabase/functions ./functions
+
+# Create logs directory
+RUN mkdir -p /var/log/authencore
+
+# Set permissions
+RUN chmod +x ./functions
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+  CMD curl -f http://localhost:8080/health || exit 1
+
+# Expose port
+EXPOSE 8080
+
+# Development command with auto-reload
+CMD ["deno", "run", "--allow-all", "--watch", "./functions/server.ts"]
