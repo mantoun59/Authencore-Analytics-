@@ -7,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Download, BookOpen, Users, Settings, HelpCircle, FileText, CheckCircle } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 const FAQ = () => {
+  const { t } = useTranslation();
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -19,11 +21,10 @@ const FAQ = () => {
           {/* Header Section */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-foreground mb-4">
-              FAQ & Platform Guide
+              {t("faq.title")}
             </h1>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Comprehensive information about our assessment platform, frequently asked questions, 
-              and downloadable resources to help you get the most out of AuthenCore Analytics.
+              {t("faq.subtitle")}
             </p>
           </div>
 

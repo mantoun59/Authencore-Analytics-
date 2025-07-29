@@ -118,7 +118,7 @@ const Footer = () => {
                 to="/faq"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                FAQ & Platform Guide
+                {t("navigation.about")}
               </Link>
               <Link
                 to="/privacy"
@@ -180,7 +180,7 @@ const Footer = () => {
                 Privacy Policy
               </Link>
               <Link to="/faq" className="text-foreground hover:text-primary transition-colors">
-                FAQ & Support
+                {t("footer.support")}
               </Link>
               <a href="mailto:contact@authencore.org" className="text-foreground hover:text-primary transition-colors">
                 Contact
