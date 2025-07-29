@@ -7,19 +7,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
+import { CareerLaunchReportEnhanced } from "@/components/CareerLaunchReportEnhanced";
+import { AccessibilityEnhancements } from "@/components/AccessibilityEnhancements";
 import { 
-  Rocket, 
-  Target, 
-  Lightbulb, 
   Trophy, 
-  Star, 
   Download,
-  Zap,
+  Rocket,
+  Target,
   Brain,
+  Zap,
   Users,
+  Star,
+  Lightbulb,
   CheckCircle2,
-  TrendingUp,
-  MessageSquare
+  TrendingUp
 } from "lucide-react";
 
 // Enhanced AI Sample Data
