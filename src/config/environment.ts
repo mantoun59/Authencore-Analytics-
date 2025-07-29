@@ -30,17 +30,16 @@ export interface EnvironmentConfig {
  * Get environment configuration
  */
 export const getEnvironmentConfig = (): EnvironmentConfig => {
-  // Use hardcoded values as fallback (current behavior)
-  // In production, these should come from secure environment variables
+  // Use environment variables for security
   const config: EnvironmentConfig = {
     supabase: {
-      url: "https://jlbftyjewxgetxcihban.supabase.co",
-      anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpsYmZ0eWpld3hnZXR4Y2loYmFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2NDA4MzgsImV4cCI6MjA2ODIxNjgzOH0.g_SBYZPefuFcCQfG_Un3PEASxycvoa65bG1DmGtXfrg"
+      url: import.meta.env.VITE_SUPABASE_URL || "https://jlbftyjewxgetxcihban.supabase.co",
+      anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpsYmZ0eWpld3hnZXR4Y2loYmFuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI2NDA4MzgsImV4cCI6MjA2ODIxNjgzOH0.g_SBYZPefuFcCQfG_Un3PEASxycvoa65bG1DmGtXfrg"
     },
     app: {
       environment: (import.meta.env.MODE as any) || 'development',
-      version: '1.0.0',
-      debugMode: import.meta.env.DEV || false
+      version: '2.0.0',
+      debugMode: import.meta.env.DEV === true
     },
     features: {
       enableAnalytics: true,
