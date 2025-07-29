@@ -219,6 +219,15 @@ const Assessment = () => {
                         Multilingual
                       </Badge>
                     )}
+                    {/* Debug: Always show for emotional intelligence */}
+                    {assessment.id === 'emotional-intelligence' && (
+                      <Badge 
+                        variant="destructive" 
+                        className="absolute top-12 right-4 z-10"
+                      >
+                        DEBUG: EI
+                      </Badge>
+                    )}
                      <div className="flex items-center gap-3 mb-4">
                        <IconComponent className={`h-8 w-8 ${colorClasses.icon}`} />
                        <div>
