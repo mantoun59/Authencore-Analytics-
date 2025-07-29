@@ -6,8 +6,10 @@ import { careerLaunchQuestions } from "@/data/careerLaunchQuestionsFixed";
 import { useCareerLaunchScoring } from "@/hooks/useCareerLaunchScoring";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { ChevronLeft, ChevronRight, Brain, Target, Star, Users } from "lucide-react";
+import { ChevronLeft, ChevronRight, Brain, Target, Star, Users, Settings } from "lucide-react";
 import EnhancedProgressIndicator from "@/components/EnhancedProgressIndicator";
+import { AccessibilityControls } from "@/components/AccessibilityControls";
+import { ResponseTimeAnalytics } from "@/utils/responseTimeAnalytics";
 
 interface CareerLaunchAssessmentProps {
   onComplete: (results: any) => void;
@@ -27,6 +29,8 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
   }>>([]);
   const [startTime] = useState(Date.now());
   const [timeSpent, setTimeSpent] = useState(0);
+  const [questionStartTime, setQuestionStartTime] = useState(Date.now());
+  const [showAccessibilityControls, setShowAccessibilityControls] = useState(false);
   const { calculateScores } = useCareerLaunchScoring();
   const { toast } = useToast();
 
@@ -52,6 +56,19 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
   const estimatedTime = (careerLaunchQuestions.length * 0.75); // 45 seconds = 0.75 minutes
 
   const handleAnswer = (selectedOption: 'A' | 'B') => {
+    // Record response time analytics
+    const responseTime = (Date.now() - questionStartTime) / 1000; // in seconds
+    ResponseTimeAnalytics.recordResponse({
+      questionId: currentQuestion.id,
+      responseTime,
+      timestamp: Date.now(),
+      questionType: currentQuestion.category,
+      dimension: currentQuestion.dimension
+    });
+    
+    // Reset timer for next question
+    setQuestionStartTime(Date.now());
+    
     const score = selectedOption === 'A' ? 1 : 0;
     
     // For interests, score the selected dimension
@@ -140,8 +157,9 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
 
   const completeAssessment = async (finalAnswers: typeof answers) => {
     try {
-      // Calculate scores using the enhanced scoring engine
-      const results = calculateScores(finalAnswers);
+      // Calculate scores using the enhanced scoring engine with response time data
+      const sessionData = ResponseTimeAnalytics.getSessionData();
+      const results = calculateScores(finalAnswers, userProfile, sessionData.totalTime / 1000);
       
       // Save to Supabase
       const { data: user } = await supabase.auth.getUser();
@@ -264,8 +282,8 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
           </CardContent>
         </Card>
 
-        {/* Navigation */}
-        <div className="flex justify-between">
+        {/* Navigation and Controls */}
+        <div className="flex justify-between items-center">
           <Button
             onClick={goToPrevious}
             variant="ghost"
@@ -276,11 +294,30 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
             Previous
           </Button>
           
-          <div className="text-sm text-muted-foreground flex items-center">
-            Progress: {Math.round(progress)}%
+          <div className="flex items-center gap-4">
+            <Button
+              onClick={() => setShowAccessibilityControls(true)}
+              variant="ghost"
+              size="sm"
+              className="flex items-center gap-2"
+              aria-label="Open accessibility settings"
+            >
+              <Settings className="h-4 w-4" />
+              Accessibility
+            </Button>
+            
+            <div className="text-sm text-muted-foreground flex items-center">
+              Progress: {Math.round(progress)}%
+            </div>
           </div>
         </div>
       </div>
+
+      {/* Accessibility Controls Modal */}
+      <AccessibilityControls
+        isOpen={showAccessibilityControls}
+        onClose={() => setShowAccessibilityControls(false)}
+      />
     </div>
   );
 }

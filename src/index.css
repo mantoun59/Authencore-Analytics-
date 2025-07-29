@@ -2,6 +2,67 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Accessibility enhancements */
+.font-normal {
+  font-size: 1rem;
+}
+
+.font-large {
+  font-size: 1.25rem;
+}
+
+.font-extra-large {
+  font-size: 1.5rem;
+}
+
+.high-contrast {
+  --background: 0 0% 100%;
+  --foreground: 0 0% 0%;
+  --primary: 240 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 0 0% 10%;
+  --secondary-foreground: 0 0% 100%;
+  --muted: 0 0% 95%;
+  --muted-foreground: 0 0% 20%;
+  --accent: 240 100% 40%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 0%;
+  --input: 0 0% 95%;
+  --ring: 240 100% 50%;
+}
+
+.reduced-motion,
+.reduced-motion * {
+  animation-duration: 0.01ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.01ms !important;
+  scroll-behavior: auto !important;
+}
+
+.screen-reader-mode {
+  /* Enhanced focus indicators */
+}
+
+.screen-reader-mode :focus {
+  outline: 3px solid hsl(var(--ring));
+  outline-offset: 2px;
+}
+
+/* Color blind support filters */
+.colorblind-protanopia {
+  filter: url('#protanopia-filter');
+}
+
+.colorblind-deuteranopia {
+  filter: url('#deuteranopia-filter');
+}
+
+.colorblind-tritanopia {
+  filter: url('#tritanopia-filter');
+}
+
 /* Background patterns for visual interest */
 @layer utilities {
   .bg-grid-pattern {

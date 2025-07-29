@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { CareerLaunchScoringEngine, CareerLaunchDimensions } from '@/services/careerLaunchScoringEngine';
+import { ResponseTimeAnalytics } from '@/utils/responseTimeAnalytics';
 
 interface AnswerItem {
   id: string;
@@ -58,8 +59,15 @@ export const useCareerLaunchScoring = () => {
   const calculateScores = (answers: AnswerItem[], candidateProfile?: any, totalTime?: number): CareerLaunchResult => {
     // Enhanced CareerLaunch Scoring initiated with responses
     
-    // Validate assessment quality
-    const assessmentQuality = scoringEngine.validateAssessmentQuality(answers, totalTime || 1200);
+    // Get response time analytics
+    const analyticsInsights = ResponseTimeAnalytics.generateInsights();
+    const sessionData = ResponseTimeAnalytics.getSessionData();
+    
+    // Validate assessment quality (enhanced with response time data)
+    const assessmentQuality = scoringEngine.validateAssessmentQuality(
+      answers, 
+      totalTime || sessionData.totalTime || 1200
+    );
     
     // Calculate core dimension scores using advanced weighting
     const dimensionScores = scoringEngine.scoreCareerReadiness(answers, candidateProfile);
