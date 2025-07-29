@@ -92,175 +92,11 @@
     "takeAssessment": "Bewertung Durchführen",
     "learnMore": "Mehr erfahren",
     "duration": "Dauer",
-    "minutes": "Minuten",
-    "careerLaunch": {
-      "title": "Karrierestart",
-      "description": "Umfassende Bewertung der Arbeitsbereitschaft für Berufseinsteiger",
-      "duration": "25-30 Minuten"
-    },
-    "culturalIntelligence": {
-      "title": "Kulturelle Intelligenz",
-      "description": "Bewerten Sie Ihre Fähigkeit, effektiv in multikulturellen Umgebungen zu arbeiten",
-      "duration": "20-25 Minuten"
-    },
-    "emotionalIntelligence": {
-      "title": "Emotionale Intelligenz",
-      "description": "Messen Sie Ihre Fähigkeit, Emotionen zu verstehen und zu verwalten",
-      "duration": "20-25 Minuten"
-    },
-    "communication": {
-      "title": "Kommunikationsstile",
-      "description": "Entdecken Sie Ihre bevorzugten Kommunikationsmuster und -stile",
-      "duration": "15-20 Minuten"
-    },
-    "leadership": {
-      "title": "Authentische Führung",
-      "description": "Bewerten Sie Ihren Führungsstil und Ihr Potenzial",
-      "duration": "25-30 Minuten"
-    },
-    "stress": {
-      "title": "Stressresilienz",
-      "description": "Verstehen Sie Ihre Stressbewältigungsstrategien und Widerstandsfähigkeit",
-      "duration": "20-25 Minuten"
-    },
-    "genZ": {
-      "title": "GenZ Arbeitsplatz",
-      "description": "Speziell für die Generation Z entwickelte Arbeitsplatzbewertung",
-      "duration": "20-25 Minuten"
-    },
-    "digitalWellness": {
-      "title": "Digitales Wohlbefinden",
-      "description": "Bewerten Sie Ihre digitalen Gewohnheiten und ihr Wohlbefinden",
-      "duration": "15-20 Minuten"
-    },
-    "faithValues": {
-      "title": "Glaube und Werte",
-      "description": "Erkunden Sie Ihre Kernwerte und Überzeugungen",
-      "duration": "20-25 Minuten"
-    },
-    "burnoutPrevention": {
-      "title": "Burnout-Prävention",
-      "description": "Identifizieren Sie Burnout-Risiken und Präventionsstrategien",
-      "duration": "25-30 Minuten"
-    },
-    "badges": {
-      "bestvalue": "Bestes Preis-Leistungs-Verhältnis",
-      "premium": "Premium",
-      "global": "Global",
-      "advanced": "Erweitert",
-      "eqfocus": "EQ-Fokus",
-      "genzfocus": "Gen Z-Fokus",
-      "digitalhealth": "Digitale Gesundheit",
-      "comprehensive": "Umfassend",
-      "validitydetection": "Validitätserkennung",
-      "burnoutprevention": "Burnout-Prävention",
-      "linguisticanalysis": "Linguistische Analyse",
-      "eqdimensions": "EQ-Dimensionen",
-      "42dimensions": "42 Dimensionen",
-      "7dimensions": "7 Dimensionen",
-      "digitalfirst": "Digital-First",
-      "purposedriven": "Zweckgetrieben",
-      "productivityfocus": "Produktivitätsfokus",
-      "wellnessbased": "Wellness-basiert",
-      "360degree": "360-Grad",
-      "60+scenarios": "60+ Szenarien",
-      "riasecprofile": "RIASEC-Profil",
-      "percentilescoring": "Perzentil-Bewertung",
-      "4cqdimensions": "4 CQ-Dimensionen",
-      "teamcompatibility": "Team-Kompatibilität",
-      "workplaceapplications": "Arbeitsplatzanwendungen",
-      "validatedinstruments": "Validierte Instrumente",
-      "professional": "Professionell",
-      "questionsLabel": "Fragen",
-      "mishiringalt": "Digitale Bewertungstechnologie-Schnittstelle mit Handinteraktion"
-    },
-    "features": {
-      "riasecinterestprofiling": "RIASEC-Interessensprofilerstellung",
-      "cognitiveaptitudeassessment": "Kognitive Eignungsbeurteilung", 
-      "personalityandworkstyleanalysis": "Persönlichkeits- und Arbeitsstilanalyse",
-      "careervaluealignmentscoring": "Karriere-Werte-Alignment-Scoring",
-      "validitydetectionalgorithms": "Algorithmen zur Validitätserkennung",
-      "percentilebasedscoring": "Perzentil-basierte Bewertung",
-      "workplacebehaviorpredictions": "Vorhersagen für Arbeitsplatzverhalten",
-      "teamcompatibilityanalysis": "Team-Kompatibilitätsanalyse",
-      "comprehensiveburnoutriskassessment": "Umfassende Burnout-Risikobeurteilung",
-      "proactivepreventionstrategies": "Proaktive Präventionsstrategien",
-      "workloadmanagementevaluation": "Arbeitsbelastungsmanagement-Bewertung",
-      "emotionalexhaustionmeasurement": "Emotionale Erschöpfungsmessung",
-      "realworldculturalscenarios": "Reale kulturelle Szenarien",
-      "emailadaptationchallenges": "E-Mail-Anpassungsherausforderungen",
-      "globalmeetingschedulingsimulations": "Globale Meeting-Planungssimulationen",
-      "crossculturalnegotiationscenarios": "Interkulturelle Verhandlungsszenarien",
-      "communicationdnaprofiling": "Kommunikations-DNA-Profilerstellung",
-      "channeleffectivenessmapping": "Channel-Effektivitätszuordnung",
-      "interactivecommunicationsimulations": "Interaktive Kommunikationssimulationen",
-      "conflictresolutionstyleanalysis": "Konfliktlösungsstil-Analyse",
-      "comprehensiveeqprofiling": "Umfassende EQ-Profilerstellung",
-      "workplaceemotionalscenarios": "Arbeitsplatz-emotionale Szenarien",
-      "leadershipeqassessment": "Führungs-EQ-Bewertung",
-      "teamemotionaldynamics": "Team-emotionale Dynamik",
-      "validatedpsychologicalinstruments": "Validierte psychologische Instrumente",
-      "multipleassessmenttechniques": "Multiple Bewertungstechniken",
-      "comprehensive42dimensionanalysis": "Umfassende 42-Dimensionen-Analyse",
-      "advanceddistortiondetection": "Erweiterte Verzerrungserkennung",
-      "generationalworkplacepreferences": "Generationelle Arbeitsplatzpräferenzen",
-      "digitalcommunicationassessment": "Digitale Kommunikationsbewertung",
-      "worklifebalanceevaluation": "Work-Life-Balance-Bewertung",
-      "careerexpectationanalysis": "Karriereerwartungsanalyse",
-      "digitalhabitsanalysis": "Analyse digitaler Gewohnheiten",
-      "screentimeimpactassessment": "Bildschirmzeit-Auswirkungsbewertung",
-      "productivityoptimizationinsights": "Produktivitätsoptimierungs-Insights",
-      "digitalstressevaluation": "Digitale Stressbewertung",
-      "comprehensiveleadershipprofiling": "Umfassende Führungsprofilerstellung",
-      "managementstyleassessment": "Management-Stil-Bewertung",
-      "teameffectivenessevaluation": "Team-Effektivitätsbewertung",
-      "strategicthinkinganalysis": "Strategische Denkanalyse",
-      "pdfreports": "PDF-Berichte"
-    },
-    "cards": {
-      "careerlaunch": {
-        "title": "CareerLaunch",
-        "description": "Umfassende Karriere-Entdeckungsbewertung zur Analyse von Interessen, Fähigkeiten, Persönlichkeit und Werten mit personalisierten Erkenntnissen"
-      },
-      "cairpersonality": {
-        "title": "CAIR+ Persönlichkeit", 
-        "description": "Umfassende Persönlichkeitsbewertung mit 100 Persönlichkeitsfragen + 20 Validitätsprüfungen über 4 Schlüsseldimensionen"
-      },
-      "burnoutpreventionindex": {
-        "title": "Burnout-Präventionsindex",
-        "description": "Umfassende Burnout-Präventionsbewertung zur Bewertung von Stressniveaus, Risikofaktoren und Belastbarkeitsfähigkeiten über 7 Dimensionen"
-      },
-      "culturalintelligence": {
-        "title": "Kulturelle Intelligenz",
-        "description": "Umfassende Bewertung der kulturellen Intelligenz mit realen Szenarien und globalen Geschäftsherausforderungen"
-      },
-      "communicationstyles": {
-        "title": "Kommunikationsstile",
-        "description": "Umfassende Kommunikationsbewertung mit linguistischer Analyse und Echtzeit-Simulationen"
-      },
-      "emotionalintelligence": {
-        "title": "Emotionale Intelligenz",
-        "description": "Umfassende Bewertung der emotionalen Intelligenz zur Messung von Selbstwahrnehmung, Empathie und sozialen Fähigkeiten"
-      },
-      "faithvalues": {
-        "title": "Glaube & Werte",
-        "description": "Umfassende 90-Fragen-Bewertung mit validierten Instrumenten zur Analyse der glaubensbasierten Werte-Ausrichtung über 42 Dimensionen"
-      },
-      "genzworkplace": {
-        "title": "Gen Z Arbeitsplatz",
-        "description": "Spezialisierte Bewertung für Gen Z-Arbeitsplatzpräferenzen, Werte und Karriereerwartungen"
-      },
-      "digitalwellness": {
-        "title": "Digitales Wohlbefinden",
-        "description": "Umfassende Bewertung digitaler Gewohnheiten, Bildschirmzeitmanagement und Technologie-Leben-Balance"
-      },
-      "authenticleadership": {
-        "title": "Authentische Führung",
-        "description": "Umfassende Führungsbewertung zur Bewertung authentischer Führungsfähigkeiten und Entwicklungsbereiche"
-      }
-    }
+    "minutes": "Minuten"
   },
   "about": {
+    "title": "Über AuthenCore Analytics",
+    "subtitle": "Pioniere in der modernen psychometrischen Bewertung",
     "mission": "Über Uns – Authencore Analytics",
     "vision": "Eine Welt zu schaffen, in der jeder sein volles Potenzial verstehen kann",
     "values": "Wissenschaftliche Genauigkeit, Privatsphäre und persönliche Entwicklung"
@@ -270,6 +106,7 @@
     "resources": "Ressourcen",
     "legal": "Rechtliches",
     "contact": "Kontakt",
+    "support": "Support",
     "tagline": "Gedanken messen. Zukunft gestalten.",
     "copyright": "Alle Rechte vorbehalten. Fortgeschrittene KI-gestützte Talentbewertungslösungen"
   },
@@ -294,189 +131,14 @@
     "updated": "Erfolgreich aktualisiert",
     "deleted": "Erfolgreich gelöscht"
   },
-  "dashboard": {
-    "title": "Dashboard",
-    "welcomeMessage": "Willkommen zurück",
-    "overview": "Überblick",
-    "statsTitle": "Schnelle Statistiken",
-    "totalAssessments": "Gesamte Bewertungen",
-    "completedAssessments": "Abgeschlossen",
-    "pendingAssessments": "Ausstehend",
-    "averageScore": "Durchschnittsscore",
-    "lastActivity": "Letzte Aktivität",
-    "teamMembers": "Teammitglieder",
-    "recentActivityTitle": "Aktuelle Aktivität",
-    "noRecentActivity": "Keine aktuelle Aktivität anzuzeigen",
-    "activityCompleted": "hat Bewertung abgeschlossen",
-    "activityStarted": "hat Bewertung begonnen",
-    "activityInvited": "wurde zur Bewertung eingeladen",
-    "quickActionsTitle": "Schnelle Aktionen",
-    "startNewAssessment": "Neue Bewertung Starten",
-    "viewReports": "Berichte Anzeigen",
-    "manageTeam": "Team Verwalten",
-    "settings": "Einstellungen",
-    "inviteMembers": "Teammitglieder Einladen",
-    "downloadResults": "Ergebnisse Herunterladen",
-    "progressTitle": "Bewertungsfortschritt",
-    "inProgress": "In Bearbeitung",
-    "notStarted": "Nicht Begonnen",
-    "completed": "Abgeschlossen",
-    "viewDetails": "Details Anzeigen",
-    "continueAssessment": "Bewertung Fortsetzen",
-    "upcomingTitle": "Kommende Bewertungen",
-    "recommendationsTitle": "Empfohlene Aktionen",
-    "noUpcoming": "Keine kommenden Bewertungen",
-    "teamOverviewTitle": "Team-Überblick",
-    "teamPerformance": "Team-Leistung",
-    "completionRate": "Abschlussrate",
-    "teamProgress": "Team-Fortschritt",
-    "viewTeamReports": "Team-Berichte Anzeigen",
-    "notificationsTitle": "Benachrichtigungen",
-    "noNotifications": "Keine neuen Benachrichtigungen",
-    "markAllRead": "Alle als Gelesen Markieren",
-    "scheduleTitle": "Geplante Bewertungen",
-    "dueToday": "Fällig Heute",
-    "dueSoon": "Bald Fällig",
-    "overdue": "Überfällig"
-  },
   "landing": {
-    "heroTitle": "Entfesseln Sie das Volle Potenzial Ihres Teams",
-    "heroSubtitle": "Professionelle psychometrische Bewertungen für Karriereentwicklung, Teambuilding und organisatorisches Wachstum",
-    "heroDescription": "Entdecken Sie Stärken, identifizieren Sie Entwicklungsmöglichkeiten und treffen Sie datenbasierte Entscheidungen mit unserer umfassenden Suite wissenschaftlich validierter Bewertungen.",
-    "ctaPrimary": "Bewertung Starten",
-    "ctaSecondary": "Mehr Erfahren",
-    "ctaDemo": "Demo Anfordern",
-    "featuresTitle": "Warum Authencore Analytics Wählen?",
-    "featuresSubtitle": "Vertraut von Organisationen weltweit für präzise, umsetzbare Erkenntnisse",
-    "feature1Title": "Wissenschaftlich Validiert",
-    "feature1Description": "Unsere Bewertungen werden durch rigorose Forschung und bewährte Methodologien unterstützt",
-    "feature2Title": "Umsetzbare Erkenntnisse",
-    "feature2Description": "Erhalten Sie klare, praktische Empfehlungen für persönliche und berufliche Entwicklung",
-    "feature3Title": "Team-Analytik",
-    "feature3Description": "Verstehen Sie Teamdynamiken und optimieren Sie die Zusammenarbeit in Ihrer Organisation",
-    "feature4Title": "Fortschrittsverfolgung",
-    "feature4Description": "Überwachen Sie Wachstum über Zeit mit umfassenden Fortschrittsberichten",
-    "feature5Title": "Mehrsprachiger Support",
-    "feature5Description": "Verfügbar in mehreren Sprachen für globale Organisationen",
-    "feature6Title": "Sicher und Vertraulich",
-    "feature6Description": "Unternehmenssicherheit mit vollständigem Datenschutz",
-    "assessmentsTitle": "Umfassende Bewertungs-Suite",
-    "assessmentsSubtitle": "Wählen Sie aus unserer Palette professioneller psychometrischer Evaluierungen",
-    "assessmentCareer": "Karrierestart-Bewertung",
-    "assessmentCareerDesc": "Entdecken Sie Ihren idealen Karriereweg mit umfassender Interessens- und Fähigkeitsanalyse",
-    "assessmentEI": "Emotionale Intelligenz",
-    "assessmentEIDesc": "Bewerten und entwickeln Sie Ihre emotionale Intelligenz in fünf Schlüsseldimensionen",
-    "assessmentCommunication": "Kommunikationsstile",
-    "assessmentCommunicationDesc": "Verstehen Sie Ihre Kommunikationspräferenzen und verbessern Sie Teaminteraktionen",
-    "assessmentCultural": "Kulturelle Intelligenz",
-    "assessmentCulturalDesc": "Bewerten Sie Ihre Fähigkeit, effektiv in verschiedenen kulturellen Kontexten zu arbeiten",
-    "assessmentLeadership": "Authentische Führung",
-    "assessmentLeadershipDesc": "Entwickeln Sie Ihr Führungspotenzial mit Einblicken in Ihren Führungsstil",
-    "testimonialsTitle": "Was Unsere Kunden Sagen",
-    "testimonial1": "Authencore Analytics hat transformiert, wie wir unser Team verstehen und entwickeln. Die Erkenntnisse sind unbezahlbar.",
-    "testimonial1Author": "Sarah Johnson, HR-Direktorin",
-    "testimonial2": "Die Bewertungsergebnisse halfen mir, meine Stärken zu identifizieren und einen fokussierten Entwicklungsplan zu erstellen.",
-    "testimonial2Author": "Michael Chen, Produktmanager",
-    "testimonial3": "Wir haben seit der Implementierung dieser Bewertungen bedeutende Verbesserung in der Teamzusammenarbeit gesehen.",
-    "testimonial3Author": "Elena Rodriguez, Teamleiterin",
     "ctaTitle": "Bereit, Ihr Team zu Transformieren?",
-    "ctaDescription": "Schließen Sie sich Tausenden von Fachleuten an, die ihr Potenzial mit Authencore Analytics freigesetzt haben",
-    "ctaButton": "Heute Beginnen"
-  },
-  "reports": {
-    "title": "Berichte",
-    "subtitle": "Ihre Bewertungsergebnisse und Fortschritt anzeigen",
-    "myReports": "Meine Berichte",
-    "teamReports": "Team-Berichte",
-    "organizationReports": "Organisationsberichte",
-    "individual": "Individuelle Berichte",
-    "team": "Team-Berichte",
-    "comparison": "Vergleichsberichte",
-    "progress": "Fortschrittsberichte",
-    "viewReport": "Bericht Anzeigen",
-    "downloadPDF": "PDF Herunterladen",
-    "shareReport": "Bericht Teilen",
-    "printReport": "Bericht Drucken",
-    "exportData": "Daten Exportieren",
-    "generatedOn": "Generiert am",
-    "assessmentDate": "Bewertungsdatum",
-    "reportType": "Berichtstyp",
-    "participant": "Teilnehmer",
-    "participants": "Teilnehmer",
-    "executiveSummary": "Zusammenfassung für Führungskräfte",
-    "detailedResults": "Detaillierte Ergebnisse",
-    "recommendations": "Empfehlungen",
-    "developmentPlan": "Entwicklungsplan",
-    "strengths": "Stärken",
-    "developmentAreas": "Entwicklungsbereiche",
-    "filterByAssessment": "Nach Bewertung Filtern",
-    "filterByDate": "Nach Datum Filtern",
-    "filterByParticipant": "Nach Teilnehmer Filtern",
-    "searchReports": "Berichte suchen...",
-    "noReports": "Keine Berichte verfügbar",
-    "noReportsDescription": "Schließen Sie eine Bewertung ab, um Ihre Berichte hier zu sehen",
-    "noTeamReports": "Keine Team-Berichte verfügbar",
-    "noProgressData": "Nicht genügend Daten für Fortschrittsverfolgung",
-    "progressOverTime": "Fortschritt über Zeit",
-    "improvementTrends": "Verbesserungstrends",
-    "performanceMetrics": "Leistungsmetriken",
-    "benchmarkComparison": "Benchmark-Vergleich",
-    "teamPerformance": "Team-Leistung",
-    "teamComposition": "Team-Zusammensetzung",
-    "collaborationScore": "Kollaborations-Score",
-    "diversityMetrics": "Diversitätsmetriken",
-    "teamStrengths": "Team-Stärken",
-    "teamDevelopmentAreas": "Team-Entwicklungsbereiche"
-  },
-  "assessmentPages": {
-    "title": "Bewertungen",
-    "subtitle": "Entdecken Sie Ihre Stärken und Entwicklungsmöglichkeiten",
-    "browseAll": "Alle Bewertungen Durchsuchen",
-    "myAssessments": "Meine Bewertungen",
-    "availableAssessments": "Verfügbare Bewertungen",
-    "duration": "Dauer",
-    "questions": "Fragen",
-    "startAssessment": "Bewertung Starten",
-    "continueAssessment": "Fortsetzen",
-    "viewResults": "Ergebnisse Anzeigen",
-    "retakeAssessment": "Wiederholen",
-    "categories": "Kategorien",
-    "allCategories": "Alle Kategorien",
-    "personality": "Persönlichkeit",
-    "skills": "Fähigkeiten",
-    "career": "Karriere",
-    "leadership": "Führung",
-    "communication": "Kommunikation",
-    "wellness": "Wohlbefinden",
-    "statusNotStarted": "Nicht Begonnen",
-    "statusInProgress": "In Bearbeitung",
-    "statusCompleted": "Abgeschlossen",
-    "statusExpired": "Abgelaufen",
-    "overview": "Überblick",
-    "whatYoullLearn": "Was Sie Lernen Werden",
-    "howItWorks": "Wie Es Funktioniert",
-    "sampleQuestions": "Beispielfragen",
-    "estimatedTime": "Geschätzte Zeit",
-    "questionCount": "Anzahl der Fragen",
-    "completionRate": "Abschlussrate",
-    "difficulty": "Schwierigkeitsgrad",
-    "searchPlaceholder": "Bewertungen suchen...",
-    "filterBy": "Filtern nach",
-    "sortBy": "Sortieren nach",
-    "sortNewest": "Neueste Zuerst",
-    "sortOldest": "Älteste Zuerst",
-    "sortPopular": "Beliebteste",
-    "sortDuration": "Dauer",
-    "descriptionCareer": "Umfassende Karriereberatungsbewertung, um Ihnen zu helfen, Ihren idealen Karriereweg, Interessen und berufliche Entwicklungsmöglichkeiten zu identifizieren.",
-    "descriptionEI": "Bewerten Sie Ihre emotionale Intelligenz in fünf Schlüsseldimensionen: Selbstwahrnehmung, Selbstregulation, Motivation, Empathie und soziale Fähigkeiten.",
-    "descriptionCommunication": "Entdecken Sie Ihre Kommunikationsstil-Präferenzen und lernen Sie, wie Sie Ihren Ansatz für bessere Teamzusammenarbeit anpassen.",
-    "descriptionCultural": "Bewerten Sie Ihre kulturelle Intelligenz und Fähigkeit, effektiv in vielfältigen, multikulturellen Umgebungen zu arbeiten.",
-    "descriptionLeadership": "Erkunden Sie Ihr Führungspotenzial und entdecken Sie Ihren authentischen Führungsstil in verschiedenen Situationen.",
-    "descriptionDigital": "Bewerten Sie Ihre Beziehung zur Technologie und entwickeln Sie gesunde digitale Gewohnheiten für verbessertes Wohlbefinden.",
-    "descriptionBurnout": "Identifizieren Sie frühe Warnzeichen von Burnout und entwickeln Sie Strategien für Prävention und Erholung.",
-    "descriptionGenZ": "Verstehen Sie generationsspezifische Arbeitsplatzpräferenzen und optimieren Sie Ihr Arbeitsumfeld für maximales Engagement.",
-    "descriptionStress": "Bewerten Sie Ihre Stressresilienz und entwickeln Sie effektive Bewältigungsstrategien für herausfordernde Situationen.",
-    "descriptionFaith": "Erkunden Sie, wie Ihre persönlichen Werte und Überzeugungen mit Ihren beruflichen Zielen und der Arbeitsplatzkultur übereinstimmen."
+    "ctaDescription": "Schließen Sie sich Tausenden von Fachleuten an, die ihr Potenzial mit AuthenCore Analytics freigesetzt haben",
+    "ctaButton": "Heute Beginnen",
+    "feature1Title": "Wissenschaftlich Validiert",
+    "feature1Description": "Unsere Bewertungen sind durch rigorose Forschung und bewährte Methoden unterstützt",
+    "feature2Title": "Umsetzbare Einblicke",
+    "feature2Description": "Erhalten Sie klare, praktische Empfehlungen für persönliche und berufliche Entwicklung"
   },
   "homepage": {
     "howItWorks": {
@@ -500,28 +162,116 @@
       "button": "Heute Beginnen"
     }
   },
-  "notFound": {
-    "title": "Seite Nicht Gefunden",
-    "description": "Die gesuchte Seite existiert nicht oder wurde verschoben.",
-    "requestedPath": "Angefragter Pfad:",
-    "returnHome": "Zur Startseite",
-    "goBack": "Zurück",
-    "popularPages": "Beliebte Seiten",
-    "pages": {
-      "assessments": "Bewertungen",
-      "careerLaunch": "Karrierestart",
-      "aboutUs": "Über Uns",
-      "authentication": "Authentifizierung"
-    }
-  },
-  "privacy": {
-    "title": "Datenschutzrichtlinie",
-    "effectiveDate": "Gültigkeitsdatum:",
-    "sections": {
-      "introduction": {
-        "title": "Einführung",
-        "content1": "Willkommen bei Authencore Analytics. Wir verpflichten uns, Ihre Privatsphäre und persönlichen Informationen zu schützen.",
-        "content2": "Unsere Mission ist 'Gedanken Messen. Zukünfte Gestalten.' Wir nehmen diese Verantwortung ernst."
+  "psychometrics": {
+    "historicalFoundation": {
+      "title": "Historische Grundlage",
+      "subtitle": "Ursprünge und Entwicklung der psychologischen Messung",
+      "birth1890s": {
+        "title": "1890er - Geburt des Testens",
+        "description": "James McKeen Cattell prägt \"mentaler Test\" und legt das Fundament für moderne Psychometrie."
+      },
+      "intelligence1905": {
+        "title": "1905 - Intelligenzmessung",
+        "description": "Die Binet-Simon-Skala führt standardisierte Intelligenztestmethoden ein."
+      },
+      "digitalEra": {
+        "title": "1970er-Heute - Digitales Zeitalter",
+        "description": "Computeradaptive Tests und KI-gestützte Analytik revolutionieren die Bewertungsbereitstellung."
+      }
+    },
+    "scientificProcess": {
+      "title": "Wissenschaftlicher Prozess",
+      "subtitle": "Wie wir Messpräzision und Validität sicherstellen",
+      "itemDevelopment": {
+        "title": "Itemerstellung",
+        "description": "Expertenpanels erstellen Fragen basierend auf etablierten psychologischen Theorien."
+      },
+      "validationStudies": {
+        "title": "Validierungsstudien",
+        "description": "Umfangreiche Tests mit vielfältigen Populationen gewährleisten kulturelle Fairness und Genauigkeit."
+      },
+      "statisticalAnalysis": {
+        "title": "Statistische Analyse",
+        "description": "Fortgeschrittene psychometrische Modelle gewährleisten Zuverlässigkeit und Konstruktvalidität."
+      },
+      "continuousRefinement": {
+        "title": "Kontinuierliche Verfeinerung",
+        "description": "Regelmäßige Updates basierend auf neuer Forschung und Benutzerfeedback erhalten die Genauigkeit."
+      }
+    },
+    "accuracyStandards": {
+      "title": "Genauigkeitsstandards",
+      "subtitle": "Bewährte Zuverlässigkeits- und Validitätsmetriken",
+      "reliability": {
+        "title": "Zuverlässigkeit",
+        "level": "Hoch",
+        "description": "Konsistente Ergebnisse über mehrere Testsitzungen hinweg"
+      },
+      "validity": {
+        "title": "Validität",
+        "level": "Validiert",
+        "description": "Misst genau das, was es zu messen behauptet"
+      },
+      "predictivePower": {
+        "title": "Vorhersagekraft",
+        "level": "Stark",
+        "description": "Bietet bedeutungsvolle Einblicke für Karriere- und Persönlichkeitsentwicklung"
+      }
+    },
+    "assessmentExperience": {
+      "title": "Was Sie Während Ihrer Bewertung Erwarten Können",
+      "subtitle": "Ein umfassender Überblick über die Bewertungserfahrung",
+      "step1": {
+        "title": "Vor-Bewertungs-Setup",
+        "description": "Vervollständigen Sie Ihr Profil und erhalten Sie personalisierte Anweisungen. Durchschnittliche Setup-Zeit: 5-10 Minuten."
+      },
+      "step2": {
+        "title": "Interaktive Bewertung",
+        "description": "Beschäftigen Sie sich mit dynamischen Fragen, Szenarien und Multimedia-Inhalten. Dauer: 30-90 Minuten je nach Bewertungstyp."
+      },
+      "step3": {
+        "title": "Sofortige Analyse",
+        "description": "Unser KI-gestütztes System verarbeitet Ihre Antworten in Echtzeit und gewährleistet genaue Bewertung und Interpretation."
+      },
+      "step4": {
+        "title": "Umfassender Bericht",
+        "description": "Erhalten Sie detaillierte Einblicke mit visuellen Diagrammen, personalisierten Empfehlungen und umsetzbaren nächsten Schritten."
+      },
+      "step5": {
+        "title": "Nachbetreuung",
+        "description": "Zugang zu Interpretationsleitfäden, Karriereberatungsressourcen und optionalen Beratungssitzungen."
+      },
+      "step6": {
+        "title": "Fortlaufende Entwicklung",
+        "description": "Verfolgen Sie Ihren Fortschritt über die Zeit mit periodischen Neubewertungen und Empfehlungen zur Kompetenzentwicklung."
+      }
+    },
+    "benefits": {
+      "title": "Vorteile der Professionellen Psychometrischen Bewertung",
+      "subtitle": "Warum psychometrische Tests für persönliches und berufliches Wachstum wesentlich sind",
+      "selfAwareness": {
+        "title": "Selbstbewusstsein",
+        "description": "Gewinnen Sie tiefe Einblicke in Ihre Persönlichkeit, Stärken und Entwicklungsbereiche."
+      },
+      "careerClarity": {
+        "title": "Karriereklarheit",
+        "description": "Treffen Sie informierte Entscheidungen über Karrierewege und berufliche Entwicklung."
+      },
+      "performanceEnhancement": {
+        "title": "Leistungsverbesserung",
+        "description": "Optimieren Sie Ihren Arbeitsstil und verbessern Sie die Produktivität durch gezielte Einblicke."
+      },
+      "riskMitigation": {
+        "title": "Risikominderung",
+        "description": "Identifizieren Sie potenzielle Herausforderungen und entwickeln Sie Strategien zu deren Überwindung."
+      },
+      "cognitiveUnderstanding": {
+        "title": "Kognitives Verständnis",
+        "description": "Verstehen Sie Ihre Denkmuster und Entscheidungsprozesse."
+      },
+      "competitiveAdvantage": {
+        "title": "Wettbewerbsvorteil",
+        "description": "Heben Sie sich auf dem Arbeitsmarkt mit validierten psychologischen Einblicken ab."
       }
     }
   }

@@ -1,24 +1,27 @@
 import { MousePointer, FileText, BarChart3 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import businessAnalytics from "@/assets/business-analytics.jpg";
 
 const HowItWorks = () => {
+  const { t } = useTranslation();
+  
   const steps = [
     {
       number: "1",
-      title: "Select an Assessment",
-      description: "User browses and selects the desired evaluation from our comprehensive range",
+      title: t("homepage.howItWorks.step1.title"),
+      description: t("homepage.howItWorks.step1.description"),
       icon: MousePointer
     },
     {
       number: "2", 
-      title: "Complete Assessment",
-      description: "Guided process for input and completion with expert-designed questions",
+      title: t("homepage.howItWorks.step2.title"),
+      description: t("homepage.howItWorks.step2.description"),
       icon: FileText
     },
     {
       number: "3",
-      title: "View Results",
-      description: "Instantly access and review the personalized results with detailed insights",
+      title: t("homepage.howItWorks.step3.title"),
+      description: t("homepage.howItWorks.step3.description"),
       icon: BarChart3
     }
   ];
@@ -36,7 +39,7 @@ const HowItWorks = () => {
         </div>
 
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-foreground mb-4">How It Works</h2>
+          <h2 className="text-4xl font-bold text-foreground mb-4">{t("homepage.howItWorks.title")}</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">

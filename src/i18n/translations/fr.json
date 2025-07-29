@@ -618,6 +618,119 @@
       "description": "Rejoignez des milliers de professionnels qui ont débloqué leur potentiel avec AuthenCore Analytics",
       "button": "Commencer Aujourd'hui"
     }
+  },
+  "psychometrics": {
+    "historicalFoundation": {
+      "title": "Fondation Historique",
+      "subtitle": "Origines et évolution de la mesure psychologique",
+      "birth1890s": {
+        "title": "1890s - Naissance du Test",
+        "description": "James McKeen Cattell invente le \"test mental\", établissant les fondations de la psychométrie moderne."
+      },
+      "intelligence1905": {
+        "title": "1905 - Mesure de l'Intelligence",
+        "description": "L'échelle Binet-Simon introduit des méthodes de test d'intelligence standardisées."
+      },
+      "digitalEra": {
+        "title": "1970s-Présent - Ère Numérique",
+        "description": "Les tests adaptatifs par ordinateur et l'analytique alimentée par IA révolutionnent la livraison d'évaluations."
+      }
+    },
+    "scientificProcess": {
+      "title": "Processus Scientifique",
+      "subtitle": "Comment nous assurons la précision et la validité de mesure",
+      "itemDevelopment": {
+        "title": "Développement d'Articles",
+        "description": "Des panels d'experts créent des questions basées sur des théories psychologiques établies."
+      },
+      "validationStudies": {
+        "title": "Études de Validation",
+        "description": "Des tests extensifs avec des populations diverses assurent l'équité culturelle et la précision."
+      },
+      "statisticalAnalysis": {
+        "title": "Analyse Statistique",
+        "description": "Des modèles psychométriques avancés assurent la fiabilité et la validité de construction."
+      },
+      "continuousRefinement": {
+        "title": "Raffinement Continu",
+        "description": "Des mises à jour régulières basées sur de nouvelles recherches et les retours utilisateurs maintiennent la précision."
+      }
+    },
+    "accuracyStandards": {
+      "title": "Standards de Précision",
+      "subtitle": "Métriques prouvées de fiabilité et validité",
+      "reliability": {
+        "title": "Fiabilité",
+        "level": "Élevée",
+        "description": "Résultats cohérents à travers plusieurs sessions de test"
+      },
+      "validity": {
+        "title": "Validité",
+        "level": "Validée",
+        "description": "Mesure ce qu'elle prétend mesurer avec précision"
+      },
+      "predictivePower": {
+        "title": "Pouvoir Prédictif",
+        "level": "Fort",
+        "description": "Fournit des insights significatifs pour le développement de carrière et personnel"
+      }
+    },
+    "assessmentExperience": {
+      "title": "À Quoi S'Attendre Pendant Votre Évaluation",
+      "subtitle": "Un aperçu complet de l'expérience d'évaluation",
+      "step1": {
+        "title": "Configuration Pré-Évaluation",
+        "description": "Complétez votre profil et recevez des instructions personnalisées. Temps de configuration moyen : 5-10 minutes."
+      },
+      "step2": {
+        "title": "Évaluation Interactive",
+        "description": "Engagez-vous avec des questions dynamiques, des scénarios et du contenu multimédia. Durée : 30-90 minutes selon le type d'évaluation."
+      },
+      "step3": {
+        "title": "Analyse Immédiate",
+        "description": "Notre système alimenté par IA traite vos réponses en temps réel, assurant un scoring et une interprétation précis."
+      },
+      "step4": {
+        "title": "Rapport Complet",
+        "description": "Recevez des insights détaillés avec des graphiques visuels, des recommandations personnalisées et des prochaines étapes actionnables."
+      },
+      "step5": {
+        "title": "Support de Suivi",
+        "description": "Accès aux guides d'interprétation, ressources de conseil en carrière et sessions de consultation optionnelles."
+      },
+      "step6": {
+        "title": "Développement Continu",
+        "description": "Suivez vos progrès dans le temps avec des réévaluations périodiques et des recommandations de développement de compétences."
+      }
+    },
+    "benefits": {
+      "title": "Avantages de l'Évaluation Psychométrique Professionnelle",
+      "subtitle": "Pourquoi les tests psychométriques sont essentiels pour la croissance personnelle et professionnelle",
+      "selfAwareness": {
+        "title": "Conscience de Soi",
+        "description": "Gagnez des insights profonds sur votre personnalité, forces et domaines de développement."
+      },
+      "careerClarity": {
+        "title": "Clarté de Carrière",
+        "description": "Prenez des décisions éclairées sur les parcours de carrière et le développement professionnel."
+      },
+      "performanceEnhancement": {
+        "title": "Amélioration de Performance",
+        "description": "Optimisez votre style de travail et améliorez la productivité grâce à des insights ciblés."
+      },
+      "riskMitigation": {
+        "title": "Atténuation des Risques",
+        "description": "Identifiez les défis potentiels et développez des stratégies pour les surmonter."
+      },
+      "cognitiveUnderstanding": {
+        "title": "Compréhension Cognitive",
+        "description": "Comprenez vos schémas de pensée et processus de prise de décision."
+      },
+      "competitiveAdvantage": {
+        "title": "Avantage Concurrentiel",
+        "description": "Démarquez-vous sur le marché de l'emploi avec des insights psychologiques validés."
+      }
+    }
   }
 }
 }

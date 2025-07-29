@@ -26,23 +26,23 @@ const PsychometricsInfo = () => {
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
                 <Calendar className="h-8 w-8 text-blue-600" />
-                <CardTitle className="text-xl">Historical Foundation</CardTitle>
+                <CardTitle className="text-xl">{t("psychometrics.historicalFoundation.title")}</CardTitle>
               </div>
-              <CardDescription>Origins and evolution of psychological measurement</CardDescription>
+              <CardDescription>{t("psychometrics.historicalFoundation.subtitle")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
                 <div className="border-l-4 border-blue-600 pl-4">
-                  <h4 className="font-semibold text-foreground">1890s - Birth of Testing</h4>
-                  <p className="text-sm text-muted-foreground">James McKeen Cattell coins "mental test," establishing the foundation for modern psychometrics.</p>
+                  <h4 className="font-semibold text-foreground">{t("psychometrics.historicalFoundation.birth1890s.title")}</h4>
+                  <p className="text-sm text-muted-foreground">{t("psychometrics.historicalFoundation.birth1890s.description")}</p>
                 </div>
                 <div className="border-l-4 border-blue-600 pl-4">
-                  <h4 className="font-semibold text-foreground">1905 - Intelligence Measurement</h4>
-                  <p className="text-sm text-muted-foreground">Binet-Simon scale introduces standardized intelligence testing methods.</p>
+                  <h4 className="font-semibold text-foreground">{t("psychometrics.historicalFoundation.intelligence1905.title")}</h4>
+                  <p className="text-sm text-muted-foreground">{t("psychometrics.historicalFoundation.intelligence1905.description")}</p>
                 </div>
                 <div className="border-l-4 border-blue-600 pl-4">
-                  <h4 className="font-semibold text-foreground">1970s-Present - Digital Era</h4>
-                  <p className="text-sm text-muted-foreground">Computer-adaptive testing and AI-powered analytics revolutionize assessment delivery.</p>
+                  <h4 className="font-semibold text-foreground">{t("psychometrics.historicalFoundation.digitalEra.title")}</h4>
+                  <p className="text-sm text-muted-foreground">{t("psychometrics.historicalFoundation.digitalEra.description")}</p>
                 </div>
               </div>
             </CardContent>
@@ -53,38 +53,38 @@ const PsychometricsInfo = () => {
             <CardHeader>
               <div className="flex items-center gap-3 mb-2">
                 <Target className="h-8 w-8 text-green-600" />
-                <CardTitle className="text-xl">Scientific Process</CardTitle>
+                <CardTitle className="text-xl">{t("psychometrics.scientificProcess.title")}</CardTitle>
               </div>
-              <CardDescription>How we ensure measurement precision and validity</CardDescription>
+              <CardDescription>{t("psychometrics.scientificProcess.subtitle")}</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-foreground">Item Development</h4>
-                    <p className="text-sm text-muted-foreground">Expert panels create questions based on established psychological theories.</p>
+                    <h4 className="font-semibold text-foreground">{t("psychometrics.scientificProcess.itemDevelopment.title")}</h4>
+                    <p className="text-sm text-muted-foreground">{t("psychometrics.scientificProcess.itemDevelopment.description")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-foreground">Validation Studies</h4>
-                    <p className="text-sm text-muted-foreground">Extensive testing with diverse populations ensures cultural fairness and accuracy.</p>
+                    <h4 className="font-semibold text-foreground">{t("psychometrics.scientificProcess.validationStudies.title")}</h4>
+                    <p className="text-sm text-muted-foreground">{t("psychometrics.scientificProcess.validationStudies.description")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-foreground">Statistical Analysis</h4>
-                    <p className="text-sm text-muted-foreground">Advanced psychometric models ensure reliability and construct validity.</p>
+                    <h4 className="font-semibold text-foreground">{t("psychometrics.scientificProcess.statisticalAnalysis.title")}</h4>
+                    <p className="text-sm text-muted-foreground">{t("psychometrics.scientificProcess.statisticalAnalysis.description")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-foreground">Continuous Refinement</h4>
-                    <p className="text-sm text-muted-foreground">Regular updates based on new research and user feedback maintain accuracy.</p>
+                    <h4 className="font-semibold text-foreground">{t("psychometrics.scientificProcess.continuousRefinement.title")}</h4>
+                    <p className="text-sm text-muted-foreground">{t("psychometrics.scientificProcess.continuousRefinement.description")}</p>
                   </div>
                 </div>
               </div>
@@ -133,9 +133,9 @@ const PsychometricsInfo = () => {
           <CardHeader className="text-center">
             <CardTitle className="text-2xl flex items-center justify-center gap-2">
               <Brain className="h-6 w-6 text-primary" />
-              What to Expect During Your Assessment
+              {t("psychometrics.assessmentExperience.title")}
             </CardTitle>
-            <CardDescription>A comprehensive overview of the assessment experience</CardDescription>
+            <CardDescription>{t("psychometrics.assessmentExperience.subtitle")}</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-8">

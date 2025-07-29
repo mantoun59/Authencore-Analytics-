@@ -93,52 +93,7 @@
     "takeAssessment": "Tomar Evaluación",
     "learnMore": "Saber más",
     "duration": "Duración",
-    "minutes": "minutos",
-    "careerLaunch": {
-      "title": "Lanzamiento de Carrera",
-      "description": "Evaluación integral para profesionales jóvenes que ingresan al mercado laboral.",
-      "duration": "25-30"
-    },
-    "culturalIntelligence": {
-      "title": "Inteligencia Cultural (CAIR)",
-      "description": "Evalúa la capacidad de trabajar efectivamente en entornos culturalmente diversos.",
-      "duration": "20-25"
-    },
-    "communication": {
-      "title": "Estilos de Comunicación",
-      "description": "Identifica patrones de comunicación y preferencias de estilo personal.",
-      "duration": "15-20"
-    },
-    "emotionalIntelligence": {
-      "title": "Inteligencia Emocional",
-      "description": "Mide la capacidad de entender y gestionar emociones efectivamente.",
-      "duration": "20-25"
-    },
-    "leadership": {
-      "title": "Liderazgo Auténtico",
-      "description": "Evalúa el potencial y estilo de liderazgo auténtico.",
-      "duration": "25-30"
-    },
-    "stressResilience": {
-      "title": "Resistencia al Estrés",
-      "description": "Evalúa la capacidad de manejar el estrés y la resiliencia en el lugar de trabajo.",
-      "duration": "15-20"
-    },
-    "genZ": {
-      "title": "Lugar de Trabajo Gen Z",
-      "description": "Evaluación especializada para entender las preferencias laborales de la Generación Z.",
-      "duration": "20-25"
-    },
-    "digitalWellness": {
-      "title": "Bienestar Digital",
-      "description": "Evalúa los hábitos digitales y el equilibrio vida-trabajo en la era digital.",
-      "duration": "15-20"
-    },
-    "faithValues": {
-      "title": "Fe y Valores",
-      "description": "Explora la alineación entre valores personales y fe en el contexto profesional.",
-      "duration": "30-35"
-    }
+    "minutes": "minutos"
   },
   "about": {
     "title": "Acerca de AuthenCore Analytics",
@@ -190,189 +145,14 @@
     "updated": "Actualizado exitosamente",
     "deleted": "Eliminado exitosamente"
   },
-  "dashboard": {
-    "title": "Panel de Control",
-    "welcomeMessage": "Bienvenido de vuelta",
-    "overview": "Resumen",
-    "statsTitle": "Estadísticas Rápidas",
-    "totalAssessments": "Evaluaciones Totales",
-    "completedAssessments": "Completadas",
-    "pendingAssessments": "Pendientes",
-    "averageScore": "Puntuación Promedio",
-    "lastActivity": "Última Actividad",
-    "teamMembers": "Miembros del Equipo",
-    "recentActivityTitle": "Actividad Reciente",
-    "noRecentActivity": "No hay actividad reciente para mostrar",
-    "activityCompleted": "completó evaluación",
-    "activityStarted": "comenzó evaluación",
-    "activityInvited": "fue invitado a evaluación",
-    "quickActionsTitle": "Acciones Rápidas",
-    "startNewAssessment": "Comenzar Nueva Evaluación",
-    "viewReports": "Ver Informes",
-    "manageTeam": "Gestionar Equipo",
-    "settings": "Configuración",
-    "inviteMembers": "Invitar Miembros del Equipo",
-    "downloadResults": "Descargar Resultados",
-    "progressTitle": "Progreso de Evaluaciones",
-    "inProgress": "En Progreso",
-    "notStarted": "No Iniciado",
-    "completed": "Completado",
-    "viewDetails": "Ver Detalles",
-    "continueAssessment": "Continuar Evaluación",
-    "upcomingTitle": "Próximas Evaluaciones",
-    "recommendationsTitle": "Acciones Recomendadas",
-    "noUpcoming": "No hay evaluaciones próximas",
-    "teamOverviewTitle": "Resumen del Equipo",
-    "teamPerformance": "Rendimiento del Equipo",
-    "completionRate": "Tasa de Finalización",
-    "teamProgress": "Progreso del Equipo",
-    "viewTeamReports": "Ver Informes del Equipo",
-    "notificationsTitle": "Notificaciones",
-    "noNotifications": "No hay notificaciones nuevas",
-    "markAllRead": "Marcar Todas como Leídas",
-    "scheduleTitle": "Evaluaciones Programadas",
-    "dueToday": "Vencen Hoy",
-    "dueSoon": "Vencen Pronto",
-    "overdue": "Vencidas"
-  },
   "landing": {
-    "heroTitle": "Libera Todo el Potencial de Tu Equipo",
-    "heroSubtitle": "Evaluaciones psicométricas profesionales para desarrollo profesional, formación de equipos y crecimiento organizacional",
-    "heroDescription": "Descubre fortalezas, identifica oportunidades de desarrollo y toma decisiones basadas en datos con nuestra suite integral de evaluaciones científicamente validadas.",
-    "ctaPrimary": "Comenzar Evaluación",
-    "ctaSecondary": "Aprender Más",
-    "ctaDemo": "Solicitar Demo",
-    "featuresTitle": "¿Por Qué Elegir Authencore Analytics?",
-    "featuresSubtitle": "Confiado por organizaciones mundiales para insights precisos y accionables",
+    "ctaTitle": "¿Listo para Transformar Su Equipo?",
+    "ctaDescription": "Únase a miles de profesionales que han desbloqueado su potencial con AuthenCore Analytics",
+    "ctaButton": "Comience Hoy",
     "feature1Title": "Científicamente Validado",
     "feature1Description": "Nuestras evaluaciones están respaldadas por investigación rigurosa y metodologías probadas",
     "feature2Title": "Insights Accionables",
-    "feature2Description": "Obtén recomendaciones claras y prácticas para desarrollo personal y profesional",
-    "feature3Title": "Análisis de Equipos",
-    "feature3Description": "Comprende las dinámicas del equipo y optimiza la colaboración en tu organización",
-    "feature4Title": "Seguimiento de Progreso",
-    "feature4Description": "Monitorea el crecimiento a lo largo del tiempo con reportes integrales de progreso",
-    "feature5Title": "Soporte Multiidioma",
-    "feature5Description": "Disponible en múltiples idiomas para organizaciones globales",
-    "feature6Title": "Seguro y Confidencial",
-    "feature6Description": "Seguridad de nivel empresarial con protección completa de privacidad de datos",
-    "assessmentsTitle": "Suite Integral de Evaluaciones",
-    "assessmentsSubtitle": "Elige de nuestra gama de evaluaciones psicométricas profesionales",
-    "assessmentCareer": "Evaluación de Lanzamiento Profesional",
-    "assessmentCareerDesc": "Descubre tu camino profesional ideal con análisis integral de intereses y habilidades",
-    "assessmentEI": "Inteligencia Emocional",
-    "assessmentEIDesc": "Evalúa y desarrolla tu inteligencia emocional en cinco dimensiones clave",
-    "assessmentCommunication": "Estilos de Comunicación",
-    "assessmentCommunicationDesc": "Comprende tus preferencias de comunicación y mejora las interacciones del equipo",
-    "assessmentCultural": "Inteligencia Cultural",
-    "assessmentCulturalDesc": "Evalúa tu capacidad para trabajar efectivamente en contextos culturales diversos",
-    "assessmentLeadership": "Liderazgo Auténtico",
-    "assessmentLeadershipDesc": "Desarrolla tu potencial de liderazgo con insights sobre tu estilo de liderazgo",
-    "testimonialsTitle": "Lo Que Dicen Nuestros Clientes",
-    "testimonial1": "Authencore Analytics transformó cómo entendemos y desarrollamos nuestro equipo. Los insights son invaluables.",
-    "testimonial1Author": "Sarah Johnson, Directora de RRHH",
-    "testimonial2": "Los resultados de la evaluación me ayudaron a identificar mis fortalezas y crear un plan de desarrollo enfocado.",
-    "testimonial2Author": "Michael Chen, Gerente de Producto",
-    "testimonial3": "Hemos visto mejora significativa en la colaboración del equipo desde implementar estas evaluaciones.",
-    "testimonial3Author": "Elena Rodriguez, Líder de Equipo",
-    "ctaTitle": "¿Listo para Transformar Tu Equipo?",
-    "ctaDescription": "Únete a miles de profesionales que han liberado su potencial con Authencore Analytics",
-    "ctaButton": "Comenzar Hoy"
-  },
-  "reports": {
-    "title": "Informes",
-    "subtitle": "Ver sus resultados de evaluación y progreso",
-    "myReports": "Mis Informes",
-    "teamReports": "Informes del Equipo",
-    "organizationReports": "Informes Organizacionales",
-    "individual": "Informes Individuales",
-    "team": "Informes de Equipo",
-    "comparison": "Informes de Comparación",
-    "progress": "Informes de Progreso",
-    "viewReport": "Ver Informe",
-    "downloadPDF": "Descargar PDF",
-    "shareReport": "Compartir Informe",
-    "printReport": "Imprimir Informe",
-    "exportData": "Exportar Datos",
-    "generatedOn": "Generado el",
-    "assessmentDate": "Fecha de Evaluación",
-    "reportType": "Tipo de Informe",
-    "participant": "Participante",
-    "participants": "Participantes",
-    "executiveSummary": "Resumen Ejecutivo",
-    "detailedResults": "Resultados Detallados",
-    "recommendations": "Recomendaciones",
-    "developmentPlan": "Plan de Desarrollo",
-    "strengths": "Fortalezas",
-    "developmentAreas": "Áreas de Desarrollo",
-    "filterByAssessment": "Filtrar por Evaluación",
-    "filterByDate": "Filtrar por Fecha",
-    "filterByParticipant": "Filtrar por Participante",
-    "searchReports": "Buscar informes...",
-    "noReports": "No hay informes disponibles",
-    "noReportsDescription": "Complete una evaluación para ver sus informes aquí",
-    "noTeamReports": "No hay informes de equipo disponibles",
-    "noProgressData": "No hay suficientes datos para seguimiento de progreso",
-    "progressOverTime": "Progreso a lo Largo del Tiempo",
-    "improvementTrends": "Tendencias de Mejora",
-    "performanceMetrics": "Métricas de Rendimiento",
-    "benchmarkComparison": "Comparación de Referencia",
-    "teamPerformance": "Rendimiento del Equipo",
-    "teamComposition": "Composición del Equipo",
-    "collaborationScore": "Puntuación de Colaboración",
-    "diversityMetrics": "Métricas de Diversidad",
-    "teamStrengths": "Fortalezas del Equipo",
-    "teamDevelopmentAreas": "Áreas de Desarrollo del Equipo"
-  },
-  "assessmentPages": {
-    "title": "Evaluaciones",
-    "subtitle": "Descubre tus fortalezas y oportunidades de desarrollo",
-    "browseAll": "Explorar Todas las Evaluaciones",
-    "myAssessments": "Mis Evaluaciones",
-    "availableAssessments": "Evaluaciones Disponibles",
-    "duration": "Duración",
-    "questions": "Preguntas",
-    "startAssessment": "Comenzar Evaluación",
-    "continueAssessment": "Continuar",
-    "viewResults": "Ver Resultados",
-    "retakeAssessment": "Repetir",
-    "categories": "Categorías",
-    "allCategories": "Todas las Categorías",
-    "personality": "Personalidad",
-    "skills": "Habilidades",
-    "career": "Carrera",
-    "leadership": "Liderazgo",
-    "communication": "Comunicación",
-    "wellness": "Bienestar",
-    "statusNotStarted": "No Iniciada",
-    "statusInProgress": "En Progreso",
-    "statusCompleted": "Completada",
-    "statusExpired": "Expirada",
-    "overview": "Resumen",
-    "whatYoullLearn": "Qué Aprenderás",
-    "howItWorks": "Cómo Funciona",
-    "sampleQuestions": "Preguntas de Muestra",
-    "estimatedTime": "Tiempo Estimado",
-    "questionCount": "Número de Preguntas",
-    "completionRate": "Tasa de Finalización",
-    "difficulty": "Nivel de Dificultad",
-    "searchPlaceholder": "Buscar evaluaciones...",
-    "filterBy": "Filtrar por",
-    "sortBy": "Ordenar por",
-    "sortNewest": "Más Recientes Primero",
-    "sortOldest": "Más Antiguas Primero",
-    "sortPopular": "Más Populares",
-    "sortDuration": "Duración",
-    "descriptionCareer": "Evaluación integral de orientación profesional para ayudarte a identificar tu camino profesional ideal, intereses y oportunidades de desarrollo profesional.",
-    "descriptionEI": "Evalúa tu inteligencia emocional en cinco dimensiones clave: autoconciencia, autorregulación, motivación, empatía y habilidades sociales.",
-    "descriptionCommunication": "Descubre tus preferencias de estilo de comunicación y aprende cómo adaptar tu enfoque para mejor colaboración en equipo.",
-    "descriptionCultural": "Evalúa tu inteligencia cultural y capacidad para trabajar efectivamente en ambientes diversos y multiculturales.",
-    "descriptionLeadership": "Explora tu potencial de liderazgo y descubre tu estilo de liderazgo auténtico en varias situaciones.",
-    "descriptionDigital": "Evalúa tu relación con la tecnología y desarrolla hábitos digitales saludables para mejor bienestar.",
-    "descriptionBurnout": "Identifica señales tempranas de agotamiento y desarrolla estrategias para prevención y recuperación.",
-    "descriptionGenZ": "Comprende las preferencias del lugar de trabajo generacional y optimiza tu ambiente de trabajo para máximo compromiso.",
-    "descriptionStress": "Evalúa tu resistencia al estrés y desarrolla estrategias de afrontamiento efectivas para situaciones desafiantes.",
-    "descriptionFaith": "Explora cómo tus valores y creencias personales se alinean con tus metas profesionales y cultura del lugar de trabajo."
+    "feature2Description": "Obtén recomendaciones claras y prácticas para el desarrollo personal y profesional"
   },
   "homepage": {
     "howItWorks": {
@@ -396,28 +176,116 @@
       "button": "Comience Hoy"
     }
   },
-  "notFound": {
-    "title": "Página No Encontrada",
-    "description": "La página que buscas no existe o ha sido movida.",
-    "requestedPath": "Ruta solicitada:",
-    "returnHome": "Volver al Inicio",
-    "goBack": "Volver",
-    "popularPages": "Páginas Populares",
-    "pages": {
-      "assessments": "Evaluaciones",
-      "careerLaunch": "Lanzamiento de Carrera",
-      "aboutUs": "Acerca de Nosotros",
-      "authentication": "Autenticación"
-    }
-  },
-  "privacy": {
-    "title": "Política de Privacidad",
-    "effectiveDate": "Fecha de vigencia:",
-    "sections": {
-      "introduction": {
-        "title": "Introducción",
-        "content1": "Bienvenido a Authencore Analytics. Estamos comprometidos a proteger su privacidad e información personal.",
-        "content2": "Nuestra misión es 'Midiendo Mentes. Moldeando Futuros.' Tomamos esta responsabilidad en serio."
+  "psychometrics": {
+    "historicalFoundation": {
+      "title": "Fundación Histórica",
+      "subtitle": "Orígenes y evolución de la medición psicológica",
+      "birth1890s": {
+        "title": "1890s - Nacimiento de las Pruebas",
+        "description": "James McKeen Cattell acuña \"prueba mental\", estableciendo la base para la psicometría moderna."
+      },
+      "intelligence1905": {
+        "title": "1905 - Medición de Inteligencia",
+        "description": "La escala Binet-Simon introduce métodos estandarizados de pruebas de inteligencia."
+      },
+      "digitalEra": {
+        "title": "1970s-Presente - Era Digital",
+        "description": "Las pruebas adaptativas por computadora y el análisis impulsado por IA revolucionan la entrega de evaluaciones."
+      }
+    },
+    "scientificProcess": {
+      "title": "Proceso Científico",
+      "subtitle": "Cómo aseguramos la precisión de medición y validez",
+      "itemDevelopment": {
+        "title": "Desarrollo de Ítems",
+        "description": "Paneles de expertos crean preguntas basadas en teorías psicológicas establecidas."
+      },
+      "validationStudies": {
+        "title": "Estudios de Validación",
+        "description": "Pruebas extensivas con poblaciones diversas aseguran equidad cultural y precisión."
+      },
+      "statisticalAnalysis": {
+        "title": "Análisis Estadístico",
+        "description": "Modelos psicométricos avanzados aseguran confiabilidad y validez de constructo."
+      },
+      "continuousRefinement": {
+        "title": "Refinamiento Continuo",
+        "description": "Actualizaciones regulares basadas en nueva investigación y retroalimentación del usuario mantienen la precisión."
+      }
+    },
+    "accuracyStandards": {
+      "title": "Estándares de Precisión",
+      "subtitle": "Métricas probadas de confiabilidad y validez",
+      "reliability": {
+        "title": "Confiabilidad",
+        "level": "Alta",
+        "description": "Resultados consistentes a través de múltiples sesiones de prueba"
+      },
+      "validity": {
+        "title": "Validez",
+        "level": "Validada",
+        "description": "Mide lo que afirma medir con precisión"
+      },
+      "predictivePower": {
+        "title": "Poder Predictivo",
+        "level": "Fuerte",
+        "description": "Proporciona insights significativos para el desarrollo profesional y personal"
+      }
+    },
+    "assessmentExperience": {
+      "title": "Qué Esperar Durante Su Evaluación",
+      "subtitle": "Una visión integral de la experiencia de evaluación",
+      "step1": {
+        "title": "Configuración Pre-Evaluación",
+        "description": "Complete su perfil y reciba instrucciones personalizadas. Tiempo promedio de configuración: 5-10 minutos."
+      },
+      "step2": {
+        "title": "Evaluación Interactiva",
+        "description": "Participe con preguntas dinámicas, escenarios y contenido multimedia. Duración: 30-90 minutos dependiendo del tipo de evaluación."
+      },
+      "step3": {
+        "title": "Análisis Inmediato",
+        "description": "Nuestro sistema impulsado por IA procesa sus respuestas en tiempo real, asegurando puntuación e interpretación precisas."
+      },
+      "step4": {
+        "title": "Reporte Integral",
+        "description": "Reciba insights detallados con gráficos visuales, recomendaciones personalizadas y próximos pasos accionables."
+      },
+      "step5": {
+        "title": "Soporte de Seguimiento",
+        "description": "Acceso a guías de interpretación, recursos de consejería profesional y sesiones de consulta opcionales."
+      },
+      "step6": {
+        "title": "Desarrollo Continuo",
+        "description": "Rastree su progreso a lo largo del tiempo con reevaluaciones periódicas y recomendaciones de desarrollo de habilidades."
+      }
+    },
+    "benefits": {
+      "title": "Beneficios de la Evaluación Psicométrica Profesional",
+      "subtitle": "Por qué las pruebas psicométricas son esenciales para el crecimiento personal y profesional",
+      "selfAwareness": {
+        "title": "Autoconciencia",
+        "description": "Obtenga insights profundos sobre su personalidad, fortalezas y áreas de desarrollo."
+      },
+      "careerClarity": {
+        "title": "Claridad Profesional",
+        "description": "Tome decisiones informadas sobre trayectorias profesionales y desarrollo profesional."
+      },
+      "performanceEnhancement": {
+        "title": "Mejora del Rendimiento",
+        "description": "Optimice su estilo de trabajo y mejore la productividad a través de insights dirigidos."
+      },
+      "riskMitigation": {
+        "title": "Mitigación de Riesgos",
+        "description": "Identifique desafíos potenciales y desarrolle estrategias para superarlos."
+      },
+      "cognitiveUnderstanding": {
+        "title": "Comprensión Cognitiva",
+        "description": "Entienda sus patrones de pensamiento y procesos de toma de decisiones."
+      },
+      "competitiveAdvantage": {
+        "title": "Ventaja Competitiva",
+        "description": "Destáquese en el mercado laboral con insights psicológicos validados."
       }
     }
   }
