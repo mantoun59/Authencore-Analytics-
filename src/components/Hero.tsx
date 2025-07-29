@@ -28,7 +28,7 @@ const Hero = () => {
             <div className="flex flex-col items-center mb-6">
               <LogoDisplay size="lg" showTagline={false} className="text-center" />
               <p className="text-lg text-foreground/70 italic mt-2">
-                Reading minds. Shaping futures
+                {t("hero.tagline")}
               </p>
             </div>
 
@@ -60,11 +60,11 @@ const Hero = () => {
             {/* Trust indicators */}
             <div className="flex items-center space-x-2 text-sm text-muted-foreground pt-4">
               <Shield className="w-4 h-4" />
-              <span>Confidential & Secure</span>
+              <span>{t("features.secure.title")}</span>
               <span>•</span>
-              <span>Professional Standards</span>
+              <span>{t("landing.feature1Title")}</span>
               <span>•</span>
-              <span>Validated Assessments</span>
+              <span>{t("features.comprehensive.title")}</span>
             </div>
           </div>
 
@@ -84,15 +84,15 @@ const Hero = () => {
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <div className="text-2xl font-bold text-primary mb-1">10</div>
-                    <div className="text-xs text-muted-foreground">Assessment Types</div>
+                    <div className="text-xs text-muted-foreground">{t("assessments.title")}</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-primary mb-1">Validated</div>
-                    <div className="text-xs text-muted-foreground">Scientifically Researched, AI Developed</div>
+                    <div className="text-2xl font-bold text-primary mb-1">{t("landing.feature1Title")}</div>
+                    <div className="text-xs text-muted-foreground">{t("features.aiPowered.description")}</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-primary mb-1">Secure</div>
-                    <div className="text-xs text-muted-foreground">Data Protection</div>
+                    <div className="text-2xl font-bold text-primary mb-1">{t("features.secure.title")}</div>
+                    <div className="text-xs text-muted-foreground">{t("features.secure.description")}</div>
                   </div>
                 </div>
               </div>

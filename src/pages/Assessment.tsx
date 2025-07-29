@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare, Globe, BarChart3, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { assessmentsData } from "@/data/assessmentsData";
 import assessmentConceptImage from "@/assets/assessment-concept.jpg";
 import LogoDisplay from "@/components/LogoDisplay";
@@ -13,6 +14,7 @@ import { PaymentButton } from "@/components/PaymentButton";
 import AssessmentPreviewModal from "@/components/AssessmentPreviewModal";
 
 const Assessment = () => {
+  const { t } = useTranslation();
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
   const [selectedAssessment, setSelectedAssessment] = useState<any>(null);
   const getInfoRoute = (assessmentId: string) => {
@@ -172,14 +174,13 @@ const Assessment = () => {
           </div>
           
           <Badge className="mb-6 bg-primary/10 text-primary hover:bg-primary/20">
-            🎯 Assessment Center
+            🎯 {t("assessments.title")}
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text text-transparent">
-            Professional Assessment Suite
+            {t("assessments.title")} {t("landing.assessmentsTitle")}
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            Choose from our comprehensive range of 10+ professional assessments designed to evaluate skills, 
-            personality, career readiness, and workplace performance.
+            {t("landing.assessmentsSubtitle")}
           </p>
         </div>
       </section>
@@ -245,11 +246,11 @@ const Assessment = () => {
                           className="flex-1"
                           onClick={() => handlePreviewAssessment(assessment)}
                         >
-                          Preview
+                          {t("assessmentPages.overview")}
                         </Button>
                         <Link to={getInfoRoute(assessment.id)} className="flex-1">
                           <Button variant="outline" size="sm" className="w-full">
-                            Learn More <ArrowRight className="ml-2 h-3 w-3" />
+                            {t("assessments.learnMore")} <ArrowRight className="ml-2 h-3 w-3" />
                           </Button>
                         </Link>
                       </div>
@@ -275,42 +276,42 @@ const Assessment = () => {
                   </div>
                 </div>
                 <CardTitle className="text-xl text-center">
-                  Professional Assessment Platform
+                  {t("about.title")}
                 </CardTitle>
                 <CardDescription className="text-base text-center">
-                  Advanced psychological evaluation tools powered by AI and validated frameworks
+                  {t("about.subtitle")}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4 flex-grow flex flex-col">
                 <div className="text-center py-4">
-                  <div className="text-2xl font-bold text-primary mb-2">10+ Assessments</div>
-                  <div className="text-sm text-muted-foreground">Comprehensive Testing Suite</div>
+                  <div className="text-2xl font-bold text-primary mb-2">{t("landing.feature1Title")}</div>
+                  <div className="text-sm text-muted-foreground">{t("landing.assessmentsSubtitle")}</div>
                 </div>
                 <ul className="space-y-2 text-sm text-muted-foreground">
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    AI-Powered Analysis
+                    {t("features.aiPowered.title")}
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Instant PDF Reports
+                    {t("features.realTime.title")}
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Enterprise Security
+                    {t("features.secure.title")}
                   </li>
                   <li className="flex items-center gap-2">
                     <CheckCircle2 className="h-4 w-4 text-green-500" />
-                    Validity Detection
+                    {t("landing.feature1Title")}
                   </li>
                 </ul>
                 <div className="flex-grow"></div>
                 <div className="text-center">
                   <div className="text-lg font-semibold text-primary mb-2">
-                    Starting from $9.99
+                    {t("common.save")} $9.99
                   </div>
                   <div className="text-xs text-muted-foreground">
-                    Professional-grade assessments for everyone
+                    {t("about.subtitle")}
                   </div>
                 </div>
               </CardContent>
@@ -324,9 +325,9 @@ const Assessment = () => {
       <section className="py-16 px-4 bg-muted/30">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold mb-4">Choose the Right Assessment</h2>
+            <h2 className="text-3xl font-bold mb-4">{t("assessments.title")}</h2>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Each assessment serves different purposes and provides unique insights for career development, hiring, and personal growth.
+              {t("assessments.subtitle")}
             </p>
           </div>
 

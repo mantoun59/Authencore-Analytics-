@@ -11,18 +11,18 @@ const WhyChooseUs = () => {
   const features = [
     {
       icon: BarChart3,
-      title: "Expert Analysis",
-      description: "Leverage our in-depth industry knowledge for reliable insights with professional assessment and analytics."
+      title: t("landing.feature2Title"),
+      description: t("landing.feature2Description")
     },
     {
       icon: Shield,
-      title: "Reliable Results", 
-      description: "Highlights accuracy and consistency of provided insights you can trust for critical decisions."
+      title: t("landing.feature1Title"), 
+      description: t("landing.feature1Description")
     },
     {
       icon: Target,
-      title: "Actionable Insights",
-      description: "Focus on data-driven results that transform into strategic decisions for your success."
+      title: t("landing.feature2Title"),
+      description: t("landing.feature2Description")
     }
   ];
 
@@ -40,7 +40,7 @@ const WhyChooseUs = () => {
 
         <div className="text-center mb-16">
           <Badge className="mb-4 bg-primary/10 text-primary hover:bg-primary/20">
-            🏆 Professional Assessment Solutions
+            🏆 {t("about.title")}
           </Badge>
           <h2 className="text-4xl font-bold text-foreground mb-6">{t("features.whyChoose.title")}</h2>
           <p className="text-lg text-muted-foreground mb-8 max-w-3xl mx-auto">
@@ -74,28 +74,28 @@ const WhyChooseUs = () => {
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             <div>
               <h3 className="text-2xl font-bold text-foreground mb-4">
-                Professional Assessment Solutions
+                {t("about.title")}
               </h3>
               <div className="space-y-4">
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-foreground">Scientifically Validated</h4>
-                    <p className="text-sm text-muted-foreground">Our assessments are built on established psychological research and validated methodologies.</p>
+                    <h4 className="font-semibold text-foreground">{t("landing.feature1Title")}</h4>
+                    <p className="text-sm text-muted-foreground">{t("landing.feature1Description")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-foreground">Comprehensive Reporting</h4>
-                    <p className="text-sm text-muted-foreground">Detailed insights with actionable recommendations for personal and professional development.</p>
+                    <h4 className="font-semibold text-foreground">{t("features.comprehensive.title")}</h4>
+                    <p className="text-sm text-muted-foreground">{t("features.comprehensive.description")}</p>
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
                   <CheckCircle2 className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
                   <div>
-                    <h4 className="font-semibold text-foreground">Secure & Confidential</h4>
-                    <p className="text-sm text-muted-foreground">Your data is protected with enterprise-grade security and strict confidentiality protocols.</p>
+                    <h4 className="font-semibold text-foreground">{t("features.secure.title")}</h4>
+                    <p className="text-sm text-muted-foreground">{t("features.secure.description")}</p>
                   </div>
                 </div>
               </div>
@@ -105,36 +105,36 @@ const WhyChooseUs = () => {
                 <CardHeader>
                   <CardTitle className="text-lg flex items-center gap-2">
                     <TrendingUp className="h-5 w-5 text-primary" />
-                    Assessment Features
+                    {t("features.title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <ul className="space-y-2 text-sm">
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      Multiple assessment types
+                      {t("features.comprehensive.title")}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      Instant results and reporting
+                      {t("features.realTime.title")}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      Professional interpretation
+                      {t("about.subtitle")}
                     </li>
                     <li className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 text-green-600" />
-                      Ongoing support resources
+                      {t("footer.support")}
                     </li>
                   </ul>
                 </CardContent>
               </Card>
               <div className="text-center">
-                <Link to="/about">
-                  <Button size="lg" className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
-                    Learn More About Our Process
-                  </Button>
-                </Link>
+                  <Link to="/about">
+                    <Button size="lg" className="bg-gradient-to-r from-primary to-accent hover:from-primary/90 hover:to-accent/90">
+                      {t("hero.learnMore")}
+                    </Button>
+                  </Link>
               </div>
             </div>
           </div>
@@ -143,21 +143,20 @@ const WhyChooseUs = () => {
         {/* Call to Action */}
         <div className="text-center">
           <h3 className="text-2xl font-bold text-foreground mb-4">
-            Ready to Get Started?
+            {t("landing.ctaTitle")}
           </h3>
           <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
-            Discover your potential with our professionally designed assessments 
-            and take the first step toward personal and professional growth.
+            {t("landing.ctaDescription")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/assessment">
               <Button size="lg" className="bg-primary hover:bg-primary/90">
-                Explore Our Assessments
+                {t("assessments.title")}
               </Button>
             </Link>
             <Link to="/assessment">
               <Button size="lg" variant="outline">
-                Get Started Today
+                {t("landing.ctaButton")}
               </Button>
             </Link>
           </div>

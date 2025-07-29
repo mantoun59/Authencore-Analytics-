@@ -2,9 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Rocket, Brain, Shield } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { assessmentsData } from "@/data/assessmentsData";
 
 const FeaturedAssessments = () => {
+  const { t } = useTranslation();
   // Use real assessment data - featuring the top 3 assessments
   const featuredAssessments = assessmentsData.slice(0, 3).map(assessment => ({
     title: assessment.title,
@@ -19,7 +21,7 @@ const FeaturedAssessments = () => {
     <section className="py-20 bg-muted/50">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-foreground mb-4">Featured Assessments</h2>
+          <h2 className="text-4xl font-bold text-foreground mb-4">{t("landing.assessmentsTitle")}</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -40,7 +42,7 @@ const FeaturedAssessments = () => {
                   </div>
                   <Link to={assessment.route}>
                     <Button className="w-full bg-primary hover:bg-primary/90">
-                      Take Assessment
+                      {t("assessments.takeAssessment")}
                     </Button>
                   </Link>
                 </CardContent>

@@ -85,21 +85,19 @@ const Features = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
               <h3 className="text-3xl font-bold mb-6 text-foreground">
-                Professional Analytics Dashboard
+                {t("dashboard.title")}
               </h3>
               <p className="text-lg text-foreground mb-6 leading-relaxed">
-                Access comprehensive assessment analytics through our professional dashboard. 
-                Monitor progress, track development, and gain deep insights into assessment results 
-                with advanced data visualization tools.
+                {t("features.realTime.description")}
               </p>
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center space-x-2">
                   <BarChart3 className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-foreground">Real-time Analytics</span>
+                  <span className="text-sm text-foreground">{t("features.realTime.title")}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Award className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-foreground">Professional Reports</span>
+                  <span className="text-sm text-foreground">{t("reports.title")}</span>
                 </div>
               </div>
             </div>
@@ -118,23 +116,23 @@ const Features = () => {
         {/* Additional stats section */}
         <div className="mt-20 text-center">
           <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-8 shadow-card border border-border/50">
-            <h3 className="text-2xl font-bold mb-8 text-foreground">Assessment Categories</h3>
+            <h3 className="text-2xl font-bold mb-8 text-foreground">{t("assessmentPages.categories")}</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Personality</div>
-                <div className="text-sm text-foreground">Assessments</div>
+                <div className="text-2xl font-bold text-primary mb-1">{t("assessmentPages.personality")}</div>
+                <div className="text-sm text-foreground">{t("assessments.title")}</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Cognitive</div>
-                <div className="text-sm text-foreground">Testing</div>
+                <div className="text-2xl font-bold text-primary mb-1">{t("assessmentPages.skills")}</div>
+                <div className="text-sm text-foreground">{t("common.test")}</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Behavioral</div>
-                <div className="text-sm text-foreground">Analysis</div>
+                <div className="text-2xl font-bold text-primary mb-1">{t("assessmentPages.communication")}</div>
+                <div className="text-sm text-foreground">{t("reports.detailedResults")}</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Professional</div>
-                <div className="text-sm text-foreground">Development</div>
+                <div className="text-2xl font-bold text-primary mb-1">{t("about.title")}</div>
+                <div className="text-sm text-foreground">{t("reports.developmentPlan")}</div>
               </div>
             </div>
           </div>

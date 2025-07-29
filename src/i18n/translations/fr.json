@@ -21,7 +21,8 @@
     "male": "Masculin",
     "female": "Féminin",
     "other": "Autre",
-    "selectLanguage": "Sélectionner la langue"
+    "selectLanguage": "Sélectionner la langue",
+    "test": "Test"
   },
   "navigation": {
     "home": "Accueil",
@@ -63,6 +64,10 @@
     "whyChoose": {
       "title": "Pourquoi Choisir AuthenCore Analytics",
       "subtitle": "Découvrez des évaluations psychologiques de niveau professionnel soutenues par la recherche scientifique et conçues pour fournir des insights significatifs pour le développement personnel et professionnel"
+    },
+    "reports": {
+      "title": "Rapports Professionnels",
+      "description": "Rapports d'évaluation détaillés avec des insights actionnables."
     }
   },
   "assessments": {

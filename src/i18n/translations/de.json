@@ -20,7 +20,8 @@
     "female": "Weiblich",
     "other": "Anderes",
     "preferNotToSay": "Möchte nicht angeben",
-    "selectLanguage": "Sprache auswählen"
+    "selectLanguage": "Sprache auswählen",
+    "test": "Test"
   },
   "navigation": {
     "home": "Startseite",
@@ -66,6 +67,11 @@
     "aiPowered": {
       "title": "KI-gestützte Analyse",
       "description": "Fortschrittliche künstliche Intelligenz analysiert Ihre Antworten für tiefere Erkenntnisse und personalisierte Empfehlungen."
+    },
+    },
+    "reports": {
+      "title": "Professionelle Berichte",
+      "description": "Detaillierte Bewertungsberichte mit umsetzbaren Erkenntnissen."
     },
     "whyChoose": {
       "title": "Warum AuthenCore Analytics Wählen",

@@ -21,7 +21,8 @@
     "male": "Male",
     "female": "Female",
     "other": "Other",
-    "selectLanguage": "Select Language"
+    "selectLanguage": "Select Language",
+    "test": "Testing"
   },
   "navigation": {
     "home": "Home",
@@ -59,6 +60,14 @@
     "secure": {
       "title": "Secure & Private",
       "description": "Enterprise-grade encryption and strict privacy policies protect all user data."
+    },
+    "reports": {
+      "title": "Professional Reports",
+      "description": "Detailed assessment reports with actionable insights."
+    },
+    "whyChoose": {
+      "title": "Why Choose Us?",
+      "subtitle": "Trusted by professionals worldwide for accurate insights."
     }
   },
   "assessments": {
