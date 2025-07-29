@@ -1,0 +1,43 @@
+project_id = "jlbftyjewxgetxcihban"
+
+[functions.process-assessment]
+verify_jwt = false
+
+[functions.storage-monitor] 
+verify_jwt = false
+
+[functions.ai-chatbot]
+verify_jwt = false
+
+[functions.security-middleware]
+verify_jwt = false
+
+[functions.send-assessment-report]
+verify_jwt = false
+
+[functions.update-payment-status]
+verify_jwt = false
+
+[functions.create-payment-order]
+verify_jwt = false
+
+[functions.enhanced-pdf-generator]
+verify_jwt = false
+
+[functions.generate-ai-report]
+verify_jwt = false
+
+[functions.generate-marketing-pdf]
+verify_jwt = false
+
+[functions.enhanced-ai-analysis]
+verify_jwt = false
+
+[functions.send-partner-credentials]
+verify_jwt = false
+
+[functions.generate-image]
+verify_jwt = false
+
+[functions.purchase-analytics]
+verify_jwt = false
