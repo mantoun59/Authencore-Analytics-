@@ -822,5 +822,118 @@
     "descriptionGenZ": "Understand generational workplace preferences and optimize your work environment for maximum engagement.",
     "descriptionStress": "Assess your stress resilience and develop effective coping strategies for challenging situations.",
     "descriptionFaith": "Explore how your personal values and beliefs align with your professional goals and workplace culture."
+  },
+  "psychometrics": {
+    "historicalFoundation": {
+      "title": "Historical Foundation",
+      "subtitle": "Origins and evolution of psychological measurement",
+      "birth1890s": {
+        "title": "1890s - Birth of Testing",
+        "description": "James McKeen Cattell coins \"mental test\", establishing the foundation for modern psychometrics."
+      },
+      "intelligence1905": {
+        "title": "1905 - Intelligence Measurement",
+        "description": "The Binet-Simon scale introduces standardized intelligence testing methods."
+      },
+      "digitalEra": {
+        "title": "1970s-Present - Digital Era",
+        "description": "Computer-adaptive testing and AI-driven analysis revolutionize assessment delivery."
+      }
+    },
+    "scientificProcess": {
+      "title": "Scientific Process",
+      "subtitle": "How we ensure measurement accuracy and validity",
+      "itemDevelopment": {
+        "title": "Item Development",
+        "description": "Expert panels create questions based on established psychological theories."
+      },
+      "validationStudies": {
+        "title": "Validation Studies",
+        "description": "Extensive testing with diverse populations ensures cultural fairness and accuracy."
+      },
+      "statisticalAnalysis": {
+        "title": "Statistical Analysis",
+        "description": "Advanced psychometric models ensure reliability and construct validity."
+      },
+      "continuousRefinement": {
+        "title": "Continuous Refinement",
+        "description": "Regular updates based on new research and user feedback maintain accuracy."
+      }
+    },
+    "accuracyStandards": {
+      "title": "Accuracy Standards",
+      "subtitle": "Proven reliability and validity metrics",
+      "reliability": {
+        "title": "Reliability",
+        "level": "High",
+        "description": "Consistent results across multiple testing sessions"
+      },
+      "validity": {
+        "title": "Validity",
+        "level": "Validated",
+        "description": "Accurately measures what it claims to measure"
+      },
+      "predictivePower": {
+        "title": "Predictive Power",
+        "level": "Strong",
+        "description": "Provides meaningful insights for professional and personal development"
+      }
+    },
+    "assessmentExperience": {
+      "title": "What to Expect During Your Assessment",
+      "subtitle": "A comprehensive view of the assessment experience",
+      "step1": {
+        "title": "Pre-Assessment Setup",
+        "description": "Complete your profile and receive personalized instructions. Average setup time: 5-10 minutes."
+      },
+      "step2": {
+        "title": "Interactive Assessment",
+        "description": "Engage with dynamic questions, scenarios, and multimedia content. Duration: 30-90 minutes depending on assessment type."
+      },
+      "step3": {
+        "title": "Immediate Analysis",
+        "description": "Our AI-powered system processes your responses in real-time, ensuring accurate scoring and interpretation."
+      },
+      "step4": {
+        "title": "Comprehensive Report",
+        "description": "Receive detailed insights with visual charts, personalized recommendations, and actionable next steps."
+      },
+      "step5": {
+        "title": "Follow-up Support",
+        "description": "Access to interpretation guides, professional counseling resources, and optional consultation sessions."
+      },
+      "step6": {
+        "title": "Ongoing Development",
+        "description": "Track your progress over time with periodic reassessments and skill development recommendations."
+      }
+    },
+    "benefits": {
+      "title": "Benefits of Professional Psychometric Assessment",
+      "subtitle": "Why psychometric testing is essential for personal and professional growth",
+      "selfAwareness": {
+        "title": "Self-Awareness",
+        "description": "Gain deep insights into your personality, strengths, and areas for development."
+      },
+      "careerClarity": {
+        "title": "Career Clarity",
+        "description": "Make informed decisions about career paths and professional development."
+      },
+      "performanceEnhancement": {
+        "title": "Performance Enhancement",
+        "description": "Optimize your work style and improve productivity through targeted insights."
+      },
+      "riskMitigation": {
+        "title": "Risk Mitigation",
+        "description": "Identify potential challenges and develop strategies to overcome them."
+      },
+      "cognitiveUnderstanding": {
+        "title": "Cognitive Understanding",
+        "description": "Understand your thinking patterns and decision-making processes."
+      },
+      "competitiveAdvantage": {
+        "title": "Competitive Advantage",
+        "description": "Stand out in the job market with validated psychological insights."
+      }
+    }
   }
 }
