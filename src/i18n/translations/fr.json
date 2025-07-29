@@ -70,6 +70,30 @@
       "description": "Rapports d'évaluation détaillés avec des insights actionnables."
     }
   },
+  "about": {
+    "title": "À Propos d'AuthenCore Analytics",
+    "subtitle": "Pionniers de l'évaluation psychométrique moderne",
+    "mission": "À Propos – Authencore Analytics",
+    "whoWeAre": "Qui Nous Sommes",
+    "whoWeAreText1": "Chez Authencore Analytics, nous sommes des apprenants passionnés, des créateurs et des explorateurs numériques qui croient que chacun mérite l'accès aux outils qui débloquent la compréhension de soi et la croissance personnelle.",
+    "whoWeAreText2": "Nous ne sommes pas une équipe de psychologues licenciés, mais un petit groupe de développeurs et d'éducateurs qui ont construit cette plateforme en utilisant les technologies d'IA combinées avec des cadres psychologiques open-source et soutenus par la recherche.",
+    "whyWeBuilt": "Pourquoi Nous Avons Construit Ceci",
+    "whyWeBuiltText1": "Nous savons que l'insight profond de soi n'est pas seulement pour les cadres d'entreprise ou les séances de thérapie. C'est pour les étudiants trouvant leur chemin, les professionnels naviguant les défis.",
+    "whyWeBuiltText2": "Nos évaluations alimentées par l'IA sont construites sur des construits validés en psychologie tels que les traits de personnalité Big Five, les modèles d'intelligence émotionnelle et les cadres de bien-être.",
+    "platformTitle": "Plateforme d'Évaluation Professionnelle", 
+    "platformDescription": "Notre plateforme combine une technologie de pointe avec des cadres psychologiques validés pour fournir des évaluations de niveau professionnel.",
+    "aiPowered": "Alimenté par l'IA",
+    "securePlatform": "Plateforme Sécurisée",
+    "teamAnalytics": "Analytiques d'Équipe",
+    "goalOriented": "Orienté Objectifs",
+    "ourPromise": "Notre Promesse",
+    "promiseText": "Nous promettons d'être toujours honnêtes sur ce que nos évaluations peuvent et ne peuvent pas faire.",
+    "disclaimer": "Avertissement",
+    "importantNote": "Note Importante",
+    "disclaimerText1": "Les évaluations et rapports fournis par Authencore Analytics sont conçus à des fins éducatives et de développement personnel uniquement.",
+    "disclaimerText2": "Nos résultats sont basés sur des données auto-déclarées et structurées en utilisant des cadres psychologiques validés open-source interprétés par des algorithmes d'IA.",
+    "footerText": "Alimenté par l'IA et la psychologie open-source pour la croissance humaine et la clarté."
+  },
   "assessments": {
     "title": "Nos Évaluations",
     "subtitle": "Évaluations psychométriques scientifiquement validées",

@@ -27,26 +27,26 @@ const About = () => {
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Who We Are */}
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-foreground">Who We Are</h3>
+            <h3 className="text-2xl font-bold text-foreground">{t("about.whoWeAre")}</h3>
             <div className="space-y-4 text-foreground text-lg leading-relaxed">
               <p>
-                At Authencore Analytics, we're passionate learners, creators, and digital explorers who believe that everyone deserves access to the tools that unlock self-understanding and personal growth.
+                {t("about.whoWeAreText1")}
               </p>
               <p>
-                We are not a team of licensed psychologists, but a small group of developers and educators who've built this platform using AI technologies combined with open-source, research-backed psychological frameworks. Our mission is to bring the science of personality, emotional intelligence, and wellbeing to your fingertips in a way that is practical, insightful, and affordable.
+                {t("about.whoWeAreText2")}
               </p>
             </div>
           </div>
 
           {/* Why We Built This */}
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-foreground">Why We Built This</h3>
+            <h3 className="text-2xl font-bold text-foreground">{t("about.whyWeBuilt")}</h3>
             <div className="space-y-4 text-foreground text-lg leading-relaxed">
               <p>
-                We know that deep self-insight isn't just for corporate executives or therapy sessions. It's for students finding their path, professionals navigating challenges, and anyone wanting to understand themselves a little better today than yesterday.
+                {t("about.whyWeBuiltText1")}
               </p>
               <p>
-                Our AI-powered assessments are built on validated constructs in psychology such as the Big Five personality traits, emotional intelligence models, and wellbeing frameworks. We combine these with modern technology to make them accessible anytime, anywhere.
+                {t("about.whyWeBuiltText2")}
               </p>
             </div>
           </div>
@@ -54,28 +54,26 @@ const About = () => {
           {/* Visual Features Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
             <div className="space-y-6">
-              <h3 className="text-2xl font-bold text-foreground">Professional Assessment Platform</h3>
+              <h3 className="text-2xl font-bold text-foreground">{t("about.platformTitle")}</h3>
               <p className="text-foreground text-lg leading-relaxed">
-                Our platform combines cutting-edge technology with validated psychological frameworks 
-                to deliver professional-grade assessments that help individuals and organizations 
-                make informed decisions about personal and professional development.
+                {t("about.platformDescription")}
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <div className="flex items-center space-x-3">
                   <Brain className="w-6 h-6 text-primary" />
-                  <span className="text-sm font-medium text-foreground">AI-Powered</span>
+                  <span className="text-sm font-medium text-foreground">{t("about.aiPowered")}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Shield className="w-6 h-6 text-primary" />
-                  <span className="text-sm font-medium text-foreground">Secure Platform</span>
+                  <span className="text-sm font-medium text-foreground">{t("about.securePlatform")}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Users className="w-6 h-6 text-primary" />
-                  <span className="text-sm font-medium text-foreground">Team Analytics</span>
+                  <span className="text-sm font-medium text-foreground">{t("about.teamAnalytics")}</span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <Target className="w-6 h-6 text-primary" />
-                  <span className="text-sm font-medium text-foreground">Goal-Oriented</span>
+                  <span className="text-sm font-medium text-foreground">{t("about.goalOriented")}</span>
                 </div>
               </div>
             </div>
@@ -92,9 +90,9 @@ const About = () => {
         <div className="max-w-4xl mx-auto space-y-16">
           {/* Our Promise */}
           <div className="space-y-6">
-            <h3 className="text-2xl font-bold text-foreground">Our Promise</h3>
+            <h3 className="text-2xl font-bold text-foreground">{t("about.ourPromise")}</h3>
             <p className="text-foreground text-lg leading-relaxed">
-              We promise to always be honest about what our assessments can and cannot do. We're here to empower your personal development journey, not to diagnose or label you.
+              {t("about.promiseText")}
             </p>
           </div>
 
@@ -102,16 +100,16 @@ const About = () => {
           <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-8 space-y-6">
             <div className="flex items-center gap-3">
               <AlertTriangle className="w-6 h-6 text-destructive" />
-              <h3 className="text-2xl font-bold text-destructive">Disclaimer</h3>
+              <h3 className="text-2xl font-bold text-destructive">{t("about.disclaimer")}</h3>
             </div>
             <div className="space-y-4">
-              <h4 className="text-lg font-semibold text-foreground">Important Note</h4>
+              <h4 className="text-lg font-semibold text-foreground">{t("about.importantNote")}</h4>
               <div className="space-y-4 text-foreground leading-relaxed">
                 <p>
-                  The assessments and reports provided by Authencore Analytics are designed for educational and personal development purposes only. They are not clinical tools and should not be used to diagnose, treat, or manage any mental health condition.
+                  {t("about.disclaimerText1")}
                 </p>
                 <p>
-                  Our results are based on self-reported data and structured using open-source validated psychological frameworks interpreted through AI algorithms. If you have concerns about your mental health or wellbeing, we strongly encourage you to consult a qualified mental health professional or licensed psychologist.
+                  {t("about.disclaimerText2")}
                 </p>
               </div>
             </div>
@@ -122,7 +120,7 @@ const About = () => {
             <div className="flex items-center justify-center gap-2 text-foreground">
               <Sparkles className="w-5 h-5 text-primary" />
               <p className="text-lg font-medium">
-                Powered by AI and open-source psychology for human growth and clarity.
+                {t("about.footerText")}
               </p>
             </div>
           </div>
