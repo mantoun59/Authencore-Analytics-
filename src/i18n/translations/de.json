@@ -162,6 +162,23 @@
       "button": "Heute Beginnen"
     }
   },
+  "homepage": {
+    "howItWorks": {
+      "title": "Wie Es Funktioniert",
+      "step1": {
+        "title": "Wählen Sie Ihre Bewertung",
+        "description": "Wählen Sie aus unserer umfassenden Suite validierter psychometrischer Bewertungen, die für verschiedene Zwecke und berufliche Bedürfnisse entwickelt wurden."
+      },
+      "step2": {
+        "title": "Vervollständigen Sie die Bewertung",
+        "description": "Beantworten Sie durchdacht gestaltete Fragen in einer sicheren, benutzerfreundlichen Umgebung. Die meisten Bewertungen dauern 15-45 Minuten."
+      },
+      "step3": {
+        "title": "Erhalten Sie Ihre Ergebnisse",
+        "description": "Erhalten Sie detaillierte Einblicke, professionelle Berichte und personalisierte Empfehlungen zur Anleitung Ihrer persönlichen und beruflichen Entwicklung."
+      }
+    }
+  },
   "psychometrics": {
     "historicalFoundation": {
       "title": "Historische Grundlage",

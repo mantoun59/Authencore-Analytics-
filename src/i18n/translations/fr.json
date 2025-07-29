@@ -619,6 +619,23 @@
       "button": "Commencer Aujourd'hui"
     }
   },
+  "homepage": {
+    "howItWorks": {
+      "title": "Comment Ça Marche",
+      "step1": {
+        "title": "Choisissez Votre Évaluation",
+        "description": "Sélectionnez parmi notre suite complète d'évaluations psychométriques validées conçues pour différents besoins professionnels."
+      },
+      "step2": {
+        "title": "Complétez l'Évaluation",
+        "description": "Répondez à des questions soigneusement conçues dans un environnement sécurisé et convivial. La plupart des évaluations prennent 15-45 minutes."
+      },
+      "step3": {
+        "title": "Obtenez Vos Résultats",
+        "description": "Recevez des insights détaillés, des rapports professionnels et des recommandations personnalisées pour guider votre développement personnel et professionnel."
+      }
+    }
+  },
   "psychometrics": {
     "historicalFoundation": {
       "title": "Fondation Historique",

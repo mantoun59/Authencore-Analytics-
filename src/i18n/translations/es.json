@@ -176,6 +176,23 @@
       "button": "Comience Hoy"
     }
   },
+  "homepage": {
+    "howItWorks": {
+      "title": "Cómo Funciona",
+      "step1": {
+        "title": "Elija Su Evaluación",
+        "description": "Seleccione de nuestra suite completa de evaluaciones psicométricas validadas diseñadas para diferentes propósitos y necesidades profesionales."
+      },
+      "step2": {
+        "title": "Complete la Evaluación",
+        "description": "Responda preguntas cuidadosamente diseñadas en un entorno seguro y fácil de usar. La mayoría de las evaluaciones toman 15-45 minutos."
+      },
+      "step3": {
+        "title": "Obtenga Sus Resultados",
+        "description": "Reciba insights detallados, informes profesionales y recomendaciones personalizadas para guiar su desarrollo personal y profesional."
+      }
+    }
+  },
   "psychometrics": {
     "historicalFoundation": {
       "title": "Fundación Histórica",
