@@ -38,27 +38,27 @@ const FAQ = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <BookOpen className="h-5 w-5 text-primary" />
-                    Platform Overview
+                    {t("faqContent.platformOverview.title")}
                   </CardTitle>
                   <CardDescription>
-                    Learn about AuthenCore Analytics and our comprehensive assessment suite
+                    {t("faqContent.platformOverview.description")}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="what-is-authencore">
-                      <AccordionTrigger>What is AuthenCore Analytics?</AccordionTrigger>
+                      <AccordionTrigger>{t("faqContent.platformOverview.whatIsAuthencore")}</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>AuthenCore Analytics is a professional psychological assessment platform offering 10 scientifically validated assessments for individuals, employers, and partners.</p>
+                          <p>{t("faqContent.platformOverview.whatIsAuthencoreAnswer")}</p>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="p-4 bg-primary/5 rounded-lg">
-                              <h4 className="font-semibold mb-2">For Individuals</h4>
-                              <p className="text-sm text-muted-foreground">Comprehensive career discovery, personality insights, and personal development recommendations.</p>
+                              <h4 className="font-semibold mb-2">{t("faqContent.platformOverview.forIndividuals")}</h4>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.platformOverview.forIndividualsDesc")}</p>
                             </div>
                             <div className="p-4 bg-secondary/5 rounded-lg">
-                              <h4 className="font-semibold mb-2">For Organizations</h4>
-                              <p className="text-sm text-muted-foreground">Advanced talent assessment, team compatibility analysis, and leadership development tools.</p>
+                              <h4 className="font-semibold mb-2">{t("faqContent.platformOverview.forOrganizations")}</h4>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.platformOverview.forOrganizationsDesc")}</p>
                             </div>
                           </div>
                         </div>
@@ -66,17 +66,17 @@ const FAQ = () => {
                     </AccordionItem>
                     
                     <AccordionItem value="mission">
-                      <AccordionTrigger>Our Mission & Approach</AccordionTrigger>
+                      <AccordionTrigger>{t("faqContent.platformOverview.missionTitle")}</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p className="font-medium text-primary">"Measuring Minds. Shaping Futures."</p>
-                          <p>We combine cutting-edge psychometric science with advanced AI technology to provide:</p>
+                          <p className="font-medium text-primary">"{t("faqContent.platformOverview.missionTagline")}"</p>
+                          <p>{t("faqContent.platformOverview.missionDesc")}</p>
                           <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                            <li>Scientifically validated assessment instruments</li>
-                            <li>Advanced validity detection and quality assurance</li>
-                            <li>Personalized insights and development recommendations</li>
-                            <li>Professional-grade reporting and analytics</li>
-                            <li>Ethical and culturally sensitive assessment practices</li>
+                            <li>{t("faqContent.platformOverview.validatedInstruments")}</li>
+                            <li>{t("faqContent.platformOverview.validityDetection")}</li>
+                            <li>{t("faqContent.platformOverview.personalizedInsights")}</li>
+                            <li>{t("faqContent.platformOverview.professionalReporting")}</li>
+                            <li>{t("faqContent.platformOverview.ethicalPractices")}</li>
                           </ul>
                         </div>
                       </AccordionContent>
@@ -90,56 +90,56 @@ const FAQ = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-primary" />
-                    Assessment Information
+                    {t("faqContent.assessmentInfo.title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="assessment-types">
-                      <AccordionTrigger>What types of assessments do you offer?</AccordionTrigger>
+                      <AccordionTrigger>{t("faqContent.assessmentInfo.typesQuestion")}</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>We offer 10 comprehensive assessments covering different aspects of personality, career, and workplace dynamics:</p>
+                          <p>{t("faqContent.assessmentInfo.typesAnswer")}</p>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">CareerLaunch Assessment</h5>
-                              <p className="text-sm text-muted-foreground">Career discovery and planning</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.careerLaunchTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.careerLaunchDesc")}</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">CAIR+ Personality</h5>
-                              <p className="text-sm text-muted-foreground">Advanced personality analysis with cultural intelligence</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.cairPersonalityTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.cairPersonalityDesc")}</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">Stress Resilience</h5>
-                              <p className="text-sm text-muted-foreground">Burnout prevention and stress management</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.stressResilienceTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.stressResilienceDesc")}</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">Cultural Intelligence</h5>
-                              <p className="text-sm text-muted-foreground">Global workplace readiness and cross-cultural competency</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.culturalIntelligenceTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.culturalIntelligenceDesc")}</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">Communication Styles</h5>
-                              <p className="text-sm text-muted-foreground">Professional communication analysis and development</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.communicationStylesTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.communicationStylesDesc")}</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">Emotional Intelligence</h5>
-                              <p className="text-sm text-muted-foreground">EQ assessment and emotional development</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.emotionalIntelligenceTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.emotionalIntelligenceDesc")}</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">Authentic Leadership Assessment</h5>
-                              <p className="text-sm text-muted-foreground">Leadership style analysis and development</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.authenticLeadershipTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.authenticLeadershipDesc")}</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">Digital Wellness</h5>
-                              <p className="text-sm text-muted-foreground">Digital habits and technology relationship analysis</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.digitalWellnessTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.digitalWellnessDesc")}</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">Faith & Values</h5>
-                              <p className="text-sm text-muted-foreground">Values alignment and faith-based decision making</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.faithValuesTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.faithValuesDesc")}</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">Gen Z Workplace</h5>
-                              <p className="text-sm text-muted-foreground">Modern workplace readiness and generational preferences</p>
+                              <h5 className="font-medium">{t("faqContent.assessmentInfo.genZWorkplaceTitle")}</h5>
+                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.genZWorkplaceDesc")}</p>
                             </div>
                           </div>
                         </div>
@@ -147,61 +147,61 @@ const FAQ = () => {
                     </AccordionItem>
                     
                     <AccordionItem value="how-long">
-                      <AccordionTrigger>How long do assessments take?</AccordionTrigger>
+                      <AccordionTrigger>{t("faqContent.assessmentInfo.durationQuestion")}</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>Assessment duration varies by type and complexity:</p>
+                          <p>{t("faqContent.assessmentInfo.durationAnswer")}</p>
                           <div className="space-y-3">
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">Quick Assessments</span>
+                              <span className="font-medium">{t("faqContent.assessmentInfo.quickAssessments")}</span>
                               <Badge variant="outline">15-25 minutes</Badge>
                             </div>
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">Standard Assessments</span>
+                              <span className="font-medium">{t("faqContent.assessmentInfo.standardAssessments")}</span>
                               <Badge variant="outline">25-40 minutes</Badge>
                             </div>
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">Comprehensive Assessments</span>
+                              <span className="font-medium">{t("faqContent.assessmentInfo.comprehensiveAssessments")}</span>
                               <Badge variant="outline">45-60 minutes</Badge>
                             </div>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            All assessments can be paused and resumed within 24 hours of starting.
+                            {t("faqContent.assessmentInfo.pauseNote")}
                           </p>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
                     
                     <AccordionItem value="how-to-take">
-                      <AccordionTrigger>How do I take an assessment?</AccordionTrigger>
+                      <AccordionTrigger>{t("faqContent.assessmentInfo.howToTakeQuestion")}</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>Taking an assessment is simple and straightforward:</p>
+                          <p>{t("faqContent.assessmentInfo.howToTakeAnswer")}</p>
                           <ol className="space-y-3 text-sm">
                             <li className="flex items-start gap-2">
                               <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">1</span>
-                              <span>Select your desired assessment from our assessment catalog</span>
+                              <span>{t("faqContent.assessmentInfo.step1")}</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">2</span>
-                              <span>Complete the secure payment process</span>
+                              <span>{t("faqContent.assessmentInfo.step2")}</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">3</span>
-                              <span>Answer all questions honestly and thoughtfully</span>
+                              <span>{t("faqContent.assessmentInfo.step3")}</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">4</span>
-                              <span>Review your comprehensive results and download your PDF report</span>
+                              <span>{t("faqContent.assessmentInfo.step4")}</span>
                             </li>
                           </ol>
                           <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                            <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-1">Important Tips:</h5>
+                            <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-1">{t("faqContent.assessmentInfo.importantTips")}</h5>
                             <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                              <li>• Find a quiet environment with minimal distractions</li>
-                              <li>• Answer instinctively rather than overthinking responses</li>
-                              <li>• Complete in one sitting when possible for best results</li>
-                              <li>• Be honest - there are no right or wrong answers</li>
+                              <li>• {t("faqContent.assessmentInfo.tip1")}</li>
+                              <li>• {t("faqContent.assessmentInfo.tip2")}</li>
+                              <li>• {t("faqContent.assessmentInfo.tip3")}</li>
+                              <li>• {t("faqContent.assessmentInfo.tip4")}</li>
                             </ul>
                           </div>
                         </div>
@@ -209,30 +209,30 @@ const FAQ = () => {
                     </AccordionItem>
                     
                     <AccordionItem value="reports">
-                      <AccordionTrigger>What do I receive after completing an assessment?</AccordionTrigger>
+                      <AccordionTrigger>{t("faqContent.assessmentInfo.reportsQuestion")}</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>Upon completion, you receive a comprehensive report package:</p>
+                          <p>{t("faqContent.assessmentInfo.reportsAnswer")}</p>
                           <ul className="space-y-2">
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">Interactive online results with detailed explanations</span>
+                              <span className="text-sm">{t("faqContent.assessmentInfo.onlineResults")}</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">Professional PDF report with comprehensive analysis</span>
+                              <span className="text-sm">{t("faqContent.assessmentInfo.pdfReport")}</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">Personalized development recommendations</span>
+                              <span className="text-sm">{t("faqContent.assessmentInfo.developmentRecs")}</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">Percentile rankings and score interpretations</span>
+                              <span className="text-sm">{t("faqContent.assessmentInfo.percentileRankings")}</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">Career/workplace application insights</span>
+                              <span className="text-sm">{t("faqContent.assessmentInfo.careerInsights")}</span>
                             </li>
                           </ul>
                         </div>
@@ -247,33 +247,33 @@ const FAQ = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Settings className="h-5 w-5 text-primary" />
-                    Technical Support
+                    {t("faqContent.technicalSupport.title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="technical-requirements">
-                      <AccordionTrigger>What are the technical requirements?</AccordionTrigger>
+                      <AccordionTrigger>{t("faqContent.technicalSupport.requirementsQuestion")}</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>Our platform works on all modern devices and browsers:</p>
+                          <p>{t("faqContent.technicalSupport.requirementsAnswer")}</p>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                              <h5 className="font-medium">Supported Browsers</h5>
+                              <h5 className="font-medium">{t("faqContent.technicalSupport.supportedBrowsers")}</h5>
                               <ul className="text-sm text-muted-foreground space-y-1">
-                                <li>• Chrome (recommended)</li>
-                                <li>• Firefox</li>
-                                <li>• Safari</li>
-                                <li>• Edge</li>
+                                <li>• {t("faqContent.technicalSupport.chrome")}</li>
+                                <li>• {t("faqContent.technicalSupport.firefox")}</li>
+                                <li>• {t("faqContent.technicalSupport.safari")}</li>
+                                <li>• {t("faqContent.technicalSupport.edge")}</li>
                               </ul>
                             </div>
                             <div className="space-y-2">
-                              <h5 className="font-medium">Device Requirements</h5>
+                              <h5 className="font-medium">{t("faqContent.technicalSupport.deviceRequirements")}</h5>
                               <ul className="text-sm text-muted-foreground space-y-1">
-                                <li>• Stable internet connection</li>
-                                <li>• Modern smartphone/tablet/computer</li>
-                                <li>• JavaScript enabled</li>
-                                <li>• Cookies enabled</li>
+                                <li>• {t("faqContent.technicalSupport.stableConnection")}</li>
+                                <li>• {t("faqContent.technicalSupport.modernDevice")}</li>
+                                <li>• {t("faqContent.technicalSupport.javascriptEnabled")}</li>
+                                <li>• {t("faqContent.technicalSupport.cookiesEnabled")}</li>
                               </ul>
                             </div>
                           </div>
@@ -282,27 +282,27 @@ const FAQ = () => {
                     </AccordionItem>
                     
                     <AccordionItem value="support">
-                      <AccordionTrigger>How can I get help or support?</AccordionTrigger>
+                      <AccordionTrigger>{t("faqContent.technicalSupport.supportQuestion")}</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>We offer multiple support channels to assist you:</p>
+                          <p>{t("faqContent.technicalSupport.supportAnswer")}</p>
                           <div className="space-y-3">
                             <div className="p-4 border rounded-lg">
-                              <h5 className="font-medium mb-2">Email Support</h5>
+                              <h5 className="font-medium mb-2">{t("faqContent.technicalSupport.emailSupport")}</h5>
                               <p className="text-sm text-muted-foreground">
-                                Contact us at <a href="mailto:contact@authencore.org" className="text-primary hover:underline">contact@authencore.org</a> for any questions or issues.
+                                {t("faqContent.technicalSupport.emailSupportDesc")}
                               </p>
                             </div>
                             <div className="p-4 border rounded-lg">
-                              <h5 className="font-medium mb-2">Documentation</h5>
+                              <h5 className="font-medium mb-2">{t("faqContent.technicalSupport.documentation")}</h5>
                               <p className="text-sm text-muted-foreground">
-                                Comprehensive guides and documentation available in our download section.
+                                {t("faqContent.technicalSupport.documentationDesc")}
                               </p>
                             </div>
                             <div className="p-4 border rounded-lg">
-                              <h5 className="font-medium mb-2">Response Time</h5>
+                              <h5 className="font-medium mb-2">{t("faqContent.technicalSupport.responseTime")}</h5>
                               <p className="text-sm text-muted-foreground">
-                                We typically respond to support requests within 24 hours during business days.
+                                {t("faqContent.technicalSupport.responseTimeDesc")}
                               </p>
                             </div>
                           </div>
@@ -322,26 +322,26 @@ const FAQ = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <HelpCircle className="h-5 w-5 text-primary" />
-                    Quick Actions
+                    {t("faqContent.quickActions.title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Link to="/assessment">
                     <Button className="w-full justify-start" variant="outline">
                       <CheckCircle className="h-4 w-4 mr-2" />
-                      View All Assessments
+                      {t("faqContent.quickActions.viewAllAssessments")}
                     </Button>
                   </Link>
                   <Link to="/sample-reports">
                     <Button className="w-full justify-start" variant="outline">
                       <FileText className="h-4 w-4 mr-2" />
-                      Sample Reports
+                      {t("faqContent.quickActions.sampleReports")}
                     </Button>
                   </Link>
                   <Link to="/about">
                     <Button className="w-full justify-start" variant="outline">
                       <Users className="h-4 w-4 mr-2" />
-                      About Us
+                      {t("faqContent.quickActions.aboutUs")}
                     </Button>
                   </Link>
                 </CardContent>
@@ -352,47 +352,47 @@ const FAQ = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Download className="h-5 w-5 text-primary" />
-                    Downloads & Resources
+                    {t("faqContent.downloads.title")}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-sm text-muted-foreground">
-                    Access professional documentation, marketing materials, and assessment guides.
+                    {t("faqContent.downloads.description")}
                   </p>
                   
                   <div className="space-y-3">
                     <div className="p-3 border rounded-lg">
-                      <h5 className="font-medium text-sm mb-1">Assessment Guides</h5>
+                      <h5 className="font-medium text-sm mb-1">{t("faqContent.downloads.assessmentGuides")}</h5>
                       <p className="text-xs text-muted-foreground mb-2">
-                        Comprehensive guides for each assessment type
+                        {t("faqContent.downloads.assessmentGuidesDesc")}
                       </p>
                       <Link to="/marketing-materials">
                         <Button size="sm" variant="outline" className="w-full">
-                          Access Guides
+                          {t("faqContent.downloads.accessGuides")}
                         </Button>
                       </Link>
                     </div>
                     
                     <div className="p-3 border rounded-lg">
-                      <h5 className="font-medium text-sm mb-1">Marketing Materials</h5>
+                      <h5 className="font-medium text-sm mb-1">{t("faqContent.downloads.marketingMaterials")}</h5>
                       <p className="text-xs text-muted-foreground mb-2">
-                        Professional brochures and promotional content
+                        {t("faqContent.downloads.marketingMaterialsDesc")}
                       </p>
                       <Link to="/marketing-materials">
                         <Button size="sm" variant="outline" className="w-full">
-                          Download Materials
+                          {t("faqContent.downloads.downloadMaterials")}
                         </Button>
                       </Link>
                     </div>
                     
                     <div className="p-3 border rounded-lg">
-                      <h5 className="font-medium text-sm mb-1">Technical Documentation</h5>
+                      <h5 className="font-medium text-sm mb-1">{t("faqContent.downloads.technicalDocumentation")}</h5>
                       <p className="text-xs text-muted-foreground mb-2">
-                        API documentation and integration guides
+                        {t("faqContent.downloads.technicalDocumentationDesc")}
                       </p>
                       <Link to="/marketing-materials">
                         <Button size="sm" variant="outline" className="w-full">
-                          View Documentation
+                          {t("faqContent.downloads.viewDocumentation")}
                         </Button>
                       </Link>
                     </div>
@@ -402,11 +402,11 @@ const FAQ = () => {
                   
                   <div className="text-center">
                     <p className="text-xs text-muted-foreground mb-2">
-                      Need something specific?
+                      {t("faqContent.downloads.needSomethingSpecific")}
                     </p>
                     <a href="mailto:contact@authencore.org">
                       <Button size="sm" className="w-full">
-                        Contact Support
+                        {t("faqContent.downloads.contactSupport")}
                       </Button>
                     </a>
                   </div>
@@ -416,23 +416,23 @@ const FAQ = () => {
               {/* Popular Topics */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">Popular Topics</CardTitle>
+                  <CardTitle className="text-lg">{t("faqContent.popularTopics.title")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <Link to="/privacy" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • Privacy & Data Security
+                    • {t("faqContent.popularTopics.privacyDataSecurity")}
                   </Link>
                   <Link to="/sample-reports" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • Sample Assessment Reports
+                    • {t("faqContent.popularTopics.sampleReports")}
                   </Link>
                   <Link to="/assessment" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • Assessment Pricing
+                    • {t("faqContent.popularTopics.assessmentPricing")}
                   </Link>
                   <a href="mailto:contact@authencore.org" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • Business Partnerships
+                    • {t("faqContent.popularTopics.businessPartnerships")}
                   </a>
                   <Link to="/marketing-materials" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • Employer Solutions
+                    • {t("faqContent.popularTopics.employerSolutions")}
                   </Link>
                 </CardContent>
               </Card>
