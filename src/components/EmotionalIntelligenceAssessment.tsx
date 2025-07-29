@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -37,7 +38,19 @@ interface AssessmentResults {
 
 const EmotionalIntelligenceAssessment = ({ onComplete }: EmotionalIntelligenceAssessmentProps) => {
   const navigate = useNavigate();
-  const [currentLanguage, setCurrentLanguage] = useState<'es' | 'fr' | 'de'>('es');
+  const { i18n } = useTranslation();
+  
+  // Map main app languages to component languages, default to Spanish if not supported
+  const getComponentLanguage = (mainLang: string): 'es' | 'fr' | 'de' => {
+    switch (mainLang) {
+      case 'fr': return 'fr';
+      case 'de': return 'de';
+      case 'es': return 'es';
+      default: return 'es'; // Default to Spanish since English isn't available in this component
+    }
+  };
+  
+  const [currentLanguage, setCurrentLanguage] = useState<'es' | 'fr' | 'de'>(getComponentLanguage(i18n.language));
   const [currentStep, setCurrentStep] = useState<'info' | 'assessment' | 'results'>('info');
   const [currentDimension, setCurrentDimension] = useState(0);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -59,6 +72,11 @@ const EmotionalIntelligenceAssessment = ({ onComplete }: EmotionalIntelligenceAs
 
   const ui = emotionalIntelligenceTranslations.ui[currentLanguage];
   const questions = emotionalIntelligenceTranslations.questions;
+
+  // Update component language when main app language changes
+  useEffect(() => {
+    setCurrentLanguage(getComponentLanguage(i18n.language));
+  }, [i18n.language]);
 
   useEffect(() => {
     if (currentStep === 'assessment' && startTime === 0) {
