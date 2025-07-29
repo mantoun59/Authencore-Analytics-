@@ -8,20 +8,20 @@ const HowItWorks = () => {
   const steps = [
     {
       number: "1",
-      title: t("homepage.howItWorks.step1.title"),
-      description: t("homepage.howItWorks.step1.description"),
+      title: "Choose Your Assessment",
+      description: "Select from our range of scientifically validated psychometric assessments tailored to your needs.",
       icon: MousePointer
     },
     {
       number: "2", 
-      title: t("homepage.howItWorks.step2.title"),
-      description: t("homepage.howItWorks.step2.description"),
+      title: "Complete Assessment",
+      description: "Answer thoughtfully designed questions in a user-friendly interface that adapts to your pace.",
       icon: FileText
     },
     {
       number: "3",
-      title: t("homepage.howItWorks.step3.title"),
-      description: t("homepage.howItWorks.step3.description"),
+      title: "Get Insights",
+      description: "Receive detailed analysis and actionable recommendations to guide your personal and professional development.",
       icon: BarChart3
     }
   ];
@@ -39,7 +39,7 @@ const HowItWorks = () => {
         </div>
 
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-foreground mb-4">{t("homepage.howItWorks.title")}</h2>
+          <h2 className="text-4xl font-bold text-foreground mb-4">How It Works</h2>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-6xl mx-auto">

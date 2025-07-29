@@ -21,38 +21,38 @@ const Hero = () => {
             {/* Badge */}
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-primary/10 border border-primary/20">
               <Brain className="w-4 h-4 text-primary mr-2" />
-              <span className="text-sm font-medium text-primary">{t("hero.title")}</span>
+              <span className="text-sm font-medium text-primary">AuthenCore Analytics</span>
             </div>
 
             {/* Company Logo */}
             <div className="flex flex-col items-center mb-6">
               <LogoDisplay size="lg" showTagline={false} className="text-center" />
               <p className="text-lg text-foreground/70 italic mt-2">
-                {t("hero.tagline")}
+                Where data meets trust
               </p>
             </div>
 
             {/* Main heading */}
             <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-              {t("hero.title")}
+              Advanced AI-Powered Psychometrics
             </h1>
             
             {/* Subtitle */}
             <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
-              {t("hero.subtitle")}
+              World-class professional assessments with deep analysis and instant reporting
             </p>
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/assessment">
                 <Button size="lg" className="bg-primary hover:bg-primary/90 group">
-                  {t("hero.getStarted")}
+                  Get Started
                   <TrendingUp className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link to="/about">
                 <Button variant="outline" size="lg">
-                  {t("hero.learnMore")}
+                  Learn More
                 </Button>
               </Link>
             </div>
@@ -60,11 +60,11 @@ const Hero = () => {
             {/* Trust indicators */}
             <div className="flex items-center space-x-2 text-sm text-muted-foreground pt-4">
               <Shield className="w-4 h-4" />
-              <span>{t("features.secure.title")}</span>
+              <span>Secure & Private</span>
               <span>•</span>
-              <span>{t("landing.feature1Title")}</span>
+              <span>Scientifically Validated</span>
               <span>•</span>
-              <span>{t("features.comprehensive.title")}</span>
+              <span>Comprehensive Assessments</span>
             </div>
           </div>
 
@@ -84,15 +84,15 @@ const Hero = () => {
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <div className="text-2xl font-bold text-primary mb-1">10</div>
-                    <div className="text-xs text-muted-foreground">{t("assessments.title")}</div>
+                    <div className="text-xs text-muted-foreground">Our Assessments</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-primary mb-1">{t("landing.feature1Title")}</div>
-                    <div className="text-xs text-muted-foreground">{t("features.aiPowered.description")}</div>
+                    <div className="text-2xl font-bold text-primary mb-1">Scientifically Validated</div>
+                    <div className="text-xs text-muted-foreground">Advanced machine learning algorithms provide deep insights and personalized recommendations.</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-primary mb-1">{t("features.secure.title")}</div>
-                    <div className="text-xs text-muted-foreground">{t("features.secure.description")}</div>
+                    <div className="text-2xl font-bold text-primary mb-1">Secure & Private</div>
+                    <div className="text-xs text-muted-foreground">Enterprise-grade encryption and strict privacy policies protect all user data.</div>
                   </div>
                 </div>
               </div>
