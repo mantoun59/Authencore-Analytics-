@@ -9,38 +9,38 @@ const Features = () => {
   const features = [
     {
       icon: Brain,
-      title: "Comprehensive Assessments",
-      description: "Wide range of scientifically validated psychometric assessments for various purposes.",
+      title: t("features.comprehensive.title"),
+      description: t("features.comprehensive.description"),
       gradient: "from-blue-500 to-purple-600"
     },
     {
       icon: FileText,
-      title: "Professional Reports",
-      description: "Detailed assessment reports with actionable insights.",
+      title: t("features.reports.title"),
+      description: t("features.reports.description"),
       gradient: "from-green-500 to-teal-600"
     },
     {
       icon: Shield,
-      title: "Secure & Private",
-      description: "Enterprise-grade encryption and strict privacy policies protect all user data.",
+      title: t("features.secure.title"),
+      description: t("features.secure.description"),
       gradient: "from-orange-500 to-red-600"
     },
     {
       icon: Zap,
-      title: "Real-Time Reporting",
-      description: "Instant, detailed reports generated immediately upon assessment completion.",
+      title: t("features.realTime.title"),
+      description: t("features.realTime.description"),
       gradient: "from-yellow-500 to-orange-600"
     },
     {
       icon: Users,
-      title: "AI-Powered Analysis",
-      description: "Advanced machine learning algorithms provide deep insights and personalized recommendations.",
+      title: t("features.aiPowered.title"),
+      description: t("features.aiPowered.description"),
       gradient: "from-purple-500 to-pink-600"
     },
     {
       icon: Target,
-      title: "Comprehensive Assessments",
-      description: "Wide range of scientifically validated psychometric assessments for various purposes.",
+      title: t("features.comprehensive.title"),
+      description: t("features.comprehensive.description"),
       gradient: "from-indigo-500 to-blue-600"
     }
   ];
@@ -50,10 +50,10 @@ const Features = () => {
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-primary bg-clip-text text-transparent">
-            Key Features
+            {t("features.title")}
           </h2>
           <p className="text-xl text-foreground max-w-2xl mx-auto">
-            Comprehensive assessment tools for modern professional development
+            {t("features.subtitle")}
           </p>
         </div>
 
@@ -85,19 +85,19 @@ const Features = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="order-2 lg:order-1">
               <h3 className="text-3xl font-bold mb-6 text-foreground">
-                Dashboard
+                {t("navigation.dashboard")}
               </h3>
               <p className="text-lg text-foreground mb-6 leading-relaxed">
-                Instant, detailed reports generated immediately upon assessment completion.
+                {t("features.realTime.description")}
               </p>
               <div className="flex flex-wrap gap-4">
                 <div className="flex items-center space-x-2">
                   <BarChart3 className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-foreground">Real-Time Reporting</span>
+                  <span className="text-sm text-foreground">{t("features.realTime.title")}</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <Award className="w-5 h-5 text-primary" />
-                  <span className="text-sm text-foreground">Reports</span>
+                  <span className="text-sm text-foreground">{t("reports.title")}</span>
                 </div>
               </div>
             </div>
@@ -116,23 +116,23 @@ const Features = () => {
         {/* Additional stats section */}
         <div className="mt-20 text-center">
           <div className="bg-card/80 backdrop-blur-sm rounded-2xl p-8 shadow-card border border-border/50">
-            <h3 className="text-2xl font-bold mb-8 text-foreground">Categories</h3>
+            <h3 className="text-2xl font-bold mb-8 text-foreground">{t("assessmentPages.categories")}</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Personality</div>
-                <div className="text-sm text-foreground">Our Assessments</div>
+                <div className="text-2xl font-bold text-primary mb-1">{t("assessmentPages.personality")}</div>
+                <div className="text-sm text-foreground">{t("assessments.title")}</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Skills</div>
-                <div className="text-sm text-foreground">Testing</div>
+                <div className="text-2xl font-bold text-primary mb-1">{t("assessmentPages.skills")}</div>
+                <div className="text-sm text-foreground">{t("common.test")}</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">Communication</div>
-                <div className="text-sm text-foreground">Detailed Results</div>
+                <div className="text-2xl font-bold text-primary mb-1">{t("assessmentPages.communication")}</div>
+                <div className="text-sm text-foreground">{t("reports.detailedResults")}</div>
               </div>
               <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">About AuthenCore Analytics</div>
-                <div className="text-sm text-foreground">Development Plan</div>
+                <div className="text-2xl font-bold text-primary mb-1">{t("navigation.about")}</div>
+                <div className="text-sm text-foreground">{t("reports.developmentPlan")}</div>
               </div>
             </div>
           </div>
