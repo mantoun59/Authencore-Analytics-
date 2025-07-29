@@ -823,6 +823,23 @@
     "descriptionStress": "Assess your stress resilience and develop effective coping strategies for challenging situations.",
     "descriptionFaith": "Explore how your personal values and beliefs align with your professional goals and workplace culture."
   },
+  "homepage": {
+    "howItWorks": {
+      "title": "How It Works",
+      "step1": {
+        "title": "Choose Your Assessment",
+        "description": "Select from our comprehensive suite of validated psychometric assessments designed for different purposes and professional needs."
+      },
+      "step2": {
+        "title": "Complete the Assessment",
+        "description": "Answer thoughtfully designed questions in a secure, user-friendly environment. Most assessments take 15-45 minutes to complete."
+      },
+      "step3": {
+        "title": "Get Your Results",
+        "description": "Receive detailed insights, professional reports, and personalized recommendations to guide your personal and professional development."
+      }
+    }
+  },
   "psychometrics": {
     "historicalFoundation": {
       "title": "Historical Foundation",
