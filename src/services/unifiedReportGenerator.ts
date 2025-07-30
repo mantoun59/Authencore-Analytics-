@@ -400,13 +400,22 @@ export class UnifiedReportGenerator {
     const title = this.getReportTitle(config.assessmentType, config.reportType);
     const company = config.branding?.company || 'AuthenCore Analytics';
     
+    // Debug logging
+    console.log('🔍 Building header with branding:', {
+      logo: config.branding?.logo,
+      company: company,
+      reportType: config.reportType,
+      assessmentType: config.assessmentType
+    });
+    
     return `
       <div class="header">
         ${config.branding?.logo ? `
           <div style="text-align: center; margin-bottom: 20px;">
-            <img src="${config.branding.logo}" alt="Company Logo" style="max-height: 80px; max-width: 200px;">
+            <img src="${config.branding.logo}" alt="Company Logo" style="max-height: 80px; max-width: 200px; border: 2px solid red;">
+            <div style="font-size: 12px; color: red;">DEBUG: Logo path = ${config.branding.logo}</div>
           </div>
-        ` : ''}
+        ` : `<div style="color: red; text-align: center;">DEBUG: No logo found in branding config</div>`}
         <h1>${title}</h1>
         <div class="subtitle">Professional Assessment Report • ${company}</div>
         ${config.reportType === 'employer' ? `
