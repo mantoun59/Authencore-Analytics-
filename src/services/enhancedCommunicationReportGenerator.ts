@@ -55,10 +55,12 @@ export class EnhancedCommunicationReportGenerator {
         includeRecommendations: true,
         includeActionPlan: true,
         branding: {
+          logo: '/final-logo.png',
           colors: {
             primary: '#4F46E5',
             secondary: '#7C3AED'
-          }
+          },
+          company: 'AuthenCore Analytics'
         }
       };
 
@@ -81,10 +83,12 @@ export class EnhancedCommunicationReportGenerator {
         includeRecommendations: true,
         includeActionPlan: false,
         branding: {
+          logo: '/final-logo.png',
           colors: {
             primary: '#059669',
             secondary: '#10B981'
-          }
+          },
+          company: 'AuthenCore Analytics'
         }
       };
 

@@ -79,7 +79,15 @@ export class ConsolidatedReportService {
         template: 'standard',
         includeCharts: false,
         includeRecommendations: true,
-        includeActionPlan: config.type === 'candidate'
+        includeActionPlan: config.type === 'candidate',
+        branding: {
+          logo: '/final-logo.png',
+          colors: {
+            primary: '#008080',
+            secondary: '#20B2AA'
+          },
+          company: 'AuthenCore Analytics'
+        }
       };
 
       await unifiedReportGenerator.generateReport(reportConfig);

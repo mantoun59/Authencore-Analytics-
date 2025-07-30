@@ -131,7 +131,7 @@ const SampleReports = () => {
         return;
       }
 
-      // For other assessment types, use unified report generator
+      // For other assessment types, use unified report generator with consistent branding
       const unifiedData = convertToUnifiedFormat(sampleData, selectedAssessment);
       const config = {
         assessmentType: selectedAssessment,
