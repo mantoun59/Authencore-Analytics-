@@ -494,6 +494,13 @@ const SampleReports = () => {
               'Client Relations': { score: 85, description: 'High empathy creates strong client connections' },
               'Conflict Resolution': { score: 78, description: 'Good emotional regulation supports mediation skills' },
               'Change Management': { score: 75, description: 'Self-awareness helps navigate organizational changes' }
+            },
+            employerDistortion: {
+              'Emotional Authenticity': 'High - Genuine emotional responses indicate authentic self-awareness',
+              'Empathy Inflation': 'Low risk - Empathy scores align with behavioral indicators',
+              'Social Desirability': 'Moderate - Some tendency to present as emotionally mature, within normal range',
+              'Self-Report Accuracy': 'High - Emotional intelligence responses show good self-insight',
+              'Response Validity': 'Excellent - All emotional intelligence validity measures passed'
             }
           },
           'leadership': {
@@ -509,6 +516,13 @@ const SampleReports = () => {
               'Team Development': { score: 88, description: 'Exceptional team building creates high-performance cultures' },
               'Change Leadership': { score: 75, description: 'Solid foundation for leading organizational transformations' },
               'Crisis Management': { score: 72, description: 'Developing skills for high-pressure decision making' }
+            },
+            employerDistortion: {
+              'Leadership Inflation': 'Low risk - Leadership scores supported by behavioral evidence',
+              'Authority Bias': 'Moderate - Some tendency to overstate leadership experience, monitored',
+              'Influence Accuracy': 'High - Influence patterns align with reported capabilities',
+              'Decision-Making Realism': 'High - Realistic assessment of decision-making abilities',
+              'Validity Indicators': 'All leadership assessment validity checks passed'
             }
           },
           'genz': {
@@ -524,6 +538,13 @@ const SampleReports = () => {
               'Innovation Projects': { score: 85, description: 'Strong technological foundation supports innovation initiatives' },
               'Social Impact Roles': { score: 88, description: 'High purpose alignment drives engagement in meaningful work' },
               'Rapid Skill Acquisition': { score: 87, description: 'Learning agility enables quick adaptation to new requirements' }
+            },
+            employerDistortion: {
+              'Digital Competency Accuracy': 'Very High - Digital skills demonstrated through assessment performance',
+              'Generation Bias': 'Low risk - Age-appropriate expectations without overstating capabilities',
+              'Purpose Authenticity': 'High - Values alignment supported by consistent response patterns',
+              'Learning Agility Claims': 'High - Learning orientation validated through behavioral indicators',
+              'Technology Assessment Validity': 'Excellent - All digital fluency measures show high reliability'
             }
           }
         };
@@ -539,6 +560,12 @@ const SampleReports = () => {
             'Professional Context 1': { score: 78, description: 'Good effectiveness in primary professional scenarios' },
             'Professional Context 2': { score: 82, description: 'Strong performance in collaborative work environments' },
             'Professional Context 3': { score: 75, description: 'Solid foundation for continued skill development' }
+          },
+          employerDistortion: {
+            'Assessment Authenticity': 'High - Consistent response patterns indicate genuine engagement',
+            'Professional Presentation': 'Moderate - Appropriate level of positive self-presentation',
+            'Response Reliability': 'High - Valid and reliable assessment outcomes',
+            'Hiring Suitability': 'Excellent - Results suitable for employment decision-making'
           }
         };
 
@@ -571,7 +598,7 @@ const SampleReports = () => {
             'Cultural Fit': 'Good - Demonstrates values alignment and adaptability',
             'Growth Potential': 'High - Shows capacity for skill development and advancement'
           },
-          distortionAnalysis: {
+          distortionAnalysis: selectedProfile.employerDistortion || {
             'Overall Authenticity': 'High - Consistent and genuine response patterns',
             'Social Desirability': 'Moderate - Appropriate professional presentation',
             'Response Consistency': 'High - Reliable and valid assessment results',
