@@ -112,38 +112,96 @@ const SampleReports = () => {
       // Use HTML report generator for ALL assessment types including communication
       const { generateHtmlReport } = await import('@/utils/htmlReportGenerator');
       
-      const reportData = {
-        assessmentType: getAssessmentDisplayName(selectedAssessment),
-        reportType: reportType === 'candidate' ? 'standard' as const : 'employer' as const,
-        userInfo: {
-          name: sampleData.candidateInfo.name,
-          email: sampleData.candidateInfo.email,
-          assessmentDate: sampleData.candidateInfo.completionDate,
-          questionsAnswered: 60,
-          timeSpent: '15 minutes',
-          reliabilityScore: 92,
-          reportId: `SAMPLE-${selectedAssessment.toUpperCase()}-${Date.now()}`
-        },
-        overallScore: sampleData.executiveSummary?.overallScore || 75,
-        dimensions: Object.entries(sampleData.dimensionScores || {}).map(([key, score]: [string, any]) => ({
-          name: key.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
-          score: typeof score === 'object' ? score.score : score,
-          level: (typeof score === 'object' ? score.score : score) >= 70 ? 'High' : 
-                 (typeof score === 'object' ? score.score : score) >= 40 ? 'Moderate' : 'Low'
-        })),
-        strengths: sampleData.executiveSummary?.topStrengths || [],
-        developmentAreas: sampleData.executiveSummary?.keyDevelopmentAreas || [],
-        recommendations: sampleData.executiveSummary?.recommendedNextSteps || [],
-        careerMatches: (sampleData as any).careerMatches || (sampleData as any).careerRecommendations || [],
-        branding: {
-          logo: '/final-logo.png',
-          colors: {
-            primary: '#008080',
-            secondary: '#20B2AA'
+      // Communication-specific data mapping
+      let reportData;
+      if (selectedAssessment === 'communication' || selectedAssessment === 'communication-styles') {
+        reportData = {
+          assessmentType: 'Communication Styles Assessment',
+          reportType: reportType === 'candidate' ? 'standard' as const : 'employer' as const,
+          userInfo: {
+            name: 'Sarah Johnson',
+            email: 'sarah.johnson@example.com',
+            assessmentDate: new Date().toLocaleDateString(),
+            questionsAnswered: 75,
+            timeSpent: '18 minutes',
+            reliabilityScore: 94,
+            reportId: `COMM-${Date.now()}`
           },
-          company: 'AuthenCore Analytics'
-        }
-      };
+          overallScore: 77,
+          dimensions: [
+            { name: 'Assertiveness', score: 78, level: 'High' },
+            { name: 'Expressiveness', score: 85, level: 'Very High' },
+            { name: 'Information Processing', score: 72, level: 'High' },
+            { name: 'Channel Preferences', score: 80, level: 'High' },
+            { name: 'Listening Patterns', score: 75, level: 'High' },
+            { name: 'Influence Strategies', score: 82, level: 'Very High' },
+            { name: 'Conflict Communication', score: 68, level: 'Moderate' }
+          ],
+          strengths: [
+            'Highly expressive and engaging communication style',
+            'Effective influence and persuasion techniques',
+            'Adapts well to different communication channels'
+          ],
+          developmentAreas: [
+            'Conflict resolution and difficult conversations',
+            'Direct communication in challenging situations',
+            'Balancing assertiveness with empathy'
+          ],
+          recommendations: [
+            'Practice active listening techniques in team meetings',
+            'Develop conflict mediation skills through training',
+            'Work on direct feedback delivery methods'
+          ],
+          careerMatches: [
+            'Team Lead/Supervisor roles',
+            'Customer relationship management',
+            'Training and development positions',
+            'Sales and business development'
+          ],
+          branding: {
+            logo: '/final-logo.png',
+            colors: {
+              primary: '#008080',
+              secondary: '#20B2AA'
+            },
+            company: 'AuthenCore Analytics'
+          }
+        };
+      } else {
+        // Generic data for other assessments
+        reportData = {
+          assessmentType: getAssessmentDisplayName(selectedAssessment),
+          reportType: reportType === 'candidate' ? 'standard' as const : 'employer' as const,
+          userInfo: {
+            name: sampleData.candidateInfo.name,
+            email: sampleData.candidateInfo.email,
+            assessmentDate: sampleData.candidateInfo.completionDate,
+            questionsAnswered: 60,
+            timeSpent: '15 minutes',
+            reliabilityScore: 92,
+            reportId: `SAMPLE-${selectedAssessment.toUpperCase()}-${Date.now()}`
+          },
+          overallScore: sampleData.executiveSummary?.overallScore || 75,
+          dimensions: Object.entries(sampleData.dimensionScores || {}).map(([key, score]: [string, any]) => ({
+            name: key.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+            score: typeof score === 'object' ? score.score : score,
+            level: (typeof score === 'object' ? score.score : score) >= 70 ? 'High' : 
+                   (typeof score === 'object' ? score.score : score) >= 40 ? 'Moderate' : 'Low'
+          })),
+          strengths: sampleData.executiveSummary?.topStrengths || [],
+          developmentAreas: sampleData.executiveSummary?.keyDevelopmentAreas || [],
+          recommendations: sampleData.executiveSummary?.recommendedNextSteps || [],
+          careerMatches: (sampleData as any).careerMatches || (sampleData as any).careerRecommendations || [],
+          branding: {
+            logo: '/final-logo.png',
+            colors: {
+              primary: '#008080',
+              secondary: '#20B2AA'
+            },
+            company: 'AuthenCore Analytics'
+          }
+        };
+      }
 
       await generateHtmlReport(reportData);
       toast.success(`Sample ${reportType} report generated successfully!`);
