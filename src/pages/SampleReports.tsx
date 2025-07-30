@@ -1054,7 +1054,7 @@ const SampleReports = () => {
       candidateInfo: sampleData.candidateInfo,
       overallScore: sampleData.overallScore || 75,
       overallPercentile: sampleData.overallPercentile || 75,
-      dimensions: Object.entries(sampleData.scores || {}).map(([key, score]: [string, any]) => ({
+      dimensions: Object.entries(sampleData.dimensionScores || sampleData.scores || {}).map(([key, score]: [string, any]) => ({
         key,
         name: key.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
         score: typeof score === 'object' ? score.score : score,
