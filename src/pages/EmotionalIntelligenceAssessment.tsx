@@ -15,6 +15,7 @@ import { useEmotionalIntelligenceScoring } from '@/hooks/useEmotionalIntelligenc
 import { emotionalIntelligenceQuestions } from '@/data/emotionalIntelligenceQuestions';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { generateEmotionalIntelligenceReport } from '@/services/emotionalIntelligenceReportGenerator';
 
 interface UserProfile {
   name: string;
@@ -86,33 +87,42 @@ export default function EmotionalIntelligenceAssessment() {
     }
   };
 
-  const generatePDFReport = async () => {
+  const generatePDFReport = async (reportType: 'candidate' | 'employer' = 'candidate') => {
     try {
       const reportData = {
-        assessmentType: 'emotional-intelligence',
-        results: results,
         candidateInfo: {
           name: userProfile.name,
           email: userProfile.email,
           position: userProfile.position,
           organization: userProfile.organization,
-          date: new Date().toLocaleDateString()
-        }
+          assessmentDate: new Date().toLocaleDateString()
+        },
+        results: results,
+        reportType: reportType
       };
 
-      const response = await supabase.functions.invoke('generate-pdf-report', {
-        body: reportData
-      });
-
-      if (response.data) {
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(response.data);
-          newWindow.document.close();
-        }
+      const htmlContent = generateEmotionalIntelligenceReport(reportData);
+      
+      // Open in new window
+      const reportWindow = window.open('', '_blank', 'width=900,height=700');
+      if (!reportWindow) {
+        throw new Error('Unable to open report window. Please allow popups for this site.');
       }
+      
+      reportWindow.document.write(htmlContent);
+      reportWindow.document.close();
+      
+      // Auto-focus the window
+      reportWindow.onload = () => {
+        reportWindow.focus();
+      };
+
+      toast({
+        title: "Report Generated!",
+        description: "Your Emotional Intelligence report has been opened in a new window.",
+      });
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error('Error generating report:', error);
       toast({
         title: "Error",
         description: "There was an error generating your report. Please try again.",
@@ -422,39 +432,44 @@ export default function EmotionalIntelligenceAssessment() {
                   </div>
                 ) : (
                   <>
+                    <div className="text-center mb-6">
+                      <div className="text-4xl font-bold text-rose-600 mb-2">{results?.overallScore}%</div>
+                      <p className="text-lg text-muted-foreground">Overall Emotional Intelligence Score</p>
+                    </div>
+                    
                     <div className="grid md:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <h3 className="text-xl font-semibold text-rose-700">Self-Awareness:</h3>
-                        <Badge className="bg-rose-100 border-rose-300 text-rose-700">{results?.selfAwareness}</Badge>
-                        <p className="text-rose-600">Understanding your own emotions and how they affect others.</p>
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="text-xl font-semibold text-rose-700">Self-Regulation:</h3>
-                        <Badge className="bg-rose-100 border-rose-300 text-rose-700">{results?.selfRegulation}</Badge>
-                        <p className="text-rose-600">Managing your emotions and impulses effectively.</p>
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="text-xl font-semibold text-rose-700">Social Awareness:</h3>
-                        <Badge className="bg-rose-100 border-rose-300 text-rose-700">{results?.socialAwareness}</Badge>
-                        <p className="text-rose-600">Recognizing and understanding the emotions of others.</p>
-                      </div>
-                      <div className="space-y-2">
-                        <h3 className="text-xl font-semibold text-rose-700">Relationship Management:</h3>
-                        <Badge className="bg-rose-100 border-rose-300 text-rose-700">{results?.relationshipManagement}</Badge>
-                        <p className="text-rose-600">Building and maintaining positive relationships.</p>
-                      </div>
+                      {Object.entries(results?.scores || {}).map(([dimension, score]: [string, any]) => (
+                        <div key={dimension} className="space-y-2">
+                          <h3 className="text-xl font-semibold text-rose-700">
+                            {dimension.charAt(0).toUpperCase() + dimension.slice(1).replace(/([A-Z])/g, ' $1')}:
+                          </h3>
+                          <Badge className={`${
+                            score.level === 'High' ? 'bg-green-100 border-green-300 text-green-700' :
+                            score.level === 'Medium' ? 'bg-yellow-100 border-yellow-300 text-yellow-700' :
+                            'bg-red-100 border-red-300 text-red-700'
+                          }`}>
+                            {score.percentage}% - {score.level}
+                          </Badge>
+                          <p className="text-sm text-rose-600">{score.interpretation}</p>
+                        </div>
+                      ))}
                     </div>
-                    <div className="space-y-4">
-                      <h3 className="text-xl font-semibold text-rose-700">Overall Emotional Intelligence:</h3>
-                      <Badge className="bg-rose-200 border-rose-400 text-rose-800 text-lg font-bold">{results?.overallEQ}</Badge>
-                      <p className="text-rose-600">A comprehensive measure of your emotional intelligence abilities.</p>
+                    
+                    <div className="flex gap-4">
+                      <Button
+                        className="flex-1 bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600"
+                        onClick={() => generatePDFReport('candidate')}
+                      >
+                        Generate Personal Report
+                      </Button>
+                      <Button
+                        variant="outline"
+                        className="flex-1 border-rose-200 text-rose-600 hover:bg-rose-50"
+                        onClick={() => generatePDFReport('employer')}
+                      >
+                        Generate Employer Report
+                      </Button>
                     </div>
-                    <Button
-                      className="w-full bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600"
-                      onClick={generatePDFReport}
-                    >
-                      Generate PDF Report
-                    </Button>
                   </>
                 )}
               </CardContent>

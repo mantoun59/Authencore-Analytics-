@@ -104,11 +104,18 @@ export const useEmotionalIntelligenceScoring = () => {
     const dimensions = ['selfAwareness', 'selfRegulation', 'motivation', 'empathy', 'socialSkills'];
     const scores: EmotionalIntelligenceScores = {} as EmotionalIntelligenceScores;
     
-    // Calculate scores for each dimension
+    // Calculate scores for each dimension (now 14 questions each instead of 12)
     dimensions.forEach((dimension, dimensionIndex) => {
-      const dimensionResponses = responses.slice(dimensionIndex * 12, (dimensionIndex + 1) * 12);
-      const rawScore = dimensionResponses.reduce((sum, response) => sum + response, 0);
-      const maxScore = 60; // 12 questions × 5 max points
+      const dimensionResponses = responses.slice(dimensionIndex * 14, (dimensionIndex + 1) * 14);
+      
+      // Handle reverse scoring - questions 12 and 13 (indices 12, 13) are reverse-scored
+      const processedResponses = dimensionResponses.map((response, index) => {
+        const isReverse = index === 12 || index === 13; // Last 2 questions are reverse-scored
+        return isReverse ? (6 - response) : response; // Reverse 1-5 scale to 5-1
+      });
+      
+      const rawScore = processedResponses.reduce((sum, response) => sum + response, 0);
+      const maxScore = 70; // 14 questions × 5 max points
       const percentage = Math.round((rawScore / maxScore) * 100);
       
       let level: 'Low' | 'Medium' | 'High';
@@ -126,7 +133,7 @@ export const useEmotionalIntelligenceScoring = () => {
     
     // Calculate overall score
     const totalRaw = Object.values(scores).reduce((sum, score) => sum + score.raw, 0);
-    const totalMax = 300; // 60 questions × 5 max points
+    const totalMax = 350; // 70 questions × 5 max points
     const overallScore = Math.round((totalRaw / totalMax) * 100);
     
     // Generate recommendations for low-scoring dimensions
