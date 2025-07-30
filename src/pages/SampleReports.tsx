@@ -1808,6 +1808,64 @@ const SampleReports = () => {
   const getSampleEmployerReport = (assessmentType: string) => {
     const candidateReport = getSampleCandidateReport(assessmentType);
     
+    // Faith-specific employer data for FVAI
+    if (assessmentType === 'faith-values') {
+      const fvaiEmployerSpecific = {
+        riskAssessment: {
+          hiringRisk: 'Low' as const,
+          successProbability: 88,
+          retentionRisk: 'Low' as const,
+          rampUpTime: '1-2 months',
+          culturalFitRisk: 'Minimal'
+        },
+        fitAnalysis: {
+          culturalFit: 92,
+          roleAlignment: 88,
+          growthPotential: 91,
+          valuesAlignment: 94,
+          managerialNeeds: [
+            'Purpose-driven leadership approach with clear mission connection',
+            'Opportunities for meaningful community impact and service',
+            'Values-based decision making framework and support',
+            'Professional development aligned with spiritual growth'
+          ]
+        },
+        interviewGuide: {
+          recommendedQuestions: [
+            'Describe a time when your personal values guided a difficult workplace decision',
+            'How do you approach conflicts between business objectives and ethical principles?',
+            'Tell me about a situation where you had to serve others while facing personal challenges',
+            'What role does faith or spirituality play in your professional motivation?',
+            'How do you handle situations where organizational culture conflicts with your values?'
+          ],
+          areasToExplore: [
+            'Alignment between personal values and organizational mission',
+            'Approach to ethical decision-making under pressure',
+            'Leadership style in faith-based or values-driven contexts',
+            'Ability to navigate secular and faith-based environments',
+            'Commitment to service and community impact'
+          ],
+          redFlags: [
+            'Significant misalignment between stated values and organizational culture',
+            'Difficulty articulating how faith influences professional decisions',
+            'Inflexibility in adapting to diverse workplace environments',
+            'Lack of clear examples of service-oriented leadership'
+          ]
+        },
+        onboardingRecommendations: [
+          'Connect new hire with organizational mission and values from day one',
+          'Assign mentor who shares similar values or faith background',
+          'Provide opportunities for community service and mission-driven projects',
+          'Establish clear expectations for values-based decision making',
+          'Create pathways for spiritual/personal growth alongside professional development',
+          'Connect with employee resource groups or faith-based networks within organization'
+        ]
+      };
+      
+      return { ...candidateReport, ...fvaiEmployerSpecific };
+    }
+    
+    // Generic employer data for other assessments
     const employerSpecific = {
       riskAssessment: {
         hiringRisk: 'Low' as const,
