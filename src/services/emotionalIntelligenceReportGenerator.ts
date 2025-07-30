@@ -470,7 +470,10 @@ export const generateEmotionalIntelligenceReport = (data: EmotionalIntelligenceR
         <button class="print-button" onclick="window.print()">🖨️ Print Report</button>
         
         <div class="report-header">
-            <img src="/final-logo.png" alt="AuthenCore Analytics" class="logo" />
+            <div class="text-logo">
+                <div style="font-size: 2rem; font-weight: 800; margin-bottom: 10px; color: white;">AuthenCore Analytics</div>
+                <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 20px;">Professional Assessment Solutions</div>
+            </div>
             <h1 class="report-title">Emotional Intelligence Assessment</h1>
             <p class="report-subtitle">${reportType === 'employer' ? 'Employer Hiring Report' : 'Personal Development Report'}</p>
         </div>
