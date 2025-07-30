@@ -129,29 +129,52 @@ const SampleReports = () => {
           },
           overallScore: 77,
           dimensions: [
-            { name: 'Assertiveness', score: 78, level: 'High' },
-            { name: 'Expressiveness', score: 85, level: 'Very High' },
-            { name: 'Information Processing', score: 72, level: 'High' },
-            { name: 'Channel Preferences', score: 80, level: 'High' },
-            { name: 'Listening Patterns', score: 75, level: 'High' },
-            { name: 'Influence Strategies', score: 82, level: 'Very High' },
-            { name: 'Conflict Communication', score: 68, level: 'Moderate' }
+            { name: 'Assertiveness', score: 78, level: 'High', description: 'Your tendency to express opinions directly and take charge in conversations. High assertiveness indicates comfort with leading discussions and making decisions.' },
+            { name: 'Expressiveness', score: 85, level: 'Very High', description: 'Your use of emotional expression, storytelling, and engaging communication. Very high expressiveness shows natural ability to captivate and motivate others.' },
+            { name: 'Information Processing', score: 72, level: 'High', description: 'Your preference for detailed analysis versus quick decision-making. High processing indicates thorough consideration of information before responding.' },
+            { name: 'Channel Preferences', score: 80, level: 'High', description: 'Your adaptability across different communication mediums (verbal, written, digital). High flexibility shows comfort with various communication formats.' },
+            { name: 'Listening Patterns', score: 75, level: 'High', description: 'Your active listening skills and attention to others\' perspectives. High listening ability demonstrates strong empathy and understanding.' },
+            { name: 'Influence Strategies', score: 82, level: 'Very High', description: 'Your ability to persuade and motivate others through communication. Very high influence indicates natural leadership and persuasion capabilities.' },
+            { name: 'Conflict Communication', score: 68, level: 'Moderate', description: 'Your approach to managing disagreements and difficult conversations. Moderate level suggests room for growth in handling challenging interactions.' }
           ],
+          profile: 'Dynamic Communicator - You excel at engaging others through expressive and influential communication. Your natural charisma and persuasive abilities make you effective in leadership and team environments. While you demonstrate strong listening skills, developing conflict resolution techniques will enhance your overall communication effectiveness.',
           strengths: [
-            'Highly expressive and engaging communication style',
-            'Effective influence and persuasion techniques',
-            'Adapts well to different communication channels'
+            'Highly expressive and engaging communication style that captures attention',
+            'Effective influence and persuasion techniques for motivating teams',
+            'Adapts well to different communication channels and formats',
+            'Strong active listening skills that build rapport with others',
+            'Natural leadership presence in group communications'
           ],
           developmentAreas: [
-            'Conflict resolution and difficult conversations',
-            'Direct communication in challenging situations',
-            'Balancing assertiveness with empathy'
+            'Conflict resolution and managing difficult conversations effectively',
+            'Direct communication during challenging or sensitive situations',
+            'Balancing assertiveness with empathy in decision-making discussions',
+            'Structured communication for complex technical topics',
+            'Time management during lengthy collaborative discussions'
           ],
           recommendations: [
-            'Practice active listening techniques in team meetings',
-            'Develop conflict mediation skills through training',
-            'Work on direct feedback delivery methods'
+            'Practice active listening techniques in team meetings to enhance understanding',
+            'Develop conflict mediation skills through specialized training programs',
+            'Work on direct feedback delivery methods using structured frameworks',
+            'Join a public speaking group to refine presentation skills',
+            'Seek mentorship opportunities to develop executive communication abilities',
+            'Practice written communication for complex technical documentation'
           ],
+          contextualEffectiveness: {
+            'Leadership Meetings': { score: 88, description: 'Excellent at facilitating discussions and driving decisions' },
+            'Team Collaboration': { score: 85, description: 'Strong team player who motivates and engages colleagues' },
+            'Client Presentations': { score: 82, description: 'Persuasive and engaging when presenting to external stakeholders' },
+            'Conflict Resolution': { score: 65, description: 'Moderate effectiveness; benefits from structured approach' },
+            'Technical Documentation': { score: 70, description: 'Good foundation but could improve clarity and structure' },
+            'Cross-Cultural Communication': { score: 75, description: 'Generally effective with room for cultural sensitivity growth' }
+          },
+          workingStyles: {
+            'Preferred Communication Style': 'Collaborative and engaging, with emphasis on relationship-building',
+            'Decision Making': 'Consultative approach, seeking input before making final decisions',
+            'Feedback Delivery': 'Positive and encouraging, though may avoid difficult conversations',
+            'Meeting Leadership': 'Dynamic facilitator who keeps discussions engaging and productive',
+            'Written Communication': 'Clear and personable, with room for more structured technical writing'
+          },
           careerMatches: [
             {
               career: { title: 'Team Lead/Supervisor', description: 'Leading teams and managing projects' },

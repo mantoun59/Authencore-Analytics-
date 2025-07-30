@@ -18,12 +18,14 @@ export interface HtmlReportData {
   strengths?: string[];
   developmentAreas?: string[];
   recommendations?: string[];
-  careerMatches?: Array<{ title: string; match: number; description?: string }>;
+  careerMatches?: Array<{ career?: { title: string; description?: string }; title?: string; match?: number; matchPercentage?: number; description?: string }>;
   profile?: string;
   riskFlags?: string[];
   validityLevel?: string;
   riasecResults?: Record<string, number>;
   aptitudeResults?: Record<string, number>;
+  contextualEffectiveness?: Record<string, { score: number; description: string }>;
+  workingStyles?: Record<string, string>;
   [key: string]: any;
 }
 
@@ -261,6 +263,99 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
       margin-bottom: 10px;
     }
     
+    .contextual-section {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .context-item {
+      background: white;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 4px solid #f59e0b;
+    }
+    
+    .context-score {
+      font-weight: bold;
+      color: #f59e0b;
+      font-size: 18px;
+    }
+    
+    .working-styles-section {
+      background: #f3e8ff;
+      border: 1px solid #8b5cf6;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .style-item {
+      background: white;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 4px solid #8b5cf6;
+    }
+    
+    .strengths-development-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .strengths-section {
+      background: #dcfce7;
+      border: 1px solid #16a34a;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    
+    .development-section {
+      background: #fef2f2;
+      border: 1px solid #ef4444;
+      border-radius: 8px;
+      padding: 20px;
+    }
+    
+    .list-item {
+      background: white;
+      padding: 10px 15px;
+      margin: 8px 0;
+      border-radius: 6px;
+      border-left: 4px solid currentColor;
+    }
+    
+    .dimension-description {
+      font-size: 14px;
+      color: #64748b;
+      margin-top: 8px;
+      line-height: 1.4;
+    }
+    
+    .dimension-level {
+      background: #008080;
+      color: white;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+    }
+    
+    .profile-description {
+      background: #e0f2fe;
+      border-left: 4px solid #008080;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 0 8px 8px 0;
+      font-style: italic;
+      line-height: 1.6;
+    }
+    
     .print-button {
       background: #008080;
       color: white;
@@ -321,7 +416,20 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
     </div>
     ` : ''}
     
+    ${data.profile ? `
+    <div class="profile-description">
+      <h2 class="section-title">🎯 Communication Profile</h2>
+      <p>${data.profile}</p>
+    </div>
+    ` : ''}
+    
     ${generateDimensionsSection(data)}
+    
+    ${generateStrengthsAndDevelopmentSection(data)}
+    
+    ${generateContextualEffectivenessSection(data)}
+    
+    ${generateWorkingStylesSection(data)}
     
     ${generateRecommendationsSection(data)}
     
@@ -367,7 +475,7 @@ const generateReportId = (): string => {
 const generateDimensionsSection = (data: HtmlReportData): string => {
   if (!data.dimensions) return '';
   
-  let dimensions: Array<{ name: string; score: number }> = [];
+  let dimensions: Array<{ name: string; score: number; description?: string; level?: string }> = [];
   
   if (Array.isArray(data.dimensions)) {
     dimensions = data.dimensions;
@@ -387,11 +495,84 @@ const generateDimensionsSection = (data: HtmlReportData): string => {
         <div class="dimension-item">
           <div class="dimension-header">
             <span class="dimension-name">${dim.name}</span>
-            <span class="dimension-score">${Math.round(dim.score)}</span>
+            <div>
+              ${dim.level ? `<span class="dimension-level">${dim.level}</span>` : ''}
+              <span class="dimension-score">${Math.round(dim.score)}</span>
+            </div>
           </div>
           <div class="progress-bar">
             <div class="progress-fill" style="width: ${Math.min(dim.score, 100)}%"></div>
           </div>
+          ${dim.description ? `<div class="dimension-description">${dim.description}</div>` : ''}
+        </div>
+      `).join('')}
+    </div>
+  `;
+};
+
+const generateStrengthsAndDevelopmentSection = (data: HtmlReportData): string => {
+  if ((!data.strengths || data.strengths.length === 0) && (!data.developmentAreas || data.developmentAreas.length === 0)) return '';
+  
+  return `
+    <div class="strengths-development-grid">
+      ${data.strengths && data.strengths.length > 0 ? `
+        <div class="strengths-section">
+          <h3 class="section-title">✅ Key Strengths</h3>
+          ${data.strengths.map(strength => `
+            <div class="list-item" style="border-left-color: #16a34a;">
+              ${strength}
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+      
+      ${data.developmentAreas && data.developmentAreas.length > 0 ? `
+        <div class="development-section">
+          <h3 class="section-title">🎯 Development Areas</h3>
+          ${data.developmentAreas.map(area => `
+            <div class="list-item" style="border-left-color: #ef4444;">
+              ${area}
+            </div>
+          `).join('')}
+        </div>
+      ` : ''}
+    </div>
+  `;
+};
+
+const generateContextualEffectivenessSection = (data: HtmlReportData): string => {
+  if (!data.contextualEffectiveness || Object.keys(data.contextualEffectiveness).length === 0) return '';
+  
+  return `
+    <div class="contextual-section">
+      <h2 class="section-title">📈 Contextual Effectiveness</h2>
+      ${Object.entries(data.contextualEffectiveness).map(([context, details]) => `
+        <div class="context-item">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+            <strong>${context}</strong>
+            <span class="context-score">${details.score}/100</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: ${Math.min(details.score, 100)}%; background: #f59e0b;"></div>
+          </div>
+          <div style="font-size: 14px; color: #64748b; margin-top: 8px;">
+            ${details.description}
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+};
+
+const generateWorkingStylesSection = (data: HtmlReportData): string => {
+  if (!data.workingStyles || Object.keys(data.workingStyles).length === 0) return '';
+  
+  return `
+    <div class="working-styles-section">
+      <h2 class="section-title">💼 Working Styles</h2>
+      ${Object.entries(data.workingStyles).map(([style, description]) => `
+        <div class="style-item">
+          <strong>${style}:</strong> ${description}
         </div>
       `).join('')}
     </div>
@@ -419,13 +600,19 @@ const generateCareerMatchesSection = (data: HtmlReportData): string => {
   return `
     <div class="career-matches">
       <h2 class="section-title">🎯 Career Recommendations</h2>
-      ${data.careerMatches.slice(0, 10).map((career, index) => `
-        <div class="career-item">
-          <div class="career-title">#${index + 1} ${career.title}</div>
-          <div class="career-match">${Math.round(career.match)}% Match</div>
-          ${career.description ? `<p>${career.description}</p>` : ''}
-        </div>
-      `).join('')}
+      ${data.careerMatches.slice(0, 10).map((career, index) => {
+        const title = career.career?.title || career.title || 'Unknown Career';
+        const match = career.matchPercentage || career.match || 0;
+        const description = career.career?.description || career.description || '';
+        
+        return `
+          <div class="career-item">
+            <div class="career-title">#${index + 1} ${title}</div>
+            <div class="career-match">${Math.round(match)}% Match</div>
+            ${description ? `<p>${description}</p>` : ''}
+          </div>
+        `;
+      }).join('')}
     </div>
   `;
 };
