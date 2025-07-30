@@ -104,6 +104,13 @@ export const generateBurnoutEmployerReport = (config: BurnoutEmployerReportConfi
             text-align: center;
         }
         
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 1.5rem;
+            filter: brightness(0) invert(1);
+        }
+        
         .header h1 {
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
@@ -345,6 +352,7 @@ export const generateBurnoutEmployerReport = (config: BurnoutEmployerReportConfi
 <body>
     <div class="report-container">
         <div class="header">
+            <img src="/final-logo.png" alt="AuthenCore Analytics" class="logo" />
             <h1>Burnout Prevention Assessment</h1>
             <div class="subtitle">Employer Comprehensive Report</div>
         </div>
