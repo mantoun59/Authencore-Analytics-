@@ -22,7 +22,7 @@ export const generateFVAIReport = (data: FVAIReportData): string => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faith & Values Alignment Index Report - ${candidateInfo.name}</title>
+    <title>Faith & Values Alignment Index - Comprehensive Report</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         
@@ -561,8 +561,8 @@ export const generateFVAIReport = (data: FVAIReportData): string => {
         
         <div class="header">
             <img src="/final-logo.png" alt="AuthenCore Analytics" class="logo" />
-            <h1>Faith & Values Alignment Index</h1>
-            <p class="subtitle">Comprehensive Assessment Report</p>
+            <h1>Faith & Values Alignment Index (FVAI)</h1>
+            <p class="subtitle">Comprehensive Values Assessment Report</p>
         </div>
         
         <div class="candidate-info">

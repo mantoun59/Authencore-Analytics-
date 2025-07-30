@@ -21,7 +21,7 @@ export const generateFVAIEmployerReport = (data: FVAIEmployerReportData): string
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FVAI Employer Report - ${candidateInfo.name}</title>
+    <title>FVAI Employer Assessment Report - ${candidateInfo.name}</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         

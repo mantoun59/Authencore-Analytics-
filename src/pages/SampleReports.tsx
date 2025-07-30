@@ -77,7 +77,7 @@ const getAssessmentDisplayName = (assessmentType: string): string => {
     'cultural': 'Cultural Intelligence Assessment',
     'digital-wellness': 'Digital Wellness Assessment',
     'digital': 'Digital Wellness Assessment',
-    'faith-values': 'Faith & Values Assessment',
+    'faith-values': 'Faith & Values Alignment Index (FVAI)',
     'genz': 'Gen Z Workplace Assessment'
   };
   
