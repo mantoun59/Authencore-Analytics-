@@ -112,9 +112,71 @@ const SampleReports = () => {
       // Use HTML report generator for ALL assessment types including communication
       const { generateHtmlReport } = await import('@/utils/htmlReportGenerator');
       
+      console.log('🎯 Assessment type being processed:', selectedAssessment);
       // Assessment-specific data mapping
       let reportData;
-      if (selectedAssessment === 'burnout-prevention' || selectedAssessment === 'burnout') {
+      if (selectedAssessment === 'emotional-intelligence' || selectedAssessment === 'emotional') {
+        console.log('✅ Using dedicated emotional intelligence path');
+        // Use the dedicated emotional intelligence report generator
+        const { generateEmotionalIntelligenceReport } = await import('@/services/emotionalIntelligenceReportGenerator');
+        const sampleData = reportType === 'employer' 
+          ? getSampleEmployerReport(selectedAssessment)
+          : getSampleCandidateReport(selectedAssessment);
+        
+        const reportHtml = generateEmotionalIntelligenceReport({
+          candidateInfo: {
+            name: sampleData.candidateInfo.name,
+            email: sampleData.candidateInfo.email,
+            assessmentDate: sampleData.candidateInfo.completionDate
+          },
+          results: {
+            overallScore: sampleData.executiveSummary.overallScore,
+            scores: {
+              selfAwareness: {
+                raw: sampleData.dimensionScores.self_awareness?.score || 89,
+                percentage: sampleData.dimensionScores.self_awareness?.score || 89,
+                level: sampleData.dimensionScores.self_awareness?.level as 'Low' | 'Medium' | 'High' || 'High',
+                interpretation: sampleData.dimensionScores.self_awareness?.interpretation || 'Strong understanding of own emotions and reactions'
+              },
+              selfRegulation: {
+                raw: sampleData.dimensionScores.emotional_regulation?.score || 73,
+                percentage: sampleData.dimensionScores.emotional_regulation?.score || 73,
+                level: sampleData.dimensionScores.emotional_regulation?.level as 'Low' | 'Medium' | 'High' || 'Medium',
+                interpretation: sampleData.dimensionScores.emotional_regulation?.interpretation || 'Good control over emotional responses'
+              },
+              motivation: {
+                raw: sampleData.dimensionScores.motivation?.score || 83,
+                percentage: sampleData.dimensionScores.motivation?.score || 83,
+                level: sampleData.dimensionScores.motivation?.level as 'Low' | 'Medium' | 'High' || 'High',
+                interpretation: sampleData.dimensionScores.motivation?.interpretation || 'High internal drive and goal orientation'
+              },
+              empathy: {
+                raw: sampleData.dimensionScores.empathy?.score || 86,
+                percentage: sampleData.dimensionScores.empathy?.score || 86,
+                level: sampleData.dimensionScores.empathy?.level as 'Low' | 'Medium' | 'High' || 'High',
+                interpretation: sampleData.dimensionScores.empathy?.interpretation || 'Strong ability to understand others\' perspectives'
+              },
+              socialSkills: {
+                raw: sampleData.dimensionScores.social_skills?.score || 85,
+                percentage: sampleData.dimensionScores.social_skills?.score || 85,
+                level: sampleData.dimensionScores.social_skills?.level as 'Low' | 'Medium' | 'High' || 'High',
+                interpretation: sampleData.dimensionScores.social_skills?.interpretation || 'Excellent interpersonal and relationship skills'
+              }
+            },
+            recommendations: []
+          },
+          reportType: reportType as 'candidate' | 'employer'
+        });
+        
+        // Open the report in a new window
+        const newWindow = window.open('', '_blank');
+        if (newWindow) {
+          newWindow.document.write(reportHtml);
+          newWindow.document.close();
+        }
+        toast.success(`Sample ${reportType} report generated successfully!`);
+        return;
+      } else if (selectedAssessment === 'burnout-prevention' || selectedAssessment === 'burnout') {
         // Use standard HTML generator like other assessments
         reportData = {
           assessmentType: 'Burnout Prevention Index',
@@ -1157,6 +1219,8 @@ const SampleReports = () => {
         };
       }
 
+      
+      console.log('🔍 About to call generateHtmlReport with reportData:', reportData);
       await generateHtmlReport(reportData);
       toast.success(`Sample ${reportType} report generated successfully!`);
       
