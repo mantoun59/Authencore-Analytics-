@@ -1453,6 +1453,11 @@ const SampleReports = () => {
         email: 'sarah.johnson@email.com',
         completionDate: new Date().toLocaleDateString(),
         assessmentId: `${assessmentType.toUpperCase()}-${Date.now().toString().slice(-6)}`
+      },
+      userInfo: {
+        name: 'Sarah Johnson',
+        email: 'sarah.johnson@email.com',
+        assessmentDate: new Date().toLocaleDateString()
       }
     };
 
