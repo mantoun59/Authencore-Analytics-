@@ -80,27 +80,23 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
       });
 
       if (response.data?.downloadUrl) {
-        // Open the generated report URL directly
-        window.open(response.data.downloadUrl, '_blank');
-      } else if (response.data && typeof response.data === 'string') {
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(response.data);
-          newWindow.document.close();
-          
-          setTimeout(() => {
-            newWindow.focus();
-            newWindow.print();
-          }, 1000);
-        }
+        // Create a proper download link for the HTML report
+        const link = document.createElement('a');
+        link.href = response.data.downloadUrl;
+        link.download = `${userProfile.name.replace(/\s+/g, '_')}_${type}_report.html`;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } else if (response.error) {
+        throw new Error(response.error.message || 'Failed to generate report');
       } else {
-        console.error('Invalid response data:', response.data);
         throw new Error('Invalid response format');
       }
 
       toast({
         title: "Report Generated",
-        description: `${type === 'advisor' ? 'Advisor' : 'Standard'} report opened for download.`,
+        description: `${type === 'advisor' ? 'Advisor' : 'Standard'} report downloaded successfully.`,
       });
     } catch (error) {
       console.error('Error generating report:', error);
