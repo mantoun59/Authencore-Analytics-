@@ -33,50 +33,47 @@ const sampleCandidateData = {
   adaptabilityScore: 75,
   
   profile: {
-    type: "Socializer",
+    type: "Socializer" as const,
+    primary: "Enthusiastic and people-focused",
+    secondary: "Optimistic and influential", 
     strength: "Building rapport and inspiring others",
     challenge: "Managing detailed analysis under pressure",
-    workStyle: "Collaborative and energetic approach with focus on relationships",
-    traits: {
-      primary: "Enthusiastic and people-focused",
-      secondary: "Optimistic and influential",
-      strength: "Inspiring team engagement",
-      challenge: "Maintaining focus on details",
-      workStyle: "Thrives in collaborative, fast-paced environments"
-    }
+    workStyle: "Collaborative and energetic approach with focus on relationships"
   },
 
   dimensions: {
-    assertiveness: { score: 72, level: "High", percentile: 75, description: "Confident communication with clear direction" },
-    expressiveness: { score: 88, level: "Very High", percentile: 90, description: "Highly engaging and animated communication" },
-    informationProcessing: { score: 65, level: "Low", percentile: 60, description: "Developing systematic information handling" },
-    channelPreferences: { score: 81, level: "High", percentile: 82, description: "Adaptable across communication platforms" },
-    listeningPatterns: { score: 79, level: "High", percentile: 78, description: "Active listening with empathetic responses" },
-    influenceStrategies: { score: 84, level: "Very High", percentile: 85, description: "Effective persuasion and motivation" },
-    conflictCommunication: { score: 68, level: "Moderate", percentile: 65, description: "Developing conflict resolution skills" }
+    assertiveness: { score: 72, level: "High" as const, percentile: 75, description: "Confident communication with clear direction" },
+    expressiveness: { score: 88, level: "Very High" as const, percentile: 90, description: "Highly engaging and animated communication" },
+    informationProcessing: { score: 65, level: "Low" as const, percentile: 60, description: "Developing systematic information handling" },
+    channelPreferences: { score: 81, level: "High" as const, percentile: 82, description: "Adaptable across communication platforms" },
+    listeningPatterns: { score: 79, level: "High" as const, percentile: 78, description: "Active listening with empathetic responses" },
+    influenceStrategies: { score: 84, level: "Very High" as const, percentile: 85, description: "Effective persuasion and motivation" },
+    conflictCommunication: { score: 68, level: "Moderate" as const, percentile: 65, description: "Developing conflict resolution skills" }
   },
 
   contextualEffectiveness: {
     leadership: 73,
     teamwork: 85,
-    customerInteraction: 82,
+    customerService: 82,
+    salesNegotiation: 67,
     conflictResolution: 67,
-    presentations: 79,
-    written: 71
+    publicSpeaking: 79
   },
 
   distortionAnalysis: {
-    reliability: "High",
+    score: 15,
+    level: "Low" as const,
+    indicators: [],
+    reliability: "High" as const,
+    recommendations: [],
+    consistencyCheck: 0.89,
+    extremePatterns: 0.1,
+    socialDesirabilityBias: 0.2,
+    responseTimePattern: 0.3,
+    // Additional properties used in templates
     responseConsistency: 0.89,
-    socialDesirabilityBias: "Low",
-    extremeResponsePattern: "None",
     engagementLevel: "High",
-    recommendationsConfidence: "High",
-    validity: {
-      hasDistortions: false,
-      distortionType: null,
-      recommendations: []
-    }
+    recommendationsConfidence: "High"
   },
 
   developmentAreas: [
@@ -107,12 +104,7 @@ const sampleCandidateData = {
   // Required by CommunicationStylesResults interface
   completedAt: new Date().toISOString(),
   timeSpent: 1200, // 20 minutes in seconds
-  responsePattern: {
-    averageTime: 45,
-    varianceScore: 0.3,
-    rushingIndicator: false,
-    pausingIndicator: false
-  }
+  responsePattern: "Consistent and engaged response pattern with moderate timing variance"
 };
 
 const sampleEmployerData = {
