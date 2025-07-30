@@ -1,4 +1,5 @@
 import { formatPDFLegalFooter } from '@/utils/legalNotices';
+import finalLogo from '@/assets/final-logo.png';
 
 export interface BurnoutEmployerReportConfig {
   candidateInfo: {
@@ -352,7 +353,7 @@ export const generateBurnoutEmployerReport = (config: BurnoutEmployerReportConfi
 <body>
     <div class="report-container">
         <div class="header">
-            <img src="/final-logo.png" alt="AuthenCore Analytics" class="logo" />
+            <img src="${finalLogo}" alt="AuthenCore Analytics" class="logo" />
             <h1>Burnout Prevention Assessment</h1>
             <div class="subtitle">Employer Comprehensive Report</div>
         </div>

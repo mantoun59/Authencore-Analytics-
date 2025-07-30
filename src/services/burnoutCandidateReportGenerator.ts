@@ -1,4 +1,5 @@
 import { formatPDFLegalFooter } from '@/utils/legalNotices';
+import finalLogo from '@/assets/final-logo.png';
 
 export interface BurnoutCandidateReportConfig {
   candidateInfo: {
@@ -49,13 +50,23 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
     }
   };
 
+  const getWellnessMessage = (level: string) => {
+    switch (level) {
+      case 'excellent': return "🌟 Outstanding! You're in excellent shape with strong resilience and effective wellness practices.";
+      case 'good': return "💪 Great job! You have good wellness foundations with some areas for enhancement.";
+      case 'fair': return "⚡ You're on the right path but there are important areas that need attention.";
+      case 'poor': return "🚨 Your wellness needs immediate attention. Let's work together to build stronger foundations.";
+      default: return "📊 Your wellness assessment provides valuable insights for your journey ahead.";
+    }
+  };
+
   const getMotivationalMessage = (risk: string, profile: string) => {
     if (risk === 'low') {
-      return "You're demonstrating excellent resilience! Keep up the great work maintaining your well-being.";
+      return "🎉 Excellent news! Your burnout risk is low. You've built strong resilience foundations that serve you well. Keep nurturing these positive patterns while staying mindful of your ongoing wellness journey.";
     } else if (risk === 'medium') {
-      return "You're managing well overall, but there are opportunities to strengthen your resilience further.";
+      return "🔄 You're in a growth zone! While your burnout risk is moderate, this is actually a powerful position - you have awareness and the opportunity to strengthen your resilience before any serious issues arise.";
     } else {
-      return "Your results indicate you may benefit from additional support. Remember, seeking help is a sign of strength.";
+      return "🌱 Every journey starts with a single step, and taking this assessment shows your commitment to positive change. Your high-risk areas are opportunities for transformation and growth.";
     }
   };
 
@@ -65,7 +76,7 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Burnout Prevention Assessment Results</title>
+    <title>Burnout Prevention Assessment - ${candidateInfo.name}</title>
     <style>
         * {
             margin: 0;
@@ -76,7 +87,7 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             line-height: 1.6;
-            color: #333;
+            color: #1f2937;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
         }
@@ -85,17 +96,19 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
             max-width: 1000px;
             margin: 2rem auto;
             background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
             overflow: hidden;
+            position: relative;
         }
         
         .header {
-            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 3rem 2rem;
+            padding: 4rem 2rem 3rem;
             text-align: center;
             position: relative;
+            overflow: hidden;
         }
         
         .header::before {
@@ -105,53 +118,61 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="white" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="white" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>') repeat;
-        }
-        
-        .logo {
-            width: 120px;
-            height: auto;
-            margin-bottom: 1.5rem;
-            filter: brightness(0) invert(1);
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,255,255,0.1) 0%, transparent 50%);
         }
         
         .header-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
+        }
+        
+        .logo {
+            width: 150px;
+            height: auto;
+            margin-bottom: 2rem;
+            filter: brightness(0) invert(1);
+            opacity: 0.95;
         }
         
         .header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 0.5rem;
+            font-size: 3.2rem;
+            margin-bottom: 1rem;
             font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .header .subtitle {
-            font-size: 1.3rem;
+            font-size: 1.4rem;
             opacity: 0.9;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
+            font-weight: 300;
         }
         
         .header .name {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 600;
             background: rgba(255, 255, 255, 0.2);
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
             display: inline-block;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
         
         .content {
-            padding: 2.5rem;
+            padding: 3rem 2rem;
         }
         
         .section {
             margin-bottom: 3rem;
-            padding: 2rem;
-            border-radius: 12px;
             background: #f8fafc;
+            border-radius: 16px;
+            padding: 2rem;
             border: 1px solid #e2e8f0;
             position: relative;
+            overflow: hidden;
         }
         
         .section::before {
@@ -161,14 +182,14 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
             left: 0;
             width: 4px;
             height: 100%;
-            background: linear-gradient(180deg, #4f46e5, #7c3aed);
-            border-radius: 2px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
         }
         
         .section h2 {
-            color: #2d3748;
+            font-size: 1.8rem;
             margin-bottom: 1.5rem;
-            font-size: 1.6rem;
+            color: #1e293b;
+            font-weight: 600;
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -177,264 +198,331 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
         .motivational-section {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
-            text-align: center;
+            border-radius: 20px;
             padding: 2.5rem;
-            border-radius: 12px;
             margin-bottom: 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
         }
         
-        .motivational-section h2 {
-            color: white;
-            margin-bottom: 1rem;
+        .motivational-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(255,255,255,0.1) 10px,
+                rgba(255,255,255,0.1) 20px
+            );
+            animation: float 20s linear infinite;
+        }
+        
+        @keyframes float {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
         }
         
         .motivational-message {
             font-size: 1.2rem;
-            font-style: italic;
-            opacity: 0.95;
+            line-height: 1.8;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
         
         .score-overview {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
             margin-bottom: 2rem;
         }
         
         .score-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
             text-align: center;
-            border: 1px solid #e2e8f0;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
             position: relative;
             overflow: hidden;
+            transform: translateY(0);
+            transition: transform 0.3s ease;
         }
         
         .score-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #3b82f6, #1d4ed8, #3b82f6);
+            border-radius: 20px;
+            z-index: -1;
+            opacity: 0.5;
         }
         
         .score-value {
-            font-size: 3rem;
-            font-weight: bold;
+            font-size: 4rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
         
         .score-label {
-            color: #6b7280;
-            font-size: 0.95rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 1.1rem;
+            opacity: 0.9;
             font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         
-        .wellness-indicator {
+        .risk-indicator {
             display: inline-block;
-            padding: 0.5rem 1.5rem;
-            border-radius: 25px;
-            font-size: 1rem;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
             font-weight: 600;
-            text-transform: capitalize;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 1rem;
         }
-        
-        .wellness-excellent { background: #dcfce7; color: #166534; }
-        .wellness-good { background: #dbeafe; color: #1e40af; }
-        .wellness-fair { background: #fef3c7; color: #92400e; }
-        .wellness-poor { background: #fee2e2; color: #991b1b; }
         
         .category-analysis {
             display: grid;
-            gap: 1.5rem;
+            gap: 2rem;
         }
         
         .category-item {
             background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
+            padding: 2rem;
+            border-radius: 16px;
             border: 1px solid #e2e8f0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+        
+        .category-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
         
         .category-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
         }
         
         .category-name {
-            font-weight: 600;
-            color: #2d3748;
-            font-size: 1.1rem;
+            font-weight: 700;
+            color: #1e293b;
+            font-size: 1.2rem;
         }
         
         .category-level {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
             font-size: 0.9rem;
-            color: #6b7280;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
         .progress-bar {
-            width: 100%;
+            background: #f1f5f9;
             height: 12px;
-            background: #e2e8f0;
             border-radius: 6px;
             overflow: hidden;
-            margin-bottom: 0.5rem;
+            margin-bottom: 1rem;
+            position: relative;
         }
         
         .progress-fill {
             height: 100%;
+            background: linear-gradient(90deg, #10b981, #059669);
             border-radius: 6px;
-            background: linear-gradient(90deg, #4f46e5, #7c3aed);
-            transition: width 0.8s ease;
+            position: relative;
+            transition: width 1s ease-in-out;
+        }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         
         .percentage-text {
-            text-align: right;
-            font-size: 0.9rem;
-            color: #6b7280;
-            font-weight: 500;
+            font-weight: 600;
+            color: #1e293b;
+            font-size: 1.1rem;
         }
         
         .insights-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2rem;
         }
         
-        .insights-column {
+        .insight-card {
             background: white;
-            padding: 1.5rem;
-            border-radius: 10px;
+            padding: 2rem;
+            border-radius: 16px;
             border: 1px solid #e2e8f0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
         }
         
-        .insights-column h3 {
+        .insight-card h3 {
+            font-size: 1.3rem;
             margin-bottom: 1rem;
+            color: #1e293b;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
         
-        .insights-column.strengths h3 {
-            color: #059669;
-        }
-        
-        .insights-column.challenges h3 {
-            color: #dc2626;
-        }
-        
-        .insights-list {
+        .insight-list {
             list-style: none;
+            padding: 0;
         }
         
-        .insights-list li {
-            padding: 0.75rem 0;
+        .insight-list li {
+            padding: 0.8rem 0;
             border-bottom: 1px solid #f1f5f9;
-            position: relative;
-            padding-left: 1.5rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
         }
         
-        .insights-list li:last-child {
+        .insight-list li:last-child {
             border-bottom: none;
         }
         
-        .strengths .insights-list li:before {
-            content: "✓";
-            position: absolute;
-            left: 0;
-            color: #059669;
-            font-weight: bold;
-        }
-        
-        .challenges .insights-list li:before {
-            content: "→";
-            position: absolute;
-            left: 0;
-            color: #dc2626;
-            font-weight: bold;
-        }
-        
-        .recommendations-section {
-            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
-            border: 1px solid #fbbf24;
-            border-radius: 12px;
-            padding: 2rem;
-        }
-        
-        .recommendations-section h3 {
-            color: #92400e;
-            margin-bottom: 1.5rem;
-            font-size: 1.3rem;
+        .insight-icon {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 50%;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            color: white;
+            font-size: 0.8rem;
+            flex-shrink: 0;
+            margin-top: 0.1rem;
         }
         
-        .recommendations-list {
-            list-style: none;
+        .action-plan {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-top: 2rem;
+        }
+        
+        .action-plan h2 {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+        
+        .action-steps {
             display: grid;
-            gap: 1rem;
+            gap: 1.5rem;
         }
         
-        .recommendations-list li {
-            background: white;
-            padding: 1rem 1.5rem;
-            border-radius: 8px;
-            border-left: 4px solid #f59e0b;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        .action-step {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .step-number {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 1rem;
         }
         
         .footer {
-            background: #2d3748;
-            color: white;
+            background: #1e293b;
+            color: #94a3b8;
             padding: 2rem;
             text-align: center;
             font-size: 0.9rem;
+            line-height: 1.8;
         }
         
-        .footer p {
-            margin-bottom: 0.5rem;
+        .footer strong {
+            color: white;
         }
         
-        @media (max-width: 768px) {
-            .insights-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .score-overview {
-                grid-template-columns: 1fr;
-            }
-            
-            .content {
-                padding: 1.5rem;
-            }
+        .priority-areas {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .priority-card {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.95rem;
         }
         
         @media print {
-            body { 
-                background: white; 
-                -webkit-print-color-adjust: exact;
+            body {
+                background: white;
             }
-            .report-container { 
-                box-shadow: none; 
+            .report-container {
+                box-shadow: none;
                 margin: 0;
-                border-radius: 0;
             }
-            .section { 
-                break-inside: avoid; 
+            .section {
+                break-inside: avoid;
                 page-break-inside: avoid;
             }
         }
@@ -444,7 +532,7 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
     <div class="report-container">
         <div class="header">
             <div class="header-content">
-                <img src="/final-logo.png" alt="AuthenCore Analytics" class="logo" />
+                <img src="${finalLogo}" alt="AuthenCore Analytics" class="logo" />
                 <h1>🌟 Your Wellness Journey</h1>
                 <div class="subtitle">Burnout Prevention Assessment Results</div>
                 <div class="name">${candidateInfo.name}</div>
@@ -465,20 +553,21 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
                     <div class="score-card">
                         <div class="score-value">${Math.round(results.overallScore)}</div>
                         <div class="score-label">Resilience Score</div>
+                        <div class="risk-indicator" style="background-color: ${getRiskColor(results.burnoutRisk)};">
+                            ${results.burnoutRisk.toUpperCase()} RISK
+                        </div>
                     </div>
-                    <div class="score-card">
-                        <div class="score-value">${Math.round(results.percentileScore)}</div>
-                        <div class="score-label">Percentile Ranking</div>
-                    </div>
-                    <div class="score-card">
-                        <div class="score-value" style="font-size: 1.8rem;">${results.burnoutRiskProfile}</div>
-                        <div class="score-label">Resilience Profile</div>
-                    </div>
-                    <div class="score-card">
-                        <span class="wellness-indicator wellness-${results.wellnessLevel}">${results.wellnessLevel}</span>
-                        <div class="score-label">Wellness Level</div>
+                    <div class="score-card" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                        <div class="score-value">${results.percentileScore}%</div>
+                        <div class="score-label">Percentile Rank</div>
+                        <div class="risk-indicator" style="background: rgba(255,255,255,0.2);">
+                            ${results.wellnessLevel.toUpperCase()}
+                        </div>
                     </div>
                 </div>
+                <p style="text-align: center; font-size: 1.1rem; color: #64748b; margin-top: 1rem;">
+                    ${getWellnessMessage(results.wellnessLevel)}
+                </p>
             </div>
 
             <!-- Detailed Category Analysis -->
@@ -504,84 +593,65 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
             <div class="section">
                 <h2>💡 Your Personal Insights</h2>
                 <div class="insights-grid">
-                    <div class="insights-column strengths">
-                        <h3>🌟 Your Strengths</h3>
-                        <ul class="insights-list">
-                            ${results.strengths.length > 0 ? 
-                                results.strengths.map(strength => `<li>${strength}</li>`).join('') :
-                                '<li>Every challenge is an opportunity to build new strengths</li>'
-                            }
+                    <div class="insight-card">
+                        <h3>✨ Your Strengths</h3>
+                        <ul class="insight-list">
+                            ${results.strengths.map(strength => `
+                                <li>
+                                    <div class="insight-icon">✓</div>
+                                    <span>${strength}</span>
+                                </li>
+                            `).join('')}
                         </ul>
                     </div>
-                    <div class="insights-column challenges">
+                    <div class="insight-card">
                         <h3>🎯 Growth Opportunities</h3>
-                        <ul class="insights-list">
-                            ${results.challenges.length > 0 ? 
-                                results.challenges.map(challenge => `<li>${challenge}</li>`).join('') :
-                                '<li>You\'re doing great! Continue maintaining your current strategies</li>'
-                            }
+                        <ul class="insight-list">
+                            ${results.challenges.map(challenge => `
+                                <li>
+                                    <div class="insight-icon">→</div>
+                                    <span>${challenge}</span>
+                                </li>
+                            `).join('')}
                         </ul>
                     </div>
                 </div>
             </div>
 
-            <!-- Personal Action Plan -->
-            <div class="section">
-                <h2>🚀 Your Personal Action Plan</h2>
-                <div class="recommendations-section">
-                    <h3>💡 Recommended Next Steps</h3>
-                    <ul class="recommendations-list">
-                        ${results.recommendations.map(rec => `<li>${rec}</li>`).join('')}
-                        <li>Set aside 15 minutes daily for mindfulness or relaxation activities</li>
-                        <li>Schedule regular check-ins with yourself to monitor your well-being</li>
-                        <li>Build a support network of colleagues, friends, or mentors</li>
-                        ${results.burnoutRisk === 'high' ? 
-                            '<li><strong>Consider speaking with a counselor or therapist for additional support</strong></li>' : 
-                            '<li>Celebrate your progress and maintain the strategies that work for you</li>'
-                        }
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Priority Focus Areas -->
-            ${results.priorityAreas.length > 0 ? `
-            <div class="section">
-                <h2>🎯 Your Priority Focus Areas</h2>
-                <p style="margin-bottom: 1.5rem; color: #6b7280;">These areas could benefit from your immediate attention:</p>
-                <div style="display: grid; gap: 1rem;">
-                    ${results.priorityAreas.map(area => `
-                        <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; padding: 1rem; border-left: 4px solid #ef4444;">
-                            <h4 style="color: #991b1b; margin-bottom: 0.5rem;">${area}</h4>
-                            <p style="color: #6b7280; font-size: 0.9rem;">Focus on developing strategies and seeking support in this area</p>
+            <!-- Action Plan -->
+            <div class="action-plan">
+                <h2>🚀 Your Personalized Action Plan</h2>
+                <div class="action-steps">
+                    ${results.recommendations.map((recommendation, index) => `
+                        <div class="action-step">
+                            <div class="step-number">${index + 1}</div>
+                            <p>${recommendation}</p>
                         </div>
                     `).join('')}
                 </div>
             </div>
-            ` : ''}
 
-            <!-- Encouragement Section -->
-            <div class="section" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%); border: 1px solid #0ea5e9;">
-                <h2 style="color: #0369a1;">🌈 Remember</h2>
-                <div style="background: white; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #0ea5e9;">
-                    <p style="font-size: 1.1rem; line-height: 1.7; color: #1e40af;">
-                        Your well-being is a journey, not a destination. Every small step you take towards better self-care 
-                        and stress management makes a difference. Be patient with yourself, celebrate your progress, 
-                        and remember that seeking support is a sign of strength, not weakness.
-                    </p>
+            <!-- Priority Areas -->
+            ${results.priorityAreas && results.priorityAreas.length > 0 ? `
+            <div class="section">
+                <h2>🚨 Priority Focus Areas</h2>
+                <p style="margin-bottom: 1.5rem; color: #64748b;">These areas need your immediate attention for optimal wellness:</p>
+                <div class="priority-areas">
+                    ${results.priorityAreas.map(area => `
+                        <div class="priority-card">${area}</div>
+                    `).join('')}
                 </div>
             </div>
+            ` : ''}
         </div>
 
         <div class="footer">
-            ${formatPDFLegalFooter()}
-            <p style="margin-top: 1rem; opacity: 0.8;">
-                Assessment completed on ${candidateInfo.assessmentDate}
-            </p>
-            <p style="opacity: 0.7;">
-                Take care of yourself - you're worth it! 💙
-            </p>
+            <p><strong>AuthenCore Analytics</strong> - Professional Assessment Solutions</p>
+            <p>Generated on ${new Date().toLocaleDateString()} | Assessment ID: BPI-${Date.now()}</p>
+            <p>${formatPDFLegalFooter()}</p>
         </div>
     </div>
 </body>
-</html>`;
+</html>
+  `;
 };
