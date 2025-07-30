@@ -87,45 +87,113 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
     }
     
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       line-height: 1.6;
       color: #333;
-      background: white;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      animation: fadeIn 0.5s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    @keyframes slideDown {
+      from { 
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to { 
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    @keyframes scaleIn {
+      from { 
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to { 
+        opacity: 1;
+        transform: scale(1);
+      }
     }
     
     .report-container {
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 20px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      animation: scaleIn 0.6s ease-out;
     }
     
     .report-header {
-      background: linear-gradient(135deg, #008080, #006666);
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
       color: white;
-      padding: 30px;
+      padding: 40px 30px;
       margin: -20px -20px 30px -20px;
-      border-radius: 8px;
+      border-radius: 16px 16px 0 0;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: slideDown 0.7s ease-out;
+    }
+    
+    .report-header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+      background-size: 30px 30px;
+      animation: shimmer 3s linear infinite;
+    }
+    
+    @keyframes shimmer {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
     
     .logo {
-      width: 80px;
-      height: 80px;
-      margin: 0 auto 20px;
-      background: white;
-      border-radius: 8px;
-      padding: 8px;
+      width: 100px;
+      height: auto;
+      margin: 0 auto 25px;
+      filter: brightness(0) invert(1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .logo:hover {
+      transform: scale(1.1) rotate(5deg);
     }
     
     .report-title {
-      font-size: 28px;
-      font-weight: bold;
-      margin-bottom: 10px;
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+      text-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 1;
+      background: linear-gradient(45deg, #ffffff, #f1f5f9);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
     .report-subtitle {
-      font-size: 16px;
-      opacity: 0.9;
+      font-size: 1.1rem;
+      opacity: 0.95;
+      font-weight: 400;
+      position: relative;
+      z-index: 1;
+      letter-spacing: 0.5px;
     }
     
     .profile-section {
@@ -409,18 +477,28 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
     }
     
     .print-button {
-      background: #008080;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
       color: white;
-      padding: 12px 24px;
+      padding: 14px 28px;
       border: none;
-      border-radius: 6px;
+      border-radius: 12px;
       font-size: 16px;
+      font-weight: 600;
       cursor: pointer;
       margin: 20px 0;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
     
     .print-button:hover {
-      background: #006666;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+    }
+    
+    .print-button:active {
+      transform: translateY(0);
     }
     
     .footer {
