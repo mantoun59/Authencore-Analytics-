@@ -2324,66 +2324,74 @@ const SampleReports = () => {
               <CardHeader>
                 <CardTitle>Faith & Values Alignment Index (FVAI) Sample Reports</CardTitle>
                 <CardDescription>
-                  View authentic FVAI reports with faith-based values analysis, cultural alignment scoring, and comprehensive insights
+                  View authentic FVAI reports with faith-based values analysis
                 </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="grid md:grid-cols-2 gap-6">
                   <Button 
-                    onClick={() => {
-                      const { generateFVAICandidateReport } = require('@/services/fvaiCandidateReportGenerator');
-                      const sampleData = {
-                        candidateInfo: {
-                          name: 'Sarah Chen',
-                          email: 'sarah.chen@faithorganization.org',
-                          position: 'Community Relations Manager',
-                          organization: 'Hope Community Foundation',
-                          faithBackground: 'Christian - Baptist Tradition',
-                          date: new Date().toLocaleDateString()
-                        },
-                        results: {
-                          topValues: [
-                            { name: 'Integrity', score: 92, icon: '⚖️', description: 'Demonstrates unwavering commitment to moral principles and ethical behavior in all situations' },
-                            { name: 'Compassion', score: 89, icon: '❤️', description: 'Shows exceptional empathy and genuine care for others\' wellbeing and struggles' },
-                            { name: 'Service', score: 91, icon: '🤝', description: 'Strong orientation toward serving others and contributing to community welfare' },
-                            { name: 'Justice', score: 85, icon: '⚖️', description: 'Committed to fairness, equality, and standing up for what is right' },
-                            { name: 'Stewardship', score: 87, icon: '🌱', description: 'Responsible management of resources, talents, and opportunities entrusted to them' },
-                            { name: 'Humility', score: 83, icon: '🙏', description: 'Balanced self-awareness with appropriate confidence and teachable spirit' },
-                            { name: 'Gratitude', score: 90, icon: '🙏', description: 'Maintains appreciative mindset that enhances relationships and perspective' },
-                            { name: 'Courage', score: 79, icon: '💪', description: 'Shows moral courage with opportunity to strengthen advocacy and boldness' }
-                          ],
-                          cultureMatches: [
-                            {
-                              culture: {
-                                name: 'Purpose-Driven Organization',
-                                description: 'Organizations that prioritize mission, values, and meaningful impact over pure profit',
-                                characteristics: ['Mission-focused', 'Values-driven', 'Community-oriented', 'Servant leadership'],
-                                examples: ['Non-profits', 'Faith-based organizations', 'Social enterprises']
-                              },
-                              alignment: 'Strong',
-                              score: 88
-                            }
-                          ],
-                          insights: {
-                            workStyle: 'Collaborative, purpose-driven approach that prioritizes relationships and meaningful impact',
-                            idealEnvironment: 'Mission-focused organizations with strong values alignment and opportunities for service',
-                            growthAreas: 'Leadership confidence, strategic planning skills, and healthy boundary setting',
-                            challenges: 'May struggle in highly competitive or value-conflicted environments'
+                    onClick={async () => {
+                      try {
+                        const { generateFVAICandidateReport } = await import('@/services/fvaiCandidateReportGenerator');
+                        const sampleData = {
+                          candidateInfo: {
+                            name: 'Sarah Chen',
+                            email: 'sarah.chen@faithorganization.org',
+                            position: 'Community Relations Manager',
+                            organization: 'Hope Community Foundation',
+                            faithBackground: 'Christian - Baptist Tradition',
+                            date: new Date().toLocaleDateString()
                           },
-                          validity: 'Excellent',
-                          validityMetrics: { 
-                            responseConsistency: 94, 
-                            socialDesirabilityBias: 12, 
-                            responsePatternFlag: false 
-                          },
-                          distortionScore: 8
+                          results: {
+                            topValues: [
+                              { id: 'integrity', name: 'Integrity', score: 92, icon: '⚖️', description: 'Demonstrates unwavering commitment to moral principles' },
+                              { id: 'compassion', name: 'Compassion', score: 89, icon: '❤️', description: 'Shows exceptional empathy and care for others' },
+                              { id: 'service', name: 'Service', score: 91, icon: '🤝', description: 'Strong orientation toward serving others' },
+                              { id: 'justice', name: 'Justice', score: 85, icon: '⚖️', description: 'Committed to fairness and equality' },
+                              { id: 'stewardship', name: 'Stewardship', score: 87, icon: '🌱', description: 'Responsible resource management' },
+                              { id: 'humility', name: 'Humility', score: 83, icon: '🙏', description: 'Balanced self-awareness' }
+                            ],
+                            valueScores: {
+                              integrity: 92, compassion: 89, service: 91, justice: 85, stewardship: 87, humility: 83, gratitude: 90, courage: 79
+                            },
+                            cultureMatches: [
+                              {
+                                culture: {
+                                  id: 'purpose-driven',
+                                  name: 'Purpose-Driven Organization',
+                                  description: 'Organizations that prioritize mission, values, and meaningful impact',
+                                  characteristics: ['Mission-focused', 'Values-driven', 'Community-oriented'],
+                                  examples: ['Non-profits', 'Faith-based organizations']
+                                },
+                                alignment: 'Strong',
+                                score: 88
+                              }
+                            ],
+                            insights: {
+                              workStyle: 'Collaborative, purpose-driven approach that prioritizes relationships',
+                              idealEnvironment: 'Mission-focused organizations with strong values alignment',
+                              growthAreas: 'Leadership confidence, strategic planning skills',
+                              challenges: 'May struggle in highly competitive environments'
+                            },
+                            validity: 'Excellent',
+                            validityMetrics: { 
+                              responseConsistency: 94, 
+                              socialDesirabilityBias: 12, 
+                              fakeGoodPattern: 8,
+                              responsePatternFlag: false 
+                            },
+                            distortionScore: 8,
+                            defensivenessScore: 15
+                          }
+                        };
+                        const html = generateFVAICandidateReport(sampleData);
+                        const reportWindow = window.open('', '_blank');
+                        if (reportWindow) {
+                          reportWindow.document.write(html);
+                          reportWindow.document.close();
                         }
-                      };
-                      const html = generateFVAICandidateReport(sampleData);
-                      const reportWindow = window.open('', '_blank');
-                      if (reportWindow) {
-                        reportWindow.document.write(html);
-                        reportWindow.document.close();
+                      } catch (error) {
+                        console.error('Error generating candidate report:', error);
                       }
                     }}
                     className="h-24 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold"
@@ -2396,49 +2404,62 @@ const SampleReports = () => {
                   </Button>
                   
                   <Button 
-                    onClick={() => {
-                      const { generateFVAIEmployerReport } = require('@/services/fvaiEmployerReportGenerator');
-                      const sampleData = {
-                        candidateInfo: {
-                          name: 'Sarah Chen',
-                          email: 'sarah.chen@faithorganization.org',
-                          position: 'Community Relations Manager',
-                          organization: 'Hope Community Foundation',
-                          faithBackground: 'Christian - Baptist Tradition',
-                          date: new Date().toLocaleDateString()
-                        },
-                        results: {
-                          topValues: [
-                            { name: 'Integrity', score: 92, icon: '⚖️', description: 'Demonstrates unwavering commitment to moral principles' },
-                            { name: 'Compassion', score: 89, icon: '❤️', description: 'Shows exceptional empathy and care for others' },
-                            { name: 'Service', score: 91, icon: '🤝', description: 'Strong orientation toward serving others' },
-                            { name: 'Justice', score: 85, icon: '⚖️', description: 'Committed to fairness and equality' },
-                            { name: 'Stewardship', score: 87, icon: '🌱', description: 'Responsible resource management' },
-                            { name: 'Humility', score: 83, icon: '🙏', description: 'Balanced self-awareness' }
-                          ],
-                          cultureMatches: [{
-                            culture: { 
-                              name: 'Purpose-Driven Organization', 
-                              description: 'Values-based organization focused on mission and community impact',
-                              characteristics: ['Mission-focused', 'Values-driven', 'Community-oriented', 'Servant leadership'],
-                              examples: ['Non-profits', 'Faith-based organizations', 'Social enterprises']
+                    onClick={async () => {
+                      try {
+                        const { generateFVAIEmployerReport } = await import('@/services/fvaiEmployerReportGenerator');
+                        const sampleData = {
+                          candidateInfo: {
+                            name: 'Sarah Chen',
+                            email: 'sarah.chen@faithorganization.org',
+                            position: 'Community Relations Manager',
+                            organization: 'Hope Community Foundation',
+                            faithBackground: 'Christian - Baptist Tradition',
+                            date: new Date().toLocaleDateString()
+                          },
+                          results: {
+                            topValues: [
+                              { id: 'integrity', name: 'Integrity', score: 92, icon: '⚖️', description: 'Demonstrates unwavering commitment to moral principles' },
+                              { id: 'compassion', name: 'Compassion', score: 89, icon: '❤️', description: 'Shows exceptional empathy and care for others' }
+                            ],
+                            valueScores: {
+                              integrity: 92, compassion: 89, service: 91, justice: 85, stewardship: 87, humility: 83
                             },
-                            alignment: 'Strong',
-                            score: 88
-                          }],
-                          validity: 'Excellent',
-                          validityMetrics: { 
-                            responseConsistency: 94, 
-                            socialDesirabilityBias: 12, 
-                            responsePatternFlag: false 
+                            cultureMatches: [{
+                              culture: { 
+                                id: 'purpose-driven',
+                                name: 'Purpose-Driven Organization', 
+                                description: 'Values-based organization focused on mission and community impact',
+                                characteristics: ['Mission-focused', 'Values-driven'],
+                                examples: ['Non-profits', 'Faith-based organizations']
+                              },
+                              alignment: 'Strong',
+                              score: 88
+                            }],
+                            insights: {
+                              workStyle: 'Collaborative approach',
+                              idealEnvironment: 'Mission-focused organizations',
+                              growthAreas: 'Leadership development',
+                              challenges: 'Competitive environments'
+                            },
+                            validity: 'Excellent',
+                            validityMetrics: { 
+                              responseConsistency: 94, 
+                              socialDesirabilityBias: 12, 
+                              fakeGoodPattern: 8,
+                              responsePatternFlag: false 
+                            },
+                            distortionScore: 8,
+                            defensivenessScore: 15
                           }
+                        };
+                        const html = generateFVAIEmployerReport(sampleData);
+                        const reportWindow = window.open('', '_blank');
+                        if (reportWindow) {
+                          reportWindow.document.write(html);
+                          reportWindow.document.close();
                         }
-                      };
-                      const html = generateFVAIEmployerReport(sampleData);
-                      const reportWindow = window.open('', '_blank');
-                      if (reportWindow) {
-                        reportWindow.document.write(html);
-                        reportWindow.document.close();
+                      } catch (error) {
+                        console.error('Error generating employer report:', error);
                       }
                     }}
                     className="h-24 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold"
