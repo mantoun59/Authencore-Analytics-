@@ -79,7 +79,10 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
         body: reportData
       });
 
-      if (response.data) {
+      if (response.data?.downloadUrl) {
+        // Open the generated report URL directly
+        window.open(response.data.downloadUrl, '_blank');
+      } else if (response.data && typeof response.data === 'string') {
         const newWindow = window.open('', '_blank');
         if (newWindow) {
           newWindow.document.write(response.data);
@@ -89,13 +92,16 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
             newWindow.focus();
             newWindow.print();
           }, 1000);
-
-          toast({
-            title: "Report Generated",
-            description: `${type === 'advisor' ? 'Advisor' : 'Standard'} report opened for download.`,
-          });
         }
+      } else {
+        console.error('Invalid response data:', response.data);
+        throw new Error('Invalid response format');
       }
+
+      toast({
+        title: "Report Generated",
+        description: `${type === 'advisor' ? 'Advisor' : 'Standard'} report opened for download.`,
+      });
     } catch (error) {
       console.error('Error generating report:', error);
       toast({
