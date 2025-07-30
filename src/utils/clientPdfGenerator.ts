@@ -23,373 +23,431 @@ export interface SimplePdfData {
   validityLevel?: string;
   riasecResults?: Record<string, number>;
   aptitudeResults?: Record<string, number>;
-  interviewQuestions?: string[];
-  coachingPlan?: Array<{ priority: string; timeline: string; target: string; tools: string }>;
   [key: string]: any;
 }
 
 export type ReportType = 'applicant' | 'advisor' | 'certificate';
 
-// Professional color scheme
+// Clean color scheme (RGB values for jsPDF compatibility)
 const colors = {
-  primary: [0, 128, 128] as [number, number, number], // Teal
-  secondary: [0, 51, 102] as [number, number, number], // Dark Blue
-  accent: [16, 185, 129] as [number, number, number], // Green
-  neutral: [107, 114, 128] as [number, number, number], // Gray
-  light: [249, 250, 251] as [number, number, number], // Light Gray
-  white: [255, 255, 255] as [number, number, number]
+  primary: [0, 128, 128] as const, // Teal
+  secondary: [25, 25, 112] as const, // Navy
+  accent: [34, 139, 34] as const, // Forest Green
+  neutral: [105, 105, 105] as const, // Dim Gray
+  light: [245, 245, 245] as const, // White Smoke
+  white: [255, 255, 255] as const
 };
 
-// Professional PDF generator with multiple report types
-export const generateProfessionalPdf = (data: SimplePdfData, reportType: ReportType = 'applicant'): void => {
-  try {
-    validateInput(data);
-    
-    console.log(`Starting ${reportType} PDF generation for:`, data.userInfo.name);
-
-    const doc = new jsPDF();
-    
-    switch (reportType) {
-      case 'applicant':
-        generateApplicantReport(doc, data);
-        break;
-      case 'advisor':
-        generateAdvisorReport(doc, data);
-        break;
-      case 'certificate':
-        generateCertificate(doc, data);
-        break;
-      default:
-        throw new Error(`Unknown report type: ${reportType}`);
-    }
-
-    const fileName = generateFileName(data, reportType);
-    console.log('PDF generation completed successfully. Saving as:', fileName);
-    doc.save(fileName);
-
-  } catch (error) {
-    console.error('PDF generation error:', error);
-    alert('Failed to generate PDF report. Please check the console for details and try again.');
-    throw new Error(`PDF generation failed: ${error.message}`);
-  }
+// Clean text utility that removes problematic characters
+const cleanText = (text: any): string => {
+  if (!text) return 'N/A';
+  if (typeof text !== 'string') return String(text);
+  
+  // Remove all non-ASCII characters and control characters
+  return text
+    .replace(/[^\x20-\x7E]/g, '') // Keep only printable ASCII
+    .replace(/\s+/g, ' ') // Normalize whitespace
+    .trim() || 'N/A';
 };
 
-// Legacy function for backward compatibility
-export const generateClientSidePdf = (data: SimplePdfData): void => {
-  generateProfessionalPdf(data, 'applicant');
+// Safe number utility
+const safeNumber = (value: any, defaultValue: number = 0): number => {
+  const num = Number(value);
+  return isNaN(num) ? defaultValue : Math.round(num);
 };
 
 // Input validation
 const validateInput = (data: SimplePdfData): void => {
   if (!data || typeof data !== 'object') {
-    throw new Error('Invalid data provided to PDF generator');
+    throw new Error('Invalid data provided');
   }
   if (!data.userInfo?.name || !data.userInfo?.email) {
-    throw new Error('Missing required user information (name/email)');
+    throw new Error('Missing required user information');
   }
 };
 
-// Text cleaning utility
-const cleanText = (text: string): string => {
-  if (!text || typeof text !== 'string') return 'N/A';
-  return text.replace(/[^\x00-\x7F]/g, "").trim() || 'N/A';
-};
-
-// File name generator
-const generateFileName = (data: SimplePdfData, reportType: ReportType): string => {
-  const name = cleanText(data.userInfo.name).replace(/\s+/g, '_');
-  const date = new Date().toISOString().split('T')[0];
-  const suffix = reportType === 'certificate' ? '_Certificate' : 
-                reportType === 'advisor' ? '_Advisor_Report' : '_Report';
-  return `${name}${suffix}_${date}.pdf`;
-};
-
-// Professional header with logo space
-const addProfessionalHeader = (doc: jsPDF, title: string, subtitle?: string): number => {
-  const pageWidth = doc.internal.pageSize.getWidth();
+// Main PDF generation function
+export const generateClientSidePdf = (data: SimplePdfData): void => {
+  console.log('Starting clean PDF generation for:', data.userInfo?.name);
   
-  // Header background
-  doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-  doc.rect(0, 0, pageWidth, 45, 'F');
-  
-  // Logo space (left side)
-  doc.setFillColor(colors.white[0], colors.white[1], colors.white[2]);
-  doc.rect(15, 10, 25, 25, 'F');
-  doc.setFontSize(8);
-  doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-  doc.text('LOGO', 20, 25);
-  
-  // Title
-  doc.setFontSize(20);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-  doc.text(title, 50, 25);
-  
-  // Subtitle
-  if (subtitle) {
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.text(subtitle, 50, 35);
-  }
-  
-  // Confidential badge
-  doc.setFillColor(colors.accent[0], colors.accent[1], colors.accent[2]);
-  doc.rect(pageWidth - 80, 15, 65, 15, 'F');
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-  doc.text('CONFIDENTIAL', pageWidth - 75, 25);
-  
-  return 55; // Return Y position after header
-};
-
-// Professional footer
-const addProfessionalFooter = (doc: jsPDF): void => {
-  const pageHeight = doc.internal.pageSize.getHeight();
-  const pageWidth = doc.internal.pageSize.getWidth();
-  
-  doc.setFontSize(8);
-  doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-  doc.text('AuthenCore Analytics - Professional Assessment Report', 20, pageHeight - 15);
-  doc.text('This report is confidential and for professional use only', 20, pageHeight - 10);
-  
-  const totalPages = (doc as any).internal.getNumberOfPages();
-  const currentPage = (doc as any).internal.getCurrentPageInfo().pageNumber;
-  doc.text(`Page ${currentPage} of ${totalPages}`, pageWidth - 40, pageHeight - 10);
-};
-
-// Executive summary card
-const addExecutiveSummary = (doc: jsPDF, data: SimplePdfData, yPos: number): number => {
-  const pageWidth = doc.internal.pageSize.getWidth();
-  let yPosition = yPos;
-  
-  // Section title
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('Executive Summary', 20, yPosition);
-  yPosition += 15;
-  
-  // Summary cards in 2-column layout
-  const cardWidth = 80;
-  const cardHeight = 35;
-  
-  // Left column - Overall Score
-  doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-  doc.rect(20, yPosition, cardWidth, cardHeight, 'F');
-  doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-  doc.rect(20, yPosition, cardWidth, cardHeight, 'S');
-  
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('Overall Score', 25, yPosition + 10);
-  
-  if (data.overallScore !== undefined) {
-    doc.setFontSize(24);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.text(data.overallScore.toString(), 25, yPosition + 25);
-    doc.setFontSize(12);
-    doc.text('/100', 50, yPosition + 25);
-  }
-  
-  // Right column - Validity Level
-  const rightCardX = 110;
-  doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-  doc.rect(rightCardX, yPosition, cardWidth, cardHeight, 'F');
-  doc.setDrawColor(colors.accent[0], colors.accent[1], colors.accent[2]);
-  doc.rect(rightCardX, yPosition, cardWidth, cardHeight, 'S');
-  
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('Reliability Score', rightCardX + 5, yPosition + 10);
-  
-  if (data.userInfo.reliabilityScore) {
-    doc.setFontSize(20);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(colors.accent[0], colors.accent[1], colors.accent[2]);
-    doc.text(data.userInfo.reliabilityScore.toString() + '%', rightCardX + 5, yPosition + 25);
+  try {
+    validateInput(data);
     
-    const validityLevel = data.userInfo.reliabilityScore >= 90 ? 'Excellent' :
-                         data.userInfo.reliabilityScore >= 80 ? 'Good' :
-                         data.userInfo.reliabilityScore >= 70 ? 'Moderate' : 'Low';
-    doc.setFontSize(10);
-    doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-    doc.text(validityLevel, rightCardX + 5, yPosition + 32);
-  }
-  
-  return yPosition + cardHeight + 20;
-};
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    let yPosition = 20;
 
-// RIASEC visualization
-const addRiasecAnalysis = (doc: jsPDF, data: SimplePdfData, yPos: number): number => {
-  let yPosition = yPos;
-  
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('RIASEC Interest Profile', 20, yPosition);
-  yPosition += 15;
-  
-  const riasecData = data.riasecResults || {};
-  const riasecTypes = ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'];
-  const icons = ['🔧', '🔍', '🎨', '👥', '📈', '📊'];
-  
-  riasecTypes.forEach((type, index) => {
-    if (yPosition > 250) {
+    // Page 1: Cover & Summary
+    yPosition = addCleanHeader(doc, pageWidth);
+    yPosition = addUserInfo(doc, data, yPosition);
+    yPosition = addScoreSummary(doc, data, yPosition);
+    
+    // Page 2: Dimensional Analysis
+    doc.addPage();
+    yPosition = 20;
+    yPosition = addSectionHeader(doc, 'Assessment Dimensions', yPosition);
+    yPosition = addDimensionalAnalysis(doc, data, yPosition);
+    
+    // Page 3: Career Recommendations
+    if (data.careerMatches && data.careerMatches.length > 0) {
       doc.addPage();
-      addProfessionalHeader(doc, 'Career Launch Assessment', 'Personalized Report');
-      yPosition = 60;
+      yPosition = 20;
+      yPosition = addSectionHeader(doc, 'Career Recommendations', yPosition);
+      yPosition = addCareerRecommendations(doc, data, yPosition);
     }
     
-    const score = riasecData[type] || 0;
-    const barWidth = (score / 100) * 120;
+    // Page 4: Development Plan
+    if (data.recommendations && data.recommendations.length > 0) {
+      doc.addPage();
+      yPosition = 20;
+      yPosition = addSectionHeader(doc, 'Development Action Plan', yPosition);
+      yPosition = addDevelopmentPlan(doc, data, yPosition);
+    }
     
-    // Type label with icon representation
+    // Add page numbers and footers
+    addPageFooters(doc);
+    
+    // Generate clean filename
+    const cleanName = cleanText(data.userInfo.name).replace(/\s+/g, '_');
+    const timestamp = new Date().toISOString().split('T')[0];
+    const filename = `${cleanName}_Career_Report_${timestamp}.pdf`;
+    
+    console.log('PDF generation completed successfully:', filename);
+    doc.save(filename);
+    
+  } catch (error) {
+    console.error('PDF generation failed:', error);
+    alert(`PDF generation failed: ${error.message}`);
+    throw error;
+  }
+};
+
+// Clean header with logo and branding
+const addCleanHeader = (doc: jsPDF, pageWidth: number): number => {
+  // Header background
+  doc.setFillColor(...colors.primary);
+  doc.rect(0, 0, pageWidth, 35, 'F');
+  
+  // Logo area (placeholder)
+  doc.setFillColor(...colors.white);
+  doc.rect(10, 5, 25, 25, 'F');
+  doc.setDrawColor(...colors.secondary);
+  doc.rect(10, 5, 25, 25, 'S');
+  
+  // Logo text
+  doc.setFontSize(8);
+  doc.setTextColor(...colors.secondary);
+  doc.text('AuthenCore', 12, 20);
+  doc.text('Analytics', 12, 26);
+  
+  // Main title
+  doc.setFontSize(18);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.white);
+  doc.text('Career Launch Assessment', 45, 20);
+  
+  // Subtitle
+  doc.setFontSize(12);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Professional Career Development Report', 45, 28);
+  
+  // Confidential badge
+  doc.setFillColor(...colors.accent);
+  doc.rect(pageWidth - 60, 8, 50, 18, 'F');
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.white);
+  doc.text('CONFIDENTIAL', pageWidth - 55, 19);
+  
+  return 45;
+};
+
+// User information section
+const addUserInfo = (doc: jsPDF, data: SimplePdfData, yPos: number): number => {
+  let yPosition = yPos + 10;
+  
+  // Section background
+  doc.setFillColor(...colors.light);
+  doc.rect(15, yPosition - 5, 180, 35, 'F');
+  doc.setDrawColor(...colors.neutral);
+  doc.rect(15, yPosition - 5, 180, 35, 'S');
+  
+  // Section title
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.secondary);
+  doc.text('Candidate Information', 20, yPosition + 5);
+  
+  // User details
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(...colors.neutral);
+  
+  yPosition += 15;
+  doc.text(`Name: ${cleanText(data.userInfo.name)}`, 20, yPosition);
+  yPosition += 6;
+  doc.text(`Email: ${cleanText(data.userInfo.email)}`, 20, yPosition);
+  yPosition += 6;
+  doc.text(`Assessment Date: ${cleanText(data.userInfo.assessmentDate) || new Date().toLocaleDateString()}`, 20, yPosition);
+  
+  // Report ID if available
+  if (data.userInfo.reportId) {
+    yPosition += 6;
+    doc.text(`Report ID: ${cleanText(data.userInfo.reportId)}`, 20, yPosition);
+  }
+  
+  return yPosition + 20;
+};
+
+// Score summary with visual indicators
+const addScoreSummary = (doc: jsPDF, data: SimplePdfData, yPos: number): number => {
+  let yPosition = yPos + 10;
+  
+  doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.secondary);
+  doc.text('Assessment Summary', 20, yPosition);
+  yPosition += 15;
+  
+  // Overall score box
+  if (data.overallScore !== undefined) {
+    const score = safeNumber(data.overallScore);
+    
+    // Score card
+    doc.setFillColor(...colors.primary);
+    doc.rect(20, yPosition, 80, 30, 'F');
+    
+    // Score text
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.white);
+    doc.text('Overall Score', 25, yPosition + 12);
+    
+    doc.setFontSize(24);
+    doc.text(`${score}/100`, 25, yPosition + 25);
+    
+    // Score interpretation
+    const interpretation = score >= 85 ? 'Excellent' : 
+                          score >= 70 ? 'Good' : 
+                          score >= 55 ? 'Average' : 'Developing';
+    
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.text(`${icons[index]} ${type}`, 20, yPosition);
+    doc.setTextColor(...colors.secondary);
+    doc.text(`Performance Level: ${interpretation}`, 110, yPosition + 15);
+  }
+  
+  // Reliability score
+  if (data.userInfo.reliabilityScore) {
+    const reliability = safeNumber(data.userInfo.reliabilityScore);
+    yPosition += 40;
     
-    // Score
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.secondary);
+    doc.text('Response Reliability', 20, yPosition);
+    
+    // Reliability bar
+    const barWidth = (reliability / 100) * 100;
+    doc.setFillColor(...colors.light);
+    doc.rect(20, yPosition + 5, 100, 10, 'F');
+    doc.setFillColor(...colors.accent);
+    doc.rect(20, yPosition + 5, barWidth, 10, 'F');
+    
     doc.setFontSize(11);
-    doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-    doc.text(score.toString(), 75, yPosition);
+    doc.setTextColor(...colors.neutral);
+    doc.text(`${reliability}% - ${reliability >= 85 ? 'Highly Reliable' : reliability >= 70 ? 'Reliable' : 'Moderate'}`, 130, yPosition + 12);
+  }
+  
+  return yPosition + 25;
+};
+
+// Section header utility
+const addSectionHeader = (doc: jsPDF, title: string, yPos: number): number => {
+  doc.setFillColor(...colors.secondary);
+  doc.rect(0, yPos - 5, doc.internal.pageSize.getWidth(), 20, 'F');
+  
+  doc.setFontSize(16);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(...colors.white);
+  doc.text(title, 20, yPos + 8);
+  
+  return yPos + 25;
+};
+
+// Dimensional analysis with clean bars
+const addDimensionalAnalysis = (doc: jsPDF, data: SimplePdfData, yPos: number): number => {
+  let yPosition = yPos;
+  
+  if (!data.dimensions) return yPosition;
+  
+  const dimensionArray = Array.isArray(data.dimensions) 
+    ? data.dimensions 
+    : Object.entries(data.dimensions).map(([key, value]) => ({
+        name: cleanText(key.replace(/_/g, ' ')),
+        score: safeNumber(value)
+      }));
+  
+  // RIASEC types with simple icons
+  const riasecTypes = [
+    { name: 'Realistic', icon: 'Tools & Hands-on', color: colors.primary },
+    { name: 'Investigative', icon: 'Research & Analysis', color: colors.accent },
+    { name: 'Artistic', icon: 'Creative & Design', color: colors.secondary },
+    { name: 'Social', icon: 'People & Service', color: colors.primary },
+    { name: 'Enterprising', icon: 'Business & Leadership', color: colors.accent },
+    { name: 'Conventional', icon: 'Organization & Detail', color: colors.secondary }
+  ];
+  
+  dimensionArray.slice(0, 6).forEach((dim, index) => {
+    if (yPosition > 250) {
+      doc.addPage();
+      yPosition = addSectionHeader(doc, 'Assessment Dimensions (Continued)', 20);
+    }
     
-    // Progress bar
-    doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-    doc.rect(85, yPosition - 5, 120, 8, 'F');
-    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.rect(85, yPosition - 5, barWidth, 8, 'F');
+    const riasecType = riasecTypes[index] || { name: dim.name, icon: 'General', color: colors.neutral };
+    
+    // Dimension name and description
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.secondary);
+    doc.text(cleanText(dim.name), 20, yPosition);
+    
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...colors.neutral);
+    doc.text(riasecType.icon, 20, yPosition + 8);
+    
+    // Score bar
+    const barWidth = (dim.score / 100) * 120;
+    doc.setFillColor(...colors.light);
+    doc.rect(20, yPosition + 12, 120, 8, 'F');
+    doc.setFillColor(riasecType.color[0], riasecType.color[1], riasecType.color[2]);
+    doc.rect(20, yPosition + 12, barWidth, 8, 'F');
+    
+    // Score text
+    doc.setFontSize(11);
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(...colors.secondary);
+    doc.text(`${dim.score}`, 150, yPosition + 18);
     
     // Level indicator
-    const level = score >= 80 ? 'High' : score >= 60 ? 'Moderate' : score >= 40 ? 'Average' : 'Low';
+    const level = dim.score >= 75 ? 'High' : dim.score >= 50 ? 'Moderate' : 'Low';
     doc.setFontSize(10);
-    doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-    doc.text(level, 210, yPosition);
+    doc.setTextColor(...colors.neutral);
+    doc.text(level, 170, yPosition + 18);
     
-    yPosition += 15;
+    yPosition += 25;
   });
   
   return yPosition + 10;
 };
 
-// Career recommendations as cards
-const addCareerCards = (doc: jsPDF, data: SimplePdfData, yPos: number): number => {
+// Career recommendations
+const addCareerRecommendations = (doc: jsPDF, data: SimplePdfData, yPos: number): number => {
   let yPosition = yPos;
   
-  if (!data.careerMatches || data.careerMatches.length === 0) return yPosition;
+  if (!data.careerMatches) return yPosition;
   
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('Top Career Recommendations', 20, yPosition);
-  yPosition += 15;
-  
-  data.careerMatches.slice(0, 5).forEach((match, index) => {
-    if (yPosition > 240) {
+  data.careerMatches.slice(0, 6).forEach((match, index) => {
+    if (yPosition > 250) {
       doc.addPage();
-      addProfessionalHeader(doc, 'Career Launch Assessment', 'Personalized Report');
-      yPosition = 60;
+      yPosition = addSectionHeader(doc, 'Career Recommendations (Continued)', 20);
     }
     
-    const cardHeight = 25;
+    const matchScore = safeNumber(match.match);
     
     // Career card background
-    doc.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-    doc.rect(20, yPosition, 170, cardHeight, 'F');
-    doc.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.rect(20, yPosition, 170, cardHeight, 'S');
+    doc.setFillColor(...colors.light);
+    doc.rect(15, yPosition - 5, 180, 25, 'F');
+    doc.setDrawColor(...colors.primary);
+    doc.rect(15, yPosition - 5, 180, 25, 'S');
     
-    // Rank badge
-    doc.setFillColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-    doc.circle(30, yPosition + 12, 8, 'F');
-    doc.setFontSize(12);
+    // Rank circle
+    doc.setFillColor(...colors.primary);
+    doc.circle(25, yPosition + 7, 6, 'F');
+    doc.setFontSize(10);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-    doc.text((index + 1).toString(), 27, yPosition + 15);
+    doc.setTextColor(...colors.white);
+    doc.text(`${index + 1}`, 22, yPosition + 10);
     
     // Career title
-    doc.setFontSize(14);
+    doc.setFontSize(12);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.text(cleanText(match.title), 45, yPosition + 10);
+    doc.setTextColor(...colors.secondary);
+    doc.text(cleanText(match.title), 35, yPosition + 5);
     
     // Match percentage
-    doc.setFontSize(16);
+    doc.setFontSize(14);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(colors.accent[0], colors.accent[1], colors.accent[2]);
-    doc.text(match.match.toString() + '%', 150, yPosition + 10);
-    doc.setFontSize(10);
-    doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-    doc.text('match', 150, yPosition + 20);
+    doc.setTextColor(...colors.accent);
+    doc.text(`${matchScore}%`, 160, yPosition + 5);
     
-    // Description (if available)
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...colors.neutral);
+    doc.text('Match', 160, yPosition + 15);
+    
+    // Brief description
     if (match.description) {
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-      const desc = cleanText(match.description).substring(0, 60) + '...';
-      doc.text(desc, 45, yPosition + 20);
+      doc.setTextColor(...colors.neutral);
+      const desc = cleanText(match.description).substring(0, 80) + '...';
+      doc.text(desc, 35, yPosition + 15);
     }
     
-    yPosition += cardHeight + 8;
+    yPosition += 30;
   });
   
   return yPosition + 10;
 };
 
-// Development action plan with timeline
-const addActionPlan = (doc: jsPDF, data: SimplePdfData, yPos: number): number => {
+// Development plan
+const addDevelopmentPlan = (doc: jsPDF, data: SimplePdfData, yPos: number): number => {
   let yPosition = yPos;
   
-  if (!data.recommendations || data.recommendations.length === 0) return yPosition;
+  if (!data.recommendations) return yPosition;
   
-  if (yPosition > 200) {
-    doc.addPage();
-    addProfessionalHeader(doc, 'Career Launch Assessment', 'Personalized Report');
-    yPosition = 60;
-  }
-  
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('Personalized Action Plan', 20, yPosition);
-  yPosition += 15;
-  
-  const priorities = ['🔥 High', '⚡ Medium', '📅 Long-term'];
-  const timelines = ['1-3 months', '3-6 months', '6-12 months'];
+  const priorities = ['High Priority', 'Medium Priority', 'Long-term Goal'];
+  const timeframes = ['1-3 months', '3-6 months', '6-12 months'];
   
   data.recommendations.slice(0, 6).forEach((rec, index) => {
-    if (yPosition > 250) {
+    if (yPosition > 240) {
       doc.addPage();
-      addProfessionalHeader(doc, 'Career Launch Assessment', 'Personalized Report');
-      yPosition = 60;
+      yPosition = addSectionHeader(doc, 'Development Action Plan (Continued)', 20);
     }
     
     const priority = priorities[index % 3];
-    const timeline = timelines[index % 3];
+    const timeframe = timeframes[index % 3];
+    const priorityColor = index % 3 === 0 ? colors.accent : 
+                         index % 3 === 1 ? colors.primary : colors.neutral;
     
     // Priority badge
-    doc.setFontSize(10);
+    doc.setFillColor(priorityColor[0], priorityColor[1], priorityColor[2]);
+    doc.rect(20, yPosition - 3, 60, 12, 'F');
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(colors.accent[0], colors.accent[1], colors.accent[2]);
-    doc.text(priority, 20, yPosition);
+    doc.setTextColor(...colors.white);
+    doc.text(priority, 22, yPosition + 5);
     
-    // Timeline
-    doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-    doc.text(timeline, 60, yPosition);
+    // Timeframe
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(...colors.neutral);
+    doc.text(timeframe, 90, yPosition + 5);
     
     // Recommendation text
-    yPosition += 5;
+    yPosition += 15;
     doc.setFontSize(11);
     doc.setFont('helvetica', 'normal');
-    doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    const lines = doc.splitTextToSize(cleanText(rec), 150);
+    doc.setTextColor(...colors.secondary);
+    
+    const cleanedRec = cleanText(rec);
+    const lines = doc.splitTextToSize(cleanedRec, 170);
+    
     if (Array.isArray(lines)) {
-      lines.forEach((line, lineIndex) => {
+      lines.slice(0, 3).forEach((line, lineIndex) => {
         doc.text(line, 20, yPosition + (lineIndex * 5));
       });
       yPosition += lines.length * 5 + 10;
@@ -402,304 +460,33 @@ const addActionPlan = (doc: jsPDF, data: SimplePdfData, yPos: number): number =>
   return yPosition;
 };
 
-// Generate applicant report
-const generateApplicantReport = (doc: jsPDF, data: SimplePdfData): void => {
-  let yPosition = addProfessionalHeader(doc, 'Career Launch Assessment', 'Personalized Report');
-  
-  // Candidate info section
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('Candidate Information', 20, yPosition);
-  yPosition += 10;
-  
-  doc.setFontSize(12);
-  doc.setFont('helvetica', 'normal');
-  doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-  doc.text(`Name: ${cleanText(data.userInfo.name)}`, 20, yPosition);
-  yPosition += 8;
-  doc.text(`Email: ${cleanText(data.userInfo.email)}`, 20, yPosition);
-  yPosition += 8;
-  doc.text(`Assessment Date: ${data.userInfo.assessmentDate || new Date().toLocaleDateString()}`, 20, yPosition);
-  yPosition += 8;
-  if (data.userInfo.reportId) {
-    doc.text(`Report ID: ${data.userInfo.reportId}`, 20, yPosition);
-    yPosition += 8;
-  }
-  yPosition += 10;
-  
-  // Executive summary
-  yPosition = addExecutiveSummary(doc, data, yPosition);
-  
-  // Add new page for detailed analysis
-  doc.addPage();
-  yPosition = addProfessionalHeader(doc, 'Career Launch Assessment', 'Detailed Analysis');
-  
-  // RIASEC analysis
-  yPosition = addRiasecAnalysis(doc, data, yPosition);
-  
-  // Add new page for career recommendations
-  doc.addPage();
-  yPosition = addProfessionalHeader(doc, 'Career Launch Assessment', 'Career Guidance');
-  
-  // Career cards
-  yPosition = addCareerCards(doc, data, yPosition);
-  
-  // Action plan
-  yPosition = addActionPlan(doc, data, yPosition);
-  
-  // Add methodology page
-  doc.addPage();
-  yPosition = addProfessionalHeader(doc, 'Assessment Methodology', 'Technical Information');
-  
-  doc.setFontSize(14);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('Assessment Framework', 20, yPosition);
-  yPosition += 15;
-  
-  const methodology = [
-    '📚 RIASEC Interest Assessment - Based on Holland\'s career theory',
-    '🎯 O*NET Career Database - 900+ career matches',
-    '🧠 Cognitive Aptitude Measures - Problem-solving and reasoning',
-    '🔐 Response Quality Validation - Ensures accurate results'
-  ];
-  
-  methodology.forEach(item => {
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-    doc.text(item, 20, yPosition);
-    yPosition += 12;
-  });
-  
-  // Add footer to all pages
+// Add footers to all pages
+const addPageFooters = (doc: jsPDF): void => {
   const totalPages = (doc as any).internal.getNumberOfPages();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  
   for (let i = 1; i <= totalPages; i++) {
     doc.setPage(i);
-    addProfessionalFooter(doc);
+    
+    // Footer line
+    doc.setDrawColor(...colors.neutral);
+    doc.line(20, pageHeight - 20, pageWidth - 20, pageHeight - 20);
+    
+    // Footer text
+    doc.setFontSize(8);
+    doc.setTextColor(...colors.neutral);
+    doc.text('AuthenCore Analytics - Professional Career Assessment', 20, pageHeight - 12);
+    doc.text('Confidential Report - For Professional Use Only', 20, pageHeight - 7);
+    
+    // Page number
+    doc.text(`Page ${i} of ${totalPages}`, pageWidth - 40, pageHeight - 7);
   }
 };
 
-// Generate advisor report
-const generateAdvisorReport = (doc: jsPDF, data: SimplePdfData): void => {
-  let yPosition = addProfessionalHeader(doc, 'Career Launch Assessment', 'Coaching Summary Report');
-  
-  // Snapshot overview table
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('Candidate Snapshot', 20, yPosition);
-  yPosition += 15;
-  
-  const snapshot = [
-    ['Candidate', cleanText(data.userInfo.name)],
-    ['Date', data.userInfo.assessmentDate || new Date().toLocaleDateString()],
-    ['Reliability Score', (data.userInfo.reliabilityScore || 0) + '%'],
-    ['Risk Flags', data.riskFlags?.length ? data.riskFlags.join(', ') : 'None'],
-    ['Primary Style', data.profile || 'Mixed Profile'],
-    ['Top Career Cluster', data.careerMatches?.[0]?.title || 'Various']
-  ];
-  
-  snapshot.forEach(([label, value]) => {
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-    doc.text(label + ':', 20, yPosition);
-    
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-    doc.text(value, 90, yPosition);
-    yPosition += 12;
-  });
-  
-  yPosition += 10;
-  
-  // Risk alerts section
-  if (data.riskFlags && data.riskFlags.length > 0) {
-    doc.setFontSize(14);
-    doc.setFont('helvetica', 'bold');
-    doc.setTextColor(colors.accent[0], colors.accent[1], colors.accent[2]);
-    doc.text('⚠️ Risk Alerts', 20, yPosition);
-    yPosition += 15;
-    
-    data.riskFlags.forEach(flag => {
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-      doc.text('• ' + cleanText(flag), 25, yPosition);
-      yPosition += 10;
-    });
-    yPosition += 10;
-  }
-  
-  // Interview guide
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('🧭 Suggested Interview Questions', 20, yPosition);
-  yPosition += 15;
-  
-  const defaultQuestions = [
-    'What aspects of your assessment results surprised you most?',
-    'How do you see yourself using your strongest interests in a career?',
-    'What development areas from the report resonate with your experience?',
-    'Which career recommendations align with your current goals?',
-    'What barriers do you anticipate in pursuing these career paths?'
-  ];
-  
-  const questions = data.interviewQuestions || defaultQuestions;
-  questions.slice(0, 8).forEach((question, index) => {
-    if (yPosition > 260) {
-      doc.addPage();
-      addProfessionalHeader(doc, 'Career Launch Assessment', 'Coaching Guide');
-      yPosition = 60;
-    }
-    
-    doc.setFontSize(11);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-    const lines = doc.splitTextToSize((index + 1) + '. ' + cleanText(question), 170);
-    if (Array.isArray(lines)) {
-      lines.forEach((line, lineIndex) => {
-        doc.text(line, 20, yPosition + (lineIndex * 5));
-      });
-      yPosition += lines.length * 5 + 8;
-    } else {
-      doc.text(lines, 20, yPosition);
-      yPosition += 15;
-    }
-  });
-  
-  // Coaching plan section
-  if (yPosition > 200) {
-    doc.addPage();
-    addProfessionalHeader(doc, 'Career Launch Assessment', 'Development Plan');
-    yPosition = 60;
-  }
-  
-  doc.setFontSize(16);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text('🧩 Development Coaching Plan', 20, yPosition);
-  yPosition += 15;
-  
-  if (data.coachingPlan && data.coachingPlan.length > 0) {
-    data.coachingPlan.forEach(item => {
-      if (yPosition > 250) {
-        doc.addPage();
-        addProfessionalHeader(doc, 'Career Launch Assessment', 'Development Plan');
-        yPosition = 60;
-      }
-      
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'bold');
-      doc.setTextColor(colors.accent[0], colors.accent[1], colors.accent[2]);
-      doc.text(item.priority, 20, yPosition);
-      
-      doc.setFont('helvetica', 'normal');
-      doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-      doc.text('Timeline: ' + item.timeline, 80, yPosition);
-      yPosition += 8;
-      
-      doc.text('Target: ' + cleanText(item.target), 25, yPosition);
-      yPosition += 8;
-      doc.text('Tools: ' + cleanText(item.tools), 25, yPosition);
-      yPosition += 15;
-    });
-  }
-  
-  // Add footer to all pages
-  const totalPages = (doc as any).internal.getNumberOfPages();
-  for (let i = 1; i <= totalPages; i++) {
-    doc.setPage(i);
-    addProfessionalFooter(doc);
-  }
-};
-
-// Generate certificate
-const generateCertificate = (doc: jsPDF, data: SimplePdfData): void => {
-  // Landscape orientation for certificate
-  const certificate = new jsPDF('landscape');
-  const pageWidth = certificate.internal.pageSize.getWidth();
-  const pageHeight = certificate.internal.pageSize.getHeight();
-  
-  // Certificate border
-  certificate.setDrawColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-  certificate.setLineWidth(3);
-  certificate.rect(10, 10, pageWidth - 20, pageHeight - 20, 'S');
-  certificate.setLineWidth(1);
-  certificate.rect(15, 15, pageWidth - 30, pageHeight - 30, 'S');
-  
-  // Logo space
-  certificate.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-  certificate.rect(30, 30, 40, 30, 'F');
-  certificate.setFontSize(10);
-  certificate.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-  certificate.text('AuthenCore', 35, 50);
-  certificate.text('Analytics', 35, 55);
-  
-  // Certificate title
-  certificate.setFontSize(28);
-  certificate.setFont('helvetica', 'bold');
-  certificate.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-  certificate.text('Certificate of Completion', pageWidth / 2, 80, { align: 'center' });
-  
-  // Recipient section
-  certificate.setFontSize(16);
-  certificate.setFont('helvetica', 'normal');
-  certificate.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  certificate.text('This certifies that', pageWidth / 2, 110, { align: 'center' });
-  
-  certificate.setFontSize(24);
-  certificate.setFont('helvetica', 'bold');
-  certificate.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  certificate.text(cleanText(data.userInfo.name), pageWidth / 2, 130, { align: 'center' });
-  
-  certificate.setFontSize(16);
-  certificate.setFont('helvetica', 'normal');
-  certificate.text('has successfully completed the', pageWidth / 2, 150, { align: 'center' });
-  
-  certificate.setFontSize(20);
-  certificate.setFont('helvetica', 'bold');
-  certificate.setTextColor(colors.primary[0], colors.primary[1], colors.primary[2]);
-  certificate.text('Career Launch Assessment', pageWidth / 2, 170, { align: 'center' });
-  
-  // Date and score
-  certificate.setFontSize(14);
-  certificate.setFont('helvetica', 'normal');
-  certificate.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-  certificate.text('Completed on: ' + (data.userInfo.assessmentDate || new Date().toLocaleDateString()), 
-                  pageWidth / 2, 190, { align: 'center' });
-  
-  if (data.overallScore) {
-    certificate.text('Overall Score: ' + data.overallScore + '/100', pageWidth / 2, 205, { align: 'center' });
-  }
-  
-  // Signature line
-  certificate.setDrawColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-  certificate.line(pageWidth - 120, pageHeight - 60, pageWidth - 40, pageHeight - 60);
-  certificate.setFontSize(12);
-  certificate.text('AuthenCore Analytics', pageWidth - 80, pageHeight - 50, { align: 'center' });
-  certificate.text('Assessment Platform', pageWidth - 80, pageHeight - 40, { align: 'center' });
-  
-  // Verification QR placeholder
-  certificate.setFillColor(colors.light[0], colors.light[1], colors.light[2]);
-  certificate.rect(30, pageHeight - 80, 25, 25, 'F');
-  certificate.setFontSize(8);
-  certificate.text('QR Code', 35, pageHeight - 65);
-  certificate.text('Verify', 37, pageHeight - 60);
-  
-  // Copy certificate content to main doc
-  const certificatePages = (certificate as any).internal.pages;
-  certificatePages.forEach((page: any, index: number) => {
-    if (index > 0) {
-      doc.addPage('landscape');
-      // Copy page content (simplified - in real implementation you'd need proper page copying)
-    }
-  });
-  
-  // For now, we'll generate directly on the main doc
-  doc.addPage('landscape');
-  generateCertificate(doc, data);
+// Export additional functions for specific report types
+export const generateProfessionalPdf = (data: SimplePdfData, reportType: ReportType = 'applicant'): void => {
+  // For now, all types use the same clean implementation
+  // Can be extended later with type-specific layouts
+  generateClientSidePdf(data);
 };
