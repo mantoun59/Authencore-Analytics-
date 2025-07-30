@@ -27,7 +27,7 @@ export interface SimplePdfData {
   [key: string]: any;
 }
 
-export type ReportType = 'applicant' | 'advisor' | 'certificate';
+export type ReportType = 'applicant' | 'advisor';
 
 // Convert image to base64 for embedding in HTML
 const getLogoBase64 = async (): Promise<string> => {

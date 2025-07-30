@@ -119,59 +119,6 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
     }
   };
 
-  const generateCertificate = async () => {
-    try {
-      const certificateData = {
-        candidateName: userProfile.name,
-        assessmentType: 'Career Launch Assessment',
-        completionDate: userProfile.assessmentDate,
-        reliabilityScore: userProfile.reliabilityScore,
-        validityLevel: enhancedAI?.distortionAnalysis?.confidenceLevel || 94,
-        careerFit: results.career_fit.label
-      };
-
-      // For now, create a simple certificate download since the edge function is optional
-      const certificateHTML = generateSimpleCertificate(certificateData);
-      const blob = new Blob([certificateHTML], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${userProfile.name.replace(/\s+/g, '_')}_Career_Launch_Certificate.html`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-
-      toast({
-        title: "Certificate Downloaded",
-        description: "Your completion certificate has been generated.",
-      });
-    } catch (error) {
-      console.error('Error generating certificate:', error);
-      toast({
-        title: "Error",
-        description: "Failed to generate certificate. Please try again.",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const generateSimpleCertificate = (data: any) => {
-    return `
-    <!DOCTYPE html>
-    <html>
-    <head><title>Assessment Certificate</title></head>
-    <body style="font-family: Arial, sans-serif; padding: 40px; text-align: center;">
-      <h1 style="color: #2563eb;">Certificate of Completion</h1>
-      <h2>${data.candidateName}</h2>
-      <p>Has successfully completed the ${data.assessmentType}</p>
-      <p>Completion Date: ${data.completionDate}</p>
-      <p>Reliability Score: ${data.reliabilityScore}%</p>
-      <p>Career Profile: ${data.careerFit}</p>
-    </body>
-    </html>
-    `;
-  };
 
   const TechnicalTooltip = ({ term, definition }: { term: string; definition: string }) => (
     <TooltipProvider>
@@ -224,10 +171,6 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
             Advisor Report
           </Button>
         )}
-        <Button onClick={generateCertificate} variant="outline" className="flex items-center gap-2">
-          <Award className="h-4 w-4" />
-          Generate Certificate
-        </Button>
       </div>
 
       {/* Assessment Quality & Reliability */}
