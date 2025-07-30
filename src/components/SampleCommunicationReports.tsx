@@ -17,8 +17,12 @@ import {
   Target,
   MessageCircle,
   BarChart3,
-  FileText
+  FileText,
+  Star,
+  Zap,
+  Shield
 } from "lucide-react";
+import { RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import EnhancedCommunicationStylesVisualizer from "./CommunicationStylesEnhancedVisualizer";
 
 // Sample communication data
@@ -590,10 +594,11 @@ const SampleCommunicationReports: React.FC<SampleCommunicationReportsProps> = ({
 
       {/* Report Content */}
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="analysis">Analysis</TabsTrigger>
-          <TabsTrigger value="distortion">Validity</TabsTrigger>
+          <TabsTrigger value="workplace">Workplace Fit</TabsTrigger>
+          <TabsTrigger value="analysis">Visual Analysis</TabsTrigger>
+          <TabsTrigger value="team">Team & Validity</TabsTrigger>
           <TabsTrigger value="report">Full Report</TabsTrigger>
         </TabsList>
 
@@ -639,6 +644,88 @@ const SampleCommunicationReports: React.FC<SampleCommunicationReportsProps> = ({
                 <p className="text-blue-800 text-sm">
                   <strong>Development Focus:</strong> {sampleCandidateData.profile.challenge}
                 </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* CEI Score Chart */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <BarChart3 className="w-5 h-5" />
+                Communication Effectiveness Index (CEI) Breakdown
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <RadarChart data={[
+                    { subject: 'Clarity', score: 82, fullMark: 100 },
+                    { subject: 'Empathy', score: 85, fullMark: 100 },
+                    { subject: 'Adaptability', score: 75, fullMark: 100 },
+                    { subject: 'Influence', score: 84, fullMark: 100 },
+                    { subject: 'Listening', score: 79, fullMark: 100 },
+                    { subject: 'Assertiveness', score: 72, fullMark: 100 }
+                  ]}>
+                    <PolarGrid />
+                    <PolarAngleAxis dataKey="subject" />
+                    <PolarRadiusAxis angle={60} domain={[0, 100]} />
+                    <Radar
+                      name="CEI Components"
+                      dataKey="score"
+                      stroke="#3b82f6"
+                      fill="#3b82f6"
+                      fillOpacity={0.2}
+                      strokeWidth={2}
+                    />
+                  </RadarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Workplace Fit Analysis */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Star className="w-5 h-5" />
+                Workplace Fit Analysis
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-semibold mb-3 text-green-700">High Fit Environments</h4>
+                  <div className="space-y-2">
+                    {[
+                      { env: "Collaborative Teams", score: 94 },
+                      { env: "Customer-Facing Roles", score: 89 },
+                      { env: "Creative Projects", score: 86 },
+                      { env: "Mentoring Positions", score: 83 }
+                    ].map((item, index) => (
+                      <div key={index} className="flex justify-between items-center p-2 bg-green-50 rounded">
+                        <span className="text-sm font-medium">{item.env}</span>
+                        <Badge variant="secondary" className="bg-green-100 text-green-800">{item.score}%</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div>
+                  <h4 className="font-semibold mb-3 text-orange-700">Development Needed</h4>
+                  <div className="space-y-2">
+                    {[
+                      { env: "Data Analysis Roles", score: 62 },
+                      { env: "High-Pressure Deadlines", score: 58 },
+                      { env: "Solo Work Environments", score: 55 },
+                      { env: "Technical Documentation", score: 51 }
+                    ].map((item, index) => (
+                      <div key={index} className="flex justify-between items-center p-2 bg-orange-50 rounded">
+                        <span className="text-sm font-medium">{item.env}</span>
+                        <Badge variant="secondary" className="bg-orange-100 text-orange-800">{item.score}%</Badge>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -693,15 +780,46 @@ const SampleCommunicationReports: React.FC<SampleCommunicationReportsProps> = ({
           )}
         </TabsContent>
 
-        <TabsContent value="analysis" className="space-y-6">
-          <EnhancedCommunicationStylesVisualizer results={sampleCandidateData} />
-        </TabsContent>
-
-        <TabsContent value="distortion" className="space-y-6">
+        <TabsContent value="workplace" className="space-y-6">
+          {/* Dimension Analysis Chart */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Brain className="w-5 h-5" />
+                <BarChart3 className="w-5 h-5" />
+                Dimension Analysis
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="h-80">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={Object.entries(sampleCandidateData.dimensions).map(([key, dim]) => ({
+                    name: key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1'),
+                    score: dim.score,
+                    level: dim.level
+                  }))}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" angle={-45} textAnchor="end" height={100} />
+                    <YAxis domain={[0, 100]} />
+                    <Tooltip 
+                      formatter={(value, name) => [`${value}%`, 'Score']}
+                      labelFormatter={(label) => `Dimension: ${label}`}
+                    />
+                    <Bar dataKey="score" fill="#3b82f6" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+            </CardContent>
+          </Card>
+
+          <EnhancedCommunicationStylesVisualizer results={sampleCandidateData} />
+        </TabsContent>
+
+        <TabsContent value="analysis" className="space-y-6">
+          {/* Assessment Validity */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Shield className="w-5 h-5" />
                 Assessment Validity & Distortion Analysis
               </CardTitle>
             </CardHeader>
@@ -720,7 +838,7 @@ const SampleCommunicationReports: React.FC<SampleCommunicationReportsProps> = ({
                     </div>
                     <div className="flex justify-between">
                       <span>Social Desirability Bias:</span>
-                      <Badge variant="outline">{sampleCandidateData.distortionAnalysis.socialDesirabilityBias}</Badge>
+                      <Badge variant="outline">Low</Badge>
                     </div>
                     <div className="flex justify-between">
                       <span>Confidence Level:</span>
@@ -744,6 +862,57 @@ const SampleCommunicationReports: React.FC<SampleCommunicationReportsProps> = ({
                       <li>• High engagement suggests motivated participation</li>
                       <li>• Low social desirability bias indicates honest responses</li>
                       <li>• Recommendations have high confidence level</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Team Compatibility Analysis */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Users className="w-5 h-5" />
+                Team Compatibility Analysis
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-green-600 mb-2">92%</div>
+                  <div className="text-sm text-slate-600">Team Synergy</div>
+                  <div className="text-xs text-slate-500 mt-1">With collaborative teams</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-blue-600 mb-2">87%</div>
+                  <div className="text-sm text-slate-600">Leadership Potential</div>
+                  <div className="text-xs text-slate-500 mt-1">In team settings</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold text-purple-600 mb-2">78%</div>
+                  <div className="text-sm text-slate-600">Conflict Resolution</div>
+                  <div className="text-xs text-slate-500 mt-1">Mediation capability</div>
+                </div>
+              </div>
+
+              <div className="mt-6">
+                <h4 className="font-semibold mb-3">Ideal Team Composition</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="p-4 border rounded-lg">
+                    <h5 className="font-medium text-green-700 mb-2">Complementary Profiles</h5>
+                    <ul className="text-sm space-y-1">
+                      <li>• Detail-oriented Analysts (Thinker style)</li>
+                      <li>• Process-focused Coordinators (Supporter style)</li>
+                      <li>• Strategic Decision-makers (Director style)</li>
+                    </ul>
+                  </div>
+                  <div className="p-4 border rounded-lg">
+                    <h5 className="font-medium text-blue-700 mb-2">Team Role</h5>
+                    <ul className="text-sm space-y-1">
+                      <li>• Team motivator and relationship catalyst</li>
+                      <li>• Bridge between management and team members</li>
+                      <li>• Culture champion and engagement driver</li>
                     </ul>
                   </div>
                 </div>
@@ -809,7 +978,7 @@ const SampleCommunicationReports: React.FC<SampleCommunicationReportsProps> = ({
           )}
         </TabsContent>
 
-        <TabsContent value="report" className="space-y-6">
+        <TabsContent value="team" className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

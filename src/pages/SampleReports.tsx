@@ -27,6 +27,7 @@ import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import SampleCommunicationReports from "@/components/SampleCommunicationReports";
 
 // Helper function to map assessment types to PDF generation function format
 const getAssessmentTypeForPDF = (assessmentType: string): string => {
