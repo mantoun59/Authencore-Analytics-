@@ -89,9 +89,19 @@ export default function FaithValuesAssessment() {
 
   const generatePDFReport = async () => {
     try {
+      if (!results) {
+        toast({
+          title: "Error",
+          description: "No results available to generate report.",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Import the FVAI report generator
+      const { generateFVAIReport } = await import('@/services/fvaiReportGenerator');
+      
       const reportData = {
-        assessmentType: 'faith-values',
-        results: results,
         candidateInfo: {
           name: userProfile.name,
           email: userProfile.email,
@@ -99,28 +109,22 @@ export default function FaithValuesAssessment() {
           organization: userProfile.organization,
           faithBackground: userProfile.faithBackground,
           date: new Date().toLocaleDateString()
-        }
+        },
+        results: results
       };
 
-      await generateHtmlReport({
-        assessmentType: 'faith-values',
-        userInfo: {
-          name: userProfile.name,
-          email: userProfile.email,
-          position: userProfile.position,
-          organization: userProfile.organization,
-          faithBackground: userProfile.faithBackground
-        },
-        overallScore: results?.overallScore || 0,
-        dimensions: results?.dimensionScores ? Object.entries(results.dimensionScores).map(([key, value]: [string, any]) => ({
-          name: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-          score: typeof value === 'number' ? value : (value?.score || 0)
-        })) : []
-      });
+      const htmlContent = generateFVAIReport(reportData);
+      
+      // Create a new window/tab with the report
+      const reportWindow = window.open('', '_blank');
+      if (reportWindow) {
+        reportWindow.document.write(htmlContent);
+        reportWindow.document.close();
+      }
       
       toast({
         title: "Report Generated",
-        description: "PDF report downloaded successfully!",
+        description: "FVAI report opened in new tab!",
       });
     } catch (error) {
       console.error('Error generating PDF:', error);
