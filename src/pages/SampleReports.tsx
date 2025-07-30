@@ -153,10 +153,50 @@ const SampleReports = () => {
             'Work on direct feedback delivery methods'
           ],
           careerMatches: [
-            'Team Lead/Supervisor roles',
-            'Customer relationship management',
-            'Training and development positions',
-            'Sales and business development'
+            {
+              career: { title: 'Team Lead/Supervisor', description: 'Leading teams and managing projects' },
+              matchPercentage: 87,
+              fitScore: 85,
+              readinessLevel: 'Highly Qualified',
+              skillGaps: ['Conflict resolution'],
+              strengthAlignment: ['Communication', 'Leadership'],
+              salaryExpectation: '$65,000 - $85,000',
+              growthPotential: 'High',
+              developmentPath: ['Leadership training', 'Team management']
+            },
+            {
+              career: { title: 'Customer Relationship Management', description: 'Building and maintaining customer relationships' },
+              matchPercentage: 82,
+              fitScore: 80,
+              readinessLevel: 'Qualified',
+              skillGaps: ['Technical knowledge'],
+              strengthAlignment: ['Communication', 'Relationship building'],
+              salaryExpectation: '$55,000 - $75,000',
+              growthPotential: 'High',
+              developmentPath: ['CRM systems training', 'Sales techniques']
+            },
+            {
+              career: { title: 'Training & Development', description: 'Designing and delivering training programs' },
+              matchPercentage: 79,
+              fitScore: 77,
+              readinessLevel: 'Qualified',
+              skillGaps: ['Instructional design'],
+              strengthAlignment: ['Communication', 'Teaching ability'],
+              salaryExpectation: '$60,000 - $80,000',
+              growthPotential: 'Medium',
+              developmentPath: ['Training certification', 'Learning design']
+            },
+            {
+              career: { title: 'Sales & Business Development', description: 'Growing business through client acquisition' },
+              matchPercentage: 75,
+              fitScore: 73,
+              readinessLevel: 'Entry Level',
+              skillGaps: ['Sales techniques', 'Market analysis'],
+              strengthAlignment: ['Communication', 'Persuasion'],
+              salaryExpectation: '$50,000 - $70,000',
+              growthPotential: 'High',
+              developmentPath: ['Sales training', 'Business development']
+            }
           ],
           branding: {
             logo: '/final-logo.png',
