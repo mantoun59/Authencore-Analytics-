@@ -402,9 +402,20 @@ export class UnifiedReportGenerator {
     
     return `
       <div class="header">
-        ${config.branding?.logo ? `<img src="${config.branding.logo}" alt="Logo" style="max-height: 60px; margin-bottom: 20px;">` : ''}
+        ${config.branding?.logo ? `
+          <div style="text-align: center; margin-bottom: 20px;">
+            <img src="${config.branding.logo}" alt="Company Logo" style="max-height: 80px; max-width: 200px;">
+          </div>
+        ` : ''}
         <h1>${title}</h1>
         <div class="subtitle">Professional Assessment Report • ${company}</div>
+        ${config.reportType === 'employer' ? `
+          <div style="background: rgba(255,193,7,0.1); padding: 10px; border-radius: 8px; margin-top: 15px;">
+            <small style="color: #856404; font-weight: 500;">
+              🔒 CONFIDENTIAL EMPLOYER REPORT - Contains distortion analysis and hiring insights
+            </small>
+          </div>
+        ` : ''}
       </div>
     `;
   }
@@ -653,14 +664,123 @@ export class UnifiedReportGenerator {
   }
 
   private buildVisualizations(results: UnifiedAssessmentResults): string {
-    // Simplified visualization - in production would include actual charts
+    // Generate radar chart and bar charts for dimensions
+    const chartData = results.dimensions.map(d => ({ name: d.name, score: d.score }));
+    
     return `
       <div class="section">
         <h2>Performance Visualization</h2>
-        <div style="text-align: center; padding: 40px; background: #f8f9fa; border-radius: 12px;">
-          <p style="color: #6c757d; font-style: italic;">
-            Charts and visualizations would be rendered here in the full implementation.
-          </p>
+        <div class="charts-container">
+          ${this.buildRadarChart(chartData)}
+          ${this.buildBarChart(chartData)}
+        </div>
+      </div>
+    `;
+  }
+
+  private buildRadarChart(chartData: Array<{name: string; score: number}>): string {
+    const size = 300;
+    const center = size / 2;
+    const radius = center - 50;
+    const angleStep = (2 * Math.PI) / chartData.length;
+    
+    // Generate polygon points for radar chart
+    const points = chartData.map((item, index) => {
+      const angle = index * angleStep - Math.PI / 2;
+      const value = (item.score / 100) * radius;
+      const x = center + Math.cos(angle) * value;
+      const y = center + Math.sin(angle) * value;
+      return `${x},${y}`;
+    }).join(' ');
+    
+    // Generate grid circles
+    const gridCircles = [0.2, 0.4, 0.6, 0.8, 1.0].map(scale => 
+      `<circle cx="${center}" cy="${center}" r="${radius * scale}" fill="none" stroke="#e0e0e0" stroke-width="1"/>`
+    ).join('');
+    
+    // Generate axis lines and labels
+    const axisLines = chartData.map((item, index) => {
+      const angle = index * angleStep - Math.PI / 2;
+      const x2 = center + Math.cos(angle) * radius;
+      const y2 = center + Math.sin(angle) * radius;
+      const labelX = center + Math.cos(angle) * (radius + 20);
+      const labelY = center + Math.sin(angle) * (radius + 20);
+      
+      return `
+        <line x1="${center}" y1="${center}" x2="${x2}" y2="${y2}" stroke="#ccc" stroke-width="1"/>
+        <text x="${labelX}" y="${labelY}" text-anchor="middle" dominant-baseline="middle" 
+              font-size="11" fill="#666" transform="rotate(${angle * 180 / Math.PI}, ${labelX}, ${labelY})">
+          ${item.name}
+        </text>
+      `;
+    }).join('');
+    
+    return `
+      <div class="chart-container" style="margin: 20px 0;">
+        <h3 style="text-align: center; margin-bottom: 15px;">Dimension Scores Radar Chart</h3>
+        <div style="text-align: center;">
+          <svg width="${size}" height="${size}" style="border: 1px solid #eee; border-radius: 8px;">
+            ${gridCircles}
+            ${axisLines}
+            <polygon points="${points}" fill="rgba(0,128,128,0.3)" stroke="#008080" stroke-width="2"/>
+            ${chartData.map((item, index) => {
+              const angle = index * angleStep - Math.PI / 2;
+              const value = (item.score / 100) * radius;
+              const x = center + Math.cos(angle) * value;
+              const y = center + Math.sin(angle) * value;
+              return `<circle cx="${x}" cy="${y}" r="4" fill="#008080"/>`;
+            }).join('')}
+          </svg>
+        </div>
+      </div>
+    `;
+  }
+
+  private buildBarChart(chartData: Array<{name: string; score: number}>): string {
+    const maxScore = Math.max(...chartData.map(d => d.score));
+    const chartHeight = 400;
+    const barWidth = 40;
+    const spacing = 60;
+    const chartWidth = chartData.length * spacing + 40;
+    
+    const bars = chartData.map((item, index) => {
+      const barHeight = (item.score / 100) * (chartHeight - 100);
+      const x = 20 + index * spacing;
+      const y = chartHeight - 50 - barHeight;
+      const color = item.score >= 70 ? '#22c55e' : item.score >= 50 ? '#f59e0b' : '#ef4444';
+      
+      return `
+        <rect x="${x}" y="${y}" width="${barWidth}" height="${barHeight}" 
+              fill="${color}" rx="4"/>
+        <text x="${x + barWidth/2}" y="${chartHeight - 30}" 
+              text-anchor="middle" font-size="10" fill="#666">
+          ${item.name.length > 12 ? item.name.substring(0, 12) + '...' : item.name}
+        </text>
+        <text x="${x + barWidth/2}" y="${y - 5}" 
+              text-anchor="middle" font-size="12" font-weight="bold" fill="#333">
+          ${item.score}%
+        </text>
+      `;
+    }).join('');
+    
+    return `
+      <div class="chart-container" style="margin: 20px 0;">
+        <h3 style="text-align: center; margin-bottom: 15px;">Dimension Scores Bar Chart</h3>
+        <div style="text-align: center; overflow-x: auto;">
+          <svg width="${chartWidth}" height="${chartHeight}" style="border: 1px solid #eee; border-radius: 8px;">
+            <!-- Grid lines -->
+            ${[0, 25, 50, 75, 100].map(value => {
+              const y = chartHeight - 50 - (value / 100) * (chartHeight - 100);
+              return `
+                <line x1="20" y1="${y}" x2="${chartWidth - 20}" y2="${y}" 
+                      stroke="#f0f0f0" stroke-width="1"/>
+                <text x="15" y="${y + 3}" text-anchor="end" font-size="10" fill="#666">
+                  ${value}%
+                </text>
+              `;
+            }).join('')}
+            ${bars}
+          </svg>
         </div>
       </div>
     `;

@@ -23,7 +23,8 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { aiReportGenerator, AIReportRequest } from "@/services/aiReportGenerator";
+import { EnhancedCommunicationReportGenerator } from "@/services/enhancedCommunicationReportGenerator";
+import { unifiedReportGenerator } from "@/services/unifiedReportGenerator";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -74,64 +75,84 @@ const SampleReports = () => {
     }
   }, []);
 
-  const generateSamplePDF = async () => {
+  const generateSampleReport = async () => {
     setIsGenerating(true);
     try {
       const sampleData = reportType === 'employer' 
         ? getSampleEmployerReport(selectedAssessment)
         : getSampleCandidateReport(selectedAssessment);
       
-      // Format data for PDF generation function
-      const pdfRequestData = {
-        assessmentType: getAssessmentTypeForPDF(selectedAssessment),
-        reportType: reportType, // Add report type to request
-        results: sampleData,
-        userData: {
-          name: sampleData.candidateInfo.name,
-          email: sampleData.candidateInfo.email,
-          date: sampleData.candidateInfo.completionDate
+      // Use enhanced communication generator for communication assessments
+      if (selectedAssessment === 'communication' || selectedAssessment === 'communication-styles') {
+        const communicationData = {
+          dimensions: {
+            assertiveness: { score: 78, level: 'High', percentile: 78, description: 'Strong assertive communication style' },
+            expressiveness: { score: 85, level: 'Very High', percentile: 85, description: 'Highly expressive and engaging' },
+            informationProcessing: { score: 72, level: 'High', percentile: 72, description: 'Good analytical processing' },
+            channelPreferences: { score: 80, level: 'High', percentile: 80, description: 'Adapts well to different channels' },
+            listeningPatterns: { score: 75, level: 'High', percentile: 75, description: 'Active and empathetic listener' },
+            influenceStrategies: { score: 82, level: 'Very High', percentile: 82, description: 'Effective influence techniques' },
+            conflictCommunication: { score: 68, level: 'Moderate', percentile: 68, description: 'Developing conflict resolution skills' }
+          },
+          profile: {
+            type: 'Socializer',
+            primary: 'Expressive',
+            secondary: 'Supportive',
+            strength: 'Building relationships and motivating others',
+            challenge: 'May struggle with direct confrontation',
+            workStyle: 'Collaborative and team-oriented approach'
+          },
+          distortionAnalysis: {
+            score: 15,
+            level: 'Low' as const,
+            indicators: [],
+            reliability: 'High' as const,
+            recommendations: [],
+            consistencyCheck: 92,
+            extremePatterns: 8,
+            socialDesirabilityBias: 15,
+            responseTimePattern: 75
+          },
+          overallScore: 77,
+          candidateInfo: {
+            name: 'Sarah Johnson',
+            email: 'sarah.johnson@example.com',
+            completionDate: new Date().toLocaleDateString()
+          }
+        };
+
+        if (reportType === 'employer') {
+          await EnhancedCommunicationReportGenerator.generateEmployerReport(communicationData);
+        } else {
+          await EnhancedCommunicationReportGenerator.generateCandidateReport(communicationData);
+        }
+        
+        toast.success(`Sample ${reportType} communication report generated successfully!`);
+        return;
+      }
+
+      // For other assessment types, use unified report generator
+      const unifiedData = convertToUnifiedFormat(sampleData, selectedAssessment);
+      const config = {
+        assessmentType: selectedAssessment,
+        reportType: reportType as 'candidate' | 'employer',
+        results: unifiedData,
+        template: reportType === 'employer' ? 'executive' as const : 'detailed' as const,
+        includeCharts: true,
+        includeRecommendations: true,
+        includeActionPlan: reportType === 'candidate',
+        branding: {
+          logo: '/final-logo.png',
+          colors: {
+            primary: '#008080',
+            secondary: '#20B2AA'
+          },
+          company: 'AuthenCore Analytics'
         }
       };
-      
-      
-      
-      toast.info(`Opening sample ${reportType} report...`);
-      
-      try {
-        
-        const response = await supabase.functions.invoke('generate-pdf-report', {
-          body: pdfRequestData
-        });
 
-        
-
-        if (response.data) {
-          
-          // Open HTML report in new window for PDF printing
-          const newWindow = window.open('', '_blank');
-          if (newWindow) {
-            newWindow.document.write(response.data);
-            newWindow.document.close();
-            
-            setTimeout(() => {
-              newWindow.focus();
-              newWindow.print();
-            }, 1000);
-          }
-          toast.success(`Sample ${reportType} report opened successfully!`);
-        } else if (response.error) {
-          console.error('❌ PDF generation error:', response.error);
-          throw new Error(`PDF generation failed: ${response.error.message}`);
-        } else {
-          console.error('❌ No data returned from PDF service');
-          throw new Error('No data returned from PDF service');
-        }
-      } catch (pdfError) {
-        console.error('❌ PDF service failed, using HTML fallback:', pdfError);
-        // Fallback: Generate simple HTML report
-        generateFallbackReport(sampleData, selectedAssessment, reportType);
-        toast.success(`Sample ${reportType} report opened successfully!`);
-      }
+      await unifiedReportGenerator.generateReport(config);
+      toast.success(`Sample ${reportType} report generated successfully!`);
       
     } catch (error) {
       console.error('Error generating sample report:', error);
@@ -139,6 +160,62 @@ const SampleReports = () => {
     } finally {
       setIsGenerating(false);
     }
+  };
+
+  // Helper function to convert legacy sample data to unified format
+  const convertToUnifiedFormat = (sampleData: any, assessmentType: string) => {
+    return {
+      assessmentId: `sample-${assessmentType}-${Date.now()}`,
+      assessmentType: assessmentType,
+      candidateInfo: sampleData.candidateInfo,
+      overallScore: sampleData.overallScore || 75,
+      overallPercentile: sampleData.overallPercentile || 75,
+      dimensions: Object.entries(sampleData.scores || {}).map(([key, score]: [string, any]) => ({
+        key,
+        name: key.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+        score: typeof score === 'object' ? score.score : score,
+        percentile: typeof score === 'object' ? score.percentile || score.score : score,
+        level: (typeof score === 'object' ? score.score : score) >= 70 ? 'high' as const : 
+               (typeof score === 'object' ? score.score : score) >= 40 ? 'medium' as const : 'low' as const,
+        description: typeof score === 'object' ? score.interpretation : `Assessment of ${key}`,
+        strengths: (typeof score === 'object' ? score.score : score) >= 70 ? ['Strong performance'] : [],
+        growthAreas: (typeof score === 'object' ? score.score : score) < 70 ? ['Development opportunity'] : [],
+        recommendations: (typeof score === 'object' ? score.score : score) < 70 ? ['Focus on improvement'] : ['Maintain excellence'],
+        insights: [`Performance in ${key} shows specific patterns`]
+      })),
+      profile: {
+        title: sampleData.profile || 'Assessment Complete',
+        description: sampleData.summary || 'Assessment completed successfully',
+        keyTraits: sampleData.topStrengths || []
+      },
+      insights: {
+        strengths: sampleData.topStrengths || [],
+        challenges: sampleData.keyDevelopmentAreas || [],
+        opportunities: [],
+        recommendations: sampleData.recommendations || []
+      },
+      actionPlan: {
+        immediate: sampleData.recommendations?.slice(0, 2) || [],
+        shortTerm: sampleData.recommendations?.slice(2, 4) || [],
+        longTerm: sampleData.recommendations?.slice(4) || []
+      },
+      validityAssessment: {
+        consistencyScore: 85,
+        engagementLevel: 'high' as const,
+        responsePattern: 'normal',
+        flags: [],
+        fakeGoodIndicator: 15,
+        completionRate: 100
+      },
+      reportData: {
+        executiveSummary: sampleData.summary || 'Assessment completed successfully',
+        detailedAnalysis: 'Detailed analysis of assessment results',
+        interviewQuestions: ['Tell me about your strengths', 'How do you handle challenges?'],
+        hiringRecommendations: ['Consider for role', 'Provide development support'],
+        onboardingPlan: ['Standard onboarding', 'Focus on development areas']
+      },
+      timestamp: new Date().toISOString()
+    };
   };
 
   const generateFallbackReport = (sampleData: any, assessmentType: string, reportType: string) => {
@@ -1248,7 +1325,7 @@ const SampleReports = () => {
               <p className="text-muted-foreground mb-4">
                 See a complete sample of our comprehensive {currentAssessment?.title || 'assessment'} with detailed analysis and insights.
               </p>
-              <Button onClick={generateSamplePDF} variant="default" disabled={isGenerating}>
+              <Button onClick={generateSampleReport} variant="default" disabled={isGenerating}>
                 <Sparkles className="h-4 w-4 mr-2" />
                 {isGenerating ? 'Generating...' : `View ${currentAssessment?.title || 'Sample'} Report`}
               </Button>
@@ -1327,7 +1404,7 @@ const SampleReports = () => {
                   <Button 
                     size="sm" 
                     variant="outline"
-                    onClick={generateSamplePDF}
+              onClick={generateSampleReport}
                     disabled={isGenerating}
                   >
                     <Download className="h-4 w-4 mr-2" />
