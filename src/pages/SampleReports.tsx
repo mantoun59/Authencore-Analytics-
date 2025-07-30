@@ -1507,39 +1507,40 @@ const SampleReports = () => {
         };
 
       case 'faith-values':
-        console.log('✅ Generating comprehensive FVAI candidate report data');
+        console.log('✅ Generating FVAI candidate report using Career Launch model');
         return {
           ...baseReport,
           candidateName: 'Sarah Chen',
           position: 'Community Relations Manager',
           executiveSummary: {
             overallScore: 88,
-            readinessLevel: 'Excellent',
-            topStrengths: ['Integrity & Authenticity', 'Service-Oriented Leadership', 'Compassionate Decision-Making'],
-            keyDevelopmentAreas: ['Boundary Setting', 'Assertiveness Training', 'Strategic Planning'],
+            readinessLevel: 'Values-Aligned Professional',
+            topStrengths: ['Integrity & Authenticity', 'Service Orientation', 'Compassionate Leadership'],
+            keyDevelopmentAreas: ['Assertiveness', 'Strategic Vision', 'Work-Life Boundaries'],
             recommendedNextSteps: [
-              'Pursue leadership roles in faith-based or mission-driven organizations',
-              'Develop strategic thinking and planning capabilities',
-              'Strengthen assertiveness while maintaining compassionate approach'
+              'Pursue leadership roles in mission-driven organizations',
+              'Develop strategic planning and vision-setting skills',
+              'Strengthen personal boundaries while maintaining compassion',
+              'Seek mentorship in faith-based leadership principles'
             ]
           },
           dimensionScores: {
-            integrity: { score: 92, level: 'Excellent', interpretation: 'Demonstrates unwavering commitment to ethical principles' },
-            compassion: { score: 89, level: 'Excellent', interpretation: 'Shows exceptional empathy and care for others' },
-            service: { score: 91, level: 'Excellent', interpretation: 'Strong orientation toward serving others and community' },
-            justice: { score: 85, level: 'Very Good', interpretation: 'Committed to fairness and equal treatment' },
-            stewardship: { score: 87, level: 'Very Good', interpretation: 'Responsible management of resources and opportunities' },
-            humility: { score: 83, level: 'Good', interpretation: 'Balanced self-awareness with room for growth in confidence' },
-            gratitude: { score: 90, level: 'Excellent', interpretation: 'Appreciative mindset that enhances relationships' },
-            courage: { score: 79, level: 'Good', interpretation: 'Shows moral courage with opportunity to strengthen advocacy' }
+            integrity: { score: 92, level: 'Excellent', interpretation: 'Demonstrates unwavering commitment to moral principles and ethical decision-making across all situations' },
+            compassion: { score: 89, level: 'Excellent', interpretation: 'Shows exceptional empathy, care for others, and genuine concern for wellbeing of colleagues and community' },
+            service: { score: 91, level: 'Excellent', interpretation: 'Strong orientation toward serving others, contributing to community welfare, and making meaningful impact' },
+            justice: { score: 85, level: 'Very Good', interpretation: 'Committed to fairness, equality, and standing up for what is right in professional and personal contexts' },
+            stewardship: { score: 87, level: 'Very Good', interpretation: 'Demonstrates responsible management of resources, talents, and opportunities entrusted to them' },
+            humility: { score: 79, level: 'Good', interpretation: 'Shows balanced self-awareness with room for growth in confidence and self-advocacy' },
+            gratitude: { score: 90, level: 'Excellent', interpretation: 'Maintains appreciative mindset that enhances relationships and provides positive perspective' },
+            courage: { score: 76, level: 'Good', interpretation: 'Demonstrates moral courage with opportunities to strengthen advocacy and bold leadership' }
           },
           careerRecommendations: [
-            'Non-profit leadership positions',
-            'Community outreach coordinator',
-            'Social services management',
-            'Faith-based organization roles',
-            'Corporate social responsibility',
-            'Educational administration'
+            'Non-profit Executive Director positions',
+            'Community Relations Manager roles',
+            'Social Services Program Coordinator',
+            'Faith-based Organization Leadership',
+            'Corporate Social Responsibility Manager',
+            'Educational Administration (values-focused institutions)'
           ]
         };
       
@@ -2318,166 +2319,8 @@ const SampleReports = () => {
           </Card>
 
           {/* Report Content */}
-          {/* Special handling for FVAI reports */}
-          {selectedAssessment === 'faith-values' ? (
-            <Card>
-              <CardHeader>
-                <CardTitle>Faith & Values Alignment Index (FVAI) Sample Reports</CardTitle>
-                <CardDescription>
-                  View authentic FVAI reports with faith-based values analysis
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid md:grid-cols-2 gap-6">
-                  <Button 
-                    onClick={async () => {
-                      try {
-                        const { generateFVAICandidateReport } = await import('@/services/fvaiCandidateReportGenerator');
-                        const sampleData = {
-                          candidateInfo: {
-                            name: 'Sarah Chen',
-                            email: 'sarah.chen@faithorganization.org',
-                            position: 'Community Relations Manager',
-                            organization: 'Hope Community Foundation',
-                            faithBackground: 'Christian - Baptist Tradition',
-                            date: new Date().toLocaleDateString()
-                          },
-                          results: {
-                            topValues: [
-                              { id: 'integrity', name: 'Integrity', score: 92, icon: '⚖️', description: 'Demonstrates unwavering commitment to moral principles' },
-                              { id: 'compassion', name: 'Compassion', score: 89, icon: '❤️', description: 'Shows exceptional empathy and care for others' },
-                              { id: 'service', name: 'Service', score: 91, icon: '🤝', description: 'Strong orientation toward serving others' },
-                              { id: 'justice', name: 'Justice', score: 85, icon: '⚖️', description: 'Committed to fairness and equality' },
-                              { id: 'stewardship', name: 'Stewardship', score: 87, icon: '🌱', description: 'Responsible resource management' },
-                              { id: 'humility', name: 'Humility', score: 83, icon: '🙏', description: 'Balanced self-awareness' }
-                            ],
-                            valueScores: {
-                              integrity: 92, compassion: 89, service: 91, justice: 85, stewardship: 87, humility: 83, gratitude: 90, courage: 79
-                            },
-                            cultureMatches: [
-                              {
-                                culture: {
-                                  id: 'purpose-driven',
-                                  name: 'Purpose-Driven Organization',
-                                  description: 'Organizations that prioritize mission, values, and meaningful impact',
-                                  characteristics: ['Mission-focused', 'Values-driven', 'Community-oriented'],
-                                  examples: ['Non-profits', 'Faith-based organizations']
-                                },
-                                alignment: 'Strong',
-                                score: 88
-                              }
-                            ],
-                            insights: {
-                              workStyle: 'Collaborative, purpose-driven approach that prioritizes relationships',
-                              idealEnvironment: 'Mission-focused organizations with strong values alignment',
-                              growthAreas: 'Leadership confidence, strategic planning skills',
-                              challenges: 'May struggle in highly competitive environments'
-                            },
-                            validity: 'Excellent',
-                            validityMetrics: { 
-                              responseConsistency: 94, 
-                              socialDesirabilityBias: 12, 
-                              fakeGoodPattern: 8,
-                              responsePatternFlag: false 
-                            },
-                            distortionScore: 8,
-                            defensivenessScore: 15
-                          }
-                        };
-                        const html = generateFVAICandidateReport(sampleData);
-                        const reportWindow = window.open('', '_blank');
-                        if (reportWindow) {
-                          reportWindow.document.write(html);
-                          reportWindow.document.close();
-                        }
-                      } catch (error) {
-                        console.error('Error generating candidate report:', error);
-                      }
-                    }}
-                    className="h-24 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold"
-                  >
-                    <div className="text-center">
-                      <div className="text-2xl mb-1">👤</div>
-                      <div>Candidate Report</div>
-                      <div className="text-xs opacity-80">Personal Development Focus</div>
-                    </div>
-                  </Button>
-                  
-                  <Button 
-                    onClick={async () => {
-                      try {
-                        const { generateFVAIEmployerReport } = await import('@/services/fvaiEmployerReportGenerator');
-                        const sampleData = {
-                          candidateInfo: {
-                            name: 'Sarah Chen',
-                            email: 'sarah.chen@faithorganization.org',
-                            position: 'Community Relations Manager',
-                            organization: 'Hope Community Foundation',
-                            faithBackground: 'Christian - Baptist Tradition',
-                            date: new Date().toLocaleDateString()
-                          },
-                          results: {
-                            topValues: [
-                              { id: 'integrity', name: 'Integrity', score: 92, icon: '⚖️', description: 'Demonstrates unwavering commitment to moral principles' },
-                              { id: 'compassion', name: 'Compassion', score: 89, icon: '❤️', description: 'Shows exceptional empathy and care for others' }
-                            ],
-                            valueScores: {
-                              integrity: 92, compassion: 89, service: 91, justice: 85, stewardship: 87, humility: 83
-                            },
-                            cultureMatches: [{
-                              culture: { 
-                                id: 'purpose-driven',
-                                name: 'Purpose-Driven Organization', 
-                                description: 'Values-based organization focused on mission and community impact',
-                                characteristics: ['Mission-focused', 'Values-driven'],
-                                examples: ['Non-profits', 'Faith-based organizations']
-                              },
-                              alignment: 'Strong',
-                              score: 88
-                            }],
-                            insights: {
-                              workStyle: 'Collaborative approach',
-                              idealEnvironment: 'Mission-focused organizations',
-                              growthAreas: 'Leadership development',
-                              challenges: 'Competitive environments'
-                            },
-                            validity: 'Excellent',
-                            validityMetrics: { 
-                              responseConsistency: 94, 
-                              socialDesirabilityBias: 12, 
-                              fakeGoodPattern: 8,
-                              responsePatternFlag: false 
-                            },
-                            distortionScore: 8,
-                            defensivenessScore: 15
-                          }
-                        };
-                        const html = generateFVAIEmployerReport(sampleData);
-                        const reportWindow = window.open('', '_blank');
-                        if (reportWindow) {
-                          reportWindow.document.write(html);
-                          reportWindow.document.close();
-                        }
-                      } catch (error) {
-                        console.error('Error generating employer report:', error);
-                      }
-                    }}
-                    className="h-24 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold"
-                  >
-                    <div className="text-center">
-                      <div className="text-2xl mb-1">🏢</div>
-                      <div>Employer Report</div>
-                      <div className="text-xs opacity-80">Hiring Decision Focus</div>
-                    </div>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          ) : (
-            <>
-              {reportType === 'candidate' ? renderCandidateReport() : renderEmployerReport()}
-            </>
-          )}
+          {/* Use standard report rendering for all assessments including FVAI */}
+          {reportType === 'candidate' ? renderCandidateReport() : renderEmployerReport()}
         </div>
       </div>
       
