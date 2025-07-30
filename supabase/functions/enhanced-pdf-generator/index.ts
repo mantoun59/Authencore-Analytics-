@@ -28,7 +28,55 @@ interface AssessmentData {
 // Professional PDF generation with comprehensive features
 const generateProfessionalPDF = (data: AssessmentData): Uint8Array => {
   const safeText = (text: any): string => {
-    return String(text || 'N/A').replace(/[()\\]/g, '\\$&').slice(0, 100);
+    if (text === null || text === undefined || text === '') return 'N/A';
+    return String(text).replace(/[()\\]/g, '\\$&').slice(0, 100);
+  };
+
+  const safeNumber = (value: any, defaultValue: number = 0): number => {
+    const num = Number(value);
+    return isNaN(num) ? defaultValue : Math.round(num);
+  };
+
+  // Process dimensions data properly
+  const processDimensions = (dimensions: any): Array<{ name: string; score: number }> => {
+    if (!dimensions) return [];
+    
+    if (Array.isArray(dimensions)) {
+      return dimensions.map(dim => ({
+        name: safeText(dim.name || 'Unknown'),
+        score: safeNumber(dim.score, 0)
+      }));
+    }
+    
+    if (typeof dimensions === 'object') {
+      return Object.entries(dimensions).map(([key, value]) => ({
+        name: safeText(key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim()),
+        score: safeNumber(value, 0)
+      }));
+    }
+    
+    return [];
+  };
+
+  const processCareerMatches = (careerMatches: any): Array<{ title: string; match: number; description?: string }> => {
+    if (!careerMatches || !Array.isArray(careerMatches)) return [];
+    
+    return careerMatches.map(match => ({
+      title: safeText(match.title || match.name || 'Career Opportunity'),
+      match: safeNumber(match.match || match.score || match.percentage, 0),
+      description: safeText(match.description || 'Excellent career match based on your profile')
+    }));
+  };
+
+  const processRecommendations = (recommendations: any): string[] => {
+    if (!recommendations) return [];
+    if (Array.isArray(recommendations)) {
+      return recommendations.map(rec => safeText(rec)).filter(rec => rec !== 'N/A');
+    }
+    if (typeof recommendations === 'string') {
+      return [safeText(recommendations)].filter(rec => rec !== 'N/A');
+    }
+    return [];
   };
 
   const createProgressBar = (score: number, width: number = 200): string => {
@@ -54,7 +102,12 @@ Q`;
     { name: 'Conventional', color: '0.1 0.1 0.44 rg', desc: 'Organized, detail-oriented, systematic' }
   ];
 
-  // Generate comprehensive PDF content
+  // Process data properly
+  const processedDimensions = processDimensions(data.dimensions || data.riasecResults);
+  const processedCareerMatches = processCareerMatches(data.careerMatches);
+  const processedRecommendations = processRecommendations(data.recommendations);
+
+  // Generate comprehensive PDF content with logo
   const pdfContent = `%PDF-1.4
 1 0 obj
 <<
@@ -153,16 +206,34 @@ endobj
 stream
 BT
 
-% Header Background
+% Header Background with Logo Area
 q
 0 0.5 0.5 rg
 0 720 612 72 re f
 Q
 
+% Logo placeholder (simple graphics)
+q
+1 1 1 rg
+20 740 40 40 re f
+0 0.5 0.5 RG
+2 w
+20 740 40 40 re S
+Q
+BT
+/F2 8 Tf
+0 0.5 0.5 rg
+25 760 Td
+(AuthenCore) Tj
+0 -8 Td
+/F1 6 Tf
+(Analytics) Tj
+ET
+
 % Header Text
 /F2 24 Tf
 1 1 1 rg
-50 750 Td
+70 750 Td
 (AuthenCore Analytics) Tj
 0 -20 Td
 /F1 14 Tf
@@ -326,7 +397,7 @@ BT
 ET
 
 % RIASEC Dimensions
-${data.dimensions ? (Array.isArray(data.dimensions) ? data.dimensions : Object.entries(data.dimensions).map(([key, value]) => ({ name: key.replace(/_/g, ' '), score: value }))).slice(0, 6).map((dim, index) => {
+${processedDimensions.slice(0, 6).map((dim, index) => {
   const riasecType = riasecTypes[index] || riasecTypes[0];
   const yPos = 650 - (index * 80);
   return `
@@ -412,7 +483,7 @@ BT
 ET
 
 % Career Cards
-${data.careerMatches ? data.careerMatches.slice(0, 5).map((match, index) => {
+${processedCareerMatches.slice(0, 5).map((match, index) => {
   const yPos = 650 - (index * 90);
   const matchColor = match.match >= 80 ? '0.13 0.55 0.13 rg' : match.match >= 60 ? '1 0.6 0 rg' : '0 0.5 0.5 rg';
   return `
@@ -519,7 +590,7 @@ BT
 ET
 
 % Development Recommendations
-${data.recommendations ? data.recommendations.slice(0, 6).map((rec, index) => {
+${processedRecommendations.slice(0, 6).map((rec, index) => {
   const yPos = 650 - (index * 80);
   const priorities = [
     { label: 'Immediate Focus', color: '0.86 0.2 0.34 rg', timeframe: '1-3 months' },
