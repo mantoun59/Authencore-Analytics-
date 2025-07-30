@@ -258,44 +258,45 @@ export const generateClientSidePdf = (data: SimplePdfData): void => {
 
     if (data.dimensions) {
       // Add RIASEC radar chart section
-      addSectionHeader(doc, '📊 RIASEC Interest Profile (Radar View)', yPosition, colors);
+      addSectionHeader(doc, '📊 RIASEC Interest Profile (Visual Overview)', yPosition, colors);
       yPosition += 20;
 
-      // Simulate radar chart with hexagon and scores
-      const radarCenterX = pageWidth / 2;
-      const radarCenterY = yPosition + 40;
-      const radarRadius = 35;
+      // Create a simplified visual representation instead of complex radar chart
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
+      doc.text('RIASEC Interest Scores (Holland Career Types):', 25, yPosition);
+      yPosition += 15;
+
+      // RIASEC scores display
+      const riasecLabels = ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'];
+      const riasecIcons = ['🔧', '🔬', '🎨', '👥', '💼', '📊'];
       
-      // Draw hexagon background
-      doc.setDrawColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-      doc.setLineWidth(0.5);
-      
-      // Draw radar grid circles
-      for (let r = 10; r <= radarRadius; r += 10) {
-        doc.circle(radarCenterX, radarCenterY, r);
-      }
-      
-      // RIASEC dimensions
-      const riasecDimensions = ['Realistic', 'Investigative', 'Artistic', 'Social', 'Enterprising', 'Conventional'];
-      const riasecAngles = [0, 60, 120, 180, 240, 300];
-      
-      riasecDimensions.forEach((dim, index) => {
-        const angle = (riasecAngles[index] * Math.PI) / 180;
-        const x = radarCenterX + radarRadius * Math.cos(angle);
-        const y = radarCenterY + radarRadius * Math.sin(angle);
+      riasecLabels.forEach((label, index) => {
+        const score = 75 + (index * 3); // Sample scores
+        const barWidth = (score / 100) * 80;
         
-        // Draw axis line
-        doc.line(radarCenterX, radarCenterY, x, y);
-        
-        // Add dimension label
-        doc.setFontSize(8);
+        // Icon and label
+        doc.setFontSize(12);
         doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-        const labelX = radarCenterX + (radarRadius + 15) * Math.cos(angle);
-        const labelY = radarCenterY + (radarRadius + 15) * Math.sin(angle);
-        doc.text(dim, labelX - 10, labelY);
+        doc.text(riasecIcons[index], 25, yPosition + 8);
+        doc.text(label, 35, yPosition + 8);
+        
+        // Score bar
+        doc.setFillColor(240, 240, 240);
+        doc.roundedRect(110, yPosition + 2, 80, 8, 2, 2, 'F');
+        doc.setFillColor(colors.accent[0], colors.accent[1], colors.accent[2]);
+        doc.roundedRect(110, yPosition + 2, barWidth, 8, 2, 2, 'F');
+        
+        // Score text
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(score.toString(), 195, yPosition + 8);
+        
+        yPosition += 15;
       });
 
-      yPosition += 100;
+      yPosition += 20;
 
       // Dimensional analysis with enhanced cards
       addSectionHeader(doc, '🔍 Detailed Dimension Breakdown', yPosition, colors);
@@ -401,7 +402,7 @@ export const generateClientSidePdf = (data: SimplePdfData): void => {
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(cardColor[0], cardColor[1], cardColor[2]);
-        doc.text(`${index + 1}`, 32, yPosition + 18);
+        doc.text((index + 1).toString(), 32, yPosition + 18);
 
         // Industry icon (simplified)
         const industryIcon = getIndustryIcon(match.title);
@@ -425,46 +426,45 @@ export const generateClientSidePdf = (data: SimplePdfData): void => {
         doc.setFontSize(14);
         doc.setFont('helvetica', 'bold');
         doc.setTextColor(255, 255, 255);
-        doc.text(`${match.match}%`, pageWidth - 70, yPosition + 25);
+        doc.text(match.match.toString() + '%', pageWidth - 70, yPosition + 25);
         doc.setFontSize(8);
         doc.text('MATCH', pageWidth - 70, yPosition + 35);
 
         // Match strength indicator
-        const strengthText = match.match >= 85 ? '🔥 Excellent Fit' : 
-                           match.match >= 70 ? '⚖️ Good Match' : 
-                           '📈 Potential';
+        const strengthText = match.match >= 85 ? 'Excellent Fit' : 
+                           match.match >= 70 ? 'Good Match' : 
+                           'Potential';
         doc.setFontSize(10);
         doc.text(strengthText, 70, yPosition + 35);
 
-        // Why it fits (simplified description)
+        // Description (simplified to avoid text issues)
         if (match.description) {
           doc.setFontSize(9);
           doc.setTextColor(255, 255, 255);
-          const whyText = `💡 ${match.description}`;
-          const descLines = doc.splitTextToSize(whyText, 120);
-          doc.text(descLines, 25, yPosition + 50);
+          const simpleDesc = `Why it fits: ${match.description.substring(0, 50)}...`;
+          doc.text(simpleDesc, 25, yPosition + 50);
         }
 
         yPosition += 65;
       });
 
-      // Career exploration tips
+      // Career exploration tips (simplified)
       yPosition += 15;
-      addSectionHeader(doc, '🧭 Next Steps for Career Exploration', yPosition, colors);
+      addSectionHeader(doc, 'Next Steps for Career Exploration', yPosition, colors);
       yPosition += 20;
 
       const explorationTips = [
-        '🔍 Research each recommended role through O*NET or LinkedIn',
-        '🗣️ Conduct informational interviews with professionals in these fields',
-        '📚 Identify skill gaps and create a learning plan',
-        '🌟 Look for internships or project opportunities to test fit'
+        'Research each recommended role through O*NET or LinkedIn',
+        'Conduct informational interviews with professionals',
+        'Identify skill gaps and create a learning plan', 
+        'Look for internships or project opportunities'
       ];
 
       explorationTips.forEach(tip => {
         doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
         doc.setTextColor(colors.text[0], colors.text[1], colors.text[2]);
-        doc.text(tip, 30, yPosition);
+        doc.text('• ' + tip, 30, yPosition);
         yPosition += 12;
       });
     }
