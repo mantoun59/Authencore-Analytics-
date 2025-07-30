@@ -18,6 +18,7 @@ export interface HtmlReportData {
   strengths?: string[];
   developmentAreas?: string[];
   recommendations?: string[];
+  managementRecommendations?: string[];
   careerMatches?: Array<{ career?: { title: string; description?: string }; title?: string; match?: number; matchPercentage?: number; description?: string }>;
   profile?: string;
   riskFlags?: string[];
@@ -26,6 +27,8 @@ export interface HtmlReportData {
   aptitudeResults?: Record<string, number>;
   contextualEffectiveness?: Record<string, { score: number; description: string }>;
   workingStyles?: Record<string, string>;
+  employerInsights?: Record<string, string>;
+  riskAssessment?: Record<string, string>;
   [key: string]: any;
 }
 
@@ -356,6 +359,38 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
       line-height: 1.6;
     }
     
+    .employer-insights-section {
+      background: #f0f9ff;
+      border: 1px solid #0ea5e9;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .insight-item {
+      background: white;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 4px solid #0ea5e9;
+    }
+    
+    .risk-assessment-section {
+      background: #fef2f2;
+      border: 1px solid #f87171;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .risk-item {
+      background: white;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 4px solid #f87171;
+    }
+    
     .print-button {
       background: #008080;
       color: white;
@@ -430,6 +465,10 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
     ${generateContextualEffectivenessSection(data)}
     
     ${generateWorkingStylesSection(data)}
+    
+    ${generateEmployerInsightsSection(data)}
+    
+    ${generateRiskAssessmentSection(data)}
     
     ${generateRecommendationsSection(data)}
     
@@ -613,6 +652,36 @@ const generateCareerMatchesSection = (data: HtmlReportData): string => {
           </div>
         `;
       }).join('')}
+    </div>
+  `;
+};
+
+const generateEmployerInsightsSection = (data: HtmlReportData): string => {
+  if (!data.employerInsights || Object.keys(data.employerInsights).length === 0) return '';
+  
+  return `
+    <div class="employer-insights-section">
+      <h2 class="section-title">👔 Employer Insights</h2>
+      ${Object.entries(data.employerInsights).map(([insight, value]) => `
+        <div class="insight-item">
+          <strong>${insight}:</strong> ${value}
+        </div>
+      `).join('')}
+    </div>
+  `;
+};
+
+const generateRiskAssessmentSection = (data: HtmlReportData): string => {
+  if (!data.riskAssessment || Object.keys(data.riskAssessment).length === 0) return '';
+  
+  return `
+    <div class="risk-assessment-section">
+      <h2 class="section-title">⚠️ Risk Assessment</h2>
+      ${Object.entries(data.riskAssessment).map(([risk, assessment]) => `
+        <div class="risk-item">
+          <strong>${risk}:</strong> ${assessment}
+        </div>
+      `).join('')}
     </div>
   `;
 };

@@ -115,9 +115,148 @@ const SampleReports = () => {
       // Communication-specific data mapping
       let reportData;
       if (selectedAssessment === 'communication' || selectedAssessment === 'communication-styles') {
-        reportData = {
+        reportData = reportType === 'employer' ? {
+          assessmentType: 'Communication Styles Assessment - Employer Report',
+          reportType: 'employer' as const,
+          userInfo: {
+            name: 'Sarah Johnson',
+            email: 'sarah.johnson@example.com',
+            assessmentDate: new Date().toLocaleDateString(),
+            questionsAnswered: 75,
+            timeSpent: '18 minutes',
+            reliabilityScore: 94,
+            reportId: `COMM-EMP-${Date.now()}`,
+            position: 'Senior Marketing Coordinator',
+            department: 'Marketing & Communications'
+          },
+          overallScore: 77,
+          dimensions: [
+            { name: 'Leadership Communication', score: 82, level: 'High', description: 'Demonstrates strong ability to communicate vision and direction effectively to team members and stakeholders.' },
+            { name: 'Team Collaboration', score: 85, level: 'Very High', description: 'Excellent at facilitating group discussions and building consensus among diverse team members.' },
+            { name: 'Client Interaction', score: 80, level: 'High', description: 'Skilled in professional client communication with ability to build and maintain business relationships.' },
+            { name: 'Conflict Resolution', score: 68, level: 'Moderate', description: 'Shows potential in managing workplace conflicts but would benefit from additional training and development.' },
+            { name: 'Written Communication', score: 75, level: 'High', description: 'Produces clear, professional written communications suitable for business environments.' },
+            { name: 'Presentation Skills', score: 83, level: 'Very High', description: 'Confident presenter who can engage audiences and deliver compelling business presentations.' },
+            { name: 'Cross-Cultural Communication', score: 72, level: 'High', description: 'Generally effective in diverse workplace settings with room for cultural sensitivity development.' }
+          ],
+          profile: 'Sarah demonstrates strong communication capabilities that align well with leadership and client-facing roles. Her expressive communication style and high influence capabilities make her an asset for team leadership positions. While conflict resolution skills require development, her overall communication profile suggests readiness for increased responsibilities.',
+          
+          employerInsights: {
+            'Hiring Recommendation': 'RECOMMENDED - Strong communication skills with leadership potential',
+            'Best Fit Roles': 'Team Lead, Account Manager, Project Coordinator, Training Specialist',
+            'Management Potential': 'High - Shows natural leadership communication abilities',
+            'Team Dynamics': 'Positive contributor who enhances team collaboration and morale',
+            'Client-Facing Suitability': 'Excellent - Professional demeanor with relationship-building skills',
+            'Training Investment': 'Moderate - Focus on conflict resolution and technical communication'
+          },
+          
+          riskAssessment: {
+            'Communication Risks': 'Low overall risk with minor attention needed for difficult conversations',
+            'Workplace Conflicts': 'Medium risk - may avoid direct confrontation, could benefit from assertiveness training',
+            'Cultural Sensitivity': 'Low risk - generally inclusive communication style',
+            'Professional Boundaries': 'Low risk - maintains appropriate professional communication standards'
+          },
+          
+          strengths: [
+            'Natural leadership presence that inspires confidence in team members',
+            'Exceptional presentation and public speaking abilities for client meetings',
+            'Strong collaborative approach that builds team cohesion and productivity',
+            'Adaptable communication style that works across different business contexts',
+            'Professional written communication skills suitable for all business correspondence'
+          ],
+          
+          developmentAreas: [
+            'Conflict resolution skills for managing workplace disagreements effectively',
+            'Direct feedback delivery when addressing performance or behavioral issues',
+            'Technical communication for complex project documentation and specifications',
+            'Cross-cultural communication sensitivity for global business interactions',
+            'Time management in communication-heavy roles and lengthy meetings'
+          ],
+          
+          managementRecommendations: [
+            'Assign to client-facing roles where relationship building is critical',
+            'Consider for team leadership positions with appropriate conflict resolution training',
+            'Leverage presentation skills for company-wide communications and training',
+            'Provide mentorship opportunities to develop executive communication skills',
+            'Enroll in conflict mediation training to address development gap',
+            'Partner with technical teams to improve specialized communication abilities'
+          ],
+          
+          contextualEffectiveness: {
+            'Leadership Meetings': { score: 88, description: 'Excellent at facilitating team meetings and driving productive discussions' },
+            'Client Presentations': { score: 85, description: 'Highly effective at presenting to external stakeholders and closing deals' },
+            'Performance Reviews': { score: 70, description: 'Good foundation but needs improvement in delivering difficult feedback' },
+            'Crisis Communication': { score: 65, description: 'Shows potential but requires additional training for high-pressure situations' },
+            'Cross-Department Collaboration': { score: 82, description: 'Strong ability to work across organizational boundaries and build partnerships' },
+            'Training & Mentoring': { score: 80, description: 'Natural teaching ability that translates well to employee development roles' }
+          },
+          
+          workingStyles: {
+            'Preferred Management Style': 'Collaborative leadership with emphasis on team input and consensus building',
+            'Feedback Reception': 'Open to constructive feedback and actively seeks opportunities for growth',
+            'Stress Communication': 'Maintains professionalism under pressure but may need support during high-conflict situations',
+            'Decision Communication': 'Effectively communicates decisions with clear rationale and next steps',
+            'Change Management': 'Good at helping teams navigate organizational changes through clear communication'
+          },
+          
+          careerMatches: [
+            {
+              career: { title: 'Account Manager', description: 'Managing client relationships and driving business growth' },
+              matchPercentage: 89,
+              fitScore: 87,
+              readinessLevel: 'Highly Qualified',
+              skillGaps: ['Technical product knowledge'],
+              strengthAlignment: ['Client communication', 'Relationship building'],
+              salaryExpectation: '$65,000 - $85,000',
+              growthPotential: 'High',
+              developmentPath: ['Account management training', 'Product expertise']
+            },
+            {
+              career: { title: 'Team Lead/Supervisor', description: 'Leading teams and managing day-to-day operations' },
+              matchPercentage: 85,
+              fitScore: 83,
+              readinessLevel: 'Qualified',
+              skillGaps: ['Conflict resolution', 'Performance management'],
+              strengthAlignment: ['Leadership communication', 'Team building'],
+              salaryExpectation: '$70,000 - $90,000',
+              growthPotential: 'High',
+              developmentPath: ['Leadership development', 'Management training']
+            },
+            {
+              career: { title: 'Training Specialist', description: 'Developing and delivering training programs' },
+              matchPercentage: 82,
+              fitScore: 80,
+              readinessLevel: 'Qualified',
+              skillGaps: ['Instructional design', 'Learning management systems'],
+              strengthAlignment: ['Presentation skills', 'Communication clarity'],
+              salaryExpectation: '$60,000 - $80,000',
+              growthPotential: 'Medium',
+              developmentPath: ['Training certification', 'Learning technology']
+            },
+            {
+              career: { title: 'Project Coordinator', description: 'Coordinating cross-functional projects and teams' },
+              matchPercentage: 78,
+              fitScore: 75,
+              readinessLevel: 'Entry Level',
+              skillGaps: ['Project management tools', 'Timeline management'],
+              strengthAlignment: ['Team collaboration', 'Communication coordination'],
+              salaryExpectation: '$55,000 - $75,000',
+              growthPotential: 'High',
+              developmentPath: ['Project management certification', 'Process improvement']
+            }
+          ],
+          
+          branding: {
+            logo: '/final-logo.png',
+            colors: {
+              primary: '#008080',
+              secondary: '#20B2AA'
+            },
+            company: 'AuthenCore Analytics'
+          }
+        } : {
           assessmentType: 'Communication Styles Assessment',
-          reportType: reportType === 'candidate' ? 'standard' as const : 'employer' as const,
+          reportType: 'standard' as const,
           userInfo: {
             name: 'Sarah Johnson',
             email: 'sarah.johnson@example.com',
