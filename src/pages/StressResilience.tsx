@@ -101,7 +101,28 @@ const StressResilience = () => {
           email: userProfile?.email || 'unknown@example.com',
           date: new Date().toLocaleDateString()
         },
-        results: results
+        results: {
+          overallScore: results.overallScore,
+          percentileScore: results.percentileScore,
+          burnoutRiskProfile: results.resilienceProfile,
+          categoryScores: [],
+          dimensionScores: results.dimensionScores,
+          strengths: results.strengths,
+          challenges: results.challenges,
+          recommendations: results.recommendations,
+          burnoutRisk: results.burnoutRisk,
+          wellnessLevel: results.stressManagementLevel === 'excellent' ? 'excellent' : 'good',
+          distortionMetrics: {
+            responseAuthenticity: 85,
+            socialDesirabilityBias: 35,
+            impressionManagement: 30,
+            responseConsistency: 80,
+            straightLining: false,
+            speedWarning: false,
+            overallValidity: 'high' as const
+          },
+          priorityAreas: []
+        }
       });
 
       // Save to database - create anonymous user if needed

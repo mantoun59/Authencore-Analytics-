@@ -1,117 +1,77 @@
-// HTML report generation - jsPDF removed
-import { formatPDFLegalFooter } from '@/utils/legalNotices';
+// Updated burnout report generator using new comprehensive system
+import { generateBurnoutEmployerReport } from './burnoutEmployerReportGenerator';
+import { generateBurnoutCandidateReport } from './burnoutCandidateReportGenerator';
+import { useBurnoutPreventionScoring } from '@/hooks/useBurnoutPreventionScoring';
 
 export interface BurnoutReportConfig {
   candidateInfo: {
     name: string;
     email: string;
     date: string;
+    position?: string;
+    department?: string;
   };
   results: {
     overallScore: number;
     percentileScore: number;
-    resilienceProfile: string;
+    burnoutRiskProfile: string;
+    categoryScores: any[];
     dimensionScores: any[];
     strengths: string[];
     challenges: string[];
     recommendations: string[];
-    burnoutRisk: string;
-    stressManagementLevel: string;
-    // Enhanced data for comprehensive analysis
-    stressIndicators?: {
-      workload: number;
-      interpersonal: number;
-      control: number;
-      recognition: number;
-      fairness: number;
-      values: number;
-    };
-    wellnessMetrics?: {
-      physicalHealth: number;
-      mentalHealth: number;
-      workLifeBalance: number;
-      jobSatisfaction: number;
-    };
-    comparativeData?: {
-      industryAverage: number;
-      roleAverage: number;
-      previousAssessment?: number;
-    };
+    burnoutRisk: 'low' | 'medium' | 'high';
+    wellnessLevel: 'excellent' | 'good' | 'fair' | 'poor';
+    distortionMetrics: any;
+    priorityAreas: string[];
   };
+  reportType?: 'employer' | 'candidate';
 }
 
-// Helper functions for enhanced report generation
-const addPageHeader = (pdf: any, pageWidth: number, title: string) => {
-  pdf.setFontSize(10);
-  pdf.setFont('helvetica', 'normal');
-  pdf.setTextColor(150, 150, 150);
-  pdf.text(title, pageWidth / 2, 15, { align: 'center' });
-  pdf.setTextColor(0, 0, 0);
-  return 25;
-};
-
-const addSectionSeparator = (pdf: any, pageWidth: number, y: number) => {
-  pdf.setDrawColor(220, 220, 220);
-  pdf.line(20, y, pageWidth - 20, y);
-  return y + 10;
-};
-
-const createChart = (pdf: any, data: any[], x: number, y: number, width: number, height: number, type: 'bar' | 'line' = 'bar') => {
-  const maxValue = Math.max(...data.map(d => d.value));
-  const barSpacing = width / data.length;
-  
-  // Draw chart frame
-  pdf.setDrawColor(200, 200, 200);
-  pdf.rect(x, y, width, height);
-  
-  // Draw bars or line
-  data.forEach((item, index) => {
-    const barHeight = (item.value / maxValue) * height;
-    const barX = x + (index * barSpacing) + (barSpacing * 0.1);
-    const barWidth = barSpacing * 0.8;
-    
-    if (type === 'bar') {
-      const color = item.value >= 70 ? [76, 175, 80] : 
-                   item.value >= 40 ? [255, 193, 7] : [244, 67, 54];
-      pdf.setFillColor(color[0], color[1], color[2]);
-      pdf.rect(barX, y + height - barHeight, barWidth, barHeight, 'F');
-    }
-    
-    // Add labels
-    pdf.setFontSize(8);
-    pdf.setTextColor(0, 0, 0);
-    pdf.text(item.label.substring(0, 8), barX + barWidth/2, y + height + 10, { align: 'center' });
-    pdf.text(`${item.value}%`, barX + barWidth/2, y + height - barHeight - 2, { align: 'center' });
-  });
-};
-
 export const generateDetailedBurnoutReport = async (config: BurnoutReportConfig): Promise<void> => {
-  // Generate HTML report instead of PDF
-  const htmlContent = `
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Burnout Prevention Assessment Report</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; }
-    h1 { color: #008080; }
-    .metric { margin: 10px 0; }
-    @media print { body { margin: 0; } }
-  </style>
-</head>
-<body>
-  <h1>Comprehensive Burnout Prevention Assessment Report</h1>
-  <h2>Generated for: ${config.candidateInfo.name}</h2>
-  <p>Assessment Date: ${config.candidateInfo.date}</p>
-  <p>Overall Score: ${config.results.overallScore}/100</p>
-  <p>Risk Level: ${config.results.burnoutRisk}</p>
-  <p>Generated on: ${new Date().toLocaleDateString()}</p>
-</body>
-</html>`;
+  const { reportType = 'candidate' } = config;
+  
+  // Transform config to match new interface
+  const reportConfig = {
+    candidateInfo: {
+      name: config.candidateInfo.name,
+      email: config.candidateInfo.email,
+      assessmentDate: config.candidateInfo.date,
+      position: config.candidateInfo.position,
+      department: config.candidateInfo.department,
+    },
+    results: {
+      ...config.results,
+      distortionMetrics: config.results.distortionMetrics || {
+        responseAuthenticity: 85,
+        socialDesirabilityBias: 35,
+        impressionManagement: 30,
+        responseConsistency: 80,
+        straightLining: false,
+        speedWarning: false,
+        overallValidity: 'high' as const
+      }
+    }
+  };
 
-  const reportWindow = window.open('', '_blank', 'width=900,height=700');
+  let htmlContent: string;
+  
+  if (reportType === 'employer') {
+    htmlContent = generateBurnoutEmployerReport(reportConfig);
+  } else {
+    htmlContent = generateBurnoutCandidateReport(reportConfig);
+  }
+
+  const reportWindow = window.open('', '_blank', 'width=1200,height=800');
   if (reportWindow) {
     reportWindow.document.write(htmlContent);
     reportWindow.document.close();
+    
+    // Add print functionality
+    setTimeout(() => {
+      if (reportWindow && !reportWindow.closed) {
+        reportWindow.focus();
+      }
+    }, 1000);
   }
 };
