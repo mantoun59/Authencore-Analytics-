@@ -439,7 +439,7 @@ q
 0 0 1 1 re f
 Q
 `;
-}).join('') : ''}
+}).join('')}
 
 % Page Footer
 BT
@@ -546,7 +546,7 @@ BT
 ET
 ` : ''}
 `;
-}).join('') : ''}
+}).join('')}
 
 % Page Footer
 BT
@@ -646,7 +646,7 @@ BT
 (${safeText(rec).slice(0, 80)}...) Tj
 ET
 `;
-}).join('') : ''}
+}).join('')}
 
 % Page Footer
 BT
