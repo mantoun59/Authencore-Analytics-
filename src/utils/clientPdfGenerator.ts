@@ -88,14 +88,19 @@ const icons = {
   shield: '🛡️'
 };
 
-// Clean text utility that removes problematic characters
-const cleanText = (text: any): string => {
+// Enhanced text processing with proper Unicode support
+const normalizeText = (text: any): string => {
   if (!text) return 'N/A';
-  if (typeof text !== 'string') return String(text);
+  if (typeof text !== 'string') text = String(text);
   
-  // Remove all non-ASCII characters and control characters
+  // Normalize Unicode and fix encoding issues
   return text
-    .replace(/[^\x20-\x7E]/g, '') // Keep only printable ASCII
+    .normalize('NFKD') // Decompose Unicode characters
+    .replace(/[\u0300-\u036f]/g, '') // Remove combining marks
+    .replace(/[""]/g, '"') // Fix smart quotes
+    .replace(/['']/g, "'") // Fix smart apostrophes
+    .replace(/–—/g, '-') // Fix dashes
+    .replace(/…/g, '...') // Fix ellipsis
     .replace(/\s+/g, ' ') // Normalize whitespace
     .trim() || 'N/A';
 };
@@ -173,7 +178,7 @@ export const generateClientSidePdf = async (data: SimplePdfData): Promise<void> 
     addEnhancedFooters(doc);
     
     // Generate clean filename
-    const cleanName = cleanText(data.userInfo.name).replace(/\s+/g, '_');
+    const cleanName = normalizeText(data.userInfo.name).replace(/\s+/g, '_');
     const timestamp = new Date().toISOString().split('T')[0];
     const filename = `${cleanName}_Career_Report_${timestamp}.pdf`;
     
@@ -247,19 +252,13 @@ const addLogoFallback = (doc: jsPDF): void => {
 
 // Professional certification badges
 const addProfessionalBadges = (doc: jsPDF, pageWidth: number): void => {
-  // Confidential badge
+  // Confidential badge - moved to not overlap with main branding
   doc.setFillColor(colors.danger[0], colors.danger[1], colors.danger[2]);
-  doc.rect(pageWidth - 80, 8, 70, 12, 'F');
-  doc.setFontSize(9);
+  doc.rect(pageWidth - 65, 30, 55, 10, 'F');
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-  doc.text('🛡️ CONFIDENTIAL', pageWidth - 75, 16);
-  
-  // Professional validation badge
-  doc.setFillColor(colors.success[0], colors.success[1], colors.success[2]);
-  doc.rect(pageWidth - 80, 25, 70, 12, 'F');
-  doc.setFontSize(9);
-  doc.text('✓ PROFESSIONALLY VALIDATED', pageWidth - 75, 33);
+  doc.text('🛡️ CONFIDENTIAL', pageWidth - 62, 37);
 };
 
 // Executive summary with enhanced metrics
@@ -306,15 +305,15 @@ const addUserInfoCard = (doc: jsPDF, data: SimplePdfData, yPos: number): void =>
   doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
   
   let detailY = yPos + 18;
-  doc.text(`👤 ${cleanText(data.userInfo.name)}`, 20, detailY);
+  doc.text(`👤 ${normalizeText(data.userInfo.name)}`, 20, detailY);
   detailY += 6;
-  doc.text(`📧 ${cleanText(data.userInfo.email)}`, 20, detailY);
+  doc.text(`📧 ${normalizeText(data.userInfo.email)}`, 20, detailY);
   detailY += 6;
-  doc.text(`📅 ${cleanText(data.userInfo.assessmentDate) || new Date().toLocaleDateString()}`, 20, detailY);
+  doc.text(`📅 ${normalizeText(data.userInfo.assessmentDate) || new Date().toLocaleDateString()}`, 20, detailY);
   
   if (data.userInfo.reportId) {
     detailY += 6;
-    doc.text(`🆔 Report ID: ${cleanText(data.userInfo.reportId)}`, 20, detailY);
+    doc.text(`🆔 Report ID: ${normalizeText(data.userInfo.reportId)}`, 20, detailY);
   }
 };
 
@@ -393,7 +392,7 @@ const addRiasecVisualization = (doc: jsPDF, data: SimplePdfData, yPos: number): 
   const dimensionArray = Array.isArray(data.dimensions) 
     ? data.dimensions 
     : Object.entries(data.dimensions).map(([key, value]) => ({
-        name: cleanText(key.replace(/_/g, ' ')),
+        name: normalizeText(key.replace(/_/g, ' ')),
         score: safeNumber(value)
       }));
   
@@ -450,7 +449,7 @@ const addEnhancedDimensionBar = (doc: jsPDF, dim: any, riasecType: any, yPos: nu
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text(`${riasecType.icon} ${cleanText(dim.name)}`, 20, yPos + 5);
+  doc.text(`${riasecType.icon} ${normalizeText(dim.name)}`, 20, yPos + 5);
   
   // Description
   doc.setFontSize(10);
@@ -534,7 +533,7 @@ const addProfessionalCareerCard = (doc: jsPDF, match: any, index: number, yPos: 
   doc.setFontSize(14);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
-  doc.text(cleanText(match.title), 45, yPos + 12);
+  doc.text(normalizeText(match.title), 45, yPos + 12);
   
   // Match percentage with visual indicator
   addMatchIndicator(doc, matchScore, 140, yPos + 8);
@@ -544,7 +543,7 @@ const addProfessionalCareerCard = (doc: jsPDF, match: any, index: number, yPos: 
     doc.setFontSize(10);
     doc.setFont('helvetica', 'normal');
     doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-    const desc = cleanText(match.description).substring(0, 90) + '...';
+    const desc = normalizeText(match.description).substring(0, 90) + '...';
     const lines = doc.splitTextToSize(desc, 120);
     if (Array.isArray(lines)) {
       lines.slice(0, 2).forEach((line, lineIndex) => {
@@ -653,7 +652,7 @@ const addEnhancedActionItem = (doc: jsPDF, recommendation: string, priority: any
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(colors.secondary[0], colors.secondary[1], colors.secondary[2]);
   
-  const cleanedRec = cleanText(recommendation);
+  const cleanedRec = normalizeText(recommendation);
   const lines = doc.splitTextToSize(cleanedRec, 140);
   
   if (Array.isArray(lines)) {
