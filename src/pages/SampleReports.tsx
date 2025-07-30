@@ -378,31 +378,263 @@ const SampleReports = () => {
             company: 'AuthenCore Analytics'
           }
         };
+      } else if (selectedAssessment === 'career-launch') {
+        reportData = reportType === 'employer' ? {
+          assessmentType: 'Career Launch Assessment - Employer Report',
+          reportType: 'employer' as const,
+          userInfo: {
+            name: 'Michael Chen',
+            email: 'michael.chen@example.com',
+            assessmentDate: new Date().toLocaleDateString(),
+            questionsAnswered: 90,
+            timeSpent: '25 minutes',
+            reliabilityScore: 96,
+            reportId: `CAREER-EMP-${Date.now()}`,
+            position: 'Marketing Analyst',
+            department: 'Marketing'
+          },
+          overallScore: 82,
+          dimensions: [
+            { name: 'Technical Aptitude', score: 85, level: 'Very High', description: 'Demonstrates strong analytical and technical problem-solving capabilities essential for data-driven roles.' },
+            { name: 'Leadership Potential', score: 78, level: 'High', description: 'Shows natural leadership tendencies with ability to influence and guide team decisions.' },
+            { name: 'Creative Problem Solving', score: 80, level: 'High', description: 'Innovative approach to challenges with ability to think outside conventional frameworks.' },
+            { name: 'Communication Skills', score: 75, level: 'High', description: 'Effective communicator with ability to present complex information clearly to diverse audiences.' },
+            { name: 'Adaptability', score: 88, level: 'Very High', description: 'Exceptional flexibility in adjusting to changing work environments and new challenges.' },
+            { name: 'Risk Tolerance', score: 70, level: 'Moderate', description: 'Balanced approach to risk-taking with careful consideration of potential outcomes.' }
+          ],
+          profile: 'Michael demonstrates strong analytical capabilities combined with leadership potential that make him well-suited for progressive career advancement. His high adaptability and technical aptitude position him for success in evolving business environments.',
+          employerInsights: {
+            'Hiring Recommendation': 'HIGHLY RECOMMENDED - Strong technical and leadership combination',
+            'Best Fit Roles': 'Data Analyst, Product Manager, Business Analyst, Technical Lead',
+            'Management Potential': 'Very High - Shows natural progression to senior roles',
+            'Innovation Capacity': 'High - Brings creative solutions to business challenges',
+            'Learning Agility': 'Excellent - Rapid skill acquisition and application',
+            'Career Trajectory': 'Fast track potential for senior management positions'
+          },
+          riskAssessment: {
+            'Job Stability': 'Low risk - High engagement and career progression focus',
+            'Skill Obsolescence': 'Very low risk - Strong learning orientation and adaptability',
+            'Team Integration': 'Low risk - Good collaboration and communication skills',
+            'Role Expectations': 'Low risk - Realistic career goals and self-awareness'
+          },
+          distortionAnalysis: {
+            'Overall Authenticity': 'Very High - Responses demonstrate genuine self-reflection',
+            'Social Desirability': 'Low - Honest assessment with appropriate self-criticism',
+            'Response Consistency': 'Very High - Consistent patterns across all dimensions',
+            'Career Realism': 'High - Realistic expectations aligned with capabilities',
+            'Validity Indicators': 'All validity checks passed - Highly reliable results'
+          },
+          contextualEffectiveness: {
+            'Project Leadership': { score: 82, description: 'Strong ability to lead cross-functional projects and drive results' },
+            'Data Analysis': { score: 88, description: 'Excellent analytical skills for complex business problems' },
+            'Strategic Planning': { score: 75, description: 'Good foundation for strategic thinking with growth potential' },
+            'Team Development': { score: 78, description: 'Natural mentoring ability with leadership development potential' },
+            'Innovation Management': { score: 80, description: 'Creative problem-solving approach to business challenges' }
+          },
+          careerMatches: [
+            {
+              career: { title: 'Senior Business Analyst', description: 'Analyzing business processes and driving improvements' },
+              matchPercentage: 92,
+              fitScore: 90,
+              readinessLevel: 'Highly Qualified',
+              skillGaps: ['Advanced analytics tools'],
+              strengthAlignment: ['Technical aptitude', 'Problem solving'],
+              salaryExpectation: '$75,000 - $95,000',
+              growthPotential: 'Very High',
+              developmentPath: ['Advanced analytics certification', 'Business strategy training']
+            }
+          ]
+        } : {
+          assessmentType: 'Career Launch Assessment',
+          reportType: 'standard' as const,
+          userInfo: {
+            name: 'Michael Chen',
+            email: 'michael.chen@example.com',
+            assessmentDate: new Date().toLocaleDateString(),
+            questionsAnswered: 90,
+            timeSpent: '25 minutes',
+            reliabilityScore: 96,
+            reportId: `CAREER-${Date.now()}`
+          },
+          overallScore: 82,
+          dimensions: [
+            { name: 'Technical Aptitude', score: 85, level: 'Very High', description: 'Your strong analytical and technical problem-solving capabilities position you well for data-driven careers.' },
+            { name: 'Leadership Potential', score: 78, level: 'High', description: 'Natural leadership tendencies that will serve you well in management track positions.' },
+            { name: 'Creative Problem Solving', score: 80, level: 'High', description: 'Innovative thinking approach that brings fresh perspectives to challenges.' },
+            { name: 'Adaptability', score: 88, level: 'Very High', description: 'Exceptional flexibility that will help you thrive in dynamic work environments.' }
+          ],
+          profile: 'You have a strong foundation for career success with excellent technical skills and leadership potential. Your adaptability and problem-solving abilities make you well-suited for roles that require both analytical thinking and people management.',
+          careerMatches: [
+            {
+              career: { title: 'Business Analyst', description: 'Analyzing business processes to drive improvements' },
+              matchPercentage: 90,
+              fitScore: 88,
+              readinessLevel: 'Highly Qualified',
+              skillGaps: ['Advanced Excel', 'SQL'],
+              strengthAlignment: ['Analytical thinking', 'Problem solving'],
+              salaryExpectation: '$65,000 - $85,000',
+              growthPotential: 'Very High',
+              developmentPath: ['Business analysis certification', 'Data analytics training']
+            }
+          ]
+        };
       } else {
-        // Generic data for other assessments
-        reportData = {
-          assessmentType: getAssessmentDisplayName(selectedAssessment),
-          reportType: reportType === 'candidate' ? 'standard' as const : 'employer' as const,
+        // Enhanced data for other assessments
+        const assessmentProfiles = {
+          'emotional-intelligence': {
+            dimensions: [
+              { name: 'Self-Awareness', score: 78, level: 'High', description: 'Strong understanding of your own emotions and their impact on performance and relationships.' },
+              { name: 'Self-Regulation', score: 75, level: 'High', description: 'Good ability to manage emotions effectively and maintain composure under pressure.' },
+              { name: 'Empathy', score: 82, level: 'Very High', description: 'Exceptional ability to understand and relate to others\' emotions and perspectives.' },
+              { name: 'Social Skills', score: 80, level: 'High', description: 'Strong interpersonal skills that facilitate effective collaboration and relationship building.' }
+            ],
+            profile: 'You demonstrate strong emotional intelligence with particular strengths in empathy and social connection. This foundation supports effective leadership and team collaboration.',
+            contextualEffectiveness: {
+              'Team Leadership': { score: 82, description: 'Excellent emotional awareness enhances team dynamics' },
+              'Client Relations': { score: 85, description: 'High empathy creates strong client connections' },
+              'Conflict Resolution': { score: 78, description: 'Good emotional regulation supports mediation skills' },
+              'Change Management': { score: 75, description: 'Self-awareness helps navigate organizational changes' }
+            }
+          },
+          'leadership': {
+            dimensions: [
+              { name: 'Vision Setting', score: 80, level: 'High', description: 'Strong ability to develop and communicate compelling future direction for teams and organizations.' },
+              { name: 'Decision Making', score: 75, level: 'High', description: 'Effective at making timely decisions with appropriate consideration of available information.' },
+              { name: 'Team Building', score: 85, level: 'Very High', description: 'Exceptional skills in creating cohesive, high-performing teams and fostering collaboration.' },
+              { name: 'Influence', score: 78, level: 'High', description: 'Strong ability to persuade and motivate others toward shared goals and objectives.' }
+            ],
+            profile: 'You show strong leadership potential with particular strengths in team building and vision communication. Your collaborative approach creates environments where teams thrive.',
+            contextualEffectiveness: {
+              'Strategic Planning': { score: 78, description: 'Good vision-setting ability supports strategic initiatives' },
+              'Team Development': { score: 88, description: 'Exceptional team building creates high-performance cultures' },
+              'Change Leadership': { score: 75, description: 'Solid foundation for leading organizational transformations' },
+              'Crisis Management': { score: 72, description: 'Developing skills for high-pressure decision making' }
+            }
+          },
+          'genz': {
+            dimensions: [
+              { name: 'Digital Fluency', score: 92, level: 'Very High', description: 'Exceptional comfort and skill with digital tools, platforms, and emerging technologies.' },
+              { name: 'Work-Life Integration', score: 75, level: 'High', description: 'Strong ability to balance professional responsibilities with personal well-being and values.' },
+              { name: 'Purpose Alignment', score: 88, level: 'Very High', description: 'Clear focus on meaningful work that aligns with personal values and social impact.' },
+              { name: 'Continuous Learning', score: 85, level: 'Very High', description: 'Strong commitment to ongoing skill development and adaptability in a changing workplace.' }
+            ],
+            profile: 'You embody the strengths of the digital generation with exceptional technological fluency and strong values alignment. Your learning agility positions you well for emerging career opportunities.',
+            contextualEffectiveness: {
+              'Remote Collaboration': { score: 90, description: 'Excellent digital collaboration skills for distributed teams' },
+              'Innovation Projects': { score: 85, description: 'Strong technological foundation supports innovation initiatives' },
+              'Social Impact Roles': { score: 88, description: 'High purpose alignment drives engagement in meaningful work' },
+              'Rapid Skill Acquisition': { score: 87, description: 'Learning agility enables quick adaptation to new requirements' }
+            }
+          }
+        };
+
+        const selectedProfile = assessmentProfiles[selectedAssessment as keyof typeof assessmentProfiles] || {
+          dimensions: [
+            { name: 'Core Competency 1', score: 75, level: 'High', description: 'Strong foundation in key skills relevant to this assessment area.' },
+            { name: 'Core Competency 2', score: 80, level: 'High', description: 'Well-developed abilities that support professional effectiveness.' },
+            { name: 'Core Competency 3', score: 78, level: 'High', description: 'Solid capabilities that contribute to overall performance and success.' }
+          ],
+          profile: 'You demonstrate strong capabilities in the key areas measured by this assessment, with a solid foundation for continued growth and development.',
+          contextualEffectiveness: {
+            'Professional Context 1': { score: 78, description: 'Good effectiveness in primary professional scenarios' },
+            'Professional Context 2': { score: 82, description: 'Strong performance in collaborative work environments' },
+            'Professional Context 3': { score: 75, description: 'Solid foundation for continued skill development' }
+          }
+        };
+
+        reportData = reportType === 'employer' ? {
+          assessmentType: `${getAssessmentDisplayName(selectedAssessment)} - Employer Report`,
+          reportType: 'employer' as const,
           userInfo: {
             name: sampleData.candidateInfo.name,
             email: sampleData.candidateInfo.email,
             assessmentDate: sampleData.candidateInfo.completionDate,
-            questionsAnswered: 60,
-            timeSpent: '15 minutes',
-            reliabilityScore: 92,
-            reportId: `SAMPLE-${selectedAssessment.toUpperCase()}-${Date.now()}`
+            questionsAnswered: 75,
+            timeSpent: '20 minutes',
+            reliabilityScore: 93,
+            reportId: `${selectedAssessment.toUpperCase()}-EMP-${Date.now()}`,
+            position: 'Professional Role',
+            department: 'Various'
           },
-          overallScore: sampleData.executiveSummary?.overallScore || 75,
-          dimensions: Object.entries(sampleData.dimensionScores || {}).map(([key, score]: [string, any]) => ({
-            name: key.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
-            score: typeof score === 'object' ? score.score : score,
-            level: (typeof score === 'object' ? score.score : score) >= 70 ? 'High' : 
-                   (typeof score === 'object' ? score.score : score) >= 40 ? 'Moderate' : 'Low'
-          })),
-          strengths: sampleData.executiveSummary?.topStrengths || [],
-          developmentAreas: sampleData.executiveSummary?.keyDevelopmentAreas || [],
-          recommendations: sampleData.executiveSummary?.recommendedNextSteps || [],
-          careerMatches: (sampleData as any).careerMatches || (sampleData as any).careerRecommendations || [],
+          overallScore: 78,
+          dimensions: selectedProfile.dimensions,
+          profile: selectedProfile.profile,
+          employerInsights: {
+            'Hiring Recommendation': 'RECOMMENDED - Strong performance across key competencies',
+            'Best Fit Roles': 'Multiple professional roles based on assessment strengths',
+            'Development Potential': 'High - Shows capacity for continued growth',
+            'Team Contribution': 'Positive - Brings valuable skills to team environments',
+            'Learning Investment': 'Moderate - Good foundation with focused development needs'
+          },
+          riskAssessment: {
+            'Performance Risk': 'Low - Strong foundation across key competencies',
+            'Cultural Fit': 'Good - Demonstrates values alignment and adaptability',
+            'Growth Potential': 'High - Shows capacity for skill development and advancement'
+          },
+          distortionAnalysis: {
+            'Overall Authenticity': 'High - Consistent and genuine response patterns',
+            'Social Desirability': 'Moderate - Appropriate professional presentation',
+            'Response Consistency': 'High - Reliable and valid assessment results',
+            'Validity Indicators': 'All checks passed - Results suitable for hiring decisions'
+          },
+          contextualEffectiveness: selectedProfile.contextualEffectiveness,
+          careerMatches: [
+            {
+              career: { title: 'Professional Role 1', description: 'Role aligned with assessment strengths' },
+              matchPercentage: 85,
+              fitScore: 82,
+              readinessLevel: 'Qualified',
+              skillGaps: ['Specific technical skills'],
+              strengthAlignment: ['Core competencies', 'Professional skills'],
+              salaryExpectation: '$60,000 - $80,000',
+              growthPotential: 'High',
+              developmentPath: ['Professional development', 'Skill enhancement']
+            }
+          ]
+        } : {
+          assessmentType: getAssessmentDisplayName(selectedAssessment),
+          reportType: 'standard' as const,
+          userInfo: {
+            name: sampleData.candidateInfo.name,
+            email: sampleData.candidateInfo.email,
+            assessmentDate: sampleData.candidateInfo.completionDate,
+            questionsAnswered: 75,
+            timeSpent: '20 minutes',
+            reliabilityScore: 93,
+            reportId: `${selectedAssessment.toUpperCase()}-${Date.now()}`
+          },
+          overallScore: 78,
+          dimensions: selectedProfile.dimensions,
+          profile: selectedProfile.profile,
+          contextualEffectiveness: selectedProfile.contextualEffectiveness,
+          strengths: sampleData.executiveSummary?.topStrengths || [
+            'Strong foundation in key competency areas',
+            'Good potential for professional growth',
+            'Effective interpersonal and communication skills'
+          ],
+          developmentAreas: sampleData.executiveSummary?.keyDevelopmentAreas || [
+            'Continued skill development in specialized areas',
+            'Enhanced leadership and management capabilities',
+            'Advanced technical or industry-specific knowledge'
+          ],
+          recommendations: sampleData.executiveSummary?.recommendedNextSteps || [
+            'Focus on developing identified growth areas',
+            'Seek mentorship and professional development opportunities',
+            'Consider advanced training in relevant skill areas'
+          ],
+          careerMatches: [
+            {
+              career: { title: 'Professional Role', description: 'Role matching assessment strengths' },
+              matchPercentage: 82,
+              fitScore: 80,
+              readinessLevel: 'Qualified',
+              skillGaps: ['Technical skills', 'Industry experience'],
+              strengthAlignment: ['Core competencies', 'Professional abilities'],
+              salaryExpectation: '$55,000 - $75,000',
+              growthPotential: 'High',
+              developmentPath: ['Professional development', 'Skill building']
+            }
+          ],
           branding: {
             logo: '/final-logo.png',
             colors: {
