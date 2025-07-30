@@ -130,10 +130,13 @@ const SampleReports = () => {
             percentileScore: 72,
             burnoutRiskProfile: 'Moderate Risk - Proactive Prevention Needed',
             categoryScores: [
-              { category: 'Workload Management', score: 72, level: 'Moderate' },
-              { category: 'Emotional Exhaustion', score: 65, level: 'At Risk' },
-              { category: 'Personal Efficacy', score: 84, level: 'High' },
-              { category: 'Support Systems', score: 81, level: 'Good' }
+              { category: 'Workload Management', score: 72, level: 'Moderate', percentage: 72 },
+              { category: 'Emotional Exhaustion', score: 65, level: 'At Risk', percentage: 65 },
+              { category: 'Personal Efficacy', score: 84, level: 'High', percentage: 84 },
+              { category: 'Support Systems', score: 81, level: 'Good', percentage: 81 },
+              { category: 'Work-Life Integration', score: 75, level: 'Good', percentage: 75 },
+              { category: 'Coping Strategies', score: 79, level: 'Good', percentage: 79 },
+              { category: 'Wellbeing Practices', score: 77, level: 'Good', percentage: 77 }
             ],
             dimensionScores: [
               { name: 'Workload Management', score: 72, level: 'Moderate', description: 'Shows awareness but needs stronger systems' },

@@ -480,13 +480,13 @@ export const generateBurnoutCandidateReport = (config: BurnoutCandidateReportCon
                     ${results.categoryScores.map(category => `
                         <div class="category-item">
                             <div class="category-header">
-                                <div class="category-name">${category.dimension}</div>
+                                <div class="category-name">${category.category || category.dimension}</div>
                                 <div class="category-level">${category.level}</div>
                             </div>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${category.percentage}%;"></div>
+                                <div class="progress-fill" style="width: ${(category.percentage || category.score || 0)}%;"></div>
                             </div>
-                            <div class="percentage-text">${category.percentage.toFixed(1)}%</div>
+                            <div class="percentage-text">${(category.percentage || category.score || 0).toFixed(1)}%</div>
                         </div>
                     `).join('')}
                 </div>
