@@ -1439,38 +1439,6 @@ const SampleReports = () => {
           ]
         };
 
-      case 'faith-values':
-        console.log('✅ Matched faith-values case');
-        console.log('✅ Matched faith-values case');
-        return {
-          ...baseReport,
-          executiveSummary: {
-            overallScore: 87,
-            readinessLevel: 'Strong Alignment',
-            topStrengths: ['Spiritual Integration', 'Values Consistency', 'Ethical Decision Making'],
-            keyDevelopmentAreas: ['Community Engagement', 'Workplace Application', 'Leadership Development'],
-            recommendedNextSteps: [
-              'Seek leadership roles in faith-based organizations',
-              'Mentor others in values-based decision making',
-              'Integrate spiritual practices into daily work'
-            ]
-          },
-          dimensionScores: {
-            spiritual_purpose: { score: 92, level: 'Excellent', interpretation: 'Strong sense of spiritual purpose and calling' },
-            integrity: { score: 94, level: 'Excellent', interpretation: 'Exceptional ethical foundation and honesty' },
-            compassion: { score: 88, level: 'Very Good', interpretation: 'Strong empathy and care for others' },
-            justice: { score: 85, level: 'Very Good', interpretation: 'Commitment to fairness and social justice' },
-            service: { score: 83, level: 'Very Good', interpretation: 'Dedication to serving others and community' },
-            work_meaning: { score: 89, level: 'Very Good', interpretation: 'Clear connection between work and values' },
-            values_integration: { score: 86, level: 'Very Good', interpretation: 'Consistent application of values in decisions' },
-            moral_courage: { score: 81, level: 'Good', interpretation: 'Willingness to stand up for beliefs and values' }
-          },
-          careerRecommendations: [
-            'Faith-based organizational leadership',
-            'Non-profit management roles',
-            'Values-driven business positions'
-          ]
-        };
 
       case 'genz':
         console.log('✅ Matched genz case');
