@@ -126,45 +126,66 @@ const SampleReports = () => {
         
         const reportHtml = generateEmotionalIntelligenceReport({
           candidateInfo: {
-            name: sampleData.candidateInfo.name,
-            email: sampleData.candidateInfo.email,
-            assessmentDate: sampleData.candidateInfo.completionDate
+            name: 'Sarah Johnson',
+            email: 'sarah.johnson@email.com',
+            position: reportType === 'employer' ? 'Senior Marketing Coordinator' : undefined,
+            organization: reportType === 'employer' ? 'Tech Innovations Inc.' : undefined,
+            assessmentDate: new Date().toLocaleDateString()
           },
           results: {
-            overallScore: sampleData.executiveSummary.overallScore,
+            overallScore: 81,
             scores: {
               selfAwareness: {
-                raw: sampleData.dimensionScores.self_awareness?.score || 89,
-                percentage: sampleData.dimensionScores.self_awareness?.score || 89,
-                level: sampleData.dimensionScores.self_awareness?.level as 'Low' | 'Medium' | 'High' || 'High',
-                interpretation: sampleData.dimensionScores.self_awareness?.interpretation || 'Strong understanding of own emotions and reactions'
+                raw: 89,
+                percentage: 89,
+                level: 'High',
+                interpretation: 'Demonstrates excellent understanding of personal emotions, triggers, and behavioral patterns. Shows strong capacity for self-reflection and emotional insight.'
               },
               selfRegulation: {
-                raw: sampleData.dimensionScores.emotional_regulation?.score || 73,
-                percentage: sampleData.dimensionScores.emotional_regulation?.score || 73,
-                level: sampleData.dimensionScores.emotional_regulation?.level as 'Low' | 'Medium' | 'High' || 'Medium',
-                interpretation: sampleData.dimensionScores.emotional_regulation?.interpretation || 'Good control over emotional responses'
+                raw: 73,
+                percentage: 73,
+                level: 'Medium',
+                interpretation: 'Good emotional control with room for improvement in stress management. Shows ability to manage reactions but may struggle under high pressure situations.'
               },
               motivation: {
-                raw: sampleData.dimensionScores.motivation?.score || 83,
-                percentage: sampleData.dimensionScores.motivation?.score || 83,
-                level: sampleData.dimensionScores.motivation?.level as 'Low' | 'Medium' | 'High' || 'High',
-                interpretation: sampleData.dimensionScores.motivation?.interpretation || 'High internal drive and goal orientation'
+                raw: 83,
+                percentage: 83,
+                level: 'High',
+                interpretation: 'High internal drive and goal orientation. Demonstrates resilience, optimism, and commitment to personal and professional excellence.'
               },
               empathy: {
-                raw: sampleData.dimensionScores.empathy?.score || 86,
-                percentage: sampleData.dimensionScores.empathy?.score || 86,
-                level: sampleData.dimensionScores.empathy?.level as 'Low' | 'Medium' | 'High' || 'High',
-                interpretation: sampleData.dimensionScores.empathy?.interpretation || 'Strong ability to understand others\' perspectives'
+                raw: 86,
+                percentage: 86,
+                level: 'High',
+                interpretation: 'Strong ability to understand and relate to others\' emotions and perspectives. Excellent at reading social cues and responding appropriately.'
               },
               socialSkills: {
-                raw: sampleData.dimensionScores.social_skills?.score || 85,
-                percentage: sampleData.dimensionScores.social_skills?.score || 85,
-                level: sampleData.dimensionScores.social_skills?.level as 'Low' | 'Medium' | 'High' || 'High',
-                interpretation: sampleData.dimensionScores.social_skills?.interpretation || 'Excellent interpersonal and relationship skills'
+                raw: 85,
+                percentage: 85,
+                level: 'High',
+                interpretation: 'Excellent interpersonal and relationship-building skills. Strong communication abilities and natural leadership qualities.'
               }
             },
-            recommendations: []
+            recommendations: [
+              {
+                dimension: 'Self-Regulation',
+                suggestions: [
+                  'Practice mindfulness meditation for 10 minutes daily to improve emotional awareness',
+                  'Develop stress management techniques such as deep breathing exercises',
+                  'Create a personal emotion regulation toolkit with coping strategies',
+                  'Seek feedback from colleagues about emotional responses under pressure'
+                ]
+              },
+              {
+                dimension: 'Stress Management',
+                suggestions: [
+                  'Implement time management strategies to reduce work-related stress',
+                  'Learn to recognize early warning signs of stress and overwhelm',
+                  'Practice saying no to additional responsibilities when at capacity',
+                  'Develop a support network for challenging situations'
+                ]
+              }
+            ]
           },
           reportType: reportType as 'candidate' | 'employer'
         });
