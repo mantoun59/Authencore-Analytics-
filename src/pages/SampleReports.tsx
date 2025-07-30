@@ -37,8 +37,8 @@ const getAssessmentTypeForPDF = (assessmentType: string): string => {
     'leadership-assessment': 'leadership_assessment', 
     'stress-resilience': 'stress_resilience',
     'stress': 'stress_resilience',
-    'burnout-prevention': 'stress_resilience',
-    'burnout': 'stress_resilience',
+    'burnout-prevention': 'burnout_prevention',
+    'burnout': 'burnout_prevention',
     'career-launch': 'career_launch',
     'career': 'career_launch',
     'cair-personality': 'cair_plus',
@@ -64,8 +64,8 @@ const getAssessmentDisplayName = (assessmentType: string): string => {
     'leadership-assessment': 'Leadership Assessment', 
     'stress-resilience': 'Stress Resilience Assessment',
     'stress': 'Stress Resilience Assessment',
-    'burnout-prevention': 'Burnout Prevention Assessment',
-    'burnout': 'Burnout Prevention Assessment',
+    'burnout-prevention': 'Burnout Prevention Index',
+    'burnout': 'Burnout Prevention Index',
     'career-launch': 'Career Launch Assessment',
     'career': 'Career Launch Assessment',
     'cair-personality': 'CAIR Plus Assessment',
@@ -112,9 +112,73 @@ const SampleReports = () => {
       // Use HTML report generator for ALL assessment types including communication
       const { generateHtmlReport } = await import('@/utils/htmlReportGenerator');
       
-      // Communication-specific data mapping
+      // Assessment-specific data mapping
       let reportData;
-      if (selectedAssessment === 'communication' || selectedAssessment === 'communication-styles') {
+      if (selectedAssessment === 'burnout-prevention' || selectedAssessment === 'burnout') {
+        // Use BPI report generator
+        const { generateDetailedBurnoutReport } = await import('@/services/burnoutReportGenerator');
+        const config = {
+          candidateInfo: {
+            name: 'Alex Johnson',
+            email: 'alex.johnson@example.com',
+            date: new Date().toLocaleDateString(),
+            position: 'Senior Software Engineer',
+            department: 'Technology'
+          },
+          results: {
+            overallScore: 78,
+            percentileScore: 72,
+            burnoutRiskProfile: 'Moderate Risk - Proactive Prevention Needed',
+            categoryScores: [
+              { category: 'Workload Management', score: 72, level: 'Moderate' },
+              { category: 'Emotional Exhaustion', score: 65, level: 'At Risk' },
+              { category: 'Personal Efficacy', score: 84, level: 'High' },
+              { category: 'Support Systems', score: 81, level: 'Good' }
+            ],
+            dimensionScores: [
+              { name: 'Workload Management', score: 72, level: 'Moderate', description: 'Shows awareness but needs stronger systems' },
+              { name: 'Emotional Exhaustion', score: 65, level: 'At Risk', description: 'Experiencing moderate fatigue requiring attention' },
+              { name: 'Personal Efficacy', score: 84, level: 'High', description: 'Strong belief in personal capabilities' },
+              { name: 'Support Systems', score: 81, level: 'Good', description: 'Reliable support networks available' }
+            ],
+            strengths: [
+              'High personal efficacy and confidence',
+              'Strong support network utilization',
+              'Good self-awareness of stress signals'
+            ],
+            challenges: [
+              'Workload prioritization needs improvement',
+              'Emotional exhaustion requires attention',
+              'Boundary setting could be strengthened'
+            ],
+            recommendations: [
+              'Implement structured task prioritization system',
+              'Develop daily stress-reduction practices',
+              'Establish clearer work-life boundaries'
+            ],
+            burnoutRisk: 'medium' as const,
+            wellnessLevel: 'good' as const,
+            distortionMetrics: {
+              responseAuthenticity: 88,
+              socialDesirabilityBias: 32,
+              impressionManagement: 28,
+              responseConsistency: 85,
+              straightLining: false,
+              speedWarning: false,
+              overallValidity: 'high' as const
+            },
+            priorityAreas: [
+              'Workload Management',
+              'Emotional Recovery',
+              'Boundary Setting'
+            ]
+          },
+          reportType: reportType
+        };
+        
+        await generateDetailedBurnoutReport(config);
+        return;
+      } else if (selectedAssessment === 'communication' || selectedAssessment === 'communication-styles') {
         reportData = reportType === 'employer' ? {
           assessmentType: 'Communication Styles Assessment - Employer Report',
           reportType: 'employer' as const,
@@ -1468,31 +1532,41 @@ const SampleReports = () => {
         };
       
       case 'burnout':
+      case 'burnout-prevention':
         return {
           ...baseReport,
           executiveSummary: {
-            overallScore: 72,
-            readinessLevel: 'Moderate Risk',
-            topStrengths: ['Work-Life Awareness', 'Stress Recognition', 'Support Seeking'],
-            keyDevelopmentAreas: ['Boundary Setting', 'Recovery Techniques', 'Workload Management'],
+            overallScore: 78,
+            readinessLevel: 'Moderate Burnout Risk',
+            topStrengths: ['Self-Awareness', 'Work-Life Integration', 'Coping Strategies'],
+            keyDevelopmentAreas: ['Workload Management', 'Emotional Boundaries', 'Recovery Practices'],
             recommendedNextSteps: [
-              'Implement daily stress management practices',
+              'Implement structured workload prioritization system',
+              'Develop daily stress-reduction practices',
               'Establish clear work-life boundaries',
-              'Develop comprehensive self-care routine'
+              'Build stronger support networks'
             ]
           },
           dimensionScores: {
-            stress_awareness: { score: 81, level: 'Very Good', interpretation: 'Good recognition of stress signals and triggers' },
-            coping_strategies: { score: 69, level: 'Moderate', interpretation: 'Basic coping skills with room for improvement' },
-            work_boundaries: { score: 65, level: 'Moderate', interpretation: 'Developing ability to set and maintain boundaries' },
-            recovery_capacity: { score: 74, level: 'Good', interpretation: 'Reasonable ability to recover from stress' },
-            support_systems: { score: 77, level: 'Good', interpretation: 'Good network of support and resources' },
-            prevention_mindset: { score: 66, level: 'Moderate', interpretation: 'Growing awareness of preventive approaches' }
+            workload_management: { score: 72, level: 'Moderate', interpretation: 'Shows awareness of task prioritization but needs stronger systems for managing competing demands' },
+            emotional_exhaustion: { score: 65, level: 'At Risk', interpretation: 'Experiencing moderate emotional fatigue requiring attention and intervention' },
+            personal_efficacy: { score: 84, level: 'High', interpretation: 'Strong belief in personal capabilities and professional competence' },
+            support_systems: { score: 81, level: 'Good', interpretation: 'Has access to reliable support networks both personal and professional' },
+            work_life_integration: { score: 75, level: 'Good', interpretation: 'Generally maintains healthy boundaries between work and personal life' },
+            coping_strategies: { score: 79, level: 'Good', interpretation: 'Demonstrates effective stress management techniques and self-care practices' },
+            wellbeing_practices: { score: 77, level: 'Good', interpretation: 'Maintains consistent wellness routines supporting physical and mental health' }
           },
+          burnoutRiskProfile: 'Moderate Risk - Proactive Prevention Needed',
+          wellnessLevel: 'Good with Areas for Growth',
+          priorityAreas: [
+            'Workload Management - Implement systematic task prioritization',
+            'Emotional Recovery - Develop daily recharge practices',
+            'Boundary Setting - Strengthen work-life separation'
+          ],
           careerRecommendations: [
-            'Lower-stress work environments',
-            'Flexible schedule positions',
-            'Supportive organizational cultures'
+            'Seek roles with structured workload management',
+            'Consider positions with flexible schedules',
+            'Look for organizations with strong wellness programs'
           ]
         };
       

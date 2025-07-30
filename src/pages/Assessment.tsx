@@ -35,6 +35,7 @@ const Assessment = () => {
       'career-launch': '/career-launch-info',
       'cair-personality': '/cair-personality-info',
       'stress-resilience': '/burnout-prevention-info',
+      'burnout-prevention': '/burnout-prevention-info',
       'cultural-intelligence': '/cultural-intelligence-info',
       'communication-styles': '/communication-style-info',
       'emotional-intelligence': '/emotional-intelligence-info',
