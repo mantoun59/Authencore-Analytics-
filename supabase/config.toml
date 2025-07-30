@@ -1,5 +1,8 @@
 project_id = "jlbftyjewxgetxcihban"
 
+[functions.enhanced-pdf-generator]
+verify_jwt = false
+
 [functions.process-assessment]
 verify_jwt = false
 

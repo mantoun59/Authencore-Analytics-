@@ -118,74 +118,49 @@ const validateInput = (data: SimplePdfData): void => {
   }
 };
 
-// Main PDF generation function with enhanced visuals
+// Updated PDF generation using server-side renderer
 export const generateClientSidePdf = async (data: SimplePdfData): Promise<void> => {
-  console.log('Starting enhanced PDF generation for:', data.userInfo?.name);
+  console.log('Starting server-side PDF generation for:', data.userInfo?.name);
   
   try {
     validateInput(data);
     
-    const doc = new jsPDF();
-    
-    // Force specific encoding for ASCII compatibility
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(12);
-    
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    let yPosition = 20;
+    // Call the enhanced PDF generator edge function
+    const response = await fetch('/api/enhanced-pdf-generator', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    });
 
-    // Try to get logo base64
-    let logoBase64: string | null = null;
-    try {
-      logoBase64 = await getLogoBase64();
-    } catch (error) {
-      console.warn('Could not load logo, using text fallback:', error);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
+      throw new Error(`PDF generation failed: ${errorData.error || response.statusText}`);
     }
 
-    // Page 1: Professional Cover & Executive Summary
-    yPosition = await addEnhancedHeader(doc, pageWidth, logoBase64);
-    yPosition = addExecutiveSummary(doc, data, yPosition);
-    yPosition = addKeyMetrics(doc, data, yPosition);
+    // Get the PDF blob
+    const pdfBlob = await response.blob();
     
-    // Page 2: Dimensional Analysis with Charts
-    doc.addPage();
-    yPosition = 20;
-    yPosition = addSectionHeader(doc, 'RIASEC Interest Profile Analysis', yPosition);
-    yPosition = addRiasecVisualization(doc, data, yPosition);
-    
-    // Page 3: Career Recommendations with Rankings
-    if (data.careerMatches && data.careerMatches.length > 0) {
-      doc.addPage();
-      yPosition = 20;
-      yPosition = addSectionHeader(doc, 'Top Career Recommendations', yPosition);
-      yPosition = addEnhancedCareerCards(doc, data, yPosition);
-    }
-    
-    // Page 4: Development Action Plan with Timeline
-    if (data.recommendations && data.recommendations.length > 0) {
-      doc.addPage();
-      yPosition = 20;
-      yPosition = addSectionHeader(doc, 'Personal Development Roadmap', yPosition);
-      yPosition = addEnhancedActionPlan(doc, data, yPosition);
-    }
-    
-    // Page 5: Assessment Methodology
-    doc.addPage();
-    yPosition = 20;
-    yPosition = addSectionHeader(doc, 'Assessment Methodology & Validity', yPosition);
-    yPosition = addMethodologySection(doc, data, yPosition);
-    
-    // Add professional footers to all pages
-    addEnhancedFooters(doc);
+    // Create download link
+    const url = URL.createObjectURL(pdfBlob);
+    const link = document.createElement('a');
+    link.href = url;
     
     // Generate clean filename
-    const cleanName = normalizeText(data.userInfo.name).replace(/\s+/g, '_');
+    const cleanName = normalizeText(data.userInfo.name).replace(/\s+/g, '_').replace(/[^\w-]/g, '');
     const timestamp = new Date().toISOString().split('T')[0];
-    const filename = `${cleanName}_Career_Report_${timestamp}.pdf`;
+    link.download = `${cleanName}_Career_Report_${timestamp}.pdf`;
     
-    console.log('Enhanced PDF generation completed successfully:', filename);
-    doc.save(filename);
+    // Trigger download
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    // Clean up
+    URL.revokeObjectURL(url);
+    
+    console.log('Server-side PDF generation completed successfully');
     
   } catch (error) {
     console.error('PDF generation failed:', error);

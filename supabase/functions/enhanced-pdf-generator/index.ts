@@ -1,521 +1,621 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import puppeteer from "https://deno.land/x/puppeteer@16.2.0/mod.ts";
 
 const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type",
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface GeneratePDFRequest {
+interface AssessmentData {
   assessmentType: string;
-  results: any;
-  userData: {
+  userInfo: {
     name: string;
     email: string;
-    userId?: string;
+    assessmentDate?: string;
+    questionsAnswered?: number;
+    timeSpent?: string;
+    reliabilityScore?: number;
+    reportId?: string;
   };
-  reportType: string;
-  enhancedAI?: any;
-  language?: string;
-  assessmentResultId?: string;
+  overallScore?: number;
+  dimensions?: Array<{ name: string; score: number; description?: string; level?: string }>;
+  strengths?: string[];
+  developmentAreas?: string[];
+  recommendations?: string[];
+  careerMatches?: Array<{ title: string; match: number; description?: string }>;
+  riasecResults?: Record<string, number>;
 }
 
-const handler = async (req: Request): Promise<Response> => {
+const generateHTMLReport = (data: AssessmentData): string => {
+  const safeText = (text: any): string => {
+    return String(text || 'N/A').replace(/[<>&"']/g, (match) => {
+      const escapes: Record<string, string> = {
+        '<': '&lt;',
+        '>': '&gt;',
+        '&': '&amp;',
+        '"': '&quot;',
+        "'": '&#39;'
+      };
+      return escapes[match] || match;
+    });
+  };
+
+  const riasecTypes = [
+    { name: 'Realistic', color: '#008080', description: 'Hands-on, practical, mechanical' },
+    { name: 'Investigative', color: '#228B22', description: 'Research, analysis, problem-solving' },
+    { name: 'Artistic', color: '#FF9800', description: 'Creative, expressive, innovative' },
+    { name: 'Social', color: '#2E8B57', description: 'People-focused, helping, teaching' },
+    { name: 'Enterprising', color: '#FFD700', description: 'Leadership, business, persuasion' },
+    { name: 'Conventional', color: '#191970', description: 'Organized, detail-oriented, systematic' }
+  ];
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Assessment Report</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #1a1a1a;
+            background: white;
+        }
+        
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20mm;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #008080 0%, #191970 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #008080;
+        }
+        
+        .company-name {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+        }
+        
+        .report-title {
+            font-size: 18px;
+            opacity: 0.9;
+            margin: 0;
+        }
+        
+        .confidential-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #dc3545;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .user-card {
+            background: #f8f9fa;
+            border: 2px solid #008080;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .user-card h2 {
+            color: #008080;
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+        
+        .user-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .detail-icon {
+            width: 20px;
+            text-align: center;
+        }
+        
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .metric-card {
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .metric-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #008080, #228B22);
+        }
+        
+        .metric-value {
+            font-size: 36px;
+            font-weight: 700;
+            color: #008080;
+            margin: 10px 0;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            page-break-inside: avoid;
+        }
+        
+        .section-header {
+            background: #008080;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .riasec-chart {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .riasec-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .riasec-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .riasec-name {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .riasec-score {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .riasec-description {
+            color: #6c757d;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: #e9ecef;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.3s ease;
+        }
+        
+        .career-cards {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .career-card {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            padding: 25px;
+            position: relative;
+        }
+        
+        .career-rank {
+            position: absolute;
+            top: -10px;
+            left: 20px;
+            background: #FFD700;
+            color: #1a1a1a;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+        
+        .career-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-left: 20px;
+        }
+        
+        .career-match {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        .match-bar {
+            flex: 1;
+            height: 8px;
+            background: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .match-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #008080, #228B22);
+            border-radius: 4px;
+        }
+        
+        .recommendations-list {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .recommendation-item {
+            background: white;
+            border-left: 4px solid #008080;
+            padding: 20px;
+            border-radius: 0 8px 8px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .recommendation-priority {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        
+        .priority-high { background: #fee; color: #d63384; }
+        .priority-medium { background: #fff3cd; color: #f57c00; }
+        .priority-low { background: #d1edff; color: #0969da; }
+        
+        .methodology-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .methodology-item {
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .methodology-title {
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #008080;
+        }
+        
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 2px solid #e9ecef;
+            text-align: center;
+            color: #6c757d;
+            font-size: 12px;
+        }
+        
+        @media print {
+            .container { margin: 0; padding: 15mm; }
+            .section { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="confidential-badge">CONFIDENTIAL</div>
+            <div class="logo">
+                <div class="logo-icon">AC</div>
+                <div>
+                    <h1 class="company-name">AuthenCore Analytics</h1>
+                    <p class="report-title">Career Launch Assessment Report</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- User Information -->
+        <div class="user-card">
+            <h2>Candidate Profile</h2>
+            <div class="user-details">
+                <div class="detail-item">
+                    <span class="detail-icon">Name:</span>
+                    <strong>${safeText(data.userInfo.name)}</strong>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">Email:</span>
+                    ${safeText(data.userInfo.email)}
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">Date:</span>
+                    ${safeText(data.userInfo.assessmentDate || new Date().toLocaleDateString())}
+                </div>
+                <div class="detail-item">
+                    <span class="detail-icon">ID:</span>
+                    ${safeText(data.userInfo.reportId || 'N/A')}
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        ${data.overallScore || data.userInfo.reliabilityScore ? `
+        <div class="metrics-grid">
+            ${data.overallScore ? `
+            <div class="metric-card">
+                <div class="metric-label">Overall Score</div>
+                <div class="metric-value">${data.overallScore}</div>
+                <div style="color: #6c757d; font-size: 12px;">out of 100</div>
+            </div>
+            ` : ''}
+            ${data.userInfo.reliabilityScore ? `
+            <div class="metric-card">
+                <div class="metric-label">Reliability</div>
+                <div class="metric-value">${data.userInfo.reliabilityScore}%</div>
+                <div style="color: #6c757d; font-size: 12px;">response quality</div>
+            </div>
+            ` : ''}
+        </div>
+        ` : ''}
+
+        <!-- RIASEC Profile -->
+        ${data.dimensions ? `
+        <div class="section">
+            <div class="section-header">RIASEC Interest Profile Analysis</div>
+            <div class="riasec-chart">
+                ${(Array.isArray(data.dimensions) ? data.dimensions : Object.entries(data.dimensions).map(([key, value]) => ({ name: key.replace(/_/g, ' '), score: value }))).slice(0, 6).map((dim, index) => {
+                  const riasecType = riasecTypes[index] || riasecTypes[0];
+                  return `
+                    <div class="riasec-item">
+                        <div class="riasec-header">
+                            <div class="riasec-name" style="color: ${riasecType.color}">${safeText(dim.name)}</div>
+                            <div class="riasec-score" style="color: ${riasecType.color}">${dim.score}</div>
+                        </div>
+                        <div class="riasec-description">${riasecType.description}</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${dim.score}%; background: ${riasecType.color}"></div>
+                        </div>
+                    </div>
+                  `;
+                }).join('')}
+            </div>
+        </div>
+        ` : ''}
+
+        <!-- Career Matches -->
+        ${data.careerMatches?.length ? `
+        <div class="section">
+            <div class="section-header">Top Career Recommendations</div>
+            <div class="career-cards">
+                ${data.careerMatches.slice(0, 6).map((match, index) => `
+                    <div class="career-card">
+                        <div class="career-rank">${index + 1}</div>
+                        <div class="career-title">${safeText(match.title)}</div>
+                        <div class="career-match">
+                            <span>Match:</span>
+                            <div class="match-bar">
+                                <div class="match-fill" style="width: ${match.match}%"></div>
+                            </div>
+                            <span><strong>${match.match}%</strong></span>
+                        </div>
+                        ${match.description ? `<p style="color: #6c757d; font-size: 14px; margin-top: 10px;">${safeText(match.description)}</p>` : ''}
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+        ` : ''}
+
+        <!-- Recommendations -->
+        ${data.recommendations?.length ? `
+        <div class="section">
+            <div class="section-header">Personal Development Roadmap</div>
+            <div class="recommendations-list">
+                ${data.recommendations.slice(0, 6).map((rec, index) => {
+                  const priorities = ['high', 'medium', 'low'];
+                  const priorityLabels = ['Immediate Focus', 'Medium Term', 'Long-term Goal'];
+                  const priority = priorities[index % 3];
+                  const priorityLabel = priorityLabels[index % 3];
+                  return `
+                    <div class="recommendation-item">
+                        <div class="recommendation-priority priority-${priority}">${priorityLabel}</div>
+                        <p>${safeText(rec)}</p>
+                    </div>
+                  `;
+                }).join('')}
+            </div>
+        </div>
+        ` : ''}
+
+        <!-- Methodology -->
+        <div class="section">
+            <div class="section-header">Assessment Methodology & Validity</div>
+            <p style="margin-bottom: 20px; color: #6c757d;">This assessment is based on scientifically validated methodologies:</p>
+            <div class="methodology-grid">
+                <div class="methodology-item">
+                    <div class="methodology-title">Holland RIASEC Theory</div>
+                    <p style="font-size: 14px; color: #6c757d;">Six personality types and work environments for career matching</p>
+                </div>
+                <div class="methodology-item">
+                    <div class="methodology-title">O*NET Career Database</div>
+                    <p style="font-size: 14px; color: #6c757d;">900+ career profiles with detailed requirements and outcomes</p>
+                </div>
+                <div class="methodology-item">
+                    <div class="methodology-title">Cognitive Aptitude Assessment</div>
+                    <p style="font-size: 14px; color: #6c757d;">Validated measures of reasoning and problem-solving abilities</p>
+                </div>
+                <div class="methodology-item">
+                    <div class="methodology-title">Response Quality Validation</div>
+                    <p style="font-size: 14px; color: #6c757d;">Statistical analysis ensures reliable and consistent responses</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p><strong>AuthenCore Analytics</strong> - Professional Career Assessment Platform</p>
+            <p>This report is confidential and intended for professional use only</p>
+            <p>Generated on ${new Date().toLocaleDateString()} | www.authencore.com</p>
+        </div>
+    </div>
+</body>
+</html>
+  `;
+};
+
+serve(async (req) => {
+  console.log('Enhanced PDF Generator called:', req.method);
+
   // Handle CORS preflight requests
-  if (req.method === "OPTIONS") {
+  if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
-
-    const requestData: GeneratePDFRequest = await req.json();
-    console.log("Generating PDF for:", requestData.userData.name);
-
-    // Enhanced HTML template with language support
-    const htmlContent = generateEnhancedHTML(requestData);
-    
-    // Generate filename with timestamp and language
-    const timestamp = Date.now();
-    const language = requestData.language || 'en';
-    const filename = `${requestData.assessmentType}-${requestData.reportType}-${language}-${timestamp}.html`;
-    const filePath = `${requestData.userData.userId || 'sample'}/${filename}`;
-    
-    // Upload to Supabase Storage
-    const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('reports')
-      .upload(filePath, new Blob([htmlContent], { type: 'text/html' }), {
-        cacheControl: '3600',
-        upsert: false
-      });
-
-    if (uploadError) {
-      console.error("Storage upload error:", uploadError);
-      throw new Error(`Failed to upload PDF: ${uploadError.message}`);
+    if (req.method !== 'POST') {
+      return new Response(
+        JSON.stringify({ error: 'Method not allowed' }),
+        { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
     }
 
-    // Get public URL for the uploaded file
-    const { data: urlData } = supabase.storage
-      .from('reports')
-      .getPublicUrl(filePath);
+    const data: AssessmentData = await req.json();
+    console.log('Generating PDF for user:', data.userInfo?.name);
 
-    const response = {
-      success: true,
-      downloadUrl: urlData.publicUrl,
-      filePath: filePath,
-      language: language,
-      message: "PDF generation and storage successful"
-    };
+    // Generate HTML content
+    const htmlContent = generateHTMLReport(data);
 
-    // Store PDF record in database
-    if (requestData.userData.userId && requestData.assessmentResultId) {
-      const { error: dbError } = await supabase
-        .from('pdf_reports')
-        .insert({
-          user_id: requestData.userData.userId,
-          assessment_result_id: requestData.assessmentResultId,
-          report_type: requestData.reportType,
-          file_path: filePath,
-          file_size: htmlContent.length
-        });
-
-      if (dbError) {
-        console.error("Database error:", dbError);
-      }
-    }
-
-    // Send email with download link
-    try {
-      const { error: emailError } = await supabase.functions.invoke('send-assessment-report', {
-        body: {
-          to: requestData.userData.email,
-          reportType: requestData.reportType,
-          candidateName: requestData.userData.name,
-          assessmentType: requestData.assessmentType,
-          downloadLink: urlData.publicUrl,
-          language: language,
-          employerInfo: requestData.reportType === 'employer' ? {
-            companyName: 'Your Organization',
-            contactPerson: 'Hiring Manager'
-          } : undefined
-        }
-      });
-
-      if (emailError) {
-        console.error("Email sending error:", emailError);
-        // Don't throw error - PDF generation was successful
-      }
-    } catch (emailError) {
-      console.error("Email function invocation error:", emailError);
-    }
-
-    return new Response(JSON.stringify(response), {
-      status: 200,
-      headers: {
-        "Content-Type": "application/json",
-        ...corsHeaders,
-      },
+    // Launch Puppeteer and generate PDF
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
-  } catch (error: any) {
-    console.error("Error in generate-pdf-report function:", error);
+    const page = await browser.newPage();
+    
+    // Set content with proper encoding
+    await page.setContent(htmlContent, { 
+      waitUntil: 'networkidle0',
+      timeout: 30000 
+    });
+
+    // Generate PDF with proper options
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: {
+        top: '10mm',
+        right: '10mm',
+        bottom: '10mm',
+        left: '10mm'
+      }
+    });
+
+    await browser.close();
+
+    console.log('PDF generated successfully, size:', pdfBuffer.length);
+
+    return new Response(pdfBuffer, {
+      headers: {
+        ...corsHeaders,
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': `attachment; filename="${data.userInfo.name || 'Assessment'}_Report.pdf"`
+      }
+    });
+
+  } catch (error) {
+    console.error('PDF generation error:', error);
     return new Response(
       JSON.stringify({ 
-        error: error.message,
-        details: "Failed to generate PDF report"
+        error: 'PDF generation failed', 
+        details: error.message 
       }),
-      {
-        status: 500,
-        headers: { "Content-Type": "application/json", ...corsHeaders },
+      { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
       }
     );
   }
-};
-
-function generateEnhancedHTML(data: GeneratePDFRequest): string {
-  const { results, reportType, userData, assessmentType, language = 'en' } = data;
-  
-  // Multilingual text content
-  const texts = getLocalizedTexts(language);
-  
-  return `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${assessmentType} Assessment Report - ${userData.name}</title>
-        <style>
-            * { box-sizing: border-box; margin: 0; padding: 0; }
-            body { 
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-                line-height: 1.6; 
-                color: #1f2937;
-                background: #ffffff;
-            }
-            .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
-            .header { 
-                text-align: center; 
-                margin-bottom: 40px; 
-                border-bottom: 3px solid #2563eb;
-                padding-bottom: 20px;
-            }
-            .logo { 
-                font-size: 28px; 
-                font-weight: bold; 
-                color: #2563eb; 
-                margin-bottom: 10px;
-            }
-            .subtitle { color: #6b7280; font-size: 16px; }
-            .report-info {
-                background: linear-gradient(135deg, #f8fafc, #e2e8f0);
-                padding: 25px;
-                border-radius: 12px;
-                margin-bottom: 30px;
-                border-left: 4px solid #2563eb;
-            }
-            .section { 
-                margin-bottom: 35px; 
-                padding: 25px;
-                background: #f9fafb;
-                border-radius: 8px;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-            }
-            .section h2 { 
-                color: #1e40af; 
-                margin-bottom: 20px; 
-                font-size: 22px;
-                border-bottom: 2px solid #dbeafe;
-                padding-bottom: 10px;
-            }
-            .score-bar {
-                background: #e5e7eb;
-                height: 20px;
-                border-radius: 10px;
-                overflow: hidden;
-                margin: 10px 0;
-                position: relative;
-            }
-            .score-fill {
-                height: 100%;
-                background: linear-gradient(90deg, #10b981, #059669);
-                border-radius: 10px;
-                transition: width 0.3s ease;
-            }
-            .score-text {
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                color: white;
-                font-weight: bold;
-                font-size: 12px;
-                text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-            }
-            .dimension {
-                margin-bottom: 25px;
-                padding: 20px;
-                background: white;
-                border-radius: 8px;
-                border: 1px solid #e5e7eb;
-            }
-            .dimension h3 { 
-                color: #374151; 
-                margin-bottom: 15px; 
-                font-size: 18px;
-            }
-            .dimension-score {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 10px;
-            }
-            .recommendations {
-                background: linear-gradient(135deg, #fef3c7, #fde68a);
-                border: 1px solid #f59e0b;
-                border-radius: 8px;
-                padding: 20px;
-                margin-top: 20px;
-            }
-            .recommendations h3 {
-                color: #92400e;
-                margin-bottom: 15px;
-            }
-            .recommendations ul {
-                list-style-position: inside;
-                color: #78350f;
-            }
-            .recommendations li {
-                margin-bottom: 8px;
-            }
-            .footer {
-                text-align: center;
-                margin-top: 40px;
-                padding-top: 20px;
-                border-top: 1px solid #e5e7eb;
-                color: #6b7280;
-                font-size: 14px;
-            }
-            .confidential {
-                background: #fef2f2;
-                border: 1px solid #fca5a5;
-                color: #dc2626;
-                padding: 15px;
-                border-radius: 8px;
-                margin-bottom: 20px;
-                font-weight: 500;
-            }
-            @media print {
-                body { font-size: 12px; }
-                .container { padding: 20px 10px; }
-                .section { page-break-inside: avoid; }
-            }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <div class="logo">AuthenCore</div>
-                <div class="subtitle">Professional Assessment Platform</div>
-            </div>
-
-            ${reportType === 'employer' ? `<div class="confidential">${texts.confidentialNotice}</div>` : ''}
-
-            <div class="report-info">
-                <h1>${texts.title} - ${assessmentType}</h1>
-                <p><strong>${texts.candidateLabel}</strong> ${userData.name}</p>
-                <p><strong>${texts.emailLabel}</strong> ${userData.email}</p>
-                <p><strong>${texts.reportTypeLabel}</strong> ${reportType === 'candidate' ? texts.individualReport : texts.employerReport}</p>
-                <p><strong>${texts.generatedLabel}</strong> ${new Date().toLocaleDateString()}</p>
-            </div>
-
-            <div class="section">
-                <h2>${texts.executiveSummary}</h2>
-                <p>This comprehensive ${assessmentType} assessment provides detailed insights into personality dimensions, behavioral patterns, and professional capabilities. The analysis includes validity checks and evidence-based recommendations.</p>
-                
-                ${results?.career_fit ? `
-                <div class="dimension">
-                    <h3>Overall Assessment Score</h3>
-                    <div class="dimension-score">
-                        <span>${results.career_fit.label || 'Career Profile'}</span>
-                        <span><strong>85/100</strong></span>
-                    </div>
-                    <div class="score-bar">
-                        <div class="score-fill" style="width: 85%">
-                            <div class="score-text">85%</div>
-                        </div>
-                    </div>
-                    <p><strong>Profile:</strong> ${results.career_fit.description || 'Well-Developed Profile'}</p>
-                </div>
-                ` : ''}
-            </div>
-
-            <div class="section">
-                <h2>${texts.dimensionalAnalysis}</h2>
-                ${generateDimensionScores(results)}
-            </div>
-
-            ${reportType === 'employer' ? `
-            <div class="section">
-                <h2>${texts.hiringInsights}</h2>
-                <div class="dimension">
-                    <h3>${texts.culturalFitAnalysis}</h3>
-                    <p>Assessment of alignment with organizational culture and values.</p>
-                    <div class="score-bar">
-                        <div class="score-fill" style="width: 82%">
-                            <div class="score-text">82%</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="dimension">
-                    <h3>${texts.roleAlignment}</h3>
-                    <p>Compatibility with position requirements and responsibilities.</p>
-                    <div class="score-bar">
-                        <div class="score-fill" style="width: 78%">
-                            <div class="score-text">78%</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            ` : ''}
-
-            <div class="section">
-                <h2>${texts.professionalDevelopment}</h2>
-                <div class="recommendations">
-                    <h3>📈 ${texts.recommendedNextSteps}</h3>
-                    <ul>
-                        <li>Focus on developing leadership communication skills</li>
-                        <li>Enhance strategic thinking through cross-functional projects</li>
-                        <li>Build stronger stakeholder relationship management</li>
-                        <li>Consider mentorship opportunities in areas of strength</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer">
-                <p>${texts.copyrightNotice}</p>
-                <p>${texts.confidentialityNote}</p>
-                <p>${texts.aiGeneratedNote}</p>
-            </div>
-        </div>
-    </body>
-    </html>
-  `;
-}
-
-function generateDimensionScores(results: any): string {
-  if (!results) {
-    return `
-      <div class="dimension">
-        <h3>Assessment scores will be displayed here after completion</h3>
-        <p>This section will contain detailed dimensional analysis including personality factors, behavioral patterns, and competency ratings.</p>
-      </div>
-    `;
-  }
-
-  let content = '';
-
-  // Handle interests (RIASEC)
-  if (results.interests) {
-    content += '<div class="dimension"><h3>Career Interests (RIASEC)</h3>';
-    Object.entries(results.interests).forEach(([key, score]: [string, any]) => {
-      content += `
-        <div style="margin-bottom: 15px;">
-          <div class="dimension-score">
-            <span>${key.charAt(0).toUpperCase() + key.slice(1)}</span>
-            <span><strong>${score}/100</strong></span>
-          </div>
-          <div class="score-bar">
-            <div class="score-fill" style="width: ${score}%">
-              <div class="score-text">${score}%</div>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-    content += '</div>';
-  }
-
-  // Handle aptitudes
-  if (results.aptitudes) {
-    content += '<div class="dimension"><h3>Cognitive Aptitudes</h3>';
-    results.aptitudes.forEach((apt: any) => {
-      content += `
-        <div style="margin-bottom: 15px;">
-          <div class="dimension-score">
-            <span>${apt.name}</span>
-            <span><strong>${apt.score}/100</strong></span>
-          </div>
-          <div class="score-bar">
-            <div class="score-fill" style="width: ${apt.score}%">
-              <div class="score-text">${apt.score}%</div>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-    content += '</div>';
-  }
-
-  // Handle personality traits
-  if (results.personality) {
-    content += '<div class="dimension"><h3>Personality Profile</h3>';
-    Object.entries(results.personality).forEach(([key, score]: [string, any]) => {
-      content += `
-        <div style="margin-bottom: 15px;">
-          <div class="dimension-score">
-            <span>${key.charAt(0).toUpperCase() + key.slice(1)}</span>
-            <span><strong>${score}/100</strong></span>
-          </div>
-          <div class="score-bar">
-            <div class="score-fill" style="width: ${score}%">
-              <div class="score-text">${score}%</div>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-    content += '</div>';
-  }
-
-  return content || `
-    <div class="dimension">
-      <h3>Assessment Results</h3>
-      <p>Detailed assessment results will be displayed here.</p>
-    </div>
-  `;
-}
-
-// Multilingual support function
-function getLocalizedTexts(language: string) {
-  const texts = {
-    en: {
-      title: 'Assessment Report',
-      candidateLabel: 'Candidate:',
-      emailLabel: 'Email:',
-      reportTypeLabel: 'Report Type:',
-      generatedLabel: 'Generated:',
-      executiveSummary: 'Executive Summary',
-      dimensionalAnalysis: 'Dimensional Analysis',
-      hiringInsights: 'Hiring Insights',
-      culturalFitAnalysis: 'Cultural Fit Analysis',
-      roleAlignment: 'Role Alignment',
-      professionalDevelopment: 'Professional Development',
-      recommendedNextSteps: 'Recommended Next Steps',
-      confidentialNotice: '⚠️ CONFIDENTIAL: This report contains sensitive candidate assessment data',
-      individualReport: 'Individual Report',
-      employerReport: 'Employer Report',
-      copyrightNotice: '© 2025 AuthenCore - Professional Assessment Platform',
-      confidentialityNote: 'This report is confidential and intended solely for the specified recipient.',
-      aiGeneratedNote: 'Report generated with advanced psychometric algorithms and AI analysis.'
-    },
-    es: {
-      title: 'Informe de Evaluación',
-      candidateLabel: 'Candidato:',
-      emailLabel: 'Correo:',
-      reportTypeLabel: 'Tipo de Informe:',
-      generatedLabel: 'Generado:',
-      executiveSummary: 'Resumen Ejecutivo',
-      dimensionalAnalysis: 'Análisis Dimensional',
-      hiringInsights: 'Perspectivas de Contratación',
-      culturalFitAnalysis: 'Análisis de Ajuste Cultural',
-      roleAlignment: 'Alineación del Rol',
-      professionalDevelopment: 'Desarrollo Profesional',
-      recommendedNextSteps: 'Próximos Pasos Recomendados',
-      confidentialNotice: '⚠️ CONFIDENCIAL: Este informe contiene datos sensibles de evaluación del candidato',
-      individualReport: 'Informe Individual',
-      employerReport: 'Informe del Empleador',
-      copyrightNotice: '© 2025 AuthenCore - Plataforma de Evaluación Profesional',
-      confidentialityNote: 'Este informe es confidencial y está destinado únicamente al destinatario especificado.',
-      aiGeneratedNote: 'Informe generado con algoritmos psicométricos avanzados y análisis de IA.'
-    },
-    fr: {
-      title: 'Rapport d\'Évaluation',
-      candidateLabel: 'Candidat:',
-      emailLabel: 'Email:',
-      reportTypeLabel: 'Type de Rapport:',
-      generatedLabel: 'Généré:',
-      executiveSummary: 'Résumé Exécutif',
-      dimensionalAnalysis: 'Analyse Dimensionnelle',
-      hiringInsights: 'Perspectives d\'Embauche',
-      culturalFitAnalysis: 'Analyse d\'Adéquation Culturelle',
-      roleAlignment: 'Alignement du Rôle',
-      professionalDevelopment: 'Développement Professionnel',
-      recommendedNextSteps: 'Prochaines Étapes Recommandées',
-      confidentialNotice: '⚠️ CONFIDENTIEL: Ce rapport contient des données sensibles d\'évaluation du candidat',
-      individualReport: 'Rapport Individuel',
-      employerReport: 'Rapport Employeur',
-      copyrightNotice: '© 2025 AuthenCore - Plateforme d\'Évaluation Professionnelle',
-      confidentialityNote: 'Ce rapport est confidentiel et destiné uniquement au destinataire spécifié.',
-      aiGeneratedNote: 'Rapport généré avec des algorithmes psychométriques avancés et une analyse IA.'
-    }
-  };
-  
-  return texts[language as keyof typeof texts] || texts.en;
-}
-
-serve(handler);
+});
