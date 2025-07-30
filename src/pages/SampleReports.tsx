@@ -908,6 +908,32 @@ const SampleReports = () => {
               'Learning Agility Claims': 'High - Learning orientation validated through behavioral indicators',
               'Technology Assessment Validity': 'Excellent - All digital fluency measures show high reliability'
             }
+          },
+          'faith-values': {
+            dimensions: [
+              { name: 'Integrity', score: 92, level: 'Excellent', description: 'Demonstrates unwavering commitment to moral principles and ethical decision-making across all situations.' },
+              { name: 'Compassion', score: 89, level: 'Excellent', description: 'Shows exceptional empathy, care for others, and genuine concern for wellbeing of colleagues and community.' },
+              { name: 'Service', score: 91, level: 'Excellent', description: 'Strong orientation toward serving others, contributing to community welfare, and making meaningful impact.' },
+              { name: 'Justice', score: 85, level: 'Very Good', description: 'Committed to fairness, equality, and standing up for what is right in professional and personal contexts.' },
+              { name: 'Stewardship', score: 87, level: 'Very Good', description: 'Demonstrates responsible management of resources, talents, and opportunities entrusted to them.' },
+              { name: 'Humility', score: 79, level: 'Good', description: 'Shows balanced self-awareness with room for growth in confidence and self-advocacy.' },
+              { name: 'Gratitude', score: 90, level: 'Excellent', description: 'Maintains appreciative mindset that enhances relationships and provides positive perspective.' },
+              { name: 'Courage', score: 76, level: 'Good', description: 'Demonstrates moral courage with opportunities to strengthen advocacy and bold leadership.' }
+            ],
+            profile: 'Your faith and values assessment reveals a strong foundation of integrity and service orientation that positions you excellently for mission-driven organizations. Your high compassion and commitment to justice create natural leadership opportunities in values-based environments.',
+            contextualEffectiveness: {
+              'Mission-Driven Leadership': { score: 92, description: 'Exceptional values alignment creates authentic leadership in purpose-driven roles' },
+              'Community Engagement': { score: 89, description: 'Strong service orientation drives meaningful community impact and relationships' },
+              'Ethical Decision Making': { score: 88, description: 'High integrity supports consistent ethical choices in complex situations' },
+              'Values-Based Mentoring': { score: 85, description: 'Compassion and wisdom create natural mentoring and development opportunities' }
+            },
+            employerDistortion: {
+              'Values Authenticity': 'High - Consistent values-based responses indicate genuine commitment to faith principles',
+              'Service Orientation Accuracy': 'Very High - Service behaviors align with stated commitment to helping others',
+              'Integrity Consistency': 'Excellent - Ethical decision patterns support high integrity scores',
+              'Faith Integration': 'Authentic - Natural integration of faith principles with professional capabilities',
+              'Values Assessment Validity': 'Excellent - All faith and values measures show high reliability and authenticity'
+            }
           }
         };
 
