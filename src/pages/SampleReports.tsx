@@ -57,6 +57,33 @@ const getAssessmentTypeForPDF = (assessmentType: string): string => {
   return typeMapping[assessmentType] || assessmentType;
 };
 
+// Helper function to get display names for assessments
+const getAssessmentDisplayName = (assessmentType: string): string => {
+  const displayMapping: Record<string, string> = {
+    'leadership': 'Leadership Assessment',
+    'leadership-assessment': 'Leadership Assessment', 
+    'stress-resilience': 'Stress Resilience Assessment',
+    'stress': 'Stress Resilience Assessment',
+    'burnout-prevention': 'Burnout Prevention Assessment',
+    'burnout': 'Burnout Prevention Assessment',
+    'career-launch': 'Career Launch Assessment',
+    'career': 'Career Launch Assessment',
+    'cair-personality': 'CAIR Plus Assessment',
+    'cair': 'CAIR Plus Assessment',
+    'communication': 'Communication Styles Assessment',
+    'emotional-intelligence': 'Emotional Intelligence Assessment',
+    'emotional': 'Emotional Intelligence Assessment',
+    'cultural-intelligence': 'Cultural Intelligence Assessment',
+    'cultural': 'Cultural Intelligence Assessment',
+    'digital-wellness': 'Digital Wellness Assessment',
+    'digital': 'Digital Wellness Assessment',
+    'faith-values': 'Faith & Values Assessment',
+    'genz': 'Gen Z Workplace Assessment'
+  };
+  
+  return displayMapping[assessmentType] || 'Professional Assessment';
+};
+
 const SampleReports = () => {
   const [selectedAssessment, setSelectedAssessment] = useState('career-launch');
   const [reportType, setReportType] = useState<'candidate' | 'employer'>('candidate');
@@ -131,16 +158,32 @@ const SampleReports = () => {
         return;
       }
 
-      // For other assessment types, use unified report generator with consistent branding
-      const unifiedData = convertToUnifiedFormat(sampleData, selectedAssessment);
-      const config = {
-        assessmentType: selectedAssessment,
-        reportType: reportType as 'candidate' | 'employer',
-        results: unifiedData,
-        template: reportType === 'employer' ? 'executive' as const : 'detailed' as const,
-        includeCharts: true,
-        includeRecommendations: true,
-        includeActionPlan: reportType === 'candidate',
+      // For other assessment types, use HTML report generator like Career Launch
+      const { generateHtmlReport } = await import('@/utils/htmlReportGenerator');
+      
+      const reportData = {
+        assessmentType: getAssessmentDisplayName(selectedAssessment),
+        reportType: reportType === 'candidate' ? 'standard' as const : 'employer' as const,
+        userInfo: {
+          name: sampleData.candidateInfo.name,
+          email: sampleData.candidateInfo.email,
+          assessmentDate: sampleData.candidateInfo.completionDate,
+          questionsAnswered: 60,
+          timeSpent: '15 minutes',
+          reliabilityScore: 92,
+          reportId: `SAMPLE-${selectedAssessment.toUpperCase()}-${Date.now()}`
+        },
+        overallScore: sampleData.executiveSummary?.overallScore || 75,
+        dimensions: Object.entries(sampleData.dimensionScores || {}).map(([key, score]: [string, any]) => ({
+          name: key.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase()),
+          score: typeof score === 'object' ? score.score : score,
+          level: (typeof score === 'object' ? score.score : score) >= 70 ? 'High' : 
+                 (typeof score === 'object' ? score.score : score) >= 40 ? 'Moderate' : 'Low'
+        })),
+        strengths: sampleData.executiveSummary?.topStrengths || [],
+        developmentAreas: sampleData.executiveSummary?.keyDevelopmentAreas || [],
+        recommendations: sampleData.executiveSummary?.recommendedNextSteps || [],
+        careerMatches: (sampleData as any).careerMatches || (sampleData as any).careerRecommendations || [],
         branding: {
           logo: '/final-logo.png',
           colors: {
@@ -151,7 +194,7 @@ const SampleReports = () => {
         }
       };
 
-      await unifiedReportGenerator.generateReport(config);
+      await generateHtmlReport(reportData);
       toast.success(`Sample ${reportType} report generated successfully!`);
       
     } catch (error) {
