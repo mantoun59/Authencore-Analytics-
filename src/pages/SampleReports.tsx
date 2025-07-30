@@ -199,6 +199,15 @@ const SampleReports = () => {
             'Change Management': 'Good at helping teams navigate organizational changes through clear communication'
           },
           
+          distortionAnalysis: {
+            'Overall Authenticity': 'High - Responses appear genuine and consistent',
+            'Social Desirability': 'Moderate - Some tendency to present in favorable light, within normal range',
+            'Response Consistency': 'High - Consistent response patterns throughout assessment',
+            'Extreme Responding': 'Low - Balanced use of response scale indicates thoughtful consideration',
+            'Impression Management': 'Moderate - Shows awareness of professional context without over-enhancement',
+            'Validity Indicators': 'All validity checks passed - Results are reliable for hiring decisions'
+          },
+          
           careerMatches: [
             {
               career: { title: 'Account Manager', description: 'Managing client relationships and driving business growth' },

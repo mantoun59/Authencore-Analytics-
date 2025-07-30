@@ -29,6 +29,7 @@ export interface HtmlReportData {
   workingStyles?: Record<string, string>;
   employerInsights?: Record<string, string>;
   riskAssessment?: Record<string, string>;
+  distortionAnalysis?: Record<string, string>;
   [key: string]: any;
 }
 
@@ -391,6 +392,22 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
       border-left: 4px solid #f87171;
     }
     
+    .distortion-analysis-section {
+      background: #fffbeb;
+      border: 1px solid #f59e0b;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .distortion-item {
+      background: white;
+      border-radius: 6px;
+      padding: 15px;
+      margin: 10px 0;
+      border-left: 4px solid #f59e0b;
+    }
+    
     .print-button {
       background: #008080;
       color: white;
@@ -469,6 +486,8 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
     ${generateEmployerInsightsSection(data)}
     
     ${generateRiskAssessmentSection(data)}
+    
+    ${generateDistortionAnalysisSection(data)}
     
     ${generateRecommendationsSection(data)}
     
@@ -680,6 +699,21 @@ const generateRiskAssessmentSection = (data: HtmlReportData): string => {
       ${Object.entries(data.riskAssessment).map(([risk, assessment]) => `
         <div class="risk-item">
           <strong>${risk}:</strong> ${assessment}
+        </div>
+      `).join('')}
+    </div>
+  `;
+};
+
+const generateDistortionAnalysisSection = (data: HtmlReportData): string => {
+  if (!data.distortionAnalysis || Object.keys(data.distortionAnalysis).length === 0) return '';
+  
+  return `
+    <div class="distortion-analysis-section">
+      <h2 class="section-title">🔍 Response Validity & Distortion Analysis</h2>
+      ${Object.entries(data.distortionAnalysis).map(([indicator, analysis]) => `
+        <div class="distortion-item">
+          <strong>${indicator}:</strong> ${analysis}
         </div>
       `).join('')}
     </div>
