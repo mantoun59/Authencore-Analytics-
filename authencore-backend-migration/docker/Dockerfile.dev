@@ -1,0 +1,45 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+# Install system dependencies
+RUN apk add --no-cache \
+    postgresql-client \
+    curl \
+    bash \
+    git
+
+# Create app user
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S authencore -u 1001
+
+# Copy package files (if they exist)
+COPY package*.json ./
+RUN npm ci --only=production || echo "No package.json found"
+
+# Copy application files
+COPY . .
+
+# Install Deno for edge functions
+RUN curl -fsSL https://deno.land/install.sh | sh
+ENV PATH="/root/.deno/bin:$PATH"
+
+# Create logs directory
+RUN mkdir -p /var/log/authencore
+RUN chown -R authencore:nodejs /var/log/authencore
+
+# Set permissions
+RUN chown -R authencore:nodejs /app
+
+# Switch to non-root user
+USER authencore
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:3000/health || exit 1
+
+# Expose ports
+EXPOSE 3000 8080
+
+# Development command
+CMD ["deno", "run", "--allow-all", "--watch", "supabase/functions/_dev-server.ts"]
