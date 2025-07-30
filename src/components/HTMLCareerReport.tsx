@@ -18,9 +18,9 @@ interface HTMLReportData {
   strengths?: string[];
   developmentAreas?: string[];
   recommendations?: string[];
-  careerMatches?: Array<{ title: string; match: number; description?: string }>;
+  careerMatches?: Array<{ title: string; match: number; description?: string; majors?: string[] }>;
   riasecResults?: Record<string, number>;
-  [key: string]: any;
+  collegeMajors?: Array<{ name: string; match: number; careers: string[]; description?: string }>;
 }
 
 interface HTMLCareerReportProps {
@@ -52,6 +52,37 @@ export const HTMLCareerReport: React.FC<HTMLCareerReportProps> = ({ data }) => {
   const processedDimensions = processDimensions(data.dimensions || data.riasecResults);
   const careerMatches = data.careerMatches || [];
   const recommendations = data.recommendations || [];
+  const collegeMajors = data.collegeMajors || generateCollegeMajors(processedDimensions, careerMatches);
+
+  // Generate college majors based on career matches and RIASEC scores
+  function generateCollegeMajors(dimensions: Array<{ name: string; score: number }>, careers: any[]): Array<{ name: string; match: number; careers: string[]; description: string }> {
+    const majorMappings = [
+      { name: 'Computer Science', riasec: ['Investigative', 'Conventional'], careers: ['Software Engineer', 'Data Scientist', 'Systems Analyst'], description: 'Programming, algorithms, and computational thinking' },
+      { name: 'Business Administration', riasec: ['Enterprising', 'Conventional'], careers: ['Business Manager', 'Marketing Manager', 'Operations Manager'], description: 'Leadership, strategy, and organizational management' },
+      { name: 'Psychology', riasec: ['Social', 'Investigative'], careers: ['Psychologist', 'Counselor', 'Human Resources'], description: 'Human behavior, mental processes, and social dynamics' },
+      { name: 'Engineering', riasec: ['Realistic', 'Investigative'], careers: ['Mechanical Engineer', 'Civil Engineer', 'Electrical Engineer'], description: 'Problem-solving, design, and technical innovation' },
+      { name: 'Graphic Design', riasec: ['Artistic', 'Conventional'], careers: ['Graphic Designer', 'Art Director', 'UX Designer'], description: 'Visual communication, creativity, and design principles' },
+      { name: 'Education', riasec: ['Social', 'Conventional'], careers: ['Teacher', 'Principal', 'Curriculum Developer'], description: 'Learning theory, pedagogy, and human development' },
+      { name: 'Marketing', riasec: ['Enterprising', 'Artistic'], careers: ['Marketing Specialist', 'Brand Manager', 'Digital Marketer'], description: 'Consumer behavior, branding, and communication strategies' },
+      { name: 'Environmental Science', riasec: ['Investigative', 'Realistic'], careers: ['Environmental Scientist', 'Conservation Biologist', 'Sustainability Consultant'], description: 'Ecology, research, and environmental protection' },
+      { name: 'Finance', riasec: ['Conventional', 'Enterprising'], careers: ['Financial Analyst', 'Investment Banker', 'Financial Planner'], description: 'Economics, financial markets, and quantitative analysis' },
+      { name: 'Communications', riasec: ['Social', 'Artistic'], careers: ['Public Relations Specialist', 'Journalist', 'Content Creator'], description: 'Media, storytelling, and interpersonal communication' }
+    ];
+
+    return majorMappings.map(major => {
+      const matchScore = major.riasec.reduce((score, riasecType) => {
+        const dimension = dimensions.find(d => d.name.toLowerCase().includes(riasecType.toLowerCase()));
+        return score + (dimension ? dimension.score : 0);
+      }, 0) / major.riasec.length;
+
+      return {
+        name: major.name,
+        match: Math.round(matchScore),
+        careers: major.careers,
+        description: major.description
+      };
+    }).sort((a, b) => b.match - a.match);
+  }
 
   // RIASEC types with colors and descriptions
   const riasecTypes = [
@@ -245,6 +276,42 @@ export const HTMLCareerReport: React.FC<HTMLCareerReportProps> = ({ data }) => {
             transition: width 0.3s ease;
           }
           
+          .college-major-card {
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+          }
+          
+          .major-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+          }
+          
+          .major-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #92400e;
+          }
+          
+          .major-match {
+            font-size: 16px;
+            font-weight: bold;
+            color: #f59e0b;
+          }
+          
+          .related-careers {
+            background: white;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 10px 0;
+            font-size: 12px;
+            color: #374151;
+          }
+          
           .career-card {
             background: white;
             border: 1px solid #e2e8f0;
@@ -432,7 +499,45 @@ export const HTMLCareerReport: React.FC<HTMLCareerReportProps> = ({ data }) => {
         })}
       </div>
 
-      {/* Page 3: Career Recommendations */}
+        {/* Page 3: College Majors */}
+        <div className="report-page">
+          <h2 className="section-title">🎓 Recommended College Majors</h2>
+          <p style={{ marginBottom: '20px', color: '#64748b' }}>
+            Academic programs that align with your interests and career goals, ranked by compatibility:
+          </p>
+
+          {collegeMajors.slice(0, 6).map((major, index) => {
+            const matchColor = major.match >= 80 ? '#22c55e' : major.match >= 60 ? '#f59e0b' : '#6b7280';
+            
+            return (
+              <div key={index} className="college-major-card">
+                <div className="major-header">
+                  <div className="major-name">🎓 {major.name}</div>
+                  <div className="major-match" style={{ color: matchColor }}>
+                    {major.match}% Match
+                  </div>
+                </div>
+                <div className="progress-bar" style={{ width: '100%', marginBottom: '10px' }}>
+                  <div 
+                    className="progress-fill" 
+                    style={{ 
+                      width: `${major.match}%`, 
+                      backgroundColor: matchColor 
+                    }}
+                  />
+                </div>
+                <div style={{ color: '#6b7280', fontSize: '14px', marginBottom: '8px' }}>
+                  {major.description}
+                </div>
+                <div className="related-careers">
+                  <strong>Related Careers:</strong> {major.careers.join(', ')}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Page 4: Career Recommendations */}
       <div className="report-page">
         <h2 className="section-title">🚀 Top Career Recommendations</h2>
         <p style={{ marginBottom: '20px', color: '#64748b' }}>
@@ -471,7 +576,7 @@ export const HTMLCareerReport: React.FC<HTMLCareerReportProps> = ({ data }) => {
         })}
       </div>
 
-      {/* Page 4: Development Recommendations */}
+      {/* Page 5: Development Recommendations */}
       <div className="report-page">
         <h2 className="section-title">💡 Personal Development Roadmap</h2>
         <p style={{ marginBottom: '20px', color: '#64748b' }}>
@@ -503,7 +608,7 @@ export const HTMLCareerReport: React.FC<HTMLCareerReportProps> = ({ data }) => {
         </div>
       </div>
 
-      {/* Page 5: Assessment Details & Methodology */}
+      {/* Page 6: Assessment Details & Methodology */}
       <div className="report-page">
         <h2 className="section-title">📊 Assessment Methodology & Validity</h2>
         

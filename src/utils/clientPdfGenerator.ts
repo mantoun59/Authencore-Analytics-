@@ -29,7 +29,7 @@ export interface SimplePdfData {
 
 export type ReportType = 'applicant' | 'advisor' | 'certificate';
 
-// Convert image to base64 for embedding in PDF
+// Convert image to base64 for embedding in HTML
 const getLogoBase64 = async (): Promise<string> => {
   return new Promise((resolve, reject) => {
     const img = new Image();
@@ -57,8 +57,6 @@ const getLogoBase64 = async (): Promise<string> => {
     img.src = finalLogo;
   });
 };
-
-// Professional color scheme (RGB values for jsPDF compatibility)
 const colors = {
   primary: [0, 128, 128] as const, // Teal
   secondary: [25, 25, 112] as const, // Navy  
@@ -125,8 +123,11 @@ export const generateClientSidePdf = async (data: SimplePdfData): Promise<void> 
   try {
     validateInput(data);
     
-    // Create HTML report
-    const htmlContent = generateHTMLReport(data);
+    // Get logo as base64
+    const logoBase64 = await getLogoBase64().catch(() => null);
+    
+    // Create HTML report with logo
+    const htmlContent = generateHTMLReport(data, logoBase64);
     
     // Open in new window for printing
     const printWindow = window.open('', '_blank', 'width=800,height=600');
@@ -154,8 +155,8 @@ export const generateClientSidePdf = async (data: SimplePdfData): Promise<void> 
   }
 };
 
-// Generate complete HTML report
-const generateHTMLReport = (data: SimplePdfData): string => {
+// Generate complete HTML report with logo
+const generateHTMLReport = (data: SimplePdfData, logoBase64: string | null = null): string => {
   // Process dimensions data
   const processDimensions = (dimensions: any): Array<{ name: string; score: number }> => {
     if (!dimensions) return [];
@@ -180,6 +181,38 @@ const generateHTMLReport = (data: SimplePdfData): string => {
   const processedDimensions = processDimensions(data.dimensions || data.riasecResults);
   const careerMatches = data.careerMatches || [];
   const recommendations = data.recommendations || [];
+
+  // Generate college majors based on career matches and RIASEC scores
+  const generateCollegeMajors = (dimensions: Array<{ name: string; score: number }>, careers: any[]): Array<{ name: string; match: number; careers: string[]; description: string }> => {
+    const majorMappings = [
+      { name: 'Computer Science', riasec: ['Investigative', 'Conventional'], careers: ['Software Engineer', 'Data Scientist', 'Systems Analyst'], description: 'Programming, algorithms, and computational thinking' },
+      { name: 'Business Administration', riasec: ['Enterprising', 'Conventional'], careers: ['Business Manager', 'Marketing Manager', 'Operations Manager'], description: 'Leadership, strategy, and organizational management' },
+      { name: 'Psychology', riasec: ['Social', 'Investigative'], careers: ['Psychologist', 'Counselor', 'Human Resources'], description: 'Human behavior, mental processes, and social dynamics' },
+      { name: 'Engineering', riasec: ['Realistic', 'Investigative'], careers: ['Mechanical Engineer', 'Civil Engineer', 'Electrical Engineer'], description: 'Problem-solving, design, and technical innovation' },
+      { name: 'Graphic Design', riasec: ['Artistic', 'Conventional'], careers: ['Graphic Designer', 'Art Director', 'UX Designer'], description: 'Visual communication, creativity, and design principles' },
+      { name: 'Education', riasec: ['Social', 'Conventional'], careers: ['Teacher', 'Principal', 'Curriculum Developer'], description: 'Learning theory, pedagogy, and human development' },
+      { name: 'Marketing', riasec: ['Enterprising', 'Artistic'], careers: ['Marketing Specialist', 'Brand Manager', 'Digital Marketer'], description: 'Consumer behavior, branding, and communication strategies' },
+      { name: 'Environmental Science', riasec: ['Investigative', 'Realistic'], careers: ['Environmental Scientist', 'Conservation Biologist', 'Sustainability Consultant'], description: 'Ecology, research, and environmental protection' },
+      { name: 'Finance', riasec: ['Conventional', 'Enterprising'], careers: ['Financial Analyst', 'Investment Banker', 'Financial Planner'], description: 'Economics, financial markets, and quantitative analysis' },
+      { name: 'Communications', riasec: ['Social', 'Artistic'], careers: ['Public Relations Specialist', 'Journalist', 'Content Creator'], description: 'Media, storytelling, and interpersonal communication' }
+    ];
+
+    return majorMappings.map(major => {
+      const matchScore = major.riasec.reduce((score, riasecType) => {
+        const dimension = dimensions.find(d => d.name.toLowerCase().includes(riasecType.toLowerCase()));
+        return score + (dimension ? dimension.score : 0);
+      }, 0) / major.riasec.length;
+
+      return {
+        name: major.name,
+        match: Math.round(matchScore),
+        careers: major.careers,
+        description: major.description
+      };
+    }).sort((a, b) => b.match - a.match);
+  };
+
+  const collegeMajors = generateCollegeMajors(processedDimensions, careerMatches);
 
   // RIASEC types with colors and descriptions
   const riasecTypes = [
@@ -263,10 +296,19 @@ const generateHTMLReport = (data: SimplePdfData): string => {
     .logo {
       width: 60px;
       height: 60px;
+      border-radius: 8px;
+      background: white;
+      padding: 5px;
+    }
+    
+    .logo-fallback {
+      width: 60px;
+      height: 60px;
       background: white;
       border-radius: 8px;
       padding: 8px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       font-weight: bold;
@@ -408,6 +450,42 @@ const generateHTMLReport = (data: SimplePdfData): string => {
       border-radius: 6px;
     }
     
+    .college-major-card {
+      background: linear-gradient(135deg, #fef3c7, #fde68a);
+      border: 2px solid #f59e0b;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+    }
+    
+    .major-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .major-name {
+      font-size: 18px;
+      font-weight: bold;
+      color: #92400e;
+    }
+    
+    .major-match {
+      font-size: 16px;
+      font-weight: bold;
+      color: #f59e0b;
+    }
+    
+    .related-careers {
+      background: white;
+      padding: 10px;
+      border-radius: 4px;
+      margin: 10px 0;
+      font-size: 12px;
+      color: #374151;
+    }
+    
     .career-card {
       background: white;
       border: 1px solid #e2e8f0;
@@ -513,9 +591,10 @@ const generateHTMLReport = (data: SimplePdfData): string => {
     <div class="report-header">
       <div class="confidential-badge">CONFIDENTIAL</div>
       <div class="logo-section">
-        <div class="logo">
-          AuthenCore<br>Analytics
-        </div>
+        ${logoBase64 
+          ? `<img src="${logoBase64}" alt="AuthenCore Analytics" class="logo" />`
+          : `<div class="logo-fallback">AuthenCore<br>Analytics</div>`
+        }
         <div class="company-info">
           <h1>AuthenCore Analytics</h1>
           <p>Career Launch Assessment Report</p>
@@ -605,7 +684,39 @@ const generateHTMLReport = (data: SimplePdfData): string => {
     }).join('')}
   </div>
 
-  <!-- Page 3: Career Recommendations -->
+  <!-- Page 3: College Majors -->
+  <div class="report-page">
+    <h2 class="section-title">🎓 Recommended College Majors</h2>
+    <p style="margin-bottom: 20px; color: #64748b;">
+      Academic programs that align with your interests and career goals, ranked by compatibility:
+    </p>
+
+    ${collegeMajors.slice(0, 6).map((major, index) => {
+      const matchColor = major.match >= 80 ? '#22c55e' : major.match >= 60 ? '#f59e0b' : '#6b7280';
+      
+      return `
+      <div class="college-major-card">
+        <div class="major-header">
+          <div class="major-name">🎓 ${normalizeText(major.name)}</div>
+          <div class="major-match" style="color: ${matchColor};">
+            ${major.match}% Match
+          </div>
+        </div>
+        <div class="progress-bar" style="width: 100%; margin-bottom: 10px;">
+          <div class="progress-fill" style="width: ${major.match}%; background-color: ${matchColor};"></div>
+        </div>
+        <div style="color: #6b7280; font-size: 14px; margin-bottom: 8px;">
+          ${normalizeText(major.description)}
+        </div>
+        <div class="related-careers">
+          <strong>Related Careers:</strong> ${major.careers.join(', ')}
+        </div>
+      </div>
+      `;
+    }).join('')}
+  </div>
+
+  <!-- Page 4: Career Recommendations -->
   <div class="report-page">
     <h2 class="section-title">🚀 Top Career Recommendations</h2>
     <p style="margin-bottom: 20px; color: #64748b;">
@@ -644,7 +755,7 @@ const generateHTMLReport = (data: SimplePdfData): string => {
     ` : ''}
   </div>
 
-  <!-- Page 4: Development Recommendations -->
+  <!-- Page 5: Development Recommendations -->
   <div class="report-page">
     <h2 class="section-title">💡 Personal Development Roadmap</h2>
     <p style="margin-bottom: 20px; color: #64748b;">
@@ -676,7 +787,7 @@ const generateHTMLReport = (data: SimplePdfData): string => {
     </div>
   </div>
 
-  <!-- Page 5: Assessment Details & Methodology -->
+  <!-- Page 6: Assessment Details & Methodology -->
   <div class="report-page">
     <h2 class="section-title">📊 Assessment Methodology & Validity</h2>
     
