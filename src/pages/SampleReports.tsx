@@ -840,6 +840,101 @@ const SampleReports = () => {
             company: 'AuthenCore Analytics'
           }
         };
+      } else if (selectedAssessment === 'faith-values') {
+        // Faith & Values Assessment specific data
+        const sampleData = reportType === 'employer' 
+          ? getSampleEmployerReport(selectedAssessment)
+          : getSampleCandidateReport(selectedAssessment);
+
+        reportData = {
+          assessmentType: 'Faith & Values Alignment Index (FVAI)',
+          reportType: reportType as 'standard' | 'advisor' | 'employer',
+          userInfo: {
+            name: sampleData.candidateInfo.name,
+            email: sampleData.candidateInfo.email,
+            assessmentDate: sampleData.candidateInfo.completionDate,
+            questionsAnswered: 90,
+            timeSpent: '25 minutes',
+            reliabilityScore: 95,
+            reportId: `FVAI-${Date.now()}`,
+            position: reportType === 'employer' ? 'Community Relations Manager' : undefined,
+            department: reportType === 'employer' ? 'Mission & Values' : undefined
+          },
+          overallScore: sampleData.executiveSummary?.overallScore || 87,
+          dimensions: Object.entries(sampleData.dimensionScores || {}).map(([key, dimData]: [string, any]) => ({
+            name: key.charAt(0).toUpperCase() + key.slice(1),
+            score: dimData.score,
+            level: dimData.level,
+            description: dimData.interpretation
+          })),
+          profile: reportType === 'employer' 
+            ? 'This candidate demonstrates exceptional alignment with faith-based values and organizational mission. Strong integrity, compassion, and service orientation make them an ideal fit for mission-driven environments. Their values-based decision making and commitment to ethical leadership position them well for roles requiring authentic values integration.'
+            : 'Your faith and values assessment reveals a strong foundation of integrity and service orientation that positions you excellently for mission-driven organizations. Your high compassion and commitment to justice create natural leadership opportunities in values-based environments.',
+          strengths: sampleData.executiveSummary?.topStrengths || [
+            'Integrity & Authenticity',
+            'Service Orientation', 
+            'Compassionate Leadership'
+          ],
+          developmentAreas: sampleData.executiveSummary?.keyDevelopmentAreas || [
+            'Assertiveness',
+            'Strategic Vision',
+            'Work-Life Boundaries'
+          ],
+          recommendations: sampleData.executiveSummary?.recommendedNextSteps || [
+            'Pursue leadership roles in mission-driven organizations',
+            'Develop strategic planning and vision-setting skills',
+            'Strengthen personal boundaries while maintaining compassion',
+            'Seek mentorship in faith-based leadership principles'
+          ],
+          contextualEffectiveness: {
+            'Mission-Driven Leadership': { score: 92, description: 'Exceptional values alignment creates authentic leadership in purpose-driven roles' },
+            'Community Engagement': { score: 89, description: 'Strong service orientation drives meaningful community impact and relationships' },
+            'Ethical Decision Making': { score: 88, description: 'High integrity supports consistent ethical choices in complex situations' },
+            'Values-Based Mentoring': { score: 85, description: 'Compassion and wisdom create natural mentoring and development opportunities' }
+          },
+          careerMatches: (sampleData.careerRecommendations || []).map((career: string, index: number) => ({
+            career: { title: career, description: `Role aligned with faith and values strengths` },
+            matchPercentage: 90 - (index * 2),
+            fitScore: 88 - (index * 2),
+            readinessLevel: 'Values-Aligned',
+            skillGaps: ['Leadership development', 'Strategic planning'],
+            strengthAlignment: ['Integrity', 'Service orientation', 'Compassion'],
+            salaryExpectation: '$55,000 - $85,000',
+            growthPotential: 'High',
+            developmentPath: ['Values-based leadership training', 'Mission-driven career development']
+          })),
+          ...(reportType === 'employer' && {
+            employerInsights: {
+              'Hiring Recommendation': 'HIGHLY RECOMMENDED - Exceptional values alignment with strong leadership potential',
+              'Best Fit Roles': 'Mission-driven positions, Community relations, Values-based leadership',
+              'Values Integration': 'Excellent - Natural integration of faith principles with professional responsibilities',
+              'Cultural Contribution': 'Outstanding - Will enhance organizational mission and values-driven culture',
+              'Leadership Potential': 'High - Authentic values-based leadership style with strong ethical foundation',
+              'Development Investment': 'Moderate - Strong foundation with focused leadership skill development needs'
+            },
+            riskAssessment: {
+              'Performance Risk': 'Low - Strong values foundation supports consistent high performance',
+              'Cultural Fit': 'Excellent - Perfect alignment with mission-driven organizational culture',
+              'Values Conflict Risk': 'Minimal - Strong personal values provide clear decision-making framework',
+              'Retention Potential': 'Very High - Deep values alignment creates strong organizational commitment'
+            },
+            distortionAnalysis: {
+              'Values Authenticity': 'High - Consistent values-based responses indicate genuine commitment to faith principles',
+              'Service Orientation Accuracy': 'Very High - Service behaviors align with stated commitment to helping others',
+              'Integrity Consistency': 'Excellent - Ethical decision patterns support high integrity scores',
+              'Faith Integration': 'Authentic - Natural integration of faith principles with professional capabilities',
+              'Values Assessment Validity': 'Excellent - All faith and values measures show high reliability and authenticity'
+            }
+          }),
+          branding: {
+            logo: '/final-logo.png',
+            colors: {
+              primary: '#008080',
+              secondary: '#20B2AA'
+            },
+            company: 'AuthenCore Analytics'
+          }
+        };
       } else {
         // Enhanced data for other assessments
         const assessmentProfiles = {
