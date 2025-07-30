@@ -1,5 +1,7 @@
-// Professional Report Generator - HTML generation only
+// Professional Report Generator - Using unified structure
 import { toast } from "sonner";
+import { UnifiedAssessmentResults, UnifiedReportConfig } from "@/types/unifiedAssessment.types";
+import { unifiedReportGenerator } from "./unifiedReportGenerator";
 
 export interface ProfessionalReportConfig {
   candidateData: { name: string; email: string; date: string; };
@@ -10,43 +12,83 @@ export interface ProfessionalReportConfig {
 }
 
 export async function generateProfessionalReport(config: ProfessionalReportConfig): Promise<void> {
-  const htmlContent = `
-<!DOCTYPE html>
-<html><head><title>Professional Assessment Report</title>
-<style>body{font-family:Arial;padding:20px;line-height:1.6}h1{color:#008080;border-bottom:2px solid #008080;padding-bottom:10px}.score-item{background:#f9f9f9;padding:10px;margin:10px 0;border-left:4px solid #008080}@media print{body{margin:0;padding:15px}}</style>
-</head><body><h1>Professional Assessment Report</h1>
-<div><h2>Candidate Information</h2><p><strong>Name:</strong> ${config.candidateData.name}</p><p><strong>Email:</strong> ${config.candidateData.email}</p><p><strong>Date:</strong> ${config.candidateData.date}</p></div>
-<h2>Assessment Scores</h2>${config.scores.map(s => `<div class="score-item"><strong>${s.name}</strong><div>Score: ${s.percentile}% (${s.level})</div><div>${s.description}</div></div>`).join('')}
-<h2>Validity Assessment</h2><p><strong>Consistency:</strong> ${config.validity.consistencyScore}%</p><p><strong>Validity:</strong> ${config.validity.overallValidity}</p>
-<h2>Action Plan</h2>${config.actionPlan.map((a, i) => `<div>${i + 1}. ${a}</div>`).join('')}
-<div style="margin-top:40px;font-size:12px;color:#666;"><p>Generated: ${new Date().toLocaleDateString()}</p></div></body></html>`;
-  
-  const reportWindow = window.open('', '_blank', 'width=900,height=700');
-  if (reportWindow) {
-    reportWindow.document.write(htmlContent);
-    reportWindow.document.close();
-    toast.success('Professional report generated!');
+  try {
+    // Convert to unified format
+    const unifiedResults: UnifiedAssessmentResults = {
+      assessmentId: `professional-${Date.now()}`,
+      assessmentType: 'professional',
+      candidateInfo: {
+        name: config.candidateData.name,
+        email: config.candidateData.email,
+        completionDate: config.candidateData.date
+      },
+      overallScore: config.scores.reduce((sum, s) => sum + s.percentile, 0) / config.scores.length,
+      overallPercentile: config.scores.reduce((sum, s) => sum + s.percentile, 0) / config.scores.length,
+      dimensions: config.scores.map(score => ({
+        key: score.name.toLowerCase().replace(/\s+/g, '_'),
+        name: score.name,
+        score: score.percentile,
+        percentile: score.percentile,
+        level: score.level as 'low' | 'medium' | 'high',
+        description: score.description,
+        strengths: score.percentile >= 70 ? ['Strong performance'] : [],
+        growthAreas: score.percentile < 70 ? ['Development needed'] : [],
+        recommendations: score.percentile < 70 ? ['Focus on improvement'] : ['Maintain excellence'],
+        insights: [`${score.name} performance analysis`]
+      })),
+      profile: {
+        title: 'Professional Assessment Results',
+        description: 'Comprehensive professional competency assessment',
+        keyTraits: config.scores.map(s => s.name)
+      },
+      insights: {
+        strengths: config.scores.filter(s => s.percentile >= 70).map(s => s.name),
+        challenges: config.scores.filter(s => s.percentile < 40).map(s => s.name),
+        opportunities: config.scores.filter(s => s.percentile >= 40 && s.percentile < 70).map(s => s.name),
+        recommendations: config.actionPlan
+      },
+      actionPlan: {
+        immediate: config.actionPlan.slice(0, 2),
+        shortTerm: config.actionPlan.slice(2, 4),
+        longTerm: config.actionPlan.slice(4)
+      },
+      validityAssessment: {
+        consistencyScore: config.validity.consistencyScore,
+        engagementLevel: 'high',
+        responsePattern: config.validity.overallValidity,
+        flags: [],
+        fakeGoodIndicator: 15,
+        completionRate: 100
+      },
+      reportData: {
+        executiveSummary: `Professional assessment completed with consistency score of ${config.validity.consistencyScore}%`,
+        detailedAnalysis: 'Comprehensive analysis of professional competencies',
+        interviewQuestions: ['Describe your professional strengths', 'How do you handle workplace challenges?'],
+        hiringRecommendations: ['Review competency alignment', 'Consider development support'],
+        onboardingPlan: ['Structured onboarding', 'Professional development planning']
+      },
+      timestamp: new Date().toISOString()
+    };
+
+    const reportConfig: UnifiedReportConfig = {
+      assessmentType: 'professional',
+      reportType: config.reportType,
+      results: unifiedResults,
+      template: 'detailed',
+      includeCharts: true,
+      includeRecommendations: true,
+      includeActionPlan: config.reportType === 'candidate'
+    };
+
+    await unifiedReportGenerator.generateReport(reportConfig);
+  } catch (error) {
+    console.error('Professional report generation error:', error);
+    toast.error('Failed to generate professional report');
   }
 }
 
 export class ProfessionalReportGenerator {
   static async generateReport(config: ProfessionalReportConfig): Promise<void> {
-    const htmlContent = `
-<!DOCTYPE html>
-<html><head><title>Professional Assessment Report</title>
-<style>body{font-family:Arial;padding:20px;line-height:1.6}h1{color:#008080;border-bottom:2px solid #008080;padding-bottom:10px}.score-item{background:#f9f9f9;padding:10px;margin:10px 0;border-left:4px solid #008080}@media print{body{margin:0;padding:15px}}</style>
-</head><body><h1>Professional Assessment Report</h1>
-<div><h2>Candidate Information</h2><p><strong>Name:</strong> ${config.candidateData.name}</p><p><strong>Email:</strong> ${config.candidateData.email}</p><p><strong>Date:</strong> ${config.candidateData.date}</p></div>
-<h2>Assessment Scores</h2>${config.scores.map(s => `<div class="score-item"><strong>${s.name}</strong><div>Score: ${s.percentile}% (${s.level})</div><div>${s.description}</div></div>`).join('')}
-<h2>Validity Assessment</h2><p><strong>Consistency:</strong> ${config.validity.consistencyScore}%</p><p><strong>Validity:</strong> ${config.validity.overallValidity}</p>
-<h2>Action Plan</h2>${config.actionPlan.map((a, i) => `<div>${i + 1}. ${a}</div>`).join('')}
-<div style="margin-top:40px;font-size:12px;color:#666;"><p>Generated: ${new Date().toLocaleDateString()}</p></div></body></html>`;
-    
-    const reportWindow = window.open('', '_blank', 'width=900,height=700');
-    if (reportWindow) {
-      reportWindow.document.write(htmlContent);
-      reportWindow.document.close();
-      toast.success('Professional report generated!');
-    }
+    return generateProfessionalReport(config);
   }
 }
