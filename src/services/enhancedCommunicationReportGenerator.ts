@@ -1,660 +1,507 @@
-import { CommunicationStylesResults } from '@/hooks/useCommunicationStylesScoring';
+// Enhanced Communication Report Generator - Unified Structure with Distortion Analysis
+import { UnifiedAssessmentResults, UnifiedReportConfig } from '@/types/unifiedAssessment.types';
+import { unifiedReportGenerator } from './unifiedReportGenerator';
+import { toast } from 'sonner';
 
-export interface EnhancedCommunicationReport {
-  // Header Information
-  participantName: string;
-  assessmentDate: string;
-  assessmentType: string;
-  
-  // Executive Summary
-  overallEffectiveness: {
-    score: number;
-    percentile: number;
-    interpretation: string;
-    profileType: string;
+export interface CommunicationDistortionAnalysis {
+  score: number;
+  level: 'Low' | 'Moderate' | 'High' | 'Very High';
+  indicators: string[];
+  reliability: 'High' | 'Moderate' | 'Low' | 'Questionable';
+  recommendations: string[];
+  consistencyCheck: number;
+  extremePatterns: number;
+  socialDesirabilityBias: number;
+  responseTimePattern: number;
+}
+
+export interface CommunicationStylesResults {
+  dimensions: {
+    assertiveness: { score: number; level: string; percentile: number; description: string; };
+    expressiveness: { score: number; level: string; percentile: number; description: string; };
+    informationProcessing: { score: number; level: string; percentile: number; description: string; };
+    channelPreferences: { score: number; level: string; percentile: number; description: string; };
+    listeningPatterns: { score: number; level: string; percentile: number; description: string; };
+    influenceStrategies: { score: number; level: string; percentile: number; description: string; };
+    conflictCommunication: { score: number; level: string; percentile: number; description: string; };
   };
-  
-  // Communication Profile Analysis
-  communicationProfile: {
-    primaryType: string;
-    strengthAreas: string[];
-    developmentAreas: string[];
-    workStyleMatch: string;
-    teamContributions: string[];
+  profile: {
+    type: string;
+    primary: string;
+    secondary: string;
+    strength: string;
+    challenge: string;
+    workStyle: string;
   };
-  
-  // Detailed Dimension Analysis
-  dimensionBreakdown: {
-    dimension: string;
-    score: number;
-    level: string;
-    percentile: number;
-    strengthDescription: string;
-    developmentRecommendations: string[];
-    behavioralIndicators: string[];
-  }[];
-  
-  // Contextual Effectiveness
-  situationalEffectiveness: {
-    leadership: { score: number; description: string; recommendations: string[] };
-    teamwork: { score: number; description: string; recommendations: string[] };
-    customerInteraction: { score: number; description: string; recommendations: string[] };
-    conflictResolution: { score: number; description: string; recommendations: string[] };
-  };
-  
-  // Professional Development Plan
-  developmentPlan: {
-    priority: 'High' | 'Medium' | 'Low';
-    area: string;
-    currentLevel: string;
-    targetBehaviors: string[];
-    actionSteps: string[];
-    timeline: string;
-    successMetrics: string[];
-  }[];
-  
-  // Validity and Reliability
-  assessmentValidity: {
-    responseConsistency: number;
-    engagementLevel: string;
-    recommendationConfidence: string;
-    additionalAssessmentNeeds?: string[];
+  distortionAnalysis: CommunicationDistortionAnalysis;
+  overallScore: number;
+  candidateInfo: {
+    name: string;
+    email: string;
+    completionDate: string;
   };
 }
 
-export const generateEnhancedCommunicationReport = (
-  results: CommunicationStylesResults,
-  participantName: string
-): EnhancedCommunicationReport => {
-  
-  const report: EnhancedCommunicationReport = {
-    participantName,
-    assessmentDate: new Date().toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long', 
-      day: 'numeric'
-    }),
-    assessmentType: 'Communication Styles Assessment',
-    
-    overallEffectiveness: generateOverallEffectiveness(results),
-    communicationProfile: generateCommunicationProfile(results),
-    dimensionBreakdown: generateDimensionBreakdown(results),
-    situationalEffectiveness: generateSituationalEffectiveness(results),
-    developmentPlan: generateDevelopmentPlan(results),
-    assessmentValidity: generateAssessmentValidity(results)
-  };
-  
-  return report;
-};
+export class EnhancedCommunicationReportGenerator {
+  static async generateCandidateReport(results: CommunicationStylesResults): Promise<void> {
+    try {
+      const unifiedResults = this.convertToUnifiedFormat(results, 'candidate');
+      const config: UnifiedReportConfig = {
+        assessmentType: 'communication',
+        reportType: 'candidate',
+        results: unifiedResults,
+        template: 'detailed',
+        includeCharts: true,
+        includeRecommendations: true,
+        includeActionPlan: true,
+        branding: {
+          colors: {
+            primary: '#4F46E5',
+            secondary: '#7C3AED'
+          }
+        }
+      };
 
-const generateOverallEffectiveness = (results: CommunicationStylesResults) => {
-  const { overallScore, communicationEffectivenessIndex, profile } = results;
-  
-  let interpretation = '';
-  let percentile = 0;
-  
-  if (overallScore >= 90) {
-    interpretation = `Exceptional communication effectiveness. ${profile.type} style with outstanding capability across all dimensions. Natural communication leader with ability to adapt and influence effectively.`;
-    percentile = 95;
-  } else if (overallScore >= 80) {
-    interpretation = `Strong communication effectiveness. ${profile.type} style with well-developed skills. Effective across most situations with specific strengths in ${profile.strength.toLowerCase()}.`;
-    percentile = 85;
-  } else if (overallScore >= 70) {
-    interpretation = `Good communication effectiveness. ${profile.type} style with solid foundation. Effective in familiar contexts with opportunity to develop ${profile.challenge.toLowerCase()}.`;
-    percentile = 70;
-  } else if (overallScore >= 60) {
-    interpretation = `Developing communication effectiveness. ${profile.type} tendencies with emerging skills. Clear areas for development to enhance overall communication impact.`;
-    percentile = 55;
-  } else {
-    interpretation = `Early-stage communication development. ${profile.type} preferences identified with significant opportunities for skill building across multiple dimensions.`;
-    percentile = 35;
-  }
-  
-  return {
-    score: overallScore,
-    percentile,
-    interpretation,
-    profileType: profile.type
-  };
-};
-
-const generateCommunicationProfile = (results: CommunicationStylesResults) => {
-  const { profile, dimensions } = results;
-  
-  // Identify top 3 strength areas
-  const strengthAreas = Object.entries(dimensions)
-    .sort(([,a], [,b]) => b.score - a.score)
-    .slice(0, 3)
-    .map(([key, dimension]) => `${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')} (${dimension.score}%)`);
-  
-  // Identify bottom 2 development areas  
-  const developmentAreas = Object.entries(dimensions)
-    .sort(([,a], [,b]) => a.score - b.score)
-    .slice(0, 2)
-    .map(([key, dimension]) => `${key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1')} (${dimension.score}%)`);
-  
-  const teamContributions = generateTeamContributions(profile, dimensions);
-  
-  return {
-    primaryType: profile.type,
-    strengthAreas,
-    developmentAreas,
-    workStyleMatch: profile.workStyle,
-    teamContributions
-  };
-};
-
-const generateTeamContributions = (profile: any, dimensions: any) => {
-  const contributions = [];
-  
-  if (dimensions.assertiveness.score > 70) {
-    contributions.push('Driving decisions and taking initiative in team settings');
-  }
-  if (dimensions.expressiveness.score > 70) {
-    contributions.push('Building energy and enthusiasm in group dynamics');
-  }
-  if (dimensions.informationProcessing.score > 70) {
-    contributions.push('Providing thorough analysis and systematic thinking');
-  }
-  if (dimensions.listeningPatterns.score > 70) {
-    contributions.push('Facilitating understanding and building consensus');
-  }
-  if (dimensions.influenceStrategies.score > 70) {
-    contributions.push('Persuading stakeholders and gaining buy-in for initiatives');
-  }
-  if (dimensions.conflictCommunication.score > 70) {
-    contributions.push('Mediating conflicts and finding collaborative solutions');
-  }
-  if (dimensions.channelPreferences.score > 70) {
-    contributions.push('Adapting communication across various platforms and formats');
-  }
-  
-  // Add default contribution based on profile type
-  const profileContributions = {
-    'Director': 'Leading with clear direction and accountability',
-    'Socializer': 'Inspiring and motivating team members',
-    'Thinker': 'Ensuring thoroughness and quality in team outputs',
-    'Supporter': 'Building stability and maintaining team harmony',
-    'Balanced': 'Providing flexibility and adaptability across team needs'
-  };
-  
-  contributions.push(profileContributions[profile.type as keyof typeof profileContributions] || 'Contributing unique communication perspective');
-  
-  return contributions.slice(0, 4); // Return top 4 contributions
-};
-
-const generateDimensionBreakdown = (results: CommunicationStylesResults) => {
-  const { dimensions } = results;
-  
-  return Object.entries(dimensions).map(([key, dimension]) => {
-    const dimensionName = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
-    
-    const strengthDescriptions = {
-      'assertiveness': dimension.score > 70 ? 
-        'Demonstrates confident, direct communication that drives results and maintains clear boundaries.' :
-        'Developing assertiveness skills to enhance leadership presence and decision-making effectiveness.',
-      'expressiveness': dimension.score > 70 ?
-        'Shows engaging, animated communication style that builds rapport and motivates others.' :
-        'Building expressiveness to create stronger connections and more impactful communication.',
-      'informationProcessing': dimension.score > 70 ?
-        'Exhibits systematic, thorough approach to processing and communicating complex information.' :
-        'Developing more efficient information processing to enhance decision-making speed.',
-      'channelPreferences': dimension.score > 70 ?
-        'Demonstrates versatility across communication channels and adapts well to different mediums.' :
-        'Building comfort and effectiveness across various communication platforms.',
-      'listeningPatterns': dimension.score > 70 ?
-        'Shows strong active listening skills with empathetic responses and understanding.' :
-        'Developing deeper listening skills to build stronger relationships and understanding.',
-      'influenceStrategies': dimension.score > 70 ?
-        'Uses sophisticated influence techniques to gain buy-in and persuade effectively.' :
-        'Building influence capabilities to enhance persuasion and leadership impact.',
-      'conflictCommunication': dimension.score > 70 ?
-        'Handles conflicts diplomatically and finds solutions that work for all parties.' :
-        'Developing conflict resolution skills to manage difficult conversations more effectively.'
-    };
-    
-    const developmentRecommendations = generateDimensionRecommendations(key, dimension);
-    const behavioralIndicators = generateBehavioralIndicators(key, dimension);
-    
-    return {
-      dimension: dimensionName,
-      score: dimension.score,
-      level: dimension.level,
-      percentile: dimension.percentile,
-      strengthDescription: strengthDescriptions[key as keyof typeof strengthDescriptions] || 'Communication dimension identified.',
-      developmentRecommendations,
-      behavioralIndicators
-    };
-  });
-};
-
-const generateDimensionRecommendations = (dimension: string, data: any): string[] => {
-  const recommendations: Record<string, string[]> = {
-    'assertiveness': data.score < 60 ? [
-      'Practice stating opinions clearly and confidently in team meetings',
-      'Set specific, measurable boundaries with colleagues and stakeholders',
-      'Take initiative on projects that align with your expertise',
-      'Use "I" statements to express needs and expectations directly'
-    ] : [
-      'Balance directness with empathy in sensitive conversations',
-      'Mentor others in developing assertiveness skills',
-      'Practice diplomatic assertiveness in high-stakes situations',
-      'Use assertiveness to drive positive organizational change'
-    ],
-    'expressiveness': data.score < 60 ? [
-      'Practice using varied vocal tone and pacing in presentations',
-      'Share appropriate personal experiences to build rapport',
-      'Use stories and examples to make points more engaging',
-      'Experiment with body language and gestures to support your message'
-    ] : [
-      'Adjust expressiveness based on audience and context',
-      'Use expressiveness strategically to motivate and inspire',
-      'Help others feel comfortable expressing themselves',
-      'Balance enthusiasm with professionalism in formal settings'
-    ],
-    'informationProcessing': data.score < 60 ? [
-      'Develop structured approaches to analyzing complex information',
-      'Practice summarizing key points clearly and concisely',
-      'Ask clarifying questions to ensure full understanding',
-      'Create frameworks for organizing and presenting information'
-    ] : [
-      'Help others break down complex information into manageable parts',
-      'Balance thoroughness with efficiency in time-sensitive situations',
-      'Teach systematic thinking approaches to team members',
-      'Use analytical skills to support strategic decision-making'
-    ],
-    'channelPreferences': data.score < 60 ? [
-      'Practice communicating effectively via video conferencing platforms',
-      'Develop comfort with various digital collaboration tools',
-      'Adapt message style for different communication channels',
-      'Experiment with visual aids and multimedia in presentations'
-    ] : [
-      'Help others navigate different communication platforms effectively',
-      'Lead adoption of new communication technologies',
-      'Create communication guidelines for optimal channel selection',
-      'Mentor others in multi-channel communication strategies'
-    ],
-    'listeningPatterns': data.score < 60 ? [
-      'Practice active listening techniques like paraphrasing and reflecting',
-      'Ask follow-up questions to demonstrate engagement and understanding',
-      'Minimize distractions and give full attention to speakers',
-      'Practice empathetic responses that validate others\' perspectives'
-    ] : [
-      'Model excellent listening behaviors for team members',
-      'Use listening skills to facilitate difficult conversations',
-      'Help create inclusive environments where all voices are heard',
-      'Mentor others in developing empathetic listening skills'
-    ],
-    'influenceStrategies': data.score < 60 ? [
-      'Study and practice different persuasion techniques',
-      'Build credibility through expertise and consistent follow-through',
-      'Learn to adapt influence style to different personality types',
-      'Practice building compelling business cases for your ideas'
-    ] : [
-      'Use influence skills ethically and for positive organizational impact',
-      'Teach influence and persuasion skills to team members',
-      'Help build consensus on complex organizational initiatives',
-      'Leverage influence to drive positive cultural change'
-    ],
-    'conflictCommunication': data.score < 60 ? [
-      'Learn structured conflict resolution frameworks',
-      'Practice staying calm and objective during disagreements',
-      'Develop skills in finding win-win solutions',
-      'Practice having difficult conversations with clear, specific feedback'
-    ] : [
-      'Mediate conflicts between team members effectively',
-      'Help create psychological safety for difficult conversations',
-      'Train others in conflict resolution approaches',
-      'Use conflict resolution skills to drive organizational improvements'
-    ]
-  };
-  
-  return recommendations[dimension] || [
-    'Continue developing this communication dimension',
-    'Seek feedback from colleagues on effectiveness',
-    'Practice applying skills in various professional contexts',
-    'Consider additional training or coaching in this area'
-  ];
-};
-
-const generateBehavioralIndicators = (dimension: string, data: any): string[] => {
-  const indicators: Record<string, string[]> = {
-    'assertiveness': [
-      'Speaks up in meetings with confidence and clarity',
-      'Sets and maintains professional boundaries effectively',
-      'Takes initiative on projects and decisions',
-      'Communicates expectations and requirements directly'
-    ],
-    'expressiveness': [
-      'Uses varied vocal tone and engaging body language',
-      'Shares appropriate emotions and enthusiasm',
-      'Tells stories and uses examples to illustrate points',
-      'Creates personal connections with colleagues'
-    ],
-    'informationProcessing': [
-      'Processes complex information systematically',
-      'Asks thoughtful clarifying questions',
-      'Organizes information logically for others',
-      'Takes time to consider implications before responding'
-    ],
-    'channelPreferences': [
-      'Adapts communication style to different mediums',
-      'Comfortable with various technology platforms',
-      'Chooses appropriate channels for different messages',
-      'Maintains effectiveness across communication formats'
-    ],
-    'listeningPatterns': [
-      'Gives full attention and maintains eye contact',
-      'Asks follow-up questions to show engagement',
-      'Reflects back understanding accurately',
-      'Shows empathy and validates others\' perspectives'
-    ],
-    'influenceStrategies': [
-      'Builds compelling arguments with supporting evidence',
-      'Adapts persuasion style to different audiences',
-      'Gains buy-in for ideas and initiatives',
-      'Uses credibility and relationships to influence'
-    ],
-    'conflictCommunication': [
-      'Addresses conflicts directly but diplomatically',
-      'Remains calm and objective during disagreements',
-      'Seeks understanding of all parties\' perspectives',
-      'Facilitates solutions that work for everyone'
-    ]
-  };
-  
-  return indicators[dimension] || [
-    'Demonstrates effective communication in this area',
-    'Shows consistent application of relevant skills',
-    'Adapts approach based on situation and audience',
-    'Continues to develop expertise in this dimension'
-  ];
-};
-
-const generateSituationalEffectiveness = (results: CommunicationStylesResults) => {
-  const { contextualEffectiveness, dimensions, profile } = results;
-  
-  return {
-    leadership: {
-      score: contextualEffectiveness.leadership,
-      description: contextualEffectiveness.leadership > 75 ?
-        `Strong leadership communication effectiveness. ${profile.type} style well-suited for guiding teams and driving organizational objectives.` :
-        `Developing leadership communication skills. ${profile.type} approach has potential with focused development in assertiveness and influence.`,
-      recommendations: contextualEffectiveness.leadership > 75 ? [
-        'Mentor others in developing leadership communication skills',
-        'Take on high-visibility leadership opportunities',
-        'Practice communicating vision and strategy across organizational levels'
-      ] : [
-        'Develop confident presentation and public speaking skills',
-        'Practice giving clear direction and feedback to team members',
-        'Build influence and persuasion capabilities for leadership contexts'
-      ]
-    },
-    teamwork: {
-      score: contextualEffectiveness.teamwork,
-      description: contextualEffectiveness.teamwork > 75 ?
-        `Excellent team communication. ${profile.type} style contributes effectively to collaborative environments and builds strong working relationships.` :
-        `Building team communication effectiveness. ${profile.type} approach benefits from enhanced listening and collaborative communication skills.`,
-      recommendations: contextualEffectiveness.teamwork > 75 ? [
-        'Help facilitate team meetings and collaborative sessions',
-        'Support team members who struggle with communication',
-        'Lead cross-functional projects requiring strong collaboration'
-      ] : [
-        'Practice active listening and empathetic responding',
-        'Develop skills in building consensus and managing group dynamics',
-        'Focus on contributing positively to team morale and effectiveness'
-      ]
-    },
-    customerInteraction: {
-      score: contextualEffectiveness.customerService,
-      description: contextualEffectiveness.customerService > 75 ?
-        `Strong customer communication skills. ${profile.type} style effectively builds rapport and addresses customer needs.` :
-        `Developing customer communication effectiveness. ${profile.type} approach can be enhanced with improved listening and service orientation.`,
-      recommendations: contextualEffectiveness.customerService > 75 ? [
-        'Train others in effective customer communication techniques',
-        'Handle complex or challenging customer situations',
-        'Develop customer relationship management strategies'
-      ] : [
-        'Practice empathetic listening and problem-solving communication',
-        'Develop skills in managing difficult customer conversations',
-        'Focus on building rapport and trust with external stakeholders'
-      ]
-    },
-    conflictResolution: {
-      score: contextualEffectiveness.conflictResolution,
-      description: contextualEffectiveness.conflictResolution > 75 ?
-        `Effective conflict resolution communication. ${profile.type} style manages disagreements well and finds collaborative solutions.` :
-        `Building conflict resolution capabilities. ${profile.type} approach would benefit from enhanced diplomatic and mediation skills.`,
-      recommendations: contextualEffectiveness.conflictResolution > 75 ? [
-        'Mediate conflicts between team members or departments',
-        'Train others in conflict resolution communication techniques',
-        'Help create systems for preventing and addressing workplace conflicts'
-      ] : [
-        'Learn structured approaches to conflict resolution',
-        'Practice staying calm and objective during disagreements',
-        'Develop skills in finding win-win solutions and compromises'
-      ]
+      await unifiedReportGenerator.generateReport(config);
+    } catch (error) {
+      console.error('Candidate report generation error:', error);
+      toast.error('Failed to generate candidate report');
     }
-  };
-};
+  }
 
-const generateDevelopmentPlan = (results: CommunicationStylesResults) => {
-  const { dimensions, profile } = results;
-  
-  // Get lowest scoring dimensions for development focus
-  const developmentAreas = Object.entries(dimensions)
-    .sort(([,a], [,b]) => a.score - b.score)
-    .slice(0, 3);
-  
-  return developmentAreas.map(([key, dimension], index) => {
-    const priority = index === 0 ? 'High' : index === 1 ? 'Medium' : 'Low' as const;
-    const dimensionName = key.charAt(0).toUpperCase() + key.slice(1).replace(/([A-Z])/g, ' $1');
-    
-    const developmentPlans: Record<string, any> = {
-      'assertiveness': {
-        targetBehaviors: [
-          'Express opinions confidently in group settings',
-          'Set clear boundaries and expectations with others',
-          'Take initiative on important projects and decisions',
-          'Provide direct, constructive feedback when needed'
-        ],
-        actionSteps: [
-          'Practice speaking up in the first 10 minutes of meetings',
-          'Volunteer to lead one project or initiative',
-          'Schedule regular one-on-one feedback sessions with team members',
-          'Join a leadership development program or Toastmasters'
-        ],
-        timeline: dimension.score < 40 ? '6-12 months' : '3-6 months',
-        successMetrics: [
-          'Increased participation in team meetings (measured by speaking frequency)',
-          '360-degree feedback improvement in leadership presence',
-          'Successful completion of leadership project with measurable outcomes',
-          'Improved comfort level with giving difficult feedback'
-        ]
+  static async generateEmployerReport(results: CommunicationStylesResults): Promise<void> {
+    try {
+      const unifiedResults = this.convertToUnifiedFormat(results, 'employer');
+      const config: UnifiedReportConfig = {
+        assessmentType: 'communication',
+        reportType: 'employer',
+        results: unifiedResults,
+        template: 'executive',
+        includeCharts: true,
+        includeRecommendations: true,
+        includeActionPlan: false,
+        branding: {
+          colors: {
+            primary: '#059669',
+            secondary: '#10B981'
+          }
+        }
+      };
+
+      await unifiedReportGenerator.generateReport(config);
+    } catch (error) {
+      console.error('Employer report generation error:', error);
+      toast.error('Failed to generate employer report');
+    }
+  }
+
+  private static convertToUnifiedFormat(
+    results: CommunicationStylesResults, 
+    reportType: 'candidate' | 'employer'
+  ): UnifiedAssessmentResults {
+    const dimensions = Object.entries(results.dimensions).map(([key, dimension]) => ({
+      key,
+      name: this.formatDimensionName(key),
+      score: dimension.score,
+      percentile: dimension.percentile,
+      level: this.mapLevel(dimension.level),
+      description: dimension.description,
+      strengths: this.getDimensionStrengths(key, dimension.score),
+      growthAreas: this.getDimensionGrowthAreas(key, dimension.score),
+      recommendations: this.getDimensionRecommendations(key, dimension.score, reportType),
+      insights: this.getDimensionInsights(key, dimension.score, results.distortionAnalysis)
+    }));
+
+    return {
+      assessmentId: `communication-${Date.now()}`,
+      assessmentType: 'communication',
+      candidateInfo: results.candidateInfo,
+      overallScore: results.overallScore,
+      overallPercentile: this.calculateOverallPercentile(results.overallScore),
+      dimensions,
+      profile: {
+        title: `${results.profile.type} Communication Style`,
+        description: `Primary: ${results.profile.primary}, Secondary: ${results.profile.secondary}`,
+        keyTraits: [results.profile.strength, results.profile.workStyle]
       },
-      'expressiveness': {
-        targetBehaviors: [
-          'Use varied vocal tone and engaging body language',
-          'Share appropriate personal experiences to build rapport',
-          'Express enthusiasm and emotions authentically',
-          'Use storytelling to make communication more engaging'
-        ],
-        actionSteps: [
-          'Practice presentation skills with video recording for self-review',
-          'Share one personal professional experience in team meetings',
-          'Join an improv or public speaking group',
-          'Practice using stories and analogies in explanations'
-        ],
-        timeline: dimension.score < 40 ? '4-8 months' : '2-4 months',
-        successMetrics: [
-          'Improved presentation engagement scores from audiences',
-          'Increased comfort level with expressing emotions at work',
-          'Positive feedback on storytelling and communication style',
-          'Enhanced team relationships and rapport building'
-        ]
+      insights: {
+        strengths: this.getOverallStrengths(results),
+        challenges: this.getOverallChallenges(results),
+        opportunities: this.getOverallOpportunities(results),
+        recommendations: this.getOverallRecommendations(results, reportType)
       },
-      'informationProcessing': {
-        targetBehaviors: [
-          'Process complex information systematically and thoroughly',
-          'Ask clarifying questions to ensure understanding',
-          'Organize information logically for clear communication',
-          'Balance thoroughness with efficiency in decision-making'
-        ],
-        actionSteps: [
-          'Develop and use structured frameworks for information analysis',
-          'Practice the "5 Whys" technique for problem-solving',
-          'Create templates for organizing and presenting complex information',
-          'Take a course in critical thinking or data analysis'
-        ],
-        timeline: dimension.score < 40 ? '3-6 months' : '2-3 months',
-        successMetrics: [
-          'Improved accuracy in information analysis and reporting',
-          'Reduced time needed for decision-making processes',
-          'Positive feedback on clarity and organization of communications',
-          'Successful completion of complex analytical projects'
-        ]
+      actionPlan: {
+        immediate: this.getImmediateActions(results, reportType),
+        shortTerm: this.getShortTermActions(results, reportType),
+        longTerm: this.getLongTermActions(results, reportType)
       },
-      'channelPreferences': {
-        targetBehaviors: [
-          'Adapt communication style effectively across different mediums',
-          'Choose appropriate channels for different types of messages',
-          'Maintain effectiveness in both digital and in-person formats',
-          'Help others navigate communication platform challenges'
-        ],
-        actionSteps: [
-          'Practice presenting via various platforms (video, phone, in-person)',
-          'Experiment with different digital collaboration tools',
-          'Create communication guidelines for channel selection',
-          'Seek training in virtual meeting facilitation'
-        ],
-        timeline: dimension.score < 40 ? '2-4 months' : '1-2 months',
-        successMetrics: [
-          'Improved effectiveness scores across different communication channels',
-          'Successful facilitation of virtual meetings and collaborations',
-          'Positive feedback on multi-channel communication adaptation',
-          'Increased comfort and confidence with new communication technologies'
-        ]
+      validityAssessment: {
+        consistencyScore: results.distortionAnalysis.consistencyCheck,
+        engagementLevel: this.mapEngagementLevel(results.distortionAnalysis.responseTimePattern),
+        responsePattern: results.distortionAnalysis.level.toLowerCase(),
+        flags: results.distortionAnalysis.indicators,
+        fakeGoodIndicator: results.distortionAnalysis.socialDesirabilityBias,
+        completionRate: 100
       },
-      'listeningPatterns': {
-        targetBehaviors: [
-          'Give full attention and demonstrate active engagement',
-          'Ask thoughtful follow-up questions',
-          'Reflect back understanding accurately',
-          'Show empathy and validate others\' perspectives'
-        ],
-        actionSteps: [
-          'Practice the SOLER technique (Square shoulders, Open posture, Lean in, Eye contact, Relax)',
-          'Use the "seek first to understand" approach in conversations',
-          'Practice paraphrasing and reflecting in daily interactions',
-          'Take a course in emotional intelligence or empathetic communication'
-        ],
-        timeline: dimension.score < 40 ? '3-6 months' : '2-3 months',
-        successMetrics: [
-          'Improved feedback from colleagues on feeling heard and understood',
-          'Increased accuracy in understanding others\' perspectives',
-          'Enhanced relationship quality with team members',
-          'Reduced miscommunications and conflicts'
-        ]
+      reportData: {
+        executiveSummary: this.generateExecutiveSummary(results, reportType),
+        detailedAnalysis: this.generateDetailedAnalysis(results, reportType),
+        interviewQuestions: this.generateInterviewQuestions(results),
+        hiringRecommendations: reportType === 'employer' ? this.generateHiringRecommendations(results) : undefined,
+        onboardingPlan: reportType === 'employer' ? this.generateOnboardingPlan(results) : undefined
       },
-      'influenceStrategies': {
-        targetBehaviors: [
-          'Build compelling arguments with supporting evidence',
-          'Adapt persuasion style to different audiences',
-          'Gain buy-in for ideas and initiatives effectively',
-          'Use credibility and relationships to influence positively'
-        ],
-        actionSteps: [
-          'Study and practice different persuasion frameworks (SCARF, SPIN, etc.)',
-          'Practice building business cases for proposals',
-          'Seek mentoring from influential leaders in the organization',
-          'Take a negotiation or influence training course'
-        ],
-        timeline: dimension.score < 40 ? '4-8 months' : '3-4 months',
-        successMetrics: [
-          'Increased success rate in gaining approval for proposals',
-          'Improved ability to build consensus on complex issues',
-          'Enhanced credibility and influence within the organization',
-          'Successful implementation of influenced initiatives'
-        ]
-      },
-      'conflictCommunication': {
-        targetBehaviors: [
-          'Address conflicts directly but diplomatically',
-          'Remain calm and objective during disagreements',
-          'Seek understanding of all parties\' perspectives',
-          'Facilitate solutions that work for everyone involved'
-        ],
-        actionSteps: [
-          'Learn and practice conflict resolution frameworks (e.g., mediation techniques)',
-          'Practice having difficult conversations with role-playing exercises',
-          'Seek training in emotional regulation and stress management',
-          'Find opportunities to mediate minor conflicts between colleagues'
-        ],
-        timeline: dimension.score < 40 ? '6-9 months' : '3-6 months',
-        successMetrics: [
-          'Successful resolution of workplace conflicts',
-          'Improved comfort level with difficult conversations',
-          'Positive feedback on diplomatic communication during disagreements',
-          'Reduced escalation of conflicts to higher management'
-        ]
+      timestamp: new Date().toISOString(),
+      metadata: {
+        distortionAnalysis: results.distortionAnalysis,
+        communicationProfile: results.profile
       }
     };
-    
-    const plan = developmentPlans[key] || {
-      targetBehaviors: ['Develop stronger communication skills in this area'],
-      actionSteps: ['Seek additional training and practice opportunities'],
-      timeline: '3-6 months',
-      successMetrics: ['Improved effectiveness in this communication dimension']
-    };
-    
-    return {
-      priority,
-      area: dimensionName,
-      currentLevel: dimension.level,
-      ...plan
-    };
-  });
-};
+  }
 
-const generateAssessmentValidity = (results: CommunicationStylesResults) => {
-  const { distortionAnalysis, timeSpent } = results;
-  
-  const responseConsistency = Math.max(0, 100 - distortionAnalysis.score);
-  
-  let engagementLevel = '';
-  if (timeSpent < 300000) { // Less than 5 minutes
-    engagementLevel = 'Low - Rapid responses may indicate limited engagement';
-  } else if (timeSpent < 900000) { // 5-15 minutes  
-    engagementLevel = 'Moderate - Appropriate time investment for thorough responses';
-  } else if (timeSpent < 1800000) { // 15-30 minutes
-    engagementLevel = 'High - Thoughtful consideration evident in response patterns';
-  } else {
-    engagementLevel = 'Very High - Extensive deliberation, may indicate overthinking';
+  private static formatDimensionName(key: string): string {
+    const nameMap: Record<string, string> = {
+      assertiveness: 'Assertiveness',
+      expressiveness: 'Expressiveness', 
+      informationProcessing: 'Information Processing',
+      channelPreferences: 'Channel Preferences',
+      listeningPatterns: 'Listening Patterns',
+      influenceStrategies: 'Influence Strategies',
+      conflictCommunication: 'Conflict Communication'
+    };
+    return nameMap[key] || key;
   }
-  
-  let recommendationConfidence = '';
-  const additionalAssessmentNeeds = [];
-  
-  if (distortionAnalysis.reliability === 'High') {
-    recommendationConfidence = 'High - Results are reliable for decision-making purposes';
-  } else if (distortionAnalysis.reliability === 'Moderate') {
-    recommendationConfidence = 'Moderate - Results provide useful insights with minor cautions';
-    additionalAssessmentNeeds.push('Consider behavioral interview to validate key findings');
-  } else if (distortionAnalysis.reliability === 'Low') {
-    recommendationConfidence = 'Low - Results should be supplemented with additional assessment methods';
-    additionalAssessmentNeeds.push('Behavioral interview required');
-    additionalAssessmentNeeds.push('Reference checks focusing on communication effectiveness');
-  } else {
-    recommendationConfidence = 'Questionable - Results not recommended for decision-making';
-    additionalAssessmentNeeds.push('Complete re-assessment under controlled conditions');
-    additionalAssessmentNeeds.push('Structured behavioral interview');
-    additionalAssessmentNeeds.push('360-degree feedback assessment');
+
+  private static mapLevel(level: string): 'low' | 'medium' | 'high' {
+    if (level === 'Low') return 'low';
+    if (level === 'Very High' || level === 'High') return 'high';
+    return 'medium';
   }
-  
-  return {
-    responseConsistency,
-    engagementLevel,
-    recommendationConfidence,
-    additionalAssessmentNeeds: additionalAssessmentNeeds.length > 0 ? additionalAssessmentNeeds : undefined
-  };
-};
+
+  private static getDimensionStrengths(key: string, score: number): string[] {
+    if (score < 50) return [];
+    
+    const strengthsMap: Record<string, string[]> = {
+      assertiveness: ['Clear communication', 'Confident expression', 'Direct feedback'],
+      expressiveness: ['Emotional intelligence', 'Engaging presentation', 'Motivational speaking'],
+      informationProcessing: ['Analytical thinking', 'Detail-oriented', 'Systematic approach'],
+      channelPreferences: ['Multi-channel communication', 'Adaptive medium selection', 'Technology savvy'],
+      listeningPatterns: ['Active listening', 'Empathetic understanding', 'Question asking'],
+      influenceStrategies: ['Persuasive communication', 'Collaborative influence', 'Strategic messaging'],
+      conflictCommunication: ['Conflict resolution', 'Diplomatic communication', 'De-escalation skills']
+    };
+    
+    return strengthsMap[key] || ['Strong performance in this area'];
+  }
+
+  private static getDimensionGrowthAreas(key: string, score: number): string[] {
+    if (score >= 70) return ['Maintain current excellence'];
+    
+    const growthMap: Record<string, string[]> = {
+      assertiveness: ['Practice confident communication', 'Develop boundary setting', 'Improve direct feedback skills'],
+      expressiveness: ['Enhance emotional expression', 'Develop storytelling skills', 'Practice public speaking'],
+      informationProcessing: ['Improve analytical skills', 'Develop systematic thinking', 'Practice data interpretation'],
+      channelPreferences: ['Expand communication channels', 'Adapt to digital tools', 'Practice multimedia presentation'],
+      listeningPatterns: ['Develop active listening', 'Practice empathetic responses', 'Improve question techniques'],
+      influenceStrategies: ['Learn persuasion techniques', 'Practice collaborative approaches', 'Develop strategic messaging'],
+      conflictCommunication: ['Learn conflict resolution', 'Practice diplomatic language', 'Develop de-escalation skills']
+    };
+    
+    return growthMap[key] || ['Continue development in this area'];
+  }
+
+  private static getDimensionRecommendations(key: string, score: number, reportType: string): string[] {
+    const candidateRecs: Record<string, string[]> = {
+      assertiveness: ['Practice assertive communication techniques', 'Join leadership training programs'],
+      expressiveness: ['Take public speaking courses', 'Practice storytelling in meetings'],
+      informationProcessing: ['Develop analytical thinking skills', 'Use structured problem-solving methods'],
+      channelPreferences: ['Experiment with different communication tools', 'Learn digital communication best practices'],
+      listeningPatterns: ['Practice active listening techniques', 'Seek feedback on listening skills'],
+      influenceStrategies: ['Study persuasion and influence techniques', 'Practice collaborative decision-making'],
+      conflictCommunication: ['Take conflict resolution training', 'Practice diplomatic communication']
+    };
+
+    const employerRecs: Record<string, string[]> = {
+      assertiveness: ['Provide assertiveness training', 'Assign leadership opportunities'],
+      expressiveness: ['Offer presentation skills training', 'Create speaking opportunities'],
+      informationProcessing: ['Provide analytical tools training', 'Assign data-driven projects'],
+      channelPreferences: ['Train on communication technologies', 'Encourage multi-channel practice'],
+      listeningPatterns: ['Provide active listening training', 'Create listening skill assessments'],
+      influenceStrategies: ['Offer influence and persuasion training', 'Assign collaborative projects'],
+      conflictCommunication: ['Provide conflict resolution training', 'Create mediation opportunities']
+    };
+
+    return reportType === 'employer' ? employerRecs[key] || [] : candidateRecs[key] || [];
+  }
+
+  private static getDimensionInsights(key: string, score: number, distortion: CommunicationDistortionAnalysis): string[] {
+    const insights = [`${this.formatDimensionName(key)} score of ${score} indicates specific communication patterns.`];
+    
+    if (distortion.level === 'High' || distortion.level === 'Very High') {
+      insights.push('Results may be influenced by social desirability bias.');
+    }
+    
+    if (distortion.reliability === 'Low' || distortion.reliability === 'Questionable') {
+      insights.push('Interpret results with caution due to reliability concerns.');
+    }
+    
+    return insights;
+  }
+
+  private static getOverallStrengths(results: CommunicationStylesResults): string[] {
+    const strengths: string[] = [];
+    Object.entries(results.dimensions).forEach(([key, dimension]) => {
+      if (dimension.score >= 70) {
+        strengths.push(this.formatDimensionName(key));
+      }
+    });
+    
+    strengths.push(results.profile.strength);
+    return Array.from(new Set(strengths));
+  }
+
+  private static getOverallChallenges(results: CommunicationStylesResults): string[] {
+    const challenges: string[] = [];
+    Object.entries(results.dimensions).forEach(([key, dimension]) => {
+      if (dimension.score < 40) {
+        challenges.push(this.formatDimensionName(key));
+      }
+    });
+    
+    if (results.profile.challenge) {
+      challenges.push(results.profile.challenge);
+    }
+    
+    return Array.from(new Set(challenges));
+  }
+
+  private static getOverallOpportunities(results: CommunicationStylesResults): string[] {
+    const opportunities: string[] = [];
+    Object.entries(results.dimensions).forEach(([key, dimension]) => {
+      if (dimension.score >= 40 && dimension.score < 70) {
+        opportunities.push(`Develop ${this.formatDimensionName(key)} further`);
+      }
+    });
+    
+    return opportunities;
+  }
+
+  private static getOverallRecommendations(results: CommunicationStylesResults, reportType: string): string[] {
+    const recommendations = [
+      'Focus on leveraging communication strengths',
+      'Address identified development areas systematically',
+      'Practice adaptive communication styles',
+      'Seek feedback regularly on communication effectiveness'
+    ];
+
+    if (reportType === 'employer') {
+      recommendations.push(
+        'Provide targeted communication training',
+        'Create opportunities for communication skill practice',
+        'Consider communication coaching for development areas'
+      );
+    }
+
+    // Add distortion-specific recommendations
+    if (results.distortionAnalysis.level === 'High' || results.distortionAnalysis.level === 'Very High') {
+      recommendations.push(...results.distortionAnalysis.recommendations);
+    }
+
+    return recommendations;
+  }
+
+  private static generateExecutiveSummary(results: CommunicationStylesResults, reportType: string): string {
+    const profile = results.profile.type;
+    const reliability = results.distortionAnalysis.reliability;
+    const overallScore = results.overallScore;
+    
+    let summary = `Communication assessment completed showing ${profile} communication style with overall effectiveness score of ${overallScore}%. `;
+    
+    if (reportType === 'employer') {
+      summary += `Assessment reliability is ${reliability.toLowerCase()}. `;
+      if (results.distortionAnalysis.level === 'High' || results.distortionAnalysis.level === 'Very High') {
+        summary += 'Results show some response pattern concerns that should be considered in interpretation. ';
+      }
+      summary += `Primary communication strength is ${results.profile.strength}, with development opportunities in ${results.profile.challenge}.`;
+    } else {
+      summary += `Your primary communication style is ${results.profile.primary} with ${results.profile.secondary} as a secondary preference. `;
+      summary += `Your key strength is ${results.profile.strength}, and you may benefit from developing ${results.profile.challenge}.`;
+    }
+    
+    return summary;
+  }
+
+  private static generateDetailedAnalysis(results: CommunicationStylesResults, reportType: string): string {
+    let analysis = `Detailed analysis reveals a ${results.profile.type} communication profile characterized by ${results.profile.workStyle}. `;
+    
+    const highScoring = Object.entries(results.dimensions)
+      .filter(([_, dim]) => dim.score >= 70)
+      .map(([key, _]) => this.formatDimensionName(key));
+    
+    const lowScoring = Object.entries(results.dimensions)
+      .filter(([_, dim]) => dim.score < 40)
+      .map(([key, _]) => this.formatDimensionName(key));
+    
+    if (highScoring.length > 0) {
+      analysis += `Strong performance demonstrated in: ${highScoring.join(', ')}. `;
+    }
+    
+    if (lowScoring.length > 0) {
+      analysis += `Development opportunities identified in: ${lowScoring.join(', ')}. `;
+    }
+    
+    if (reportType === 'employer') {
+      analysis += `Distortion analysis indicates ${results.distortionAnalysis.level.toLowerCase()} response bias with ${results.distortionAnalysis.reliability.toLowerCase()} reliability. `;
+      analysis += 'Consider these factors when making hiring and development decisions.';
+    }
+    
+    return analysis;
+  }
+
+  private static generateInterviewQuestions(results: CommunicationStylesResults): string[] {
+    const questions = [
+      'Describe a time when you had to communicate complex information to a diverse audience.',
+      'How do you adapt your communication style when working with different personality types?',
+      `Tell me about a situation where your ${results.profile.primary.toLowerCase()} communication style was particularly effective.`,
+      'Describe a time when you had to resolve a communication conflict or misunderstanding.',
+      'How do you ensure your message is understood when communicating with stakeholders?'
+    ];
+
+    // Add profile-specific questions
+    const profileQuestions: Record<string, string[]> = {
+      'Director': ['How do you handle situations when people don\'t respond to direct communication?'],
+      'Socializer': ['Give an example of how you\'ve used your interpersonal skills to influence outcomes.'],
+      'Thinker': ['Describe how you communicate analytical findings to non-technical audiences.'],
+      'Supporter': ['Tell me about a time when you helped facilitate team communication.'],
+      'Balanced': ['How do you decide which communication approach to use in different situations?']
+    };
+
+    if (profileQuestions[results.profile.type]) {
+      questions.push(...profileQuestions[results.profile.type]);
+    }
+
+    return questions;
+  }
+
+  private static generateHiringRecommendations(results: CommunicationStylesResults): string[] {
+    const recommendations = [];
+    
+    if (results.overallScore >= 75) {
+      recommendations.push('Strong candidate with excellent communication skills');
+    } else if (results.overallScore >= 60) {
+      recommendations.push('Good candidate with solid communication foundation');
+    } else {
+      recommendations.push('Consider additional communication training and support');
+    }
+
+    if (results.distortionAnalysis.reliability === 'Low' || results.distortionAnalysis.reliability === 'Questionable') {
+      recommendations.push('Consider additional assessment methods to validate results');
+      recommendations.push('Conduct behavioral interview to verify communication skills');
+    }
+
+    // Role-specific recommendations based on profile
+    const roleRecs: Record<string, string[]> = {
+      'Director': ['Well-suited for leadership and management roles', 'Consider for client-facing positions'],
+      'Socializer': ['Excellent for team-based and customer service roles', 'Consider for training and development positions'],
+      'Thinker': ['Well-suited for analytical and technical communication roles', 'Good fit for project management'],
+      'Supporter': ['Excellent for collaborative team environments', 'Consider for HR and support roles'],
+      'Balanced': ['Versatile communicator suitable for diverse roles', 'Good fit for cross-functional positions']
+    };
+
+    if (roleRecs[results.profile.type]) {
+      recommendations.push(...roleRecs[results.profile.type]);
+    }
+
+    return recommendations;
+  }
+
+  private static generateOnboardingPlan(results: CommunicationStylesResults): string[] {
+    const plan = [
+      'Conduct communication style discussion during orientation',
+      'Provide overview of team communication preferences',
+      'Set expectations for communication protocols'
+    ];
+
+    // Add profile-specific onboarding
+    const profilePlans: Record<string, string[]> = {
+      'Director': ['Provide clear authority and decision-making parameters', 'Establish direct reporting relationships'],
+      'Socializer': ['Introduce to team members early', 'Schedule regular social interactions'],
+      'Thinker': ['Provide detailed role documentation', 'Allow time for information processing'],
+      'Supporter': ['Assign a mentor or buddy', 'Create collaborative project opportunities'],
+      'Balanced': ['Expose to various communication scenarios', 'Provide flexibility in approach']
+    };
+
+    if (profilePlans[results.profile.type]) {
+      plan.push(...profilePlans[results.profile.type]);
+    }
+
+    // Add development-focused onboarding based on low-scoring dimensions
+    Object.entries(results.dimensions).forEach(([key, dimension]) => {
+      if (dimension.score < 50) {
+        plan.push(`Provide additional support for ${this.formatDimensionName(key)} development`);
+      }
+    });
+
+    return plan;
+  }
+
+  private static getImmediateActions(results: CommunicationStylesResults, reportType: string): string[] {
+    if (reportType === 'employer') {
+      return [
+        'Review assessment results with candidate',
+        'Discuss communication preferences and expectations',
+        'Identify immediate training needs'
+      ];
+    }
+    
+    return [
+      'Review your communication profile results',
+      'Identify your primary communication strengths',
+      'Note areas for immediate improvement'
+    ];
+  }
+
+  private static getShortTermActions(results: CommunicationStylesResults, reportType: string): string[] {
+    if (reportType === 'employer') {
+      return [
+        'Develop targeted communication training plan',
+        'Assign communication-focused projects',
+        'Provide regular feedback on communication effectiveness'
+      ];
+    }
+    
+    return [
+      'Practice communication techniques in low-risk situations',
+      'Seek feedback from trusted colleagues',
+      'Consider communication skills training or coaching'
+    ];
+  }
+
+  private static getLongTermActions(results: CommunicationStylesResults, reportType: string): string[] {
+    if (reportType === 'employer') {
+      return [
+        'Conduct follow-up communication assessments',
+        'Consider advanced communication role assignments',
+        'Develop communication mentoring opportunities'
+      ];
+    }
+    
+    return [
+      'Set long-term communication development goals',
+      'Seek advanced training in specialized areas',
+      'Consider leadership or mentoring opportunities to practice skills'
+    ];
+  }
+
+  private static calculateOverallPercentile(score: number): number {
+    // Simplified percentile calculation - in production would use normative data
+    return Math.min(Math.max(score, 1), 99);
+  }
+
+  private static mapEngagementLevel(responseTimePattern: number): 'low' | 'medium' | 'high' {
+    if (responseTimePattern < 30) return 'low';
+    if (responseTimePattern > 70) return 'high';
+    return 'medium';
+  }
+}
+
+export const enhancedCommunicationReportGenerator = EnhancedCommunicationReportGenerator;

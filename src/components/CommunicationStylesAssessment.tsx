@@ -12,8 +12,7 @@ import { useCommunicationStylesScoring } from "@/hooks/useCommunicationStylesSco
 import { useCommunicationStylesTranslation } from "@/hooks/useCommunicationStylesTranslation";
 import EnhancedCommunicationStylesVisualizer from "./CommunicationStylesEnhancedVisualizer";
 import TeamCompatibilityAnalyzer from "./TeamCompatibilityAnalyzer";
-import { generateCommunicationStylesHtml } from "@/utils/communicationHtmlGenerator";
-import { generateCommunicationStylesHTML } from "@/utils/communicationStylesHtmlGenerator";
+import { EnhancedCommunicationReportGenerator } from "@/services/enhancedCommunicationReportGenerator";
 import { useToast } from "@/hooks/use-toast";
 
 interface CommunicationStylesAssessmentProps {
@@ -94,65 +93,60 @@ const CommunicationStylesAssessment: React.FC<CommunicationStylesAssessmentProps
     }
   };
 
-  const generateReport = async () => {
+  const generateCandidateReport = async () => {
     if (!results) return;
     
     try {
-      await generateCommunicationStylesHtml({
-        results,
-        participantName: participantName || "Assessment Participant",
-        participantEmail: participantEmail || "",
-        includeDistortionAnalysis: true,
-        includeVisualCharts: true,
-        language: currentLanguage
+      await EnhancedCommunicationReportGenerator.generateCandidateReport({
+        ...results,
+        candidateInfo: {
+          name: participantName || "Assessment Participant",
+          email: participantEmail || "",
+          completionDate: new Date().toLocaleDateString()
+        }
       });
       
       toast({
-        title: "Report Generated",
+        title: "Candidate Report Generated",
         description: "Your communication styles report has been opened in a new window.",
       });
     } catch (error) {
-      console.error('Error generating HTML report:', error);
+      console.error('Error generating candidate report:', error);
       toast({
         title: "Error",
-        description: "Failed to generate HTML report. Please try again.",
+        description: "Failed to generate candidate report. Please try again.",
         variant: "destructive"
       });
     }
   };
 
-  const viewHTMLReport = async () => {
+  const generateEmployerReport = async () => {
     if (!results) return;
     
     try {
-      const htmlContent = generateCommunicationStylesHTML({
-        results,
-        participantName: participantName || "Assessment Participant",
-        participantEmail: participantEmail || "",
-        includeDistortionAnalysis: true,
-        includeVisualCharts: true,
-        language: currentLanguage
+      await EnhancedCommunicationReportGenerator.generateEmployerReport({
+        ...results,
+        candidateInfo: {
+          name: participantName || "Assessment Participant",
+          email: participantEmail || "",
+          completionDate: new Date().toLocaleDateString()
+        }
       });
       
-      const newWindow = window.open('', '_blank');
-      if (newWindow) {
-        newWindow.document.write(htmlContent);
-        newWindow.document.close();
-      }
-      
       toast({
-        title: "HTML Report Opened",
-        description: "Your communication styles report opened in a new window.",
+        title: "Employer Report Generated",
+        description: "The employer communication report has been opened in a new window.",
       });
     } catch (error) {
-      console.error('Error generating HTML:', error);
+      console.error('Error generating employer report:', error);
       toast({
         title: "Error",
-        description: "Failed to generate HTML report. Please try again.",
+        description: "Failed to generate employer report. Please try again.",
         variant: "destructive"
       });
     }
   };
+
 
   if (isComplete && results) {
     return (
@@ -168,9 +162,13 @@ const CommunicationStylesAssessment: React.FC<CommunicationStylesAssessmentProps
                 </CardDescription>
               </div>
               <div className="flex gap-3">
-                <Button onClick={viewHTMLReport}>
+                <Button onClick={generateCandidateReport}>
                   <Eye className="w-4 h-4 mr-2" />
-                  View Report
+                  Candidate Report
+                </Button>
+                <Button onClick={generateEmployerReport} variant="outline">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Employer Report
                 </Button>
                 <Button 
                   onClick={() => setShowTeamAnalysis(!showTeamAnalysis)}

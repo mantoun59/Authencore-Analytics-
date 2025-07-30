@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { MessageSquare, Users, Target, Zap, ArrowRight, ArrowLeft, Share2, Download, Clock } from "lucide-react";
 import { communicationStylesQuestions } from "@/data/communicationStylesQuestions";
 import { useCommunicationStylesScoring } from "@/hooks/useCommunicationStylesScoring";
-import { generateProfessionalReport } from "@/services/professionalReportGenerator";
+import { EnhancedCommunicationReportGenerator } from "@/services/enhancedCommunicationReportGenerator";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -88,22 +88,20 @@ const CommunicationAssessment = () => {
 
       const scoringResult = await calculateResults(answers, assessmentStartTime, responseTimings);
       
-      // Generate both individual and employer reports
-      const { generateEnhancedCommunicationReport } = await import('@/services/enhancedCommunicationReportGenerator');
-      const { generateEmployerReport } = await import('@/services/assessmentSpecificReportGenerator');
-      
-      const individualReport = generateEnhancedCommunicationReport(
-        scoringResult,
-        userProfile?.name || 'Anonymous'
-      );
-      
-      const employerReport = generateEmployerReport(
-        scoringResult,
-        userProfile?.name || 'Anonymous',
-        userProfile?.position
-      );
-      
-      // Individual and employer reports generated successfully
+      // Generate both candidate and employer reports using unified structure
+      if (scoringResult) {
+        const communicationResults = {
+          ...scoringResult,
+          candidateInfo: {
+            name: userProfile?.name || 'Anonymous',
+            email: userProfile?.email || '',
+            completionDate: new Date().toLocaleDateString()
+          }
+        };
+
+        // Generate candidate report by default
+        await EnhancedCommunicationReportGenerator.generateCandidateReport(communicationResults);
+      }
 
       // Save results to database
       if (user?.id) {
@@ -159,9 +157,33 @@ const CommunicationAssessment = () => {
           <CommunicationStylesVisualizer results={results} />
 
           <div className="flex flex-wrap justify-center gap-4 mt-12">
-            <Button className="bg-indigo-600 hover:bg-indigo-700">
+            <Button 
+              onClick={() => results && EnhancedCommunicationReportGenerator.generateCandidateReport({
+                ...results,
+                candidateInfo: {
+                  name: userProfile?.name || 'Anonymous',
+                  email: userProfile?.email || '',
+                  completionDate: new Date().toLocaleDateString()
+                }
+              })}
+              className="bg-indigo-600 hover:bg-indigo-700"
+            >
               <Download className="mr-2 w-4 h-4" />
-              Download Report
+              Candidate Report
+            </Button>
+            <Button 
+              onClick={() => results && EnhancedCommunicationReportGenerator.generateEmployerReport({
+                ...results,
+                candidateInfo: {
+                  name: userProfile?.name || 'Anonymous',
+                  email: userProfile?.email || '',
+                  completionDate: new Date().toLocaleDateString()
+                }
+              })}
+              variant="outline"
+            >
+              <Download className="mr-2 w-4 h-4" />
+              Employer Report
             </Button>
             <Button variant="outline">
               <Share2 className="mr-2 w-4 h-4" />
