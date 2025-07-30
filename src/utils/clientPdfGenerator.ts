@@ -118,55 +118,624 @@ const validateInput = (data: SimplePdfData): void => {
   }
 };
 
-// Updated PDF generation using server-side renderer
+// Generate HTML report instead of PDF
 export const generateClientSidePdf = async (data: SimplePdfData): Promise<void> => {
-  console.log('Starting server-side PDF generation for:', data.userInfo?.name);
+  console.log('Generating HTML report for:', data.userInfo?.name);
   
   try {
     validateInput(data);
     
-    // Call the enhanced PDF generator edge function using correct Supabase URL
-    const response = await fetch('https://jlbftyjewxgetxcihban.supabase.co/functions/v1/enhanced-pdf-generator', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }));
-      throw new Error(`PDF generation failed: ${errorData.error || response.statusText}`);
+    // Create HTML report
+    const htmlContent = generateHTMLReport(data);
+    
+    // Open in new window for printing
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    if (!printWindow) {
+      throw new Error('Unable to open print window. Please allow popups for this site.');
     }
-
-    // Get the PDF blob
-    const pdfBlob = await response.blob();
     
-    // Create download link
-    const url = URL.createObjectURL(pdfBlob);
-    const link = document.createElement('a');
-    link.href = url;
+    printWindow.document.write(htmlContent);
+    printWindow.document.close();
     
-    // Generate clean filename
-    const cleanName = normalizeText(data.userInfo.name).replace(/\s+/g, '_').replace(/[^\w-]/g, '');
-    const timestamp = new Date().toISOString().split('T')[0];
-    link.download = `${cleanName}_Career_Report_${timestamp}.pdf`;
+    // Auto-focus and show print dialog after content loads
+    printWindow.onload = () => {
+      printWindow.focus();
+      setTimeout(() => {
+        printWindow.print();
+      }, 500);
+    };
     
-    // Trigger download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Clean up
-    URL.revokeObjectURL(url);
-    
-    console.log('Server-side PDF generation completed successfully');
+    console.log('HTML report generated successfully');
     
   } catch (error) {
-    console.error('PDF generation failed:', error);
-    alert(`PDF generation failed: ${error.message}`);
+    console.error('Report generation failed:', error);
+    alert(`Report generation failed: ${error.message}`);
     throw error;
   }
+};
+
+// Generate complete HTML report
+const generateHTMLReport = (data: SimplePdfData): string => {
+  // Process dimensions data
+  const processDimensions = (dimensions: any): Array<{ name: string; score: number }> => {
+    if (!dimensions) return [];
+    
+    if (Array.isArray(dimensions)) {
+      return dimensions.map(dim => ({
+        name: dim.name || 'Unknown',
+        score: Number(dim.score) || 0
+      }));
+    }
+    
+    if (typeof dimensions === 'object') {
+      return Object.entries(dimensions).map(([key, value]) => ({
+        name: key.replace(/_/g, ' ').replace(/([A-Z])/g, ' $1').trim(),
+        score: Number(value) || 0
+      }));
+    }
+    
+    return [];
+  };
+
+  const processedDimensions = processDimensions(data.dimensions || data.riasecResults);
+  const careerMatches = data.careerMatches || [];
+  const recommendations = data.recommendations || [];
+
+  // RIASEC types with colors and descriptions
+  const riasecTypes = [
+    { name: 'Realistic', color: '#008080', description: 'Hands-on, practical, mechanical', icon: '🔧' },
+    { name: 'Investigative', color: '#228B22', description: 'Research, analysis, problem-solving', icon: '🔬' },
+    { name: 'Artistic', color: '#FF8C00', description: 'Creative, expressive, innovative', icon: '🎨' },
+    { name: 'Social', color: '#32CD32', description: 'People-focused, helping, teaching', icon: '👥' },
+    { name: 'Enterprising', color: '#FFD700', description: 'Leadership, business, persuasion', icon: '📈' },
+    { name: 'Conventional', color: '#4169E1', description: 'Organized, detail-oriented, systematic', icon: '📊' }
+  ];
+
+  const getScoreLevel = (score: number): { level: string; color: string } => {
+    if (score >= 85) return { level: 'Excellent', color: '#22C55E' };
+    if (score >= 70) return { level: 'Good', color: '#3B82F6' };
+    if (score >= 55) return { level: 'Average', color: '#EAB308' };
+    return { level: 'Developing', color: '#EF4444' };
+  };
+
+  const formatDate = (dateString?: string): string => {
+    if (!dateString) return new Date().toLocaleDateString();
+    return new Date(dateString).toLocaleDateString();
+  };
+
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Assessment Report - ${normalizeText(data.userInfo.name)}</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.4;
+      color: #333;
+      background: white;
+    }
+    
+    @media print {
+      body { margin: 0; }
+      .report-page {
+        page-break-after: always;
+        padding: 20px;
+        min-height: 100vh;
+      }
+      .report-page:last-child {
+        page-break-after: avoid;
+      }
+    }
+    
+    @media screen {
+      .report-page {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 100vh;
+      }
+    }
+    
+    .report-header {
+      background: linear-gradient(135deg, #008080, #006666);
+      color: white;
+      padding: 20px;
+      margin: -20px -20px 30px -20px;
+      border-radius: 0;
+      position: relative;
+    }
+    
+    .logo-section {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    
+    .logo {
+      width: 60px;
+      height: 60px;
+      background: white;
+      border-radius: 8px;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #008080;
+      font-size: 10px;
+      text-align: center;
+      line-height: 1.2;
+    }
+    
+    .company-info h1 {
+      margin: 0;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    
+    .company-info p {
+      margin: 5px 0 0 0;
+      font-size: 16px;
+      opacity: 0.9;
+    }
+    
+    .confidential-badge {
+      background: #dc2626;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-weight: bold;
+      font-size: 12px;
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+    
+    .profile-card {
+      background: #f8fafc;
+      border: 2px solid #008080;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    
+    .profile-header {
+      background: #008080;
+      color: white;
+      padding: 10px 15px;
+      margin: -20px -20px 15px -20px;
+      border-radius: 6px 6px 0 0;
+      font-weight: bold;
+    }
+    
+    .profile-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+    
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .metric-card {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .metric-card.primary {
+      border-color: #008080;
+      background: linear-gradient(135deg, #f0fdfa, #ccfbf1);
+    }
+    
+    .metric-card.success {
+      border-color: #22c55e;
+      background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    }
+    
+    .metric-value {
+      font-size: 36px;
+      font-weight: bold;
+      color: #008080;
+      margin: 10px 0;
+    }
+    
+    .metric-label {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 5px;
+    }
+    
+    .section-title {
+      font-size: 24px;
+      font-weight: bold;
+      color: #1e293b;
+      margin: 30px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 3px solid #008080;
+    }
+    
+    .dimension-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+    }
+    
+    .dimension-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    
+    .dimension-name {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    
+    .dimension-score {
+      font-size: 18px;
+      font-weight: bold;
+    }
+    
+    .progress-bar {
+      background: #e2e8f0;
+      height: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+      margin: 10px 0;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 6px;
+    }
+    
+    .career-card {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      display: flex;
+      align-items: flex-start;
+      gap: 15px;
+    }
+    
+    .career-rank {
+      background: #fbbf24;
+      color: #92400e;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      flex-shrink: 0;
+    }
+    
+    .career-content {
+      flex: 1;
+    }
+    
+    .career-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #1e293b;
+      margin-bottom: 5px;
+    }
+    
+    .career-match {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+    
+    .recommendation-item {
+      background: #f0fdf4;
+      border-left: 4px solid #22c55e;
+      padding: 15px;
+      margin: 10px 0;
+      border-radius: 0 8px 8px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .recommendation-number {
+      background: #22c55e;
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
+    
+    .summary-box {
+      background: #e0f2fe;
+      padding: 20px;
+      border-radius: 8px;
+      margin: 20px 0;
+    }
+    
+    .methodology-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin: 20px 0;
+    }
+    
+    .methodology-card {
+      background: #f8fafc;
+      padding: 20px;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+    
+    .footer {
+      background: #f8fafc;
+      padding: 20px;
+      margin: 30px -20px -20px -20px;
+      border-top: 2px solid #008080;
+      text-align: center;
+      color: #64748b;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Page 1: Overview and Profile -->
+  <div class="report-page">
+    <div class="report-header">
+      <div class="confidential-badge">CONFIDENTIAL</div>
+      <div class="logo-section">
+        <div class="logo">
+          AuthenCore<br>Analytics
+        </div>
+        <div class="company-info">
+          <h1>AuthenCore Analytics</h1>
+          <p>Career Launch Assessment Report</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-card">
+      <div class="profile-header">
+        👤 Candidate Profile
+      </div>
+      <div class="profile-grid">
+        <div><strong>Name:</strong> ${normalizeText(data.userInfo.name)}</div>
+        <div><strong>Email:</strong> ${normalizeText(data.userInfo.email)}</div>
+        <div><strong>Assessment Date:</strong> ${formatDate(data.userInfo.assessmentDate)}</div>
+        <div><strong>Report ID:</strong> ${normalizeText(data.userInfo.reportId) || `CLR-${Date.now()}`}</div>
+        ${data.userInfo.questionsAnswered ? `<div><strong>Questions Answered:</strong> ${data.userInfo.questionsAnswered}</div>` : ''}
+        ${data.userInfo.timeSpent ? `<div><strong>Time Spent:</strong> ${normalizeText(data.userInfo.timeSpent)}</div>` : ''}
+      </div>
+    </div>
+
+    <div class="metrics-grid">
+      ${data.overallScore !== undefined ? `
+      <div class="metric-card primary">
+        <div class="metric-label">🏆 Overall Score</div>
+        <div class="metric-value">${safeNumber(data.overallScore)}</div>
+        <div style="font-size: 12px; color: #64748b;">out of 100</div>
+      </div>
+      ` : ''}
+      ${data.userInfo.reliabilityScore ? `
+      <div class="metric-card success">
+        <div class="metric-label">🛡️ Reliability Score</div>
+        <div class="metric-value">${safeNumber(data.userInfo.reliabilityScore)}%</div>
+        <div style="font-size: 12px; color: #64748b;">response quality</div>
+      </div>
+      ` : ''}
+    </div>
+
+    <div class="summary-box">
+      <h3 style="margin: 0 0 10px 0; color: #0277bd;">📋 Executive Summary</h3>
+      <p style="margin: 0; line-height: 1.6;">
+        This comprehensive career assessment analyzes your interests, aptitudes, and personality traits 
+        to provide personalized career recommendations based on scientifically validated methodologies. 
+        The report uses the Holland RIASEC model and integrates with the O*NET career database for 
+        accurate career matching.
+      </p>
+    </div>
+  </div>
+
+  <!-- Page 2: RIASEC Analysis -->
+  <div class="report-page">
+    <h2 class="section-title">🔬 RIASEC Interest Profile Analysis</h2>
+    <p style="margin-bottom: 20px; color: #64748b;">
+      Your interest profile based on Holland's RIASEC model - six personality types that help predict career satisfaction:
+    </p>
+
+    ${processedDimensions.slice(0, 6).map((dim, index) => {
+      const riasecType = riasecTypes[index] || riasecTypes[0];
+      const scoreInfo = getScoreLevel(dim.score);
+      
+      return `
+      <div class="dimension-item">
+        <div class="dimension-header">
+          <div>
+            <span style="font-size: 20px; margin-right: 10px;">${riasecType.icon}</span>
+            <span class="dimension-name" style="color: ${riasecType.color};">
+              ${normalizeText(dim.name)}
+            </span>
+            <div style="font-size: 14px; color: #64748b; margin-top: 2px;">
+              ${riasecType.description}
+            </div>
+          </div>
+          <div style="text-align: right;">
+            <div class="dimension-score" style="color: ${riasecType.color};">
+              ${dim.score}
+            </div>
+            <div style="font-size: 12px; color: ${scoreInfo.color}; font-weight: bold;">
+              ${scoreInfo.level}
+            </div>
+          </div>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" style="width: ${dim.score}%; background-color: ${riasecType.color};"></div>
+        </div>
+      </div>
+      `;
+    }).join('')}
+  </div>
+
+  <!-- Page 3: Career Recommendations -->
+  <div class="report-page">
+    <h2 class="section-title">🚀 Top Career Recommendations</h2>
+    <p style="margin-bottom: 20px; color: #64748b;">
+      Based on your assessment results, here are your top career matches ranked by compatibility:
+    </p>
+
+    ${careerMatches.slice(0, 8).map((match, index) => {
+      const matchScore = safeNumber(match.match);
+      const matchColor = matchScore >= 80 ? '#22c55e' : matchScore >= 60 ? '#f59e0b' : '#6b7280';
+      
+      return `
+      <div class="career-card">
+        <div class="career-rank">${index + 1}</div>
+        <div class="career-content">
+          <div class="career-title">${normalizeText(match.title)}</div>
+          <div class="career-match" style="color: ${matchColor};">
+            ${matchScore}% Match
+          </div>
+          <div class="progress-bar" style="width: 200px;">
+            <div class="progress-fill" style="width: ${matchScore}%; background-color: ${matchColor};"></div>
+          </div>
+          ${match.description ? `
+          <div style="margin-top: 10px; color: #64748b; font-size: 14px;">
+            ${normalizeText(match.description)}
+          </div>
+          ` : ''}
+        </div>
+      </div>
+      `;
+    }).join('')}
+    
+    ${careerMatches.length === 0 ? `
+    <div style="text-align: center; padding: 40px; color: #64748b;">
+      <p>Career recommendations will be generated based on your specific assessment results.</p>
+    </div>
+    ` : ''}
+  </div>
+
+  <!-- Page 4: Development Recommendations -->
+  <div class="report-page">
+    <h2 class="section-title">💡 Personal Development Roadmap</h2>
+    <p style="margin-bottom: 20px; color: #64748b;">
+      Your personalized development roadmap with prioritized action items for career growth:
+    </p>
+
+    ${recommendations.slice(0, 10).map((rec, index) => `
+    <div class="recommendation-item">
+      <span class="recommendation-number">${index + 1}</span>
+      <span>${normalizeText(rec)}</span>
+    </div>
+    `).join('')}
+
+    ${recommendations.length === 0 ? `
+    <div style="text-align: center; padding: 40px; color: #64748b;">
+      <p>Personalized recommendations will be generated based on your specific assessment results.</p>
+    </div>
+    ` : ''}
+
+    <div style="margin-top: 40px; background: #f0fdf4; padding: 20px; border-radius: 8px; border: 2px solid #22c55e;">
+      <h3 style="margin: 0 0 15px 0; color: #16a34a;">🎯 Next Steps</h3>
+      <ul style="margin: 0; padding-left: 20px; line-height: 1.8;">
+        <li>Review your RIASEC profile and identify your strongest interest areas</li>
+        <li>Research the recommended careers that align with your interests and values</li>
+        <li>Consider informational interviews with professionals in your target fields</li>
+        <li>Develop skills and gain experience in your areas of interest</li>
+        <li>Create a timeline for your career transition or development goals</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Page 5: Assessment Details & Methodology -->
+  <div class="report-page">
+    <h2 class="section-title">📊 Assessment Methodology & Validity</h2>
+    
+    <div class="methodology-grid">
+      <div class="methodology-card">
+        <h4 style="color: #008080; margin: 0 0 10px 0;">🔬 Holland RIASEC Theory</h4>
+        <p style="font-size: 14px; color: #64748b; margin: 0;">
+          Six personality types and work environments for accurate career matching based on decades of research.
+        </p>
+      </div>
+      
+      <div class="methodology-card">
+        <h4 style="color: #008080; margin: 0 0 10px 0;">📚 O*NET Career Database</h4>
+        <p style="font-size: 14px; color: #64748b; margin: 0;">
+          900+ career profiles with detailed requirements and outcomes for comprehensive matching.
+        </p>
+      </div>
+      
+      <div class="methodology-card">
+        <h4 style="color: #008080; margin: 0 0 10px 0;">🧠 Cognitive Aptitude Assessment</h4>
+        <p style="font-size: 14px; color: #64748b; margin: 0;">
+          Validated measures of reasoning and problem-solving abilities for accurate predictions.
+        </p>
+      </div>
+      
+      <div class="methodology-card">
+        <h4 style="color: #008080; margin: 0 0 10px 0;">✅ Response Quality Validation</h4>
+        <p style="font-size: 14px; color: #64748b; margin: 0;">
+          Statistical analysis ensures reliable and consistent responses for trustworthy results.
+        </p>
+      </div>
+    </div>
+
+    <div class="summary-box">
+      <h4 style="color: #0277bd; margin: 0 0 15px 0;">📈 Assessment Statistics</h4>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+        <div><strong>Questions Answered:</strong> ${data.userInfo.questionsAnswered || 'Complete Set'}</div>
+        <div><strong>Time Spent:</strong> ${normalizeText(data.userInfo.timeSpent) || 'Appropriate Duration'}</div>
+        <div><strong>Reliability Score:</strong> ${data.userInfo.reliabilityScore || 'High'}%</div>
+        <div><strong>Report Generated:</strong> ${formatDate()}</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div style="margin-bottom: 10px;">
+        <strong>AuthenCore Analytics</strong> | Professional Career Assessment Platform
+      </div>
+      <div style="font-size: 11px;">
+        This report is confidential and intended for professional use only. 
+        For questions about this report, contact: support@authencore.com
+      </div>
+      <div style="margin-top: 10px; font-size: 11px;">
+        Generated on ${formatDate()} | www.authencore.com
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+  `.trim();
 };
 
 // Enhanced header with real logo
