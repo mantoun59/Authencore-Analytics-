@@ -93,15 +93,15 @@ const normalizeText = (text: any): string => {
   if (!text) return 'N/A';
   if (typeof text !== 'string') text = String(text);
   
-  // Normalize Unicode and fix encoding issues
+  // More aggressive text cleaning for PDF compatibility
   return text
-    .normalize('NFKD') // Decompose Unicode characters
-    .replace(/[\u0300-\u036f]/g, '') // Remove combining marks
-    .replace(/[""]/g, '"') // Fix smart quotes
-    .replace(/['']/g, "'") // Fix smart apostrophes
-    .replace(/–—/g, '-') // Fix dashes
+    .normalize('NFKC') // Use canonical composition
+    .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
+    .replace(/[^\x20-\x7E]/g, ' ') // Replace non-ASCII with spaces
+    .replace(/[""'']/g, '"') // Normalize quotes
+    .replace(/[–—]/g, '-') // Normalize dashes
     .replace(/…/g, '...') // Fix ellipsis
-    .replace(/\s+/g, ' ') // Normalize whitespace
+    .replace(/\s+/g, ' ') // Normalize all whitespace
     .trim() || 'N/A';
 };
 
@@ -129,6 +129,11 @@ export const generateClientSidePdf = async (data: SimplePdfData): Promise<void> 
     validateInput(data);
     
     const doc = new jsPDF();
+    
+    // Set proper encoding and font for Unicode support
+    doc.setFont('helvetica', 'normal');
+    doc.setCharSpace(0);
+    
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     let yPosition = 20;
@@ -640,12 +645,12 @@ const addEnhancedActionItem = (doc: jsPDF, recommendation: string, priority: any
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(priority.color[0], priority.color[1], priority.color[2]);
-  doc.text(`${priority.icon} ${priority.label}`, 45, yPos + 10);
+  doc.text(`${priority.icon} ${normalizeText(priority.label)}`, 45, yPos + 10);
   
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-  doc.text(`Timeline: ${priority.timeframe}`, 130, yPos + 10);
+  doc.text(`Timeline: ${normalizeText(priority.timeframe)}`, 130, yPos + 10);
   
   // Recommendation text with better formatting
   doc.setFontSize(11);
