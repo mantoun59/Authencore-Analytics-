@@ -109,56 +109,7 @@ const SampleReports = () => {
         ? getSampleEmployerReport(selectedAssessment)
         : getSampleCandidateReport(selectedAssessment);
       
-      // Use enhanced communication generator for communication assessments
-      if (selectedAssessment === 'communication' || selectedAssessment === 'communication-styles') {
-        const communicationData = {
-          dimensions: {
-            assertiveness: { score: 78, level: 'High', percentile: 78, description: 'Strong assertive communication style' },
-            expressiveness: { score: 85, level: 'Very High', percentile: 85, description: 'Highly expressive and engaging' },
-            informationProcessing: { score: 72, level: 'High', percentile: 72, description: 'Good analytical processing' },
-            channelPreferences: { score: 80, level: 'High', percentile: 80, description: 'Adapts well to different channels' },
-            listeningPatterns: { score: 75, level: 'High', percentile: 75, description: 'Active and empathetic listener' },
-            influenceStrategies: { score: 82, level: 'Very High', percentile: 82, description: 'Effective influence techniques' },
-            conflictCommunication: { score: 68, level: 'Moderate', percentile: 68, description: 'Developing conflict resolution skills' }
-          },
-          profile: {
-            type: 'Socializer',
-            primary: 'Expressive',
-            secondary: 'Supportive',
-            strength: 'Building relationships and motivating others',
-            challenge: 'May struggle with direct confrontation',
-            workStyle: 'Collaborative and team-oriented approach'
-          },
-          distortionAnalysis: {
-            score: 15,
-            level: 'Low' as const,
-            indicators: [],
-            reliability: 'High' as const,
-            recommendations: [],
-            consistencyCheck: 92,
-            extremePatterns: 8,
-            socialDesirabilityBias: 15,
-            responseTimePattern: 75
-          },
-          overallScore: 77,
-          candidateInfo: {
-            name: 'Sarah Johnson',
-            email: 'sarah.johnson@example.com',
-            completionDate: new Date().toLocaleDateString()
-          }
-        };
-
-        if (reportType === 'employer') {
-          await EnhancedCommunicationReportGenerator.generateEmployerReport(communicationData);
-        } else {
-          await EnhancedCommunicationReportGenerator.generateCandidateReport(communicationData);
-        }
-        
-        toast.success(`Sample ${reportType} communication report generated successfully!`);
-        return;
-      }
-
-      // For other assessment types, use HTML report generator like Career Launch
+      // Use HTML report generator for ALL assessment types including communication
       const { generateHtmlReport } = await import('@/utils/htmlReportGenerator');
       
       const reportData = {
