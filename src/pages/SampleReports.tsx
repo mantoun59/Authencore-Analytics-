@@ -2318,10 +2318,131 @@ const SampleReports = () => {
           </Card>
 
           {/* Report Content */}
-          {reportType === 'candidate' ? renderCandidateReport() : renderEmployerReport()}
+          {/* Special handling for FVAI reports */}
+          {selectedAssessment === 'faith-values' ? (
+            <Card>
+              <CardHeader>
+                <CardTitle>Faith & Values Assessment Sample Reports</CardTitle>
+                <CardDescription>
+                  View comprehensive FVAI reports with actual faith-based values data
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <Button 
+                    onClick={() => {
+                      const { generateFVAICandidateReport } = require('@/services/fvaiCandidateReportGenerator');
+                      const sampleData = {
+                        candidateInfo: {
+                          name: 'Sarah Chen',
+                          email: 'sarah.chen@email.com',
+                          position: 'Community Relations Manager',
+                          organization: 'Hope Foundation',
+                          faithBackground: 'Christian',
+                          date: new Date().toLocaleDateString()
+                        },
+                        results: {
+                          topValues: [
+                            { name: 'Integrity', score: 92, icon: '⚖️', description: 'Unwavering commitment to moral principles' },
+                            { name: 'Compassion', score: 89, icon: '❤️', description: 'Deep empathy and care for others' },
+                            { name: 'Service', score: 91, icon: '🤝', description: 'Strong desire to serve others' },
+                            { name: 'Justice', score: 85, icon: '⚖️', description: 'Commitment to fairness' },
+                            { name: 'Stewardship', score: 87, icon: '🌱', description: 'Responsible resource management' },
+                            { name: 'Humility', score: 83, icon: '🙏', description: 'Balanced self-awareness' }
+                          ],
+                          insights: {
+                            workStyle: 'Collaborative and purpose-driven approach',
+                            idealEnvironment: 'Mission-focused organizations with strong values',
+                            growthAreas: 'Leadership confidence and strategic planning'
+                          },
+                          validity: 'Excellent',
+                          validityMetrics: { responseConsistency: 94, socialDesirabilityBias: 12, responsePatternFlag: false },
+                          distortionScore: 8
+                        }
+                      };
+                      const html = generateFVAICandidateReport(sampleData);
+                      const window = open('', '_blank');
+                      window?.document.write(html);
+                    }}
+                    className="bg-purple-600 hover:bg-purple-700"
+                  >
+                    👤 Candidate Report
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      const { generateFVAIEmployerReport } = require('@/services/fvaiEmployerReportGenerator');
+                      const sampleData = {
+                        candidateInfo: {
+                          name: 'Sarah Chen',
+                          email: 'sarah.chen@email.com',
+                          position: 'Community Relations Manager',
+                          organization: 'Hope Foundation',
+                          faithBackground: 'Christian',
+                          date: new Date().toLocaleDateString()
+                        },
+                        results: {
+                          topValues: [
+                            { name: 'Integrity', score: 92, icon: '⚖️', description: 'Unwavering commitment to moral principles' },
+                            { name: 'Compassion', score: 89, icon: '❤️', description: 'Deep empathy and care for others' }
+                          ],
+                          cultureMatches: [{
+                            culture: { name: 'Purpose-Driven', description: 'Values-based organization', characteristics: ['Service-oriented', 'Ethical'], examples: [] },
+                            alignment: 'Strong'
+                          }],
+                          validity: 'Excellent'
+                        }
+                      };
+                      const html = generateFVAIEmployerReport(sampleData);
+                      const window = open('', '_blank');
+                      window?.document.write(html);
+                    }}
+                    className="bg-purple-600 hover:bg-purple-700"
+                  >
+                    🏢 Employer Report
+                  </Button>
+                  <Button 
+                    onClick={() => {
+                      const { generateFVAIReport } = require('@/services/fvaiReportGenerator');
+                      const sampleData = {
+                        candidateInfo: {
+                          name: 'Sarah Chen',
+                          email: 'sarah.chen@email.com',
+                          position: 'Community Relations Manager',
+                          organization: 'Hope Foundation',
+                          faithBackground: 'Christian',
+                          date: new Date().toLocaleDateString()
+                        },
+                        results: {
+                          topValues: [
+                            { name: 'Integrity', score: 92, icon: '⚖️', description: 'Unwavering commitment to moral principles' },
+                            { name: 'Compassion', score: 89, icon: '❤️', description: 'Deep empathy and care for others' }
+                          ],
+                          cultureMatches: [{ culture: { name: 'Purpose-Driven', description: 'Values-based', characteristics: [], examples: [] }, alignment: 'Strong' }],
+                          insights: { workStyle: 'Collaborative', idealEnvironment: 'Mission-focused', challenges: 'None', growthAreas: 'Leadership' },
+                          validity: 'Excellent',
+                          validityMetrics: { responseConsistency: 94, socialDesirabilityBias: 12, responsePatternFlag: false },
+                          distortionScore: 8
+                        }
+                      };
+                      const html = generateFVAIReport(sampleData);
+                      const window = open('', '_blank');
+                      window?.document.write(html);
+                    }}
+                    className="bg-purple-600 hover:bg-purple-700"
+                  >
+                    📊 Comprehensive
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <>
+              {reportType === 'candidate' ? renderCandidateReport() : renderEmployerReport()}
+            </>
+          )}
         </div>
       </div>
-
+      
       <Footer />
     </div>
   );
