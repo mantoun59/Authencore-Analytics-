@@ -935,6 +935,7 @@ const SampleReports = () => {
             company: 'AuthenCore Analytics'
           }
         };
+        console.log('🔍 Faith-values reportData being passed to HTML generator:', reportData);
       } else {
         // Enhanced data for other assessments
         const assessmentProfiles = {
