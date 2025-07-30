@@ -444,7 +444,7 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
     <div class="report-header">
       <img src="${finalLogo}" alt="AuthenCore Analytics" class="logo" />
       <div class="report-title">${reportTitle}</div>
-      <div class="report-subtitle">Professional Assessment Report</div>
+      <div class="report-subtitle">${getReportSubtitle(data.assessmentType)}</div>
     </div>
     
     <button class="print-button" onclick="window.print()">🖨️ Print Report</button>
@@ -470,7 +470,7 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
     
     ${data.profile ? `
     <div class="profile-description">
-      <h2 class="section-title">🎯 Communication Profile</h2>
+      <h2 class="section-title">${getProfileSectionTitle(data.assessmentType)}</h2>
       <p>${data.profile}</p>
     </div>
     ` : ''}
@@ -510,7 +510,7 @@ const getReportTitle = (assessmentType: string): string => {
     'communication-styles': 'Communication Styles Assessment',
     'emotional-intelligence': 'Emotional Intelligence Assessment',
     'leadership': 'Leadership Assessment',
-    'faith-values': 'Faith & Values Assessment',
+    'faith-values': 'Faith & Values Alignment Index (FVAI)',
     'cair': 'CAIR Personality Assessment',
     'gen-z': 'Gen Z Workplace Assessment',
     'digital-wellness': 'Digital Wellness Assessment',
@@ -519,6 +519,40 @@ const getReportTitle = (assessmentType: string): string => {
     'cultural-intelligence': 'Cultural Intelligence Assessment'
   };
   return titles[assessmentType] || 'Professional Assessment';
+};
+
+const getReportSubtitle = (assessmentType: string): string => {
+  const subtitles: Record<string, string> = {
+    'communication': 'Communication Styles Assessment Report',
+    'emotional-intelligence': 'Emotional Intelligence Assessment Report', 
+    'leadership': 'Leadership Assessment Report',
+    'faith-values': 'Faith & Values Alignment Report',
+    'cair': 'CAIR Personality Assessment Report',
+    'gen-z': 'Gen Z Workplace Assessment Report',
+    'digital-wellness': 'Digital Wellness Assessment Report',
+    'stress-resilience': 'Stress Resilience Assessment Report',
+    'burnout-prevention': 'Burnout Prevention Assessment Report',
+    'cultural-intelligence': 'Cultural Intelligence Assessment Report',
+    'career-launch': 'Career Launch Assessment Report'
+  };
+  return subtitles[assessmentType] || 'Professional Assessment Report';
+};
+
+const getProfileSectionTitle = (assessmentType: string): string => {
+  const profileTitles: Record<string, string> = {
+    'communication': '🎯 Communication Profile',
+    'emotional-intelligence': '🧠 Emotional Intelligence Profile',
+    'leadership': '👥 Leadership Profile', 
+    'faith-values': '🙏 Values Alignment Profile',
+    'cair': '🎭 Personality Profile',
+    'gen-z': '🚀 Gen Z Profile',
+    'digital-wellness': '📱 Digital Wellness Profile',
+    'stress-resilience': '💪 Resilience Profile',
+    'burnout-prevention': '🛡️ Burnout Prevention Profile',
+    'cultural-intelligence': '🌍 Cultural Intelligence Profile',
+    'career-launch': '🎯 Career Readiness Profile'
+  };
+  return profileTitles[assessmentType] || '🎯 Assessment Profile';
 };
 
 const formatDate = (dateString?: string): string => {
