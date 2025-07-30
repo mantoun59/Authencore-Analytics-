@@ -47,12 +47,12 @@ const sampleCandidateData = {
   },
 
   dimensions: {
-    assertiveness: { score: 72, level: "Good", percentile: 75, description: "Confident communication with clear direction" },
-    expressiveness: { score: 88, level: "Excellent", percentile: 90, description: "Highly engaging and animated communication" },
-    informationProcessing: { score: 65, level: "Moderate", percentile: 60, description: "Developing systematic information handling" },
-    channelPreferences: { score: 81, level: "Very Good", percentile: 82, description: "Adaptable across communication platforms" },
-    listeningPatterns: { score: 79, level: "Good", percentile: 78, description: "Active listening with empathetic responses" },
-    influenceStrategies: { score: 84, level: "Very Good", percentile: 85, description: "Effective persuasion and motivation" },
+    assertiveness: { score: 72, level: "High", percentile: 75, description: "Confident communication with clear direction" },
+    expressiveness: { score: 88, level: "Very High", percentile: 90, description: "Highly engaging and animated communication" },
+    informationProcessing: { score: 65, level: "Low", percentile: 60, description: "Developing systematic information handling" },
+    channelPreferences: { score: 81, level: "High", percentile: 82, description: "Adaptable across communication platforms" },
+    listeningPatterns: { score: 79, level: "High", percentile: 78, description: "Active listening with empathetic responses" },
+    influenceStrategies: { score: 84, level: "Very High", percentile: 85, description: "Effective persuasion and motivation" },
     conflictCommunication: { score: 68, level: "Moderate", percentile: 65, description: "Developing conflict resolution skills" }
   },
 
