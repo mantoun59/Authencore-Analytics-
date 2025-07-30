@@ -8,7 +8,7 @@ import { CareerLaunchReportEnhanced } from "@/components/CareerLaunchReportEnhan
 import { PaymentProtection } from "@/components/PaymentProtection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { generateClientSidePdf } from '@/utils/clientPdfGenerator';
+import { generateHtmlReport } from '@/utils/htmlReportGenerator';
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -104,7 +104,7 @@ const CareerLaunch = () => {
         ]
       };
 
-      generateClientSidePdf(pdfData);
+      await generateHtmlReport(pdfData);
       
       toast({
         title: "Report Generated",

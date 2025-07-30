@@ -12,7 +12,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useFaithValuesScoring } from '@/hooks/useFaithValuesScoring';
 import { faithValuesData } from '@/data/faithValuesQuestions';
-import { generateClientSidePdf } from '@/utils/clientPdfGenerator';
+import { generateHtmlReport } from '@/utils/htmlReportGenerator';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 
@@ -102,8 +102,8 @@ export default function FaithValuesAssessment() {
         }
       };
 
-      generateClientSidePdf({
-        assessmentType: 'Faith & Values',
+      await generateHtmlReport({
+        assessmentType: 'faith-values',
         userInfo: {
           name: userProfile.name,
           email: userProfile.email,

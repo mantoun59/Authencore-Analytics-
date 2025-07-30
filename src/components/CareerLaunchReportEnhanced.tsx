@@ -68,10 +68,10 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
 
   const downloadReport = async (type: 'standard' | 'advisor' = 'standard') => {
     try {
-      // Use client-side PDF generation instead of server-side
-      const { generateClientSidePdf } = await import('@/utils/clientPdfGenerator');
+      // Use HTML report generation instead of PDF
+      const { generateHtmlReport } = await import('@/utils/htmlReportGenerator');
       
-      const pdfData = {
+      const reportData = {
         assessmentType: 'Career Launch Assessment',
         reportType: type, // Pass the report type
         enhancedAI: enhancedAI, // Pass enhanced AI data for advisor reports
@@ -112,11 +112,11 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
         }, {} as Record<string, number>)
       };
 
-      await generateClientSidePdf(pdfData);
+      await generateHtmlReport(reportData);
 
       toast({
         title: "Report Generated",
-        description: `${type === 'advisor' ? 'Advisor' : 'Standard'} PDF report downloaded successfully.`,
+        description: `${type === 'advisor' ? 'Advisor' : 'Standard'} HTML report opened successfully.`,
       });
     } catch (error) {
       console.error('Error generating report:', error);

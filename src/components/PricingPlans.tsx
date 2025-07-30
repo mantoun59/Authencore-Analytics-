@@ -14,7 +14,7 @@ const PricingPlans = () => {
         "Basic Analytics",
         "Email Support",
         "Mobile Access",
-        "PDF Export"
+        "HTML Reports"
       ],
       buttonText: "Get Started",
       popular: false

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import jsPDF from 'jspdf';
+// HTML report generation instead of PDF
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
@@ -126,7 +126,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   const getDevelopmentAreas = () => results?.improvements || [];
   const getRecommendations = () => results?.recommendations || [];
 
-  // Generate simple PDF report with debugging
+  // Generate simple HTML report
   const downloadReport = async () => {
     if (!results) {
       toast.error('No assessment data available');
@@ -137,8 +137,33 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       console.log('Results data:', results);
       console.log('Dimensions data:', results.dimensions);
       
-      const doc = new jsPDF();
-      let yPosition = 20;
+      // Generate HTML report instead of PDF
+      const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>${assessmentType} Assessment Report</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { color: #008080; }
+    .score { font-size: 24px; font-weight: bold; color: #008080; }
+    @media print { body { margin: 0; } }
+  </style>
+</head>
+<body>
+  <h1>${assessmentType} Assessment Report</h1>
+  <div class="score">Overall Score: ${getOverallScore()}</div>
+  <p>Generated on: ${new Date().toLocaleDateString()}</p>
+</body>
+</html>`;
+
+      const reportWindow = window.open('', '_blank', 'width=900,height=700');
+      if (!reportWindow) {
+        throw new Error('Unable to open report window');
+      }
+      
+      reportWindow.document.write(htmlContent);
+      reportWindow.document.close();
 
       // Header
       doc.setFontSize(20);
@@ -204,13 +229,10 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         yPosition += 8;
       }
 
-      // Save PDF
-      const fileName = `${assessmentType}-report-${new Date().toISOString().split('T')[0]}.pdf`;
-      doc.save(fileName);
-      toast.success('PDF report downloaded successfully!');
+      toast.success('HTML report opened successfully!');
     } catch (error) {
-      console.error('PDF generation error:', error);
-      toast.error('Failed to generate PDF report');
+      console.error('HTML generation error:', error);
+      toast.error('Failed to generate HTML report');
     }
   };
 

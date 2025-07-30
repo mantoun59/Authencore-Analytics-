@@ -62,7 +62,7 @@ const MarketingPromotion: React.FC = () => {
             </Button>
           </Link>
           <p className="text-sm text-muted-foreground mt-3">
-            High-quality PDFs and images ready for presentations
+            High-quality HTML reports and images ready for presentations
           </p>
         </div>
       </div>

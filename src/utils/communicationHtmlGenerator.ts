@@ -1,6 +1,7 @@
 import { CommunicationStylesResults } from "@/hooks/useCommunicationStylesScoring";
+import finalLogo from '../assets/final-logo.png';
 
-interface CommunicationPDFOptions {
+interface CommunicationHtmlOptions {
   results: CommunicationStylesResults;
   participantName: string;
   participantEmail: string;
@@ -9,7 +10,7 @@ interface CommunicationPDFOptions {
   language?: string;
 }
 
-export const generateCommunicationStylesPDF = async (options: CommunicationPDFOptions): Promise<Blob> => {
+export const generateCommunicationStylesHtml = async (options: CommunicationHtmlOptions): Promise<void> => {
   const {
     results,
     participantName,
@@ -19,8 +20,8 @@ export const generateCommunicationStylesPDF = async (options: CommunicationPDFOp
     language = 'en'
   } = options;
 
-  // Create comprehensive PDF content
-  const pdfContent = `
+  // Create comprehensive HTML content
+  const htmlContent = `
 <!DOCTYPE html>
 <html lang="${language}">
 <head>
@@ -42,6 +43,12 @@ export const generateCommunicationStylesPDF = async (options: CommunicationPDFOp
             border-bottom: 3px solid #3b82f6;
             padding-bottom: 20px;
             margin-bottom: 30px;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 8px;
         }
         .participant-info {
             background: #f8fafc;
@@ -93,7 +100,7 @@ export const generateCommunicationStylesPDF = async (options: CommunicationPDFOp
         }
         .dimension-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
@@ -185,19 +192,36 @@ export const generateCommunicationStylesPDF = async (options: CommunicationPDFOp
             font-size: 0.9em;
             color: #6b7280;
         }
+        .print-button {
+            background: #3b82f6;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        .print-button:hover {
+            background: #2563eb;
+        }
         @media print {
             body { margin: 0; padding: 15px; }
             .score-grid { grid-template-columns: repeat(2, 1fr); }
             .dimension-grid { grid-template-columns: 1fr; }
             .section { page-break-inside: avoid; }
+            .print-button { display: none; }
         }
     </style>
 </head>
 <body>
     <div class="header">
+        <img src="${finalLogo}" alt="AuthenCore Analytics" class="logo" />
         <h1>Communication Styles Assessment Report</h1>
         <p style="font-size: 1.2em; color: #6b7280;">Comprehensive Communication Effectiveness Analysis</p>
     </div>
+
+    <button class="print-button" onclick="window.print()">🖨️ Print Report</button>
 
     <div class="participant-info">
         <h2>Participant Information</h2>
@@ -354,26 +378,31 @@ export const generateCommunicationStylesPDF = async (options: CommunicationPDFOp
     <div class="footer">
         <p>This report was generated on ${new Date().toLocaleDateString()} using advanced psychometric analysis.</p>
         <p>For questions about this assessment, please contact your administrator.</p>
+        <p>© ${new Date().getFullYear()} AuthenCore Analytics - Confidential Assessment Report</p>
     </div>
 </body>
 </html>
   `;
 
-  // Convert HTML to PDF using jsPDF (simple implementation)
+  // Open in new window for viewing/printing
   try {
-    // For now, return the HTML as a blob that can be opened/printed
-    // In a real implementation, you'd use jsPDF or similar library
-    const htmlBlob = new Blob([pdfContent], { type: 'text/html' });
+    const reportWindow = window.open('', '_blank', 'width=900,height=700');
+    if (!reportWindow) {
+      throw new Error('Unable to open report window. Please allow popups for this site.');
+    }
     
-    // For actual PDF generation, you would use:
-    // const jsPDF = await import('jspdf');
-    // const pdf = new jsPDF.jsPDF();
-    // pdf.html(pdfContent);
-    // return pdf.output('blob');
+    reportWindow.document.write(htmlContent);
+    reportWindow.document.close();
     
-    return htmlBlob;
+    // Auto-focus the window
+    reportWindow.onload = () => {
+      reportWindow.focus();
+    };
+    
+    console.log('Communication styles HTML report generated successfully');
+    
   } catch (error) {
-    console.error('Error generating PDF:', error);
-    throw new Error('Failed to generate PDF report');
+    console.error('Error generating HTML report:', error);
+    throw new Error('Failed to generate HTML report');
   }
 };

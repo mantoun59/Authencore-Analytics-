@@ -12,7 +12,7 @@ import { useCommunicationStylesScoring } from "@/hooks/useCommunicationStylesSco
 import { useCommunicationStylesTranslation } from "@/hooks/useCommunicationStylesTranslation";
 import EnhancedCommunicationStylesVisualizer from "./CommunicationStylesEnhancedVisualizer";
 import TeamCompatibilityAnalyzer from "./TeamCompatibilityAnalyzer";
-import { generateCommunicationStylesPDF } from "@/utils/communicationStylesPdfGenerator";
+import { generateCommunicationStylesHtml } from "@/utils/communicationHtmlGenerator";
 import { generateCommunicationStylesHTML } from "@/utils/communicationStylesHtmlGenerator";
 import { useToast } from "@/hooks/use-toast";
 
@@ -94,11 +94,11 @@ const CommunicationStylesAssessment: React.FC<CommunicationStylesAssessmentProps
     }
   };
 
-  const downloadPDF = async () => {
+  const generateReport = async () => {
     if (!results) return;
     
     try {
-      const pdfBlob = await generateCommunicationStylesPDF({
+      await generateCommunicationStylesHtml({
         results,
         participantName: participantName || "Assessment Participant",
         participantEmail: participantEmail || "",
@@ -107,24 +107,15 @@ const CommunicationStylesAssessment: React.FC<CommunicationStylesAssessmentProps
         language: currentLanguage
       });
       
-      const url = URL.createObjectURL(pdfBlob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `communication-styles-report-${Date.now()}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
       toast({
-        title: "PDF Generated",
-        description: "Your communication styles report has been downloaded.",
+        title: "Report Generated",
+        description: "Your communication styles report has been opened in a new window.",
       });
     } catch (error) {
-      console.error('Error generating PDF:', error);
+      console.error('Error generating HTML report:', error);
       toast({
         title: "Error",
-        description: "Failed to generate PDF report. Please try again.",
+        description: "Failed to generate HTML report. Please try again.",
         variant: "destructive"
       });
     }

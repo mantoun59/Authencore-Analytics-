@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { generateClientSidePdf } from '@/utils/clientPdfGenerator';
+import { generateHtmlReport } from '@/utils/htmlReportGenerator';
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
@@ -366,8 +366,8 @@ export default function CAIRAssessment() {
       };
 
       try {
-        generateClientSidePdf({
-          assessmentType: 'CAIR+ Personality',
+        await generateHtmlReport({
+          assessmentType: 'cair-personality',
           userInfo: {
             name: userProfile.name,
             email: userProfile.email,
