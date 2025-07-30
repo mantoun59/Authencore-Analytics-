@@ -118,9 +118,9 @@ const SampleReports = () => {
       let reportData;
       if (selectedAssessment === 'emotional-intelligence' || selectedAssessment === 'emotional') {
         console.log('✅ Using career launch model for emotional intelligence report');
-        // Use the same structure as career launch
+        // Use the same structure as career launch with enriched content
         reportData = reportType === 'employer' ? {
-          assessmentType: 'Emotional Intelligence Assessment - Employer Report',
+          assessmentType: 'Emotional Intelligence Assessment - Comprehensive Employer Report',
           reportType: 'employer' as const,
           userInfo: {
             name: 'Sarah Johnson',
@@ -131,88 +131,187 @@ const SampleReports = () => {
             reliabilityScore: 95,
             reportId: `EI-EMP-${Date.now()}`,
             position: 'Senior Marketing Coordinator',
-            department: 'Marketing'
+            department: 'Marketing',
+            yearsExperience: '5-7 years',
+            educationLevel: 'Bachelor\'s Degree',
+            assessmentVersion: '2024-EQ-Pro'
           },
           overallScore: 81,
+          executiveSummary: {
+            hiringRecommendation: 'HIGHLY RECOMMENDED',
+            riskLevel: 'Low Risk',
+            culturalFit: 92,
+            leadershipPotential: 85,
+            teamCollaboration: 88,
+            stressResilience: 73,
+            summary: 'Sarah demonstrates exceptional emotional intelligence with particularly strong self-awareness, empathy, and social skills. Her high EQ scores indicate excellent potential for leadership roles and team collaboration. Primary development area is stress management under high-pressure situations.',
+            keyHighlights: [
+              'Top 15% in self-awareness and empathy dimensions',
+              'Natural leadership qualities with high social intelligence',
+              'Strong cultural fit and team collaboration potential',
+              'Moderate stress management - suitable for structured environments'
+            ]
+          },
           dimensions: [
-            { name: 'Self-Awareness', score: 89, level: 'Very High', description: 'Demonstrates excellent understanding of personal emotions, triggers, and behavioral patterns with strong capacity for self-reflection.' },
-            { name: 'Self-Regulation', score: 73, level: 'High', description: 'Good emotional control with developing stress management skills; shows ability to manage reactions effectively.' },
-            { name: 'Motivation', score: 83, level: 'Very High', description: 'High internal drive and goal orientation with demonstrated resilience, optimism, and commitment to excellence.' },
-            { name: 'Empathy', score: 86, level: 'Very High', description: 'Strong ability to understand and relate to others\' emotions with excellent social awareness and perspective-taking.' },
-            { name: 'Social Skills', score: 85, level: 'Very High', description: 'Excellent interpersonal and relationship-building skills with strong communication abilities and natural leadership qualities.' }
+            { 
+              name: 'Self-Awareness', 
+              score: 89, 
+              level: 'Very High', 
+              description: 'Demonstrates exceptional understanding of personal emotions, triggers, and behavioral patterns. Shows remarkable capacity for self-reflection and emotional insight. Recognizes impact of emotions on performance and relationships.',
+              businessImpact: 'High self-awareness translates to better decision-making, authentic leadership, and continuous self-improvement.',
+              interviewFocus: 'Ask about times when self-awareness helped navigate challenges or improve performance.'
+            },
+            { 
+              name: 'Self-Regulation', 
+              score: 73, 
+              level: 'High', 
+              description: 'Good emotional control with developing stress management skills. Shows ability to manage reactions effectively in most situations. May need support during peak stress periods.',
+              businessImpact: 'Adequate self-regulation for most roles; may need stress management support in high-pressure environments.',
+              interviewFocus: 'Explore stress management strategies and examples of maintaining composure under pressure.'
+            },
+            { 
+              name: 'Motivation', 
+              score: 83, 
+              level: 'Very High', 
+              description: 'High internal drive and goal orientation with demonstrated resilience, optimism, and commitment to excellence. Shows strong persistence and achievement focus.',
+              businessImpact: 'High motivation drives performance, goal achievement, and positive team energy.',
+              interviewFocus: 'Discuss long-term goals, what motivates peak performance, and examples of perseverance.'
+            },
+            { 
+              name: 'Empathy', 
+              score: 86, 
+              level: 'Very High', 
+              description: 'Exceptional ability to understand and relate to others\' emotions with excellent social awareness and perspective-taking. Naturally attuned to team dynamics and individual needs.',
+              businessImpact: 'Strong empathy enhances customer relations, team cohesion, and conflict resolution capabilities.',
+              interviewFocus: 'Ask about understanding different perspectives and supporting team members through challenges.'
+            },
+            { 
+              name: 'Social Skills', 
+              score: 85, 
+              level: 'Very High', 
+              description: 'Excellent interpersonal and relationship-building skills with strong communication abilities and natural leadership qualities. Skilled at influence, teamwork, and relationship management.',
+              businessImpact: 'Superior social skills drive team effectiveness, stakeholder relationships, and organizational influence.',
+              interviewFocus: 'Explore leadership experiences, team building, and managing difficult conversations.'
+            }
           ],
           strengths: [
-            'Exceptional emotional self-awareness and insight',
-            'Strong empathetic understanding of others',
-            'Excellent interpersonal communication skills',
-            'High motivation and goal-oriented mindset',
-            'Natural leadership and relationship-building abilities'
+            'Exceptional emotional self-awareness enables authentic leadership and continuous improvement',
+            'Strong empathetic understanding builds trust and enhances team relationships',
+            'Excellent interpersonal communication facilitates collaboration and influence',
+            'High motivation and goal orientation drives results and team inspiration',
+            'Natural relationship-building abilities strengthen stakeholder connections',
+            'Superior social intelligence enables effective team dynamics management',
+            'Strong cultural sensitivity and adaptability in diverse environments',
+            'Authentic leadership style that inspires trust and followership'
           ],
           developmentAreas: [
-            'Stress management under high-pressure situations',
-            'Emotional regulation during challenging interactions',
-            'Influence and persuasion techniques',
-            'Conflict resolution and difficult conversations',
-            'Maintaining emotional balance during organizational changes'
+            'Stress management techniques for high-pressure deadline situations',
+            'Emotional regulation strategies during organizational restructuring',
+            'Advanced influence and persuasion techniques for senior stakeholder management',
+            'Conflict resolution skills for complex multi-party disputes',
+            'Maintaining emotional balance during rapid organizational changes',
+            'Executive presence development for C-suite interactions',
+            'Advanced negotiation skills leveraging emotional intelligence',
+            'Resilience building for sustained high-performance periods'
           ],
           recommendations: [
-            'Practice mindfulness and stress reduction techniques daily',
-            'Develop emotional regulation strategies for high-pressure situations',
-            'Seek leadership development opportunities to leverage natural EQ strengths',
-            'Build influence and persuasion skills through communication training',
-            'Create a personal emotional intelligence development plan',
-            'Consider coaching or mentoring roles to utilize empathy and social skills'
+            'Implement daily mindfulness practice to enhance stress management capabilities',
+            'Enroll in executive leadership development program to leverage natural EQ strengths',
+            'Provide stress management coaching for high-pressure situations',
+            'Create structured feedback system to maintain high self-awareness',
+            'Assign mentoring role to utilize empathy and social skills',
+            'Offer advanced communication and influence training',
+            'Provide conflict resolution and negotiation skills development',
+            'Consider leadership succession planning given high EQ foundation'
           ],
           contextualEffectiveness: {
-            'Team Leadership': { score: 88, description: 'Excellent at understanding team dynamics and motivating colleagues' },
-            'Client Relations': { score: 85, description: 'Strong empathy and communication skills enhance customer relationships' },
-            'Conflict Resolution': { score: 70, description: 'Good foundation but could improve in high-stress conflict situations' },
-            'Stress Management': { score: 73, description: 'Generally manages stress well but needs strategies for peak pressure' },
-            'Change Management': { score: 80, description: 'Adapts well to change and helps others navigate transitions' },
-            'Cross-Cultural Communication': { score: 82, description: 'Strong cultural sensitivity and adaptability in diverse environments' }
+            'Team Leadership': { score: 88, description: 'Excellent at understanding team dynamics, motivating colleagues, and creating psychological safety' },
+            'Client Relations': { score: 85, description: 'Strong empathy and communication skills significantly enhance customer relationships and satisfaction' },
+            'Conflict Resolution': { score: 70, description: 'Good foundation but needs structured approach and training for complex conflicts' },
+            'Stress Management': { score: 73, description: 'Generally manages stress well but requires support strategies for sustained high-pressure periods' },
+            'Change Management': { score: 80, description: 'Adapts well to change and effectively helps others navigate transitions and uncertainty' },
+            'Cross-Cultural Communication': { score: 82, description: 'Strong cultural sensitivity and adaptability enable effective work in diverse global environments' },
+            'Executive Presence': { score: 75, description: 'Good foundation with room for development in senior leadership interactions' },
+            'Crisis Management': { score: 68, description: 'Adequate but would benefit from crisis leadership training and stress management techniques' }
           },
           workingStyles: {
-            'Emotional Approach': 'Highly self-aware and empathetic, with strong emotional intelligence foundation',
-            'Stress Response': 'Generally composed but may need additional coping strategies for intense pressure',
-            'Relationship Building': 'Natural relationship builder who creates strong interpersonal connections',
-            'Team Dynamics': 'Excellent team player who understands and responds to group emotional needs',
-            'Communication Style': 'Empathetic and emotionally intelligent communicator who reads situations well'
+            'Leadership Approach': 'Authentic, empathetic leader who builds trust through genuine connection and emotional intelligence',
+            'Stress Response': 'Generally composed with good baseline resilience; may need additional support during sustained pressure',
+            'Relationship Building': 'Natural relationship builder who creates strong, lasting interpersonal connections across all levels',
+            'Team Dynamics': 'Excellent team player who intuitively understands and responds to group emotional needs and dynamics',
+            'Communication Style': 'Emotionally intelligent communicator who adapts style to audience and reads situations accurately',
+            'Decision Making': 'Balances analytical thinking with emotional intelligence for well-rounded decision-making',
+            'Feedback Reception': 'High self-awareness enables excellent receptivity to feedback and continuous improvement',
+            'Conflict Style': 'Collaborative approach focusing on understanding all perspectives before seeking resolution'
           },
           careerMatches: [
             {
-              career: { title: 'Team Lead/People Manager', description: 'Leading teams and managing people development' },
+              career: { title: 'Senior People Manager / Director', description: 'Leading large teams and developing organizational culture' },
+              matchPercentage: 92,
+              fitScore: 90,
+              readinessLevel: 'Highly Qualified',
+              skillGaps: ['Executive presence', 'Strategic planning'],
+              strengthAlignment: ['Empathy', 'Social Skills', 'Self-Awareness', 'Motivation'],
+              salaryExpectation: '$85,000 - $120,000',
+              growthPotential: 'Very High',
+              developmentPath: ['Executive leadership program', 'Strategic thinking training', 'Executive presence coaching']
+            },
+            {
+              career: { title: 'Customer Success Director', description: 'Leading customer relationships and driving retention strategies' },
               matchPercentage: 88,
               fitScore: 86,
               readinessLevel: 'Highly Qualified',
-              skillGaps: ['Stress management'],
-              strengthAlignment: ['Empathy', 'Social Skills', 'Self-Awareness'],
-              salaryExpectation: '$70,000 - $90,000',
+              skillGaps: ['Strategic customer planning'],
+              strengthAlignment: ['Empathy', 'Communication', 'Relationship building'],
+              salaryExpectation: '$80,000 - $110,000',
               growthPotential: 'Very High',
-              developmentPath: ['Leadership training', 'Stress management', 'Advanced emotional intelligence']
+              developmentPath: ['Customer success certification', 'Strategic account management']
             },
             {
-              career: { title: 'Customer Success Manager', description: 'Building and maintaining customer relationships' },
+              career: { title: 'Human Resources Business Partner', description: 'Strategic HR support and organizational development' },
               matchPercentage: 85,
               fitScore: 83,
               readinessLevel: 'Qualified',
-              skillGaps: ['Technical product knowledge'],
-              strengthAlignment: ['Empathy', 'Communication', 'Relationship building'],
-              salaryExpectation: '$65,000 - $85,000',
+              skillGaps: ['HR compliance', 'Employment law', 'Data analytics'],
+              strengthAlignment: ['Empathy', 'Social Skills', 'Motivation', 'Self-Awareness'],
+              salaryExpectation: '$75,000 - $100,000',
               growthPotential: 'High',
-              developmentPath: ['Customer success training', 'Product knowledge']
-            },
-            {
-              career: { title: 'Human Resources Specialist', description: 'Supporting employee development and organizational culture' },
-              matchPercentage: 82,
-              fitScore: 80,
-              readinessLevel: 'Qualified',
-              skillGaps: ['HR compliance', 'Employment law'],
-              strengthAlignment: ['Empathy', 'Social Skills', 'Motivation'],
-              salaryExpectation: '$60,000 - $80,000',
-              growthPotential: 'High',
-              developmentPath: ['HR certification', 'Employment law training']
+              developmentPath: ['SHRM certification', 'Employment law training', 'HR analytics']
             }
           ],
+          hiringInsights: {
+            riskAssessment: {
+              overallRisk: 'Low',
+              retentionRisk: 'Very Low',
+              performanceRisk: 'Low',
+              culturalRisk: 'Very Low',
+              leadershipRisk: 'Low'
+            },
+            onboardingRecommendations: [
+              'Provide comprehensive 90-day emotional intelligence leadership development plan',
+              'Assign senior mentor with strong EQ for leadership guidance',
+              'Create structured feedback system to leverage high self-awareness',
+              'Include stress management resources and training in first 60 days',
+              'Set clear expectations for leadership behavior and team dynamics',
+              'Provide access to executive coaching for advanced EQ development'
+            ],
+            managementGuidance: [
+              'Leverage natural empathy for team development and mentoring opportunities',
+              'Provide regular feedback to maintain high self-awareness and growth',
+              'Support with stress management techniques during high-pressure periods',
+              'Encourage leadership role in change management initiatives',
+              'Utilize for conflict resolution and team building activities',
+              'Consider for cross-functional team leadership roles'
+            ],
+            interviewQuestions: [
+              'Describe a time when understanding your emotions helped you make a better business decision.',
+              'Tell me about a situation where you had to manage your emotional response during a stressful period.',
+              'How do you recognize and respond to the emotional needs of your team members?',
+              'Give an example of how you\'ve used empathy to resolve a conflict or difficult situation.',
+              'Describe your approach to giving difficult feedback while maintaining relationships.',
+              'How do you maintain emotional balance during organizational changes or uncertainty?'
+            ]
+          },
           branding: {
             logo: '/final-logo.png',
             colors: {
@@ -222,7 +321,7 @@ const SampleReports = () => {
             company: 'AuthenCore Analytics'
           }
         } : {
-          assessmentType: 'Emotional Intelligence Assessment',
+          assessmentType: 'Emotional Intelligence Assessment - Personal Development Report',
           reportType: 'standard' as const,
           userInfo: {
             name: 'Sarah Johnson',
@@ -231,45 +330,146 @@ const SampleReports = () => {
             questionsAnswered: 70,
             timeSpent: '22 minutes',
             reliabilityScore: 95,
-            reportId: `EI-${Date.now()}`
+            reportId: `EI-${Date.now()}`,
+            assessmentVersion: '2024-EQ-Pro'
           },
           overallScore: 81,
+          executiveSummary: {
+            overallLevel: 'High Emotional Intelligence',
+            percentile: '85th percentile',
+            summary: 'You demonstrate exceptional emotional intelligence with particularly strong abilities in self-awareness, empathy, and social skills. Your EQ profile suggests natural leadership capabilities and excellent relationship-building skills.',
+            keyStrengths: [
+              'Outstanding self-awareness and emotional insight',
+              'Exceptional empathy and understanding of others',
+              'Strong social skills and relationship building',
+              'High motivation and goal orientation'
+            ],
+            developmentOpportunities: [
+              'Stress management techniques',
+              'Advanced emotional regulation',
+              'Influence and persuasion skills'
+            ]
+          },
           dimensions: [
-            { name: 'Self-Awareness', score: 89, level: 'Very High', description: 'You demonstrate excellent understanding of your personal emotions, triggers, and behavioral patterns.' },
-            { name: 'Self-Regulation', score: 73, level: 'High', description: 'You show good emotional control with opportunities to develop stress management skills further.' },
-            { name: 'Motivation', score: 83, level: 'Very High', description: 'You possess high internal drive and goal orientation with strong resilience and optimism.' },
-            { name: 'Empathy', score: 86, level: 'Very High', description: 'You have a strong ability to understand and relate to others\' emotions and perspectives.' },
-            { name: 'Social Skills', score: 85, level: 'Very High', description: 'You excel at interpersonal communication and relationship-building with natural leadership qualities.' }
+            { 
+              name: 'Self-Awareness', 
+              score: 89, 
+              level: 'Very High', 
+              description: 'You have exceptional understanding of your personal emotions, triggers, and behavioral patterns. This self-knowledge is a tremendous strength that enables authentic leadership and continuous personal growth.',
+              personalInsight: 'Your high self-awareness means you can recognize emotional patterns and their impact on your performance and relationships.',
+              developmentTip: 'Continue to practice self-reflection and seek feedback to maintain this valuable awareness.'
+            },
+            { 
+              name: 'Self-Regulation', 
+              score: 73, 
+              level: 'High', 
+              description: 'You show good emotional control with opportunities to develop stress management skills further. You generally manage your reactions well but may benefit from additional techniques during high-pressure situations.',
+              personalInsight: 'You have a solid foundation in emotional control but can enhance your stress management capabilities.',
+              developmentTip: 'Practice mindfulness, deep breathing, and other stress management techniques to strengthen this area.'
+            },
+            { 
+              name: 'Motivation', 
+              score: 83, 
+              level: 'Very High', 
+              description: 'You possess high internal drive and goal orientation with strong resilience and optimism. Your motivation is a key driver of your success and positive impact on others.',
+              personalInsight: 'Your strong internal motivation helps you persist through challenges and achieve your goals.',
+              developmentTip: 'Channel your motivation into mentoring others and taking on leadership challenges.'
+            },
+            { 
+              name: 'Empathy', 
+              score: 86, 
+              level: 'Very High', 
+              description: 'You have a remarkable ability to understand and relate to others\' emotions and perspectives. This strength makes you naturally effective in relationships and team situations.',
+              personalInsight: 'Your empathy allows you to connect deeply with others and understand their needs and motivations.',
+              developmentTip: 'Use your empathy to build bridges in conflicts and create inclusive environments.'
+            },
+            { 
+              name: 'Social Skills', 
+              score: 85, 
+              level: 'Very High', 
+              description: 'You excel at interpersonal communication and relationship-building with natural leadership qualities. Your social intelligence is a significant asset in both personal and professional contexts.',
+              personalInsight: 'Your social skills enable you to influence, collaborate, and lead effectively.',
+              developmentTip: 'Consider roles that leverage your social skills, such as team leadership or client relations.'
+            }
           ],
           strengths: [
-            'Exceptional emotional self-awareness and personal insight',
-            'Strong empathetic understanding and connection with others',
-            'Excellent interpersonal communication and social skills',
-            'High motivation and goal-oriented mindset',
-            'Natural relationship-building and leadership abilities'
+            'Exceptional emotional self-awareness enables authentic self-expression and continuous growth',
+            'Strong empathetic understanding helps you build meaningful relationships and trust',
+            'Excellent interpersonal communication facilitates collaboration and positive influence',
+            'High motivation and resilience drive your success and inspire others',
+            'Natural relationship-building abilities create strong personal and professional networks',
+            'Superior social intelligence helps you navigate complex interpersonal dynamics',
+            'Strong emotional insight enables you to support others through challenges',
+            'Authentic approach to relationships builds lasting trust and respect'
           ],
           developmentAreas: [
-            'Stress management techniques for high-pressure situations',
-            'Emotional regulation strategies during challenging interactions',
-            'Building influence and persuasion skills',
-            'Conflict resolution and difficult conversation navigation',
-            'Maintaining emotional balance during times of change'
+            'Stress management techniques for maintaining peak performance under pressure',
+            'Advanced emotional regulation strategies for challenging interpersonal situations',
+            'Building influence and persuasion skills to enhance leadership effectiveness',
+            'Conflict resolution techniques for complex or emotionally charged situations',
+            'Maintaining emotional balance during periods of significant change or uncertainty',
+            'Executive presence development for senior-level interactions and presentations',
+            'Advanced communication skills for difficult conversations and negotiations',
+            'Resilience building techniques for sustained high-performance periods'
           ],
           recommendations: [
-            'Practice daily mindfulness or meditation to enhance self-regulation',
-            'Develop a personal stress management toolkit with proven techniques',
-            'Seek opportunities to practice leadership and influence skills',
-            'Consider emotional intelligence coaching or advanced training',
-            'Join professional development groups focused on interpersonal skills',
-            'Practice active listening and empathy in challenging situations'
+            'Develop a daily mindfulness or meditation practice to enhance emotional regulation',
+            'Create a personal stress management toolkit with proven techniques and strategies',
+            'Seek opportunities to practice and develop your natural leadership abilities',
+            'Consider emotional intelligence coaching to maximize your EQ potential',
+            'Join professional development groups focused on advanced interpersonal skills',
+            'Practice active listening and empathy skills in challenging situations',
+            'Pursue leadership roles that leverage your emotional intelligence strengths',
+            'Develop a personal brand around your emotional intelligence and relationship skills'
           ],
-          careerRecommendations: [
-            'Leadership and management roles',
-            'Human resources and people development',
-            'Customer service and relationship management',
-            'Counseling and coaching positions',
-            'Team leadership and collaboration roles'
-          ],
+          careerGuidance: {
+            idealRoles: [
+              'Leadership and management positions across all industries',
+              'Human resources and organizational development roles',
+              'Customer success and relationship management positions',
+              'Counseling, coaching, and people development careers',
+              'Team leadership and collaborative project management',
+              'Sales and business development roles requiring relationship building',
+              'Healthcare and social services positions',
+              'Education and training roles'
+            ],
+            careerDevelopment: [
+              'Seek leadership opportunities to practice and develop your natural EQ abilities',
+              'Consider industries that value emotional intelligence such as healthcare, education, or consulting',
+              'Build expertise in areas like change management, team development, or organizational culture',
+              'Develop complementary skills like strategic thinking or technical expertise',
+              'Network in professional associations focused on leadership and emotional intelligence',
+              'Consider pursuing certifications in coaching, leadership, or organizational development'
+            ],
+            workEnvironments: [
+              'Collaborative, team-oriented cultures that value emotional intelligence',
+              'Organizations undergoing change that need emotionally intelligent leaders',
+              'Customer-focused businesses that prioritize relationship building',
+              'Inclusive, diverse workplaces that value empathy and understanding',
+              'Companies with strong emphasis on employee development and culture',
+              'Mission-driven organizations that align with your values and motivation'
+            ]
+          },
+          actionPlan: {
+            immediate: [
+              'Begin a daily 10-minute mindfulness practice to enhance self-regulation',
+              'Identify and document your stress triggers and current coping strategies',
+              'Seek feedback from trusted colleagues about your emotional intelligence strengths',
+              'Research and select one stress management technique to practice consistently'
+            ],
+            shortTerm: [
+              'Enroll in a stress management or emotional regulation workshop',
+              'Join a professional development group or book club focused on emotional intelligence',
+              'Volunteer for a leadership role in a project or community organization',
+              'Practice difficult conversations using your empathy and social skills'
+            ],
+            longTerm: [
+              'Consider pursuing formal leadership development or coaching certification',
+              'Develop expertise in a specific area like change management or team dynamics',
+              'Seek mentoring opportunities to help others develop their emotional intelligence',
+              'Build a personal brand and network around your emotional intelligence expertise'
+            ]
+          },
           branding: {
             logo: '/final-logo.png',
             colors: {
