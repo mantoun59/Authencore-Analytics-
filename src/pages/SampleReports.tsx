@@ -117,87 +117,168 @@ const SampleReports = () => {
       // Assessment-specific data mapping
       let reportData;
       if (selectedAssessment === 'emotional-intelligence' || selectedAssessment === 'emotional') {
-        console.log('✅ Using dedicated emotional intelligence path - MATCHED!');
-        // Use the dedicated emotional intelligence report generator
-        const { generateEmotionalIntelligenceReport } = await import('@/services/emotionalIntelligenceReportGenerator');
-        const sampleData = reportType === 'employer' 
-          ? getSampleEmployerReport(selectedAssessment)
-          : getSampleCandidateReport(selectedAssessment);
-        
-        const reportHtml = generateEmotionalIntelligenceReport({
-          candidateInfo: {
+        console.log('✅ Using career launch model for emotional intelligence report');
+        // Use the same structure as career launch
+        reportData = reportType === 'employer' ? {
+          assessmentType: 'Emotional Intelligence Assessment - Employer Report',
+          reportType: 'employer' as const,
+          userInfo: {
             name: 'Sarah Johnson',
             email: 'sarah.johnson@email.com',
-            position: reportType === 'employer' ? 'Senior Marketing Coordinator' : undefined,
-            organization: reportType === 'employer' ? 'Tech Innovations Inc.' : undefined,
-            assessmentDate: new Date().toLocaleDateString()
+            assessmentDate: new Date().toLocaleDateString(),
+            questionsAnswered: 70,
+            timeSpent: '22 minutes',
+            reliabilityScore: 95,
+            reportId: `EI-EMP-${Date.now()}`,
+            position: 'Senior Marketing Coordinator',
+            department: 'Marketing'
           },
-          results: {
-            overallScore: 81,
-            scores: {
-              selfAwareness: {
-                raw: 89,
-                percentage: 89,
-                level: 'High',
-                interpretation: 'Demonstrates excellent understanding of personal emotions, triggers, and behavioral patterns. Shows strong capacity for self-reflection and emotional insight.'
-              },
-              selfRegulation: {
-                raw: 73,
-                percentage: 73,
-                level: 'Medium',
-                interpretation: 'Good emotional control with room for improvement in stress management. Shows ability to manage reactions but may struggle under high pressure situations.'
-              },
-              motivation: {
-                raw: 83,
-                percentage: 83,
-                level: 'High',
-                interpretation: 'High internal drive and goal orientation. Demonstrates resilience, optimism, and commitment to personal and professional excellence.'
-              },
-              empathy: {
-                raw: 86,
-                percentage: 86,
-                level: 'High',
-                interpretation: 'Strong ability to understand and relate to others\' emotions and perspectives. Excellent at reading social cues and responding appropriately.'
-              },
-              socialSkills: {
-                raw: 85,
-                percentage: 85,
-                level: 'High',
-                interpretation: 'Excellent interpersonal and relationship-building skills. Strong communication abilities and natural leadership qualities.'
-              }
+          overallScore: 81,
+          dimensions: [
+            { name: 'Self-Awareness', score: 89, level: 'Very High', description: 'Demonstrates excellent understanding of personal emotions, triggers, and behavioral patterns with strong capacity for self-reflection.' },
+            { name: 'Self-Regulation', score: 73, level: 'High', description: 'Good emotional control with developing stress management skills; shows ability to manage reactions effectively.' },
+            { name: 'Motivation', score: 83, level: 'Very High', description: 'High internal drive and goal orientation with demonstrated resilience, optimism, and commitment to excellence.' },
+            { name: 'Empathy', score: 86, level: 'Very High', description: 'Strong ability to understand and relate to others\' emotions with excellent social awareness and perspective-taking.' },
+            { name: 'Social Skills', score: 85, level: 'Very High', description: 'Excellent interpersonal and relationship-building skills with strong communication abilities and natural leadership qualities.' }
+          ],
+          strengths: [
+            'Exceptional emotional self-awareness and insight',
+            'Strong empathetic understanding of others',
+            'Excellent interpersonal communication skills',
+            'High motivation and goal-oriented mindset',
+            'Natural leadership and relationship-building abilities'
+          ],
+          developmentAreas: [
+            'Stress management under high-pressure situations',
+            'Emotional regulation during challenging interactions',
+            'Influence and persuasion techniques',
+            'Conflict resolution and difficult conversations',
+            'Maintaining emotional balance during organizational changes'
+          ],
+          recommendations: [
+            'Practice mindfulness and stress reduction techniques daily',
+            'Develop emotional regulation strategies for high-pressure situations',
+            'Seek leadership development opportunities to leverage natural EQ strengths',
+            'Build influence and persuasion skills through communication training',
+            'Create a personal emotional intelligence development plan',
+            'Consider coaching or mentoring roles to utilize empathy and social skills'
+          ],
+          contextualEffectiveness: {
+            'Team Leadership': { score: 88, description: 'Excellent at understanding team dynamics and motivating colleagues' },
+            'Client Relations': { score: 85, description: 'Strong empathy and communication skills enhance customer relationships' },
+            'Conflict Resolution': { score: 70, description: 'Good foundation but could improve in high-stress conflict situations' },
+            'Stress Management': { score: 73, description: 'Generally manages stress well but needs strategies for peak pressure' },
+            'Change Management': { score: 80, description: 'Adapts well to change and helps others navigate transitions' },
+            'Cross-Cultural Communication': { score: 82, description: 'Strong cultural sensitivity and adaptability in diverse environments' }
+          },
+          workingStyles: {
+            'Emotional Approach': 'Highly self-aware and empathetic, with strong emotional intelligence foundation',
+            'Stress Response': 'Generally composed but may need additional coping strategies for intense pressure',
+            'Relationship Building': 'Natural relationship builder who creates strong interpersonal connections',
+            'Team Dynamics': 'Excellent team player who understands and responds to group emotional needs',
+            'Communication Style': 'Empathetic and emotionally intelligent communicator who reads situations well'
+          },
+          careerMatches: [
+            {
+              career: { title: 'Team Lead/People Manager', description: 'Leading teams and managing people development' },
+              matchPercentage: 88,
+              fitScore: 86,
+              readinessLevel: 'Highly Qualified',
+              skillGaps: ['Stress management'],
+              strengthAlignment: ['Empathy', 'Social Skills', 'Self-Awareness'],
+              salaryExpectation: '$70,000 - $90,000',
+              growthPotential: 'Very High',
+              developmentPath: ['Leadership training', 'Stress management', 'Advanced emotional intelligence']
             },
-            recommendations: [
-              {
-                dimension: 'Self-Regulation',
-                suggestions: [
-                  'Practice mindfulness meditation for 10 minutes daily to improve emotional awareness',
-                  'Develop stress management techniques such as deep breathing exercises',
-                  'Create a personal emotion regulation toolkit with coping strategies',
-                  'Seek feedback from colleagues about emotional responses under pressure'
-                ]
-              },
-              {
-                dimension: 'Stress Management',
-                suggestions: [
-                  'Implement time management strategies to reduce work-related stress',
-                  'Learn to recognize early warning signs of stress and overwhelm',
-                  'Practice saying no to additional responsibilities when at capacity',
-                  'Develop a support network for challenging situations'
-                ]
-              }
-            ]
+            {
+              career: { title: 'Customer Success Manager', description: 'Building and maintaining customer relationships' },
+              matchPercentage: 85,
+              fitScore: 83,
+              readinessLevel: 'Qualified',
+              skillGaps: ['Technical product knowledge'],
+              strengthAlignment: ['Empathy', 'Communication', 'Relationship building'],
+              salaryExpectation: '$65,000 - $85,000',
+              growthPotential: 'High',
+              developmentPath: ['Customer success training', 'Product knowledge']
+            },
+            {
+              career: { title: 'Human Resources Specialist', description: 'Supporting employee development and organizational culture' },
+              matchPercentage: 82,
+              fitScore: 80,
+              readinessLevel: 'Qualified',
+              skillGaps: ['HR compliance', 'Employment law'],
+              strengthAlignment: ['Empathy', 'Social Skills', 'Motivation'],
+              salaryExpectation: '$60,000 - $80,000',
+              growthPotential: 'High',
+              developmentPath: ['HR certification', 'Employment law training']
+            }
+          ],
+          branding: {
+            logo: '/final-logo.png',
+            colors: {
+              primary: '#008080',
+              secondary: '#20B2AA'
+            },
+            company: 'AuthenCore Analytics'
+          }
+        } : {
+          assessmentType: 'Emotional Intelligence Assessment',
+          reportType: 'standard' as const,
+          userInfo: {
+            name: 'Sarah Johnson',
+            email: 'sarah.johnson@email.com',
+            assessmentDate: new Date().toLocaleDateString(),
+            questionsAnswered: 70,
+            timeSpent: '22 minutes',
+            reliabilityScore: 95,
+            reportId: `EI-${Date.now()}`
           },
-          reportType: reportType as 'candidate' | 'employer'
-        });
-        
-        // Open the report in a new window
-        const newWindow = window.open('', '_blank');
-        if (newWindow) {
-          newWindow.document.write(reportHtml);
-          newWindow.document.close();
-        }
-        toast.success(`Sample ${reportType} report generated successfully!`);
-        return;
+          overallScore: 81,
+          dimensions: [
+            { name: 'Self-Awareness', score: 89, level: 'Very High', description: 'You demonstrate excellent understanding of your personal emotions, triggers, and behavioral patterns.' },
+            { name: 'Self-Regulation', score: 73, level: 'High', description: 'You show good emotional control with opportunities to develop stress management skills further.' },
+            { name: 'Motivation', score: 83, level: 'Very High', description: 'You possess high internal drive and goal orientation with strong resilience and optimism.' },
+            { name: 'Empathy', score: 86, level: 'Very High', description: 'You have a strong ability to understand and relate to others\' emotions and perspectives.' },
+            { name: 'Social Skills', score: 85, level: 'Very High', description: 'You excel at interpersonal communication and relationship-building with natural leadership qualities.' }
+          ],
+          strengths: [
+            'Exceptional emotional self-awareness and personal insight',
+            'Strong empathetic understanding and connection with others',
+            'Excellent interpersonal communication and social skills',
+            'High motivation and goal-oriented mindset',
+            'Natural relationship-building and leadership abilities'
+          ],
+          developmentAreas: [
+            'Stress management techniques for high-pressure situations',
+            'Emotional regulation strategies during challenging interactions',
+            'Building influence and persuasion skills',
+            'Conflict resolution and difficult conversation navigation',
+            'Maintaining emotional balance during times of change'
+          ],
+          recommendations: [
+            'Practice daily mindfulness or meditation to enhance self-regulation',
+            'Develop a personal stress management toolkit with proven techniques',
+            'Seek opportunities to practice leadership and influence skills',
+            'Consider emotional intelligence coaching or advanced training',
+            'Join professional development groups focused on interpersonal skills',
+            'Practice active listening and empathy in challenging situations'
+          ],
+          careerRecommendations: [
+            'Leadership and management roles',
+            'Human resources and people development',
+            'Customer service and relationship management',
+            'Counseling and coaching positions',
+            'Team leadership and collaboration roles'
+          ],
+          branding: {
+            logo: '/final-logo.png',
+            colors: {
+              primary: '#008080',
+              secondary: '#20B2AA'
+            },
+            company: 'AuthenCore Analytics'
+          }
+        };
       } else if (selectedAssessment === 'burnout-prevention' || selectedAssessment === 'burnout') {
         // Use standard HTML generator like other assessments
         reportData = {
