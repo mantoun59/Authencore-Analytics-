@@ -60,8 +60,10 @@ const PartnerAnalytics = lazy(() => import("@/pages/PartnerAnalytics"));
 
 // Lazy load - Reports & Materials
 const SampleCareerLaunchReport = lazy(() => import("@/pages/SampleCareerLaunchReport"));
-const SampleReports = lazy(() => import("@/pages/SampleReports"));
 const Payment = lazy(() => import("@/pages/Payment"));
+
+// Regular import for SampleReports to fix dynamic import error
+import SampleReports from "@/pages/SampleReports";
 
 // Note: Description pages moved to immediate imports to prevent chunk loading errors
 
@@ -273,11 +275,7 @@ const RouteConfig = () => {
           <SampleCareerLaunchReport />
         </Suspense>
       } />
-      <Route path="/sample-reports" element={
-        <Suspense fallback={<LoadingFallback message="Loading Sample Reports..." />}>
-          <SampleReports />
-        </Suspense>
-      } />
+      <Route path="/sample-reports" element={<SampleReports />} />
       
       {/* Protected Admin Routes - Lazy Loaded with Protection */}
       <Route path="/admin" element={
