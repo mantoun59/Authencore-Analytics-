@@ -113,10 +113,11 @@ const SampleReports = () => {
       const { generateHtmlReport } = await import('@/utils/htmlReportGenerator');
       
       console.log('🎯 Assessment type being processed:', selectedAssessment);
+      console.log('🔍 Report type:', reportType);
       // Assessment-specific data mapping
       let reportData;
       if (selectedAssessment === 'emotional-intelligence' || selectedAssessment === 'emotional') {
-        console.log('✅ Using dedicated emotional intelligence path');
+        console.log('✅ Using dedicated emotional intelligence path - MATCHED!');
         // Use the dedicated emotional intelligence report generator
         const { generateEmotionalIntelligenceReport } = await import('@/services/emotionalIntelligenceReportGenerator');
         const sampleData = reportType === 'employer' 
