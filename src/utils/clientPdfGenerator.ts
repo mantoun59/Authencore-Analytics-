@@ -88,20 +88,17 @@ const icons = {
   shield: '🛡️'
 };
 
-// Enhanced text processing with proper Unicode support
+// Force ASCII-only text for jsPDF compatibility  
 const normalizeText = (text: any): string => {
   if (!text) return 'N/A';
   if (typeof text !== 'string') text = String(text);
   
-  // More aggressive text cleaning for PDF compatibility
+  // Convert to ASCII-only characters for jsPDF
   return text
-    .normalize('NFKC') // Use canonical composition
-    .replace(/[\u0300-\u036f]/g, '') // Remove diacritical marks
-    .replace(/[^\x20-\x7E]/g, ' ') // Replace non-ASCII with spaces
-    .replace(/[""'']/g, '"') // Normalize quotes
-    .replace(/[–—]/g, '-') // Normalize dashes
-    .replace(/…/g, '...') // Fix ellipsis
-    .replace(/\s+/g, ' ') // Normalize all whitespace
+    .normalize('NFD') // Decompose characters
+    .replace(/[\u0300-\u036f]/g, '') // Remove accents/diacritics
+    .replace(/[^\x20-\x7E]/g, '') // Remove ALL non-ASCII characters
+    .replace(/\s+/g, ' ') // Normalize spaces
     .trim() || 'N/A';
 };
 
@@ -130,9 +127,9 @@ export const generateClientSidePdf = async (data: SimplePdfData): Promise<void> 
     
     const doc = new jsPDF();
     
-    // Set proper encoding and font for Unicode support
+    // Force specific encoding for ASCII compatibility
     doc.setFont('helvetica', 'normal');
-    doc.setCharSpace(0);
+    doc.setFontSize(12);
     
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
@@ -263,7 +260,7 @@ const addProfessionalBadges = (doc: jsPDF, pageWidth: number): void => {
   doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(colors.white[0], colors.white[1], colors.white[2]);
-  doc.text('🛡️ CONFIDENTIAL', pageWidth - 62, 37);
+  doc.text('CONFIDENTIAL', pageWidth - 62, 37);
 };
 
 // Executive summary with enhanced metrics
@@ -645,12 +642,12 @@ const addEnhancedActionItem = (doc: jsPDF, recommendation: string, priority: any
   doc.setFontSize(11);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(priority.color[0], priority.color[1], priority.color[2]);
-  doc.text(`${priority.icon} ${normalizeText(priority.label)}`, 45, yPos + 10);
+  doc.text(normalizeText(priority.label), 45, yPos + 10);
   
   doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(colors.neutral[0], colors.neutral[1], colors.neutral[2]);
-  doc.text(`Timeline: ${normalizeText(priority.timeframe)}`, 130, yPos + 10);
+  doc.text('Timeline: ' + normalizeText(priority.timeframe), 130, yPos + 10);
   
   // Recommendation text with better formatting
   doc.setFontSize(11);
