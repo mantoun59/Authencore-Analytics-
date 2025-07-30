@@ -94,7 +94,7 @@ const SampleReports = () => {
       
       
       
-      toast.info(`Generating sample ${reportType} PDF report...`);
+      toast.info(`Opening sample ${reportType} report...`);
       
       try {
         
@@ -117,7 +117,7 @@ const SampleReports = () => {
               newWindow.print();
             }, 1000);
           }
-          toast.success(`Sample ${reportType} PDF report generated successfully!`);
+          toast.success(`Sample ${reportType} report opened successfully!`);
         } else if (response.error) {
           console.error('❌ PDF generation error:', response.error);
           throw new Error(`PDF generation failed: ${response.error.message}`);
@@ -129,7 +129,7 @@ const SampleReports = () => {
         console.error('❌ PDF service failed, using HTML fallback:', pdfError);
         // Fallback: Generate simple HTML report
         generateFallbackReport(sampleData, selectedAssessment, reportType);
-        toast.success(`Sample ${reportType} report generated successfully!`);
+        toast.success(`Sample ${reportType} report opened successfully!`);
       }
       
     } catch (error) {
@@ -261,7 +261,7 @@ const SampleReports = () => {
     },
     'communication': {
       title: 'Communication Styles Assessment',
-      description: 'Comprehensive communication assessment with linguistic analysis',
+      description: 'Comprehensive communication assessment with distortion analysis and interview suggestions',
       icon: Users,
       color: 'text-indigo-600',
       bgColor: 'bg-indigo-50'

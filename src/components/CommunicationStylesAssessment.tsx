@@ -177,13 +177,9 @@ const CommunicationStylesAssessment: React.FC<CommunicationStylesAssessmentProps
                 </CardDescription>
               </div>
               <div className="flex gap-3">
-                <Button onClick={viewHTMLReport} variant="outline">
+                <Button onClick={viewHTMLReport}>
                   <Eye className="w-4 h-4 mr-2" />
-                  View HTML
-                </Button>
-                <Button onClick={downloadPDF}>
-                  <Download className="w-4 h-4 mr-2" />
-                  Download PDF
+                  View Report
                 </Button>
                 <Button 
                   onClick={() => setShowTeamAnalysis(!showTeamAnalysis)}
