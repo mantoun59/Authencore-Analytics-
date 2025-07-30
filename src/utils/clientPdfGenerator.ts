@@ -125,8 +125,8 @@ export const generateClientSidePdf = async (data: SimplePdfData): Promise<void> 
   try {
     validateInput(data);
     
-    // Call the enhanced PDF generator edge function
-    const response = await fetch('/api/enhanced-pdf-generator', {
+    // Call the enhanced PDF generator edge function using correct Supabase URL
+    const response = await fetch('https://jlbftyjewxgetxcihban.supabase.co/functions/v1/enhanced-pdf-generator', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
