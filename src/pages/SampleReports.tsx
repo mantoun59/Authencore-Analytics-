@@ -1507,31 +1507,39 @@ const SampleReports = () => {
         };
 
       case 'faith-values':
+        console.log('✅ Generating comprehensive FVAI candidate report data');
         return {
           ...baseReport,
+          candidateName: 'Sarah Chen',
+          position: 'Community Relations Manager',
           executiveSummary: {
-            overallScore: 87,
-            readinessLevel: 'Strong Alignment',
-            topStrengths: ['Spiritual Integration', 'Values Consistency', 'Ethical Decision Making'],
-            keyDevelopmentAreas: ['Community Engagement', 'Workplace Application', 'Leadership Development'],
+            overallScore: 88,
+            readinessLevel: 'Excellent',
+            topStrengths: ['Integrity & Authenticity', 'Service-Oriented Leadership', 'Compassionate Decision-Making'],
+            keyDevelopmentAreas: ['Boundary Setting', 'Assertiveness Training', 'Strategic Planning'],
             recommendedNextSteps: [
-              'Seek leadership roles in faith-based organizations',
-              'Mentor others in values-based decision making',
-              'Integrate spiritual practices into daily work'
+              'Pursue leadership roles in faith-based or mission-driven organizations',
+              'Develop strategic thinking and planning capabilities',
+              'Strengthen assertiveness while maintaining compassionate approach'
             ]
           },
           dimensionScores: {
-            spiritual_foundation: { score: 91, level: 'Excellent', interpretation: 'Strong spiritual grounding and consistent practice' },
-            moral_compass: { score: 88, level: 'Very Good', interpretation: 'Clear ethical framework guides decisions' },
-            workplace_integration: { score: 79, level: 'Good', interpretation: 'Successfully applies values in professional settings' },
-            community_service: { score: 82, level: 'Very Good', interpretation: 'Active in serving others and community involvement' },
-            personal_growth: { score: 85, level: 'Very Good', interpretation: 'Committed to continuous spiritual development' },
-            leadership_calling: { score: 83, level: 'Very Good', interpretation: 'Natural inclination to lead with values' }
+            integrity: { score: 92, level: 'Excellent', interpretation: 'Demonstrates unwavering commitment to ethical principles' },
+            compassion: { score: 89, level: 'Excellent', interpretation: 'Shows exceptional empathy and care for others' },
+            service: { score: 91, level: 'Excellent', interpretation: 'Strong orientation toward serving others and community' },
+            justice: { score: 85, level: 'Very Good', interpretation: 'Committed to fairness and equal treatment' },
+            stewardship: { score: 87, level: 'Very Good', interpretation: 'Responsible management of resources and opportunities' },
+            humility: { score: 83, level: 'Good', interpretation: 'Balanced self-awareness with room for growth in confidence' },
+            gratitude: { score: 90, level: 'Excellent', interpretation: 'Appreciative mindset that enhances relationships' },
+            courage: { score: 79, level: 'Good', interpretation: 'Shows moral courage with opportunity to strengthen advocacy' }
           },
           careerRecommendations: [
-            'Non-profit leadership roles',
-            'Faith-based organizational positions',
-            'Ethical consulting and advisory roles'
+            'Non-profit leadership positions',
+            'Community outreach coordinator',
+            'Social services management',
+            'Faith-based organization roles',
+            'Corporate social responsibility',
+            'Educational administration'
           ]
         };
       

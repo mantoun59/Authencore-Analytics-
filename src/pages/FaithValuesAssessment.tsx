@@ -87,7 +87,7 @@ export default function FaithValuesAssessment() {
     }
   };
 
-  const generatePDFReport = async () => {
+  const generatePDFReport = async (reportType: 'candidate' | 'employer' | 'comprehensive' = 'candidate') => {
     try {
       if (!results) {
         toast({
@@ -98,9 +98,7 @@ export default function FaithValuesAssessment() {
         return;
       }
 
-      // Import the FVAI report generator
-      const { generateFVAIReport } = await import('@/services/fvaiReportGenerator');
-      
+      let htmlContent = '';
       const reportData = {
         candidateInfo: {
           name: userProfile.name,
@@ -113,7 +111,16 @@ export default function FaithValuesAssessment() {
         results: results
       };
 
-      const htmlContent = generateFVAIReport(reportData);
+      if (reportType === 'candidate') {
+        const { generateFVAICandidateReport } = await import('@/services/fvaiCandidateReportGenerator');
+        htmlContent = generateFVAICandidateReport(reportData);
+      } else if (reportType === 'employer') {
+        const { generateFVAIEmployerReport } = await import('@/services/fvaiEmployerReportGenerator');
+        htmlContent = generateFVAIEmployerReport(reportData);
+      } else {
+        const { generateFVAIReport } = await import('@/services/fvaiReportGenerator');
+        htmlContent = generateFVAIReport(reportData);
+      }
       
       // Create a new window/tab with the report
       const reportWindow = window.open('', '_blank');
@@ -124,7 +131,7 @@ export default function FaithValuesAssessment() {
       
       toast({
         title: "Report Generated",
-        description: "FVAI report opened in new tab!",
+        description: `FVAI ${reportType} report opened in new tab!`,
       });
     } catch (error) {
       console.error('Error generating PDF:', error);
@@ -397,9 +404,17 @@ export default function FaithValuesAssessment() {
                 ) : (
                   <p>Loading results...</p>
                 )}
-                <Button onClick={generatePDFReport} disabled={!results} className="w-full bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
-                  Generate PDF Report
-                </Button>
+                <div className="grid md:grid-cols-3 gap-4">
+                  <Button onClick={() => generatePDFReport('candidate')} disabled={!results} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
+                    📄 Candidate Report
+                  </Button>
+                  <Button onClick={() => generatePDFReport('employer')} disabled={!results} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
+                    🏢 Employer Report
+                  </Button>
+                  <Button onClick={() => generatePDFReport('comprehensive')} disabled={!results} className="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600">
+                    📊 Comprehensive Report
+                  </Button>
+                </div>
               </CardContent>
             </Card>
           </div>
