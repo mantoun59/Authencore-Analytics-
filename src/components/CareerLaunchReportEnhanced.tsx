@@ -73,15 +73,18 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
       
       const pdfData = {
         assessmentType: 'Career Launch Assessment',
+        reportType: type, // Pass the report type
+        enhancedAI: enhancedAI, // Pass enhanced AI data for advisor reports
         userInfo: {
           name: userProfile.name,
           email: userProfile.email,
           assessmentDate: userProfile.assessmentDate,
           questionsAnswered: userProfile.questionsAnswered,
           timeSpent: userProfile.timeSpent,
-          reliabilityScore: userProfile.reliabilityScore
+          reliabilityScore: userProfile.reliabilityScore,
+          reportId: `CLR-${Date.now()}`
         },
-        overallScore: 85,
+        overallScore: Math.round(Object.values(results.interests).reduce((sum, val) => sum + val, 0) / 6),
         dimensions: [
           ...Object.entries(results.interests).map(([key, value]) => ({
             name: key.charAt(0).toUpperCase() + key.slice(1),
@@ -101,7 +104,12 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
           match: 85 - (index * 5), // Generate decreasing match scores
           description: `Strong alignment with ${career.toLowerCase()} career path`
         })),
-        recommendations: results.action_plan
+        recommendations: results.action_plan,
+        riasecResults: results.interests,
+        aptitudeResults: results.aptitudes.reduce((acc, apt) => {
+          acc[apt.name] = apt.score;
+          return acc;
+        }, {} as Record<string, number>)
       };
 
       await generateClientSidePdf(pdfData);
