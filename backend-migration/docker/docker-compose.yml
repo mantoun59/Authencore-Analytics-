@@ -18,8 +18,16 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - RESEND_API_KEY=${RESEND_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - CORS_ORIGIN=${CORS_ORIGIN:-http://localhost:3000}
     depends_on:
       - postgres
+      - redis
+    networks:
+      - authencore-network
     profiles:
       - dev
 
@@ -36,8 +44,19 @@ services:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - RESEND_API_KEY=${RESEND_API_KEY}
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_ROLE_KEY=${SUPABASE_SERVICE_ROLE_KEY}
+      - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
+      - CORS_ORIGIN=${CORS_ORIGIN:-https://yourdomain.com}
+      - JWT_SECRET=${JWT_SECRET}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY}
     depends_on:
       - postgres
+      - redis
+    networks:
+      - authencore-network
+    restart: unless-stopped
     profiles:
       - prod
 
@@ -54,11 +73,14 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
       - ../database:/docker-entrypoint-initdb.d:ro
+    networks:
+      - authencore-network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U authencore_user -d authencore_analytics"]
       interval: 30s
       timeout: 10s
       retries: 3
+    restart: unless-stopped
     profiles:
       - dev
       - prod
@@ -70,11 +92,14 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
+    networks:
+      - authencore-network
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 30s
       timeout: 10s
       retries: 3
+    restart: unless-stopped
     profiles:
       - dev
       - prod
@@ -91,6 +116,9 @@ services:
       - nginx-logs:/var/log/nginx
     depends_on:
       - authencore-app
+    networks:
+      - authencore-network
+    restart: unless-stopped
     profiles:
       - prod
 
@@ -106,13 +134,40 @@ services:
     volumes:
       - minio-data:/data
     command: server /data --console-address ":9001"
+    networks:
+      - authencore-network
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
       interval: 30s
       timeout: 20s
       retries: 3
+    restart: unless-stopped
     profiles:
       - dev
+
+  # Database backup service
+  db-backup:
+    image: postgres:15-alpine
+    environment:
+      PGPASSWORD: ${DB_PASSWORD:-authencore_password}
+    volumes:
+      - ./backups:/backups
+      - ../scripts:/scripts:ro
+    command: |
+      sh -c "
+        while true; do
+          pg_dump -h postgres -U authencore_user -d authencore_analytics > /backups/backup_$$(date +%Y%m%d_%H%M%S).sql
+          find /backups -name 'backup_*.sql' -mtime +7 -delete
+          sleep 86400
+        done
+      "
+    depends_on:
+      - postgres
+    networks:
+      - authencore-network
+    restart: unless-stopped
+    profiles:
+      - prod
 
 volumes:
   postgres-data:
@@ -125,6 +180,9 @@ volumes:
     driver: local
 
 networks:
-  default:
-    name: authencore-network
+  authencore-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
     driver: bridge
