@@ -841,101 +841,77 @@ const SampleReports = () => {
           }
         };
       } else if (selectedAssessment === 'faith-values') {
-        // Faith & Values Assessment specific data
+        // Use dedicated FVAI report generators
         const sampleData = reportType === 'employer' 
           ? getSampleEmployerReport(selectedAssessment)
           : getSampleCandidateReport(selectedAssessment);
 
-        reportData = {
-          assessmentType: 'Faith & Values Alignment Index (FVAI)',
-          reportType: reportType as 'standard' | 'advisor' | 'employer',
-          userInfo: {
+        // Import the appropriate FVAI report generator
+        const fvaiReportData = {
+          candidateInfo: {
             name: sampleData.candidateInfo.name,
             email: sampleData.candidateInfo.email,
-            assessmentDate: sampleData.candidateInfo.completionDate,
-            questionsAnswered: 90,
-            timeSpent: '25 minutes',
-            reliabilityScore: 95,
-            reportId: `FVAI-${Date.now()}`,
-            position: reportType === 'employer' ? 'Community Relations Manager' : undefined,
-            department: reportType === 'employer' ? 'Mission & Values' : undefined
+            position: 'Community Relations Manager',
+            organization: 'Sample Organization',
+            faithBackground: 'Christian',
+            date: sampleData.candidateInfo.completionDate
           },
-          overallScore: sampleData.executiveSummary?.overallScore || 87,
-          dimensions: Object.entries(sampleData.dimensionScores || {}).map(([key, dimData]: [string, any]) => ({
-            name: key.charAt(0).toUpperCase() + key.slice(1),
-            score: dimData.score,
-            level: dimData.level,
-            description: dimData.interpretation
-          })),
-          profile: reportType === 'employer' 
-            ? 'This candidate demonstrates exceptional alignment with faith-based values and organizational mission. Strong integrity, compassion, and service orientation make them an ideal fit for mission-driven environments. Their values-based decision making and commitment to ethical leadership position them well for roles requiring authentic values integration.'
-            : 'Your faith and values assessment reveals a strong foundation of integrity and service orientation that positions you excellently for mission-driven organizations. Your high compassion and commitment to justice create natural leadership opportunities in values-based environments.',
-          strengths: sampleData.executiveSummary?.topStrengths || [
-            'Integrity & Authenticity',
-            'Service Orientation', 
-            'Compassionate Leadership'
-          ],
-          developmentAreas: sampleData.executiveSummary?.keyDevelopmentAreas || [
-            'Assertiveness',
-            'Strategic Vision',
-            'Work-Life Boundaries'
-          ],
-          recommendations: sampleData.executiveSummary?.recommendedNextSteps || [
-            'Pursue leadership roles in mission-driven organizations',
-            'Develop strategic planning and vision-setting skills',
-            'Strengthen personal boundaries while maintaining compassion',
-            'Seek mentorship in faith-based leadership principles'
-          ],
-          contextualEffectiveness: {
-            'Mission-Driven Leadership': { score: 92, description: 'Exceptional values alignment creates authentic leadership in purpose-driven roles' },
-            'Community Engagement': { score: 89, description: 'Strong service orientation drives meaningful community impact and relationships' },
-            'Ethical Decision Making': { score: 88, description: 'High integrity supports consistent ethical choices in complex situations' },
-            'Values-Based Mentoring': { score: 85, description: 'Compassion and wisdom create natural mentoring and development opportunities' }
-          },
-          careerMatches: (sampleData.careerRecommendations || []).map((career: string, index: number) => ({
-            career: { title: career, description: `Role aligned with faith and values strengths` },
-            matchPercentage: 90 - (index * 2),
-            fitScore: 88 - (index * 2),
-            readinessLevel: 'Values-Aligned',
-            skillGaps: ['Leadership development', 'Strategic planning'],
-            strengthAlignment: ['Integrity', 'Service orientation', 'Compassion'],
-            salaryExpectation: '$55,000 - $85,000',
-            growthPotential: 'High',
-            developmentPath: ['Values-based leadership training', 'Mission-driven career development']
-          })),
-          ...(reportType === 'employer' && {
-            employerInsights: {
-              'Hiring Recommendation': 'HIGHLY RECOMMENDED - Exceptional values alignment with strong leadership potential',
-              'Best Fit Roles': 'Mission-driven positions, Community relations, Values-based leadership',
-              'Values Integration': 'Excellent - Natural integration of faith principles with professional responsibilities',
-              'Cultural Contribution': 'Outstanding - Will enhance organizational mission and values-driven culture',
-              'Leadership Potential': 'High - Authentic values-based leadership style with strong ethical foundation',
-              'Development Investment': 'Moderate - Strong foundation with focused leadership skill development needs'
+          results: {
+            valueScores: Object.fromEntries(
+              Object.entries(sampleData.dimensionScores || {}).map(([key, dimData]: [string, any]) => [key, dimData.score])
+            ),
+            topValues: Object.entries(sampleData.dimensionScores || {}).map(([key, dimData]: [string, any]) => ({
+              id: key,
+              name: key.charAt(0).toUpperCase() + key.slice(1),
+              description: dimData.interpretation,
+              icon: '🙏',
+              score: dimData.score
+            })),
+            cultureMatches: [{
+              culture: {
+                id: 'purpose-driven',
+                name: 'Purpose-Driven Organization',
+                description: 'Organizations that prioritize mission-driven work, ethical leadership, and community impact.',
+                characteristics: ['Service-oriented', 'Integrity-focused', 'Community-minded', 'Purpose-driven'],
+                examples: ['Non-profits', 'Faith-based organizations', 'Social enterprises']
+              },
+              score: sampleData.executiveSummary?.overallScore || 87,
+              alignment: 'Strong'
+            }],
+            insights: {
+              workStyle: 'Values-driven approach with emphasis on integrity and service',
+              idealEnvironment: 'Mission-focused organizations with strong ethical culture',
+              challenges: 'May struggle in environments that conflict with personal values',
+              growthAreas: 'Leadership development and strategic thinking skills'
             },
-            riskAssessment: {
-              'Performance Risk': 'Low - Strong values foundation supports consistent high performance',
-              'Cultural Fit': 'Excellent - Perfect alignment with mission-driven organizational culture',
-              'Values Conflict Risk': 'Minimal - Strong personal values provide clear decision-making framework',
-              'Retention Potential': 'Very High - Deep values alignment creates strong organizational commitment'
+            distortionScore: 15,
+            defensivenessScore: 12,
+            validityMetrics: {
+              responseConsistency: 92,
+              socialDesirabilityBias: 18,
+              fakeGoodPattern: 15,
+              responsePatternFlag: false
             },
-            distortionAnalysis: {
-              'Values Authenticity': 'High - Consistent values-based responses indicate genuine commitment to faith principles',
-              'Service Orientation Accuracy': 'Very High - Service behaviors align with stated commitment to helping others',
-              'Integrity Consistency': 'Excellent - Ethical decision patterns support high integrity scores',
-              'Faith Integration': 'Authentic - Natural integration of faith principles with professional capabilities',
-              'Values Assessment Validity': 'Excellent - All faith and values measures show high reliability and authenticity'
-            }
-          }),
-          branding: {
-            logo: '/final-logo.png',
-            colors: {
-              primary: '#008080',
-              secondary: '#20B2AA'
-            },
-            company: 'AuthenCore Analytics'
+            validity: 'High'
           }
         };
-      } else {
+
+        let htmlContent: string;
+        if (reportType === 'employer') {
+          const { generateFVAIEmployerReport } = await import('@/services/fvaiEmployerReportGenerator');
+          htmlContent = generateFVAIEmployerReport(fvaiReportData);
+        } else {
+          const { generateFVAICandidateReport } = await import('@/services/fvaiCandidateReportGenerator');
+          htmlContent = generateFVAICandidateReport(fvaiReportData);
+        }
+
+        // Create a new window/tab with the report
+        const reportWindow = window.open('', '_blank');
+        if (reportWindow) {
+          reportWindow.document.write(htmlContent);
+          reportWindow.document.close();
+        }
+        return;
         // Enhanced data for other assessments
         const assessmentProfiles = {
           'emotional-intelligence': {
@@ -1052,7 +1028,7 @@ const SampleReports = () => {
           }
         };
 
-        reportData = reportType === 'employer' ? {
+        let reportData = reportType === 'employer' ? {
           assessmentType: `${getAssessmentDisplayName(selectedAssessment)} - Employer Report`,
           reportType: 'employer' as const,
           userInfo: {
