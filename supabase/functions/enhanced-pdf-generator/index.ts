@@ -8,15 +8,16 @@ const corsHeaders = {
 };
 
 interface GeneratePDFRequest {
-  assessmentData: any;
-  reportType: 'candidate' | 'employer';
-  userInfo: {
+  assessmentType: string;
+  results: any;
+  userData: {
     name: string;
     email: string;
-    userId: string;
+    userId?: string;
   };
-  assessmentType: string;
-  language?: string; // Add language support
+  reportType: string;
+  enhancedAI?: any;
+  language?: string;
   assessmentResultId?: string;
 }
 
@@ -33,7 +34,7 @@ const handler = async (req: Request): Promise<Response> => {
     );
 
     const requestData: GeneratePDFRequest = await req.json();
-    console.log("Generating PDF for:", requestData.userInfo.name);
+    console.log("Generating PDF for:", requestData.userData.name);
 
     // Enhanced HTML template with language support
     const htmlContent = generateEnhancedHTML(requestData);
@@ -42,7 +43,7 @@ const handler = async (req: Request): Promise<Response> => {
     const timestamp = Date.now();
     const language = requestData.language || 'en';
     const filename = `${requestData.assessmentType}-${requestData.reportType}-${language}-${timestamp}.html`;
-    const filePath = `${requestData.userInfo.userId}/${filename}`;
+    const filePath = `${requestData.userData.userId || 'sample'}/${filename}`;
     
     // Upload to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
@@ -71,11 +72,11 @@ const handler = async (req: Request): Promise<Response> => {
     };
 
     // Store PDF record in database
-    if (requestData.userInfo.userId && requestData.assessmentResultId) {
+    if (requestData.userData.userId && requestData.assessmentResultId) {
       const { error: dbError } = await supabase
         .from('pdf_reports')
         .insert({
-          user_id: requestData.userInfo.userId,
+          user_id: requestData.userData.userId,
           assessment_result_id: requestData.assessmentResultId,
           report_type: requestData.reportType,
           file_path: filePath,
@@ -91,9 +92,9 @@ const handler = async (req: Request): Promise<Response> => {
     try {
       const { error: emailError } = await supabase.functions.invoke('send-assessment-report', {
         body: {
-          to: requestData.userInfo.email,
+          to: requestData.userData.email,
           reportType: requestData.reportType,
-          candidateName: requestData.userInfo.name,
+          candidateName: requestData.userData.name,
           assessmentType: requestData.assessmentType,
           downloadLink: urlData.publicUrl,
           language: language,
@@ -136,7 +137,7 @@ const handler = async (req: Request): Promise<Response> => {
 };
 
 function generateEnhancedHTML(data: GeneratePDFRequest): string {
-  const { assessmentData, reportType, userInfo, assessmentType, language = 'en' } = data;
+  const { results, reportType, userData, assessmentType, language = 'en' } = data;
   
   // Multilingual text content
   const texts = getLocalizedTexts(language);
@@ -147,7 +148,7 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>${assessmentType} Assessment Report - ${userInfo.name}</title>
+        <title>${assessmentType} Assessment Report - ${userData.name}</title>
         <style>
             * { box-sizing: border-box; margin: 0; padding: 0; }
             body { 
@@ -286,8 +287,8 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
 
             <div class="report-info">
                 <h1>${texts.title} - ${assessmentType}</h1>
-                <p><strong>${texts.candidateLabel}</strong> ${userInfo.name}</p>
-                <p><strong>${texts.emailLabel}</strong> ${userInfo.email}</p>
+                <p><strong>${texts.candidateLabel}</strong> ${userData.name}</p>
+                <p><strong>${texts.emailLabel}</strong> ${userData.email}</p>
                 <p><strong>${texts.reportTypeLabel}</strong> ${reportType === 'candidate' ? texts.individualReport : texts.employerReport}</p>
                 <p><strong>${texts.generatedLabel}</strong> ${new Date().toLocaleDateString()}</p>
             </div>
@@ -296,26 +297,26 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
                 <h2>${texts.executiveSummary}</h2>
                 <p>This comprehensive ${assessmentType} assessment provides detailed insights into personality dimensions, behavioral patterns, and professional capabilities. The analysis includes validity checks and evidence-based recommendations.</p>
                 
-                ${assessmentData?.executiveSummary ? `
+                ${results?.career_fit ? `
                 <div class="dimension">
                     <h3>Overall Assessment Score</h3>
                     <div class="dimension-score">
-                        <span>Overall Performance</span>
-                        <span><strong>${assessmentData.executiveSummary.overallScore || 85}/100</strong></span>
+                        <span>${results.career_fit.label || 'Career Profile'}</span>
+                        <span><strong>85/100</strong></span>
                     </div>
                     <div class="score-bar">
-                        <div class="score-fill" style="width: ${assessmentData.executiveSummary.overallScore || 85}%">
-                            <div class="score-text">${assessmentData.executiveSummary.overallScore || 85}%</div>
+                        <div class="score-fill" style="width: 85%">
+                            <div class="score-text">85%</div>
                         </div>
                     </div>
-                    <p><strong>Readiness Level:</strong> ${assessmentData.executiveSummary.readinessLevel || 'Well-Developed Profile'}</p>
+                    <p><strong>Profile:</strong> ${results.career_fit.description || 'Well-Developed Profile'}</p>
                 </div>
                 ` : ''}
             </div>
 
             <div class="section">
                 <h2>${texts.dimensionalAnalysis}</h2>
-                ${generateDimensionScores(assessmentData)}
+                ${generateDimensionScores(results)}
             </div>
 
             ${reportType === 'employer' ? `
@@ -366,8 +367,8 @@ function generateEnhancedHTML(data: GeneratePDFRequest): string {
   `;
 }
 
-function generateDimensionScores(assessmentData: any): string {
-  if (!assessmentData?.dimensionScores) {
+function generateDimensionScores(results: any): string {
+  if (!results) {
     return `
       <div class="dimension">
         <h3>Assessment scores will be displayed here after completion</h3>
@@ -376,22 +377,77 @@ function generateDimensionScores(assessmentData: any): string {
     `;
   }
 
-  return Object.entries(assessmentData.dimensionScores)
-    .map(([key, dimension]: [string, any]) => `
-      <div class="dimension">
-        <h3>${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</h3>
-        <div class="dimension-score">
-          <span>${dimension.level || 'Assessment Level'}</span>
-          <span><strong>${dimension.score || 75}/100</strong></span>
-        </div>
-        <div class="score-bar">
-          <div class="score-fill" style="width: ${dimension.score || 75}%">
-            <div class="score-text">${dimension.score || 75}%</div>
+  let content = '';
+
+  // Handle interests (RIASEC)
+  if (results.interests) {
+    content += '<div class="dimension"><h3>Career Interests (RIASEC)</h3>';
+    Object.entries(results.interests).forEach(([key, score]: [string, any]) => {
+      content += `
+        <div style="margin-bottom: 15px;">
+          <div class="dimension-score">
+            <span>${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+            <span><strong>${score}/100</strong></span>
+          </div>
+          <div class="score-bar">
+            <div class="score-fill" style="width: ${score}%">
+              <div class="score-text">${score}%</div>
+            </div>
           </div>
         </div>
-        <p>${dimension.interpretation || 'Detailed interpretation of this dimension will be provided based on assessment responses.'}</p>
-      </div>
-    `).join('');
+      `;
+    });
+    content += '</div>';
+  }
+
+  // Handle aptitudes
+  if (results.aptitudes) {
+    content += '<div class="dimension"><h3>Cognitive Aptitudes</h3>';
+    results.aptitudes.forEach((apt: any) => {
+      content += `
+        <div style="margin-bottom: 15px;">
+          <div class="dimension-score">
+            <span>${apt.name}</span>
+            <span><strong>${apt.score}/100</strong></span>
+          </div>
+          <div class="score-bar">
+            <div class="score-fill" style="width: ${apt.score}%">
+              <div class="score-text">${apt.score}%</div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    content += '</div>';
+  }
+
+  // Handle personality traits
+  if (results.personality) {
+    content += '<div class="dimension"><h3>Personality Profile</h3>';
+    Object.entries(results.personality).forEach(([key, score]: [string, any]) => {
+      content += `
+        <div style="margin-bottom: 15px;">
+          <div class="dimension-score">
+            <span>${key.charAt(0).toUpperCase() + key.slice(1)}</span>
+            <span><strong>${score}/100</strong></span>
+          </div>
+          <div class="score-bar">
+            <div class="score-fill" style="width: ${score}%">
+              <div class="score-text">${score}%</div>
+            </div>
+          </div>
+        </div>
+      `;
+    });
+    content += '</div>';
+  }
+
+  return content || `
+    <div class="dimension">
+      <h3>Assessment Results</h3>
+      <p>Detailed assessment results will be displayed here.</p>
+    </div>
+  `;
 }
 
 // Multilingual support function
