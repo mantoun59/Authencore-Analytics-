@@ -478,6 +478,271 @@ const SampleReports = () => {
             }
           ]
         };
+      } else if (selectedAssessment === 'cair' || selectedAssessment === 'cair-personality' || selectedAssessment === 'cairplus') {
+        reportData = reportType === 'employer' ? {
+          assessmentType: 'CAIR+ Personality Assessment - Employer Report',
+          reportType: 'employer' as const,
+          userInfo: {
+            name: 'David Martinez',
+            email: 'david.martinez@example.com',
+            assessmentDate: new Date().toLocaleDateString(),
+            questionsAnswered: 120,
+            timeSpent: '32 minutes',
+            reliabilityScore: 97,
+            reportId: `CAIR-EMP-${Date.now()}`,
+            position: 'Senior Project Manager',
+            department: 'Operations'
+          },
+          overallScore: 84,
+          dimensions: [
+            { 
+              name: 'Conscientiousness', 
+              score: 88, 
+              level: 'Very High', 
+              description: 'Exceptional organizational skills, reliability, and goal achievement. Demonstrates systematic approach to complex projects and consistently meets commitments.',
+              subdimensions: [
+                { name: 'Organization', score: 92, level: 'Exceptional', description: 'Outstanding systematic approach to workspace and task management' },
+                { name: 'Reliability', score: 89, level: 'Very High', description: 'Exceptional consistency in meeting commitments and deadlines' },
+                { name: 'Goal Orientation', score: 85, level: 'Very High', description: 'Strong focus on achieving specific objectives' },
+                { name: 'Attention to Detail', score: 87, level: 'Very High', description: 'High precision and thoroughness in work execution' }
+              ]
+            },
+            { 
+              name: 'Agreeableness', 
+              score: 79, 
+              level: 'High', 
+              description: 'Strong collaborative tendencies with excellent empathy and team cooperation skills. Natural relationship builder.',
+              subdimensions: [
+                { name: 'Cooperation', score: 82, level: 'Very High', description: 'Excellent willingness to work collaboratively toward shared goals' },
+                { name: 'Empathy', score: 85, level: 'Very High', description: 'Outstanding ability to understand and relate to others\' perspectives' },
+                { name: 'Trust', score: 72, level: 'High', description: 'Good faith in others\' intentions with appropriate caution' },
+                { name: 'Helpfulness', score: 78, level: 'High', description: 'Strong tendency to support and assist colleagues' }
+              ]
+            },
+            { 
+              name: 'Innovation', 
+              score: 75, 
+              level: 'High', 
+              description: 'Good creative problem-solving abilities with solid adaptability to change and new situations.',
+              subdimensions: [
+                { name: 'Creativity', score: 73, level: 'High', description: 'Good ability to generate novel ideas and original solutions' },
+                { name: 'Adaptability', score: 80, level: 'High', description: 'Strong flexibility in adjusting to new situations and changes' },
+                { name: 'Openness to Change', score: 76, level: 'High', description: 'Good acceptance and embrace of change initiatives' },
+                { name: 'Risk Taking', score: 69, level: 'Moderate', description: 'Balanced approach to risk with careful consideration' }
+              ]
+            },
+            { 
+              name: 'Resilience', 
+              score: 82, 
+              level: 'Very High', 
+              description: 'Excellent stress management and recovery abilities. Maintains high performance under pressure.',
+              subdimensions: [
+                { name: 'Stress Tolerance', score: 85, level: 'Very High', description: 'Outstanding ability to maintain performance under pressure' },
+                { name: 'Recovery Speed', score: 78, level: 'High', description: 'Good ability to bounce back from setbacks quickly' },
+                { name: 'Emotional Stability', score: 84, level: 'Very High', description: 'Excellent emotional consistency and self-regulation' },
+                { name: 'Optimism', score: 80, level: 'High', description: 'Strong positive outlook and hope in challenging situations' }
+              ]
+            }
+          ],
+          profile: 'David demonstrates an exceptional blend of conscientiousness and resilience that makes him highly suitable for senior management roles. His strong organizational skills combined with collaborative leadership style position him as an ideal candidate for complex project management and team leadership positions.',
+          employerInsights: {
+            'Hiring Recommendation': 'HIGHLY RECOMMENDED - Outstanding leadership and management potential',
+            'Best Fit Roles': 'Senior Project Manager, Operations Director, Team Lead, Department Manager',
+            'Management Potential': 'Exceptional - Ready for senior leadership responsibilities',
+            'Team Dynamics': 'Excellent team builder and collaborative leader',
+            'Stress Handling': 'Outstanding performance under pressure and tight deadlines',
+            'Development Investment': 'Low risk, high return - minimal training needed for immediate impact'
+          },
+          riskAssessment: {
+            'Performance Risk': 'Very Low - Consistent high performer with proven reliability',
+            'Leadership Risk': 'Low - Natural leadership abilities with collaborative approach',
+            'Stress Management': 'Very Low - Excellent resilience and pressure handling',
+            'Team Integration': 'Very Low - Strong interpersonal skills and empathy',
+            'Cultural Adaptability': 'Low - Good flexibility and openness to organizational changes'
+          },
+          distortionAnalysis: {
+            'Response Authenticity': 'Very High - Consistent genuine response patterns throughout assessment',
+            'Social Desirability Bias': 'Low - Minimal tendency to present overly favorable image',
+            'Impression Management': 'Moderate - Appropriate professional presentation without over-enhancement',
+            'Response Consistency': 'Excellent - Highly consistent patterns across similar question types',
+            'Extreme Response Bias': 'Low - Balanced use of response scale indicating thoughtful consideration',
+            'Fake Good Indicators': 'Low risk - No significant inflation of positive traits',
+            'Fake Bad Indicators': 'Very Low - No evidence of response minimization',
+            'Random Response Pattern': 'None detected - Thoughtful and deliberate response engagement',
+            'Overall Validity': 'Excellent - Results highly reliable for hiring and development decisions',
+            'Confidence Level': '97% - Assessment results suitable for high-stakes employment decisions'
+          },
+          contextualEffectiveness: {
+            'Project Leadership': { score: 92, description: 'Exceptional ability to lead complex projects and coordinate multiple stakeholders' },
+            'Team Management': { score: 87, description: 'Outstanding team building and collaborative leadership capabilities' },
+            'Crisis Management': { score: 84, description: 'Excellent performance under pressure with strong problem-solving approach' },
+            'Strategic Planning': { score: 79, description: 'Good long-term thinking with systematic implementation approach' },
+            'Change Leadership': { score: 81, description: 'Strong ability to guide teams through organizational transitions' },
+            'Stakeholder Relations': { score: 85, description: 'Excellent interpersonal skills for managing diverse stakeholder relationships' }
+          },
+          workingStyles: {
+            'Decision Making': 'Systematic and collaborative approach with thorough analysis',
+            'Communication Style': 'Clear, direct, and empathetic with strong listening skills',
+            'Conflict Resolution': 'Diplomatic and solution-focused with emphasis on win-win outcomes',
+            'Work Pace': 'Steady and reliable with ability to accelerate when needed',
+            'Leadership Approach': 'Collaborative and supportive while maintaining clear accountability',
+            'Innovation Preference': 'Balanced approach valuing both stability and continuous improvement'
+          },
+          careerMatches: [
+            {
+              career: { title: 'Operations Director', description: 'Leading operational excellence and process optimization' },
+              matchPercentage: 94,
+              fitScore: 92,
+              readinessLevel: 'Highly Qualified',
+              skillGaps: ['Strategic finance knowledge'],
+              strengthAlignment: ['Organizational excellence', 'Team leadership', 'Process management'],
+              salaryExpectation: '$120,000 - $150,000',
+              growthPotential: 'Very High',
+              developmentPath: ['Executive leadership program', 'Financial management training']
+            },
+            {
+              career: { title: 'Senior Project Manager', description: 'Managing complex multi-stakeholder projects' },
+              matchPercentage: 92,
+              fitScore: 90,
+              readinessLevel: 'Highly Qualified',
+              skillGaps: ['Advanced project methodologies'],
+              strengthAlignment: ['Organization', 'Reliability', 'Team collaboration'],
+              salaryExpectation: '$95,000 - $120,000',
+              growthPotential: 'Very High',
+              developmentPath: ['PMP certification', 'Agile/Scrum mastery']
+            }
+          ],
+          branding: {
+            logo: '/final-logo.png',
+            colors: {
+              primary: '#008080',
+              secondary: '#20B2AA'
+            },
+            company: 'AuthenCore Analytics'
+          }
+        } : {
+          assessmentType: 'CAIR+ Personality Assessment',
+          reportType: 'standard' as const,
+          userInfo: {
+            name: 'David Martinez',
+            email: 'david.martinez@example.com',
+            assessmentDate: new Date().toLocaleDateString(),
+            questionsAnswered: 120,
+            timeSpent: '32 minutes',
+            reliabilityScore: 97,
+            reportId: `CAIR-${Date.now()}`
+          },
+          overallScore: 84,
+          dimensions: [
+            { 
+              name: 'Conscientiousness', 
+              score: 88, 
+              level: 'Very High', 
+              description: 'You have exceptional organizational skills and reliability. You naturally create structure, follow through on commitments, and maintain high standards in your work.',
+              subdimensions: [
+                { name: 'Organization', score: 92, level: 'Exceptional', description: 'You excel at creating and maintaining efficient systems and organized approaches to tasks' },
+                { name: 'Reliability', score: 89, level: 'Very High', description: 'Others can always count on you to meet commitments and deliver quality work on time' },
+                { name: 'Goal Orientation', score: 85, level: 'Very High', description: 'You have a strong focus on achieving specific objectives and measurable outcomes' }
+              ]
+            },
+            { 
+              name: 'Agreeableness', 
+              score: 79, 
+              level: 'High', 
+              description: 'You have strong collaborative tendencies with excellent empathy and team cooperation skills. You naturally build positive relationships.',
+              subdimensions: [
+                { name: 'Cooperation', score: 82, level: 'Very High', description: 'You work exceptionally well with others toward shared goals and team success' },
+                { name: 'Empathy', score: 85, level: 'Very High', description: 'You have an outstanding ability to understand and relate to others\' perspectives and feelings' },
+                { name: 'Trust', score: 72, level: 'High', description: 'You generally have faith in others while maintaining appropriate caution' }
+              ]
+            },
+            { 
+              name: 'Innovation', 
+              score: 75, 
+              level: 'High', 
+              description: 'You have good creative problem-solving abilities with solid adaptability to change and new situations.',
+              subdimensions: [
+                { name: 'Creativity', score: 73, level: 'High', description: 'You bring good creative thinking and novel approaches to problem-solving' },
+                { name: 'Adaptability', score: 80, level: 'High', description: 'You adjust well to new situations and changing circumstances' },
+                { name: 'Openness to Change', score: 76, level: 'High', description: 'You generally embrace change and see opportunities in new situations' }
+              ]
+            },
+            { 
+              name: 'Resilience', 
+              score: 82, 
+              level: 'Very High', 
+              description: 'You have excellent stress management and recovery abilities. You maintain high performance under pressure and bounce back quickly from setbacks.',
+              subdimensions: [
+                { name: 'Stress Tolerance', score: 85, level: 'Very High', description: 'You maintain excellent performance and composure under pressure' },
+                { name: 'Recovery Speed', score: 78, level: 'High', description: 'You bounce back from setbacks and disappointments relatively quickly' },
+                { name: 'Emotional Stability', score: 84, level: 'Very High', description: 'You demonstrate excellent emotional consistency and self-regulation' }
+              ]
+            }
+          ],
+          profile: 'Your personality profile reveals a exceptional blend of conscientiousness and resilience that positions you well for leadership and management roles. Your strong organizational skills, combined with your collaborative nature and stress resilience, make you particularly well-suited for complex project management and team leadership positions.',
+          strengths: [
+            'Exceptional organizational and planning capabilities that drive project success',
+            'Outstanding reliability and follow-through that builds trust with colleagues',
+            'Strong collaborative leadership style that motivates and engages teams',
+            'Excellent stress resilience that maintains performance under pressure',
+            'High empathy and interpersonal skills that build positive relationships',
+            'Good adaptability and openness to change and innovation'
+          ],
+          developmentAreas: [
+            'Continue building creative problem-solving skills for complex challenges',
+            'Develop comfort with higher levels of risk-taking for innovation opportunities',
+            'Enhance strategic thinking capabilities for long-term planning',
+            'Build confidence in independent decision-making in ambiguous situations'
+          ],
+          recommendations: [
+            'Seek leadership opportunities that leverage your organizational and collaborative strengths',
+            'Consider advanced project management or operations management roles',
+            'Develop strategic thinking skills through mentorship or executive education',
+            'Practice creative problem-solving techniques to enhance innovation capabilities',
+            'Build a network of mentors and peers in senior management positions',
+            'Explore opportunities that combine your organizational skills with team leadership'
+          ],
+          contextualEffectiveness: {
+            'Team Leadership': { score: 87, description: 'Excellent collaborative leadership style that motivates teams' },
+            'Project Management': { score: 92, description: 'Outstanding organizational and coordination capabilities' },
+            'Stress Management': { score: 85, description: 'Excellent performance maintenance under pressure' },
+            'Innovation Projects': { score: 75, description: 'Good creative contribution with room for growth' },
+            'Change Adaptation': { score: 80, description: 'Strong flexibility in adjusting to new situations' },
+            'Relationship Building': { score: 83, description: 'Excellent interpersonal connection and trust building' }
+          },
+          careerMatches: [
+            {
+              career: { title: 'Project Manager', description: 'Leading complex projects and coordinating teams' },
+              matchPercentage: 92,
+              fitScore: 90,
+              readinessLevel: 'Highly Qualified',
+              skillGaps: ['Advanced project methodologies'],
+              strengthAlignment: ['Organization', 'Reliability', 'Team leadership'],
+              salaryExpectation: '$75,000 - $95,000',
+              growthPotential: 'Very High',
+              developmentPath: ['PMP certification', 'Leadership development']
+            },
+            {
+              career: { title: 'Operations Manager', description: 'Managing operational processes and efficiency' },
+              matchPercentage: 89,
+              fitScore: 87,
+              readinessLevel: 'Qualified',
+              skillGaps: ['Process optimization', 'Data analysis'],
+              strengthAlignment: ['Conscientiousness', 'Team collaboration'],
+              salaryExpectation: '$70,000 - $90,000',
+              growthPotential: 'High',
+              developmentPath: ['Operations management training', 'Lean Six Sigma']
+            }
+          ],
+          branding: {
+            logo: '/final-logo.png',
+            colors: {
+              primary: '#008080',
+              secondary: '#20B2AA'
+            },
+            company: 'AuthenCore Analytics'
+          }
+        };
       } else {
         // Enhanced data for other assessments
         const assessmentProfiles = {
