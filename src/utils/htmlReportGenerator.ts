@@ -164,10 +164,14 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
       width: 100px;
       height: auto;
       margin: 0 auto 25px;
-      filter: brightness(0) invert(1);
+      background: white;
+      border-radius: 12px;
+      padding: 12px;
+      filter: none;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
       z-index: 1;
+      display: block;
     }
     
     .logo:hover {
