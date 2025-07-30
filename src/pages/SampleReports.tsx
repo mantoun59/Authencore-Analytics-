@@ -545,9 +545,6 @@ const SampleReports = () => {
           ]
         };
 
-      case 'digital-wellness':
-      case 'digital':
-      
       case 'faith-values':
         return {
           ...baseReport,
