@@ -387,6 +387,129 @@ export const generateFVAIReport = (data: FVAIReportData): string => {
             margin-top: 10px;
         }
         
+        .chart-container {
+            background: hsl(var(--card));
+            border: 1px solid hsl(var(--border));
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .chart-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .chart-header h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: hsl(var(--muted-foreground));
+        }
+        
+        .bar-chart {
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            gap: 15px;
+            height: 300px;
+            padding: 20px;
+            background: 
+                linear-gradient(to top, hsl(var(--border)) 1px, transparent 1px),
+                linear-gradient(to top, hsl(var(--border)) 1px, transparent 1px);
+            background-size: 100% 20%, 100% 10%;
+            background-position: 0 0, 0 0;
+            position: relative;
+        }
+        
+        .bar-chart::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 100%;
+            background: 
+                repeating-linear-gradient(
+                    to top,
+                    transparent 0px,
+                    transparent 24px,
+                    hsl(var(--border)) 24px,
+                    hsl(var(--border)) 25px
+                );
+            pointer-events: none;
+        }
+        
+        .bar-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+            max-width: 80px;
+            flex: 1;
+        }
+        
+        .bar-container {
+            height: 250px;
+            width: 100%;
+            display: flex;
+            align-items: end;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .bar {
+            width: 80%;
+            background: #7DD3FC;
+            border-radius: 4px 4px 0 0;
+            position: relative;
+            min-height: 10px;
+            transition: all 0.8s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: hsl(var(--foreground));
+            background: hsl(var(--background));
+            padding: 2px 6px;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .bar-label {
+            margin-top: 10px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: hsl(var(--foreground));
+            text-align: center;
+            line-height: 1.2;
+            writing-mode: horizontal-tb;
+        }
+        
+        .values-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .value-detail-card {
+            background: var(--gradient-subtle);
+            border: 1px solid hsl(var(--border));
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .value-detail-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px -8px rgba(0, 0, 0, 0.1);
+        }
+
         .excellent { background: #dcfce7; color: #166534; }
         .high { background: #dbeafe; color: #1d4ed8; }
         .moderate { background: #fef3c7; color: #92400e; }
@@ -473,19 +596,34 @@ export const generateFVAIReport = (data: FVAIReportData): string => {
         </div>
         
         <div class="section">
-            <h2>⭐ Top Values Profile</h2>
-            <div class="values-grid">
-                ${results.topValues.map(value => `
-                    <div class="value-card">
+            <h2>⭐ Values Alignment Profile</h2>
+            <div class="chart-container">
+                <div class="chart-header">
+                    <h3>Alignment Score (0-100)</h3>
+                </div>
+                <div class="bar-chart">
+                    ${results.topValues.map(value => `
+                        <div class="bar-group">
+                            <div class="bar-container">
+                                <div class="bar" style="height: ${value.score}%">
+                                    <span class="bar-value">${Math.round(value.score)}</span>
+                                </div>
+                            </div>
+                            <div class="bar-label">${value.name}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+            
+            <div class="values-detail-grid">
+                ${results.topValues.slice(0, 6).map(value => `
+                    <div class="value-detail-card">
                         <div class="value-header">
                             <div class="value-icon">${value.icon}</div>
                             <div class="value-name">${value.name}</div>
                             <div class="value-score">${Math.round(value.score)}</div>
                         </div>
                         <div class="value-description">${value.description}</div>
-                        <div class="score-bar">
-                            <div class="score-fill" style="width: ${value.score}%"></div>
-                        </div>
                     </div>
                 `).join('')}
             </div>
