@@ -23,6 +23,28 @@ export interface SimplePdfData {
 
 export const generateClientSidePdf = (data: SimplePdfData): void => {
   try {
+    // Content validation - ensure data exists and is valid
+    if (!data || typeof data !== 'object') {
+      throw new Error('Invalid data provided to PDF generator');
+    }
+
+    // Validate required fields
+    if (!data.userInfo?.name || !data.userInfo?.email) {
+      throw new Error('Missing required user information (name/email)');
+    }
+
+    // Clean text content to avoid encoding issues
+    const cleanText = (text: string): string => {
+      if (!text || typeof text !== 'string') return 'N/A';
+      return text.replace(/[^\x00-\x7F]/g, "").trim() || 'N/A';
+    };
+
+    console.log('Starting PDF generation with data:', {
+      assessmentType: data.assessmentType,
+      userName: data.userInfo.name,
+      hasResults: !!data.dimensions || !!data.overallScore
+    });
+
     const doc = new jsPDF();
     let yPosition = 20;
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -45,7 +67,7 @@ export const generateClientSidePdf = (data: SimplePdfData): void => {
     doc.setFontSize(20);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(0, 0, 0);
-    doc.text(data.assessmentType || 'Assessment Report', 20, 70);
+    doc.text(cleanText(data.assessmentType) || 'Assessment Report', 20, 70);
     
     yPosition = 90;
 
@@ -57,13 +79,13 @@ export const generateClientSidePdf = (data: SimplePdfData): void => {
     
     doc.setFontSize(12);
     doc.setFont('helvetica', 'normal');
-    doc.text('Name: ' + (data.userInfo.name || 'N/A'), 20, yPosition);
+    doc.text('Name: ' + cleanText(data.userInfo.name), 20, yPosition);
     yPosition += 8;
-    doc.text('Email: ' + (data.userInfo.email || 'N/A'), 20, yPosition);
+    doc.text('Email: ' + cleanText(data.userInfo.email), 20, yPosition);
     yPosition += 8;
     
     if (data.userInfo.assessmentDate) {
-      doc.text('Date: ' + data.userInfo.assessmentDate, 20, yPosition);
+      doc.text('Date: ' + cleanText(data.userInfo.assessmentDate), 20, yPosition);
       yPosition += 8;
     }
     
@@ -116,7 +138,7 @@ export const generateClientSidePdf = (data: SimplePdfData): void => {
 
         doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
-        doc.text(dim.name + ': ' + dim.score.toString(), 20, yPosition);
+        doc.text(cleanText(dim.name) + ': ' + dim.score.toString(), 20, yPosition);
         
         // Simple score bar
         const barWidth = (dim.score / 100) * 100;
@@ -150,7 +172,7 @@ export const generateClientSidePdf = (data: SimplePdfData): void => {
         
         doc.setFontSize(12);
         doc.setFont('helvetica', 'normal');
-        doc.text((index + 1).toString() + '. ' + match.title + ' (' + match.match.toString() + '% match)', 20, yPosition);
+        doc.text((index + 1).toString() + '. ' + cleanText(match.title) + ' (' + match.match.toString() + '% match)', 20, yPosition);
         yPosition += 10;
       });
       yPosition += 10;
@@ -176,7 +198,7 @@ export const generateClientSidePdf = (data: SimplePdfData): void => {
         
         doc.setFontSize(11);
         doc.setFont('helvetica', 'normal');
-        const lines = doc.splitTextToSize((index + 1).toString() + '. ' + rec, 170);
+        const lines = doc.splitTextToSize((index + 1).toString() + '. ' + cleanText(rec), 170);
         if (Array.isArray(lines)) {
           lines.forEach((line, lineIndex) => {
             doc.text(line, 20, yPosition + (lineIndex * 5));
@@ -199,13 +221,22 @@ export const generateClientSidePdf = (data: SimplePdfData): void => {
       doc.text('Page ' + i.toString() + ' of ' + totalPages.toString(), pageWidth - 40, pageHeight - 10);
     }
 
-    // Save
-    const fileName = (data.userInfo.name || 'Assessment').replace(/\s+/g, '_') + '_Report_' + 
+    // Save with debug logging
+    const fileName = cleanText(data.userInfo.name).replace(/\s+/g, '_') + '_Report_' + 
                    new Date().toISOString().split('T')[0] + '.pdf';
+    
+    console.log('PDF generation completed successfully. Saving as:', fileName);
     doc.save(fileName);
 
   } catch (error) {
-    console.error('PDF generation error:', error);
-    throw new Error('Failed to generate PDF report');
+    console.error('PDF generation error details:', {
+      error: error.message,
+      stack: error.stack,
+      data: data ? Object.keys(data) : 'No data'
+    });
+    
+    // Show user-friendly error message
+    alert('Failed to generate PDF report. Please check the console for details and try again.');
+    throw new Error(`PDF generation failed: ${error.message}`);
   }
 };
