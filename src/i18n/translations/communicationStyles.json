@@ -1,0 +1,638 @@
+{
+  "en": {
+    "dimensions": {
+      "assertiveness": {
+        "name": "Assertiveness",
+        "description": "Your ability to express opinions confidently and stand your ground",
+        "levels": {
+          "Low": "Prefers indirect communication and collaborative approaches",
+          "Moderate": "Balances directness with diplomacy appropriately",
+          "High": "Communicates directly and confidently advocates for ideas",
+          "Very High": "Highly direct and decisive in communication style"
+        }
+      },
+      "expressiveness": {
+        "name": "Expressiveness", 
+        "description": "How openly you share emotions and engage with others",
+        "levels": {
+          "Low": "Reserved and measured in emotional expression",
+          "Moderate": "Appropriately expressive in professional settings",
+          "High": "Open and animated in communication style",
+          "Very High": "Highly expressive and emotionally engaging"
+        }
+      },
+      "informationProcessing": {
+        "name": "Information Processing",
+        "description": "How you prefer to receive and process information",
+        "levels": {
+          "Low": "Prefers time to think and process information carefully",
+          "Moderate": "Adapts processing speed to situation requirements",
+          "High": "Processes information quickly and responds promptly",
+          "Very High": "Extremely fast information processing and decision making"
+        }
+      },
+      "channelPreferences": {
+        "name": "Channel Preferences",
+        "description": "Your adaptability across different communication methods",
+        "levels": {
+          "Low": "Strong preference for specific communication channels",
+          "Moderate": "Comfortable with several communication methods",
+          "High": "Highly adaptable across various communication channels",
+          "Very High": "Seamlessly adapts to any communication medium"
+        }
+      },
+      "listeningPatterns": {
+        "name": "Listening Patterns",
+        "description": "Your approach to listening and understanding others",
+        "levels": {
+          "Low": "Task-focused with selective listening patterns",
+          "Moderate": "Good listening skills with occasional distractions",
+          "High": "Active listener who seeks to understand others",
+          "Very High": "Exceptional listening skills with deep empathy"
+        }
+      },
+      "influenceStrategies": {
+        "name": "Influence Strategies",
+        "description": "How you persuade and influence others",
+        "levels": {
+          "Low": "Prefers fact-based logical arguments",
+          "Moderate": "Uses combination of logic and relationship building",
+          "High": "Skilled at persuasion through multiple approaches",
+          "Very High": "Highly sophisticated influence and persuasion abilities"
+        }
+      },
+      "conflictCommunication": {
+        "name": "Conflict Communication",
+        "description": "Your approach to handling disagreements and conflicts",
+        "levels": {
+          "Low": "Avoids direct confrontation, prefers harmony",
+          "Moderate": "Addresses conflicts when necessary with care",
+          "High": "Comfortable handling conflicts directly and constructively",
+          "Very High": "Thrives in challenging conversations and conflict resolution"
+        }
+      }
+    },
+    "profiles": {
+      "Director": {
+        "name": "Director",
+        "description": "Results-focused and direct communication style",
+        "traits": {
+          "primary": "Results-focused and direct",
+          "secondary": "Task-oriented with clear expectations",
+          "strength": "Decisive leadership and efficient communication",
+          "challenge": "May appear too blunt or impatient with others",
+          "workStyle": "Prefers fast-paced, goal-oriented environments"
+        }
+      },
+      "Socializer": {
+        "name": "Socializer",
+        "description": "Enthusiastic and people-focused communication style",
+        "traits": {
+          "primary": "Enthusiastic and people-focused",
+          "secondary": "Inspiring and relationship-building",
+          "strength": "Motivating others and creating positive energy",
+          "challenge": "May talk too much or lose focus on details",
+          "workStyle": "Thrives in collaborative, creative environments"
+        }
+      },
+      "Thinker": {
+        "name": "Thinker",
+        "description": "Analytical and systematic communication style",
+        "traits": {
+          "primary": "Analytical and systematic",
+          "secondary": "Quality-focused and thorough",
+          "strength": "Attention to detail and logical problem-solving",
+          "challenge": "May be slow to decide or overly cautious",
+          "workStyle": "Prefers structured, predictable work environments"
+        }
+      },
+      "Supporter": {
+        "name": "Supporter",
+        "description": "Cooperative and steady communication style",
+        "traits": {
+          "primary": "Cooperative and steady",
+          "secondary": "Team-oriented and patient",
+          "strength": "Building consensus and maintaining harmony",
+          "challenge": "May avoid conflict or difficult conversations",
+          "workStyle": "Excels in stable, supportive team environments"
+        }
+      },
+      "Balanced": {
+        "name": "Balanced",
+        "description": "Adaptable and flexible communication style",
+        "traits": {
+          "primary": "Adaptable communication style",
+          "secondary": "Flexible approach based on situation",
+          "strength": "Versatility across different communication contexts",
+          "challenge": "May lack distinctive communication identity",
+          "workStyle": "Adapts well to various work environments"
+        }
+      }
+    },
+    "contexts": {
+      "leadership": "Leadership Situations",
+      "teamwork": "Team Collaboration",
+      "customerService": "Customer Service",
+      "salesNegotiation": "Sales & Negotiation",
+      "conflictResolution": "Conflict Resolution",
+      "publicSpeaking": "Public Speaking"
+    },
+    "ui": {
+      "title": "Communication Styles Assessment",
+      "subtitle": "Discover your communication patterns and effectiveness",
+      "overallEffectiveness": "Overall Communication Effectiveness",
+      "communicationIndex": "Communication Effectiveness Index",
+      "adaptabilityScore": "Adaptability Score",
+      "dimensionsAnalysis": "Communication Dimensions Analysis",
+      "contextualEffectiveness": "Contextual Effectiveness",
+      "profileAnalysis": "Detailed Profile Analysis",
+      "developmentRecommendations": "Development Recommendations",
+      "assessmentValidity": "Assessment Validity Analysis",
+      "teamCompatibility": "Team Compatibility Analysis",
+      "strengths": "Key Strengths",
+      "challenges": "Development Areas",
+      "workStyle": "Work Style",
+      "secondaryTraits": "Secondary Traits",
+      "reliability": "Reliability",
+      "qualityIndicators": "Quality Indicators",
+      "noQualityConcerns": "No quality concerns detected - Assessment appears highly reliable"
+    }
+  },
+  "es": {
+    "dimensions": {
+      "assertiveness": {
+        "name": "Asertividad",
+        "description": "Tu habilidad para expresar opiniones con confianza y mantener tu posición",
+        "levels": {
+          "Low": "Prefiere comunicación indirecta y enfoques colaborativos",
+          "Moderate": "Equilibra la directidad con la diplomacia apropiadamente",
+          "High": "Se comunica directamente y aboga con confianza por las ideas",
+          "Very High": "Altamente directo y decisivo en el estilo de comunicación"
+        }
+      },
+      "expressiveness": {
+        "name": "Expresividad",
+        "description": "Qué tan abiertamente compartes emociones e interactúas con otros",
+        "levels": {
+          "Low": "Reservado y medido en la expresión emocional",
+          "Moderate": "Apropiadamente expresivo en entornos profesionales",
+          "High": "Abierto y animado en el estilo de comunicación",
+          "Very High": "Altamente expresivo y emocionalmente atractivo"
+        }
+      },
+      "informationProcessing": {
+        "name": "Procesamiento de Información",
+        "description": "Cómo prefieres recibir y procesar información",
+        "levels": {
+          "Low": "Prefiere tiempo para pensar y procesar información cuidadosamente",
+          "Moderate": "Adapta la velocidad de procesamiento a los requisitos de la situación",
+          "High": "Procesa información rápidamente y responde con prontitud",
+          "Very High": "Procesamiento de información y toma de decisiones extremadamente rápidos"
+        }
+      },
+      "channelPreferences": {
+        "name": "Preferencias de Canal",
+        "description": "Tu adaptabilidad a través de diferentes métodos de comunicación",
+        "levels": {
+          "Low": "Fuerte preferencia por canales de comunicación específicos",
+          "Moderate": "Cómodo con varios métodos de comunicación",
+          "High": "Altamente adaptable a través de varios canales de comunicación",
+          "Very High": "Se adapta sin problemas a cualquier medio de comunicación"
+        }
+      },
+      "listeningPatterns": {
+        "name": "Patrones de Escucha",
+        "description": "Tu enfoque para escuchar y entender a otros",
+        "levels": {
+          "Low": "Enfocado en tareas con patrones de escucha selectiva",
+          "Moderate": "Buenas habilidades de escucha con distracciones ocasionales",
+          "High": "Escucha activo que busca entender a otros",
+          "Very High": "Habilidades de escucha excepcionales con empatía profunda"
+        }
+      },
+      "influenceStrategies": {
+        "name": "Estrategias de Influencia",
+        "description": "Cómo persuades e influyes en otros",
+        "levels": {
+          "Low": "Prefiere argumentos lógicos basados en hechos",
+          "Moderate": "Usa combinación de lógica y construcción de relaciones",
+          "High": "Hábil en persuasión a través de múltiples enfoques",
+          "Very High": "Habilidades de influencia y persuasión altamente sofisticadas"
+        }
+      },
+      "conflictCommunication": {
+        "name": "Comunicación de Conflictos",
+        "description": "Tu enfoque para manejar desacuerdos y conflictos",
+        "levels": {
+          "Low": "Evita la confrontación directa, prefiere la armonía",
+          "Moderate": "Aborda conflictos cuando es necesario con cuidado",
+          "High": "Cómodo manejando conflictos directa y constructivamente",
+          "Very High": "Prospera en conversaciones desafiantes y resolución de conflictos"
+        }
+      }
+    },
+    "profiles": {
+      "Director": {
+        "name": "Director",
+        "description": "Estilo de comunicación enfocado en resultados y directo",
+        "traits": {
+          "primary": "Enfocado en resultados y directo",
+          "secondary": "Orientado a tareas con expectativas claras",
+          "strength": "Liderazgo decisivo y comunicación eficiente",
+          "challenge": "Puede parecer demasiado brusco o impaciente con otros",
+          "workStyle": "Prefiere entornos de ritmo rápido y orientados a objetivos"
+        }
+      },
+      "Socializer": {
+        "name": "Socializador",
+        "description": "Estilo de comunicación entusiasta y enfocado en las personas",
+        "traits": {
+          "primary": "Entusiasta y enfocado en las personas",
+          "secondary": "Inspirador y constructor de relaciones",
+          "strength": "Motivar a otros y crear energía positiva",
+          "challenge": "Puede hablar demasiado o perder el enfoque en los detalles",
+          "workStyle": "Prospera en entornos colaborativos y creativos"
+        }
+      },
+      "Thinker": {
+        "name": "Pensador",
+        "description": "Estilo de comunicación analítico y sistemático",
+        "traits": {
+          "primary": "Analítico y sistemático",
+          "secondary": "Enfocado en la calidad y minucioso",
+          "strength": "Atención al detalle y resolución lógica de problemas",
+          "challenge": "Puede ser lento para decidir o excesivamente cauteloso",
+          "workStyle": "Prefiere entornos de trabajo estructurados y predecibles"
+        }
+      },
+      "Supporter": {
+        "name": "Partidario",
+        "description": "Estilo de comunicación cooperativo y estable",
+        "traits": {
+          "primary": "Cooperativo y estable",
+          "secondary": "Orientado al equipo y paciente",
+          "strength": "Construir consenso y mantener la armonía",
+          "challenge": "Puede evitar conflictos o conversaciones difíciles",
+          "workStyle": "Sobresale en entornos de equipo estables y de apoyo"
+        }
+      },
+      "Balanced": {
+        "name": "Equilibrado",
+        "description": "Estilo de comunicación adaptable y flexible",
+        "traits": {
+          "primary": "Estilo de comunicación adaptable",
+          "secondary": "Enfoque flexible basado en la situación",
+          "strength": "Versatilidad en diferentes contextos de comunicación",
+          "challenge": "Puede carecer de identidad de comunicación distintiva",
+          "workStyle": "Se adapta bien a varios entornos de trabajo"
+        }
+      }
+    },
+    "contexts": {
+      "leadership": "Situaciones de Liderazgo",
+      "teamwork": "Colaboración en Equipo",
+      "customerService": "Servicio al Cliente",
+      "salesNegotiation": "Ventas y Negociación",
+      "conflictResolution": "Resolución de Conflictos",
+      "publicSpeaking": "Hablar en Público"
+    },
+    "ui": {
+      "title": "Evaluación de Estilos de Comunicación",
+      "subtitle": "Descubre tus patrones de comunicación y efectividad",
+      "overallEffectiveness": "Efectividad General de Comunicación",
+      "communicationIndex": "Índice de Efectividad de Comunicación",
+      "adaptabilityScore": "Puntuación de Adaptabilidad",
+      "dimensionsAnalysis": "Análisis de Dimensiones de Comunicación",
+      "contextualEffectiveness": "Efectividad Contextual",
+      "profileAnalysis": "Análisis Detallado del Perfil",
+      "developmentRecommendations": "Recomendaciones de Desarrollo",
+      "assessmentValidity": "Análisis de Validez de la Evaluación",
+      "teamCompatibility": "Análisis de Compatibilidad del Equipo",
+      "strengths": "Fortalezas Clave",
+      "challenges": "Áreas de Desarrollo",
+      "workStyle": "Estilo de Trabajo",
+      "secondaryTraits": "Rasgos Secundarios",
+      "reliability": "Confiabilidad",
+      "qualityIndicators": "Indicadores de Calidad",
+      "noQualityConcerns": "No se detectaron problemas de calidad - La evaluación parece altamente confiable"
+    }
+  },
+  "fr": {
+    "dimensions": {
+      "assertiveness": {
+        "name": "Assertivité",
+        "description": "Votre capacité à exprimer vos opinions avec confiance et à défendre votre position",
+        "levels": {
+          "Low": "Préfère la communication indirecte et les approches collaboratives",
+          "Moderate": "Équilibre la directitude avec la diplomatie de manière appropriée",
+          "High": "Communique directement et défend les idées avec confiance",
+          "Very High": "Très direct et décisif dans le style de communication"
+        }
+      },
+      "expressiveness": {
+        "name": "Expressivité",
+        "description": "À quel point vous partagez ouvertement les émotions et vous engagez avec les autres",
+        "levels": {
+          "Low": "Réservé et mesuré dans l'expression émotionnelle",
+          "Moderate": "Appropriément expressif dans les environnements professionnels",
+          "High": "Ouvert et animé dans le style de communication",
+          "Very High": "Très expressif et émotionnellement engageant"
+        }
+      },
+      "informationProcessing": {
+        "name": "Traitement de l'Information",
+        "description": "Comment vous préférez recevoir et traiter l'information",
+        "levels": {
+          "Low": "Préfère le temps pour réfléchir et traiter l'information soigneusement",
+          "Moderate": "Adapte la vitesse de traitement aux exigences de la situation",
+          "High": "Traite l'information rapidement et répond promptement",
+          "Very High": "Traitement de l'information et prise de décision extrêmement rapides"
+        }
+      },
+      "channelPreferences": {
+        "name": "Préférences de Canal",
+        "description": "Votre adaptabilité à travers différentes méthodes de communication",
+        "levels": {
+          "Low": "Forte préférence pour des canaux de communication spécifiques",
+          "Moderate": "À l'aise avec plusieurs méthodes de communication",
+          "High": "Très adaptable à travers divers canaux de communication",
+          "Very High": "S'adapte parfaitement à tout support de communication"
+        }
+      },
+      "listeningPatterns": {
+        "name": "Modèles d'Écoute",
+        "description": "Votre approche pour écouter et comprendre les autres",
+        "levels": {
+          "Low": "Axé sur les tâches avec des modèles d'écoute sélective",
+          "Moderate": "Bonnes compétences d'écoute avec des distractions occasionnelles",
+          "High": "Auditeur actif qui cherche à comprendre les autres",
+          "Very High": "Compétences d'écoute exceptionnelles avec une empathie profonde"
+        }
+      },
+      "influenceStrategies": {
+        "name": "Stratégies d'Influence",
+        "description": "Comment vous persuadez et influencez les autres",
+        "levels": {
+          "Low": "Préfère les arguments logiques basés sur les faits",
+          "Moderate": "Utilise une combinaison de logique et de construction de relations",
+          "High": "Habile en persuasion à travers plusieurs approches",
+          "Very High": "Capacités d'influence et de persuasion très sophistiquées"
+        }
+      },
+      "conflictCommunication": {
+        "name": "Communication de Conflit",
+        "description": "Votre approche pour gérer les désaccords et les conflits",
+        "levels": {
+          "Low": "Évite la confrontation directe, préfère l'harmonie",
+          "Moderate": "Aborde les conflits quand nécessaire avec soin",
+          "High": "À l'aise pour gérer les conflits directement et constructivement",
+          "Very High": "Prospère dans les conversations difficiles et la résolution de conflits"
+        }
+      }
+    },
+    "profiles": {
+      "Director": {
+        "name": "Directeur",
+        "description": "Style de communication axé sur les résultats et direct",
+        "traits": {
+          "primary": "Axé sur les résultats et direct",
+          "secondary": "Orienté tâches avec des attentes claires",
+          "strength": "Leadership décisif et communication efficace",
+          "challenge": "Peut paraître trop brusque ou impatient avec les autres",
+          "workStyle": "Préfère les environnements rapides et orientés objectifs"
+        }
+      },
+      "Socializer": {
+        "name": "Socialisateur",
+        "description": "Style de communication enthousiaste et axé sur les personnes",
+        "traits": {
+          "primary": "Enthousiaste et axé sur les personnes",
+          "secondary": "Inspirant et constructeur de relations",
+          "strength": "Motiver les autres et créer une énergie positive",
+          "challenge": "Peut trop parler ou perdre le focus sur les détails",
+          "workStyle": "Prospère dans des environnements collaboratifs et créatifs"
+        }
+      },
+      "Thinker": {
+        "name": "Penseur",
+        "description": "Style de communication analytique et systématique",
+        "traits": {
+          "primary": "Analytique et systématique",
+          "secondary": "Axé sur la qualité et minutieux",
+          "strength": "Attention aux détails et résolution logique de problèmes",
+          "challenge": "Peut être lent à décider ou trop prudent",
+          "workStyle": "Préfère des environnements de travail structurés et prévisibles"
+        }
+      },
+      "Supporter": {
+        "name": "Supporter",
+        "description": "Style de communication coopératif et stable",
+        "traits": {
+          "primary": "Coopératif et stable",
+          "secondary": "Orienté équipe et patient",
+          "strength": "Construire le consensus et maintenir l'harmonie",
+          "challenge": "Peut éviter les conflits ou les conversations difficiles",
+          "workStyle": "Excelle dans des environnements d'équipe stables et soutenants"
+        }
+      },
+      "Balanced": {
+        "name": "Équilibré",
+        "description": "Style de communication adaptable et flexible",
+        "traits": {
+          "primary": "Style de communication adaptable",
+          "secondary": "Approche flexible basée sur la situation",
+          "strength": "Polyvalence dans différents contextes de communication",
+          "challenge": "Peut manquer d'identité de communication distinctive",
+          "workStyle": "S'adapte bien à divers environnements de travail"
+        }
+      }
+    },
+    "contexts": {
+      "leadership": "Situations de Leadership",
+      "teamwork": "Collaboration d'Équipe",
+      "customerService": "Service Client",
+      "salesNegotiation": "Ventes et Négociation",
+      "conflictResolution": "Résolution de Conflits",
+      "publicSpeaking": "Prise de Parole en Public"
+    },
+    "ui": {
+      "title": "Évaluation des Styles de Communication",
+      "subtitle": "Découvrez vos modèles de communication et votre efficacité",
+      "overallEffectiveness": "Efficacité Globale de Communication",
+      "communicationIndex": "Index d'Efficacité de Communication",
+      "adaptabilityScore": "Score d'Adaptabilité",
+      "dimensionsAnalysis": "Analyse des Dimensions de Communication",
+      "contextualEffectiveness": "Efficacité Contextuelle",
+      "profileAnalysis": "Analyse Détaillée du Profil",
+      "developmentRecommendations": "Recommandations de Développement",
+      "assessmentValidity": "Analyse de Validité de l'Évaluation",
+      "teamCompatibility": "Analyse de Compatibilité d'Équipe",
+      "strengths": "Forces Clés",
+      "challenges": "Domaines de Développement",
+      "workStyle": "Style de Travail",
+      "secondaryTraits": "Traits Secondaires",
+      "reliability": "Fiabilité",
+      "qualityIndicators": "Indicateurs de Qualité",
+      "noQualityConcerns": "Aucun problème de qualité détecté - L'évaluation semble très fiable"
+    }
+  },
+  "de": {
+    "dimensions": {
+      "assertiveness": {
+        "name": "Durchsetzungsfähigkeit",
+        "description": "Ihre Fähigkeit, Meinungen selbstbewusst zu äußern und Ihren Standpunkt zu vertreten",
+        "levels": {
+          "Low": "Bevorzugt indirekte Kommunikation und kollaborative Ansätze",
+          "Moderate": "Balanciert Direktheit mit Diplomatie angemessen",
+          "High": "Kommuniziert direkt und verteidigt Ideen selbstbewusst",
+          "Very High": "Sehr direkt und entschieden im Kommunikationsstil"
+        }
+      },
+      "expressiveness": {
+        "name": "Ausdrucksfähigkeit",
+        "description": "Wie offen Sie Emotionen teilen und mit anderen interagieren",
+        "levels": {
+          "Low": "Zurückhaltend und gemessen im emotionalen Ausdruck",
+          "Moderate": "Angemessen ausdrucksstark in beruflichen Umgebungen",
+          "High": "Offen und lebhaft im Kommunikationsstil",
+          "Very High": "Sehr ausdrucksstark und emotional ansprechend"
+        }
+      },
+      "informationProcessing": {
+        "name": "Informationsverarbeitung",
+        "description": "Wie Sie Informationen bevorzugt erhalten und verarbeiten",
+        "levels": {
+          "Low": "Bevorzugt Zeit zum Nachdenken und sorgfältigen Verarbeiten von Informationen",
+          "Moderate": "Passt Verarbeitungsgeschwindigkeit an Situationsanforderungen an",
+          "High": "Verarbeitet Informationen schnell und antwortet prompt",
+          "Very High": "Extrem schnelle Informationsverarbeitung und Entscheidungsfindung"
+        }
+      },
+      "channelPreferences": {
+        "name": "Kanalvorlieben",
+        "description": "Ihre Anpassungsfähigkeit an verschiedene Kommunikationsmethoden",
+        "levels": {
+          "Low": "Starke Vorliebe für spezifische Kommunikationskanäle",
+          "Moderate": "Komfortabel mit mehreren Kommunikationsmethoden",
+          "High": "Sehr anpassungsfähig über verschiedene Kommunikationskanäle",
+          "Very High": "Passt sich nahtlos an jedes Kommunikationsmedium an"
+        }
+      },
+      "listeningPatterns": {
+        "name": "Zuhörmuster",
+        "description": "Ihr Ansatz zum Zuhören und Verstehen anderer",
+        "levels": {
+          "Low": "Aufgabenorientiert mit selektiven Zuhörmustern",
+          "Moderate": "Gute Zuhörfähigkeiten mit gelegentlichen Ablenkungen",
+          "High": "Aktiver Zuhörer, der andere zu verstehen sucht",
+          "Very High": "Außergewöhnliche Zuhörfähigkeiten mit tiefer Empathie"
+        }
+      },
+      "influenceStrategies": {
+        "name": "Einflussstrategien",
+        "description": "Wie Sie andere überzeugen und beeinflussen",
+        "levels": {
+          "Low": "Bevorzugt faktenbasierte logische Argumente",
+          "Moderate": "Verwendet Kombination aus Logik und Beziehungsaufbau",
+          "High": "Geschickt in Überzeugung durch mehrere Ansätze",
+          "Very High": "Sehr ausgeklügelte Einfluss- und Überzeugungsfähigkeiten"
+        }
+      },
+      "conflictCommunication": {
+        "name": "Konfliktkommunikation",
+        "description": "Ihr Ansatz im Umgang mit Meinungsverschiedenheiten und Konflikten",
+        "levels": {
+          "Low": "Vermeidet direkte Konfrontation, bevorzugt Harmonie",
+          "Moderate": "Geht Konflikte bei Bedarf vorsichtig an",
+          "High": "Komfortabel im direkten und konstruktiven Umgang mit Konflikten",
+          "Very High": "Gedeiht in herausfordernden Gesprächen und Konfliktlösung"
+        }
+      }
+    },
+    "profiles": {
+      "Director": {
+        "name": "Direktor",
+        "description": "Ergebnisorientierter und direkter Kommunikationsstil",
+        "traits": {
+          "primary": "Ergebnisorientiert und direkt",
+          "secondary": "Aufgabenorientiert mit klaren Erwartungen",
+          "strength": "Entscheidende Führung und effiziente Kommunikation",
+          "challenge": "Kann zu schroff oder ungeduldig mit anderen erscheinen",
+          "workStyle": "Bevorzugt schnelle, zielorientierte Umgebungen"
+        }
+      },
+      "Socializer": {
+        "name": "Geselliger",
+        "description": "Enthusiastischer und menschenorientierter Kommunikationsstil",
+        "traits": {
+          "primary": "Enthusiastisch und menschenorientiert",
+          "secondary": "Inspirierend und beziehungsfördernd",
+          "strength": "Andere motivieren und positive Energie schaffen",
+          "challenge": "Kann zu viel reden oder den Fokus auf Details verlieren",
+          "workStyle": "Gedeiht in kollaborativen, kreativen Umgebungen"
+        }
+      },
+      "Thinker": {
+        "name": "Denker",
+        "description": "Analytischer und systematischer Kommunikationsstil",
+        "traits": {
+          "primary": "Analytisch und systematisch",
+          "secondary": "Qualitätsorientiert und gründlich",
+          "strength": "Aufmerksamkeit für Details und logische Problemlösung",
+          "challenge": "Kann langsam entscheiden oder übermäßig vorsichtig sein",
+          "workStyle": "Bevorzugt strukturierte, vorhersagbare Arbeitsumgebungen"
+        }
+      },
+      "Supporter": {
+        "name": "Unterstützer",
+        "description": "Kooperativer und stabiler Kommunikationsstil",
+        "traits": {
+          "primary": "Kooperativ und stabil",
+          "secondary": "Teamorientiert und geduldig",
+          "strength": "Konsens aufbauen und Harmonie bewahren",
+          "challenge": "Kann Konflikte oder schwierige Gespräche vermeiden",
+          "workStyle": "Zeichnet sich in stabilen, unterstützenden Teamumgebungen aus"
+        }
+      },
+      "Balanced": {
+        "name": "Ausgewogen",
+        "description": "Anpassungsfähiger und flexibler Kommunikationsstil",
+        "traits": {
+          "primary": "Anpassungsfähiger Kommunikationsstil",
+          "secondary": "Flexibler Ansatz basierend auf der Situation",
+          "strength": "Vielseitigkeit in verschiedenen Kommunikationskontexten",
+          "challenge": "Kann eine unverwechselbare Kommunikationsidentität fehlen",
+          "workStyle": "Passt sich gut an verschiedene Arbeitsumgebungen an"
+        }
+      }
+    },
+    "contexts": {
+      "leadership": "Führungssituationen",
+      "teamwork": "Teamzusammenarbeit",
+      "customerService": "Kundenservice",
+      "salesNegotiation": "Verkauf und Verhandlung",
+      "conflictResolution": "Konfliktlösung",
+      "publicSpeaking": "Öffentliches Sprechen"
+    },
+    "ui": {
+      "title": "Bewertung der Kommunikationsstile",
+      "subtitle": "Entdecken Sie Ihre Kommunikationsmuster und Effektivität",
+      "overallEffectiveness": "Gesamte Kommunikationseffektivität",
+      "communicationIndex": "Kommunikationseffektivitätsindex",
+      "adaptabilityScore": "Anpassungsfähigkeitswert",
+      "dimensionsAnalysis": "Analyse der Kommunikationsdimensionen",
+      "contextualEffectiveness": "Kontextuelle Effektivität",
+      "profileAnalysis": "Detaillierte Profilanalyse",
+      "developmentRecommendations": "Entwicklungsempfehlungen",
+      "assessmentValidity": "Bewertungsvaliditätsanalyse",
+      "teamCompatibility": "Teamkompatibilitätsanalyse",
+      "strengths": "Kernstärken",
+      "challenges": "Entwicklungsbereiche",
+      "workStyle": "Arbeitsstil",
+      "secondaryTraits": "Sekundäre Eigenschaften",
+      "reliability": "Zuverlässigkeit",
+      "qualityIndicators": "Qualitätsindikatoren",
+      "noQualityConcerns": "Keine Qualitätsbedenken erkannt - Bewertung erscheint hochzuverlässig"
+    }
+  }
+}
