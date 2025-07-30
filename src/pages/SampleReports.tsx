@@ -115,71 +115,101 @@ const SampleReports = () => {
       // Assessment-specific data mapping
       let reportData;
       if (selectedAssessment === 'burnout-prevention' || selectedAssessment === 'burnout') {
-        // Use BPI report generator
-        const { generateDetailedBurnoutReport } = await import('@/services/burnoutReportGenerator');
-        const config = {
-          candidateInfo: {
+        // Use standard HTML generator like other assessments
+        reportData = {
+          assessmentType: 'Burnout Prevention Index',
+          reportType: reportType as 'standard' | 'advisor' | 'employer',
+          userInfo: {
             name: 'Alex Johnson',
             email: 'alex.johnson@example.com',
-            date: new Date().toLocaleDateString(),
-            position: 'Senior Software Engineer',
-            department: 'Technology'
+            assessmentDate: new Date().toLocaleDateString(),
+            questionsAnswered: 102,
+            timeSpent: '28 minutes',
+            reliabilityScore: 94,
+            reportId: `BPI-${Date.now()}`,
+            position: reportType === 'employer' ? 'Senior Software Engineer' : undefined,
+            department: reportType === 'employer' ? 'Technology' : undefined
           },
-          results: {
-            overallScore: 78,
-            percentileScore: 72,
-            burnoutRiskProfile: 'Moderate Risk - Proactive Prevention Needed',
-            categoryScores: [
-              { category: 'Workload Management', score: 72, level: 'Moderate', percentage: 72 },
-              { category: 'Emotional Exhaustion', score: 65, level: 'At Risk', percentage: 65 },
-              { category: 'Personal Efficacy', score: 84, level: 'High', percentage: 84 },
-              { category: 'Support Systems', score: 81, level: 'Good', percentage: 81 },
-              { category: 'Work-Life Integration', score: 75, level: 'Good', percentage: 75 },
-              { category: 'Coping Strategies', score: 79, level: 'Good', percentage: 79 },
-              { category: 'Wellbeing Practices', score: 77, level: 'Good', percentage: 77 }
-            ],
-            dimensionScores: [
-              { name: 'Workload Management', score: 72, level: 'Moderate', description: 'Shows awareness but needs stronger systems' },
-              { name: 'Emotional Exhaustion', score: 65, level: 'At Risk', description: 'Experiencing moderate fatigue requiring attention' },
-              { name: 'Personal Efficacy', score: 84, level: 'High', description: 'Strong belief in personal capabilities' },
-              { name: 'Support Systems', score: 81, level: 'Good', description: 'Reliable support networks available' }
-            ],
-            strengths: [
-              'High personal efficacy and confidence',
-              'Strong support network utilization',
-              'Good self-awareness of stress signals'
-            ],
-            challenges: [
-              'Workload prioritization needs improvement',
-              'Emotional exhaustion requires attention',
-              'Boundary setting could be strengthened'
-            ],
-            recommendations: [
-              'Implement structured task prioritization system',
-              'Develop daily stress-reduction practices',
-              'Establish clearer work-life boundaries'
-            ],
-            burnoutRisk: 'medium' as const,
-            wellnessLevel: 'good' as const,
-            distortionMetrics: {
-              responseAuthenticity: 88,
-              socialDesirabilityBias: 32,
-              impressionManagement: 28,
-              responseConsistency: 85,
-              straightLining: false,
-              speedWarning: false,
-              overallValidity: 'high' as const
+          overallScore: 78,
+          dimensions: [
+            { name: 'Workload Management', score: 72, level: 'Moderate', description: 'Shows awareness of task prioritization but needs stronger systems for managing competing demands and deadlines effectively.' },
+            { name: 'Emotional Exhaustion', score: 65, level: 'At Risk', description: 'Experiencing moderate emotional fatigue that requires attention and intervention to prevent further depletion.' },
+            { name: 'Personal Efficacy', score: 84, level: 'High', description: 'Strong belief in personal capabilities and professional competence with confidence in ability to handle job demands.' },
+            { name: 'Support Systems', score: 81, level: 'Good', description: 'Has access to reliable support networks both personal and professional, with good utilization patterns.' },
+            { name: 'Work-Life Integration', score: 75, level: 'Good', description: 'Generally maintains healthy boundaries between work and personal life with room for improvement.' },
+            { name: 'Coping Strategies', score: 79, level: 'Good', description: 'Demonstrates effective stress management techniques and self-care practices for resilience building.' },
+            { name: 'Wellbeing Practices', score: 77, level: 'Good', description: 'Maintains consistent wellness routines supporting physical and mental health with good awareness.' }
+          ],
+          profile: reportType === 'employer' 
+            ? 'This candidate demonstrates moderate burnout risk with particular attention needed in workload management and emotional exhaustion areas. Shows strong personal efficacy and good support system utilization. Recommended for roles with structured workload management and supportive team environments.'
+            : 'You show a balanced wellness profile with strong personal efficacy and good support systems. Your main areas for growth involve workload management and emotional energy conservation. With focused attention on these areas, you can build stronger resilience and prevent burnout effectively.',
+          strengths: [
+            'High personal efficacy and professional confidence',
+            'Strong support network utilization and relationship building',
+            'Good self-awareness of stress signals and personal limits',
+            'Effective baseline coping strategies and stress management',
+            'Consistent wellbeing practices and health consciousness'
+          ],
+          developmentAreas: [
+            'Workload prioritization and task management systems',
+            'Emotional energy conservation and recovery practices',
+            'Boundary setting between work and personal life',
+            'Proactive stress prevention rather than reactive management',
+            'Advanced time management and delegation skills'
+          ],
+          recommendations: [
+            'Implement a structured task prioritization system using methods like Eisenhower Matrix',
+            'Develop daily stress-reduction practices such as mindfulness or brief meditation',
+            'Establish clearer work-life boundaries with specific start/stop times',
+            'Build stronger support networks through professional mentoring or peer groups',
+            'Create a comprehensive self-care routine including physical activity and recovery time',
+            'Practice saying no to non-essential commitments to protect energy reserves',
+            'Seek training in advanced time management and delegation techniques'
+          ],
+          ...(reportType === 'employer' && {
+            employerInsights: {
+              'Hiring Recommendation': 'CONDITIONAL - Strong potential with support for workload management',
+              'Best Fit Roles': 'Structured environments, clear expectations, supportive team culture',
+              'Management Approach': 'Regular check-ins, workload monitoring, recognition of achievements',
+              'Team Dynamics': 'Positive contributor who benefits from collaborative, supportive environments',
+              'Development Investment': 'Moderate - Focus on stress management and workload optimization',
+              'Risk Mitigation': 'Monitor workload, provide stress management resources, ensure work-life balance'
             },
-            priorityAreas: [
-              'Workload Management',
-              'Emotional Recovery',
-              'Boundary Setting'
-            ]
-          },
-          reportType: reportType
+            riskAssessment: {
+              'Burnout Risk Level': 'Moderate - Requires proactive management and support',
+              'Performance Risk': 'Low - Strong efficacy beliefs support sustained performance',
+              'Retention Risk': 'Medium - Dependent on workload management and support quality',
+              'Team Impact': 'Positive - Good colleague with collaborative approach'
+            }
+          }),
+          ...(reportType === 'employer' && {
+            contextualEffectiveness: {
+              'High-Pressure Situations': { score: 68, description: 'Adequate performance under pressure but benefits from structured support' },
+              'Team Collaboration': { score: 82, description: 'Strong collaborative skills and positive team contribution' },
+              'Independent Work': { score: 79, description: 'Good self-direction with effective autonomous work habits' },
+              'Deadline Management': { score: 71, description: 'Generally meets deadlines but could improve time management' },
+              'Stress Recovery': { score: 74, description: 'Reasonable recovery patterns with room for optimization' },
+              'Workload Adaptation': { score: 69, description: 'Struggles somewhat with fluctuating demands and priorities' }
+            },
+            workingStyles: {
+              'Preferred Work Environment': 'Structured, supportive environments with clear expectations and manageable workloads',
+              'Feedback Reception': 'Open to constructive feedback and actively seeks growth opportunities',
+              'Stress Response': 'Generally maintains composure but shows signs of strain under excessive pressure',
+              'Team Interaction': 'Collaborative and supportive colleague who contributes positively to team dynamics',
+              'Change Adaptation': 'Adapts well to planned changes but may struggle with sudden shifts or increased demands'
+            }
+          }),
+          distortionAnalysis: {
+            'Response Authenticity': 'High - Responses appear genuine and consistent throughout assessment',
+            'Social Desirability': 'Moderate - Some tendency to present favorably, within acceptable range',
+            'Response Consistency': 'High - Consistent response patterns indicate reliable results',
+            'Extreme Responding': 'Low - Balanced use of response scale shows thoughtful consideration',
+            'Impression Management': 'Moderate - Aware of assessment context without over-enhancement',
+            'Overall Validity': 'High - Results are reliable and suitable for decision-making purposes'
+          }
         };
-        
-        await generateDetailedBurnoutReport(config);
+
+        await generateHtmlReport(reportData);
         return;
       } else if (selectedAssessment === 'communication' || selectedAssessment === 'communication-styles') {
         reportData = reportType === 'employer' ? {
