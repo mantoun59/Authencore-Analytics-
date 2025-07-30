@@ -16,7 +16,7 @@ export class UnifiedReportGenerator {
 
   async generateReport(config: UnifiedReportConfig): Promise<void> {
     try {
-      const htmlContent = this.buildReportHTML(config);
+      const htmlContent = await this.buildReportHTML(config);
       this.displayReport(htmlContent, config);
       toast.success(`${config.reportType} report generated successfully!`);
     } catch (error) {
@@ -26,8 +26,10 @@ export class UnifiedReportGenerator {
     }
   }
 
-  private buildReportHTML(config: UnifiedReportConfig): string {
+  private async buildReportHTML(config: UnifiedReportConfig): Promise<string> {
     const { results, reportType, assessmentType, template = 'standard' } = config;
+    
+    const header = await this.buildHeader(results, config);
     
     return `
 <!DOCTYPE html>
@@ -40,7 +42,7 @@ export class UnifiedReportGenerator {
 </head>
 <body>
   <div class="report-container">
-    ${this.buildHeader(results, config)}
+    ${header}
     ${this.buildCandidateInfo(results.candidateInfo)}
     ${this.buildExecutiveSummary(results, reportType)}
     ${this.buildOverallScore(results)}
@@ -396,26 +398,35 @@ export class UnifiedReportGenerator {
     `;
   }
 
-  private buildHeader(results: UnifiedAssessmentResults, config: UnifiedReportConfig): string {
+  private async buildHeader(results: UnifiedAssessmentResults, config: UnifiedReportConfig): Promise<string> {
     const title = this.getReportTitle(config.assessmentType, config.reportType);
     const company = config.branding?.company || 'AuthenCore Analytics';
     
-    // Debug logging
-    console.log('🔍 Building header with branding:', {
-      logo: config.branding?.logo,
-      company: company,
-      reportType: config.reportType,
-      assessmentType: config.assessmentType
-    });
+    // Convert logo to base64 if it exists
+    let logoDataUrl = '';
+    if (config.branding?.logo) {
+      try {
+        const response = await fetch(config.branding.logo);
+        if (response.ok) {
+          const blob = await response.blob();
+          logoDataUrl = await new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result as string);
+            reader.readAsDataURL(blob);
+          });
+        }
+      } catch (error) {
+        console.error('Failed to load logo:', error);
+      }
+    }
     
     return `
       <div class="header">
-        ${config.branding?.logo ? `
+        ${logoDataUrl ? `
           <div style="text-align: center; margin-bottom: 20px;">
-            <img src="${config.branding.logo}" alt="Company Logo" style="max-height: 80px; max-width: 200px; border: 2px solid red;">
-            <div style="font-size: 12px; color: red;">DEBUG: Logo path = ${config.branding.logo}</div>
+            <img src="${logoDataUrl}" alt="Company Logo" style="max-height: 80px; max-width: 200px;">
           </div>
-        ` : `<div style="color: red; text-align: center;">DEBUG: No logo found in branding config</div>`}
+        ` : ''}
         <h1>${title}</h1>
         <div class="subtitle">Professional Assessment Report • ${company}</div>
         ${config.reportType === 'employer' ? `
