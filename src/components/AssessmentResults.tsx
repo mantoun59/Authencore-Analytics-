@@ -165,70 +165,6 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       reportWindow.document.write(htmlContent);
       reportWindow.document.close();
 
-      // Header
-      doc.setFontSize(20);
-      doc.setFont('helvetica', 'bold');
-      doc.text(`${assessmentType.toUpperCase()} Assessment Report`, 20, yPosition);
-      yPosition += 20;
-
-      // Candidate info
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
-      if (candidateInfo?.name) {
-        doc.text(`Candidate: ${candidateInfo.name}`, 20, yPosition);
-        yPosition += 8;
-      }
-      if (candidateInfo?.email) {
-        doc.text(`Email: ${candidateInfo.email}`, 20, yPosition);
-        yPosition += 8;
-      }
-      doc.text(`Date: ${new Date().toLocaleDateString()}`, 20, yPosition);
-      yPosition += 15;
-
-      // Overall Score
-      doc.setFontSize(16);
-      doc.setFont('helvetica', 'bold');
-      const overallScore = typeof results.overallScore === 'number' ? results.overallScore : 0;
-      doc.text(`Overall Score: ${overallScore}/100`, 20, yPosition);
-      yPosition += 15;
-
-      // Dimensions
-      doc.setFontSize(14);
-      doc.text('Dimension Scores:', 20, yPosition);
-      yPosition += 10;
-
-      doc.setFontSize(12);
-      doc.setFont('helvetica', 'normal');
-      
-      // Check if dimensions is an array or object
-      if (Array.isArray(results.dimensions)) {
-        results.dimensions.forEach((dim) => {
-          if (yPosition > 250) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          const dimensionName = String(dim.name || 'Unknown Dimension');
-          const dimensionScore = typeof dim.score === 'number' ? dim.score : 0;
-          doc.text(`${dimensionName}: ${dimensionScore}/100`, 25, yPosition);
-          yPosition += 8;
-        });
-      } else if (typeof results.dimensions === 'object') {
-        // Handle object format
-        Object.entries(results.dimensions).forEach(([key, value]) => {
-          if (yPosition > 250) {
-            doc.addPage();
-            yPosition = 20;
-          }
-          const dimensionName = String(key).replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-          const dimensionScore = typeof value === 'number' ? value : (typeof value === 'object' && value && 'score' in value ? value.score : 0);
-          doc.text(`${dimensionName}: ${dimensionScore}/100`, 25, yPosition);
-          yPosition += 8;
-        });
-      } else {
-        doc.text('No dimension data available', 25, yPosition);
-        yPosition += 8;
-      }
-
       toast.success('HTML report opened successfully!');
     } catch (error) {
       console.error('HTML generation error:', error);
@@ -610,9 +546,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
   const dimensions = getDimensions();
 
-  // Legacy PDF generation (keeping for fallback compatibility)
-  const generateLegacyPDF = () => {
-    const doc = new jsPDF();
+  // Legacy HTML generation (keeping for fallback compatibility)
+  const generateLegacyReport = () => {
     const currentScore = getOverallScore();
     const currentProfile = getProfile();
     const currentDimensionScores = getDimensionScores();
@@ -671,32 +606,37 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
     const content = getReportContent();
     
-    // Title
-    doc.setFontSize(20);
-    doc.text(content.title, 20, 30);
-    
-    // Overall Score
-    doc.setFontSize(16);
-    doc.text(content.scoreLabel, 20, 50);
-    doc.setFontSize(24);
-    doc.text(`${currentScore}/100`, 20, 65);
-    doc.setFontSize(12);
-    doc.text(`${content.profileLabel} - ${getScoreDescription(currentScore)}`, 20, 75);
-    
-    // Dimension Scores
-    doc.setFontSize(16);
-    doc.text('Dimension Scores:', 20, 95);
-    doc.setFontSize(12);
-    
-    let yPos = 110;
-    dimensions.forEach((dimension) => {
-      const score = currentDimensionScores[dimension.key] || 0;
-      doc.text(`${dimension.title}: ${score}/100 (${getScoreDescription(score)})`, 20, yPos);
-      yPos += 15;
-    });
-    
-    // Save the PDF
-    doc.save(content.filename);
+    // Create simple HTML report instead of PDF
+    const htmlContent = `
+<!DOCTYPE html>
+<html>
+<head>
+  <title>${content.title}</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    h1 { color: #008080; }
+    .score { font-size: 24px; font-weight: bold; color: #008080; }
+    @media print { body { margin: 0; } }
+  </style>
+</head>
+<body>
+  <h1>${content.title}</h1>
+  <div class="score">${content.scoreLabel}: ${currentScore}/100</div>
+  <p>${content.profileLabel} - ${getScoreDescription(currentScore)}</p>
+  <h2>Dimension Scores:</h2>
+  ${dimensions.map(dimension => {
+    const score = currentDimensionScores[dimension.key] || 0;
+    return `<p>${dimension.title}: ${score}/100 (${getScoreDescription(score)})</p>`;
+  }).join('')}
+  <p>Generated on: ${new Date().toLocaleDateString()}</p>
+</body>
+</html>`;
+
+    const reportWindow = window.open('', '_blank', 'width=900,height=700');
+    if (reportWindow) {
+      reportWindow.document.write(htmlContent);
+      reportWindow.document.close();
+    }
   };
 
   const shareResults = async () => {
@@ -752,8 +692,8 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       toast.info('Generating AI-powered report... This may take a moment.');
       const reportContent = await aiReportGenerator.generateReport(request);
       
-      // Generate PDF from the AI report content with specified report type
-      await aiReportGenerator.generatePDFReport(reportContent, reportType);
+      // Generate HTML from the AI report content with specified report type
+      // Note: AI report generation disabled - using HTML reports instead
       
       toast.success('AI report generated successfully!');
       
