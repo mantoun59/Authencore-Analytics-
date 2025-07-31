@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 
 // Immediate load - Critical pages and description pages
 import Index from "@/pages/Index";
+import About from "@/pages/About";
 import Auth from "@/pages/Auth";
 import Assessment from "@/pages/Assessment";
 import NotFound from "@/pages/NotFound";
@@ -94,11 +95,7 @@ const RouteConfig = () => {
       <Route path="/auth" element={<Auth />} />
       
       {/* Public Information Pages - Lazy Loaded */}
-      <Route path="/about" element={
-        <Suspense fallback={<LoadingFallback message="Loading About Page..." />}>
-          <AboutPage />
-        </Suspense>
-      } />
+      <Route path="/about" element={<About />} />
       <Route path="/faq" element={
         <Suspense fallback={<LoadingFallback message="Loading FAQ..." />}>
           <FAQ />
