@@ -133,6 +133,40 @@ All colors MUST be HSL.
     
     /* Smooth animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* High contrast mode support */
+  .high-contrast {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --primary: 240 100% 50%;
+    --primary-foreground: 0 0% 100%;
+    --border: 0 0% 50%;
+    --accent: 60 100% 50%;
+    --accent-foreground: 0 0% 0%;
+  }
+
+  .dark.high-contrast {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --primary: 240 100% 70%;
+    --primary-foreground: 0 0% 0%;
+    --border: 0 0% 70%;
+    --accent: 60 100% 70%;
+    --accent-foreground: 0 0% 0%;
+  }
+
+  /* Enhanced focus indicators */
+  .focus-visible-always *:focus {
+    outline: 3px solid hsl(var(--primary)) !important;
+    outline-offset: 2px !important;
+  }
+
+  /* Performance optimizations for images */
+  img {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 1000px;
+  }
 
     /* Sidebar - light theme */
     --sidebar-background: 0 0% 98%;

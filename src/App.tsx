@@ -14,6 +14,7 @@ import AIChat from "@/components/AIChat";
 import CookieBanner from "@/components/CookieBanner";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { initializeSecurity } from "@/utils/securityEnhancements";
+import { optimizeImageLoading, preloadCriticalResources, optimizeFontLoading } from "@/utils/performanceOptimizer";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -35,6 +36,11 @@ const App = () => {
   useEffect(() => {
     // Initialize security enhancements on app start
     initializeSecurity().catch(console.error);
+    
+    // Initialize performance optimizations
+    optimizeImageLoading();
+    preloadCriticalResources();
+    optimizeFontLoading();
   }, []);
 
   return (

@@ -123,8 +123,10 @@ const ImageGenerator = () => {
             <div className="relative rounded-lg overflow-hidden border">
               <img 
                 src={generatedImage} 
-                alt="Generated image"
+                alt="AI-generated image based on user prompt"
                 className="w-full h-auto"
+                loading="lazy"
+                decoding="async"
               />
             </div>
             <Button 

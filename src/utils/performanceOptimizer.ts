@@ -1,6 +1,54 @@
 // Performance monitoring and optimization utilities
 import { logger } from '@/services/loggingService';
 
+// Image lazy loading optimization
+export const optimizeImageLoading = () => {
+  if ('IntersectionObserver' in window) {
+    const imageObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target as HTMLImageElement;
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            img.removeAttribute('data-src');
+            imageObserver.unobserve(img);
+          }
+        }
+      });
+    });
+
+    document.querySelectorAll('img[data-src]').forEach(img => {
+      imageObserver.observe(img);
+    });
+  }
+};
+
+// Preload critical resources  
+export const preloadCriticalResources = () => {
+  const criticalResources = [
+    '/final-logo.png',
+    '/src/assets/final-logo.png'
+  ];
+
+  criticalResources.forEach(resource => {
+    const link = document.createElement('link');
+    link.rel = 'preload';
+    link.as = 'image';
+    link.href = resource;
+    document.head.appendChild(link);
+  });
+};
+
+// Optimize font loading
+export const optimizeFontLoading = () => {
+  if ('fonts' in document) {
+    const fonts = ['Inter', 'system-ui'];
+    fonts.forEach(fontFamily => {
+      document.fonts.load(`1rem ${fontFamily}`);
+    });
+  }
+};
+
 interface PerformanceEntry {
   name: string;
   startTime: number;

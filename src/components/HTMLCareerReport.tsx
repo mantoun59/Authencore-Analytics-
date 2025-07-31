@@ -399,7 +399,13 @@ export const HTMLCareerReport: React.FC<HTMLCareerReportProps> = ({ data }) => {
         <div className="report-header">
           <div className="confidential-badge">CONFIDENTIAL</div>
           <div className="logo-section">
-            <img src={finalLogo} alt="AuthenCore Analytics" className="logo" />
+            <img 
+              src={finalLogo} 
+              alt="AuthenCore Analytics - Professional Career Assessment Platform" 
+              className="logo"
+              loading="eager"
+              decoding="sync"
+            />
             <div className="company-info">
               <h1>AuthenCore Analytics</h1>
               <p>Career Launch Assessment Report</p>
