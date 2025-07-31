@@ -86,7 +86,7 @@ const ContactForm = () => {
           body: formData
         });
       } catch (emailError) {
-        console.log('Email notification failed:', emailError);
+        
         // Don't fail the form submission if email fails
       }
 

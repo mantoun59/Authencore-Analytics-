@@ -131,7 +131,7 @@ const AIChat = memo(() => {
   
   // Simple, reliable close function
   const closeChat = useCallback((e?: React.MouseEvent) => {
-    console.log('Closing chat...', e?.type);
+    
     e?.preventDefault?.();
     e?.stopPropagation?.();
     setIsOpen(false);
@@ -139,7 +139,7 @@ const AIChat = memo(() => {
   
   // Simple toggle function
   const toggleChat = useCallback((e?: React.MouseEvent) => {
-    console.log('Toggling chat, current state:', isOpen, e?.type);
+    
     e?.preventDefault?.();
     e?.stopPropagation?.();
     setIsOpen(prev => !prev);
@@ -223,16 +223,16 @@ const AIChat = memo(() => {
         if (data && data.response && !error) {
           aiResponse = data.response;
           usesFallback = false;
-          console.log('AI response received successfully');
+          
         } else if (error) {
           console.error('Edge function error:', error);
           // Don't throw error, let it fall back to intelligent response
         } else if (data && !data.success) {
-          console.log('Edge function returned fallback, using intelligent response instead');
+          
           // Don't use the API fallback, use our intelligent response
         }
       } catch (edgeFunctionError) {
-        console.log('Using fallback response system due to:', edgeFunctionError?.message || 'API error');
+        
         
         // Show user-friendly message for timeout
         if (edgeFunctionError?.message?.includes('timeout')) {

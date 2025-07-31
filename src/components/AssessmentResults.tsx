@@ -127,8 +127,6 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     }
 
     try {
-      console.log('Results data:', results);
-      console.log('Dimensions data:', results.dimensions);
       
       // Generate HTML report instead of PDF
       const htmlContent = `
