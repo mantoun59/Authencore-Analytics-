@@ -318,7 +318,11 @@ const AIChat = memo(() => {
     <>
       {/* Enhanced Chat Toggle Button */}
       <Button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsOpen(!isOpen);
+        }}
         className="fixed bottom-6 right-6 rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-lg z-50 transition-all duration-300 hover:scale-105"
         size="icon"
         aria-label={isOpen ? "Close AuthenBot chat" : "Open AuthenBot chat"}
@@ -329,16 +333,30 @@ const AIChat = memo(() => {
         )}
       </Button>
 
-      {/* Enhanced Chat Window */}
+      {/* Enhanced Chat Window with proper event handling */}
       {isOpen && (
-        <Card className="fixed bottom-24 right-6 w-96 h-[600px] shadow-2xl z-50 flex flex-col border-2 border-primary/20">
+        <Card 
+          className="fixed bottom-24 right-6 w-96 h-[600px] shadow-2xl z-50 flex flex-col border-2 border-primary/20"
+          onClick={(e) => e.stopPropagation()}
+        >
           <CardHeader className="bg-gradient-to-r from-primary to-primary-glow text-white rounded-t-lg py-4">
-            <CardTitle className="flex items-center gap-3 text-lg">
-              <Bot className="h-6 w-6" />
-              <div>
-                <div>AuthenBot</div>
-                <div className="text-xs font-normal opacity-90">Professional Assessment Assistant</div>
+            <CardTitle className="flex items-center justify-between text-lg">
+              <div className="flex items-center gap-3">
+                <Bot className="h-6 w-6" />
+                <div>
+                  <div>AuthenBot</div>
+                  <div className="text-xs font-normal opacity-90">Professional Assessment Assistant</div>
+                </div>
               </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsOpen(false)}
+                className="text-white hover:bg-white/20 h-8 w-8 rounded-full"
+                aria-label="Close chat"
+              >
+                <X className="h-4 w-4" />
+              </Button>
             </CardTitle>
           </CardHeader>
           
