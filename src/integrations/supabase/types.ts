@@ -342,6 +342,66 @@ export type Database = {
           },
         ]
       }
+      chatbot_analytics: {
+        Row: {
+          conversation_duration_seconds: number | null
+          created_at: string
+          id: string
+          message_count: number
+          satisfaction_rating: number | null
+          session_id: string
+          topics_discussed: string[] | null
+          user_id: string | null
+        }
+        Insert: {
+          conversation_duration_seconds?: number | null
+          created_at?: string
+          id?: string
+          message_count?: number
+          satisfaction_rating?: number | null
+          session_id: string
+          topics_discussed?: string[] | null
+          user_id?: string | null
+        }
+        Update: {
+          conversation_duration_seconds?: number | null
+          created_at?: string
+          id?: string
+          message_count?: number
+          satisfaction_rating?: number | null
+          session_id?: string
+          topics_discussed?: string[] | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      chatbot_conversations: {
+        Row: {
+          conversation_data: Json
+          created_at: string
+          id: string
+          session_id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          conversation_data?: Json
+          created_at?: string
+          id?: string
+          session_id: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          conversation_data?: Json
+          created_at?: string
+          id?: string
+          session_id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       employer_accounts: {
         Row: {
           contact_person: string | null

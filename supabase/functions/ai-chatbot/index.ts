@@ -1,181 +1,288 @@
 import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.51.0';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Validation helper function
-const validateChatbotRequest = (data: unknown) => {
-  if (!data || typeof data !== 'object') {
-    throw new Error('Invalid request body - must be an object');
-  }
-  
-  const req = data as Record<string, unknown>;
-  
-  if (!req.message || typeof req.message !== 'string') {
-    throw new Error('Invalid or missing message field - must be a string');
-  }
-  
-  if (req.message.length > 1000) {
-    throw new Error('Message too long - maximum 1000 characters');
-  }
-  
-  if (req.sessionId && typeof req.sessionId !== 'string') {
-    throw new Error('Invalid sessionId - must be a string');
-  }
-  
-  return {
-    message: req.message.trim(),
-    sessionId: req.sessionId as string | undefined,
-    context: req.context as Record<string, unknown> | undefined
-  };
-};
-
-const SYSTEM_PROMPT = `You are a helpful AI assistant for AuthenCore Analytics, a professional psychological assessment platform. Your role is to assist users with questions about our website, assessments, and services.
-
-ABOUT AUTHENCORE ANALYTICS:
-- We are a professional psychological assessment platform
-- Our mission: "Measuring Minds. Shaping Futures."
-- We provide scientifically validated tests for individuals and organizations
-- We offer comprehensive career assessment tools and personality evaluations
-
-AVAILABLE ASSESSMENTS:
-1. CareerLaunch Assessment ($9.99) - Best Value
-   - 144 questions across 18 dimensions
-   - Comprehensive career discovery assessment
-   - Analyzes interests, aptitudes, personality, and values
-   - Includes RIASEC profile, aptitude analysis, and PDF reports
-
-2. CAIR+ Personality Assessment ($29.99) - Premium
-   - 100 questions with validity detection
-   - Comprehensive personality assessment with advanced validity detection
-   - Percentile scoring and dual reporting
-
-3. Stress Resilience Assessment ($19.99) - Popular
-   - 60 questions with biometric simulation
-   - Advanced stress resilience and adaptability assessment
-
-4. Cultural Intelligence Assessment ($19.99) - Global
-   - 60+ scenarios across 4 CQ dimensions
-   - Comprehensive cultural intelligence assessment with real-world scenarios
-
-5. Communication Styles Assessment ($24.99) - Advanced
-   - 80 questions with linguistic analysis
-   - Comprehensive communication assessment with linguistic analysis
-
-6. Emotional Intelligence Assessment ($24.99) - EQ Focus
-   - 65 questions measuring EQ dimensions
-   - Comprehensive emotional intelligence assessment
-
-7. Leadership Assessment ($34.99) - Executive
-   - 90 questions with 360-degree feedback
-   - Advanced leadership assessment with comprehensive feedback
-
-8. Digital Wellness Assessment ($14.99) - Wellbeing
-   - 55 questions with habit tracking
-   - Comprehensive digital wellness assessment
-
-9. Faith & Values Assessment ($19.99) - Personal
-   - 70 questions exploring values alignment
-   - Comprehensive faith and values assessment
-
-10. Gen Z Workplace Assessment ($16.99) - Generational
-    - 50 questions focused on Gen Z workplace dynamics
-    - Generational workplace assessment
-
-Please provide helpful, accurate information about our services. Always maintain a professional and supportive tone.`;
+// Initialize Supabase client
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
 serve(async (req) => {
-  console.log('🤖 AI Chatbot function v2.0 called at:', new Date().toISOString());
+  console.log('🤖 AuthenBot AI Chatbot function called at:', new Date().toISOString());
   
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    console.log('📋 Handling CORS preflight request');
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { message, conversationHistory = [] } = await req.json();
-    console.log('📨 Received message:', message?.substring(0, 50) + '...');
-
-    if (!message) {
-      throw new Error('Message is required');
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openAIApiKey) {
+      console.log('OpenAI API key not found, using fallback response');
+      return new Response(JSON.stringify({ 
+        response: "I'm AuthenBot, your professional assistant for AuthenCore Analytics! Our comprehensive assessment portfolio helps you discover your potential. What would you like to know?" 
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
-    const anthropicApiKey = Deno.env.get('ANTHROPIC_API_KEY');
-    if (!anthropicApiKey) {
-      console.error('❌ Anthropic API key not found in environment');
-      throw new Error('Anthropic API key not configured');
-    }
+    const { message, conversationHistory = [], sessionId = null } = await req.json();
     
-    console.log('🔑 Anthropic API key found, length:', anthropicApiKey.length);
-
-    // Prepare messages for Claude
-    const messages = [
-      ...conversationHistory,
-      { role: 'user', content: message }
-    ];
-
-    console.log('🚀 Making request to Claude API...');
-    
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${anthropicApiKey}`,
-        'Content-Type': 'application/json',
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-haiku-20241022',
-        max_tokens: 500,
-        system: SYSTEM_PROMPT,
-        messages,
-      }),
+    console.log('Processing AuthenBot request:', { 
+      messageLength: message?.length, 
+      sessionId,
+      historyLength: conversationHistory?.length 
     });
 
-    console.log('📊 Claude API response status:', response.status);
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('❌ Claude API error:', response.status, errorText);
-      
-      if (response.status === 401) {
-        throw new Error('Invalid Anthropic API key. Please check your API key configuration.');
-      } else if (response.status === 429) {
-        throw new Error('Claude API rate limit exceeded. Please try again later.');
-      } else if (response.status === 400) {
-        throw new Error('Invalid request to Claude API. Please try a different message.');
-      } else {
-        throw new Error(`Claude API error: ${response.status} - ${errorText}`);
+    // Get user context if available
+    const authHeader = req.headers.get('authorization');
+    let userId = null;
+    if (authHeader) {
+      try {
+        const token = authHeader.replace('Bearer ', '');
+        const { data: { user } } = await supabase.auth.getUser(token);
+        userId = user?.id || null;
+      } catch (error) {
+        console.log('No authenticated user found');
       }
     }
 
-    const data = await response.json();
-    const assistantMessage = data.content?.[0]?.text;
+    // Professional system prompt focused on assessments and career development
+    const systemPrompt = `You are AuthenBot, the professional AI assistant for AuthenCore Analytics - "Measuring Minds, Shaping Futures." You are an expert in psychological assessments, career development, and professional growth.
 
-    if (!assistantMessage) {
-      throw new Error('No response received from Claude API');
+    CORE CAPABILITIES:
+    - Answer questions about our 10 comprehensive assessment types
+    - Explain psychological concepts and career development
+    - Provide guidance on professional growth and skill development
+    - Help users understand their assessment results and next steps
+    - Offer personalized assessment recommendations based on user goals
+
+    OUR COMPREHENSIVE ASSESSMENT PORTFOLIO:
+    1. CareerLaunch Assessment ($9.99) ⭐ FLAGSHIP
+       - 144 questions across 18 dimensions
+       - Complete career discovery tool analyzing interests, aptitudes, personality, and values
+       - RIASEC profile with career matching
+       - Perfect for students, career changers, and anyone seeking direction
+
+    2. CAIR+ Personality Assessment ($29.99) 🧠 ADVANCED
+       - 100 questions with advanced validity detection technology
+       - Comprehensive personality evaluation with percentile scoring
+       - Dual reporting for candidates and employers
+
+    3. Authentic Leadership Assessment ($34.99) 👨‍💼 EXECUTIVE
+       - 90 questions with 360-degree feedback capability
+       - Executive-level leadership evaluation
+       - Advanced leadership development insights
+
+    4. Faith & Values Assessment ($19.99) 💫 PERSONAL
+       - 70 questions exploring core values and beliefs
+       - Values-based decision making framework
+       - Personal meaning and purpose discovery
+
+    5. Communication Styles Assessment ($14.99) 💬 PROFESSIONAL
+       - 80 questions with linguistic analysis
+       - Professional communication effectiveness
+       - Team dynamics and interpersonal skills
+
+    6. Emotional Intelligence Assessment ($24.99) ❤️ EQ FOCUS
+       - 65 questions measuring all EQ dimensions
+       - Emotional awareness and regulation skills
+       - Leadership and relationship effectiveness
+
+    7. Cultural Intelligence Assessment ($24.99) 🌍 GLOBAL
+       - 60+ real-world scenarios across 4 CQ dimensions
+       - Cross-cultural competency assessment
+       - Global workplace effectiveness
+
+    8. Gen Z Workplace Assessment ($19.99) 🚀 GENERATIONAL
+       - 50 questions focused on next-gen workplace dynamics
+       - Modern work preferences and values
+       - Generational workplace insights
+
+    9. Digital Wellness Assessment ($14.99) 📱 WELLBEING
+       - 55 questions with habit tracking
+       - Technology relationship evaluation
+       - Digital health and balance strategies
+
+    10. Stress & Resilience Assessment ($19.99) 💪 RESILIENCE
+        - 60 questions with biometric simulation
+        - Stress management and adaptability
+        - Resilience building strategies
+
+    PROFESSIONAL TONE & APPROACH:
+    - Maintain a professional yet approachable demeanor
+    - Provide evidence-based, scientifically-informed guidance
+    - Be encouraging and growth-focused in all interactions
+    - Offer specific, actionable advice and recommendations
+    - Respect individual differences and privacy
+    - Ask clarifying questions to provide better guidance
+    - Direct users to the most appropriate assessments for their goals
+
+    CONVERSATION GUIDELINES:
+    - Always maintain professional assessment standards
+    - Provide specific next steps and actionable insights
+    - Reference scientific backing when discussing concepts
+    - Encourage continuous professional and personal development
+    - Respect confidentiality and privacy in all interactions
+    - If asked about specific assessment results, request more context
+    - Recommend assessments based on user's stated goals and circumstances
+
+    PRICING GUIDANCE:
+    - Our assessments range from $9.99 to $34.99
+    - CareerLaunch ($9.99) offers exceptional value for comprehensive career exploration
+    - Specialized assessments provide deep insights into specific areas
+    - All assessments include detailed reports with actionable insights
+
+    Remember: Your role is to guide users toward self-discovery and professional growth through our scientifically-validated assessment portfolio. Be helpful, insightful, and always professional.`;
+
+    // Prepare conversation messages with optimized context
+    const messages = [
+      { role: 'system', content: systemPrompt },
+      ...conversationHistory.slice(-6), // Keep last 6 messages for better context
+      { role: 'user', content: message }
+    ];
+
+    console.log('Sending request to OpenAI GPT-4...');
+
+    // Call OpenAI API with latest model
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4.1-2025-04-14', // Latest GPT-4 model
+        messages: messages,
+        max_tokens: 600,
+        temperature: 0.7,
+        presence_penalty: 0.1,
+        frequency_penalty: 0.1,
+        top_p: 0.9,
+      }),
+    });
+
+    if (!response.ok) {
+      console.error('OpenAI API error:', response.status, response.statusText);
+      const errorData = await response.text();
+      console.error('Error details:', errorData);
+      throw new Error(`OpenAI API error: ${response.status}`);
     }
 
-    console.log('✅ Successfully generated response, length:', assistantMessage.length);
+    const data = await response.json();
+    const aiResponse = data.choices[0].message.content;
+
+    console.log('OpenAI response received successfully');
+
+    // Store conversation in database if sessionId provided
+    if (sessionId) {
+      try {
+        const conversationData = [
+          ...conversationHistory,
+          { 
+            role: 'user', 
+            content: message, 
+            timestamp: new Date().toISOString() 
+          },
+          { 
+            role: 'assistant', 
+            content: aiResponse, 
+            timestamp: new Date().toISOString() 
+          }
+        ];
+
+        await supabase
+          .from('chatbot_conversations')
+          .upsert({
+            session_id: sessionId,
+            user_id: userId,
+            conversation_data: conversationData,
+            updated_at: new Date().toISOString()
+          }, {
+            onConflict: 'session_id'
+          });
+
+        console.log('Conversation stored successfully in database');
+      } catch (error) {
+        console.error('Error storing conversation:', error);
+        // Don't fail the request if storage fails
+      }
+    }
+
+    // Log detailed analytics
+    try {
+      await supabase
+        .from('analytics_events')
+        .insert({
+          event_type: 'chatbot_interaction',
+          entity_type: 'professional_guidance',
+          metadata: {
+            session_id: sessionId,
+            user_id: userId,
+            message_length: message.length,
+            response_length: aiResponse.length,
+            has_conversation_history: conversationHistory.length > 0,
+            interaction_type: 'assessment_guidance',
+            timestamp: new Date().toISOString()
+          }
+        });
+      
+      console.log('Analytics logged successfully');
+    } catch (error) {
+      console.error('Error logging analytics:', error);
+    }
 
     return new Response(JSON.stringify({ 
-      response: assistantMessage,
-      success: true 
+      response: aiResponse,
+      sessionId: sessionId,
+      success: true,
+      source: 'openai_gpt4'
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
-    console.error('💥 Error in ai-chatbot function:', error);
+    console.error('Error in AuthenBot ai-chatbot function:', error);
     
+    // Provide comprehensive professional fallback response
+    const fallbackResponse = `I apologize for the technical difficulty. I'm AuthenBot, your professional assistant for AuthenCore Analytics - "Measuring Minds, Shaping Futures."
+
+    I'm here to help you with:
+    
+    🎯 **Assessment Guidance**
+    • Understanding our 10 comprehensive assessment types
+    • Choosing the right assessment for your goals
+    • Interpreting assessment results and next steps
+    
+    💼 **Career Development**
+    • Professional growth strategies
+    • Career exploration and planning
+    • Skill development recommendations
+    
+    🧠 **Psychological Insights**
+    • Personality and behavioral patterns
+    • Emotional intelligence development
+    • Leadership and communication skills
+    
+    **Popular Assessment Recommendations:**
+    • CareerLaunch Assessment ($9.99) - Perfect for career exploration
+    • CAIR+ Personality Assessment ($29.99) - Deep personality insights
+    • Authentic Leadership Assessment ($34.99) - Executive leadership development
+    • Emotional Intelligence Assessment ($24.99) - EQ enhancement
+    
+    What specific area of professional or personal development would you like to explore? I'm here to provide expert guidance tailored to your goals.`;
+
     return new Response(JSON.stringify({ 
-      error: error.message || 'An unexpected error occurred',
-      success: false 
+      response: fallbackResponse,
+      success: false,
+      source: 'fallback_professional'
     }), {
-      status: 500,
+      status: 200, // Return 200 to avoid client-side errors
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
