@@ -149,35 +149,68 @@ serve(async (req) => {
 
     console.log('Sending request to OpenAI GPT-4...');
 
-    // Call OpenAI API with latest model
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14', // Latest GPT-4 model
-        messages: messages,
-        max_tokens: 600,
-        temperature: 0.7,
-        presence_penalty: 0.1,
-        frequency_penalty: 0.1,
-        top_p: 0.9,
-      }),
-    });
+    // Create AbortController for timeout handling
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-    if (!response.ok) {
-      console.error('OpenAI API error:', response.status, response.statusText);
-      const errorData = await response.text();
-      console.error('Error details:', errorData);
-      throw new Error(`OpenAI API error: ${response.status}`);
+    let aiResponse;
+
+    try {
+      // Call OpenAI API with latest model and timeout
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4.1-2025-04-14', // Latest GPT-4 model
+          messages: messages,
+          max_tokens: 600,
+          temperature: 0.7,
+          presence_penalty: 0.1,
+          frequency_penalty: 0.1,
+          top_p: 0.9,
+          stream: false,
+        }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        console.error('OpenAI API error:', response.status, response.statusText);
+        const errorData = await response.text();
+        console.error('Error details:', errorData);
+        throw new Error(`OpenAI API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      
+      if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+        console.error('Invalid OpenAI response structure:', data);
+        throw new Error('Invalid response from OpenAI');
+      }
+
+      aiResponse = data.choices[0].message.content;
+      
+      if (!aiResponse || typeof aiResponse !== 'string') {
+        console.error('Empty or invalid AI response');
+        throw new Error('Empty response from OpenAI');
+      }
+
+      console.log('OpenAI response received successfully, length:', aiResponse.length);
+    } catch (fetchError) {
+      clearTimeout(timeoutId);
+      
+      if (fetchError.name === 'AbortError') {
+        console.error('OpenAI request timed out after 30 seconds');
+        throw new Error('Request timeout - please try again');
+      }
+      
+      console.error('Fetch error:', fetchError);
+      throw fetchError;
     }
-
-    const data = await response.json();
-    const aiResponse = data.choices[0].message.content;
-
-    console.log('OpenAI response received successfully');
 
     // Store conversation in database if sessionId provided
     if (sessionId) {

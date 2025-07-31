@@ -127,7 +127,7 @@ const AIChat = memo(() => {
     }
   }, [messages.length, scrollToBottom]);
 
-  // Enhanced sendMessage function with professional AI integration
+  // Enhanced sendMessage function with professional AI integration and timeout protection
   const sendMessage = useCallback(async () => {
     if (!inputMessage.trim() || isLoading) return;
 
@@ -148,7 +148,7 @@ const AIChat = memo(() => {
     }
 
     try {
-      // Try enhanced AI response first
+      // Try enhanced AI response first with timeout
       let aiResponse = generateProfessionalResponse(currentInput);
       let usesFallback = true;
 
@@ -159,7 +159,12 @@ const AIChat = memo(() => {
           content: m.content
         }));
 
-        const { data, error } = await supabase.functions.invoke('ai-chatbot', {
+        // Add timeout to prevent stalling
+        const timeoutPromise = new Promise((_, reject) => {
+          setTimeout(() => reject(new Error('Request timeout')), 25000); // 25 second timeout
+        });
+
+        const apiPromise = supabase.functions.invoke('ai-chatbot', {
           body: { 
             message: currentInput,
             conversationHistory,
@@ -167,12 +172,27 @@ const AIChat = memo(() => {
           }
         });
 
+        const { data, error } = await Promise.race([apiPromise, timeoutPromise]) as any;
+
         if (data && data.response && !error) {
           aiResponse = data.response;
           usesFallback = false;
+          console.log('AI response received successfully');
+        } else if (error) {
+          console.error('Edge function error:', error);
+          throw error;
         }
       } catch (edgeFunctionError) {
-        console.log('Using fallback response system');
+        console.log('Using fallback response system due to:', edgeFunctionError?.message || 'API error');
+        
+        // Show user-friendly message for timeout
+        if (edgeFunctionError?.message?.includes('timeout')) {
+          toast({
+            title: "Response Delay",
+            description: "AI is taking longer than usual. Using quick response mode.",
+            variant: "default",
+          });
+        }
       }
 
       const assistantMessage: Message = {
@@ -200,14 +220,27 @@ const AIChat = memo(() => {
     } catch (error) {
       console.error('Chat error:', error);
       
+      // Show appropriate error message
+      let errorContent = "I apologize for the technical difficulty. I'm still here to help with questions about AuthenCore Analytics, our assessments, and your professional development. Please try your question again, and I'll do my best to assist you.";
+      
+      if (error?.message?.includes('timeout')) {
+        errorContent = "The response is taking longer than expected. Let me provide you with immediate assistance using our professional knowledge base. Please feel free to rephrase your question if needed.";
+      }
+      
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
-        content: "I apologize for the technical difficulty. I'm still here to help with questions about AuthenCore Analytics, our assessments, and your professional development. Please try your question again, and I'll do my best to assist you.",
+        content: errorContent,
         timestamp: new Date()
       };
 
       setMessages(prev => cleanupMessages([...prev, errorMessage]));
+      
+      toast({
+        title: "Connection Issue",
+        description: "Switched to offline mode. Functionality continues normally.",
+        variant: "default",
+      });
     } finally {
       setIsLoading(false);
     }
