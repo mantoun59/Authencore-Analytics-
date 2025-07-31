@@ -25,6 +25,189 @@ export interface AssessmentData {
 
 export const assessmentsData: AssessmentData[] = [
   {
+    id: 'technology-integration',
+    title: 'Technology Integration & Boundary Management',
+    subtitle: 'Master Your Digital Workplace Balance',
+    price: '$9.99',
+    duration: '10 minutes',
+    questions: 25,
+    description: 'Assess your relationship with technology in the workplace and develop strategies for optimal integration while maintaining healthy boundaries.',
+    detailedDescription: 'The Technology Integration & Boundary Management assessment evaluates how effectively you integrate technology into your work while maintaining healthy boundaries. Based on Boundary Theory and Technology Acceptance Model, this assessment provides insights into your digital usage patterns, boundary-setting skills, and overall tech-life balance.',
+    whatItMeasures: [
+      'Technology usage patterns and intentionality',
+      'Digital boundary setting and maintenance',
+      'Tech-life balance and well-being integration',
+      'Productivity impact of technology use',
+      'Stress management in digital environments'
+    ],
+    dimensions: [
+      { name: 'Usage Patterns', description: 'How you interact with and utilize technology in your daily work' },
+      { name: 'Digital Boundaries', description: 'Your ability to set and maintain healthy limits around technology use' },
+      { name: 'Tech-Life Balance', description: 'How well you integrate technology while maintaining personal well-being' },
+      { name: 'Productivity Impact', description: 'The effect of technology on your work effectiveness and goal achievement' }
+    ],
+    features: [
+      'Digital Usage Pattern Analysis',
+      'Boundary Setting Assessment', 
+      'Tech-Life Balance Evaluation',
+      'Productivity Enhancement Strategies'
+    ],
+    badges: ['Professional Development', 'Workplace Well-being', 'Digital Balance'],
+    route: '/technology-integration',
+    icon: 'smartphone',
+    color: 'blue',
+    gradient: 'from-blue-500 to-cyan-500'
+  },
+  {
+    id: 'communication-competency',
+    title: 'Professional Communication Competencies',
+    subtitle: 'Enhance Your Communication Effectiveness', 
+    price: '$9.99',
+    duration: '12 minutes',
+    questions: 30,
+    description: 'Evaluate your communication skills across various professional contexts and identify opportunities for enhanced effectiveness.',
+    detailedDescription: 'The Professional Communication Competencies assessment measures your effectiveness across four key communication dimensions using evidence-based research. This assessment helps you understand your communication style preferences and provides targeted recommendations for improving your professional communication impact.',
+    whatItMeasures: [
+      'Direct vs indirect communication effectiveness',
+      'Formal vs informal style adaptability',
+      'Expressive vs reserved communication expression',
+      'Task vs relationship focus in communication',
+      'Overall communication competence and impact'
+    ],
+    dimensions: [
+      { name: 'Direct vs Indirect', description: 'Your preference for straightforward versus diplomatic communication approaches' },
+      { name: 'Formal vs Informal', description: 'Your comfort level with structured versus casual communication styles' },
+      { name: 'Expressive vs Reserved', description: 'Your tendency toward animated versus controlled communication expression' },
+      { name: 'Task vs Relationship', description: 'Your focus on objectives versus interpersonal connections in communication' }
+    ],
+    features: [
+      'Communication Style Analysis',
+      'Context Adaptability Assessment',
+      'Effectiveness Measurement', 
+      'Professional Growth Recommendations'
+    ],
+    badges: ['Communication Skills', 'Professional Development', 'Leadership Growth'],
+    route: '/communication-competency',
+    icon: 'message-circle',
+    color: 'green',
+    gradient: 'from-green-500 to-emerald-500'
+  },
+  {
+    id: 'leadership-behavior',
+    title: 'Leadership Behaviors & Effectiveness',
+    subtitle: 'Develop Your Leadership Approach',
+    price: '$9.99', 
+    duration: '17 minutes',
+    questions: 40,
+    description: 'Measure your leadership behaviors across different styles and situations to enhance your leadership effectiveness.',
+    detailedDescription: 'The Leadership Behaviors & Effectiveness assessment evaluates your leadership approach across six research-based leadership styles. Using Transformational Leadership Theory, this assessment identifies your primary and secondary leadership styles while providing insights into your overall leadership effectiveness and development opportunities.',
+    whatItMeasures: [
+      'Visionary leadership capabilities and inspiration skills',
+      'Coaching leadership approach and development focus',
+      'Affiliative leadership and relationship building',
+      'Democratic leadership and collaborative decision-making',
+      'Pacesetting leadership and performance standards',
+      'Commanding leadership and directive approaches'
+    ],
+    dimensions: [
+      { name: 'Visionary Leadership', description: 'Inspiring others with compelling visions and driving change through shared purpose' },
+      { name: 'Coaching Leadership', description: 'Developing individual capabilities and supporting personal/professional growth' },
+      { name: 'Affiliative Leadership', description: 'Building strong relationships and creating harmony within teams' },
+      { name: 'Democratic Leadership', description: 'Valuing input and making decisions through collaboration and consensus' },
+      { name: 'Pacesetting Leadership', description: 'Setting high standards and modeling excellence while expecting high performance' },
+      { name: 'Commanding Leadership', description: 'Providing clear direction and making decisive decisions in critical situations' }
+    ],
+    features: [
+      'Leadership Style Identification',
+      'Situational Effectiveness Analysis',
+      'Behavioral Pattern Assessment',
+      'Development Action Planning'
+    ],
+    badges: ['Leadership Development', 'Management Skills', 'Team Leadership'],
+    route: '/leadership-behavior',
+    icon: 'crown',
+    color: 'purple',
+    gradient: 'from-purple-500 to-violet-500'
+  },
+  {
+    id: 'work-values',
+    title: 'Work Values & Motivation',
+    subtitle: 'Discover What Drives You Professionally',
+    price: '$9.99',
+    duration: '16 minutes', 
+    questions: 45,
+    description: 'Identify your core work values and motivational drivers to find greater career satisfaction and alignment.',
+    detailedDescription: 'The Work Values & Motivation assessment identifies your core professional values using the Super Work Values Inventory framework combined with Self-Determination Theory. This comprehensive evaluation helps you understand what motivates you at work and guides career decisions that align with your intrinsic values.',
+    whatItMeasures: [
+      'Achievement and recognition motivation',
+      'Autonomy and independence preferences',
+      'Social impact and service orientation',
+      'Security and stability priorities',
+      'Growth and learning drive',
+      'Work-life integration values',
+      'Innovation and creativity motivation',
+      'Leadership and influence aspirations',
+      'Collaboration and teamwork preferences'
+    ],
+    dimensions: [
+      { name: 'Achievement & Recognition', description: 'Motivation for accomplishment, success, and acknowledgment of your contributions' },
+      { name: 'Autonomy & Independence', description: 'Preference for self-direction, decision-making authority, and flexible work arrangements' },
+      { name: 'Social Impact & Service', description: 'Drive to make a meaningful difference and contribute to society or community' },
+      { name: 'Security & Stability', description: 'Priority on job security, predictable income, and stable work environments' },
+      { name: 'Growth & Learning', description: 'Motivation for continuous development, skill acquisition, and intellectual challenge' },
+      { name: 'Work-Life Integration', description: 'Importance of balance between professional and personal life priorities' },
+      { name: 'Innovation & Creativity', description: 'Drive for creative expression, novel solutions, and innovative thinking' },
+      { name: 'Leadership & Influence', description: 'Motivation to guide others, make decisions, and have organizational impact' },
+      { name: 'Collaboration & Teamwork', description: 'Preference for working with others and building strong team relationships' }
+    ],
+    features: [
+      'Values Hierarchy Mapping',
+      'Motivation Driver Analysis',
+      'Career Alignment Assessment',
+      'Workplace Fit Evaluation'
+    ],
+    badges: ['Career Development', 'Values Alignment', 'Personal Growth'],
+    route: '/work-values',
+    icon: 'heart',
+    color: 'red',
+    gradient: 'from-red-500 to-rose-500'
+  },
+  {
+    id: 'work-preferences',
+    title: 'Individual Work Preferences',
+    subtitle: 'Optimize Your Work Environment',
+    price: '$9.99',
+    duration: '15 minutes',
+    questions: 35,
+    description: 'Assess your individual workplace preferences to identify optimal environments for maximum productivity and satisfaction.',
+    detailedDescription: 'The Individual Work Preferences assessment evaluates your preferences across five key workplace dimensions using the Job Characteristics Model. This assessment helps you understand your ideal work environment, communication preferences, career expectations, and optimal conditions for professional success.',
+    whatItMeasures: [
+      'Work environment and structure preferences',
+      'Communication style and frequency preferences',
+      'Career expectations and advancement priorities',
+      'Technology integration and digital work preferences',
+      'Multigenerational collaboration strategies and approaches'
+    ],
+    dimensions: [
+      { name: 'Work Preferences', description: 'Your preferences for work structure, environment, and task organization' },
+      { name: 'Communication Styles', description: 'Your preferred methods and frequency of professional communication' },
+      { name: 'Career Expectations', description: 'Your expectations for career growth, advancement, and professional development' },
+      { name: 'Technology Integration', description: 'Your comfort and preferences for technology use in work environments' },
+      { name: 'Multigenerational Strategies', description: 'Your approach to working effectively across different generations' }
+    ],
+    features: [
+      'Work Environment Analysis',
+      'Communication Preference Assessment',
+      'Career Expectation Evaluation',
+      'Multigenerational Strategy Planning'
+    ],
+    badges: ['Workplace Optimization', 'Professional Preferences', 'Career Planning'],
+    route: '/work-preferences',
+    icon: 'settings',
+    color: 'indigo',
+    gradient: 'from-indigo-500 to-blue-500'
+  },
+  {
     id: 'career-launch',
     title: 'CareerLaunch',
     subtitle: 'Career Discovery & Planning',

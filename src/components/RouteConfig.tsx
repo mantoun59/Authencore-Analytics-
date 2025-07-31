@@ -35,6 +35,13 @@ const GenZWorkplaceAssessment = lazy(() => import("@/pages/GenZWorkplaceAssessme
 const DigitalWellnessAssessment = lazy(() => import("@/pages/DigitalWellnessAssessment"));
 const LeadershipAssessment = lazy(() => import("@/pages/LeadershipAssessment"));
 
+// New comprehensive assessments
+const TechnologyIntegrationAssessment = lazy(() => import("@/pages/TechnologyIntegrationAssessment"));
+const CommunicationCompetencyAssessment = lazy(() => import("@/pages/CommunicationCompetencyAssessment"));
+const LeadershipBehaviorAssessment = lazy(() => import("@/pages/LeadershipBehaviorAssessment"));
+const WorkValuesAssessment = lazy(() => import("@/pages/WorkValuesAssessment"));
+const WorkPreferencesAssessment = lazy(() => import("@/pages/WorkPreferencesAssessment"));
+
 // Lazy load - Information pages
 const AboutPage = lazy(() => import("@/pages/About"));
 const FAQ = lazy(() => import("@/pages/FAQ"));
@@ -196,6 +203,33 @@ const RouteConfig = () => {
       <Route path="/leadership" element={
         <Suspense fallback={<LoadingFallback message="Loading Leadership Assessment..." />}>
           <LeadershipAssessment />
+        </Suspense>
+      } />
+      
+      {/* New Comprehensive Assessments - Lazy Loaded */}
+      <Route path="/technology-integration" element={
+        <Suspense fallback={<LoadingFallback message="Loading Technology Integration Assessment..." />}>
+          <TechnologyIntegrationAssessment />
+        </Suspense>
+      } />
+      <Route path="/communication-competency" element={
+        <Suspense fallback={<LoadingFallback message="Loading Communication Competency Assessment..." />}>
+          <CommunicationCompetencyAssessment />
+        </Suspense>
+      } />
+      <Route path="/leadership-behavior" element={
+        <Suspense fallback={<LoadingFallback message="Loading Leadership Behavior Assessment..." />}>
+          <LeadershipBehaviorAssessment />
+        </Suspense>
+      } />
+      <Route path="/work-values" element={
+        <Suspense fallback={<LoadingFallback message="Loading Work Values Assessment..." />}>
+          <WorkValuesAssessment />
+        </Suspense>
+      } />
+      <Route path="/work-preferences" element={
+        <Suspense fallback={<LoadingFallback message="Loading Work Preferences Assessment..." />}>
+          <WorkPreferencesAssessment />
         </Suspense>
       } />
       
