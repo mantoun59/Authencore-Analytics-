@@ -210,7 +210,10 @@ const AIChat = memo(() => {
           console.log('AI response received successfully');
         } else if (error) {
           console.error('Edge function error:', error);
-          throw error;
+          // Don't throw error, let it fall back to intelligent response
+        } else if (data && !data.success) {
+          console.log('Edge function returned fallback, using intelligent response instead');
+          // Don't use the API fallback, use our intelligent response
         }
       } catch (edgeFunctionError) {
         console.log('Using fallback response system due to:', edgeFunctionError?.message || 'API error');

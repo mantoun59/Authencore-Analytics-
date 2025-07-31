@@ -12,6 +12,43 @@ const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
+// Simple greeting handler for instant responses
+const handleSimpleGreeting = (input: string): string | null => {
+  if (!input || typeof input !== 'string') return null;
+  
+  const lowercaseInput = input.toLowerCase().trim();
+  
+  // Simple greetings that should get instant responses
+  const simpleGreetings = ['hi', 'hello', 'hey', 'ho', 'good morning', 'good afternoon', 'good evening'];
+  const isSimpleGreeting = simpleGreetings.some(greeting => 
+    lowercaseInput === greeting || 
+    lowercaseInput === greeting + '!' ||
+    lowercaseInput === greeting + '.'
+  );
+  
+  if (isSimpleGreeting) {
+    const greetingResponses = [
+      "Hi there! I'm AuthenBot. How can I help you with your professional development today?",
+      "Hello! I'm here to guide you through our assessment portfolio. What interests you?",
+      "Hey! Ready to explore your potential? What would you like to know about our assessments?",
+      "Hi! I'm AuthenBot, your professional development assistant. What can I help you discover?"
+    ];
+    return greetingResponses[Math.floor(Math.random() * greetingResponses.length)];
+  }
+  
+  // Thank you responses
+  if (lowercaseInput.includes('thanks') || lowercaseInput.includes('thank you')) {
+    return "You're welcome! Is there anything else I can help you with regarding your professional development?";
+  }
+  
+  // Single word help
+  if (lowercaseInput === 'help') {
+    return "I'm here to help! Ask me about our assessments, career guidance, or professional development. What specific area interests you?";
+  }
+  
+  return null;
+};
+
 serve(async (req) => {
   console.log('🤖 AuthenBot AI Chatbot function called at:', new Date().toISOString());
   
@@ -36,8 +73,23 @@ serve(async (req) => {
     console.log('Processing AuthenBot request:', { 
       messageLength: message?.length, 
       sessionId,
-      historyLength: conversationHistory?.length 
+      historyLength: conversationHistory?.length,
+      message: message?.substring(0, 50) // Log first 50 chars for debugging
     });
+
+    // Handle simple greetings locally (no need for OpenAI)
+    const simpleGreeting = handleSimpleGreeting(message);
+    if (simpleGreeting) {
+      console.log('Handling simple greeting locally');
+      return new Response(JSON.stringify({ 
+        response: simpleGreeting,
+        sessionId: sessionId,
+        success: true,
+        source: 'local_intelligent'
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
 
     // Get user context if available
     const authHeader = req.headers.get('authorization');
