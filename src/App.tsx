@@ -52,10 +52,10 @@ const App = () => {
             <AuthProvider>
               <PartnerProvider>
                 <EmployerProvider>
-                  <GoogleAnalytics />
                   <Toaster />
                   <Sonner />
                   <BrowserRouter>
+                    <GoogleAnalytics />
                     <ScrollToTop />
                     <RouteConfig />
                     <AIChat />
