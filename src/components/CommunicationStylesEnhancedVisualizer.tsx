@@ -591,6 +591,133 @@ const EnhancedCommunicationStylesVisualizer: React.FC<EnhancedCommunicationStyle
           </CardContent>
         </Card>
       )}
+
+      {/* Enhanced Assessment Validity & Reliability Section */}
+      <Card className="shadow-lg border-0 bg-gradient-to-br from-slate-50 to-gray-50">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-3">
+            <Shield className="w-6 h-6 text-indigo-600" />
+            Enhanced Validation Metrics
+          </CardTitle>
+          <CardDescription>
+            Comprehensive assessment reliability including consistency checks and cognitive load analysis
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Reverse Score Consistency */}
+            <div className="text-center p-4 bg-white rounded-lg border">
+              <div className="w-16 h-16 mx-auto mb-3 bg-blue-100 rounded-full flex items-center justify-center">
+                <TrendingUp className="w-8 h-8 text-blue-600" />
+              </div>
+              <h4 className="font-semibold text-slate-800 mb-2">Consistency Check</h4>
+              <div className="text-2xl font-bold text-blue-600 mb-1">
+                {Math.round(results.distortionAnalysis.reverseScoreConsistency)}%
+              </div>
+              <Progress value={results.distortionAnalysis.reverseScoreConsistency} className="h-2 mb-2" />
+              <p className="text-xs text-slate-600">
+                Reverse-scored item consistency
+              </p>
+            </div>
+
+            {/* Attention Check Accuracy */}
+            <div className="text-center p-4 bg-white rounded-lg border">
+              <div className="w-16 h-16 mx-auto mb-3 bg-green-100 rounded-full flex items-center justify-center">
+                <Eye className="w-8 h-8 text-green-600" />
+              </div>
+              <h4 className="font-semibold text-slate-800 mb-2">Attention Accuracy</h4>
+              <div className="text-2xl font-bold text-green-600 mb-1">
+                {Math.round(results.distortionAnalysis.attentionCheckAccuracy)}%
+              </div>
+              <Progress value={results.distortionAnalysis.attentionCheckAccuracy} className="h-2 mb-2" />
+              <p className="text-xs text-slate-600">
+                Attention check performance
+              </p>
+            </div>
+
+            {/* Cognitive Load Score */}
+            <div className="text-center p-4 bg-white rounded-lg border">
+              <div className="w-16 h-16 mx-auto mb-3 bg-purple-100 rounded-full flex items-center justify-center">
+                <Brain className="w-8 h-8 text-purple-600" />
+              </div>
+              <h4 className="font-semibold text-slate-800 mb-2">Cognitive Load</h4>
+              <div className="text-2xl font-bold text-purple-600 mb-1">
+                {Math.round(results.distortionAnalysis.cognitiveLoadScore)}%
+              </div>
+              <Progress value={results.distortionAnalysis.cognitiveLoadScore} className="h-2 mb-2" />
+              <p className="text-xs text-slate-600">
+                Thoughtful response pattern
+              </p>
+            </div>
+
+            {/* Overall Reliability */}
+            <div className="text-center p-4 bg-white rounded-lg border">
+              <div className="w-16 h-16 mx-auto mb-3 bg-indigo-100 rounded-full flex items-center justify-center">
+                <Shield className="w-8 h-8 text-indigo-600" />
+              </div>
+              <h4 className="font-semibold text-slate-800 mb-2">Overall Reliability</h4>
+              <div className="text-2xl font-bold text-indigo-600 mb-1">
+                {results.distortionAnalysis.reliability}
+              </div>
+              <div className="text-sm text-slate-600 mb-2">
+                Distortion Score: {Math.round(results.distortionAnalysis.score)}%
+              </div>
+              <p className="text-xs text-slate-600">
+                Assessment trustworthiness
+              </p>
+            </div>
+          </div>
+
+          {/* Enhanced Validity Indicators */}
+          <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+            <h4 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              Advanced Validation Breakdown
+            </h4>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+              <div>
+                <strong className="text-blue-800">Response Patterns:</strong>
+                <div className="mt-1 space-y-1">
+                  <div className="flex justify-between">
+                    <span>Extreme Patterns:</span>
+                    <span>{Math.round(results.distortionAnalysis.extremePatterns)}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Social Desirability:</span>
+                    <span>{Math.round(results.distortionAnalysis.socialDesirabilityBias)}%</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <strong className="text-blue-800">Timing Analysis:</strong>
+                <div className="mt-1 space-y-1">
+                  <div className="flex justify-between">
+                    <span>Response Time Pattern:</span>
+                    <span>{Math.round(results.distortionAnalysis.responseTimePattern)}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Total Time:</span>
+                    <span>{Math.round(results.timeSpent / 60)} min</span>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <strong className="text-blue-800">Quality Indicators:</strong>
+                <div className="mt-1 space-y-1">
+                  <div className="flex justify-between">
+                    <span>Consistency Check:</span>
+                    <span>{Math.round(results.distortionAnalysis.consistencyCheck)}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Reliability Level:</span>
+                    <span className="capitalize">{results.distortionAnalysis.reliability}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };
