@@ -13,8 +13,20 @@ interface FVAIReportData {
   results: FaithValuesResult;
 }
 
+// Enhanced Faith & Values Report with Professional Insights
 export const generateFVAIReport = (data: FVAIReportData): string => {
   const { candidateInfo, results } = data;
+
+  // Add faith-based leadership profiles
+  const getFaithProfile = (results: any) => {
+    const overallScore = results.overallScore || 75;
+    if (overallScore >= 85) return { type: 'Faith-Centered Leader', badge: '✨', description: 'Strong alignment with faith-based values and leadership principles' };
+    if (overallScore >= 75) return { type: 'Values-Driven Professional', badge: '🌟', description: 'Demonstrates consistent faith integration in professional settings' };
+    if (overallScore >= 65) return { type: 'Growing Believer', badge: '🌱', description: 'Developing faith integration with emerging leadership qualities' };
+    return { type: 'Faith Explorer', badge: '🔍', description: 'Beginning journey of faith-work integration' };
+  };
+
+  const faithProfile = getFaithProfile(results);
 
   return `
 <!DOCTYPE html>

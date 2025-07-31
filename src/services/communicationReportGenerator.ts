@@ -83,6 +83,7 @@ export interface CommunicationReport {
   };
 }
 
+// Enhanced Communication Report with Modern Design & Analysis
 export const generateCommunicationReport = (
   results: CommunicationStylesResults,
   participantName: string,

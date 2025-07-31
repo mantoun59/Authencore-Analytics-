@@ -12,8 +12,23 @@ interface EmotionalIntelligenceReportData {
   reportType: 'candidate' | 'employer';
 }
 
+// Enhanced Emotional Intelligence Report Generator with Professional UI
 export const generateEmotionalIntelligenceReport = (data: EmotionalIntelligenceReportData): string => {
   const { candidateInfo, results, reportType } = data;
+
+  // Professional EI profiles based on results
+  const getEIProfile = (scores: any) => {
+    const { selfAwareness, selfRegulation, motivation, empathy, socialSkills } = scores;
+    const avg = (selfAwareness + selfRegulation + motivation + empathy + socialSkills) / 5;
+    
+    if (avg >= 85) return { type: 'EI Master', badge: '🏆', color: '#22c55e' };
+    if (avg >= 75) return { type: 'EI Leader', badge: '🌟', color: '#3b82f6' };
+    if (avg >= 65) return { type: 'EI Developer', badge: '📈', color: '#8b5cf6' };
+    if (avg >= 55) return { type: 'EI Emerging', badge: '🌱', color: '#f59e0b' };
+    return { type: 'EI Foundation', badge: '🧠', color: '#ef4444' };
+  };
+
+  const profile = getEIProfile(results.scores || results);
 
   return `
 <!DOCTYPE html>
@@ -491,8 +506,16 @@ export const generateEmotionalIntelligenceReport = (data: EmotionalIntelligenceR
         </div>
         
         <div class="overall-score">
-            <div class="score-value">${results.overallScore}</div>
-            <div class="score-label">Overall Emotional Intelligence Score</div>
+            <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px;">
+                <div style="font-size: 4rem; opacity: 0.8;">${profile.badge}</div>
+                <div>
+                    <div class="score-value">${results.overallScore}</div>
+                    <div class="score-label">Overall EI Score</div>
+                </div>
+            </div>
+            <div style="display: inline-block; padding: 8px 20px; background: ${profile.color}20; color: ${profile.color}; border-radius: 20px; font-weight: 600; font-size: 1.1rem;">
+                ${profile.type}
+            </div>
         </div>
         
         <div class="section">
