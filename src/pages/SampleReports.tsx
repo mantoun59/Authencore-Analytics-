@@ -2075,6 +2075,7 @@ const SampleReports = () => {
         };
       
       case 'cair':
+      case 'cairplus':
       case 'cair-personality':
       case 'cair-assessment':
         console.log('✅ Matched cair case');
