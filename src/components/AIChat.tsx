@@ -128,6 +128,18 @@ const AIChat = memo(() => {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
   const [conversationStarted, setConversationStarted] = useState(false);
+  
+  // Simple, reliable close function
+  const closeChat = useCallback(() => {
+    console.log('Closing chat...');
+    setIsOpen(false);
+  }, []);
+  
+  // Simple toggle function
+  const toggleChat = useCallback(() => {
+    console.log('Toggling chat, current state:', isOpen);
+    setIsOpen(prev => !prev);
+  }, [isOpen]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -318,14 +330,11 @@ const AIChat = memo(() => {
     <>
       {/* Enhanced Chat Toggle Button */}
       <Button
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          setIsOpen(!isOpen);
-        }}
+        onClick={toggleChat}
         className="fixed bottom-6 right-6 rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-lg z-50 transition-all duration-300 hover:scale-105"
         size="icon"
         aria-label={isOpen ? "Close AuthenBot chat" : "Open AuthenBot chat"}
+        type="button"
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
         {!conversationStarted && !isOpen && (
@@ -335,10 +344,11 @@ const AIChat = memo(() => {
 
       {/* Enhanced Chat Window with proper event handling */}
       {isOpen && (
-        <Card 
-          className="fixed bottom-24 right-6 w-96 h-[600px] shadow-2xl z-50 flex flex-col border-2 border-primary/20"
+        <div 
+          className="fixed bottom-24 right-6 w-96 h-[600px] z-50"
           onClick={(e) => e.stopPropagation()}
         >
+          <Card className="w-full h-full shadow-2xl flex flex-col border-2 border-primary/20">
           <CardHeader className="bg-gradient-to-r from-primary to-primary-glow text-white rounded-t-lg py-4">
             <CardTitle className="flex items-center justify-between text-lg">
               <div className="flex items-center gap-3">
@@ -351,9 +361,10 @@ const AIChat = memo(() => {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => setIsOpen(false)}
-                className="text-white hover:bg-white/20 h-8 w-8 rounded-full"
+                onClick={closeChat}
+                className="text-white hover:bg-white/20 h-8 w-8 rounded-full flex-shrink-0"
                 aria-label="Close chat"
+                type="button"
               >
                 <X className="h-4 w-4" />
               </Button>
@@ -434,7 +445,8 @@ const AIChat = memo(() => {
               </p>
             </div>
           </CardContent>
-        </Card>
+          </Card>
+        </div>
       )}
     </>
   );
