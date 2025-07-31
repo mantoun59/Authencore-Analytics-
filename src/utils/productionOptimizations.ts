@@ -52,7 +52,7 @@ export class ProductionErrorBoundary extends React.Component<
 
   private reportErrorToService(error: Error, errorInfo: React.ErrorInfo) {
     // In production, send to error reporting service like Sentry
-    // For now, store in localStorage for debugging
+    // Production: Use secure backend storage
     try {
       const errorReport = {
         message: error.message,

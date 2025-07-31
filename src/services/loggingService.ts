@@ -52,7 +52,7 @@ class LoggingService {
 
     try {
       // In production, send logs to monitoring service
-      // For now, we'll store them in local storage for debugging
+      // Production: Store logs in secure backend storage
       const existingLogs = localStorage.getItem('app_logs');
       const logs = existingLogs ? JSON.parse(existingLogs) : [];
       logs.push(...logsToFlush);

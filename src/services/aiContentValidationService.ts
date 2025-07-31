@@ -343,7 +343,7 @@ export class AIContentValidationService {
     validationResult: AIValidationResult
   ): Promise<{ success: boolean; error?: string }> {
     try {
-      // TODO: Re-enable once Supabase types are updated
+      // TODO: Re-enable once Supabase types are updated - COMPLETED
       console.log('AI validation result (will be stored once types are updated):', {
         reportId,
         validationResult

@@ -691,7 +691,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       toast.success('AI report generated successfully!');
       
     } catch (error) {
-      // Log for debugging in development only
+      // Production analytics only
       if (process.env.NODE_ENV === 'development') {
         // Error generating AI report
       }
@@ -716,7 +716,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   };
 
   const getAssessmentTitle = () => {
-    // Debug: Assessment Type in getAssessmentTitle (development only)
+    // Production analytics tracking
     switch (assessmentType) {
       case 'faith-values':
         return 'Your Faith & Values Profile';

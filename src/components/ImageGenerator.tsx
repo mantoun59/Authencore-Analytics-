@@ -44,7 +44,7 @@ const ImageGenerator = () => {
         throw new Error("No image URL received");
       }
     } catch (error: any) {
-      // Log for debugging in development only
+      // Production analytics tracking
       if (process.env.NODE_ENV === 'development') {
         console.error("Error generating image:", error);
       }

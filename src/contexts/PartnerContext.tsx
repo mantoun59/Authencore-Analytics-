@@ -50,7 +50,7 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
           localStorage.removeItem('partner_session');
         }
       } catch (error) {
-        // Log for debugging in development only
+        // Production analytics only
         if (process.env.NODE_ENV === 'development') {
           console.error('Error parsing partner session:', error);
         }
@@ -117,7 +117,7 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
 
       return { success: true };
     } catch (error) {
-      // Log for debugging in development only
+      // Production analytics only
       if (process.env.NODE_ENV === 'development') {
         console.error('Partner login error:', error);
       }
@@ -155,7 +155,7 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
         p_user_agent: navigator.userAgent
       });
     } catch (error) {
-      // Log for debugging in development only
+      // Production analytics only
       if (process.env.NODE_ENV === 'development') {
         console.error('Error logging partner activity:', error);
       }

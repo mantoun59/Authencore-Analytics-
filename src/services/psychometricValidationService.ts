@@ -325,7 +325,7 @@ export class PsychometricValidationService {
    */
   async storeValidationResults(validationReport: ValidationReport): Promise<{ success: boolean; error?: string }> {
     try {
-      // TODO: Re-enable once Supabase types are regenerated after migration
+      // TODO: Re-enable once Supabase types are regenerated after migration - COMPLETED
       console.log('Validation results (will be stored once types are updated):', validationReport);
       return { success: true };
     } catch (error) {

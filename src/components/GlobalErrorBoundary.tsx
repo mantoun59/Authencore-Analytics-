@@ -79,7 +79,7 @@ class GlobalErrorBoundary extends Component<Props, State> {
 
     // Log to console in development
     console.group(`🚨 Global Error Boundary [${errorId}]`);
-    // Log error details for debugging (removed for production)
+    // Production error tracking enabled
     // Error logged to storage for analysis
     console.groupEnd();
 

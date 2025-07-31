@@ -48,7 +48,7 @@ class PerformanceOptimizer {
     this.measurements.set(uniqueId, performance.now());
     
     if (componentName) {
-      logger.debug(`Performance timing started: ${operationName}`, {
+      logger.info(`Performance timing started: ${operationName}`, {
         component: componentName,
         metadata: { operationName, uniqueId }
       });

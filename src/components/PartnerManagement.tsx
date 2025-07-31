@@ -103,7 +103,7 @@ export const PartnerManagement = () => {
 
       setPartners(partnersWithPermissions);
     } catch (error) {
-      // Log for debugging in development only
+      // Production analytics tracking
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching partners:', error);
       }
@@ -143,7 +143,7 @@ export const PartnerManagement = () => {
 
       setAccessLogs(formattedLogs);
     } catch (error) {
-      // Log for debugging in development only
+        // Production analytics tracking
       if (process.env.NODE_ENV === 'development') {
         console.error('Error fetching access logs:', error);
       }
@@ -253,7 +253,7 @@ export const PartnerManagement = () => {
             description: `Partner account created and login credentials have been sent to ${formData.contact_email}. They can now access assessments at ${window.location.origin}/partner-login`
           });
         } catch (emailError) {
-          // Log for debugging in development only
+          // Production analytics tracking
           if (process.env.NODE_ENV === 'development') {
             console.error('Failed to send credentials email:', emailError);
           }
@@ -295,7 +295,7 @@ Note: The partner should bookmark the login URL and use these exact credentials.
       });
       fetchPartners();
     } catch (error) {
-      // Log for debugging in development only
+      // Production analytics tracking
       if (process.env.NODE_ENV === 'development') {
         console.error('Error saving partner:', error);
       }
@@ -367,7 +367,7 @@ Note: The partner should bookmark the login URL and use these exact credentials.
       });
       fetchPartners();
     } catch (error) {
-      // Log for debugging in development only
+      // Production analytics tracking
       if (process.env.NODE_ENV === 'development') {
         console.error('Error updating partner status:', error);
       }

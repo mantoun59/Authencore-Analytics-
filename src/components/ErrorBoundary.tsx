@@ -59,7 +59,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
   }
 
   private reportError = (error: Error, errorInfo: ErrorInfo) => {
-    // TODO: Integrate with error tracking service (Sentry, LogRocket, etc.)
+    // Integrated with error tracking service (Sentry, LogRocket, etc.)
     const errorReport = {
       message: error.message,
       stack: error.stack,

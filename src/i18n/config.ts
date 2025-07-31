@@ -29,7 +29,7 @@ i18n
     resources,
     lng: 'en', // default language
     fallbackLng: 'en',
-    debug: false, // Disable debug
+    debug: false, // Production optimized
 
     interpolation: {
       escapeValue: false,
