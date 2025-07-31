@@ -38,8 +38,8 @@ const SocialShare = ({
     window.open(shareUrl, '_blank', 'width=600,height=400,scrollbars=yes,resizable=yes');
     
     // Track sharing analytics
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'share', {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'share', {
         method: platform,
         content_type: 'assessment_result',
         item_id: window.location.pathname

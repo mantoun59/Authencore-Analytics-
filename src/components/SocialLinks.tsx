@@ -75,8 +75,8 @@ const SocialLinks = ({
     window.open(url, '_blank', 'noopener,noreferrer');
     
     // Track social media clicks
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'social_click', {
+    if (typeof window !== 'undefined' && (window as any).gtag) {
+      (window as any).gtag('event', 'social_click', {
         platform: platform,
         event_category: 'Social Media',
         event_label: platform
