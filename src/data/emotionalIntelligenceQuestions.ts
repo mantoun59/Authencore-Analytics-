@@ -4,6 +4,8 @@ export interface EmotionalIntelligenceQuestion {
   question: string;
   reverse?: boolean; // For reverse-scored items
   context?: 'general' | 'workplace' | 'social'; // Context categorization
+  weight?: number; // Scoring weight for predictive power
+  behaviorCategory?: 'leadership' | 'conflict' | 'teamwork' | 'stress' | 'relationships';
 }
 
 export const emotionalIntelligenceQuestions: EmotionalIntelligenceQuestion[] = [
@@ -454,4 +456,73 @@ export const dimensionNames = {
   motivation: "Motivation",
   empathy: "Empathy",
   socialSkills: "Social Skills"
+};
+
+// Enhanced EI Profile Categories and Behavior Mapping
+export const eiProfileTypes = {
+  EMPATHETIC_LEADER: {
+    name: "Empathetic Leader",
+    description: "High empathy and social skills with strong self-awareness",
+    badge: "🌟 Empathetic Leader",
+    characteristics: ["Strong people focus", "Natural team builder", "Excellent listener", "Inclusive leader"]
+  },
+  CALM_REGULATOR: {
+    name: "Calm Regulator", 
+    description: "Exceptional self-regulation with high motivation",
+    badge: "🧘 Calm Regulator",
+    characteristics: ["Stays composed under pressure", "Excellent impulse control", "Consistent performer", "Stress resilient"]
+  },
+  MOTIVATED_ACHIEVER: {
+    name: "Motivated Achiever",
+    description: "High internal motivation with strong self-awareness", 
+    badge: "🚀 Motivated Achiever",
+    characteristics: ["Goal-oriented", "Self-driven", "Resilient to setbacks", "Growth mindset"]
+  },
+  SOCIAL_CONNECTOR: {
+    name: "Social Connector",
+    description: "Outstanding social skills with high empathy",
+    badge: "🤝 Social Connector", 
+    characteristics: ["Builds relationships easily", "Excellent communicator", "Network builder", "Team collaborator"]
+  },
+  BALANCED_PROFESSIONAL: {
+    name: "Balanced Professional",
+    description: "Well-rounded across all EI dimensions",
+    badge: "⚖️ Balanced Professional",
+    characteristics: ["Consistent across dimensions", "Adaptable leader", "Well-rounded skillset", "Reliable teammate"]
+  },
+  DEVELOPING_POTENTIAL: {
+    name: "Developing Potential", 
+    description: "Strong foundation with areas for growth",
+    badge: "🌱 Developing Potential",
+    characteristics: ["Growth opportunities identified", "Foundation skills present", "Ready for development", "Coachable mindset"]
+  }
+};
+
+// Behavioral indicators for workplace performance
+export const behavioralIndicators = {
+  leadership: {
+    high: ["Inspires team confidence", "Makes decisions under pressure", "Communicates vision clearly", "Manages change effectively"],
+    moderate: ["Shows leadership potential", "Takes initiative sometimes", "Communicates adequately", "Adapts to some changes"],
+    developing: ["Needs leadership development", "Hesitant to take charge", "Communication needs improvement", "Struggles with change"]
+  },
+  conflict: {
+    high: ["Resolves disputes calmly", "Mediates effectively", "Finds win-win solutions", "Prevents escalation"],
+    moderate: ["Handles most conflicts well", "Sometimes avoids difficult issues", "Generally fair in disputes", "Needs guidance occasionally"],
+    developing: ["Avoids confrontation", "Escalates conflicts", "Takes sides inappropriately", "Needs conflict training"]
+  },
+  teamwork: {
+    high: ["Excellent collaborator", "Supports team goals", "Builds strong relationships", "Inclusive team member"],
+    moderate: ["Good team player", "Generally cooperative", "Builds some relationships", "Usually supportive"],
+    developing: ["Prefers working alone", "Struggles in teams", "Limited collaboration", "Needs team skills development"]
+  },
+  stress: {
+    high: ["Thrives under pressure", "Maintains composure", "Helps others stay calm", "Excellent stress management"],
+    moderate: ["Handles stress adequately", "Occasionally overwhelmed", "Uses some coping strategies", "Generally resilient"],
+    developing: ["Easily overwhelmed", "Poor stress tolerance", "Needs stress management training", "Affects others negatively"]
+  },
+  relationships: {
+    high: ["Builds deep connections", "Maintains long-term relationships", "Excellent interpersonal skills", "Trusted by others"],
+    moderate: ["Forms good relationships", "Generally well-liked", "Adequate social skills", "Some close work friendships"],
+    developing: ["Struggles with relationships", "Limited social connections", "Needs interpersonal development", "Often misunderstood"]
+  }
 };
