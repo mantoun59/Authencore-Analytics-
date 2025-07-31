@@ -14,74 +14,104 @@ interface Message {
   timestamp: Date;
 }
 
-// Professional assessment-focused response generator
-const generateProfessionalResponse = (input: string): string => {
-  const lowercaseInput = input.toLowerCase();
+// Intelligent response generator with context awareness
+const generateIntelligentResponse = (input: string, conversationLength: number): string => {
+  const lowercaseInput = input.toLowerCase().trim();
+  
+  // Simple greeting detection
+  const simpleGreetings = ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening'];
+  const isSimpleGreeting = simpleGreetings.some(greeting => 
+    lowercaseInput === greeting || lowercaseInput === greeting + '!'
+  );
+  
+  if (isSimpleGreeting) {
+    const greetingResponses = [
+      "Hi there! I'm AuthenBot. How can I help you with your professional development today?",
+      "Hello! I'm here to guide you through our assessment portfolio. What interests you?",
+      "Hey! Ready to explore your potential? What would you like to know about our assessments?",
+      "Hi! I'm AuthenBot, your professional development assistant. What can I help you discover?"
+    ];
+    return greetingResponses[Math.floor(Math.random() * greetingResponses.length)];
+  }
+  
+  // Short questions or single words
+  if (lowercaseInput.length < 15 && !lowercaseInput.includes('?')) {
+    if (lowercaseInput.includes('help')) {
+      return "I'm here to help! Ask me about our assessments, career guidance, or professional development. What specific area interests you?";
+    }
+    if (lowercaseInput.includes('thanks') || lowercaseInput.includes('thank you')) {
+      return "You're welcome! Is there anything else I can help you with regarding your professional development?";
+    }
+  }
   
   const hasKeyword = (keywords: string[]) => keywords.some(keyword => lowercaseInput.includes(keyword));
   
-  // Enhanced keyword detection for assessments
+  // Enhanced keyword detection for assessments with intelligent length
   if (hasKeyword(['career', 'job', 'work', 'profession', 'future', 'path', 'direction'])) {
     if (hasKeyword(['price', 'cost', 'pricing', '$', 'money', 'fee'])) {
-      return "The CareerLaunch Assessment is our most comprehensive career discovery tool at $9.99. It uses 144 scientifically-crafted questions to evaluate your interests, aptitudes, personality traits, and core values, providing a complete roadmap for your professional future.";
+      return "The CareerLaunch Assessment is $9.99 - our most comprehensive career discovery tool with 144 questions analyzing your interests, aptitudes, personality, and values.";
     }
-    return "Our CareerLaunch Assessment ($9.99) is designed to help you discover your ideal career path through comprehensive analysis of your interests, aptitudes, personality, and values. It's perfect for students, career changers, and anyone seeking professional clarity.";
+    return "Our CareerLaunch Assessment ($9.99) helps you discover your ideal career path through comprehensive analysis. Perfect for students, career changers, and anyone seeking professional clarity.";
   }
   
   if (hasKeyword(['personality', 'traits', 'character', 'behavior', 'psychology'])) {
-    return "The CAIR+ Personality Assessment ($29.99) offers advanced psychological evaluation with cutting-edge validity detection technology. It provides deep insights into your personality patterns, behavioral tendencies, and interpersonal style for personal and professional development.";
+    return "The CAIR+ Personality Assessment ($29.99) provides advanced psychological evaluation with validity detection technology for deep personality insights.";
   }
   
   if (hasKeyword(['leadership', 'manager', 'executive', 'lead', 'management', 'boss'])) {
-    return "Our Authentic Leadership Assessment ($34.99) is specifically designed for current and aspiring leaders. It evaluates your leadership style, emotional intelligence, decision-making patterns, and provides actionable strategies for authentic leadership development.";
+    return "Our Authentic Leadership Assessment ($34.99) evaluates your leadership style and provides strategies for authentic leadership development.";
   }
   
   if (hasKeyword(['communication', 'speaking', 'talking', 'presentation', 'interpersonal'])) {
-    return "The Communication Styles Assessment ($14.99) analyzes how you prefer to communicate and interact with others. It helps improve your professional relationships, team dynamics, and overall communication effectiveness in the workplace.";
+    return "The Communication Styles Assessment ($14.99) analyzes how you communicate and helps improve your professional relationships and team dynamics.";
   }
   
   if (hasKeyword(['emotional', 'emotion', 'eq', 'feelings', 'empathy'])) {
-    return "Our Emotional Intelligence Assessment ($24.99) measures your ability to understand and manage emotions - both your own and others'. High EQ is crucial for leadership, teamwork, and overall professional success.";
+    return "Our Emotional Intelligence Assessment ($24.99) measures your ability to understand and manage emotions - crucial for leadership and teamwork.";
   }
   
   if (hasKeyword(['values', 'beliefs', 'faith', 'meaning', 'purpose'])) {
-    return "The Faith & Values Assessment ($19.99) helps you understand your core values and how they influence your decision-making. It's valuable for anyone seeking clarity on what truly matters to them in life and work.";
+    return "The Faith & Values Assessment ($19.99) helps you understand your core values and how they influence your decision-making.";
   }
   
   if (hasKeyword(['stress', 'pressure', 'burnout', 'resilience', 'coping'])) {
-    return "Our Stress & Resilience Assessment ($19.99) evaluates how you handle pressure and provides strategies for building resilience. It's essential for maintaining well-being in today's demanding work environment.";
+    return "Our Stress & Resilience Assessment ($19.99) evaluates how you handle pressure and provides strategies for building resilience.";
   }
   
   if (hasKeyword(['culture', 'cultural', 'diversity', 'international', 'global'])) {
-    return "The Cultural Intelligence Assessment ($24.99) measures your ability to work effectively across cultures. It's crucial for success in our increasingly globalized workplace and for anyone working with diverse teams.";
+    return "The Cultural Intelligence Assessment ($24.99) measures your ability to work effectively across cultures in our globalized workplace.";
   }
   
   if (hasKeyword(['digital', 'technology', 'online', 'screen', 'wellness'])) {
-    return "Our Digital Wellness Assessment ($14.99) evaluates your relationship with technology and provides strategies for healthy digital habits. It's particularly relevant in our screen-dominated world.";
+    return "Our Digital Wellness Assessment ($14.99) evaluates your relationship with technology and provides strategies for healthy digital habits.";
   }
   
   if (hasKeyword(['genz', 'gen z', 'generation', 'young', 'workplace', 'millennial'])) {
-    return "The Gen Z Workplace Assessment ($19.99) analyzes next-generation workplace dynamics and preferences. It's perfect for understanding how younger generations approach work and what they value in their careers.";
+    return "The Gen Z Workplace Assessment ($19.99) analyzes next-generation workplace dynamics and what younger generations value in careers.";
   }
   
   if (hasKeyword(['price', 'cost', 'pricing', 'expensive', 'cheap', 'budget', '$', 'money', 'fee'])) {
-    return "Our assessment portfolio ranges from $9.99 to $34.99, strategically priced for accessibility while maintaining scientific rigor. The CareerLaunch Assessment ($9.99) offers exceptional value, while specialized assessments like Authentic Leadership ($34.99) provide executive-level insights.";
+    return "Our assessments range from $9.99 to $34.99. The CareerLaunch Assessment ($9.99) offers exceptional value for comprehensive career exploration.";
   }
   
   if (hasKeyword(['help', 'support', 'guidance', 'assistance', 'confused', 'unsure'])) {
-    return "I'm here to provide expert guidance on our comprehensive assessment portfolio and professional development strategies. Each assessment is scientifically validated and designed to provide actionable insights. What specific area of growth or challenge would you like to explore?";
+    return "I'm here to guide you through our scientifically-validated assessment portfolio. What specific area of growth or challenge interests you?";
   }
   
   if (hasKeyword(['report', 'results', 'interpretation', 'analysis', 'feedback'])) {
-    return "All our assessments provide detailed, professional reports with actionable insights and development recommendations. Each report includes personalized feedback, strengths analysis, growth areas, and specific next steps for your development journey.";
+    return "All our assessments provide detailed reports with actionable insights, strengths analysis, growth areas, and specific development recommendations.";
   }
   
   if (hasKeyword(['accuracy', 'valid', 'reliable', 'scientific', 'research'])) {
-    return "AuthenCore Analytics maintains the highest psychometric standards. Our assessments are scientifically validated, regularly updated, and include advanced validity detection to ensure accurate, reliable results you can trust for important decisions.";
+    return "AuthenCore maintains the highest psychometric standards with scientifically validated assessments and advanced validity detection for reliable results.";
   }
   
-  // Default professional welcome message
-  return "Welcome to AuthenCore Analytics - where we're 'Measuring Minds, Shaping Futures.' I'm AuthenBot, your professional assistant for career development and psychological assessment guidance. Our comprehensive portfolio includes 10 scientifically-validated assessments designed to unlock your potential. What area of personal or professional growth interests you most?";
+  // Default intelligent welcome based on conversation length
+  if (conversationLength <= 2) {
+    return "I'm AuthenBot, your professional development assistant at AuthenCore Analytics. What area of growth interests you most?";
+  }
+  
+  return "I can help with assessment selection, career guidance, or professional development strategies. What specific question do you have?";
 };
 
 const AIChat = memo(() => {
@@ -90,7 +120,7 @@ const AIChat = memo(() => {
     {
       id: '1',
       type: 'assistant',
-      content: "Hello! I'm AuthenBot, your professional assistant for AuthenCore Analytics. I'm here to help you navigate our comprehensive assessment portfolio and guide your professional development journey. What would you like to explore today?",
+      content: "Hi! I'm AuthenBot, your professional development assistant. How can I help you today?",
       timestamp: new Date()
     }
   ]);
@@ -148,8 +178,8 @@ const AIChat = memo(() => {
     }
 
     try {
-      // Try enhanced AI response first with timeout
-      let aiResponse = generateProfessionalResponse(currentInput);
+      // Generate intelligent response based on context
+      let aiResponse = generateIntelligentResponse(currentInput, messages.length);
       let usesFallback = true;
 
       try {
