@@ -16,8 +16,10 @@ const Header = () => {
     { name: t("navigation.home"), href: "/" },
     { name: t("navigation.about"), href: "/about" },
     { name: t("navigation.assessments"), href: "/assessment" },
+    { name: "Contact", href: "/contact" },
     { name: t("footer.support"), href: "/faq" },
-    { name: t("navigation.partnerEmployer"), href: "/partner-login" },
+    { name: "Employers", href: "/employer-login" },
+    { name: "Partners", href: "/partner-login" },
     { name: t("navigation.admin"), href: "/admin" },
   ];
 
