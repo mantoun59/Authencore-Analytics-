@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+  
+  <!-- Homepage -->
+  <url>
+    <loc>https://authencore-analytics.lovable.app/</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://authencore-analytics.lovable.app/src/assets/final-logo.png</image:loc>
+      <image:title>AuthenCore Analytics Logo</image:title>
+    </image:image>
+  </url>
+
+  <!-- Assessment Pages -->
+  <url>
+    <loc>https://authencore-analytics.lovable.app/assessment</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/career-launch</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/communication-styles</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/emotional-intelligence</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/cultural-intelligence</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/genz-workplace</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/stress-resilience</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/leadership</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/digital-wellness</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/faith-values</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/burnout-prevention</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- Info Pages -->
+  <url>
+    <loc>https://authencore-analytics.lovable.app/about</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/pricing</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/sample-reports</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/faq</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/privacy-policy</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.5</priority>
+  </url>
+
+  <!-- Authentication Pages -->
+  <url>
+    <loc>https://authencore-analytics.lovable.app/auth</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+
+  <!-- Business Pages -->
+  <url>
+    <loc>https://authencore-analytics.lovable.app/employer-login</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://authencore-analytics.lovable.app/partner-login</loc>
+    <lastmod>2024-07-31</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+</urlset>
