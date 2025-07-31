@@ -74,6 +74,9 @@ const sampleCandidateData = {
     extremePatterns: 0.1,
     socialDesirabilityBias: 0.2,
     responseTimePattern: 0.3,
+    reverseScoreConsistency: 95,
+    attentionCheckAccuracy: 100,
+    cognitiveLoadScore: 88,
     // Additional properties used in templates
     responseConsistency: 0.89,
     engagementLevel: "High",

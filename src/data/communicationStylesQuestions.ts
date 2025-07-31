@@ -9,6 +9,8 @@ export interface CommunicationQuestion {
   prompt?: string;
   timeLimit?: number;
   weight: number;
+  reverseScored?: boolean; // For consistency validation
+  attentionCheck?: boolean; // For attention validation
 }
 
 export const communicationStylesQuestions: CommunicationQuestion[] = [
@@ -539,7 +541,7 @@ export const communicationStylesQuestions: CommunicationQuestion[] = [
     type: 'written-response',
     question: 'Respond to an urgent client complaint about service quality.',
     prompt: 'Write your response as if emailing the client directly.',
-    timeLimit: 300,
+    timeLimit: 180, // High pressure, quick response needed
     weight: 1.8
   },
   {
@@ -589,7 +591,7 @@ export const communicationStylesQuestions: CommunicationQuestion[] = [
     type: 'written-response',
     question: 'Convince a skeptical stakeholder to support your project.',
     prompt: 'Write your persuasive message.',
-    timeLimit: 300,
+    timeLimit: 240, // Medium cognitive load for persuasion
     weight: 1.7
   },
   {
@@ -1115,6 +1117,138 @@ export const communicationStylesQuestions: CommunicationQuestion[] = [
       'Inclusive process with extensive stakeholder engagement'
     ],
     weight: 1.8
+  },
+
+  // REVERSE-CODED QUESTIONS FOR CONSISTENCY VALIDATION
+  {
+    id: 'cs81-rev',
+    module: 'style-identification',
+    dimension: 'assertiveness',
+    type: 'multiple-choice',
+    question: 'When leading a team, I rarely speak up during meetings.',
+    options: [
+      'Strongly Agree',
+      'Agree',
+      'Neutral',
+      'Disagree',
+      'Strongly Disagree'
+    ],
+    weight: 1.0,
+    reverseScored: true
+  },
+  {
+    id: 'cs82-rev',
+    module: 'style-identification',
+    dimension: 'expressiveness',
+    type: 'multiple-choice',
+    question: 'I avoid showing emotions in professional settings.',
+    options: [
+      'Strongly Agree',
+      'Agree',
+      'Neutral',
+      'Disagree',
+      'Strongly Disagree'
+    ],
+    weight: 1.0,
+    reverseScored: true
+  },
+  {
+    id: 'cs83-rev',
+    module: 'style-identification',
+    dimension: 'influence-strategies',
+    type: 'multiple-choice',
+    question: 'I rarely try to persuade others to see my point of view.',
+    options: [
+      'Strongly Agree',
+      'Agree',
+      'Neutral',
+      'Disagree',
+      'Strongly Disagree'
+    ],
+    weight: 1.0,
+    reverseScored: true
+  },
+  {
+    id: 'cs84-rev',
+    module: 'style-identification',
+    dimension: 'listening-patterns',
+    type: 'multiple-choice',
+    question: 'I often interrupt others when they are speaking.',
+    options: [
+      'Strongly Agree',
+      'Agree',
+      'Neutral',
+      'Disagree',
+      'Strongly Disagree'
+    ],
+    weight: 1.0,
+    reverseScored: true
+  },
+  {
+    id: 'cs85-rev',
+    module: 'style-identification',
+    dimension: 'conflict-communication',
+    type: 'multiple-choice',
+    question: 'I always avoid discussing disagreements directly.',
+    options: [
+      'Strongly Agree',
+      'Agree',
+      'Neutral',
+      'Disagree',
+      'Strongly Disagree'
+    ],
+    weight: 1.0,
+    reverseScored: true
+  },
+
+  // ATTENTION CHECK QUESTIONS
+  {
+    id: 'cs86-att',
+    module: 'style-identification',
+    dimension: 'assertiveness',
+    type: 'multiple-choice',
+    question: 'For quality assurance, please select "Disagree" for this question.',
+    options: [
+      'Strongly Agree',
+      'Agree',
+      'Neutral',
+      'Disagree',
+      'Strongly Disagree'
+    ],
+    weight: 0,
+    attentionCheck: true
+  },
+  {
+    id: 'cs87-att',
+    module: 'linguistic-analysis',
+    dimension: 'expressiveness',
+    type: 'multiple-choice',
+    question: 'To ensure you are reading carefully, please choose the third option.',
+    options: [
+      'First option',
+      'Second option',
+      'Third option',
+      'Fourth option',
+      'Fifth option'
+    ],
+    weight: 0,
+    attentionCheck: true
+  },
+  {
+    id: 'cs88-att',
+    module: 'interactive-simulations',
+    dimension: 'information-processing',
+    type: 'multiple-choice',
+    question: 'This is an attention check. Please select "Neutral" to continue.',
+    options: [
+      'Strongly Agree',
+      'Agree',
+      'Neutral',
+      'Disagree',
+      'Strongly Disagree'
+    ],
+    weight: 0,
+    attentionCheck: true
   }
 ];
 

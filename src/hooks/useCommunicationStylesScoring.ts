@@ -29,6 +29,9 @@ export interface DistortionAnalysis {
   extremePatterns: number;
   socialDesirabilityBias: number;
   responseTimePattern: number;
+  reverseScoreConsistency: number;
+  attentionCheckAccuracy: number;
+  cognitiveLoadScore: number;
 }
 
 export interface CommunicationStylesResults {
@@ -110,8 +113,13 @@ export const useCommunicationStylesScoring = () => {
       // Determine communication profile
       const profile = determineProfile(dimensions);
 
-      // Analyze distortion patterns
-      const distortionAnalysis = calculateDistortionAnalysis(Object.entries(answers).map(([key, value]) => ({ selectedOption: value })));
+      // Analyze distortion patterns with enhanced validation
+      const enhancedDistortionAnalysis = {
+        ...calculateDistortionAnalysis(Object.entries(answers).map(([key, value]) => ({ selectedOption: value }))),
+        reverseScoreConsistency: calculateReverseScoreConsistency(answers),
+        attentionCheckAccuracy: calculateAttentionCheckAccuracy(answers),
+        cognitiveLoadScore: calculateCognitiveLoadScore(responseTimings, timeSpent)
+      };
 
       // Calculate contextual effectiveness
       const contextualEffectiveness = calculateContextualEffectiveness(dimensions, answers);
@@ -128,7 +136,7 @@ export const useCommunicationStylesScoring = () => {
         communicationEffectivenessIndex,
         adaptabilityScore,
         profile,
-        distortionAnalysis,
+        distortionAnalysis: enhancedDistortionAnalysis,
         contextualEffectiveness,
         developmentAreas,
         completedAt: new Date().toISOString(),
@@ -441,7 +449,10 @@ export const useCommunicationStylesScoring = () => {
       consistencyCheck: 100, // Will be calculated by enhanced analysis
       extremePatterns: 85,
       socialDesirabilityBias: 90,
-      responseTimePattern: 95
+      responseTimePattern: 95,
+      reverseScoreConsistency: 100, // Placeholder
+      attentionCheckAccuracy: 100, // Placeholder
+      cognitiveLoadScore: 85 // Placeholder
     };
   };
 
@@ -550,6 +561,70 @@ export const useCommunicationStylesScoring = () => {
     return descriptions[dimension as keyof typeof descriptions]?.[level] || 'Score calculated';
   };
 
+  // Enhanced validation helper functions
+  const calculateReverseScoreConsistency = (answers: Record<string, any>): number => {
+    const reverseQuestions = communicationStylesQuestions.filter(q => q.reverseScored);
+    let consistencyCount = 0;
+    let totalChecks = 0;
+
+    reverseQuestions.forEach(reverseQ => {
+      const reverseAnswer = answers[reverseQ.id];
+      if (reverseAnswer !== undefined) {
+        // Find similar forward-scored questions in same dimension
+        const forwardQuestions = communicationStylesQuestions.filter(
+          q => q.dimension === reverseQ.dimension && !q.reverseScored && !q.attentionCheck
+        );
+        
+        forwardQuestions.forEach(forwardQ => {
+          const forwardAnswer = answers[forwardQ.id];
+          if (forwardAnswer !== undefined) {
+            // Check consistency (reverse-scored should have opposite pattern)
+            const reverseScore = 5 - parseInt(reverseAnswer); // Reverse scale
+            const forwardScore = parseInt(forwardAnswer);
+            const difference = Math.abs(reverseScore - forwardScore);
+            
+            if (difference <= 1) consistencyCount++; // Allow 1 point tolerance
+            totalChecks++;
+          }
+        });
+      }
+    });
+
+    return totalChecks > 0 ? (consistencyCount / totalChecks) * 100 : 100;
+  };
+
+  const calculateAttentionCheckAccuracy = (answers: Record<string, any>): number => {
+    const attentionQuestions = communicationStylesQuestions.filter(q => q.attentionCheck);
+    let correctCount = 0;
+
+    attentionQuestions.forEach(q => {
+      const answer = answers[q.id];
+      if (answer !== undefined) {
+        // Check if correct answer was selected based on question instruction
+        if (q.id === 'cs86-att' && answer === '3') correctCount++; // "Disagree"
+        if (q.id === 'cs87-att' && answer === '2') correctCount++; // "Third option"
+        if (q.id === 'cs88-att' && answer === '2') correctCount++; // "Neutral"
+      }
+    });
+
+    return attentionQuestions.length > 0 ? (correctCount / attentionQuestions.length) * 100 : 100;
+  };
+
+  const calculateCognitiveLoadScore = (responseTimings: Record<string, number>, totalTime: number): number => {
+    const times = Object.values(responseTimings).filter(t => t > 0);
+    if (times.length === 0) return 85;
+
+    const avgTime = times.reduce((sum, time) => sum + time, 0) / times.length;
+    const timeVariance = times.reduce((sum, time) => sum + Math.pow(time - avgTime, 2), 0) / times.length;
+    
+    // Higher variance indicates thoughtful consideration (good cognitive load)
+    // Very low times indicate rushing (poor cognitive load)
+    const normalizedVariance = Math.min(timeVariance / 1000, 100);
+    const timeThresholdScore = avgTime > 3000 ? 100 : (avgTime / 3000) * 100;
+    
+    return Math.round((normalizedVariance * 0.3 + timeThresholdScore * 0.7));
+  };
+
   // Enhanced distortion detection and validity analysis
   const calculateDistortionAnalysis = (responses: any[]): DistortionAnalysis => {
     AssessmentLogger.log('Calculating enhanced distortion analysis for Communication Styles');
@@ -599,7 +674,10 @@ export const useCommunicationStylesScoring = () => {
       consistencyCheck: validationResult.score,
       extremePatterns: extremePatterns,
       socialDesirabilityBias: socialDesirability,
-      responseTimePattern: timePatterns
+      responseTimePattern: timePatterns,
+      reverseScoreConsistency: 95, // Enhanced validation
+      attentionCheckAccuracy: 100, // Enhanced validation  
+      cognitiveLoadScore: 90 // Enhanced validation
     };
   };
 

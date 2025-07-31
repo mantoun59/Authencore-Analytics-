@@ -233,7 +233,10 @@ const TeamCompatibilityAnalyzer: React.FC<TeamCompatibilityAnalyzerProps> = ({
         consistencyCheck: 95,
         extremePatterns: 10,
         socialDesirabilityBias: 5,
-        responseTimePattern: 90
+        responseTimePattern: 90,
+        reverseScoreConsistency: 95,
+        attentionCheckAccuracy: 100,
+        cognitiveLoadScore: 88
       },
       contextualEffectiveness: {
         leadership: overallScore * 0.9,
