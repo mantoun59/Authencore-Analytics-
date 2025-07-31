@@ -10,6 +10,7 @@ import About from "@/pages/About";
 import Auth from "@/pages/Auth";
 import Assessment from "@/pages/Assessment";
 import NotFound from "@/pages/NotFound";
+import PsychometricAudit from "@/pages/PsychometricAudit";
 import CAIRPersonalityDescription from "@/pages/CAIRPersonalityDescription";
 import AuthenticLeadershipDescription from "@/pages/AuthenticLeadershipDescription";
 import BurnoutPreventionDescription from "@/pages/BurnoutPreventionDescription";
@@ -304,6 +305,7 @@ const RouteConfig = () => {
           </Suspense>
         </ProtectedAdminRoute>
       } />
+      <Route path="/psychometric-audit" element={<PsychometricAudit />} />
       
       {/* Catch-all 404 Route - MUST BE LAST */}
       <Route path="*" element={<NotFound />} />

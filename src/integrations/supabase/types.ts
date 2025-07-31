@@ -289,6 +289,60 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_validation_status: {
+        Row: {
+          assessment_type: string
+          created_at: string
+          ethical_concerns: string[] | null
+          id: string
+          last_reviewed_at: string | null
+          legal_compliance_status: string | null
+          notes: string | null
+          psychometric_rating: number | null
+          reliability_score: number | null
+          reviewed_by: string | null
+          risk_level: string
+          theoretical_foundation: string | null
+          updated_at: string
+          validation_status: string
+          validity_evidence: string[] | null
+        }
+        Insert: {
+          assessment_type: string
+          created_at?: string
+          ethical_concerns?: string[] | null
+          id?: string
+          last_reviewed_at?: string | null
+          legal_compliance_status?: string | null
+          notes?: string | null
+          psychometric_rating?: number | null
+          reliability_score?: number | null
+          reviewed_by?: string | null
+          risk_level?: string
+          theoretical_foundation?: string | null
+          updated_at?: string
+          validation_status?: string
+          validity_evidence?: string[] | null
+        }
+        Update: {
+          assessment_type?: string
+          created_at?: string
+          ethical_concerns?: string[] | null
+          id?: string
+          last_reviewed_at?: string | null
+          legal_compliance_status?: string | null
+          notes?: string | null
+          psychometric_rating?: number | null
+          reliability_score?: number | null
+          reviewed_by?: string | null
+          risk_level?: string
+          theoretical_foundation?: string | null
+          updated_at?: string
+          validation_status?: string
+          validity_evidence?: string[] | null
+        }
+        Relationships: []
+      }
       bias_analysis_results: {
         Row: {
           analysis_metadata: Json | null
@@ -1310,6 +1364,42 @@ export type Database = {
           },
         ]
       }
+      professional_oversight_requirements: {
+        Row: {
+          assessment_type: string
+          created_at: string
+          id: string
+          legal_disclaimers: string[] | null
+          minimum_qualification_level: string | null
+          requires_qualified_administrator: boolean | null
+          requires_supervision: boolean | null
+          updated_at: string
+          usage_restrictions: string[] | null
+        }
+        Insert: {
+          assessment_type: string
+          created_at?: string
+          id?: string
+          legal_disclaimers?: string[] | null
+          minimum_qualification_level?: string | null
+          requires_qualified_administrator?: boolean | null
+          requires_supervision?: boolean | null
+          updated_at?: string
+          usage_restrictions?: string[] | null
+        }
+        Update: {
+          assessment_type?: string
+          created_at?: string
+          id?: string
+          legal_disclaimers?: string[] | null
+          minimum_qualification_level?: string | null
+          requires_qualified_administrator?: boolean | null
+          requires_supervision?: boolean | null
+          updated_at?: string
+          usage_restrictions?: string[] | null
+        }
+        Relationships: []
+      }
       professional_standards_compliance: {
         Row: {
           assessment_type: string
@@ -1678,6 +1768,10 @@ export type Database = {
           is_active: boolean
           is_expired: boolean
         }[]
+      }
+      check_assessment_access: {
+        Args: { p_assessment_type: string }
+        Returns: boolean
       }
       check_guest_access: {
         Args: { p_token: string; p_assessment_type: string }
