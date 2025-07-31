@@ -47,6 +47,7 @@ const PartnerDashboard = lazy(() => import("@/pages/PartnerDashboard"));
 const EmployerLogin = lazy(() => import("@/pages/EmployerLogin"));
 const EmployerDashboard = lazy(() => import("@/pages/EmployerDashboard"));
 const SoloAssessment = lazy(() => import("@/pages/SoloAssessment"));
+const Contact = lazy(() => import("@/pages/Contact"));
 
 // Lazy load - Admin features (heavy components)
 const AdminPage = lazy(() => import("@/pages/Admin"));
@@ -273,6 +274,13 @@ const RouteConfig = () => {
         </Suspense>
       } />
       <Route path="/sample-reports" element={<SampleReports />} />
+      
+      {/* Contact Page */}
+      <Route path="/contact" element={
+        <Suspense fallback={<LoadingFallback message="Loading Contact Form..." />}>
+          <Contact />
+        </Suspense>
+      } />
       
       {/* Protected Admin Routes - Lazy Loaded with Protection */}
       <Route path="/admin" element={
