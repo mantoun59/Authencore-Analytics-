@@ -232,7 +232,6 @@ All colors MUST be HSL.
     --sidebar-ring: 180 100% 45%;
   }
 
-@layer base {
   * {
     @apply border-border;
   }
