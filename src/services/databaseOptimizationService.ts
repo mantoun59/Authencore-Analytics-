@@ -169,7 +169,7 @@ export class DatabaseOptimizationService {
       const recentResults = response.data;
 
       if (recentResults) {
-        console.log(`Optimized query returned ${recentResults.length} recent assessment results`);
+        
       }
 
       return {

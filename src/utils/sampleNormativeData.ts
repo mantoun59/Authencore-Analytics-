@@ -41,7 +41,7 @@ const calculateStats = (data: number[]): { mean: number; stdDev: number } => {
 };
 
 export const generateSampleNormativeData = async (): Promise<void> => {
-  console.log('Generating sample normative data...');
+  
 
   const assessmentTypes = ['career-launch', 'stress-resilience', 'communication-styles'];
   
@@ -238,7 +238,7 @@ export const generateSampleNormativeData = async (): Promise<void> => {
     }
 
     // Add normative data to database
-    console.log(`Generated ${normativeDatasets.length} normative datasets`);
+    
     
     let addedCount = 0;
     for (const dataset of normativeDatasets) {
@@ -250,7 +250,7 @@ export const generateSampleNormativeData = async (): Promise<void> => {
       }
     }
     
-    console.log(`Successfully added ${addedCount} normative datasets to database`);
+    
     
   } catch (error) {
     console.error('Error generating sample normative data:', error);
@@ -279,9 +279,7 @@ const calculateDataQuality = (sampleSize: number, stdDev: number): number => {
 // Export function to initialize sample data (should be called once during setup)
 export const initializeSampleNormativeData = async (): Promise<boolean> => {
   try {
-    console.log('Initializing sample normative data...');
     await generateSampleNormativeData();
-    console.log('Sample normative data initialization complete');
     return true;
   } catch (error) {
     console.error('Failed to initialize sample normative data:', error);
