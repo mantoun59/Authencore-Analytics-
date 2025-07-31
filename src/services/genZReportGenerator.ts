@@ -900,16 +900,23 @@ export const generateGenZReport = (data: GenZReportData): string => {
         ` : ''}
         
         <div class="footer">
-            <p><strong>AuthenCore Analytics</strong> - Next-Generation Workplace Assessment Platform</p>
-            <p style="margin-top: 15px; font-size: 0.85rem;">
+            <div style="background: linear-gradient(135deg, #f8fafc, #e2e8f0); padding: 30px; border-radius: 16px; margin-bottom: 20px;">
+                <h3 style="color: ${archetype.color}; margin-bottom: 15px; font-size: 1.1rem;">🔒 Confidentiality & Privacy Notice</h3>
+                <div style="color: hsl(var(--muted-foreground)); font-size: 0.9rem; line-height: 1.6;">
+                    <p><strong>Confidentiality:</strong> This Gen Z workplace assessment contains confidential psychological data. Access is restricted to authorized personnel only. Unauthorized disclosure is strictly prohibited.</p>
+                    <p style="margin-top: 10px;"><strong>Data Protection:</strong> All assessment data is processed in compliance with GDPR, CCPA, and applicable privacy regulations. Personal information is encrypted and stored securely.</p>
+                    <p style="margin-top: 10px;"><strong>Professional Use:</strong> This report is intended for workplace development and generational insights only. Results should be interpreted by qualified professionals.</p>
+                    <p style="margin-top: 10px;"><strong>Retention:</strong> Assessment data is retained according to legal requirements and organizational policies. Individuals have the right to request data deletion.</p>
+                </div>
+            </div>
+            <p style="text-align: center; color: hsl(var(--muted-foreground)); font-size: 0.85rem;">
+                <strong>AuthenCore Analytics</strong> - Next-Generation Workplace Assessment Platform<br>
                 Report Generated: ${new Date().toLocaleDateString()} | 
-                Assessment Version: 2.0 | 
-                Questions Analyzed: 45 items
+                Questions Analyzed: 45 items | For privacy inquiries: privacy@authencore.com
             </p>
-            <p style="margin-top: 10px; font-size: 0.8rem; line-height: 1.5;">
-                This assessment leverages validated psychological instruments and modern workplace research 
-                to provide insights into Gen Z professional characteristics and workplace preferences. 
-                Results should be considered as part of a comprehensive evaluation process.
+            <p style="text-align: center; margin-top: 10px; font-size: 0.8rem; color: hsl(var(--muted-foreground));">
+                This assessment leverages validated psychological instruments and modern workplace research to provide insights into Gen Z professional characteristics.<br>
+                © ${new Date().getFullYear()} AuthenCore Analytics. All rights reserved. Confidential and Proprietary.
             </p>
         </div>
     </div>
