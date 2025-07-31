@@ -130,14 +130,18 @@ const AIChat = memo(() => {
   const [conversationStarted, setConversationStarted] = useState(false);
   
   // Simple, reliable close function
-  const closeChat = useCallback(() => {
-    console.log('Closing chat...');
+  const closeChat = useCallback((e?: React.MouseEvent) => {
+    console.log('Closing chat...', e?.type);
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
     setIsOpen(false);
   }, []);
   
   // Simple toggle function
-  const toggleChat = useCallback(() => {
-    console.log('Toggling chat, current state:', isOpen);
+  const toggleChat = useCallback((e?: React.MouseEvent) => {
+    console.log('Toggling chat, current state:', isOpen, e?.type);
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
     setIsOpen(prev => !prev);
   }, [isOpen]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
