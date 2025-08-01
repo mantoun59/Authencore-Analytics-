@@ -841,6 +841,7 @@ const SampleReports = () => {
           }
         };
       } else if (selectedAssessment === 'career-launch') {
+        console.log('✅ Matched career-launch case, reportType:', reportType);
         reportData = reportType === 'employer' ? {
           assessmentType: 'Career Launch Assessment - Employer Report',
           reportType: 'employer' as const,
