@@ -35,7 +35,10 @@ const queryClient = new QueryClient({
 const App = () => {
   useEffect(() => {
     // Initialize security enhancements on app start
-    initializeSecurity().catch(console.error);
+    initializeSecurity().catch((error) => {
+      // Only log critical errors in production
+      if (import.meta.env.DEV) console.error('Security initialization error:', error);
+    });
     
     // Initialize performance optimizations
     optimizeImageLoading();

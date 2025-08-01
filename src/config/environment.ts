@@ -68,12 +68,12 @@ export const getEnvironmentConfig = (): EnvironmentConfig => {
  */
 export const validateConfig = (config: EnvironmentConfig): boolean => {
   if (!config.supabase.url || !config.supabase.anonKey) {
-    console.error('Missing required Supabase configuration');
+    if (import.meta.env.DEV) console.error('Missing required Supabase configuration');
     return false;
   }
 
   if (config.app.environment === 'production' && config.app.debugMode) {
-    console.warn('Debug mode should be disabled in production');
+    if (import.meta.env.DEV) console.warn('Debug mode should be disabled in production');
   }
 
   return true;

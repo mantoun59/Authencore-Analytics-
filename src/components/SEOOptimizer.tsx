@@ -332,7 +332,7 @@ const SEOOptimizer = () => {
                     id="ga"
                     value={analyticsSetup.googleAnalytics}
                     onChange={(e) => setAnalyticsSetup({...analyticsSetup, googleAnalytics: e.target.value})}
-                    placeholder="G-XXXXXXXXXX"
+                    placeholder="G-AUTHENCORE2025"
                   />
                 </div>
                 

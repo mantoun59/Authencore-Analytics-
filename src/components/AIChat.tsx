@@ -172,7 +172,7 @@ const AIChat = memo(() => {
           usesFallback = false;
         }
       } catch (edgeFunctionError) {
-        console.log('Using fallback response system');
+        if (import.meta.env.DEV) console.log('Using fallback response system');
       }
 
       const assistantMessage: Message = {
@@ -198,7 +198,7 @@ const AIChat = memo(() => {
       }
 
     } catch (error) {
-      console.error('Chat error:', error);
+      if (import.meta.env.DEV) console.error('Chat error:', error);
       
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
@@ -255,9 +255,9 @@ const AIChat = memo(() => {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          console.log('Chat button clicked, isOpen before:', isOpen);
+          if (import.meta.env.DEV) console.log('Chat button clicked, isOpen before:', isOpen);
           setIsOpen(prev => {
-            console.log('Setting isOpen from', prev, 'to', !prev);
+            if (import.meta.env.DEV) console.log('Setting isOpen from', prev, 'to', !prev);
             return !prev;
           });
         }}
