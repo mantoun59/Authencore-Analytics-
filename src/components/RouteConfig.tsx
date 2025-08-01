@@ -20,7 +20,7 @@ import CareerLaunchDescription from "@/pages/CareerLaunchDescription";
 import CommunicationStyleDescription from "@/pages/CommunicationStyleDescription";
 import DigitalWellnessDescription from "@/pages/DigitalWellnessDescription";
 import EmotionalIntelligenceDescription from "@/pages/EmotionalIntelligenceDescription";
-import FaithValuesDescription from "@/pages/FaithValuesDescription";
+
 import GenZWorkplaceDescription from "@/pages/GenZWorkplaceDescription";
 
 // Lazy load - Assessment pages (large components)
@@ -30,7 +30,7 @@ const StressResilience = lazy(() => import("@/pages/StressResilience"));
 const CulturalIntelligenceAssessment = lazy(() => import("@/pages/CulturalIntelligenceAssessment"));
 const CommunicationAssessment = lazy(() => import("@/pages/CommunicationAssessment"));
 const EmotionalIntelligenceAssessment = lazy(() => import("@/components/EmotionalIntelligenceAssessment"));
-const FaithValuesAssessment = lazy(() => import("@/pages/FaithValuesAssessment"));
+
 const GenZWorkplaceAssessment = lazy(() => import("@/pages/GenZWorkplaceAssessment"));
 const DigitalWellnessAssessment = lazy(() => import("@/pages/DigitalWellnessAssessment"));
 const LeadershipAssessment = lazy(() => import("@/pages/LeadershipAssessment"));
@@ -170,11 +170,6 @@ const RouteConfig = () => {
           <EmotionalIntelligenceAssessment />
         </Suspense>
       } />
-      <Route path="/faith-values" element={
-        <Suspense fallback={<LoadingFallback message="Loading Faith & Values Assessment..." />}>
-          <FaithValuesAssessment />
-        </Suspense>
-      } />
       <Route path="/genz-assessment" element={
         <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
           <GenZWorkplaceAssessment />
@@ -243,7 +238,7 @@ const RouteConfig = () => {
       <Route path="/communication-style-info" element={<CommunicationStyleDescription />} />
       <Route path="/digital-wellness-info" element={<DigitalWellnessDescription />} />
       <Route path="/emotional-intelligence-info" element={<EmotionalIntelligenceDescription />} />
-      <Route path="/faith-values-info" element={<FaithValuesDescription />} />
+      
       <Route path="/genz-workplace-info" element={<GenZWorkplaceDescription />} />
       
       {/* Partner Routes - Lazy Loaded */}

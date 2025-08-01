@@ -165,75 +165,57 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
   const getDimensions = () => {
     switch (assessmentType) {
-      case 'faith-values':
+      case 'leadership':
         return [
           {
-            key: "spiritual_purpose",
-            title: "Spiritual Purpose",
-            description: "Sense of life meaning through spiritual beliefs",
+            key: "strategic_thinking",
+            title: "Strategic Thinking",
+            description: "Vision, planning, and long-term perspective",
             icon: Target,
             color: "text-purple-500",
             bgColor: "bg-purple-50"
           },
           {
-            key: "integrity", 
-            title: "Integrity",
-            description: "Honesty and moral principles in work",
-            icon: Shield,
+            key: "team_leadership",
+            title: "Team Leadership",
+            description: "Inspiring and developing team members",
+            icon: Users,
             color: "text-blue-500",
             bgColor: "bg-blue-50"
           },
           {
-            key: "compassion",
-            title: "Compassion",
-            description: "Care and empathy for others",
+            key: "decision_making",
+            title: "Decision Making",
+            description: "Sound judgment under pressure",
+            icon: Brain,
+            color: "text-green-500",
+            bgColor: "bg-green-50"
+          },
+          {
+            key: "emotional_intelligence",
+            title: "Emotional Intelligence",
+            description: "Self-awareness and social skills",
             icon: Heart,
             color: "text-red-500",
             bgColor: "bg-red-50"
           },
           {
-            key: "justice",
-            title: "Justice",
-            description: "Commitment to fairness and equality",
-            icon: Award,
-            color: "text-green-500",
-            bgColor: "bg-green-50"
+            key: "change_management",
+            title: "Change Management",
+            description: "Leading organizational transformation",
+            icon: TrendingUp,
+            color: "text-orange-500",
+            bgColor: "bg-orange-50"
           },
           {
-            key: "service",
-            title: "Service",
-            description: "Dedication to helping others",
-            icon: Users,
-            color: "text-teal-500",
-            bgColor: "bg-teal-50"
-          },
-          {
-            key: "work_meaning",
-            title: "Work Meaning",
-            description: "Finding purpose and significance in work",
+            key: "communication",
+            title: "Communication",
+            description: "Clear and persuasive messaging",
             icon: Sparkles,
             color: "text-yellow-500",
             bgColor: "bg-yellow-50"
-          },
-          {
-            key: "values_integration",
-            title: "Values Integration",
-            description: "Aligning personal values with work",
-            icon: TrendingUp,
-            color: "text-indigo-500",
-            bgColor: "bg-indigo-50"
-          },
-          {
-            key: "moral_courage",
-            title: "Moral Courage",
-            description: "Standing up for ethical principles",
-            icon: Brain,
-            color: "text-orange-500",
-            bgColor: "bg-orange-50"
           }
         ];
-
-      case 'leadership':
         return [
           {
             key: "strategic_thinking",
@@ -716,8 +698,6 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   const getAssessmentTitle = () => {
     // Production analytics tracking
     switch (assessmentType) {
-      case 'faith-values':
-        return 'Your Faith & Values Profile';
       case 'leadership':
         return 'Your Leadership Profile';
       case 'career':
@@ -747,8 +727,6 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
   const getAssessmentDescription = () => {
     switch (assessmentType) {
-      case 'faith-values':
-        return 'Based on your responses across faith values scenarios and workplace situations, here\'s your comprehensive values alignment assessment.';
       case 'leadership':
         return 'Based on your leadership scenarios and decision-making patterns, here\'s your comprehensive authentic leadership assessment.';
       case 'career':
@@ -778,8 +756,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
   const getScoreCategory = () => {
     switch (assessmentType) {
-      case 'faith-values':
-        return 'values alignment';
+      case 'leadership':
       case 'leadership':
         return 'leadership capacity';
       case 'career':
@@ -807,8 +784,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
   const getOverallScoreLabel = () => {
     switch (assessmentType) {
-      case 'faith-values':
-        return 'Overall Values Alignment Score';
+      case 'leadership':
       case 'leadership':
         return 'Overall Leadership Score';
       case 'career':

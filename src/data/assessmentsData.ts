@@ -461,47 +461,6 @@ export const assessmentsData: AssessmentData[] = [
     gradient: 'from-rose-500 to-pink-500'
   },
   {
-    id: 'faith-values',
-    title: 'Faith & Values',
-    subtitle: 'Comprehensive Values Alignment Assessment',
-    price: '$19.99',
-    duration: '25-30 minutes',
-    questions: 90,
-    description: 'Comprehensive 90-question assessment using validated instruments to analyze faith-based values alignment across 42 dimensions',
-    detailedDescription: 'The Faith & Values Alignment Index (FVAI) is a comprehensive 90-question assessment using validated psychological instruments to understand how your daily thoughts, decisions, and behaviours align with your core faith-based values. Covering 42 detailed dimensions across spiritual foundations, moral values, workplace ethics, and life integration, FVAI empowers personal growth, spiritual coaching, and faith-based leadership development through evidence-based insights.',
-    whatItMeasures: [
-      'Spiritual/Faith foundations and practices (12 dimensions)',
-      'Universal human values and moral frameworks (8 dimensions)',
-      'Moral foundations and ethical reasoning (6 dimensions)',
-      'Workplace values and professional ethics (8 dimensions)',
-      'Work-life integration and spiritual calling (4 dimensions)',
-      'Response validity and assessment integrity (4 dimensions)'
-    ],
-    dimensions: [
-      { name: 'Spiritual Foundations', description: 'Core spiritual beliefs, practices, and relationship with the divine (12 dimensions)' },
-      { name: 'Universal Values', description: 'Fundamental human values that guide decision-making and behavior (8 dimensions)' },
-      { name: 'Moral Foundations', description: 'Ethical principles and moral reasoning frameworks (6 dimensions)' },
-      { name: 'Workplace Ethics', description: 'Professional integrity and faith-based workplace behavior (8 dimensions)' },
-      { name: 'Work-Life Integration', description: 'Balance between spiritual calling and professional responsibilities (4 dimensions)' },
-      { name: 'Response Validity', description: 'Assessment integrity and response authenticity measures (4 dimensions)' }
-    ],
-    features: [
-      'Validated psychological instruments',
-      'Multiple assessment techniques (Likert, ranking, scenarios)',
-      'Comprehensive 42-dimension analysis',
-      'Advanced distortion detection',
-      'Faith-based leadership insights',
-      'Spiritual growth recommendations',
-      'Professional coaching guidance',
-      'Evidence-based interpretations'
-    ],
-    badges: ['90 Questions', '42 Dimensions', 'Validated Instruments'],
-    route: '/faith-values',
-    icon: 'Lightbulb',
-    color: 'amber',
-    gradient: 'from-amber-500 to-orange-500'
-  },
-  {
     id: 'genz-assessment',
     title: 'Gen Z Workplace',
     subtitle: 'Generational Workplace Assessment',
