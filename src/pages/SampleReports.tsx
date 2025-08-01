@@ -103,11 +103,13 @@ const SampleReports = () => {
   }, []);
 
   const generateSampleReport = async () => {
+    console.log('🚀 generateSampleReport called with:', selectedAssessment, reportType);
     setIsGenerating(true);
     try {
       const sampleData = reportType === 'employer' 
         ? getSampleEmployerReport(selectedAssessment)
         : getSampleCandidateReport(selectedAssessment);
+      console.log('📊 Sample data generated:', sampleData);
       
       // Use HTML report generator for ALL assessment types including communication
       const { generateHtmlReport } = await import('@/utils/htmlReportGenerator');
@@ -1529,9 +1531,11 @@ const SampleReports = () => {
       toast.success(`Sample ${reportType} report generated successfully!`);
       
     } catch (error) {
-      console.error('Error generating sample report:', error);
+      console.error('❌ Error generating sample report:', error);
+      console.error('❌ Error stack:', error instanceof Error ? error.stack : 'Unknown error');
       toast.error('Failed to generate sample report. Please try again.');
     } finally {
+      console.log('🏁 generateSampleReport finished, setting isGenerating to false');
       setIsGenerating(false);
     }
   };
