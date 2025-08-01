@@ -1,5 +1,5 @@
 import { FaithValuesResult } from '@/hooks/useFaithValuesScoring';
-import { faithValuesData } from '@/data/faithValuesQuestions';
+import { complete90FaithValuesQuestions } from '@/data/complete90FaithValuesQuestions';
 
 interface FVAIReportData {
   candidateInfo: {

@@ -11,7 +11,7 @@ import { Lightbulb, Clock, Star, Book, CheckCircle2, ArrowLeft, ArrowRight } fro
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useFaithValuesScoring } from '@/hooks/useFaithValuesScoring';
-import { faithValuesData } from '@/data/faithValuesQuestions';
+import { complete90FaithValuesQuestions } from '@/data/complete90FaithValuesQuestions';
 import { generateHtmlReport } from '@/utils/htmlReportGenerator';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
@@ -51,7 +51,7 @@ export default function FaithValuesAssessment() {
   };
 
   const nextQuestion = () => {
-    if (currentQuestionIndex < faithValuesData.universal_values.length - 1) {
+    if (currentQuestionIndex < complete90FaithValuesQuestions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
     } else {
       completeAssessment();
@@ -69,7 +69,7 @@ export default function FaithValuesAssessment() {
       const endTime = Date.now();
       const completionTime = Math.round((endTime - startTime) / 1000 / 60);
       
-      const assessmentResults = calculateScores([], []);
+      const assessmentResults = calculateScores(responses, complete90FaithValuesQuestions);
       setResults(assessmentResults);
       setPhase('results');
       
@@ -143,8 +143,8 @@ export default function FaithValuesAssessment() {
     }
   };
 
-  const progress = ((currentQuestionIndex + 1) / faithValuesData.universal_values.length) * 100;
-  const currentQuestion = faithValuesData.universal_values[currentQuestionIndex];
+  const progress = ((currentQuestionIndex + 1) / complete90FaithValuesQuestions.length) * 100;
+  const currentQuestion = complete90FaithValuesQuestions[currentQuestionIndex];
 
   if (phase === 'welcome') {
     return (
@@ -173,7 +173,7 @@ export default function FaithValuesAssessment() {
                   </div>
                   <div className="text-center space-y-2">
                     <Star className="w-8 h-8 mx-auto text-amber-500" />
-                    <h3 className="font-semibold">42 Dimensions</h3>
+                    <h3 className="font-semibold">90 Questions</h3>
                     <p className="text-sm text-muted-foreground">In-depth analysis</p>
                   </div>
                   <div className="text-center space-y-2">
@@ -348,16 +348,40 @@ export default function FaithValuesAssessment() {
           <div className="max-w-4xl mx-auto">
             <Card className="border-amber-200 shadow-xl">
               <CardHeader>
-                <CardTitle className="text-xl font-semibold">Question {currentQuestionIndex + 1} of {faithValuesData.universal_values.length}</CardTitle>
-                <CardDescription>{currentQuestion?.name}</CardDescription>
+                <CardTitle className="text-xl font-semibold">Question {currentQuestionIndex + 1} of {complete90FaithValuesQuestions.length}</CardTitle>
+                <CardDescription>{currentQuestion?.question}</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <Progress value={progress} />
                 <RadioGroup defaultValue={responses[currentQuestionIndex]?.toString()} onValueChange={(value) => handleResponse(parseInt(value))} className="grid gap-2">
-                  {['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'].map((option, index) => (
+                  {currentQuestion?.type === 'likert' && Array.from({ length: currentQuestion.scale.max }, (_, index) => {
+                    const value = index + 1;
+                    const isMin = value === currentQuestion.scale.min;
+                    const isMax = value === currentQuestion.scale.max;
+                    
+                    let label = value.toString();
+                    if (isMin && currentQuestion.scale.minLabel) label = `${value} - ${currentQuestion.scale.minLabel}`;
+                    if (isMax && currentQuestion.scale.maxLabel) label = `${value} - ${currentQuestion.scale.maxLabel}`;
+                    
+                    return (
+                      <div className="flex items-center space-x-2" key={value}>
+                        <RadioGroupItem value={value.toString()} id={`r${value}`} />
+                        <Label htmlFor={`r${value}`}>{label}</Label>
+                      </div>
+                    );
+                  })}
+                  
+                  {currentQuestion?.type === 'scenario' && currentQuestion.options?.map((option, index) => (
                     <div className="flex items-center space-x-2" key={index}>
                       <RadioGroupItem value={(index + 1).toString()} id={`r${index}`} />
-                      <Label htmlFor={`r${index}`}>{option}</Label>
+                      <Label htmlFor={`r${index}`}>{option.text}</Label>
+                    </div>
+                  ))}
+                  
+                  {currentQuestion?.type === 'ranking' && currentQuestion.items?.map((item, index) => (
+                    <div className="flex items-center space-x-2" key={index}>
+                      <RadioGroupItem value={(index + 1).toString()} id={`r${index}`} />
+                      <Label htmlFor={`r${index}`}>{item.text}</Label>
                     </div>
                   ))}
                 </RadioGroup>
@@ -366,7 +390,7 @@ export default function FaithValuesAssessment() {
                     Previous
                   </Button>
                   <Button onClick={nextQuestion} disabled={isCalculating}>
-                    {isCalculating ? 'Calculating...' : (currentQuestionIndex === faithValuesData.universal_values.length - 1 ? 'Complete' : 'Next')}
+                    {isCalculating ? 'Calculating...' : (currentQuestionIndex === complete90FaithValuesQuestions.length - 1 ? 'Complete' : 'Next')}
                   </Button>
                 </div>
               </CardContent>

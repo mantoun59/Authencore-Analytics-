@@ -2,7 +2,7 @@ import { cairQuestions, personalityDimensions } from '@/data/cairPersonalityQues
 import { burnoutPreventionQuestions } from '@/data/burnoutPreventionQuestions';
 import { leadershipQuestions } from '@/data/leadershipQuestions';
 import { genZScenarios } from '@/data/genZScenarios';
-import { faithValuesData } from '@/data/faithValuesQuestions';
+import { complete90FaithValuesQuestions } from '@/data/complete90FaithValuesQuestions';
 
 interface ValidityMetrics {
   responseConsistency: number;

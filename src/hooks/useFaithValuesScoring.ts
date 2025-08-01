@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { faithValuesData } from '@/data/faithValuesQuestions';
+import { complete90FaithValuesQuestions } from '@/data/complete90FaithValuesQuestions';
 
 export interface FaithValuesScores {
   [key: string]: number;
@@ -49,49 +49,60 @@ export const useFaithValuesScoring = () => {
   const [isCalculating, setIsCalculating] = useState(false);
 
   const calculateScores = useCallback((
-    rankedValues: string[],
-    scenarioResponses: Array<{ scenarioId: string; selectedOption: number; responseTime: number }>
+    responses: number[],
+    questions: any[]
   ): FaithValuesResult => {
     setIsCalculating(true);
     
     const valueScores: FaithValuesScores = {};
     
+    // Define dimensions from the complete questions
+    const dimensions = [
+      'spiritual_purpose', 'transcendence', 'spiritual_practices', 'work_meaning', 
+      'moral_guidance', 'spiritual_integrity', 'divine_relationship', 'spiritual_growth',
+      'community_connection', 'spiritual_coping', 'scriptural_guidance', 'worship_engagement',
+      'spiritual_discernment', 'eternal_perspective', 'spiritual_transformation',
+      'achievement', 'benevolence', 'universalism', 'self_direction', 'security',
+      'power', 'tradition', 'conformity', 'stimulation', 'hedonism'
+    ];
+    
     // Initialize scores
-    faithValuesData.universal_values.forEach(value => {
-      valueScores[value.id] = 0;
+    dimensions.forEach(dimension => {
+      valueScores[dimension] = 0;
     });
     
-    // Process ranked values (higher weight for top-ranked)
-    rankedValues.forEach((valueId, index) => {
-      const weight = 1 - (index * 0.1); // 1st = 100%, 8th = 30%
-      valueScores[valueId] += 30 * weight;
-    });
-    
-    // Process scenario responses
-    scenarioResponses.forEach(response => {
-      const scenario = faithValuesData.scenarios.find(s => s.id === response.scenarioId);
-      if (scenario && scenario.options[response.selectedOption]) {
-        const option = scenario.options[response.selectedOption];
-        Object.entries(option.values).forEach(([valueId, score]) => {
-          if (valueScores[valueId] !== undefined) {
-            valueScores[valueId] += score * 2;
-          }
-        });
+    // Process responses based on question types
+    responses.forEach((response, index) => {
+      if (index < questions.length && response > 0) {
+        const question = questions[index];
+        const dimension = dimensions[index % dimensions.length];
+        
+        let score = 0;
+        if (question.type === 'likert') {
+          // Convert Likert scale to 0-100
+          score = ((response - 1) / (question.scale.max - 1)) * 100;
+        } else if (question.type === 'scenario') {
+          // Scenario responses already scored
+          score = response * 20; // Scale to 0-100
+        } else if (question.type === 'ranking') {
+          // Ranking responses (higher rank = higher score)
+          score = ((10 - response) / 9) * 100;
+        }
+        
+        valueScores[dimension] = (valueScores[dimension] || 0) + score;
       }
     });
     
-    // Normalize scores to 0-100 range
-    const maxScore = Math.max(...Object.values(valueScores));
-    if (maxScore > 0) {
-      Object.keys(valueScores).forEach(valueId => {
-        valueScores[valueId] = Math.max(0, (valueScores[valueId] / maxScore) * 100);
-      });
-    }
+    // Normalize scores
+    Object.keys(valueScores).forEach(dimension => {
+      const questionCount = Math.max(1, Math.floor(responses.length / dimensions.length));
+      valueScores[dimension] = Math.min(100, Math.max(0, valueScores[dimension] / questionCount));
+    });
     
     // Calculate validity scores and metrics
-    const validityMetrics = calculateValidityMetrics(scenarioResponses, rankedValues);
-    const distortionScore = calculateDistortionScore(scenarioResponses);
-    const defensivenessScore = calculateDefensivenessScore(scenarioResponses, rankedValues);
+    const validityMetrics = calculateValidityMetrics(responses, questions);
+    const distortionScore = calculateDistortionScore(responses);
+    const defensivenessScore = calculateDefensivenessScore(responses, questions);
     
     // Calculate culture matches
     const cultureMatches = calculateCultureMatches(valueScores);
@@ -120,11 +131,11 @@ export const useFaithValuesScoring = () => {
   }, []);
 
   const calculateValidityMetrics = (
-    responses: Array<{ scenarioId: string; selectedOption: number; responseTime: number }>,
-    rankedValues: string[]
+    responses: number[],
+    questions: any[]
   ) => {
     // Response consistency check
-    const responseConsistency = calculateResponseConsistency(responses, rankedValues);
+    const responseConsistency = calculateResponseConsistency(responses);
     
     // Social desirability bias detection
     const socialDesirabilityBias = calculateSocialDesirabilityBias(responses);
@@ -144,188 +155,139 @@ export const useFaithValuesScoring = () => {
   };
 
   const calculateResponseConsistency = (
-    responses: Array<{ scenarioId: string; selectedOption: number; responseTime: number }>,
-    rankedValues: string[]
+    responses: number[]
   ): number => {
     let consistencyScore = 100;
     
-    // Check if scenario responses align with ranked values
-    responses.forEach(response => {
-      const scenario = faithValuesData.scenarios.find(s => s.id === response.scenarioId);
-      if (scenario && scenario.options[response.selectedOption]) {
-        const option = scenario.options[response.selectedOption];
-        
-        // Check alignment with top 3 ranked values
-        const topValues = rankedValues.slice(0, 3);
-        let hasAlignment = false;
-        
-        topValues.forEach(valueId => {
-          if (option.values[valueId] && option.values[valueId] >= 3) {
-            hasAlignment = true;
-          }
-        });
-        
-        if (!hasAlignment) {
-          consistencyScore -= 5;
-        }
-      }
-    });
+    // Check for response variance
+    const validResponses = responses.filter(r => r > 0);
+    if (validResponses.length < 2) return 50;
+    
+    const mean = validResponses.reduce((sum, r) => sum + r, 0) / validResponses.length;
+    const variance = validResponses.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) / validResponses.length;
+    
+    // Very low variance indicates potential response pattern issues
+    if (variance < 0.5) {
+      consistencyScore -= 30;
+    } else if (variance < 1) {
+      consistencyScore -= 15;
+    }
     
     return Math.max(0, consistencyScore);
   };
 
-  const calculateSocialDesirabilityBias = (responses: Array<{ scenarioId: string; selectedOption: number; responseTime: number }>): number => {
+  const calculateSocialDesirabilityBias = (responses: number[]): number => {
     let biasScore = 0;
+    const validResponses = responses.filter(r => r > 0);
     
-    const highEthicalChoices = responses.filter(r => {
-      const scenario = faithValuesData.scenarios.find(s => s.id === r.scenarioId);
-      if (scenario && scenario.options[r.selectedOption]) {
-        const option = scenario.options[r.selectedOption];
-        return (option.values['integrity'] && option.values['integrity'] >= 4) || 
-               (option.values['justice'] && option.values['justice'] >= 4) ||
-               (option.values['service'] && option.values['service'] >= 4);
-      }
-      return false;
-    }).length;
+    if (validResponses.length === 0) return 0;
     
-    const ethicalRatio = highEthicalChoices / responses.length;
-    if (ethicalRatio > 0.85) {
-      biasScore = 80;
-    } else if (ethicalRatio > 0.75) {
-      biasScore = 60;
-    } else if (ethicalRatio > 0.65) {
-      biasScore = 40;
+    // Check for too many high scores (social desirability)
+    const highScores = validResponses.filter(r => r >= 6).length;
+    const highRatio = highScores / validResponses.length;
+    
+    if (highRatio > 0.8) {
+      biasScore = 75;
+    } else if (highRatio > 0.7) {
+      biasScore = 50;
+    } else if (highRatio > 0.6) {
+      biasScore = 25;
     }
     
     return biasScore;
   };
 
-  const calculateFakeGoodPattern = (responses: Array<{ scenarioId: string; selectedOption: number; responseTime: number }>): number => {
+  const calculateFakeGoodPattern = (responses: number[]): number => {
     let fakeGoodScore = 0;
+    const validResponses = responses.filter(r => r > 0);
     
-    // Check for extremely consistent "perfect" responses
-    const perfectResponses = responses.filter(r => {
-      const scenario = faithValuesData.scenarios.find(s => s.id === r.scenarioId);
-      if (scenario && scenario.options[r.selectedOption]) {
-        const option = scenario.options[r.selectedOption];
-        const totalScore = Object.values(option.values).reduce((sum, score) => sum + score, 0);
-        return totalScore >= 15; // Very high total score indicates "perfect" answer
-      }
-      return false;
-    }).length;
+    if (validResponses.length === 0) return 0;
     
-    const perfectRatio = perfectResponses / responses.length;
-    if (perfectRatio > 0.7) {
-      fakeGoodScore = 85;
-    } else if (perfectRatio > 0.5) {
-      fakeGoodScore = 60;
-    } else if (perfectRatio > 0.35) {
-      fakeGoodScore = 35;
+    // Check for maximum score responses
+    const maxScores = validResponses.filter(r => r === 7).length;
+    const maxRatio = maxScores / validResponses.length;
+    
+    if (maxRatio > 0.6) {
+      fakeGoodScore = 80;
+    } else if (maxRatio > 0.4) {
+      fakeGoodScore = 50;
+    } else if (maxRatio > 0.3) {
+      fakeGoodScore = 25;
     }
     
     return fakeGoodScore;
   };
 
-  const checkResponsePattern = (responses: Array<{ scenarioId: string; selectedOption: number; responseTime: number }>): boolean => {
-    // Check for same option selected too frequently
-    const optionCounts = [0, 0, 0, 0];
-    responses.forEach(r => {
-      if (r.selectedOption < 4) {
-        optionCounts[r.selectedOption]++;
-      }
+  const checkResponsePattern = (responses: number[]): boolean => {
+    const validResponses = responses.filter(r => r > 0);
+    if (validResponses.length < 5) return false;
+    
+    // Check for same response repeated too often
+    const responseCounts: Record<number, number> = {};
+    validResponses.forEach(r => {
+      responseCounts[r] = (responseCounts[r] || 0) + 1;
     });
     
-    const maxOptionCount = Math.max(...optionCounts);
-    if (maxOptionCount > responses.length * 0.75) {
+    const maxCount = Math.max(...Object.values(responseCounts));
+    if (maxCount > validResponses.length * 0.7) {
       return true;
     }
     
     // Check for alternating pattern
     let alternatingPattern = 0;
-    for (let i = 1; i < responses.length; i++) {
-      if (Math.abs(responses[i].selectedOption - responses[i-1].selectedOption) === 1) {
+    for (let i = 1; i < validResponses.length; i++) {
+      if (Math.abs(validResponses[i] - validResponses[i-1]) === 1) {
         alternatingPattern++;
       }
     }
     
-    return alternatingPattern > responses.length * 0.8;
+    return alternatingPattern > validResponses.length * 0.8;
   };
 
-  const calculateDistortionScore = (responses: Array<{ scenarioId: string; selectedOption: number; responseTime: number }>): number => {
+  const calculateDistortionScore = (responses: number[]): number => {
     let distortionScore = 0;
+    const validResponses = responses.filter(r => r > 0);
     
-    // Check for rapid responses (less than 4 seconds)
-    const rapidResponses = responses.filter(r => r.responseTime < 4000).length;
-    if (rapidResponses > responses.length * 0.6) {
+    if (validResponses.length === 0) return 0;
+    
+    // Check for lack of variability
+    const uniqueResponses = new Set(validResponses);
+    if (uniqueResponses.size < 3 && validResponses.length > 10) {
+      distortionScore += 30;
+    }
+    
+    // Check for extreme response patterns
+    const mean = validResponses.reduce((sum, r) => sum + r, 0) / validResponses.length;
+    const standardDev = Math.sqrt(
+      validResponses.reduce((sum, r) => sum + Math.pow(r - mean, 2), 0) / validResponses.length
+    );
+    
+    if (standardDev < 0.5) {
       distortionScore += 25;
-    } else if (rapidResponses > responses.length * 0.4) {
-      distortionScore += 15;
-    }
-    
-    // Check for extremely slow responses (over 60 seconds) - potential overthinking
-    const slowResponses = responses.filter(r => r.responseTime > 60000).length;
-    if (slowResponses > responses.length * 0.3) {
-      distortionScore += 10;
-    }
-    
-    // Check for response time variance
-    const responseTimes = responses.map(r => r.responseTime);
-    const avgTime = responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length;
-    const variance = responseTimes.reduce((sum, time) => sum + Math.pow(time - avgTime, 2), 0) / responseTimes.length;
-    
-    if (variance < 1000000) { // Very low variance indicates mechanical responding
-      distortionScore += 15;
     }
     
     return Math.min(distortionScore, 100);
   };
 
   const calculateDefensivenessScore = (
-    responses: Array<{ scenarioId: string; selectedOption: number; responseTime: number }>,
-    rankedValues: string[]
+    responses: number[],
+    questions: any[]
   ): number => {
     let defensivenessScore = 0;
+    const validResponses = responses.filter(r => r > 0);
     
-    // Check for avoidance of challenging scenarios
-    const challengingScenarios = responses.filter(r => {
-      const scenario = faithValuesData.scenarios.find(s => s.id === r.scenarioId);
-      return scenario && scenario.category.includes('conflict') || scenario.category.includes('ethical');
-    });
+    if (validResponses.length === 0) return 0;
     
-    const neutralChoices = challengingScenarios.filter(r => {
-      const scenario = faithValuesData.scenarios.find(s => s.id === r.scenarioId);
-      if (scenario && scenario.options[r.selectedOption]) {
-        const option = scenario.options[r.selectedOption];
-        const totalScore = Object.values(option.values).reduce((sum, score) => sum + score, 0);
-        return totalScore < 8; // Low engagement with the scenario
-      }
-      return false;
-    }).length;
+    // Check for avoidance of extreme responses
+    const middleResponses = validResponses.filter(r => r >= 3 && r <= 5).length;
+    const middleRatio = middleResponses / validResponses.length;
     
-    if (challengingScenarios.length > 0) {
-      const neutralRatio = neutralChoices / challengingScenarios.length;
-      if (neutralRatio > 0.7) {
-        defensivenessScore = 75;
-      } else if (neutralRatio > 0.5) {
-        defensivenessScore = 50;
-      } else if (neutralRatio > 0.3) {
-        defensivenessScore = 25;
-      }
-    }
-    
-    // Check for inconsistency between high-ranked values and low scenario engagement
-    const topValue = rankedValues[0];
-    const lowEngagementResponses = responses.filter(r => {
-      const scenario = faithValuesData.scenarios.find(s => s.id === r.scenarioId);
-      if (scenario && scenario.options[r.selectedOption]) {
-        const option = scenario.options[r.selectedOption];
-        return option.values[topValue] && option.values[topValue] < 2;
-      }
-      return false;
-    }).length;
-    
-    if (lowEngagementResponses > responses.length * 0.4) {
-      defensivenessScore += 20;
+    if (middleRatio > 0.8) {
+      defensivenessScore = 60;
+    } else if (middleRatio > 0.7) {
+      defensivenessScore = 40;
+    } else if (middleRatio > 0.6) {
+      defensivenessScore = 20;
     }
     
     return Math.min(defensivenessScore, 100);
@@ -334,13 +296,22 @@ export const useFaithValuesScoring = () => {
   const calculateCultureMatches = (valueScores: FaithValuesScores): CultureMatch[] => {
     const matches: CultureMatch[] = [];
     
-    faithValuesData.culture_types.forEach(culture => {
+    // Mock culture types for now
+    const cultureTypes = [
+      { id: 'mission_driven', name: 'Mission-Driven Culture', description: 'Purpose and values-focused organizations', characteristics: ['Values-based decisions', 'Social impact focus'], examples: ['Nonprofits', 'B-Corps'] },
+      { id: 'traditional', name: 'Traditional Culture', description: 'Established values and practices', characteristics: ['Respect for tradition', 'Clear hierarchy'], examples: ['Religious organizations', 'Family businesses'] },
+      { id: 'innovative', name: 'Innovative Culture', description: 'Progressive and adaptive organizations', characteristics: ['Continuous improvement', 'Embracing change'], examples: ['Tech companies', 'Startups'] }
+    ];
+    
+    cultureTypes.forEach(culture => {
       let matchScore = 0;
       let matchCount = 0;
       
-      culture.key_values.forEach(valueId => {
-        if (valueScores[valueId] !== undefined) {
-          matchScore += valueScores[valueId];
+      // Calculate match based on available dimensions
+      const cultureDimensions = ['spiritual_purpose', 'moral_guidance', 'work_meaning'];
+      cultureDimensions.forEach(dimension => {
+        if (valueScores[dimension] !== undefined) {
+          matchScore += valueScores[dimension];
           matchCount++;
         }
       });
@@ -348,13 +319,7 @@ export const useFaithValuesScoring = () => {
       const finalScore = matchCount > 0 ? matchScore / matchCount : 0;
       
       matches.push({
-        culture: {
-          id: culture.id,
-          name: culture.name,
-          description: culture.description,
-          characteristics: culture.characteristics,
-          examples: culture.examples
-        },
+        culture,
         score: finalScore,
         alignment: getAlignmentLevel(finalScore)
       });
@@ -394,7 +359,7 @@ export const useFaithValuesScoring = () => {
     const lowestValueId = Object.entries(valueScores)
       .sort((a, b) => a[1] - b[1])[0][0];
     
-    const lowestValue = faithValuesData.universal_values.find(v => v.id === lowestValueId);
+    const lowestValue = { name: lowestValueId };
     const challenges = `You may find it challenging to work in environments that heavily emphasize ${lowestValue?.name.toLowerCase()} at the expense of your core values. Be aware of situations where you might need to advocate for what matters most to you.`;
     
     const growthAreas = "Consider developing strategies to communicate your values effectively in professional settings. This will help you find alignment with employers and build authentic professional relationships.";
@@ -412,12 +377,11 @@ export const useFaithValuesScoring = () => {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5)
       .map(([valueId, score]) => {
-        const valueDef = faithValuesData.universal_values.find(v => v.id === valueId);
         return {
           id: valueId,
-          name: valueDef?.name || valueId,
-          description: valueDef?.description || '',
-          icon: valueDef?.icon || '⭐',
+          name: valueId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+          description: `Your ${valueId.replace(/_/g, ' ')} orientation and practices`,
+          icon: '⭐',
           score
         };
       });
