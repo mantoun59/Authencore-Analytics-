@@ -43,7 +43,13 @@ const Assessment = () => {
       'genz-assessment': '/genz-workplace-info',
       'digital-wellness': '/digital-wellness-info',
       'leadership-assessment': '/authentic-leadership-info',
-      'innovation-mindset': '/innovation-mindset-info'
+      'innovation-mindset': '/innovation-mindset-info',
+      // New comprehensive assessments - redirect to assessment route for now
+      'technology-integration': '/technology-integration',
+      'communication-competency': '/communication-competency',
+      'leadership-behavior': '/leadership-behavior',
+      'work-values': '/work-values',
+      'work-preferences': '/work-preferences'
     };
     return routeMap[assessmentId] || '/assessment';
   };
