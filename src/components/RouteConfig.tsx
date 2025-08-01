@@ -121,6 +121,7 @@ const RouteConfig = () => {
       
       {/* Assessment Overview - Immediate Load */}
       <Route path="/assessment" element={<Assessment />} />
+      <Route path="/assessments" element={<Assessment />} />
       
       {/* Assessment Pages - Lazy Loaded with Custom Messages */}
       <Route path="/career-launch" element={
