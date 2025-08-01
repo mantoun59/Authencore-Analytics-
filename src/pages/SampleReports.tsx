@@ -845,7 +845,7 @@ const SampleReports = () => {
       } else if (selectedAssessment === 'career-launch') {
         console.log('✅ Matched career-launch case, reportType:', reportType);
         reportData = reportType === 'employer' ? {
-          assessmentType: 'Career Launch Assessment - Employer Report',
+          assessmentType: 'CareerLaunch Assessment - Employer Report',
           reportType: 'employer' as const,
           userInfo: {
             name: 'Michael Chen',
@@ -910,7 +910,7 @@ const SampleReports = () => {
             }
           ]
         } : {
-          assessmentType: 'Career Launch Assessment',
+          assessmentType: 'CareerLaunch Assessment',
           reportType: 'standard' as const,
           userInfo: {
             name: 'Michael Chen',
