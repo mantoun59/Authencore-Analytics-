@@ -2753,7 +2753,11 @@ const SampleReports = () => {
               <p className="text-muted-foreground mb-4">
                 See a complete sample of our comprehensive {currentAssessment?.title || 'assessment'} with detailed analysis and insights.
               </p>
-              <Button onClick={generateSampleReport} variant="default" disabled={isGenerating}>
+              <Button onClick={(e) => {
+                e.preventDefault();
+                console.log('🔥 Featured download button clicked!');
+                generateSampleReport();
+              }} variant="default" disabled={isGenerating}>
                 <Sparkles className="h-4 w-4 mr-2" />
                 {isGenerating ? 'Generating...' : `View ${currentAssessment?.title || 'Sample'} Report`}
               </Button>
@@ -2832,7 +2836,11 @@ const SampleReports = () => {
                   <Button 
                     size="sm" 
                     variant="outline"
-              onClick={generateSampleReport}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      console.log('🔥 Download button clicked!');
+                      generateSampleReport();
+                    }}
                     disabled={isGenerating}
                   >
                     <Download className="h-4 w-4 mr-2" />
