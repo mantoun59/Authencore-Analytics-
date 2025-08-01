@@ -143,6 +143,45 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_catalog: {
+        Row: {
+          assessment_type: string
+          created_at: string
+          description: string
+          estimated_duration_minutes: number
+          id: string
+          is_active: boolean
+          name: string
+          question_count: number
+          theoretical_foundation: string
+          updated_at: string
+        }
+        Insert: {
+          assessment_type: string
+          created_at?: string
+          description: string
+          estimated_duration_minutes: number
+          id?: string
+          is_active?: boolean
+          name: string
+          question_count: number
+          theoretical_foundation: string
+          updated_at?: string
+        }
+        Update: {
+          assessment_type?: string
+          created_at?: string
+          description?: string
+          estimated_duration_minutes?: number
+          id?: string
+          is_active?: boolean
+          name?: string
+          question_count?: number
+          theoretical_foundation?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       assessment_demographics: {
         Row: {
           age_range: string | null
@@ -289,6 +328,60 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_validation_status: {
+        Row: {
+          assessment_type: string
+          created_at: string
+          ethical_concerns: string[] | null
+          id: string
+          last_reviewed_at: string | null
+          legal_compliance_status: string | null
+          notes: string | null
+          psychometric_rating: number | null
+          reliability_score: number | null
+          reviewed_by: string | null
+          risk_level: string
+          theoretical_foundation: string | null
+          updated_at: string
+          validation_status: string
+          validity_evidence: string[] | null
+        }
+        Insert: {
+          assessment_type: string
+          created_at?: string
+          ethical_concerns?: string[] | null
+          id?: string
+          last_reviewed_at?: string | null
+          legal_compliance_status?: string | null
+          notes?: string | null
+          psychometric_rating?: number | null
+          reliability_score?: number | null
+          reviewed_by?: string | null
+          risk_level?: string
+          theoretical_foundation?: string | null
+          updated_at?: string
+          validation_status?: string
+          validity_evidence?: string[] | null
+        }
+        Update: {
+          assessment_type?: string
+          created_at?: string
+          ethical_concerns?: string[] | null
+          id?: string
+          last_reviewed_at?: string | null
+          legal_compliance_status?: string | null
+          notes?: string | null
+          psychometric_rating?: number | null
+          reliability_score?: number | null
+          reviewed_by?: string | null
+          risk_level?: string
+          theoretical_foundation?: string | null
+          updated_at?: string
+          validation_status?: string
+          validity_evidence?: string[] | null
+        }
+        Relationships: []
+      }
       bias_analysis_results: {
         Row: {
           analysis_metadata: Json | null
@@ -399,6 +492,51 @@ export type Database = {
           session_id?: string
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      communication_competency_results: {
+        Row: {
+          created_at: string
+          direct_indirect: number
+          expressive_reserved: number
+          formal_informal: number
+          id: string
+          interpretation: string
+          overall_communication_effectiveness: number
+          recommendations: Json
+          session_id: string
+          task_relationship: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          direct_indirect: number
+          expressive_reserved: number
+          formal_informal: number
+          id?: string
+          interpretation: string
+          overall_communication_effectiveness: number
+          recommendations?: Json
+          session_id: string
+          task_relationship: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          direct_indirect?: number
+          expressive_reserved?: number
+          formal_informal?: number
+          id?: string
+          interpretation?: string
+          overall_communication_effectiveness?: number
+          recommendations?: Json
+          session_id?: string
+          task_relationship?: number
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -826,6 +964,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      leadership_behavior_results: {
+        Row: {
+          affiliative_leadership: number
+          coaching_leadership: number
+          commanding_leadership: number
+          created_at: string
+          democratic_leadership: number
+          id: string
+          interpretation: string
+          overall_leadership_effectiveness: number
+          pacesetting_leadership: number
+          primary_style: string
+          recommendations: Json
+          secondary_style: string
+          session_id: string
+          updated_at: string
+          user_id: string
+          visionary_leadership: number
+        }
+        Insert: {
+          affiliative_leadership: number
+          coaching_leadership: number
+          commanding_leadership: number
+          created_at?: string
+          democratic_leadership: number
+          id?: string
+          interpretation: string
+          overall_leadership_effectiveness: number
+          pacesetting_leadership: number
+          primary_style: string
+          recommendations?: Json
+          secondary_style: string
+          session_id: string
+          updated_at?: string
+          user_id: string
+          visionary_leadership: number
+        }
+        Update: {
+          affiliative_leadership?: number
+          coaching_leadership?: number
+          commanding_leadership?: number
+          created_at?: string
+          democratic_leadership?: number
+          id?: string
+          interpretation?: string
+          overall_leadership_effectiveness?: number
+          pacesetting_leadership?: number
+          primary_style?: string
+          recommendations?: Json
+          secondary_style?: string
+          session_id?: string
+          updated_at?: string
+          user_id?: string
+          visionary_leadership?: number
+        }
+        Relationships: []
       }
       newsletter_subscriptions: {
         Row: {
@@ -1310,6 +1505,42 @@ export type Database = {
           },
         ]
       }
+      professional_oversight_requirements: {
+        Row: {
+          assessment_type: string
+          created_at: string
+          id: string
+          legal_disclaimers: string[] | null
+          minimum_qualification_level: string | null
+          requires_qualified_administrator: boolean | null
+          requires_supervision: boolean | null
+          updated_at: string
+          usage_restrictions: string[] | null
+        }
+        Insert: {
+          assessment_type: string
+          created_at?: string
+          id?: string
+          legal_disclaimers?: string[] | null
+          minimum_qualification_level?: string | null
+          requires_qualified_administrator?: boolean | null
+          requires_supervision?: boolean | null
+          updated_at?: string
+          usage_restrictions?: string[] | null
+        }
+        Update: {
+          assessment_type?: string
+          created_at?: string
+          id?: string
+          legal_disclaimers?: string[] | null
+          minimum_qualification_level?: string | null
+          requires_qualified_administrator?: boolean | null
+          requires_supervision?: boolean | null
+          updated_at?: string
+          usage_restrictions?: string[] | null
+        }
+        Relationships: []
+      }
       professional_standards_compliance: {
         Row: {
           assessment_type: string
@@ -1556,6 +1787,51 @@ export type Database = {
         }
         Relationships: []
       }
+      technology_integration_results: {
+        Row: {
+          created_at: string
+          digital_boundaries: number
+          id: string
+          interpretation: string
+          overall_tech_integration: number
+          productivity_impact: number
+          recommendations: Json
+          session_id: string
+          tech_life_balance: number
+          updated_at: string
+          usage_patterns: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          digital_boundaries: number
+          id?: string
+          interpretation: string
+          overall_tech_integration: number
+          productivity_impact: number
+          recommendations?: Json
+          session_id: string
+          tech_life_balance: number
+          updated_at?: string
+          usage_patterns: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          digital_boundaries?: number
+          id?: string
+          interpretation?: string
+          overall_tech_integration?: number
+          productivity_impact?: number
+          recommendations?: Json
+          session_id?: string
+          tech_life_balance?: number
+          updated_at?: string
+          usage_patterns?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_mfa: {
         Row: {
           backup_codes: string[] | null
@@ -1646,6 +1922,126 @@ export type Database = {
         }
         Relationships: []
       }
+      work_preferences_results: {
+        Row: {
+          career_expectations: number
+          communication_styles: number
+          created_at: string
+          id: string
+          interpretation: string
+          multigenerational_strategies: number
+          preference_profile: Json
+          recommendations: Json
+          session_id: string
+          technology_integration: number
+          updated_at: string
+          user_id: string
+          work_preferences: number
+          workplace_fit: Json
+        }
+        Insert: {
+          career_expectations: number
+          communication_styles: number
+          created_at?: string
+          id?: string
+          interpretation: string
+          multigenerational_strategies: number
+          preference_profile: Json
+          recommendations?: Json
+          session_id: string
+          technology_integration: number
+          updated_at?: string
+          user_id: string
+          work_preferences: number
+          workplace_fit: Json
+        }
+        Update: {
+          career_expectations?: number
+          communication_styles?: number
+          created_at?: string
+          id?: string
+          interpretation?: string
+          multigenerational_strategies?: number
+          preference_profile?: Json
+          recommendations?: Json
+          session_id?: string
+          technology_integration?: number
+          updated_at?: string
+          user_id?: string
+          work_preferences?: number
+          workplace_fit?: Json
+        }
+        Relationships: []
+      }
+      work_values_results: {
+        Row: {
+          achievement_recognition: number
+          autonomy_independence: number
+          bottom_values: Json
+          collaboration_teamwork: number
+          created_at: string
+          growth_learning: number
+          id: string
+          innovation_creativity: number
+          interpretation: string
+          leadership_influence: number
+          recommendations: Json
+          security_stability: number
+          session_id: string
+          social_impact_service: number
+          top_values: Json
+          updated_at: string
+          user_id: string
+          values_hierarchy: Json
+          values_profile: Json
+          work_life_integration: number
+        }
+        Insert: {
+          achievement_recognition: number
+          autonomy_independence: number
+          bottom_values: Json
+          collaboration_teamwork: number
+          created_at?: string
+          growth_learning: number
+          id?: string
+          innovation_creativity: number
+          interpretation: string
+          leadership_influence: number
+          recommendations?: Json
+          security_stability: number
+          session_id: string
+          social_impact_service: number
+          top_values: Json
+          updated_at?: string
+          user_id: string
+          values_hierarchy: Json
+          values_profile: Json
+          work_life_integration: number
+        }
+        Update: {
+          achievement_recognition?: number
+          autonomy_independence?: number
+          bottom_values?: Json
+          collaboration_teamwork?: number
+          created_at?: string
+          growth_learning?: number
+          id?: string
+          innovation_creativity?: number
+          interpretation?: string
+          leadership_influence?: number
+          recommendations?: Json
+          security_stability?: number
+          session_id?: string
+          social_impact_service?: number
+          top_values?: Json
+          updated_at?: string
+          user_id?: string
+          values_hierarchy?: Json
+          values_profile?: Json
+          work_life_integration?: number
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -1678,6 +2074,10 @@ export type Database = {
           is_active: boolean
           is_expired: boolean
         }[]
+      }
+      check_assessment_access: {
+        Args: { p_assessment_type: string }
+        Returns: boolean
       }
       check_guest_access: {
         Args: { p_token: string; p_assessment_type: string }
@@ -1794,6 +2194,10 @@ export type Database = {
           p_severity?: string
         }
         Returns: string
+      }
+      policy_exists: {
+        Args: { table_name: string; policy_name: string }
+        Returns: boolean
       }
       request_admin_password_reset: {
         Args: { p_email: string }
