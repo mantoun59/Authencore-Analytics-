@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 
 const FAQ = () => {
   const { t } = useTranslation();
+  
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -21,10 +22,10 @@ const FAQ = () => {
           {/* Header Section */}
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-foreground mb-4">
-              {t("faq.title")}
+              Frequently Asked Questions
             </h1>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              {t("faq.subtitle")}
+              Find answers to common questions about our assessments, platform features, and business solutions.
             </p>
           </div>
 
@@ -38,27 +39,27 @@ const FAQ = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <BookOpen className="h-5 w-5 text-primary" />
-                    {t("faqContent.platformOverview.title")}
+                    Platform Overview
                   </CardTitle>
                   <CardDescription>
-                    {t("faqContent.platformOverview.description")}
+                    Understanding AuthenCore and our mission
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="what-is-authencore">
-                      <AccordionTrigger>{t("faqContent.platformOverview.whatIsAuthencore")}</AccordionTrigger>
+                      <AccordionTrigger>What is AuthenCore Analytics?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>{t("faqContent.platformOverview.whatIsAuthencoreAnswer")}</p>
+                          <p>AuthenCore Analytics is a comprehensive psychometric assessment platform that helps individuals and organizations make data-driven decisions about career development, hiring, and team building.</p>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="p-4 bg-primary/5 rounded-lg">
-                              <h4 className="font-semibold mb-2">{t("faqContent.platformOverview.forIndividuals")}</h4>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.platformOverview.forIndividualsDesc")}</p>
+                              <h4 className="font-semibold mb-2">For Individuals</h4>
+                              <p className="text-sm text-muted-foreground">Discover your strengths, career fit, and development opportunities through scientifically validated assessments.</p>
                             </div>
                             <div className="p-4 bg-secondary/5 rounded-lg">
-                              <h4 className="font-semibold mb-2">{t("faqContent.platformOverview.forOrganizations")}</h4>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.platformOverview.forOrganizationsDesc")}</p>
+                              <h4 className="font-semibold mb-2">For Organizations</h4>
+                              <p className="text-sm text-muted-foreground">Reduce hiring risks, improve team performance, and make objective talent decisions with our enterprise solutions.</p>
                             </div>
                           </div>
                         </div>
@@ -66,17 +67,17 @@ const FAQ = () => {
                     </AccordionItem>
                     
                     <AccordionItem value="mission">
-                      <AccordionTrigger>{t("faqContent.platformOverview.missionTitle")}</AccordionTrigger>
+                      <AccordionTrigger>What is your mission and vision?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p className="font-medium text-primary">"{t("faqContent.platformOverview.missionTagline")}"</p>
-                          <p>{t("faqContent.platformOverview.missionDesc")}</p>
+                          <p className="font-medium text-primary">"Empowering authentic career decisions through validated psychological insights"</p>
+                          <p>We believe everyone deserves to find work that aligns with their authentic self. Our mission is to provide scientifically rigorous yet accessible assessment tools that help people understand themselves and organizations build better teams.</p>
                           <ul className="list-disc list-inside space-y-2 text-muted-foreground">
-                            <li>{t("faqContent.platformOverview.validatedInstruments")}</li>
-                            <li>{t("faqContent.platformOverview.validityDetection")}</li>
-                            <li>{t("faqContent.platformOverview.personalizedInsights")}</li>
-                            <li>{t("faqContent.platformOverview.professionalReporting")}</li>
-                            <li>{t("faqContent.platformOverview.ethicalPractices")}</li>
+                            <li>Scientifically validated assessment instruments</li>
+                            <li>Advanced validity detection and bias prevention</li>
+                            <li>Personalized insights and development recommendations</li>
+                            <li>Professional-grade reporting and analytics</li>
+                            <li>Ethical assessment practices and data protection</li>
                           </ul>
                         </div>
                       </AccordionContent>
@@ -90,56 +91,56 @@ const FAQ = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <CheckCircle className="h-5 w-5 text-primary" />
-                    {t("faqContent.assessmentInfo.title")}
+                    Assessment Information
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="assessment-types">
-                      <AccordionTrigger>{t("faqContent.assessmentInfo.typesQuestion")}</AccordionTrigger>
+                      <AccordionTrigger>What types of assessments do you offer?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>{t("faqContent.assessmentInfo.typesAnswer")}</p>
+                          <p>We offer 10 specialized assessments designed for different aspects of career and personal development:</p>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.careerLaunchTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.careerLaunchDesc")}</p>
+                              <h5 className="font-medium">Career Launch Assessment</h5>
+                              <p className="text-sm text-muted-foreground">Comprehensive career readiness and potential evaluation</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.cairPersonalityTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.cairPersonalityDesc")}</p>
+                              <h5 className="font-medium">CAIR Personality Assessment</h5>
+                              <p className="text-sm text-muted-foreground">Core personality traits for workplace effectiveness</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.stressResilienceTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.stressResilienceDesc")}</p>
+                              <h5 className="font-medium">Stress Resilience Assessment</h5>
+                              <p className="text-sm text-muted-foreground">Ability to handle pressure and bounce back from setbacks</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.culturalIntelligenceTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.culturalIntelligenceDesc")}</p>
+                              <h5 className="font-medium">Cultural Intelligence Assessment</h5>
+                              <p className="text-sm text-muted-foreground">Skills for working effectively across cultures</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.communicationStylesTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.communicationStylesDesc")}</p>
+                              <h5 className="font-medium">Communication Styles Assessment</h5>
+                              <p className="text-sm text-muted-foreground">How you communicate and collaborate with others</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.emotionalIntelligenceTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.emotionalIntelligenceDesc")}</p>
+                              <h5 className="font-medium">Emotional Intelligence Assessment</h5>
+                              <p className="text-sm text-muted-foreground">Understanding and managing emotions effectively</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.authenticLeadershipTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.authenticLeadershipDesc")}</p>
+                              <h5 className="font-medium">Authentic Leadership Assessment</h5>
+                              <p className="text-sm text-muted-foreground">Leadership style and potential evaluation</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.digitalWellnessTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.digitalWellnessDesc")}</p>
+                              <h5 className="font-medium">Digital Wellness Assessment</h5>
+                              <p className="text-sm text-muted-foreground">Healthy technology use and digital balance</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.faithValuesTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.faithValuesDesc")}</p>
+                              <h5 className="font-medium">Faith & Values Assessment</h5>
+                              <p className="text-sm text-muted-foreground">Alignment between personal values and career choices</p>
                             </div>
                             <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium">{t("faqContent.assessmentInfo.genZWorkplaceTitle")}</h5>
-                              <p className="text-sm text-muted-foreground">{t("faqContent.assessmentInfo.genZWorkplaceDesc")}</p>
+                              <h5 className="font-medium">Gen Z Workplace Assessment</h5>
+                              <p className="text-sm text-muted-foreground">Modern workplace preferences and expectations</p>
                             </div>
                           </div>
                         </div>
@@ -147,61 +148,61 @@ const FAQ = () => {
                     </AccordionItem>
                     
                     <AccordionItem value="how-long">
-                      <AccordionTrigger>{t("faqContent.assessmentInfo.durationQuestion")}</AccordionTrigger>
+                      <AccordionTrigger>How long do assessments take to complete?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>{t("faqContent.assessmentInfo.durationAnswer")}</p>
+                          <p>Assessment duration varies by complexity and depth of analysis:</p>
                           <div className="space-y-3">
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">{t("faqContent.assessmentInfo.quickAssessments")}</span>
+                              <span className="font-medium">Quick Assessments</span>
                               <Badge variant="outline">15-25 minutes</Badge>
                             </div>
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">{t("faqContent.assessmentInfo.standardAssessments")}</span>
+                              <span className="font-medium">Standard Assessments</span>
                               <Badge variant="outline">25-40 minutes</Badge>
                             </div>
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">{t("faqContent.assessmentInfo.comprehensiveAssessments")}</span>
+                              <span className="font-medium">Comprehensive Assessments</span>
                               <Badge variant="outline">45-60 minutes</Badge>
                             </div>
                           </div>
                           <p className="text-sm text-muted-foreground">
-                            {t("faqContent.assessmentInfo.pauseNote")}
+                            You can pause and resume most assessments, but we recommend completing them in one session for the most accurate results.
                           </p>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
                     
                     <AccordionItem value="how-to-take">
-                      <AccordionTrigger>{t("faqContent.assessmentInfo.howToTakeQuestion")}</AccordionTrigger>
+                      <AccordionTrigger>How do I take an assessment?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>{t("faqContent.assessmentInfo.howToTakeAnswer")}</p>
+                          <p>Taking an assessment is simple and straightforward:</p>
                           <ol className="space-y-3 text-sm">
                             <li className="flex items-start gap-2">
                               <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">1</span>
-                              <span>{t("faqContent.assessmentInfo.step1")}</span>
+                              <span>Create a free account or log in to your existing account</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">2</span>
-                              <span>{t("faqContent.assessmentInfo.step2")}</span>
+                              <span>Choose the assessment that fits your needs</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">3</span>
-                              <span>{t("faqContent.assessmentInfo.step3")}</span>
+                              <span>Answer questions honestly - there are no right or wrong answers</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <span className="bg-primary text-primary-foreground rounded-full w-5 h-5 flex items-center justify-center text-xs font-medium mt-0.5">4</span>
-                              <span>{t("faqContent.assessmentInfo.step4")}</span>
+                              <span>Receive your detailed report immediately upon completion</span>
                             </li>
                           </ol>
                           <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                            <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-1">{t("faqContent.assessmentInfo.importantTips")}</h5>
+                            <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-1">Important Tips</h5>
                             <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                              <li>• {t("faqContent.assessmentInfo.tip1")}</li>
-                              <li>• {t("faqContent.assessmentInfo.tip2")}</li>
-                              <li>• {t("faqContent.assessmentInfo.tip3")}</li>
-                              <li>• {t("faqContent.assessmentInfo.tip4")}</li>
+                              <li>• Answer based on your natural tendencies, not what you think is expected</li>
+                              <li>• Find a quiet environment without distractions</li>
+                              <li>• Don't overthink your responses - your first instinct is usually most accurate</li>
+                              <li>• Ensure stable internet connection before starting</li>
                             </ul>
                           </div>
                         </div>
@@ -209,30 +210,30 @@ const FAQ = () => {
                     </AccordionItem>
                     
                     <AccordionItem value="reports">
-                      <AccordionTrigger>{t("faqContent.assessmentInfo.reportsQuestion")}</AccordionTrigger>
+                      <AccordionTrigger>What do I receive in my assessment report?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>{t("faqContent.assessmentInfo.reportsAnswer")}</p>
+                          <p>Each assessment provides a comprehensive, personalized report including:</p>
                           <ul className="space-y-2">
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">{t("faqContent.assessmentInfo.onlineResults")}</span>
+                              <span className="text-sm">Detailed results with visual charts and graphs</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">{t("faqContent.assessmentInfo.pdfReport")}</span>
+                              <span className="text-sm">Professional PDF report for sharing or printing</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">{t("faqContent.assessmentInfo.developmentRecs")}</span>
+                              <span className="text-sm">Personalized development recommendations</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">{t("faqContent.assessmentInfo.percentileRankings")}</span>
+                              <span className="text-sm">Percentile rankings compared to similar professionals</span>
                             </li>
                             <li className="flex items-start gap-2">
                               <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
-                              <span className="text-sm">{t("faqContent.assessmentInfo.careerInsights")}</span>
+                              <span className="text-sm">Career insights and role recommendations</span>
                             </li>
                           </ul>
                         </div>
@@ -247,33 +248,33 @@ const FAQ = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Settings className="h-5 w-5 text-primary" />
-                    {t("faqContent.technicalSupport.title")}
+                    Technical Support
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Accordion type="single" collapsible className="w-full">
                     <AccordionItem value="technical-requirements">
-                      <AccordionTrigger>{t("faqContent.technicalSupport.requirementsQuestion")}</AccordionTrigger>
+                      <AccordionTrigger>What are the technical requirements?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>{t("faqContent.technicalSupport.requirementsAnswer")}</p>
+                          <p>Our platform works on all modern devices and browsers:</p>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
-                              <h5 className="font-medium">{t("faqContent.technicalSupport.supportedBrowsers")}</h5>
+                              <h5 className="font-medium">Supported Browsers</h5>
                               <ul className="text-sm text-muted-foreground space-y-1">
-                                <li>• {t("faqContent.technicalSupport.chrome")}</li>
-                                <li>• {t("faqContent.technicalSupport.firefox")}</li>
-                                <li>• {t("faqContent.technicalSupport.safari")}</li>
-                                <li>• {t("faqContent.technicalSupport.edge")}</li>
+                                <li>• Chrome 90+ (recommended)</li>
+                                <li>• Firefox 88+</li>
+                                <li>• Safari 14+</li>
+                                <li>• Edge 90+</li>
                               </ul>
                             </div>
                             <div className="space-y-2">
-                              <h5 className="font-medium">{t("faqContent.technicalSupport.deviceRequirements")}</h5>
+                              <h5 className="font-medium">Device Requirements</h5>
                               <ul className="text-sm text-muted-foreground space-y-1">
-                                <li>• {t("faqContent.technicalSupport.stableConnection")}</li>
-                                <li>• {t("faqContent.technicalSupport.modernDevice")}</li>
-                                <li>• {t("faqContent.technicalSupport.javascriptEnabled")}</li>
-                                <li>• {t("faqContent.technicalSupport.cookiesEnabled")}</li>
+                                <li>• Stable internet connection</li>
+                                <li>• Modern smartphone, tablet, or computer</li>
+                                <li>• JavaScript enabled</li>
+                                <li>• Cookies enabled</li>
                               </ul>
                             </div>
                           </div>
@@ -282,28 +283,59 @@ const FAQ = () => {
                     </AccordionItem>
                     
                     <AccordionItem value="support">
-                      <AccordionTrigger>{t("faqContent.technicalSupport.supportQuestion")}</AccordionTrigger>
+                      <AccordionTrigger>How can I get technical support?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>{t("faqContent.technicalSupport.supportAnswer")}</p>
+                          <p>We offer comprehensive support through multiple channels:</p>
                           <div className="space-y-3">
-                            <div className="p-4 border rounded-lg">
-                              <h5 className="font-medium mb-2">{t("faqContent.technicalSupport.emailSupport")}</h5>
-                              <p className="text-sm text-muted-foreground">
-                                {t("faqContent.technicalSupport.emailSupportDesc")}
-                              </p>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium mb-1">📧 Email Support</h5>
+                              <p className="text-sm text-muted-foreground">support@authencore.com - Response within 24 hours</p>
                             </div>
-                            <div className="p-4 border rounded-lg">
-                              <h5 className="font-medium mb-2">{t("faqContent.technicalSupport.documentation")}</h5>
-                              <p className="text-sm text-muted-foreground">
-                                {t("faqContent.technicalSupport.documentationDesc")}
-                              </p>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium mb-1">💬 Live Chat</h5>
+                              <p className="text-sm text-muted-foreground">Available Monday-Friday, 9 AM - 6 PM EST</p>
                             </div>
-                            <div className="p-4 border rounded-lg">
-                              <h5 className="font-medium mb-2">{t("faqContent.technicalSupport.responseTime")}</h5>
-                              <p className="text-sm text-muted-foreground">
-                                {t("faqContent.technicalSupport.responseTimeDesc")}
-                              </p>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium mb-1">📚 Help Center</h5>
+                              <p className="text-sm text-muted-foreground">Comprehensive guides and troubleshooting articles</p>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    
+                    <AccordionItem value="troubleshooting">
+                      <AccordionTrigger>Common Issues & Solutions</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <div className="space-y-3">
+                            <div className="p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
+                              <h5 className="font-medium text-red-900 dark:text-red-100 mb-2">Assessment Won't Load</h5>
+                              <ul className="text-sm text-red-800 dark:text-red-200 space-y-1">
+                                <li>• Clear your browser cache and cookies</li>
+                                <li>• Disable browser extensions temporarily</li>
+                                <li>• Try incognito/private browsing mode</li>
+                                <li>• Check your internet connection</li>
+                              </ul>
+                            </div>
+                            <div className="p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg border border-orange-200 dark:border-orange-800">
+                              <h5 className="font-medium text-orange-900 dark:text-orange-100 mb-2">Progress Not Saving</h5>
+                              <ul className="text-sm text-orange-800 dark:text-orange-200 space-y-1">
+                                <li>• Ensure cookies are enabled in your browser</li>
+                                <li>• Don't use private/incognito mode for assessments</li>
+                                <li>• Complete assessments in one session when possible</li>
+                                <li>• Contact support if you lose significant progress</li>
+                              </ul>
+                            </div>
+                            <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                              <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Report Not Generating</h5>
+                              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                                <li>• Wait 2-3 minutes after completing assessment</li>
+                                <li>• Refresh the page if report doesn't appear</li>
+                                <li>• Check your spam folder for email reports</li>
+                                <li>• Ensure pop-up blockers aren't preventing downloads</li>
+                              </ul>
                             </div>
                           </div>
                         </div>
@@ -313,175 +345,209 @@ const FAQ = () => {
                 </CardContent>
               </Card>
 
-              {/* Business & Industry Solutions */}
+              {/* Data Privacy & Security */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
-                    <Building2 className="h-5 w-5 text-primary" />
-                    Business & Industry Solutions
+                    <Shield className="h-5 w-5 text-primary" />
+                    Data Privacy & Security
                   </CardTitle>
                   <CardDescription>
-                    Comprehensive information for organizations, HR professionals, and business leaders
+                    How we protect your data and ensure privacy
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="enterprise-solutions">
-                      <AccordionTrigger>What enterprise solutions does AuthenCore offer?</AccordionTrigger>
+                    <AccordionItem value="data-security">
+                      <AccordionTrigger>How is my data protected?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>AuthenCore provides comprehensive enterprise solutions designed for organizations of all sizes, from startups to Fortune 500 companies.</p>
+                          <p>We employ industry-leading security measures to protect your information:</p>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="p-4 bg-primary/5 rounded-lg">
-                              <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                <Users className="h-4 w-4" />
-                                Bulk Assessment Management
-                              </h4>
-                              <p className="text-sm text-muted-foreground">Administer assessments to hundreds of candidates simultaneously with centralized reporting and analytics.</p>
+                            <div className="space-y-3">
+                              <h5 className="font-medium">Technical Security</h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• 256-bit SSL encryption</li>
+                                <li>• Secure cloud infrastructure</li>
+                                <li>• Regular security audits</li>
+                                <li>• Multi-factor authentication</li>
+                              </ul>
                             </div>
-                            <div className="p-4 bg-secondary/5 rounded-lg">
-                              <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                <TrendingUp className="h-4 w-4" />
-                                Advanced Analytics Dashboard
-                              </h4>
-                              <p className="text-sm text-muted-foreground">Real-time insights, predictive analytics, and comprehensive reporting for data-driven hiring decisions.</p>
-                            </div>
-                            <div className="p-4 bg-accent/5 rounded-lg">
-                              <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                <Shield className="h-4 w-4" />
-                                White-Label Solutions
-                              </h4>
-                              <p className="text-sm text-muted-foreground">Customize the platform with your company branding and integrate seamlessly with existing systems.</p>
-                            </div>
-                            <div className="p-4 bg-muted/50 rounded-lg">
-                              <h4 className="font-semibold mb-2 flex items-center gap-2">
-                                <Globe className="h-4 w-4" />
-                                API Integration
-                              </h4>
-                              <p className="text-sm text-muted-foreground">Connect with your HRIS, ATS, and other enterprise systems for streamlined workflows.</p>
+                            <div className="space-y-3">
+                              <h5 className="font-medium">Compliance Standards</h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• GDPR compliant</li>
+                                <li>• CCPA compliant</li>
+                                <li>• SOC 2 Type II certified</li>
+                                <li>• ISO 27001 standards</li>
+                              </ul>
                             </div>
                           </div>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
-
-                    <AccordionItem value="hr-benefits">
-                      <AccordionTrigger>How can HR departments benefit from AuthenCore assessments?</AccordionTrigger>
+                    
+                    <AccordionItem value="data-sharing">
+                      <AccordionTrigger>Do you share my data with third parties?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>HR departments leverage AuthenCore assessments across the entire employee lifecycle to make informed decisions and improve organizational outcomes.</p>
+                          <p className="font-medium text-green-700 dark:text-green-300">No, we never sell or share your personal assessment data.</p>
+                          <p>We only share data in these specific circumstances:</p>
+                          <div className="space-y-2">
+                            <div className="flex items-start gap-2">
+                              <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
+                              <span className="text-sm">With your explicit consent (e.g., sharing results with your employer)</span>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
+                              <span className="text-sm">With service providers under strict data processing agreements</span>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
+                              <span className="text-sm">When required by law or to protect our legal rights</span>
+                            </div>
+                            <div className="flex items-start gap-2">
+                              <CheckCircle className="h-4 w-4 text-green-500 mt-1 flex-shrink-0" />
+                              <span className="text-sm">Anonymized data for research and platform improvement</span>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    
+                    <AccordionItem value="data-deletion">
+                      <AccordionTrigger>How can I delete my data?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>You have full control over your data and can request deletion at any time:</p>
                           <div className="space-y-3">
-                            <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
-                              <Target className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                              <div>
-                                <h5 className="font-medium text-blue-900 dark:text-blue-100">Recruitment & Selection</h5>
-                                <p className="text-sm text-blue-800 dark:text-blue-200">Identify top talent, reduce time-to-hire by 40%, and improve quality of hire with scientific assessment data.</p>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
-                              <TrendingUp className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
-                              <div>
-                                <h5 className="font-medium text-green-900 dark:text-green-100">Performance Management</h5>
-                                <p className="text-sm text-green-800 dark:text-green-200">Create personalized development plans, identify high-potential employees, and track growth over time.</p>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3 p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
-                              <Users className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                              <div>
-                                <h5 className="font-medium text-purple-900 dark:text-purple-100">Team Building & Culture</h5>
-                                <p className="text-sm text-purple-800 dark:text-purple-200">Build cohesive teams, improve communication, and align individual strengths with organizational culture.</p>
-                              </div>
-                            </div>
-                            <div className="flex items-start gap-3 p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
-                              <Briefcase className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
-                              <div>
-                                <h5 className="font-medium text-orange-900 dark:text-orange-100">Succession Planning</h5>
-                                <p className="text-sm text-orange-800 dark:text-orange-200">Identify future leaders, plan career progressions, and ensure organizational continuity.</p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="industry-specific">
-                      <AccordionTrigger>Which industries use AuthenCore assessments?</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4">
-                          <p>AuthenCore assessments are trusted by organizations across diverse industries, each leveraging our platform for their unique needs.</p>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                            <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium mb-1">Healthcare & Life Sciences</h5>
-                              <p className="text-sm text-muted-foreground">Assess emotional intelligence for patient care, stress resilience for high-pressure roles, and cultural intelligence for diverse patient populations.</p>
-                            </div>
-                            <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium mb-1">Financial Services</h5>
-                              <p className="text-sm text-muted-foreground">Evaluate leadership potential, authentic decision-making, and stress management for high-stakes financial environments.</p>
-                            </div>
-                            <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium mb-1">Technology & Innovation</h5>
-                              <p className="text-sm text-muted-foreground">Identify digital wellness awareness, communication styles for remote teams, and adaptability for fast-changing environments.</p>
-                            </div>
-                            <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium mb-1">Education & Training</h5>
-                              <p className="text-sm text-muted-foreground">Assess cultural intelligence for diverse student bodies, emotional intelligence for student interactions, and authentic leadership for administration.</p>
-                            </div>
-                            <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium mb-1">Manufacturing & Operations</h5>
-                              <p className="text-sm text-muted-foreground">Evaluate stress resilience for operational roles, leadership potential for management, and team communication for collaborative environments.</p>
-                            </div>
-                            <div className="p-3 border rounded-lg">
-                              <h5 className="font-medium mb-1">Consulting & Professional Services</h5>
-                              <p className="text-sm text-muted-foreground">Assess communication styles for client interactions, cultural intelligence for global projects, and authentic leadership for team management.</p>
-                            </div>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="cost-benefit">
-                      <AccordionTrigger>What's the ROI of implementing AuthenCore assessments?</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4">
-                          <p>Organizations typically see significant returns on investment within 6-12 months of implementing AuthenCore assessments.</p>
-                          <div className="space-y-4">
-                            <div className="p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
-                              <h5 className="font-semibold text-green-900 dark:text-green-100 mb-2">Measurable Cost Savings</h5>
-                              <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
-                                <li>• 65% reduction in mis-hiring costs (average savings: $240,000 annually)</li>
-                                <li>• 40% decrease in time-to-hire (saves 15-20 hours per position)</li>
-                                <li>• 50% reduction in early turnover (first-year retention improvement)</li>
-                                <li>• 30% increase in employee productivity within first quarter</li>
-                              </ul>
-                            </div>
-                            <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                              <h5 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Revenue Enhancement</h5>
+                            <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                              <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-2">Self-Service Options</h5>
                               <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                                <li>• 25% improvement in team performance metrics</li>
-                                <li>• 20% increase in customer satisfaction scores</li>
-                                <li>• 35% faster promotion readiness for high-potential employees</li>
-                                <li>• 45% improvement in leadership effectiveness ratings</li>
+                                <li>• Delete individual assessment results from your dashboard</li>
+                                <li>• Update or remove personal information in account settings</li>
+                                <li>• Download your data before deletion (data portability)</li>
                               </ul>
                             </div>
-                            <div className="p-4 bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 rounded-lg">
-                              <h5 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Strategic Benefits</h5>
-                              <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
-                                <li>• Enhanced employer brand and candidate experience</li>
-                                <li>• Improved diversity and inclusion outcomes</li>
-                                <li>• Reduced legal risks from hiring bias</li>
-                                <li>• Data-driven succession planning capabilities</li>
+                            <div className="p-3 bg-red-50 dark:bg-red-950/20 rounded-lg border border-red-200 dark:border-red-800">
+                              <h5 className="font-medium text-red-900 dark:text-red-100 mb-2">Complete Account Deletion</h5>
+                              <ul className="text-sm text-red-800 dark:text-red-200 space-y-1">
+                                <li>• Email privacy@authencore.com with deletion request</li>
+                                <li>• All data permanently deleted within 30 days</li>
+                                <li>• Confirmation email sent when process is complete</li>
+                                <li>• Some data may be retained for legal compliance</li>
                               </ul>
                             </div>
                           </div>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
+                  </Accordion>
+                </CardContent>
+              </Card>
 
+              {/* Business Solutions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5 text-primary" />
+                    Business Solutions
+                  </CardTitle>
+                  <CardDescription>
+                    Enterprise features for organizations and HR teams
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="enterprise-features">
+                      <AccordionTrigger>What enterprise features are available?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>Our enterprise solutions include comprehensive features for large organizations:</p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-3">
+                              <h5 className="font-medium">Assessment Management</h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• Bulk candidate invitations</li>
+                                <li>• Custom assessment batteries</li>
+                                <li>• Automated reminder systems</li>
+                                <li>• Progress tracking dashboards</li>
+                              </ul>
+                            </div>
+                            <div className="space-y-3">
+                              <h5 className="font-medium">Advanced Analytics</h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• Aggregate team insights</li>
+                                <li>• Predictive analytics</li>
+                                <li>• Custom reporting templates</li>
+                                <li>• Bias detection monitoring</li>
+                              </ul>
+                            </div>
+                            <div className="space-y-3">
+                              <h5 className="font-medium">Integration & API</h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• HRIS system integration</li>
+                                <li>• ATS connector plugins</li>
+                                <li>• Custom API endpoints</li>
+                                <li>• Single sign-on (SSO)</li>
+                              </ul>
+                            </div>
+                            <div className="space-y-3">
+                              <h5 className="font-medium">Support & Training</h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• Dedicated account manager</li>
+                                <li>• Training workshops</li>
+                                <li>• Implementation support</li>
+                                <li>• Priority technical support</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    
+                    <AccordionItem value="pricing-business">
+                      <AccordionTrigger>What are your business pricing options?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>We offer flexible pricing models to suit organizations of all sizes:</p>
+                          <div className="space-y-3">
+                            <div className="p-4 border rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Users className="h-4 w-4 text-blue-600" />
+                                <h5 className="font-medium">Per-Assessment Pricing</h5>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">Pay as you go, perfect for smaller teams</p>
+                              <ul className="text-sm space-y-1">
+                                <li>• $15-45 per individual assessment</li>
+                                <li>• Volume discounts start at 25+ assessments</li>
+                                <li>• No monthly commitments</li>
+                                <li>• Access to standard reporting</li>
+                              </ul>
+                            </div>
+                            <div className="p-4 border rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Building2 className="h-4 w-4 text-green-600" />
+                                <h5 className="font-medium">Enterprise Subscriptions</h5>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">Monthly/annual plans for regular usage</p>
+                              <ul className="text-sm space-y-1">
+                                <li>• Unlimited assessments within plan limits</li>
+                                <li>• Advanced analytics and reporting</li>
+                                <li>• API access and integrations</li>
+                                <li>• Dedicated support team</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                    
                     <AccordionItem value="implementation">
                       <AccordionTrigger>How long does implementation take?</AccordionTrigger>
                       <AccordionContent>
                         <div className="space-y-4">
-                          <p>Implementation timelines vary based on organization size and complexity, but most clients are fully operational within 2-8 weeks.</p>
+                          <p>Implementation timelines vary based on complexity:</p>
                           <div className="space-y-3">
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
                               <div>
@@ -496,7 +562,7 @@ const FAQ = () => {
                             <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
                               <div>
                                 <span className="font-medium">Enterprise Setup (200-1000 employees)</span>
-                                <p className="text-sm text-muted-foreground">Custom workflows, API integration, advanced analytics</p>
+                                <p className="text-sm text-muted-foreground">Custom workflows, API integration</p>
                               </div>
                               <Badge variant="outline" className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
@@ -514,262 +580,6 @@ const FAQ = () => {
                               </Badge>
                             </div>
                           </div>
-                          <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                            <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-1">Implementation Includes:</h5>
-                            <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                              <li>• Dedicated customer success manager</li>
-                              <li>• Technical integration support</li>
-                              <li>• Admin and user training sessions</li>
-                              <li>• Custom branding and configuration</li>
-                              <li>• Data migration assistance</li>
-                              <li>• Go-live support and monitoring</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="pricing-models">
-                      <AccordionTrigger>What pricing models are available for businesses?</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4">
-                          <p>AuthenCore offers flexible pricing models to meet diverse organizational needs and budgets.</p>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="p-4 border rounded-lg">
-                              <div className="flex items-center gap-2 mb-2">
-                                <DollarSign className="h-4 w-4 text-green-600" />
-                                <h5 className="font-medium">Pay-Per-Assessment</h5>
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-2">Perfect for smaller organizations or seasonal hiring</p>
-                              <ul className="text-sm space-y-1">
-                                <li>• Individual assessment pricing</li>
-                                <li>• No monthly commitments</li>
-                                <li>• Volume discounts available</li>
-                                <li>• 30-day support included</li>
-                              </ul>
-                            </div>
-                            <div className="p-4 border rounded-lg">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Users className="h-4 w-4 text-blue-600" />
-                                <h5 className="font-medium">Subscription Plans</h5>
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-2">Ideal for regular hiring and ongoing development</p>
-                              <ul className="text-sm space-y-1">
-                                <li>• Monthly or annual billing</li>
-                                <li>• Unlimited assessments per tier</li>
-                                <li>• Advanced reporting included</li>
-                                <li>• Priority support access</li>
-                              </ul>
-                            </div>
-                            <div className="p-4 border rounded-lg">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Building2 className="h-4 w-4 text-purple-600" />
-                                <h5 className="font-medium">Enterprise Licensing</h5>
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-2">Comprehensive solution for large organizations</p>
-                              <ul className="text-sm space-y-1">
-                                <li>• Custom pricing based on usage</li>
-                                <li>• White-label options</li>
-                                <li>• API access and integrations</li>
-                                <li>• Dedicated account management</li>
-                              </ul>
-                            </div>
-                            <div className="p-4 border rounded-lg">
-                              <div className="flex items-center gap-2 mb-2">
-                                <Globe className="h-4 w-4 text-orange-600" />
-                                <h5 className="font-medium">Partner Programs</h5>
-                              </div>
-                              <p className="text-sm text-muted-foreground mb-2">For consultants and HR service providers</p>
-                              <ul className="text-sm space-y-1">
-                                <li>• Reseller pricing tiers</li>
-                                <li>• Co-branding opportunities</li>
-                                <li>• Training and certification</li>
-                                <li>• Marketing support included</li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div className="text-center p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg">
-                            <p className="font-medium mb-2">Need a custom quote?</p>
-                            <p className="text-sm text-muted-foreground mb-3">Contact our sales team for personalized pricing based on your specific requirements.</p>
-                            <a href="mailto:sales@authencore.org">
-                              <Button size="sm">Get Custom Quote</Button>
-                            </a>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="compliance-security">
-                      <AccordionTrigger>What compliance and security standards does AuthenCore meet?</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4">
-                          <p>AuthenCore maintains the highest standards of security and compliance to protect sensitive assessment data and meet global regulatory requirements.</p>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="space-y-3">
-                              <h5 className="font-medium flex items-center gap-2">
-                                <Shield className="h-4 w-4 text-green-600" />
-                                Security Certifications
-                              </h5>
-                              <ul className="text-sm text-muted-foreground space-y-1">
-                                <li>• SOC 2 Type II Compliant</li>
-                                <li>• ISO 27001 Information Security</li>
-                                <li>• GDPR and CCPA Compliant</li>
-                                <li>• HIPAA Ready Infrastructure</li>
-                                <li>• 256-bit SSL Encryption</li>
-                                <li>• Multi-factor Authentication</li>
-                              </ul>
-                            </div>
-                            <div className="space-y-3">
-                              <h5 className="font-medium flex items-center gap-2">
-                                <Globe className="h-4 w-4 text-blue-600" />
-                                Global Compliance
-                              </h5>
-                              <ul className="text-sm text-muted-foreground space-y-1">
-                                <li>• EEOC Guidelines Adherence</li>
-                                <li>• ADA Accessibility Standards</li>
-                                <li>• International Data Transfers</li>
-                                <li>• Right to be Forgotten</li>
-                                <li>• Data Portability Rights</li>
-                                <li>• Regional Privacy Laws</li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div className="p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
-                            <h5 className="font-semibold text-green-900 dark:text-green-100 mb-2">Ethical Assessment Practices</h5>
-                            <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
-                              <li>• Scientifically validated instruments</li>
-                              <li>• Bias detection and mitigation</li>
-                              <li>• Adverse impact monitoring</li>
-                              <li>• Candidate consent management</li>
-                              <li>• Equal opportunity compliance</li>
-                              <li>• Regular fairness auditing</li>
-                            </ul>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-                  </Accordion>
-                </CardContent>
-              </Card>
-
-              {/* Pricing & Business Operations */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <DollarSign className="h-5 w-5 text-primary" />
-                    Pricing & Business Operations
-                  </CardTitle>
-                  <CardDescription>
-                    Transparent pricing, billing, and business process information
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Accordion type="single" collapsible className="w-full">
-                    <AccordionItem value="volume-discounts">
-                      <AccordionTrigger>Are volume discounts available?</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4">
-                          <p>Yes, AuthenCore offers competitive volume discounts for organizations conducting multiple assessments.</p>
-                          <div className="space-y-3">
-                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">10-49 assessments</span>
-                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">10% discount</Badge>
-                            </div>
-                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">50-199 assessments</span>
-                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">20% discount</Badge>
-                            </div>
-                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">200-499 assessments</span>
-                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">30% discount</Badge>
-                            </div>
-                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
-                              <span className="font-medium">500+ assessments</span>
-                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Custom pricing</Badge>
-                            </div>
-                          </div>
-                          <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
-                            <p className="text-sm text-blue-800 dark:text-blue-200">
-                              <strong>Annual contracts</strong> receive additional 15% discount on top of volume pricing. 
-                              Contact our sales team for custom enterprise pricing for 1000+ assessments.
-                            </p>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="billing-options">
-                      <AccordionTrigger>What billing and payment options are available?</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4">
-                          <p>AuthenCore offers flexible billing options to accommodate different organizational preferences and requirements.</p>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div className="p-4 border rounded-lg">
-                              <h5 className="font-medium mb-2">Payment Methods</h5>
-                              <ul className="text-sm text-muted-foreground space-y-1">
-                                <li>• Credit/Debit Cards (Visa, MasterCard, Amex)</li>
-                                <li>• Bank Transfers (ACH/Wire)</li>
-                                <li>• Purchase Orders</li>
-                                <li>• Corporate Credit Lines</li>
-                                <li>• International Banking</li>
-                              </ul>
-                            </div>
-                            <div className="p-4 border rounded-lg">
-                              <h5 className="font-medium mb-2">Billing Frequencies</h5>
-                              <ul className="text-sm text-muted-foreground space-y-1">
-                                <li>• Pay-per-use (immediate billing)</li>
-                                <li>• Monthly subscriptions</li>
-                                <li>• Quarterly billing cycles</li>
-                                <li>• Annual prepayment (discount eligible)</li>
-                                <li>• Custom enterprise terms</li>
-                              </ul>
-                            </div>
-                          </div>
-                          <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
-                            <h5 className="font-medium text-green-900 dark:text-green-100 mb-1">Enterprise Benefits</h5>
-                            <p className="text-sm text-green-800 dark:text-green-200">
-                              Enterprise customers receive NET 30 payment terms, dedicated account management, 
-                              and custom invoicing options including multi-department cost allocation.
-                            </p>
-                          </div>
-                        </div>
-                      </AccordionContent>
-                    </AccordionItem>
-
-                    <AccordionItem value="refund-policy">
-                      <AccordionTrigger>What is the refund and cancellation policy?</AccordionTrigger>
-                      <AccordionContent>
-                        <div className="space-y-4">
-                          <p>AuthenCore maintains a fair and transparent refund policy to ensure customer satisfaction.</p>
-                          <div className="space-y-4">
-                            <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                              <h5 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Individual Assessments</h5>
-                              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
-                                <li>• Full refund if cancelled before assessment starts</li>
-                                <li>• 50% refund if cancelled within first 25% of assessment</li>
-                                <li>• No refund after 25% completion due to AI processing costs</li>
-                                <li>• Technical issues: Full refund or free retake</li>
-                              </ul>
-                            </div>
-                            <div className="p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
-                              <h5 className="font-semibold text-green-900 dark:text-green-100 mb-2">Subscription Services</h5>
-                              <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
-                                <li>• 30-day money-back guarantee for new subscriptions</li>
-                                <li>• Cancel anytime with 30-day notice</li>
-                                <li>• Prorated refunds for unused subscription time</li>
-                                <li>• Annual subscriptions: Refund remaining months minus 15% processing fee</li>
-                              </ul>
-                            </div>
-                            <div className="p-4 bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 rounded-lg">
-                              <h5 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Enterprise Contracts</h5>
-                              <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
-                                <li>• Custom refund terms negotiated per contract</li>
-                                <li>• Satisfaction guarantee periods available</li>
-                                <li>• Unused assessment credits carry forward</li>
-                                <li>• Contract modifications allowed with mutual agreement</li>
-                              </ul>
-                            </div>
-                          </div>
                         </div>
                       </AccordionContent>
                     </AccordionItem>
@@ -778,126 +588,82 @@ const FAQ = () => {
               </Card>
             </div>
 
-            {/* Sidebar - Quick Links & Downloads */}
+            {/* Sidebar */}
             <div className="space-y-6">
               
-              {/* Quick Actions */}
+              {/* Quick Links */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <HelpCircle className="h-5 w-5 text-primary" />
-                    {t("faqContent.quickActions.title")}
+                    Quick Links
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Link to="/assessment">
-                    <Button className="w-full justify-start" variant="outline">
+                  <Link to="/assessments">
+                    <Button variant="outline" className="w-full justify-start">
                       <CheckCircle className="h-4 w-4 mr-2" />
-                      {t("faqContent.quickActions.viewAllAssessments")}
+                      Take an Assessment
                     </Button>
                   </Link>
                   <Link to="/sample-reports">
-                    <Button className="w-full justify-start" variant="outline">
+                    <Button variant="outline" className="w-full justify-start">
                       <FileText className="h-4 w-4 mr-2" />
-                      {t("faqContent.quickActions.sampleReports")}
+                      View Sample Reports
                     </Button>
                   </Link>
                   <Link to="/about">
-                    <Button className="w-full justify-start" variant="outline">
-                      <Users className="h-4 w-4 mr-2" />
-                      {t("faqContent.quickActions.aboutUs")}
+                    <Button variant="outline" className="w-full justify-start">
+                      <BookOpen className="h-4 w-4 mr-2" />
+                      About AuthenCore
                     </Button>
                   </Link>
-                </CardContent>
-              </Card>
-
-              {/* Downloads Section */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Download className="h-5 w-5 text-primary" />
-                    {t("faqContent.downloads.title")}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <p className="text-sm text-muted-foreground">
-                    {t("faqContent.downloads.description")}
-                  </p>
-                  
-                  <div className="space-y-3">
-                    <div className="p-3 border rounded-lg">
-                      <h5 className="font-medium text-sm mb-1">{t("faqContent.downloads.assessmentGuides")}</h5>
-                      <p className="text-xs text-muted-foreground mb-2">
-                        {t("faqContent.downloads.assessmentGuidesDesc")}
-                      </p>
-                      <Link to="/marketing-materials">
-                        <Button size="sm" variant="outline" className="w-full">
-                          {t("faqContent.downloads.accessGuides")}
-                        </Button>
-                      </Link>
-                    </div>
-                    
-                    <div className="p-3 border rounded-lg">
-                      <h5 className="font-medium text-sm mb-1">{t("faqContent.downloads.marketingMaterials")}</h5>
-                      <p className="text-xs text-muted-foreground mb-2">
-                        {t("faqContent.downloads.marketingMaterialsDesc")}
-                      </p>
-                      <Link to="/marketing-materials">
-                        <Button size="sm" variant="outline" className="w-full">
-                          {t("faqContent.downloads.downloadMaterials")}
-                        </Button>
-                      </Link>
-                    </div>
-                    
-                    <div className="p-3 border rounded-lg">
-                      <h5 className="font-medium text-sm mb-1">{t("faqContent.downloads.technicalDocumentation")}</h5>
-                      <p className="text-xs text-muted-foreground mb-2">
-                        {t("faqContent.downloads.technicalDocumentationDesc")}
-                      </p>
-                      <Link to="/marketing-materials">
-                        <Button size="sm" variant="outline" className="w-full">
-                          {t("faqContent.downloads.viewDocumentation")}
-                        </Button>
-                      </Link>
-                    </div>
-                  </div>
-                  
-                  <Separator />
-                  
-                  <div className="text-center">
-                    <p className="text-xs text-muted-foreground mb-2">
-                      {t("faqContent.downloads.needSomethingSpecific")}
-                    </p>
-                    <a href="mailto:contact@authencore.org">
-                      <Button size="sm" className="w-full">
-                        {t("faqContent.downloads.contactSupport")}
-                      </Button>
-                    </a>
-                  </div>
+                  <a href="mailto:support@authencore.com">
+                    <Button variant="outline" className="w-full justify-start">
+                      <Settings className="h-4 w-4 mr-2" />
+                      Contact Support
+                    </Button>
+                  </a>
                 </CardContent>
               </Card>
 
               {/* Popular Topics */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-lg">{t("faqContent.popularTopics.title")}</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                    Popular Topics
+                  </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <Link to="/privacy" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • {t("faqContent.popularTopics.privacyDataSecurity")}
-                  </Link>
-                  <Link to="/sample-reports" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • {t("faqContent.popularTopics.sampleReports")}
-                  </Link>
-                  <Link to="/assessment" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • {t("faqContent.popularTopics.assessmentPricing")}
-                  </Link>
-                  <a href="mailto:contact@authencore.org" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • {t("faqContent.popularTopics.businessPartnerships")}
-                  </a>
-                  <Link to="/marketing-materials" className="block text-sm text-muted-foreground hover:text-primary transition-colors">
-                    • {t("faqContent.popularTopics.employerSolutions")}
-                  </Link>
+                  <div className="flex flex-wrap gap-2">
+                    <Badge variant="secondary">Assessment Types</Badge>
+                    <Badge variant="secondary">Pricing</Badge>
+                    <Badge variant="secondary">Data Security</Badge>
+                    <Badge variant="secondary">Business Solutions</Badge>
+                    <Badge variant="secondary">Technical Support</Badge>
+                    <Badge variant="secondary">Implementation</Badge>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Still Need Help */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Still Need Help?</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground">
+                    Can't find what you're looking for? Our support team is here to help.
+                  </p>
+                  <div className="space-y-2">
+                    <a href="mailto:support@authencore.com">
+                      <Button className="w-full">Contact Support</Button>
+                    </a>
+                    <a href="mailto:sales@authencore.com">
+                      <Button variant="outline" className="w-full">Talk to Sales</Button>
+                    </a>
+                  </div>
                 </CardContent>
               </Card>
             </div>
