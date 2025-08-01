@@ -5,7 +5,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Download, BookOpen, Users, Settings, HelpCircle, FileText, CheckCircle } from "lucide-react";
+import { Download, BookOpen, Users, Settings, HelpCircle, FileText, CheckCircle, Building2, TrendingUp, Shield, Briefcase, Globe, Target, DollarSign, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -304,6 +304,470 @@ const FAQ = () => {
                               <p className="text-sm text-muted-foreground">
                                 {t("faqContent.technicalSupport.responseTimeDesc")}
                               </p>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </CardContent>
+              </Card>
+
+              {/* Business & Industry Solutions */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Building2 className="h-5 w-5 text-primary" />
+                    Business & Industry Solutions
+                  </CardTitle>
+                  <CardDescription>
+                    Comprehensive information for organizations, HR professionals, and business leaders
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="enterprise-solutions">
+                      <AccordionTrigger>What enterprise solutions does AuthenCore offer?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>AuthenCore provides comprehensive enterprise solutions designed for organizations of all sizes, from startups to Fortune 500 companies.</p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 bg-primary/5 rounded-lg">
+                              <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                <Users className="h-4 w-4" />
+                                Bulk Assessment Management
+                              </h4>
+                              <p className="text-sm text-muted-foreground">Administer assessments to hundreds of candidates simultaneously with centralized reporting and analytics.</p>
+                            </div>
+                            <div className="p-4 bg-secondary/5 rounded-lg">
+                              <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                <TrendingUp className="h-4 w-4" />
+                                Advanced Analytics Dashboard
+                              </h4>
+                              <p className="text-sm text-muted-foreground">Real-time insights, predictive analytics, and comprehensive reporting for data-driven hiring decisions.</p>
+                            </div>
+                            <div className="p-4 bg-accent/5 rounded-lg">
+                              <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                <Shield className="h-4 w-4" />
+                                White-Label Solutions
+                              </h4>
+                              <p className="text-sm text-muted-foreground">Customize the platform with your company branding and integrate seamlessly with existing systems.</p>
+                            </div>
+                            <div className="p-4 bg-muted/50 rounded-lg">
+                              <h4 className="font-semibold mb-2 flex items-center gap-2">
+                                <Globe className="h-4 w-4" />
+                                API Integration
+                              </h4>
+                              <p className="text-sm text-muted-foreground">Connect with your HRIS, ATS, and other enterprise systems for streamlined workflows.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="hr-benefits">
+                      <AccordionTrigger>How can HR departments benefit from AuthenCore assessments?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>HR departments leverage AuthenCore assessments across the entire employee lifecycle to make informed decisions and improve organizational outcomes.</p>
+                          <div className="space-y-3">
+                            <div className="flex items-start gap-3 p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg">
+                              <Target className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                              <div>
+                                <h5 className="font-medium text-blue-900 dark:text-blue-100">Recruitment & Selection</h5>
+                                <p className="text-sm text-blue-800 dark:text-blue-200">Identify top talent, reduce time-to-hire by 40%, and improve quality of hire with scientific assessment data.</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-3 p-3 bg-green-50 dark:bg-green-950/20 rounded-lg">
+                              <TrendingUp className="h-5 w-5 text-green-600 mt-0.5 flex-shrink-0" />
+                              <div>
+                                <h5 className="font-medium text-green-900 dark:text-green-100">Performance Management</h5>
+                                <p className="text-sm text-green-800 dark:text-green-200">Create personalized development plans, identify high-potential employees, and track growth over time.</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-3 p-3 bg-purple-50 dark:bg-purple-950/20 rounded-lg">
+                              <Users className="h-5 w-5 text-purple-600 mt-0.5 flex-shrink-0" />
+                              <div>
+                                <h5 className="font-medium text-purple-900 dark:text-purple-100">Team Building & Culture</h5>
+                                <p className="text-sm text-purple-800 dark:text-purple-200">Build cohesive teams, improve communication, and align individual strengths with organizational culture.</p>
+                              </div>
+                            </div>
+                            <div className="flex items-start gap-3 p-3 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
+                              <Briefcase className="h-5 w-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                              <div>
+                                <h5 className="font-medium text-orange-900 dark:text-orange-100">Succession Planning</h5>
+                                <p className="text-sm text-orange-800 dark:text-orange-200">Identify future leaders, plan career progressions, and ensure organizational continuity.</p>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="industry-specific">
+                      <AccordionTrigger>Which industries use AuthenCore assessments?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>AuthenCore assessments are trusted by organizations across diverse industries, each leveraging our platform for their unique needs.</p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium mb-1">Healthcare & Life Sciences</h5>
+                              <p className="text-sm text-muted-foreground">Assess emotional intelligence for patient care, stress resilience for high-pressure roles, and cultural intelligence for diverse patient populations.</p>
+                            </div>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium mb-1">Financial Services</h5>
+                              <p className="text-sm text-muted-foreground">Evaluate leadership potential, authentic decision-making, and stress management for high-stakes financial environments.</p>
+                            </div>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium mb-1">Technology & Innovation</h5>
+                              <p className="text-sm text-muted-foreground">Identify digital wellness awareness, communication styles for remote teams, and adaptability for fast-changing environments.</p>
+                            </div>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium mb-1">Education & Training</h5>
+                              <p className="text-sm text-muted-foreground">Assess cultural intelligence for diverse student bodies, emotional intelligence for student interactions, and authentic leadership for administration.</p>
+                            </div>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium mb-1">Manufacturing & Operations</h5>
+                              <p className="text-sm text-muted-foreground">Evaluate stress resilience for operational roles, leadership potential for management, and team communication for collaborative environments.</p>
+                            </div>
+                            <div className="p-3 border rounded-lg">
+                              <h5 className="font-medium mb-1">Consulting & Professional Services</h5>
+                              <p className="text-sm text-muted-foreground">Assess communication styles for client interactions, cultural intelligence for global projects, and authentic leadership for team management.</p>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="cost-benefit">
+                      <AccordionTrigger>What's the ROI of implementing AuthenCore assessments?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>Organizations typically see significant returns on investment within 6-12 months of implementing AuthenCore assessments.</p>
+                          <div className="space-y-4">
+                            <div className="p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
+                              <h5 className="font-semibold text-green-900 dark:text-green-100 mb-2">Measurable Cost Savings</h5>
+                              <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
+                                <li>• 65% reduction in mis-hiring costs (average savings: $240,000 annually)</li>
+                                <li>• 40% decrease in time-to-hire (saves 15-20 hours per position)</li>
+                                <li>• 50% reduction in early turnover (first-year retention improvement)</li>
+                                <li>• 30% increase in employee productivity within first quarter</li>
+                              </ul>
+                            </div>
+                            <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                              <h5 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Revenue Enhancement</h5>
+                              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                                <li>• 25% improvement in team performance metrics</li>
+                                <li>• 20% increase in customer satisfaction scores</li>
+                                <li>• 35% faster promotion readiness for high-potential employees</li>
+                                <li>• 45% improvement in leadership effectiveness ratings</li>
+                              </ul>
+                            </div>
+                            <div className="p-4 bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+                              <h5 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Strategic Benefits</h5>
+                              <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
+                                <li>• Enhanced employer brand and candidate experience</li>
+                                <li>• Improved diversity and inclusion outcomes</li>
+                                <li>• Reduced legal risks from hiring bias</li>
+                                <li>• Data-driven succession planning capabilities</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="implementation">
+                      <AccordionTrigger>How long does implementation take?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>Implementation timelines vary based on organization size and complexity, but most clients are fully operational within 2-8 weeks.</p>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                              <div>
+                                <span className="font-medium">Basic Setup (50-200 employees)</span>
+                                <p className="text-sm text-muted-foreground">Standard assessments, basic reporting</p>
+                              </div>
+                              <Badge variant="outline" className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                1-2 weeks
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                              <div>
+                                <span className="font-medium">Enterprise Setup (200-1000 employees)</span>
+                                <p className="text-sm text-muted-foreground">Custom workflows, API integration, advanced analytics</p>
+                              </div>
+                              <Badge variant="outline" className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                3-4 weeks
+                              </Badge>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                              <div>
+                                <span className="font-medium">Complex Enterprise (1000+ employees)</span>
+                                <p className="text-sm text-muted-foreground">Multi-location, white-label, full customization</p>
+                              </div>
+                              <Badge variant="outline" className="flex items-center gap-1">
+                                <Clock className="h-3 w-3" />
+                                6-8 weeks
+                              </Badge>
+                            </div>
+                          </div>
+                          <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <h5 className="font-medium text-blue-900 dark:text-blue-100 mb-1">Implementation Includes:</h5>
+                            <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                              <li>• Dedicated customer success manager</li>
+                              <li>• Technical integration support</li>
+                              <li>• Admin and user training sessions</li>
+                              <li>• Custom branding and configuration</li>
+                              <li>• Data migration assistance</li>
+                              <li>• Go-live support and monitoring</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="pricing-models">
+                      <AccordionTrigger>What pricing models are available for businesses?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>AuthenCore offers flexible pricing models to meet diverse organizational needs and budgets.</p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 border rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <DollarSign className="h-4 w-4 text-green-600" />
+                                <h5 className="font-medium">Pay-Per-Assessment</h5>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">Perfect for smaller organizations or seasonal hiring</p>
+                              <ul className="text-sm space-y-1">
+                                <li>• Individual assessment pricing</li>
+                                <li>• No monthly commitments</li>
+                                <li>• Volume discounts available</li>
+                                <li>• 30-day support included</li>
+                              </ul>
+                            </div>
+                            <div className="p-4 border rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Users className="h-4 w-4 text-blue-600" />
+                                <h5 className="font-medium">Subscription Plans</h5>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">Ideal for regular hiring and ongoing development</p>
+                              <ul className="text-sm space-y-1">
+                                <li>• Monthly or annual billing</li>
+                                <li>• Unlimited assessments per tier</li>
+                                <li>• Advanced reporting included</li>
+                                <li>• Priority support access</li>
+                              </ul>
+                            </div>
+                            <div className="p-4 border rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Building2 className="h-4 w-4 text-purple-600" />
+                                <h5 className="font-medium">Enterprise Licensing</h5>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">Comprehensive solution for large organizations</p>
+                              <ul className="text-sm space-y-1">
+                                <li>• Custom pricing based on usage</li>
+                                <li>• White-label options</li>
+                                <li>• API access and integrations</li>
+                                <li>• Dedicated account management</li>
+                              </ul>
+                            </div>
+                            <div className="p-4 border rounded-lg">
+                              <div className="flex items-center gap-2 mb-2">
+                                <Globe className="h-4 w-4 text-orange-600" />
+                                <h5 className="font-medium">Partner Programs</h5>
+                              </div>
+                              <p className="text-sm text-muted-foreground mb-2">For consultants and HR service providers</p>
+                              <ul className="text-sm space-y-1">
+                                <li>• Reseller pricing tiers</li>
+                                <li>• Co-branding opportunities</li>
+                                <li>• Training and certification</li>
+                                <li>• Marketing support included</li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="text-center p-4 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg">
+                            <p className="font-medium mb-2">Need a custom quote?</p>
+                            <p className="text-sm text-muted-foreground mb-3">Contact our sales team for personalized pricing based on your specific requirements.</p>
+                            <a href="mailto:sales@authencore.org">
+                              <Button size="sm">Get Custom Quote</Button>
+                            </a>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="compliance-security">
+                      <AccordionTrigger>What compliance and security standards does AuthenCore meet?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>AuthenCore maintains the highest standards of security and compliance to protect sensitive assessment data and meet global regulatory requirements.</p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="space-y-3">
+                              <h5 className="font-medium flex items-center gap-2">
+                                <Shield className="h-4 w-4 text-green-600" />
+                                Security Certifications
+                              </h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• SOC 2 Type II Compliant</li>
+                                <li>• ISO 27001 Information Security</li>
+                                <li>• GDPR and CCPA Compliant</li>
+                                <li>• HIPAA Ready Infrastructure</li>
+                                <li>• 256-bit SSL Encryption</li>
+                                <li>• Multi-factor Authentication</li>
+                              </ul>
+                            </div>
+                            <div className="space-y-3">
+                              <h5 className="font-medium flex items-center gap-2">
+                                <Globe className="h-4 w-4 text-blue-600" />
+                                Global Compliance
+                              </h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• EEOC Guidelines Adherence</li>
+                                <li>• ADA Accessibility Standards</li>
+                                <li>• International Data Transfers</li>
+                                <li>• Right to be Forgotten</li>
+                                <li>• Data Portability Rights</li>
+                                <li>• Regional Privacy Laws</li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
+                            <h5 className="font-semibold text-green-900 dark:text-green-100 mb-2">Ethical Assessment Practices</h5>
+                            <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
+                              <li>• Scientifically validated instruments</li>
+                              <li>• Bias detection and mitigation</li>
+                              <li>• Adverse impact monitoring</li>
+                              <li>• Candidate consent management</li>
+                              <li>• Equal opportunity compliance</li>
+                              <li>• Regular fairness auditing</li>
+                            </ul>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  </Accordion>
+                </CardContent>
+              </Card>
+
+              {/* Pricing & Business Operations */}
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <DollarSign className="h-5 w-5 text-primary" />
+                    Pricing & Business Operations
+                  </CardTitle>
+                  <CardDescription>
+                    Transparent pricing, billing, and business process information
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Accordion type="single" collapsible className="w-full">
+                    <AccordionItem value="volume-discounts">
+                      <AccordionTrigger>Are volume discounts available?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>Yes, AuthenCore offers competitive volume discounts for organizations conducting multiple assessments.</p>
+                          <div className="space-y-3">
+                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                              <span className="font-medium">10-49 assessments</span>
+                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">10% discount</Badge>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                              <span className="font-medium">50-199 assessments</span>
+                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">20% discount</Badge>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                              <span className="font-medium">200-499 assessments</span>
+                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">30% discount</Badge>
+                            </div>
+                            <div className="flex justify-between items-center p-3 bg-muted/50 rounded">
+                              <span className="font-medium">500+ assessments</span>
+                              <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">Custom pricing</Badge>
+                            </div>
+                          </div>
+                          <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-lg border border-blue-200 dark:border-blue-800">
+                            <p className="text-sm text-blue-800 dark:text-blue-200">
+                              <strong>Annual contracts</strong> receive additional 15% discount on top of volume pricing. 
+                              Contact our sales team for custom enterprise pricing for 1000+ assessments.
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="billing-options">
+                      <AccordionTrigger>What billing and payment options are available?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>AuthenCore offers flexible billing options to accommodate different organizational preferences and requirements.</p>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="p-4 border rounded-lg">
+                              <h5 className="font-medium mb-2">Payment Methods</h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• Credit/Debit Cards (Visa, MasterCard, Amex)</li>
+                                <li>• Bank Transfers (ACH/Wire)</li>
+                                <li>• Purchase Orders</li>
+                                <li>• Corporate Credit Lines</li>
+                                <li>• International Banking</li>
+                              </ul>
+                            </div>
+                            <div className="p-4 border rounded-lg">
+                              <h5 className="font-medium mb-2">Billing Frequencies</h5>
+                              <ul className="text-sm text-muted-foreground space-y-1">
+                                <li>• Pay-per-use (immediate billing)</li>
+                                <li>• Monthly subscriptions</li>
+                                <li>• Quarterly billing cycles</li>
+                                <li>• Annual prepayment (discount eligible)</li>
+                                <li>• Custom enterprise terms</li>
+                              </ul>
+                            </div>
+                          </div>
+                          <div className="p-3 bg-green-50 dark:bg-green-950/20 rounded-lg border border-green-200 dark:border-green-800">
+                            <h5 className="font-medium text-green-900 dark:text-green-100 mb-1">Enterprise Benefits</h5>
+                            <p className="text-sm text-green-800 dark:text-green-200">
+                              Enterprise customers receive NET 30 payment terms, dedicated account management, 
+                              and custom invoicing options including multi-department cost allocation.
+                            </p>
+                          </div>
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+
+                    <AccordionItem value="refund-policy">
+                      <AccordionTrigger>What is the refund and cancellation policy?</AccordionTrigger>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <p>AuthenCore maintains a fair and transparent refund policy to ensure customer satisfaction.</p>
+                          <div className="space-y-4">
+                            <div className="p-4 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                              <h5 className="font-semibold text-blue-900 dark:text-blue-100 mb-2">Individual Assessments</h5>
+                              <ul className="text-sm text-blue-800 dark:text-blue-200 space-y-1">
+                                <li>• Full refund if cancelled before assessment starts</li>
+                                <li>• 50% refund if cancelled within first 25% of assessment</li>
+                                <li>• No refund after 25% completion due to AI processing costs</li>
+                                <li>• Technical issues: Full refund or free retake</li>
+                              </ul>
+                            </div>
+                            <div className="p-4 bg-green-50 dark:bg-green-950/20 border border-green-200 dark:border-green-800 rounded-lg">
+                              <h5 className="font-semibold text-green-900 dark:text-green-100 mb-2">Subscription Services</h5>
+                              <ul className="text-sm text-green-800 dark:text-green-200 space-y-1">
+                                <li>• 30-day money-back guarantee for new subscriptions</li>
+                                <li>• Cancel anytime with 30-day notice</li>
+                                <li>• Prorated refunds for unused subscription time</li>
+                                <li>• Annual subscriptions: Refund remaining months minus 15% processing fee</li>
+                              </ul>
+                            </div>
+                            <div className="p-4 bg-purple-50 dark:bg-purple-950/20 border border-purple-200 dark:border-purple-800 rounded-lg">
+                              <h5 className="font-semibold text-purple-900 dark:text-purple-100 mb-2">Enterprise Contracts</h5>
+                              <ul className="text-sm text-purple-800 dark:text-purple-200 space-y-1">
+                                <li>• Custom refund terms negotiated per contract</li>
+                                <li>• Satisfaction guarantee periods available</li>
+                                <li>• Unused assessment credits carry forward</li>
+                                <li>• Contract modifications allowed with mutual agreement</li>
+                              </ul>
                             </div>
                           </div>
                         </div>
