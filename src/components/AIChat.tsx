@@ -252,9 +252,10 @@ const AIChat = memo(() => {
     <>
       {/* Enhanced Chat Toggle Button */}
       <Button
-        onClick={() => {
-          console.log('Chat toggle clicked, current state:', isOpen);
-          setIsOpen(!isOpen);
+        onClick={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          setIsOpen(prev => !prev);
         }}
         className="fixed bottom-6 right-6 rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-lg z-50 transition-all duration-300 hover:scale-105"
         size="icon"
