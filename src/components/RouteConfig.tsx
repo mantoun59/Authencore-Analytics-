@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react";
 import Index from "@/pages/Index";
 import About from "@/pages/About";
 import Auth from "@/pages/Auth";
+import Profile from "@/pages/Profile";
 import Assessment from "@/pages/Assessment";
 import NotFound from "@/pages/NotFound";
 import CAIRPersonalityDescription from "@/pages/CAIRPersonalityDescription";
@@ -93,6 +94,7 @@ const RouteConfig = () => {
       {/* Critical Routes - Immediate Load */}
       <Route path="/" element={<Index />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/profile" element={<Profile />} />
       
       {/* Public Information Pages - Lazy Loaded */}
       <Route path="/about" element={<About />} />

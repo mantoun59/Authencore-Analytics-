@@ -62,10 +62,13 @@ const Header = () => {
                 <div className="w-32 h-8 bg-muted animate-pulse rounded"></div>
               ) : user ? (
                 <div className="flex items-center space-x-4">
-                  <div className="flex items-center space-x-2 text-foreground">
+                  <Link 
+                    to="/profile"
+                    className="flex items-center space-x-2 text-foreground hover:text-primary transition-colors"
+                  >
                     <User size={20} />
                     <span className="text-sm">{user.email}</span>
-                  </div>
+                  </Link>
                   <Button
                     variant="outline"
                     onClick={() => signOut()}
@@ -73,7 +76,13 @@ const Header = () => {
                     {t("navigation.signOut")}
                   </Button>
                 </div>
-              ) : null}
+              ) : (
+                <div className="flex items-center space-x-2">
+                  <Button variant="outline" asChild>
+                    <Link to="/auth">Sign In</Link>
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -118,10 +127,14 @@ const Header = () => {
                   </div>
                   {user ? (
                     <>
-                      <div className="flex items-center space-x-2 text-foreground px-3 py-2">
+                      <Link 
+                        to="/profile"
+                        className="flex items-center space-x-2 text-foreground px-3 py-2 hover:text-primary transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
                         <User size={20} />
                         <span className="text-sm">{user.email}</span>
-                      </div>
+                      </Link>
                       <Button
                         variant="outline"
                         onClick={() => {
@@ -132,7 +145,13 @@ const Header = () => {
                         {t("navigation.signOut")}
                       </Button>
                     </>
-                  ) : null}
+                  ) : (
+                    <Button variant="outline" asChild>
+                      <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                        Sign In
+                      </Link>
+                    </Button>
+                  )}
                 </div>
               </nav>
             </div>

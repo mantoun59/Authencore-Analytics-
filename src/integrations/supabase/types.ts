@@ -591,6 +591,45 @@ export type Database = {
         }
         Relationships: []
       }
+      data_deletion_requests: {
+        Row: {
+          deletion_data: Json | null
+          email: string
+          id: string
+          metadata: Json | null
+          processed_at: string | null
+          processed_by: string | null
+          request_type: string
+          requested_at: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          deletion_data?: Json | null
+          email: string
+          id?: string
+          metadata?: Json | null
+          processed_at?: string | null
+          processed_by?: string | null
+          request_type?: string
+          requested_at?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          deletion_data?: Json | null
+          email?: string
+          id?: string
+          metadata?: Json | null
+          processed_at?: string | null
+          processed_by?: string | null
+          request_type?: string
+          requested_at?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       employer_accounts: {
         Row: {
           contact_person: string | null
@@ -2104,6 +2143,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      delete_user_data: {
+        Args: { p_user_id: string }
+        Returns: Json
+      }
       detect_suspicious_activity: {
         Args: {
           p_user_id: string
@@ -2116,6 +2159,15 @@ export type Database = {
       generate_guest_token: {
         Args: Record<PropertyKey, never>
         Returns: string
+      }
+      get_deletion_request_status: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          request_id: string
+          status: string
+          requested_at: string
+          processed_at: string
+        }[]
       }
       get_normative_percentiles: {
         Args: {
@@ -2202,6 +2254,10 @@ export type Database = {
       request_admin_password_reset: {
         Args: { p_email: string }
         Returns: undefined
+      }
+      request_data_deletion: {
+        Args: { p_reason?: string }
+        Returns: string
       }
       trigger_purchase_report: {
         Args: { p_period: string; p_admin_email?: string }

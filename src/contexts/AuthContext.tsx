@@ -15,6 +15,8 @@ interface AuthContextType {
   signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>;
   signOut: () => Promise<{ error: AuthError | null }>;
   resetPassword: (email: string) => Promise<{ error: AuthError | null }>;
+  requestDataDeletion: (reason?: string) => Promise<{ error: AuthError | null }>;
+  deleteUserData: () => Promise<{ error: AuthError | null }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -107,6 +109,41 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error };
   };
 
+  const requestDataDeletion = async (reason: string = 'user_request') => {
+    try {
+      const { data, error } = await supabase.rpc('request_data_deletion', {
+        p_reason: reason
+      });
+
+      return { error };
+    } catch (error: any) {
+      console.error('Data deletion request error:', error);
+      return { error: { message: error.message || 'Failed to request data deletion' } };
+    }
+  };
+
+  const deleteUserData = async () => {
+    try {
+      if (!user) {
+        return { error: { message: 'User not authenticated' } };
+      }
+
+      const { data, error } = await supabase.rpc('delete_user_data', {
+        p_user_id: user.id
+      });
+
+      if (!error) {
+        // Sign out after successful deletion
+        await signOut();
+      }
+
+      return { error };
+    } catch (error: any) {
+      console.error('Data deletion error:', error);
+      return { error: { message: error.message || 'Failed to delete user data' } };
+    }
+  };
+
   const value = {
     user,
     session,
@@ -114,7 +151,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signUp,
     signIn,
     signOut,
-    resetPassword
+    resetPassword,
+    requestDataDeletion,
+    deleteUserData
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
