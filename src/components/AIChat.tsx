@@ -255,9 +255,14 @@ const AIChat = memo(() => {
         onClick={(e) => {
           e.preventDefault();
           e.stopPropagation();
-          setIsOpen(prev => !prev);
+          console.log('Chat button clicked, isOpen before:', isOpen);
+          setIsOpen(prev => {
+            console.log('Setting isOpen from', prev, 'to', !prev);
+            return !prev;
+          });
         }}
-        className="fixed bottom-6 right-6 rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-lg z-50 transition-all duration-300 hover:scale-105"
+        className="fixed bottom-6 right-6 rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-lg transition-all duration-300 hover:scale-105"
+        style={{ zIndex: 9999 }}
         size="icon"
         aria-label={isOpen ? "Close AuthenBot chat" : "Open AuthenBot chat"}
       >
