@@ -45,10 +45,14 @@ export const generateHtmlReport = async (data: HtmlReportData): Promise<void> =>
     // Create HTML report content
     const htmlContent = createHtmlReportContent(data);
     
-    // Open in new window for viewing/printing
-    const reportWindow = window.open('', '_blank', 'width=900,height=700');
+    // Try to open in new window
+    const reportWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
+    
     if (!reportWindow) {
-      throw new Error('Unable to open report window. Please allow popups for this site.');
+      // Fallback: download as HTML file
+      console.warn('Popup blocked, downloading as file instead');
+      downloadHtmlFile(htmlContent, data);
+      return;
     }
     
     reportWindow.document.write(htmlContent);
@@ -66,6 +70,20 @@ export const generateHtmlReport = async (data: HtmlReportData): Promise<void> =>
     alert(`Report generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     throw error;
   }
+};
+
+// Download HTML content as a file
+const downloadHtmlFile = (htmlContent: string, data: HtmlReportData) => {
+  const blob = new Blob([htmlContent], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${data.userInfo.name.replace(/\s+/g, '_')}_${data.assessmentType.replace(/\s+/g, '_')}_Report.html`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  alert('Report downloaded as HTML file. You can open it in your browser to view and print.');
 };
 
 // Create the complete HTML content for the report
