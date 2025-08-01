@@ -37,11 +37,16 @@ const BurnoutPreventionDescription = () => {
               price={assessment.price}
               className="text-lg px-8 py-3"
             />
-            <Link to="/stress-resilience">
-              <Button variant="outline" size="lg" className="text-lg px-8 py-3">
-                View Sample Report
+            <div className="flex gap-4 justify-center">
+              <Link to="/sample-reports?assessment=burnout-prevention">
+                <Button variant="outline" size="lg" className="text-lg px-8 py-3">
+                  View Sample Report
+                </Button>
+              </Link>
+              <Button size="lg" className="text-lg px-8 py-3">
+                Download Sample PDF
               </Button>
-            </Link>
+            </div>
           </div>
 
           {/* Quick Stats */}
@@ -167,11 +172,6 @@ const BurnoutPreventionDescription = () => {
               price={assessment.price}
               className="text-lg px-8 py-3"
             />
-            <Link to="/sample-reports?assessment=burnout-prevention">
-              <Button variant="outline" size="lg" className="text-lg px-8 py-3">
-                View Sample Report
-              </Button>
-            </Link>
           </div>
         </div>
       </section>

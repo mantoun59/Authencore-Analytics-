@@ -148,37 +148,25 @@ const DigitalWellnessDescription = () => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">📊 Individual Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Comprehensive digital wellness analysis with habit tracking and optimization recommendations.
-                  </p>
-                  <Link to="/sample-reports?assessment=digital-wellness" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Digital Wellness Report →
-                  </Link>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">🏢 Coaching Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Advanced insights for building healthier digital habits and improving work-life balance.
-                  </p>
-                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📊 View Sample Report</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Preview comprehensive digital wellness analysis with habit tracking recommendations.
+                </p>
+                <Link to="/sample-reports?assessment=digital-wellness">
+                  <Button variant="outline" className="w-full">
+                    View Sample Report
+                  </Button>
+                </Link>
               </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">📱 Digital Insights</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Personalized strategies for optimizing technology use and digital well-being.
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">📱 Digital Insights</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Practical guidance for healthier digital habits and productivity.
-                  </p>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📥 Download Sample</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Download a sample PDF to see the complete digital wellness analysis format.
+                </p>
+                <Button className="w-full">
+                  Download Sample PDF
+                </Button>
               </div>
             </div>
           </CardContent>

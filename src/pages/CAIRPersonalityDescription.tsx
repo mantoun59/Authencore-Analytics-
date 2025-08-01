@@ -203,6 +203,9 @@ const CAIRPersonalityDescription = () => {
                       View Sample Report
                     </Button>
                   </Link>
+                  <Button size="lg" variant="outline" className="border-white text-white bg-white/10 hover:bg-white/20 backdrop-blur-sm">
+                    Download Sample PDF
+                  </Button>
                 </div>
               </CardContent>
             </Card>

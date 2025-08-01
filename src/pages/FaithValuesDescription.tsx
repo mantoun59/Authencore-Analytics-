@@ -148,37 +148,25 @@ const FaithValuesDescription = () => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">📊 Individual Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Personal faith and values alignment analysis with spiritual growth recommendations.
-                  </p>
-                  <Link to="/sample-reports?assessment=faith-values" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Faith & Values Report →
-                  </Link>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">🏢 Coaching Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Advanced insights for faith-based leadership development and spiritual mentoring.
-                  </p>
-                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📊 View Sample Report</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Preview personal faith and values alignment analysis with spiritual growth insights.
+                </p>
+                <Link to="/sample-reports?assessment=faith-values">
+                  <Button variant="outline" className="w-full">
+                    View Sample Report
+                  </Button>
+                </Link>
               </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🕊️ Spiritual Insights</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Faith-based guidance for personal growth and values-driven leadership.
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🕊️ Spiritual Insights</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Practical recommendations for living out faith values in professional contexts.
-                  </p>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📥 Download Sample</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Download a sample PDF to see the complete faith and values analysis format.
+                </p>
+                <Button className="w-full">
+                  Download Sample PDF
+                </Button>
               </div>
             </div>
           </CardContent>

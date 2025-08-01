@@ -148,37 +148,25 @@ const AuthenticLeadershipDescription = () => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">📊 Leadership Profile</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Comprehensive leadership assessment with authentic leadership dimensions and development roadmap.
-                  </p>
-                  <Link to="/sample-reports?assessment=leadership" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Leadership Report →
-                  </Link>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">🏢 360-Degree Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Advanced insights for organizational leadership development and team effectiveness.
-                  </p>
-                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📊 View Sample Report</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Preview comprehensive leadership assessment with authentic leadership dimensions.
+                </p>
+                <Link to="/sample-reports?assessment=leadership">
+                  <Button variant="outline" className="w-full">
+                    View Sample Report
+                  </Button>
+                </Link>
               </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">👥 Leadership Development</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Evidence-based strategies for developing authentic leadership capabilities and team effectiveness.
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">👥 Leadership Development</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Evidence-based strategies for developing authentic leadership capabilities.
-                  </p>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📥 Download Sample</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Download a sample PDF to see the complete leadership analysis format.
+                </p>
+                <Button className="w-full">
+                  Download Sample PDF
+                </Button>
               </div>
             </div>
           </CardContent>

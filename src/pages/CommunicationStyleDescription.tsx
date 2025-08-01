@@ -148,37 +148,25 @@ const CommunicationStyleDescription = () => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">📊 Candidate Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Communication DNA profile with style analysis, channel effectiveness, and professional development recommendations.
-                  </p>
-                  <Link to="/sample-reports?assessment=communication" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Communication Report →
-                  </Link>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">🏢 Employer Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Team compatibility insights, communication coaching recommendations, and collaboration strategies.
-                  </p>
-                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📊 View Sample Report</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Preview Communication DNA profile with style analysis and professional recommendations.
+                </p>
+                <Link to="/sample-reports?assessment=communication">
+                  <Button variant="outline" className="w-full">
+                    View Sample Report
+                  </Button>
+                </Link>
               </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🎯 Interactive Simulations</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Real-world communication scenarios and linguistic pattern analysis for practical insights.
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🎯 Interactive Simulations</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Real-world communication scenarios and linguistic pattern analysis.
-                  </p>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📥 Download Sample</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Download a sample PDF to see the complete communication analysis format.
+                </p>
+                <Button className="w-full">
+                  Download Sample PDF
+                </Button>
               </div>
             </div>
           </CardContent>

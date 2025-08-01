@@ -175,37 +175,25 @@ const GenZWorkplaceDescription = () => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">📊 Workplace Profile Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Comprehensive Gen Z workplace analysis with career preferences and development recommendations.
-                  </p>
-                  <Link to="/sample-reports?assessment=genz" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Gen Z Workplace Report →
-                  </Link>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">🏢 Development Plan</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    90-day actionable plan for career growth and workplace success tailored for Gen Z professionals.
-                  </p>
-                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📊 View Sample Report</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Preview comprehensive Gen Z workplace analysis with career preferences and insights.
+                </p>
+                <Link to="/sample-reports?assessment=genz">
+                  <Button variant="outline" className="w-full">
+                    View Sample Report
+                  </Button>
+                </Link>
               </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">📱 Digital-First Insights</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Specialized analysis for digital natives and modern workplace preferences.
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">📱 Digital-First Insights</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Specialized analysis for digital natives and modern workplace preferences.
-                  </p>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📥 Download Sample</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Download a sample PDF to see the complete Gen Z workplace analysis format.
+                </p>
+                <Button className="w-full">
+                  Download Sample PDF
+                </Button>
               </div>
             </div>
           </CardContent>

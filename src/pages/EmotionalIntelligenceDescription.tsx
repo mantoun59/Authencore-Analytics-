@@ -138,37 +138,25 @@ const EmotionalIntelligenceDescription = () => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">📊 Individual Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Comprehensive EQ profile with practical recommendations for personal and professional development.
-                  </p>
-                  <Link to="/sample-reports?assessment=emotional-intelligence" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Emotional Intelligence Report →
-                  </Link>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">🏢 Coaching Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Advanced insights for leadership development and emotional intelligence coaching.
-                  </p>
-                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📊 View Sample Report</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Preview comprehensive EQ profile with practical recommendations for development.
+                </p>
+                <Link to="/sample-reports?assessment=emotional-intelligence">
+                  <Button variant="outline" className="w-full">
+                    View Sample Report
+                  </Button>
+                </Link>
               </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🧠 EQ Development</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Targeted strategies for improving emotional intelligence in workplace and personal settings.
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🎯 Action Plans</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Personalized development roadmaps with specific exercises and techniques for growth.
-                  </p>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📥 Download Sample</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Download a sample PDF to see the complete report format and insights.
+                </p>
+                <Button className="w-full">
+                  Download Sample PDF
+                </Button>
               </div>
             </div>
           </CardContent>

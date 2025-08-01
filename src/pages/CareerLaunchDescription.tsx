@@ -158,37 +158,25 @@ const CareerLaunchDescription = () => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">📊 Candidate Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Detailed personal insights including RIASEC profile, career recommendations, and development action plans.
-                  </p>
-                  <Link to="/sample-career-launch-report" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Candidate Report →
-                  </Link>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">🏢 Employer Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Comprehensive analysis for hiring decisions, including personality fit and team dynamics.
-                  </p>
-                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📊 View Sample Report</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Preview the comprehensive insights and career recommendations you'll receive.
+                </p>
+                <Link to="/sample-career-launch-report">
+                  <Button variant="outline" className="w-full">
+                    View Sample Report
+                  </Button>
+                </Link>
               </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🎯 Instant Results</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Receive your comprehensive PDF reports immediately upon completion.
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🚀 Career Breakthrough</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Unlock your potential with personalized career pathways and actionable insights.
-                  </p>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📥 Download Sample</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Download a sample PDF to see the complete report format and structure.
+                </p>
+                <Button className="w-full">
+                  Download Sample PDF
+                </Button>
               </div>
             </div>
           </CardContent>

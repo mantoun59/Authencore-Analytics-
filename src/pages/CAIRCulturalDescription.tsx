@@ -138,37 +138,25 @@ const CAIRCulturalDescription = () => {
           </CardHeader>
           <CardContent>
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">📊 Candidate Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Detailed CAIR+ personality profile with validity scores, workplace predictions, and development insights.
-                  </p>
-                  <Link to="/sample-reports?assessment=cultural-intelligence" className="text-primary hover:underline text-sm font-medium">
-                    View Sample Cultural Intelligence Report →
-                  </Link>
-                </div>
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-semibold text-lg mb-2">🏢 Employer Report</h3>
-                  <p className="text-sm text-muted-foreground mb-3">
-                    Comprehensive hiring analysis with team fit, risk assessment, and interview recommendations.
-                  </p>
-                  <span className="text-sm text-muted-foreground">Available with assessment purchase</span>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📊 View Sample Report</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Preview detailed CAIR+ personality profile with cultural intelligence insights.
+                </p>
+                <Link to="/sample-reports?assessment=cultural-intelligence">
+                  <Button variant="outline" className="w-full">
+                    View Sample Report
+                  </Button>
+                </Link>
               </div>
-              <div className="space-y-4">
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">🔍 Validity Detection</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Advanced algorithms ensure honest responses and reliable assessment results.
-                  </p>
-                </div>
-                <div className="p-4 bg-primary/10 rounded-lg">
-                  <h4 className="font-semibold mb-2">📈 Actionable Insights</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Personalized recommendations and development strategies based on your unique profile.
-                  </p>
-                </div>
+              <div className="p-4 border rounded-lg">
+                <h3 className="font-semibold text-lg mb-2">📥 Download Sample</h3>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Download a sample PDF to see the complete cultural intelligence analysis.
+                </p>
+                <Button className="w-full">
+                  Download Sample PDF
+                </Button>
               </div>
             </div>
           </CardContent>
