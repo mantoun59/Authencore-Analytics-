@@ -252,7 +252,10 @@ const AIChat = memo(() => {
     <>
       {/* Enhanced Chat Toggle Button */}
       <Button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => {
+          console.log('Chat toggle clicked, current state:', isOpen);
+          setIsOpen(!isOpen);
+        }}
         className="fixed bottom-6 right-6 rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-lg z-50 transition-all duration-300 hover:scale-105"
         size="icon"
         aria-label={isOpen ? "Close AuthenBot chat" : "Open AuthenBot chat"}
