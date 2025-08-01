@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rocket, Shield, Lightbulb, MessageSquare, Globe, BarChart3, Monitor } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import ConsentAgreement from "@/components/ConsentAgreement";
 
 // Helper function to transform badge names to translation keys
 const getBadgeTranslationKey = (badge: string): string => {

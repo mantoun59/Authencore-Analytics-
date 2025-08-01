@@ -11,6 +11,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { generateHtmlReport } from '@/utils/htmlReportGenerator';
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
+import ConsentAgreement from "@/components/ConsentAgreement";
+import { useNavigate } from "react-router-dom";
 import { 
   Rocket, 
   Target, 
@@ -31,12 +33,21 @@ interface UserProfile {
 
 const CareerLaunch = () => {
   const { toast } = useToast();
-  const [gamePhase, setGamePhase] = useState<'welcome' | 'registration' | 'assessment' | 'results'>('welcome');
+  const navigate = useNavigate();
+  const [gamePhase, setGamePhase] = useState<'consent' | 'welcome' | 'registration' | 'assessment' | 'results'>('consent');
   const [userProfile, setUserProfile] = useState<UserProfile>({
     name: '',
     email: ''
   });
   const [assessmentResults, setAssessmentResults] = useState<any>(null);
+
+  const handleConsentAccept = () => {
+    setGamePhase('welcome');
+  };
+
+  const handleConsentDecline = () => {
+    navigate('/');
+  };
 
   const handleApplicantDataComplete = (data: any) => {
     setUserProfile({
@@ -119,6 +130,18 @@ const CareerLaunch = () => {
       });
     }
   };
+
+  // Show consent agreement first
+  if (gamePhase === 'consent') {
+    return (
+      <ConsentAgreement
+        onAccept={handleConsentAccept}
+        onDecline={handleConsentDecline}
+        assessmentType="Career Launch Assessment"
+        userType="applicant"
+      />
+    );
+  }
 
   if (gamePhase === 'welcome') {
     return (

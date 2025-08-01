@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import CommunicationStylesVisualizer from "@/components/CommunicationStylesVisualizer";
+import ConsentAgreement from "@/components/ConsentAgreement";
 
 const CommunicationAssessment = () => {
   const navigate = useNavigate();
@@ -32,6 +33,8 @@ const CommunicationAssessment = () => {
     position: '',
     company: ''
   });
+  const [showConsent, setShowConsent] = useState(true);
+  const [consentAccepted, setConsentAccepted] = useState(false);
   const { user } = useAuth();
   const { calculateResults, results, isProcessing } = useCommunicationStylesScoring();
 
@@ -134,8 +137,29 @@ const CommunicationAssessment = () => {
     setCurrentQuestion(0);
   };
 
+  const handleConsentAccept = () => {
+    setConsentAccepted(true);
+    setShowConsent(false);
+  };
+
+  const handleConsentDecline = () => {
+    navigate('/');
+  };
+
   const progress = ((currentQuestion + 1) / questions.length) * 100;
   const currentQuestionData = questions[currentQuestion];
+
+  // Show consent agreement first
+  if (showConsent && !consentAccepted) {
+    return (
+      <ConsentAgreement
+        onAccept={handleConsentAccept}
+        onDecline={handleConsentDecline}
+        assessmentType="Communication Styles Assessment"
+        userType="applicant"
+      />
+    );
+  }
 
   if (showResults && results) {
     return (
