@@ -605,6 +605,11 @@ const createHtmlReportContent = (data: HtmlReportData): string => {
 
 // Helper functions
 const getReportTitle = (assessmentType: string): string => {
+  // If it's already a full title, return it directly
+  if (assessmentType.includes('Assessment') || assessmentType.includes('Index')) {
+    return assessmentType;
+  }
+  
   const titles: Record<string, string> = {
     'career-launch': 'Career Launch Assessment',
     'communication-styles': 'Communication Styles Assessment',
