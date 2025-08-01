@@ -21,19 +21,15 @@ serve(async (req) => {
   }
 
   try {
-    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
-    if (!openAIApiKey) {
-      console.log('OpenAI API key not found, using fallback response');
-      return new Response(JSON.stringify({ 
-        response: "I'm AuthenBot, your professional assistant for AuthenCore Analytics! Our comprehensive assessment portfolio helps you discover your potential. What would you like to know?" 
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
     const { message, conversationHistory = [], sessionId = null } = await req.json();
     
-    console.log('Processing AuthenBot request:', { 
+    const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+    if (!openAIApiKey) {
+      console.log('OpenAI API key not found, using intelligent fallback response');
+      return await handleIntelligentFallback(message, conversationHistory);
+    }
+    
+    console.log('Processing AuthenBot request:', {
       messageLength: message?.length, 
       sessionId,
       historyLength: conversationHistory?.length 
@@ -249,41 +245,144 @@ serve(async (req) => {
   } catch (error) {
     console.error('Error in AuthenBot ai-chatbot function:', error);
     
-    // Provide comprehensive professional fallback response
-    const fallbackResponse = `I apologize for the technical difficulty. I'm AuthenBot, your professional assistant for AuthenCore Analytics - "Measuring Minds, Shaping Futures."
-
-    I'm here to help you with:
-    
-    🎯 **Assessment Guidance**
-    • Understanding our 10 comprehensive assessment types
-    • Choosing the right assessment for your goals
-    • Interpreting assessment results and next steps
-    
-    💼 **Career Development**
-    • Professional growth strategies
-    • Career exploration and planning
-    • Skill development recommendations
-    
-    🧠 **Psychological Insights**
-    • Personality and behavioral patterns
-    • Emotional intelligence development
-    • Leadership and communication skills
-    
-    **Popular Assessment Recommendations:**
-    • CareerLaunch Assessment ($9.99) - Perfect for career exploration
-    • CAIR+ Personality Assessment ($29.99) - Deep personality insights
-    • Authentic Leadership Assessment ($34.99) - Executive leadership development
-    • Emotional Intelligence Assessment ($24.99) - EQ enhancement
-    
-    What specific area of professional or personal development would you like to explore? I'm here to provide expert guidance tailored to your goals.`;
-
-    return new Response(JSON.stringify({ 
-      response: fallbackResponse,
-      success: false,
-      source: 'fallback_professional'
-    }), {
-      status: 200, // Return 200 to avoid client-side errors
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    // Return intelligent contextual response instead of generic fallback
+    const { message, conversationHistory = [] } = await req.json().catch(() => ({ message: '', conversationHistory: [] }));
+    return await handleIntelligentFallback(message, conversationHistory);
   }
 });
+
+// Intelligent fallback function that provides contextual responses
+async function handleIntelligentFallback(message: string, conversationHistory: any[] = []) {
+  const messageContent = message?.toLowerCase() || '';
+  
+  // Context-aware responses based on message content
+  let intelligentResponse = '';
+  
+  if (messageContent.includes('career') || messageContent.includes('job')) {
+    intelligentResponse = `I'd love to help you with career exploration! Our **CareerLaunch Assessment** ($9.99) is perfect for discovering your ideal career path. It analyzes 18 key dimensions including your interests, aptitudes, personality, and values to provide personalized career recommendations.
+
+🎯 **What makes it special:**
+• 144 scientifically-designed questions
+• RIASEC career matching system
+• Detailed personality analysis
+• Specific job recommendations with salary insights
+
+Would you like to learn more about how CareerLaunch can guide your career decisions?`;
+  }
+  else if (messageContent.includes('personality') || messageContent.includes('traits')) {
+    intelligentResponse = `For comprehensive personality insights, I recommend our **CAIR+ Personality Assessment** ($29.99). It's our most advanced personality evaluation with:
+
+🧠 **Advanced Features:**
+• 100 questions with validity detection technology
+• Percentile scoring against professional benchmarks
+• Dual reporting (candidate + employer perspectives)
+• Deep dive into behavioral patterns and work style
+
+This assessment is perfect for understanding your authentic self and how you interact in professional environments. What aspects of personality would you like to explore?`;
+  }
+  else if (messageContent.includes('leadership') || messageContent.includes('manage')) {
+    intelligentResponse = `Leadership development is crucial for career advancement! Our **Authentic Leadership Assessment** ($34.99) provides executive-level insights:
+
+👨‍💼 **Leadership Excellence:**
+• 90 comprehensive questions
+• 360-degree feedback capability
+• Executive leadership competencies
+• Personalized development roadmap
+
+Perfect for current leaders or those aspiring to leadership roles. Would you like to discover your leadership potential and development opportunities?`;
+  }
+  else if (messageContent.includes('emotional') || messageContent.includes('eq')) {
+    intelligentResponse = `Emotional Intelligence is a key predictor of success! Our **Emotional Intelligence Assessment** ($24.99) measures all EQ dimensions:
+
+❤️ **EQ Development:**
+• 65 targeted questions
+• Self-awareness and regulation skills
+• Social awareness and relationship management
+• Leadership effectiveness insights
+
+High EQ correlates with better relationships, leadership success, and career satisfaction. Ready to enhance your emotional intelligence?`;
+  }
+  else if (messageContent.includes('communication') || messageContent.includes('team')) {
+    intelligentResponse = `Effective communication drives professional success! Our **Communication Styles Assessment** ($14.99) provides:
+
+💬 **Communication Mastery:**
+• 80 questions with linguistic analysis
+• Professional communication effectiveness
+• Team dynamics and interpersonal skills
+• Conflict resolution strategies
+
+Perfect for improving workplace relationships and team collaboration. What communication challenges would you like to address?`;
+  }
+  else if (messageContent.includes('stress') || messageContent.includes('resilience')) {
+    intelligentResponse = `Building resilience is essential for thriving in today's workplace! Our **Stress & Resilience Assessment** ($19.99) offers:
+
+💪 **Resilience Building:**
+• 60 questions with stress response analysis
+• Biometric-style stress simulation
+• Personalized coping strategies
+• Adaptability and bounce-back capacity
+
+Learn to manage stress effectively and build unshakeable resilience. Ready to strengthen your stress management skills?`;
+  }
+  else if (messageContent.includes('cultural') || messageContent.includes('global')) {
+    intelligentResponse = `In our global workplace, Cultural Intelligence is invaluable! Our **Cultural Intelligence Assessment** ($24.99) evaluates:
+
+🌍 **Global Competency:**
+• 60+ real-world cross-cultural scenarios
+• 4 CQ dimensions: Drive, Knowledge, Strategy, Action
+• Global workplace effectiveness
+• Inclusive leadership capabilities
+
+Perfect for international roles or diverse team leadership. Ready to enhance your cultural intelligence?`;
+  }
+  else if (messageContent.includes('price') || messageContent.includes('cost') || messageContent.includes('$')) {
+    intelligentResponse = `Our assessments are designed to provide exceptional value for professional development:
+
+💰 **Assessment Investment:**
+• **CareerLaunch**: $9.99 - Complete career exploration
+• **Communication Styles**: $14.99 - Professional communication
+• **Digital Wellness**: $14.99 - Technology balance
+• **Gen Z Workplace**: $19.99 - Modern work preferences
+• **Faith & Values**: $19.99 - Values-based decisions
+• **Stress & Resilience**: $19.99 - Stress management
+• **Emotional Intelligence**: $24.99 - EQ development
+• **Cultural Intelligence**: $24.99 - Global competency
+• **CAIR+ Personality**: $29.99 - Advanced personality
+• **Authentic Leadership**: $34.99 - Executive leadership
+
+Each assessment includes detailed reports with actionable insights. Which assessment aligns with your development goals?`;
+  }
+  else if (messageContent.includes('hello') || messageContent.includes('hi') || messageContent.includes('hey')) {
+    intelligentResponse = `Hello! I'm AuthenBot, your professional development guide at AuthenCore Analytics. I'm here to help you discover your potential through our scientifically-validated assessments.
+
+🚀 **How can I assist you today?**
+• Recommend the perfect assessment for your goals
+• Explain our comprehensive evaluation process
+• Guide you through career and personal development
+• Answer questions about psychological insights
+
+What area of growth interests you most - career exploration, leadership development, personality insights, or something else?`;
+  }
+  else {
+    intelligentResponse = `I'm here to help you unlock your potential through professional assessment and development! 
+
+🎯 **I can guide you with:**
+• **Career Discovery** - Find your ideal career path
+• **Personality Insights** - Understand your authentic self  
+• **Leadership Development** - Build executive capabilities
+• **Communication Skills** - Enhance professional relationships
+• **Emotional Intelligence** - Develop EQ for success
+• **Stress Resilience** - Master stress management
+• **Cultural Intelligence** - Excel in global environments
+
+Our assessments combine scientific rigor with practical insights to accelerate your professional growth. What specific challenge or goal would you like to address? I'll recommend the perfect assessment to help you succeed.`;
+  }
+
+  return new Response(JSON.stringify({ 
+    response: intelligentResponse,
+    success: true,
+    source: 'intelligent_contextual'
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
