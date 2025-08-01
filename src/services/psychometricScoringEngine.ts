@@ -2,7 +2,7 @@ import { cairQuestions, personalityDimensions } from '@/data/cairPersonalityQues
 import { burnoutPreventionQuestions } from '@/data/burnoutPreventionQuestions';
 import { leadershipQuestions } from '@/data/leadershipQuestions';
 import { genZScenarios } from '@/data/genZScenarios';
-
+import { faithValuesData } from '@/data/faithValuesQuestions';
 
 interface ValidityMetrics {
   responseConsistency: number;
@@ -257,6 +257,46 @@ export class PsychometricScoringEngine {
     };
   }
 
+  // Faith & Values Assessment Scoring
+  public scoreFaithValues(responses: PsychometricResponse[]): PsychometricResult {
+    const dimensionScores: Record<string, DimensionScore> = {};
+    const dimensions = ['spiritual_purpose', 'integrity', 'compassion', 'justice', 
+                       'service', 'work_meaning', 'values_integration', 'moral_courage'];
+    
+    // Initialize dimension accumulators
+    const dimensionAccumulator: Record<string, number[]> = {};
+    dimensions.forEach(dim => dimensionAccumulator[dim] = []);
+
+    // Process ranking responses (assuming faith values uses ranking)
+    responses.forEach((response, index) => {
+      const rank = response.answer as number;
+      const score = this.convertRankToScore(rank, responses.length);
+      const dimension = dimensions[index % dimensions.length];
+      dimensionAccumulator[dimension]?.push(score);
+    });
+
+    // Calculate dimension scores
+    Object.entries(dimensionAccumulator).forEach(([dimension, scores]) => {
+      if (scores.length > 0) {
+        const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+        dimensionScores[dimension] = this.calculateDimensionScore(avgScore, dimension, 'faith');
+      }
+    });
+
+    const overallScore = this.calculateOverallScore(dimensionScores);
+    const profile = this.getFaithValuesProfile(overallScore);
+    const validityMetrics = this.calculateValidityMetrics(responses);
+
+    return {
+      dimensionScores,
+      overallScore,
+      profile,
+      validityMetrics,
+      strengths: this.identifyStrengths(dimensionScores),
+      developmentAreas: this.identifyDevelopmentAreas(dimensionScores),
+      recommendations: this.generateFaithValuesRecommendations(dimensionScores, overallScore)
+    };
+  }
 
   // Career Launch Assessment Scoring
   public scoreCareerLaunch(responses: PsychometricResponse[]): PsychometricResult {
@@ -457,6 +497,12 @@ export class PsychometricScoringEngine {
     return 'Emerging Workplace Skills';
   }
 
+  private getFaithValuesProfile(score: number): string {
+    if (score >= 85) return 'Strong Values Alignment';
+    if (score >= 75) return 'Good Values Integration';
+    if (score >= 65) return 'Moderate Values Alignment';
+    return 'Developing Values Framework';
+  }
 
   private getCareerLaunchProfile(score: number): string {
     if (score >= 80) return 'Career Ready';
@@ -536,6 +582,16 @@ export class PsychometricScoringEngine {
     return recommendations;
   }
 
+  private generateFaithValuesRecommendations(dimensionScores: Record<string, DimensionScore>, overallScore: number): string[] {
+    const recommendations: string[] = [
+      'Integrate personal values more deeply into daily work practices',
+      'Seek organizations that align with your core values',
+      'Develop ethical leadership and decision-making skills',
+      'Consider values-based mentoring and guidance roles'
+    ];
+
+    return recommendations;
+  }
 
   private generateCareerLaunchRecommendations(dimensionScores: Record<string, DimensionScore>, overallScore: number): string[] {
     const recommendations: string[] = [

@@ -52,7 +52,7 @@ const CommunicationStylesAssessmentPage: React.FC = () => {
         <div className="pt-20 pb-10">
           <CommunicationStylesAssessment
             onComplete={(results) => {
-              
+              console.log('Assessment completed with results:', results);
             }}
             participantName={participantName}
             participantEmail={participantEmail}

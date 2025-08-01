@@ -43,13 +43,7 @@ const Assessment = () => {
       'genz-assessment': '/genz-workplace-info',
       'digital-wellness': '/digital-wellness-info',
       'leadership-assessment': '/authentic-leadership-info',
-      'innovation-mindset': '/innovation-mindset-info',
-      // New comprehensive assessments - redirect to assessment route for now
-      'technology-integration': '/technology-integration',
-      'communication-competency': '/communication-competency',
-      'leadership-behavior': '/leadership-behavior',
-      'work-values': '/work-values',
-      'work-preferences': '/work-preferences'
+      'innovation-mindset': '/innovation-mindset-info'
     };
     return routeMap[assessmentId] || '/assessment';
   };
@@ -229,12 +223,12 @@ const Assessment = () => {
                      <div className="flex items-center gap-3 mb-4">
                        <IconComponent className={`h-8 w-8 ${colorClasses.icon}`} />
                        <div>
-                         <CardTitle className="text-xl">{t(`assessments.cards.${assessment.id.replace(/-/g, '')}.title`)}</CardTitle>
+                         <CardTitle className="text-xl">{t(`assessments.cards.${assessment.id.replace('-', '')}.title`)}</CardTitle>
                          <Badge className="mt-1" variant="secondary">{t(`assessments.badges.${getBadgeTranslationKey(assessment.badges[0])}`)}</Badge>
                        </div>
                      </div>
                      <CardDescription className="text-base">
-                       {t(`assessments.cards.${assessment.id.replace(/-/g, '')}.description`)}
+                       {t(`assessments.cards.${assessment.id.replace('-', '')}.description`)}
                      </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4 flex-grow flex flex-col">

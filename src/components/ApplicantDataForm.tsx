@@ -61,26 +61,11 @@ const ApplicantDataForm: React.FC<ApplicantDataFormProps> = ({
       additionalInfo: formData.get('additionalInfo') as string,
     };
 
-    // Enhanced validation
-    const errors: string[] = [];
-    if (!data.fullName?.trim()) errors.push('Full name is required');
-    if (!data.email?.trim()) errors.push('Email address is required');
-    if (!data.phone?.trim()) errors.push('Phone number is required');
-    
-    // Email format validation
-    if (data.email && !/\S+@\S+\.\S+/.test(data.email)) {
-      errors.push('Please enter a valid email address');
-    }
-    
-    // Phone format validation  
-    if (data.phone && !/^[\d\s\-\+\(\)]+$/.test(data.phone)) {
-      errors.push('Please enter a valid phone number');
-    }
-    
-    if (errors.length > 0) {
+    // Validate required fields
+    if (!data.fullName || !data.email || !data.phone) {
       toast({
-        title: 'Validation Errors',
-        description: errors.join('. '),
+        title: 'Missing Information',
+        description: 'Please fill in all required fields.',
         variant: 'destructive',
       });
       setLoading(false);

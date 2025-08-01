@@ -47,6 +47,20 @@ export class EnhancedCommunicationReportGenerator {
     try {
       const unifiedResults = this.convertToUnifiedFormat(results, 'candidate');
       
+      console.log('🔍 Communication Candidate Report Config:', {
+        assessmentType: 'communication',
+        reportType: 'candidate',
+        hasLogo: '/final-logo.png',
+        branding: {
+          logo: '/final-logo.png',
+          colors: {
+            primary: '#4F46E5',
+            secondary: '#7C3AED'
+          },
+          company: 'AuthenCore Analytics'
+        }
+      });
+      
       const config: UnifiedReportConfig = {
         assessmentType: 'communication',
         reportType: 'candidate',

@@ -127,7 +127,7 @@ export const AssessmentValidationDashboard: React.FC = () => {
         responseArrays
       );
 
-      
+      console.log('Reliability Analysis Results:', reliabilityAnalysis);
 
       // Generate validation report
       const validationReport = await psychometricValidationService.generateValidationReport(assessmentType);

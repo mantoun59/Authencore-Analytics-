@@ -112,9 +112,12 @@ const SampleReports = () => {
       // Use HTML report generator for ALL assessment types including communication
       const { generateHtmlReport } = await import('@/utils/htmlReportGenerator');
       
+      console.log('🎯 Assessment type being processed:', selectedAssessment);
+      console.log('🔍 Report type:', reportType);
       // Assessment-specific data mapping
       let reportData;
       if (selectedAssessment === 'emotional-intelligence' || selectedAssessment === 'emotional') {
+        console.log('✅ Using career launch model for emotional intelligence report');
         // Use the same structure as career launch with enriched content
         reportData = reportType === 'employer' ? {
           assessmentType: 'Emotional Intelligence Assessment - Comprehensive Employer Report',
@@ -1297,7 +1300,7 @@ const SampleReports = () => {
             company: 'AuthenCore Analytics'
           }
         };
-        
+        console.log('🔍 Faith-values reportData being passed to HTML generator:', reportData);
       } else {
         // Enhanced data for other assessments
         const assessmentProfiles = {
@@ -1520,7 +1523,7 @@ const SampleReports = () => {
       }
 
       
-      
+      console.log('🔍 About to call generateHtmlReport with reportData:', reportData);
       await generateHtmlReport(reportData);
       toast.success(`Sample ${reportType} report generated successfully!`);
       
@@ -1966,7 +1969,7 @@ const SampleReports = () => {
         };
 
       case 'faith-values':
-        
+        console.log('✅ Generating FVAI candidate report using Career Launch model');
         return {
           ...baseReport,
           candidateName: 'Sarah Chen',
@@ -2072,10 +2075,9 @@ const SampleReports = () => {
         };
       
       case 'cair':
-      case 'cairplus':
       case 'cair-personality':
       case 'cair-assessment':
-        
+        console.log('✅ Matched cair case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -2107,7 +2109,7 @@ const SampleReports = () => {
       case 'communication':
       case 'communication-styles':
       case 'communication-assessment':
-        
+        console.log('✅ Matched communication case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -2138,7 +2140,7 @@ const SampleReports = () => {
       
       case 'emotional':
       case 'emotional-intelligence':
-        
+        console.log('✅ Matched emotional-intelligence case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -2169,7 +2171,7 @@ const SampleReports = () => {
       
       case 'cultural':
       case 'cultural-intelligence':
-        
+        console.log('✅ Matched cultural-intelligence case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -2202,7 +2204,7 @@ const SampleReports = () => {
       case 'burnout-prevention':
       case 'burnout':
       case 'stress':
-        
+        console.log('✅ Matched stress-resilience/burnout case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -2239,7 +2241,7 @@ const SampleReports = () => {
       
       case 'digital-wellness':
       case 'digital':
-        
+        console.log('✅ Matched digital-wellness case');
         return {
           ...baseReport,
           executiveSummary: {
@@ -2269,7 +2271,7 @@ const SampleReports = () => {
         };
       
       default:
-        
+        console.log('❌ No specific case found for assessment type:', assessmentType, '- falling back to default');
         return {
           ...baseReport,
           executiveSummary: {

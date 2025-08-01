@@ -42,14 +42,14 @@ const EmotionalIntelligenceAssessment = ({ onComplete }: EmotionalIntelligenceAs
   
   // Map main app languages to component languages
   const getComponentLanguage = (mainLang: string): 'en' | 'es' | 'fr' | 'de' => {
-    
+    console.log('Main app language:', mainLang);
     switch (mainLang) {
       case 'en': return 'en';
       case 'fr': return 'fr';
       case 'de': return 'de';
       case 'es': return 'es';
       default: 
-        
+        console.log('Language not recognized, defaulting to English');
         return 'en';
     }
   };

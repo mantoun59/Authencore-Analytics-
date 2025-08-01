@@ -12,7 +12,6 @@ import RouteConfig from "@/components/RouteConfig";
 import ScrollToTop from "@/components/ScrollToTop";
 import AIChat from "@/components/AIChat";
 import CookieBanner from "@/components/CookieBanner";
-import GoogleAnalytics from "@/components/GoogleAnalytics";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { initializeSecurity } from "@/utils/securityEnhancements";
 import { optimizeImageLoading, preloadCriticalResources, optimizeFontLoading } from "@/utils/performanceOptimizer";
@@ -55,7 +54,6 @@ const App = () => {
                   <Toaster />
                   <Sonner />
                   <BrowserRouter>
-                    <GoogleAnalytics />
                     <ScrollToTop />
                     <RouteConfig />
                     <AIChat />

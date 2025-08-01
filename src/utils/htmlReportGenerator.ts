@@ -35,7 +35,7 @@ export interface HtmlReportData {
 
 // Generate HTML report that can be displayed or printed
 export const generateHtmlReport = async (data: HtmlReportData): Promise<void> => {
-  
+  console.log('Generating HTML report for:', data.userInfo?.name);
   
   try {
     if (!data || !data.userInfo?.name || !data.userInfo?.email) {
@@ -59,7 +59,7 @@ export const generateHtmlReport = async (data: HtmlReportData): Promise<void> =>
       reportWindow.focus();
     };
     
-    
+    console.log('HTML report generated successfully');
     
   } catch (error) {
     console.error('Report generation failed:', error);

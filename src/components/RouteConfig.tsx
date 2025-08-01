@@ -10,7 +10,6 @@ import About from "@/pages/About";
 import Auth from "@/pages/Auth";
 import Assessment from "@/pages/Assessment";
 import NotFound from "@/pages/NotFound";
-import PsychometricAudit from "@/pages/PsychometricAudit";
 import CAIRPersonalityDescription from "@/pages/CAIRPersonalityDescription";
 import AuthenticLeadershipDescription from "@/pages/AuthenticLeadershipDescription";
 import BurnoutPreventionDescription from "@/pages/BurnoutPreventionDescription";
@@ -20,7 +19,7 @@ import CareerLaunchDescription from "@/pages/CareerLaunchDescription";
 import CommunicationStyleDescription from "@/pages/CommunicationStyleDescription";
 import DigitalWellnessDescription from "@/pages/DigitalWellnessDescription";
 import EmotionalIntelligenceDescription from "@/pages/EmotionalIntelligenceDescription";
-
+import FaithValuesDescription from "@/pages/FaithValuesDescription";
 import GenZWorkplaceDescription from "@/pages/GenZWorkplaceDescription";
 
 // Lazy load - Assessment pages (large components)
@@ -30,17 +29,10 @@ const StressResilience = lazy(() => import("@/pages/StressResilience"));
 const CulturalIntelligenceAssessment = lazy(() => import("@/pages/CulturalIntelligenceAssessment"));
 const CommunicationAssessment = lazy(() => import("@/pages/CommunicationAssessment"));
 const EmotionalIntelligenceAssessment = lazy(() => import("@/components/EmotionalIntelligenceAssessment"));
-
+const FaithValuesAssessment = lazy(() => import("@/pages/FaithValuesAssessment"));
 const GenZWorkplaceAssessment = lazy(() => import("@/pages/GenZWorkplaceAssessment"));
 const DigitalWellnessAssessment = lazy(() => import("@/pages/DigitalWellnessAssessment"));
 const LeadershipAssessment = lazy(() => import("@/pages/LeadershipAssessment"));
-
-// New comprehensive assessments
-const TechnologyIntegrationAssessment = lazy(() => import("@/pages/TechnologyIntegrationAssessment"));
-const CommunicationCompetencyAssessment = lazy(() => import("@/pages/CommunicationCompetencyAssessment"));
-const LeadershipBehaviorAssessment = lazy(() => import("@/pages/LeadershipBehaviorAssessment"));
-const WorkValuesAssessment = lazy(() => import("@/pages/WorkValuesAssessment"));
-const WorkPreferencesAssessment = lazy(() => import("@/pages/WorkPreferencesAssessment"));
 
 // Lazy load - Information pages
 const AboutPage = lazy(() => import("@/pages/About"));
@@ -55,7 +47,6 @@ const PartnerDashboard = lazy(() => import("@/pages/PartnerDashboard"));
 const EmployerLogin = lazy(() => import("@/pages/EmployerLogin"));
 const EmployerDashboard = lazy(() => import("@/pages/EmployerDashboard"));
 const SoloAssessment = lazy(() => import("@/pages/SoloAssessment"));
-const Contact = lazy(() => import("@/pages/Contact"));
 
 // Lazy load - Admin features (heavy components)
 const AdminPage = lazy(() => import("@/pages/Admin"));
@@ -170,6 +161,11 @@ const RouteConfig = () => {
           <EmotionalIntelligenceAssessment />
         </Suspense>
       } />
+      <Route path="/faith-values" element={
+        <Suspense fallback={<LoadingFallback message="Loading Faith & Values Assessment..." />}>
+          <FaithValuesAssessment />
+        </Suspense>
+      } />
       <Route path="/genz-assessment" element={
         <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
           <GenZWorkplaceAssessment />
@@ -201,33 +197,6 @@ const RouteConfig = () => {
         </Suspense>
       } />
       
-      {/* New Comprehensive Assessments - Lazy Loaded */}
-      <Route path="/technology-integration" element={
-        <Suspense fallback={<LoadingFallback message="Loading Technology Integration Assessment..." />}>
-          <TechnologyIntegrationAssessment />
-        </Suspense>
-      } />
-      <Route path="/communication-competency" element={
-        <Suspense fallback={<LoadingFallback message="Loading Communication Competency Assessment..." />}>
-          <CommunicationCompetencyAssessment />
-        </Suspense>
-      } />
-      <Route path="/leadership-behavior" element={
-        <Suspense fallback={<LoadingFallback message="Loading Leadership Behavior Assessment..." />}>
-          <LeadershipBehaviorAssessment />
-        </Suspense>
-      } />
-      <Route path="/work-values" element={
-        <Suspense fallback={<LoadingFallback message="Loading Work Values Assessment..." />}>
-          <WorkValuesAssessment />
-        </Suspense>
-      } />
-      <Route path="/work-preferences" element={
-        <Suspense fallback={<LoadingFallback message="Loading Work Preferences Assessment..." />}>
-          <WorkPreferencesAssessment />
-        </Suspense>
-      } />
-      
       {/* Assessment Description Pages - Immediate Load (prevents chunk errors) */}
       <Route path="/authentic-leadership-info" element={<AuthenticLeadershipDescription />} />
       <Route path="/burnout-prevention-info" element={<BurnoutPreventionDescription />} />
@@ -238,7 +207,7 @@ const RouteConfig = () => {
       <Route path="/communication-style-info" element={<CommunicationStyleDescription />} />
       <Route path="/digital-wellness-info" element={<DigitalWellnessDescription />} />
       <Route path="/emotional-intelligence-info" element={<EmotionalIntelligenceDescription />} />
-      
+      <Route path="/faith-values-info" element={<FaithValuesDescription />} />
       <Route path="/genz-workplace-info" element={<GenZWorkplaceDescription />} />
       
       {/* Partner Routes - Lazy Loaded */}
@@ -305,13 +274,6 @@ const RouteConfig = () => {
       } />
       <Route path="/sample-reports" element={<SampleReports />} />
       
-      {/* Contact Page */}
-      <Route path="/contact" element={
-        <Suspense fallback={<LoadingFallback message="Loading Contact Form..." />}>
-          <Contact />
-        </Suspense>
-      } />
-      
       {/* Protected Admin Routes - Lazy Loaded with Protection */}
       <Route path="/admin" element={
         <ProtectedAdminRoute>
@@ -334,7 +296,6 @@ const RouteConfig = () => {
           </Suspense>
         </ProtectedAdminRoute>
       } />
-      <Route path="/psychometric-audit" element={<PsychometricAudit />} />
       
       {/* Catch-all 404 Route - MUST BE LAST */}
       <Route path="*" element={<NotFound />} />

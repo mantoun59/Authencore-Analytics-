@@ -14,104 +14,74 @@ interface Message {
   timestamp: Date;
 }
 
-// Intelligent response generator with context awareness
-const generateIntelligentResponse = (input: string, conversationLength: number): string => {
-  const lowercaseInput = input.toLowerCase().trim();
-  
-  // Simple greeting detection
-  const simpleGreetings = ['hi', 'hello', 'hey', 'good morning', 'good afternoon', 'good evening'];
-  const isSimpleGreeting = simpleGreetings.some(greeting => 
-    lowercaseInput === greeting || lowercaseInput === greeting + '!'
-  );
-  
-  if (isSimpleGreeting) {
-    const greetingResponses = [
-      "Hi there! I'm AuthenBot. How can I help you with your professional development today?",
-      "Hello! I'm here to guide you through our assessment portfolio. What interests you?",
-      "Hey! Ready to explore your potential? What would you like to know about our assessments?",
-      "Hi! I'm AuthenBot, your professional development assistant. What can I help you discover?"
-    ];
-    return greetingResponses[Math.floor(Math.random() * greetingResponses.length)];
-  }
-  
-  // Short questions or single words
-  if (lowercaseInput.length < 15 && !lowercaseInput.includes('?')) {
-    if (lowercaseInput.includes('help')) {
-      return "I'm here to help! Ask me about our assessments, career guidance, or professional development. What specific area interests you?";
-    }
-    if (lowercaseInput.includes('thanks') || lowercaseInput.includes('thank you')) {
-      return "You're welcome! Is there anything else I can help you with regarding your professional development?";
-    }
-  }
+// Professional assessment-focused response generator
+const generateProfessionalResponse = (input: string): string => {
+  const lowercaseInput = input.toLowerCase();
   
   const hasKeyword = (keywords: string[]) => keywords.some(keyword => lowercaseInput.includes(keyword));
   
-  // Enhanced keyword detection for assessments with intelligent length
+  // Enhanced keyword detection for assessments
   if (hasKeyword(['career', 'job', 'work', 'profession', 'future', 'path', 'direction'])) {
     if (hasKeyword(['price', 'cost', 'pricing', '$', 'money', 'fee'])) {
-      return "The CareerLaunch Assessment is $9.99 - our most comprehensive career discovery tool with 144 questions analyzing your interests, aptitudes, personality, and values.";
+      return "The CareerLaunch Assessment is our most comprehensive career discovery tool at $9.99. It uses 144 scientifically-crafted questions to evaluate your interests, aptitudes, personality traits, and core values, providing a complete roadmap for your professional future.";
     }
-    return "Our CareerLaunch Assessment ($9.99) helps you discover your ideal career path through comprehensive analysis. Perfect for students, career changers, and anyone seeking professional clarity.";
+    return "Our CareerLaunch Assessment ($9.99) is designed to help you discover your ideal career path through comprehensive analysis of your interests, aptitudes, personality, and values. It's perfect for students, career changers, and anyone seeking professional clarity.";
   }
   
   if (hasKeyword(['personality', 'traits', 'character', 'behavior', 'psychology'])) {
-    return "The CAIR+ Personality Assessment ($29.99) provides advanced psychological evaluation with validity detection technology for deep personality insights.";
+    return "The CAIR+ Personality Assessment ($29.99) offers advanced psychological evaluation with cutting-edge validity detection technology. It provides deep insights into your personality patterns, behavioral tendencies, and interpersonal style for personal and professional development.";
   }
   
   if (hasKeyword(['leadership', 'manager', 'executive', 'lead', 'management', 'boss'])) {
-    return "Our Authentic Leadership Assessment ($34.99) evaluates your leadership style and provides strategies for authentic leadership development.";
+    return "Our Authentic Leadership Assessment ($34.99) is specifically designed for current and aspiring leaders. It evaluates your leadership style, emotional intelligence, decision-making patterns, and provides actionable strategies for authentic leadership development.";
   }
   
   if (hasKeyword(['communication', 'speaking', 'talking', 'presentation', 'interpersonal'])) {
-    return "The Communication Styles Assessment ($14.99) analyzes how you communicate and helps improve your professional relationships and team dynamics.";
+    return "The Communication Styles Assessment ($14.99) analyzes how you prefer to communicate and interact with others. It helps improve your professional relationships, team dynamics, and overall communication effectiveness in the workplace.";
   }
   
   if (hasKeyword(['emotional', 'emotion', 'eq', 'feelings', 'empathy'])) {
-    return "Our Emotional Intelligence Assessment ($24.99) measures your ability to understand and manage emotions - crucial for leadership and teamwork.";
+    return "Our Emotional Intelligence Assessment ($24.99) measures your ability to understand and manage emotions - both your own and others'. High EQ is crucial for leadership, teamwork, and overall professional success.";
   }
   
   if (hasKeyword(['values', 'beliefs', 'faith', 'meaning', 'purpose'])) {
-    return "The Faith & Values Assessment ($19.99) helps you understand your core values and how they influence your decision-making.";
+    return "The Faith & Values Assessment ($19.99) helps you understand your core values and how they influence your decision-making. It's valuable for anyone seeking clarity on what truly matters to them in life and work.";
   }
   
   if (hasKeyword(['stress', 'pressure', 'burnout', 'resilience', 'coping'])) {
-    return "Our Stress & Resilience Assessment ($19.99) evaluates how you handle pressure and provides strategies for building resilience.";
+    return "Our Stress & Resilience Assessment ($19.99) evaluates how you handle pressure and provides strategies for building resilience. It's essential for maintaining well-being in today's demanding work environment.";
   }
   
   if (hasKeyword(['culture', 'cultural', 'diversity', 'international', 'global'])) {
-    return "The Cultural Intelligence Assessment ($24.99) measures your ability to work effectively across cultures in our globalized workplace.";
+    return "The Cultural Intelligence Assessment ($24.99) measures your ability to work effectively across cultures. It's crucial for success in our increasingly globalized workplace and for anyone working with diverse teams.";
   }
   
   if (hasKeyword(['digital', 'technology', 'online', 'screen', 'wellness'])) {
-    return "Our Digital Wellness Assessment ($14.99) evaluates your relationship with technology and provides strategies for healthy digital habits.";
+    return "Our Digital Wellness Assessment ($14.99) evaluates your relationship with technology and provides strategies for healthy digital habits. It's particularly relevant in our screen-dominated world.";
   }
   
   if (hasKeyword(['genz', 'gen z', 'generation', 'young', 'workplace', 'millennial'])) {
-    return "The Gen Z Workplace Assessment ($19.99) analyzes next-generation workplace dynamics and what younger generations value in careers.";
+    return "The Gen Z Workplace Assessment ($19.99) analyzes next-generation workplace dynamics and preferences. It's perfect for understanding how younger generations approach work and what they value in their careers.";
   }
   
   if (hasKeyword(['price', 'cost', 'pricing', 'expensive', 'cheap', 'budget', '$', 'money', 'fee'])) {
-    return "Our assessments range from $9.99 to $34.99. The CareerLaunch Assessment ($9.99) offers exceptional value for comprehensive career exploration.";
+    return "Our assessment portfolio ranges from $9.99 to $34.99, strategically priced for accessibility while maintaining scientific rigor. The CareerLaunch Assessment ($9.99) offers exceptional value, while specialized assessments like Authentic Leadership ($34.99) provide executive-level insights.";
   }
   
   if (hasKeyword(['help', 'support', 'guidance', 'assistance', 'confused', 'unsure'])) {
-    return "I'm here to guide you through our scientifically-validated assessment portfolio. What specific area of growth or challenge interests you?";
+    return "I'm here to provide expert guidance on our comprehensive assessment portfolio and professional development strategies. Each assessment is scientifically validated and designed to provide actionable insights. What specific area of growth or challenge would you like to explore?";
   }
   
   if (hasKeyword(['report', 'results', 'interpretation', 'analysis', 'feedback'])) {
-    return "All our assessments provide detailed reports with actionable insights, strengths analysis, growth areas, and specific development recommendations.";
+    return "All our assessments provide detailed, professional reports with actionable insights and development recommendations. Each report includes personalized feedback, strengths analysis, growth areas, and specific next steps for your development journey.";
   }
   
   if (hasKeyword(['accuracy', 'valid', 'reliable', 'scientific', 'research'])) {
-    return "AuthenCore maintains the highest psychometric standards with scientifically validated assessments and advanced validity detection for reliable results.";
+    return "AuthenCore Analytics maintains the highest psychometric standards. Our assessments are scientifically validated, regularly updated, and include advanced validity detection to ensure accurate, reliable results you can trust for important decisions.";
   }
   
-  // Default intelligent welcome based on conversation length
-  if (conversationLength <= 2) {
-    return "I'm AuthenBot, your professional development assistant at AuthenCore Analytics. What area of growth interests you most?";
-  }
-  
-  return "I can help with assessment selection, career guidance, or professional development strategies. What specific question do you have?";
+  // Default professional welcome message
+  return "Welcome to AuthenCore Analytics - where we're 'Measuring Minds, Shaping Futures.' I'm AuthenBot, your professional assistant for career development and psychological assessment guidance. Our comprehensive portfolio includes 10 scientifically-validated assessments designed to unlock your potential. What area of personal or professional growth interests you most?";
 };
 
 const AIChat = memo(() => {
@@ -120,7 +90,7 @@ const AIChat = memo(() => {
     {
       id: '1',
       type: 'assistant',
-      content: "Hi! I'm AuthenBot, your professional development assistant. How can I help you today?",
+      content: "Hello! I'm AuthenBot, your professional assistant for AuthenCore Analytics. I'm here to help you navigate our comprehensive assessment portfolio and guide your professional development journey. What would you like to explore today?",
       timestamp: new Date()
     }
   ]);
@@ -128,22 +98,6 @@ const AIChat = memo(() => {
   const [isLoading, setIsLoading] = useState(false);
   const [sessionId] = useState(() => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
   const [conversationStarted, setConversationStarted] = useState(false);
-  
-  // Simple, reliable close function
-  const closeChat = useCallback((e?: React.MouseEvent) => {
-    
-    e?.preventDefault?.();
-    e?.stopPropagation?.();
-    setIsOpen(false);
-  }, []);
-  
-  // Simple toggle function
-  const toggleChat = useCallback((e?: React.MouseEvent) => {
-    
-    e?.preventDefault?.();
-    e?.stopPropagation?.();
-    setIsOpen(prev => !prev);
-  }, [isOpen]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
 
@@ -173,7 +127,7 @@ const AIChat = memo(() => {
     }
   }, [messages.length, scrollToBottom]);
 
-  // Enhanced sendMessage function with professional AI integration and timeout protection
+  // Enhanced sendMessage function with professional AI integration
   const sendMessage = useCallback(async () => {
     if (!inputMessage.trim() || isLoading) return;
 
@@ -194,8 +148,8 @@ const AIChat = memo(() => {
     }
 
     try {
-      // Generate intelligent response based on context
-      let aiResponse = generateIntelligentResponse(currentInput, messages.length);
+      // Try enhanced AI response first
+      let aiResponse = generateProfessionalResponse(currentInput);
       let usesFallback = true;
 
       try {
@@ -205,12 +159,7 @@ const AIChat = memo(() => {
           content: m.content
         }));
 
-        // Add timeout to prevent stalling
-        const timeoutPromise = new Promise((_, reject) => {
-          setTimeout(() => reject(new Error('Request timeout')), 25000); // 25 second timeout
-        });
-
-        const apiPromise = supabase.functions.invoke('ai-chatbot', {
+        const { data, error } = await supabase.functions.invoke('ai-chatbot', {
           body: { 
             message: currentInput,
             conversationHistory,
@@ -218,30 +167,12 @@ const AIChat = memo(() => {
           }
         });
 
-        const { data, error } = await Promise.race([apiPromise, timeoutPromise]) as any;
-
         if (data && data.response && !error) {
           aiResponse = data.response;
           usesFallback = false;
-          
-        } else if (error) {
-          console.error('Edge function error:', error);
-          // Don't throw error, let it fall back to intelligent response
-        } else if (data && !data.success) {
-          
-          // Don't use the API fallback, use our intelligent response
         }
       } catch (edgeFunctionError) {
-        
-        
-        // Show user-friendly message for timeout
-        if (edgeFunctionError?.message?.includes('timeout')) {
-          toast({
-            title: "Response Delay",
-            description: "AI is taking longer than usual. Using quick response mode.",
-            variant: "default",
-          });
-        }
+        console.log('Using fallback response system');
       }
 
       const assistantMessage: Message = {
@@ -269,27 +200,14 @@ const AIChat = memo(() => {
     } catch (error) {
       console.error('Chat error:', error);
       
-      // Show appropriate error message
-      let errorContent = "I apologize for the technical difficulty. I'm still here to help with questions about AuthenCore Analytics, our assessments, and your professional development. Please try your question again, and I'll do my best to assist you.";
-      
-      if (error?.message?.includes('timeout')) {
-        errorContent = "The response is taking longer than expected. Let me provide you with immediate assistance using our professional knowledge base. Please feel free to rephrase your question if needed.";
-      }
-      
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         type: 'assistant',
-        content: errorContent,
+        content: "I apologize for the technical difficulty. I'm still here to help with questions about AuthenCore Analytics, our assessments, and your professional development. Please try your question again, and I'll do my best to assist you.",
         timestamp: new Date()
       };
 
       setMessages(prev => cleanupMessages([...prev, errorMessage]));
-      
-      toast({
-        title: "Connection Issue",
-        description: "Switched to offline mode. Functionality continues normally.",
-        variant: "default",
-      });
     } finally {
       setIsLoading(false);
     }
@@ -334,11 +252,10 @@ const AIChat = memo(() => {
     <>
       {/* Enhanced Chat Toggle Button */}
       <Button
-        onClick={toggleChat}
+        onClick={() => setIsOpen(!isOpen)}
         className="fixed bottom-6 right-6 rounded-full w-16 h-16 bg-primary hover:bg-primary/90 shadow-lg z-50 transition-all duration-300 hover:scale-105"
         size="icon"
         aria-label={isOpen ? "Close AuthenBot chat" : "Open AuthenBot chat"}
-        type="button"
       >
         {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
         {!conversationStarted && !isOpen && (
@@ -346,32 +263,16 @@ const AIChat = memo(() => {
         )}
       </Button>
 
-      {/* Enhanced Chat Window with proper event handling */}
+      {/* Enhanced Chat Window */}
       {isOpen && (
-        <div 
-          className="fixed bottom-24 right-6 w-96 h-[600px] z-50"
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Card className="w-full h-full shadow-2xl flex flex-col border-2 border-primary/20">
+        <Card className="fixed bottom-24 right-6 w-96 h-[600px] shadow-2xl z-50 flex flex-col border-2 border-primary/20">
           <CardHeader className="bg-gradient-to-r from-primary to-primary-glow text-white rounded-t-lg py-4">
-            <CardTitle className="flex items-center justify-between text-lg">
-              <div className="flex items-center gap-3">
-                <Bot className="h-6 w-6" />
-                <div>
-                  <div>AuthenBot</div>
-                  <div className="text-xs font-normal opacity-90">Professional Assessment Assistant</div>
-                </div>
+            <CardTitle className="flex items-center gap-3 text-lg">
+              <Bot className="h-6 w-6" />
+              <div>
+                <div>AuthenBot</div>
+                <div className="text-xs font-normal opacity-90">Professional Assessment Assistant</div>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={closeChat}
-                className="text-white hover:bg-white/20 h-8 w-8 rounded-full flex-shrink-0"
-                aria-label="Close chat"
-                type="button"
-              >
-                <X className="h-4 w-4" />
-              </Button>
             </CardTitle>
           </CardHeader>
           
@@ -449,8 +350,7 @@ const AIChat = memo(() => {
               </p>
             </div>
           </CardContent>
-          </Card>
-        </div>
+        </Card>
       )}
     </>
   );

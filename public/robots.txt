@@ -1,23 +1,14 @@
-User-agent: *
+User-agent: Googlebot
 Allow: /
 
-# Sitemap
-Sitemap: https://authencore-analytics.lovable.app/sitemap.xml
+User-agent: Bingbot
+Allow: /
 
-# Crawl-delay for respectful crawling
-Crawl-delay: 1
+User-agent: Twitterbot
+Allow: /
 
-# Block sensitive areas
-Disallow: /admin/
-Disallow: /api/
-Disallow: /.env
-Disallow: /config/
-Disallow: /private/
+User-agent: facebookexternalhit
+Allow: /
 
-# Allow important pages for SEO
-Allow: /assessment
-Allow: /about
-Allow: /pricing
-Allow: /contact
-Allow: /privacy-policy
-Allow: /sample-reports
+User-agent: *
+Allow: /

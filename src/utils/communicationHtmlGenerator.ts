@@ -399,7 +399,7 @@ export const generateCommunicationStylesHtml = async (options: CommunicationHtml
       reportWindow.focus();
     };
     
-    
+    console.log('Communication styles HTML report generated successfully');
     
   } catch (error) {
     console.error('Error generating HTML report:', error);

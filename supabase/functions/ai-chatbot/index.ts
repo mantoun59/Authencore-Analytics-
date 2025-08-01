@@ -12,43 +12,6 @@ const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-// Simple greeting handler for instant responses
-const handleSimpleGreeting = (input: string): string | null => {
-  if (!input || typeof input !== 'string') return null;
-  
-  const lowercaseInput = input.toLowerCase().trim();
-  
-  // Simple greetings that should get instant responses
-  const simpleGreetings = ['hi', 'hello', 'hey', 'ho', 'good morning', 'good afternoon', 'good evening'];
-  const isSimpleGreeting = simpleGreetings.some(greeting => 
-    lowercaseInput === greeting || 
-    lowercaseInput === greeting + '!' ||
-    lowercaseInput === greeting + '.'
-  );
-  
-  if (isSimpleGreeting) {
-    const greetingResponses = [
-      "Hi there! I'm AuthenBot. How can I help you with your professional development today?",
-      "Hello! I'm here to guide you through our assessment portfolio. What interests you?",
-      "Hey! Ready to explore your potential? What would you like to know about our assessments?",
-      "Hi! I'm AuthenBot, your professional development assistant. What can I help you discover?"
-    ];
-    return greetingResponses[Math.floor(Math.random() * greetingResponses.length)];
-  }
-  
-  // Thank you responses
-  if (lowercaseInput.includes('thanks') || lowercaseInput.includes('thank you')) {
-    return "You're welcome! Is there anything else I can help you with regarding your professional development?";
-  }
-  
-  // Single word help
-  if (lowercaseInput === 'help') {
-    return "I'm here to help! Ask me about our assessments, career guidance, or professional development. What specific area interests you?";
-  }
-  
-  return null;
-};
-
 serve(async (req) => {
   console.log('🤖 AuthenBot AI Chatbot function called at:', new Date().toISOString());
   
@@ -73,23 +36,8 @@ serve(async (req) => {
     console.log('Processing AuthenBot request:', { 
       messageLength: message?.length, 
       sessionId,
-      historyLength: conversationHistory?.length,
-      message: message?.substring(0, 50) // Log first 50 chars for debugging
+      historyLength: conversationHistory?.length 
     });
-
-    // Handle simple greetings locally (no need for OpenAI)
-    const simpleGreeting = handleSimpleGreeting(message);
-    if (simpleGreeting) {
-      console.log('Handling simple greeting locally');
-      return new Response(JSON.stringify({ 
-        response: simpleGreeting,
-        sessionId: sessionId,
-        success: true,
-        source: 'local_intelligent'
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
 
     // Get user context if available
     const authHeader = req.headers.get('authorization');
@@ -201,68 +149,35 @@ serve(async (req) => {
 
     console.log('Sending request to OpenAI GPT-4...');
 
-    // Create AbortController for timeout handling
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+    // Call OpenAI API with latest model
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4.1-2025-04-14', // Latest GPT-4 model
+        messages: messages,
+        max_tokens: 600,
+        temperature: 0.7,
+        presence_penalty: 0.1,
+        frequency_penalty: 0.1,
+        top_p: 0.9,
+      }),
+    });
 
-    let aiResponse;
-
-    try {
-      // Call OpenAI API with latest model and timeout
-      const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${openAIApiKey}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          model: 'gpt-4.1-2025-04-14', // Latest GPT-4 model
-          messages: messages,
-          max_tokens: 600,
-          temperature: 0.7,
-          presence_penalty: 0.1,
-          frequency_penalty: 0.1,
-          top_p: 0.9,
-          stream: false,
-        }),
-        signal: controller.signal,
-      });
-
-      clearTimeout(timeoutId);
-
-      if (!response.ok) {
-        console.error('OpenAI API error:', response.status, response.statusText);
-        const errorData = await response.text();
-        console.error('Error details:', errorData);
-        throw new Error(`OpenAI API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-      
-      if (!data.choices || !data.choices[0] || !data.choices[0].message) {
-        console.error('Invalid OpenAI response structure:', data);
-        throw new Error('Invalid response from OpenAI');
-      }
-
-      aiResponse = data.choices[0].message.content;
-      
-      if (!aiResponse || typeof aiResponse !== 'string') {
-        console.error('Empty or invalid AI response');
-        throw new Error('Empty response from OpenAI');
-      }
-
-      console.log('OpenAI response received successfully, length:', aiResponse.length);
-    } catch (fetchError) {
-      clearTimeout(timeoutId);
-      
-      if (fetchError.name === 'AbortError') {
-        console.error('OpenAI request timed out after 30 seconds');
-        throw new Error('Request timeout - please try again');
-      }
-      
-      console.error('Fetch error:', fetchError);
-      throw fetchError;
+    if (!response.ok) {
+      console.error('OpenAI API error:', response.status, response.statusText);
+      const errorData = await response.text();
+      console.error('Error details:', errorData);
+      throw new Error(`OpenAI API error: ${response.status}`);
     }
+
+    const data = await response.json();
+    const aiResponse = data.choices[0].message.content;
+
+    console.log('OpenAI response received successfully');
 
     // Store conversation in database if sessionId provided
     if (sessionId) {
