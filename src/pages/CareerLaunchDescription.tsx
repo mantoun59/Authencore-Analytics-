@@ -163,7 +163,7 @@ const CareerLaunchDescription = () => {
                 <p className="text-sm text-muted-foreground mb-3">
                   Preview the comprehensive insights and career recommendations you'll receive.
                 </p>
-                <Link to="/sample-career-launch-report">
+                <Link to="/sample-reports?assessment=career-launch">
                   <Button variant="outline" className="w-full">
                     View Sample Report
                   </Button>
@@ -174,9 +174,11 @@ const CareerLaunchDescription = () => {
                 <p className="text-sm text-muted-foreground mb-3">
                   Download a sample PDF to see the complete report format and structure.
                 </p>
-                <Button className="w-full">
-                  Download Sample PDF
-                </Button>
+                <Link to="/sample-reports?assessment=career-launch">
+                  <Button className="w-full">
+                    Download Sample PDF
+                  </Button>
+                </Link>
               </div>
             </div>
           </CardContent>
