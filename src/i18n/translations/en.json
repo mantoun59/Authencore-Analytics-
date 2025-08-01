@@ -115,7 +115,21 @@
       "wellnessbased": "Wellness-Based",
       "comprehensive": "Comprehensive",
       "360degree": "360-Degree",
-      "mishiringalt": "Professional psychological assessment tools and analytics"
+      "mishiringalt": "Professional psychological assessment tools and analytics",
+      "professionaldevelopment": "Professional Development",
+      "workplacewellbeing": "Workplace Wellbeing",
+      "digitalbalance": "Digital Balance",
+      "communicationskills": "Communication Skills",
+      "leadershipgrowth": "Leadership Growth",
+      "leadershipdevelopment": "Leadership Development",
+      "managementskills": "Management Skills",
+      "teamleadership": "Team Leadership",
+      "careerdevelopment": "Career Development",
+      "valuesalignment": "Values Alignment",
+      "personalgrowth": "Personal Growth",
+      "workplaceoptimization": "Workplace Optimization",
+      "professionalpreferences": "Professional Preferences",
+      "careerplanning": "Career Planning"
     },
     "features": {
       "riasecprofiling": "RIASEC interest profiling",
@@ -209,6 +223,31 @@
         "title": "Authentic Leadership",
         "subtitle": "Leadership Development Assessment",
         "description": "Comprehensive leadership assessment evaluating authentic leadership capabilities and development areas"
+      },
+      "technologyintegration": {
+        "title": "Technology Integration",
+        "subtitle": "Digital Workplace Effectiveness",
+        "description": "Comprehensive assessment of technology usage patterns, digital boundaries, and work-life balance in modern environments"
+      },
+      "communicationcompetency": {
+        "title": "Communication Competency",
+        "subtitle": "Professional Communication Skills",
+        "description": "Advanced evaluation of communication effectiveness across direct/indirect, formal/informal, expressive/reserved, and task/relationship dimensions"
+      },
+      "leadershipbehavior": {
+        "title": "Leadership Behaviors & Effectiveness",
+        "subtitle": "Multi-Style Leadership Assessment",
+        "description": "Comprehensive assessment of leadership behaviors across six research-based styles: visionary, coaching, affiliative, democratic, pacesetting, and commanding"
+      },
+      "workvalues": {
+        "title": "Work Values & Motivation",
+        "subtitle": "Professional Values Assessment",
+        "description": "In-depth analysis of core work values and motivational drivers across achievement, autonomy, social impact, security, growth, work-life integration, innovation, leadership, and collaboration"
+      },
+      "workpreferences": {
+        "title": "Individual Work Preferences",
+        "subtitle": "Workplace Optimization Assessment",
+        "description": "Comprehensive evaluation of individual workplace preferences using the Job Characteristics Model to identify optimal environments for productivity and satisfaction"
       }
     },
     "comparison": {
