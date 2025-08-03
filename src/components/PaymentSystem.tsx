@@ -58,7 +58,7 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
     {
       id: 'individual' as const,
       name: 'Individual Assessment',
-      price: 9.99,
+      price: 24.99,
       description: 'Single assessment of your choice',
       features: [
         'Choose any assessment type',
