@@ -16,16 +16,16 @@ const AdminTestingTools: React.FC = () => {
   const { toast } = useToast();
 
   const assessmentTypes = [
-    { value: 'cair-personality', label: 'CAIR Personality Assessment', short: 'Personality' },
-    { value: 'cair-cultural', label: 'CAIR Cultural Intelligence', short: 'Cultural' },
-    { value: 'communication-styles', label: 'Communication Styles', short: 'Communication' },
-    { value: 'emotional-intelligence', label: 'Emotional Intelligence', short: 'Emotional' },
-    { value: 'leadership', label: 'Leadership Assessment', short: 'Leadership' },
-    { value: 'career-launch', label: 'Career Launch Assessment', short: 'Career Launch' },
-    { value: 'burnout-prevention', label: 'Burnout Prevention & Stress Resilience', short: 'Burnout' },
-    { value: 'faith-values', label: 'Faith & Values Integration', short: 'Faith' },
-    { value: 'genz-workplace', label: 'Gen Z Workplace', short: 'Gen Z' },
-    { value: 'digital-wellness', label: 'Digital Wellness', short: 'Digital' },
+    { value: 'cair-personality', label: 'CAIR Personality Assessment', short: 'Personality', route: '/cair-assessment' },
+    { value: 'cair-cultural', label: 'CAIR Cultural Intelligence', short: 'Cultural', route: '/cultural-intelligence-assessment' },
+    { value: 'communication-styles', label: 'Communication Styles', short: 'Communication', route: '/communication-styles-assessment' },
+    { value: 'emotional-intelligence', label: 'Emotional Intelligence', short: 'Emotional', route: '/emotional-intelligence-assessment' },
+    { value: 'leadership', label: 'Leadership Assessment', short: 'Leadership', route: '/leadership-assessment' },
+    { value: 'career-launch', label: 'Career Launch Assessment', short: 'Career Launch', route: '/career-launch' },
+    { value: 'burnout-prevention', label: 'Burnout Prevention & Stress Resilience', short: 'Burnout', route: '/stress-resilience' },
+    { value: 'faith-values', label: 'Faith & Values Integration', short: 'Faith', route: '/faith-values-assessment' },
+    { value: 'genz-workplace', label: 'Gen Z Workplace', short: 'Gen Z', route: '/genz-workplace-assessment' },
+    { value: 'digital-wellness', label: 'Digital Wellness', short: 'Digital', route: '/digital-wellness-assessment' },
   ];
 
   const generateTestToken = async () => {
@@ -86,8 +86,8 @@ const AdminTestingTools: React.FC = () => {
       return;
     }
 
-    // Open assessment in new tab with test parameter
-    const testUrl = `/assessment/${selectedAssessment}?test=true`;
+    const assessment = assessmentTypes.find(a => a.value === selectedAssessment);
+    const testUrl = `${assessment?.route || '/assessment'}?test=true`;
     window.open(testUrl, '_blank');
   };
 
@@ -101,8 +101,8 @@ const AdminTestingTools: React.FC = () => {
       return;
     }
 
-    // Direct access as admin (bypass payment)
-    const adminUrl = `/assessment/${selectedAssessment}?admin=true`;
+    const assessment = assessmentTypes.find(a => a.value === selectedAssessment);
+    const adminUrl = `${assessment?.route || '/assessment'}?admin=true`;
     window.location.href = adminUrl;
   };
 
@@ -198,7 +198,7 @@ const AdminTestingTools: React.FC = () => {
                   key={type.value}
                   variant="outline"
                   size="sm"
-                  onClick={() => window.open(`/assessment/${type.value}?admin=true`, '_blank')}
+                  onClick={() => window.open(`${type.route}?admin=true`, '_blank')}
                   className="text-xs h-8 px-2"
                   title={type.label}
                 >
