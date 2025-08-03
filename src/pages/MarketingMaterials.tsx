@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Image, Sparkles, Upload, Download, FileText, Trash2, Eye, BookOpen } from 'lucide-react';
+import { Users, Image, Sparkles, Upload, Download, FileText, Trash2, Eye, BookOpen, Mail, ExternalLink } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -171,6 +171,14 @@ const MarketingMaterials: React.FC = () => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  };
+
+  const handleContactSales = () => {
+    window.open('mailto:sales@authencore.org?subject=Custom Marketing Materials Request&body=Hello, I would like to request custom marketing materials for my organization.', '_blank');
+  };
+
+  const handleRequestDesign = () => {
+    window.open('mailto:design@authencore.org?subject=Custom Design Request&body=Hello, I would like to request custom design services for my marketing materials.', '_blank');
   };
 
   return (
@@ -363,12 +371,21 @@ const MarketingMaterials: React.FC = () => {
                   Contact our team for branded collateral that aligns with your organization's identity.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" className="bg-primary hover:bg-primary/90 text-primary-foreground">
-                    <Users className="w-5 h-5 mr-2" />
+                  <Button 
+                    size="lg" 
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                    onClick={handleContactSales}
+                  >
+                    <Mail className="w-5 h-5 mr-2" />
                     Contact Sales Team
                   </Button>
-                  <Button variant="outline" size="lg" className="border-primary/30 hover:bg-primary/5">
-                    <Image className="w-5 h-5 mr-2" />
+                  <Button 
+                    variant="outline" 
+                    size="lg" 
+                    className="border-primary/30 hover:bg-primary/5"
+                    onClick={handleRequestDesign}
+                  >
+                    <ExternalLink className="w-5 h-5 mr-2" />
                     Request Custom Design
                   </Button>
                 </div>
