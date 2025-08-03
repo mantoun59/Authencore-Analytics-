@@ -138,6 +138,8 @@ serve(async (req) => {
 });
 
 function generateReceiptHtml(invoice: any, items: any[], order: any): string {
+  const logoBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="; // Placeholder - will be replaced with actual logo
+  
   const itemsHtml = items.map(item => `
     <tr>
       <td style="padding: 8px; border-bottom: 1px solid #e5e5e5;">${item.description}</td>
@@ -156,6 +158,7 @@ function generateReceiptHtml(invoice: any, items: any[], order: any): string {
     </head>
     <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
       <div style="text-align: center; margin-bottom: 30px;">
+        <img src="data:image/png;base64,${logoBase64}" alt="AuthenCore Analytics" style="max-width: 200px; height: auto; margin-bottom: 10px;" />
         <h1 style="color: #2563eb; margin: 0;">AuthenCore Analytics</h1>
         <p style="color: #666; margin: 5px 0 0 0;">Professional Assessment Platform</p>
       </div>

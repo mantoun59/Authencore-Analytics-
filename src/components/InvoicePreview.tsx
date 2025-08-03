@@ -1,6 +1,8 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Printer, ExternalLink } from 'lucide-react';
+import logoImage from '@/assets/final-logo.png';
 
 const InvoicePreview: React.FC = () => {
   const mockInvoiceData = {
@@ -20,7 +22,25 @@ const InvoicePreview: React.FC = () => {
     ]
   };
 
-  const generateReceiptHtml = () => {
+  const getLogoBase64 = async (): Promise<string> => {
+    try {
+      const response = await fetch(logoImage);
+      const blob = await response.blob();
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const base64 = (reader.result as string).split(',')[1];
+          resolve(base64);
+        };
+        reader.readAsDataURL(blob);
+      });
+    } catch (error) {
+      console.error('Error loading logo:', error);
+      return '';
+    }
+  };
+
+  const generateReceiptHtml = async () => {
     const itemsHtml = mockInvoiceData.items.map(item => `
       <tr>
         <td style="padding: 8px; border-bottom: 1px solid #e5e5e5;">${item.description}</td>
@@ -39,6 +59,7 @@ const InvoicePreview: React.FC = () => {
       </head>
       <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
         <div style="text-align: center; margin-bottom: 30px;">
+          <img src="data:image/png;base64,${await getLogoBase64()}" alt="AuthenCore Analytics" style="max-width: 200px; height: auto; margin-bottom: 10px;" />
           <h1 style="color: #2563eb; margin: 0;">AuthenCore Analytics</h1>
           <p style="color: #666; margin: 5px 0 0 0;">Professional Assessment Platform</p>
         </div>
@@ -96,12 +117,26 @@ const InvoicePreview: React.FC = () => {
     `;
   };
 
-  const openReceiptPreview = () => {
-    const receiptHtml = generateReceiptHtml();
+  const openReceiptPreview = async () => {
+    const receiptHtml = await generateReceiptHtml();
     const newWindow = window.open('', '_blank');
     if (newWindow) {
       newWindow.document.write(receiptHtml);
       newWindow.document.close();
+    }
+  };
+
+  const printReceipt = async () => {
+    const receiptHtml = await generateReceiptHtml();
+    const printWindow = window.open('', '_blank');
+    if (printWindow) {
+      printWindow.document.write(receiptHtml);
+      printWindow.document.close();
+      printWindow.focus();
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 500);
     }
   };
 
@@ -111,6 +146,13 @@ const InvoicePreview: React.FC = () => {
         <CardTitle>Invoice & Receipt Preview</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Logo Display */}
+        <div className="text-center">
+          <img src={logoImage} alt="AuthenCore Analytics" className="mx-auto mb-4 max-w-[200px] h-auto" />
+          <h2 className="text-xl font-bold text-primary">AuthenCore Analytics</h2>
+          <p className="text-muted-foreground">Professional Assessment Platform</p>
+        </div>
+
         {/* Invoice Summary */}
         <div className="bg-muted/50 p-4 rounded-lg">
           <h3 className="font-semibold mb-3">Invoice Details</h3>
@@ -164,15 +206,20 @@ const InvoicePreview: React.FC = () => {
           </p>
         </div>
 
-        {/* Preview Button */}
-        <div className="text-center">
-          <Button onClick={openReceiptPreview} className="w-full sm:w-auto">
-            Open Receipt Preview in New Window
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
+          <Button onClick={openReceiptPreview} variant="outline" className="flex items-center gap-2">
+            <ExternalLink className="w-4 h-4" />
+            Preview in New Window
           </Button>
-          <p className="text-sm text-muted-foreground mt-2">
-            This shows exactly what customers receive via email
-          </p>
+          <Button onClick={printReceipt} className="flex items-center gap-2">
+            <Printer className="w-4 h-4" />
+            Print Receipt
+          </Button>
         </div>
+        <p className="text-sm text-muted-foreground text-center">
+          This shows exactly what customers receive via email
+        </p>
       </CardContent>
     </Card>
   );
