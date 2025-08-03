@@ -16,16 +16,16 @@ const AdminTestingTools: React.FC = () => {
   const { toast } = useToast();
 
   const assessmentTypes = [
-    { value: 'cair-personality', label: 'CAIR Personality Assessment' },
-    { value: 'cair-cultural', label: 'CAIR Cultural Intelligence' },
-    { value: 'communication-styles', label: 'Communication Styles' },
-    { value: 'emotional-intelligence', label: 'Emotional Intelligence' },
-    { value: 'leadership', label: 'Leadership Assessment' },
-    { value: 'stress-resilience', label: 'Stress & Resilience' },
-    { value: 'burnout-prevention', label: 'Burnout Prevention' },
-    { value: 'faith-values', label: 'Faith & Values Integration' },
-    { value: 'genz-workplace', label: 'Gen Z Workplace' },
-    { value: 'digital-wellness', label: 'Digital Wellness' },
+    { value: 'cair-personality', label: 'CAIR Personality Assessment', short: 'Personality' },
+    { value: 'cair-cultural', label: 'CAIR Cultural Intelligence', short: 'Cultural' },
+    { value: 'communication-styles', label: 'Communication Styles', short: 'Communication' },
+    { value: 'emotional-intelligence', label: 'Emotional Intelligence', short: 'Emotional' },
+    { value: 'leadership', label: 'Leadership Assessment', short: 'Leadership' },
+    { value: 'stress-resilience', label: 'Stress & Resilience', short: 'Stress' },
+    { value: 'burnout-prevention', label: 'Burnout Prevention', short: 'Burnout' },
+    { value: 'faith-values', label: 'Faith & Values Integration', short: 'Faith' },
+    { value: 'genz-workplace', label: 'Gen Z Workplace', short: 'Gen Z' },
+    { value: 'digital-wellness', label: 'Digital Wellness', short: 'Digital' },
   ];
 
   const generateTestToken = async () => {
@@ -123,12 +123,12 @@ const AdminTestingTools: React.FC = () => {
               <p className="text-sm text-blue-700 mb-4">Direct access to assessments as admin (no payment required)</p>
               <div className="space-y-2">
                 <Select value={selectedAssessment} onValueChange={setSelectedAssessment}>
-                  <SelectTrigger>
+                  <SelectTrigger className="bg-background">
                     <SelectValue placeholder="Select assessment" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent className="bg-background border shadow-lg z-50 max-h-60 overflow-auto">
                     {assessmentTypes.map((type) => (
-                      <SelectItem key={type.value} value={type.value}>
+                      <SelectItem key={type.value} value={type.value} className="hover:bg-muted">
                         {type.label}
                       </SelectItem>
                     ))}
@@ -191,17 +191,18 @@ const AdminTestingTools: React.FC = () => {
 
           {/* Quick Access Links */}
           <div className="border-t pt-4">
-            <h3 className="font-semibold mb-3">Quick Assessment Links</h3>
+            <h3 className="font-semibold mb-3">Quick Assessment Links (All 10 Assessments)</h3>
             <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-              {assessmentTypes.slice(0, 10).map((type) => (
+              {assessmentTypes.map((type) => (
                 <Button
                   key={type.value}
                   variant="outline"
                   size="sm"
                   onClick={() => window.open(`/assessment/${type.value}?admin=true`, '_blank')}
-                  className="text-xs h-8"
+                  className="text-xs h-8 px-2"
+                  title={type.label}
                 >
-                  {type.label.split(' ')[0]}
+                  {type.short}
                 </Button>
               ))}
             </div>
