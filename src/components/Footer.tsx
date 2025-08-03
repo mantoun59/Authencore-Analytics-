@@ -118,7 +118,7 @@ const Footer = () => {
                 to="/faq"
                 className="block text-foreground hover:text-primary transition-colors text-sm"
               >
-                {t("navigation.about")}
+                FAQ
               </Link>
               <Link
                 to="/privacy"
