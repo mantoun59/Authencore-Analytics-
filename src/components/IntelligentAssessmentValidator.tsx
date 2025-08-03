@@ -378,7 +378,52 @@ const IntelligentAssessmentValidator: React.FC = () => {
       }
 
       const questionData = await moduleLoader();
-      const questions = Object.values(questionData)[0] as any[];
+      
+      // Extract questions based on specific property names for each assessment
+      let questions: any[] = [];
+      let dataType = 'unknown';
+      
+      const data = questionData as any; // Type assertion for dynamic properties
+      
+      if (data.careerInterests) {
+        questions = data.careerInterests;
+        dataType = 'career-interests';
+      } else if (data.personalityQuestions) {
+        questions = data.personalityQuestions;
+        dataType = 'personality-questions';
+      } else if (data.burnoutPreventionQuestions) {
+        questions = data.burnoutPreventionQuestions;
+        dataType = 'burnout-questions';
+      } else if (data.communicationStylesQuestions) {
+        questions = data.communicationStylesQuestions;
+        dataType = 'communication-questions';
+      } else if (data.emotionalIntelligenceQuestions) {
+        questions = data.emotionalIntelligenceQuestions;
+        dataType = 'ei-questions';
+      } else if (data.genZScenarios) {
+        questions = data.genZScenarios;
+        dataType = 'genz-scenarios';
+      } else if (data.digitalWellnessQuestions) {
+        questions = data.digitalWellnessQuestions;
+        dataType = 'digital-wellness-questions';
+      } else if (data.leadershipQuestions) {
+        questions = data.leadershipQuestions;
+        dataType = 'leadership-questions';
+      } else if (data.stressResilienceQuestions) {
+        questions = data.stressResilienceQuestions;
+        dataType = 'stress-questions';
+      } else if (data.faithValuesScenarios || data.scenarios) {
+        questions = data.faithValuesScenarios || data.scenarios;
+        dataType = 'faith-scenarios';
+      } else if (data.culturalScenarios) {
+        questions = data.culturalScenarios;
+        dataType = 'cultural-scenarios';
+      } else {
+        // Fallback to first array found
+        const firstArray = Object.values(data).find(val => Array.isArray(val)) as any[];
+        questions = firstArray || [];
+        dataType = 'generic';
+      }
       
       if (!Array.isArray(questions) || questions.length === 0) {
         return {
@@ -391,28 +436,51 @@ const IntelligentAssessmentValidator: React.FC = () => {
         };
       }
 
-      // Validate question structure - handle different question formats
+      // Validate question structure based on data type
       const validationResults = questions.map((q, index) => {
-        // Check for different text field variants
-        const hasText = q.text || q.question || q.scenario || q.questionText || q.item || q.title;
-        
-        // Check for different options field variants - handle all known formats
+        let hasText = false;
         let hasOptions = false;
         
-        if (q.options || q.choices || q.responses) {
-          hasOptions = true; // Standard array formats
-        } else if (q.optionA && q.optionB) {
-          hasOptions = true; // CAIR forced choice format
-        } else if (q.responses && typeof q.responses === 'object') {
-          hasOptions = true; // GenZ format with response objects
-        } else if (q.answers || q.scale) {
-          hasOptions = true; // Other formats
-        } else if (q.type === 'scenario' || q.type === 'basic') {
-          hasOptions = true; // Scenario-based questions
-        } else if (q.dimension) {
-          hasOptions = true; // Likert scale questions (EQ, Digital Wellness)
-        } else if (q.description || q.workplace_behaviors) {
-          hasOptions = true; // Value/interest items (Career Launch, Faith Values)
+        switch (dataType) {
+          case 'career-interests':
+            hasText = !!(q.title || q.description);
+            hasOptions = !!(q.category || q.tags || q.interest_type);
+            break;
+            
+          case 'personality-questions':
+            hasText = !!(q.questionText);
+            hasOptions = !!(q.optionA && q.optionB);
+            break;
+            
+          case 'burnout-questions':
+          case 'communication-questions':
+            hasText = !!(q.question);
+            hasOptions = !!(q.options && Array.isArray(q.options) && q.options.length > 0);
+            break;
+            
+          case 'ei-questions':
+          case 'digital-wellness-questions':
+          case 'leadership-questions':
+          case 'stress-questions':
+            hasText = !!(q.question || q.text);
+            hasOptions = !!(q.dimension); // These use Likert scales
+            break;
+            
+          case 'genz-scenarios':
+            hasText = !!(q.text || q.scenario);
+            hasOptions = !!(q.responses && typeof q.responses === 'object' && Object.keys(q.responses).length > 0);
+            break;
+            
+          case 'faith-scenarios':
+          case 'cultural-scenarios':
+            hasText = !!(q.scenario || q.text);
+            hasOptions = !!(q.options && Array.isArray(q.options) && q.options.length > 0);
+            break;
+            
+          default:
+            // Generic validation
+            hasText = !!(q.text || q.question || q.scenario || q.questionText || q.title);
+            hasOptions = !!(q.options || q.choices || q.responses || (q.optionA && q.optionB) || q.dimension);
         }
         
         return { index, hasText, hasOptions, valid: hasText && hasOptions };
