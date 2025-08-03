@@ -662,7 +662,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
       }
 
       const request: AIReportRequest = {
-        assessmentResultId: `assessment-${Date.now()}`,
+        assessmentResultId: 'mock-assessment-id', // Use mock ID for sample reports
         reportType,
         candidateInfo: {
           name: candidateInfo.name,

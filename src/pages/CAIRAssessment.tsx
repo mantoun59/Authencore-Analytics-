@@ -400,59 +400,55 @@ export default function CAIRAssessment() {
         }
       }
 
-      // Generate CAIR-specific branded report with logo
-      await generateHtmlReport({
+      // Use unified assessment engine for proper database integration
+      const { unifiedAssessmentEngine } = await import('@/services/unifiedAssessmentEngine');
+      
+      const assessmentData = {
         assessmentType: 'cair-personality',
-        userInfo: {
-          name: userProfile.name,
-          email: userProfile.email,
-          position: userProfile.position,
-          company: userProfile.company
-        },
-        overallScore: Math.round(Object.values(scores).reduce((sum, s) => sum + s.percentile, 0) / Object.keys(scores).length),
+        userProfile,
+        responses: responses,
+        scores: Object.fromEntries(Object.entries(scores).map(([key, value]) => [key, value.percentile])),
         dimensions: Object.entries(scores).map(([key, value]) => ({
           name: personalityDimensions[key as keyof typeof personalityDimensions]?.name || key,
           score: value.percentile
         })),
-        includeLogo: true,
-        organizationName: 'AuthenCore Analytics',
-        customBranding: {
-          primaryColor: '#2563eb',
-          secondaryColor: '#1e293b'
+        overallScore: Math.round(Object.values(scores).reduce((sum, s) => sum + s.percentile, 0) / Object.keys(scores).length),
+        validity: {
+          isValid: validity.overallValidity === 'Valid',
+          flags: validity.overallValidity !== 'Valid' ? ['validity_concerns'] : []
+        },
+        metadata: {
+          totalQuestions: questions.length,
+          completionTime: Math.round((Date.now() - assessmentStartTime) / 60000),
+          validityMetrics: validity
         }
-      });
+      };
+
+      // Process complete assessment with unified engine
+      const result = await unifiedAssessmentEngine.processAssessmentComplete(assessmentData, true);
       
-      toast({
-        title: "CAIR Report Generated",
-        description: "Professional CAIR Personality Assessment report downloaded!",
-      });
+      if (result.reportGenerated) {
+        toast({
+          title: "CAIR Assessment Complete",
+          description: "Professional CAIR report generated with AuthenCore branding!",
+        });
+      }
 
-      // Generate AI report if we have a saved assessment ID
-      if (savedAssessmentId && user) {
-        try {
-          const { data: aiReport, error: aiError } = await supabase.functions.invoke('generate-ai-report', {
-            body: {
-              assessmentResultId: savedAssessmentId,
-              reportType: 'candidate',
-              candidateInfo: {
-                name: userProfile.name,
-                email: userProfile.email,
-                position: userProfile.position,
-                company: userProfile.company
-              }
-            }
+      if (result.aiReportGenerated) {
+        toast({
+          title: "AI Analysis Complete",
+          description: "Enhanced CAIR personality insights generated!",
+        });
+      }
+
+      if (result.errors.length > 0) {
+        console.warn('Assessment processing had some issues:', result.errors);
+        if (!result.reportGenerated) {
+          toast({
+            title: "Report Generation Issue",
+            description: "Some features may not be available. Basic report attempted.",
+            variant: "destructive",
           });
-
-          if (aiError) {
-            console.error('AI report generation error:', aiError);
-          } else {
-            toast({
-              title: "AI Analysis Complete",
-              description: "Enhanced AI-powered insights generated!",
-            });
-          }
-        } catch (aiError) {
-          console.error('AI report error:', aiError);
         }
       }
 
