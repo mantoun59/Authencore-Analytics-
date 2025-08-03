@@ -73,8 +73,8 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
     {
       id: 'bundle' as const,
       name: 'Bundle (10 Assessments)',
-      price: 79.99,
-      description: 'All 10 assessments - discounted price!',
+      price: 149.94,
+      description: 'All 10 assessments - 40% discount!',
       features: [
         'All 10 assessment types',
         'Career, Personality, Leadership',
