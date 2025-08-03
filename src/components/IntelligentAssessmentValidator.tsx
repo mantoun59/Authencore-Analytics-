@@ -394,12 +394,26 @@ const IntelligentAssessmentValidator: React.FC = () => {
       // Validate question structure - handle different question formats
       const validationResults = questions.map((q, index) => {
         // Check for different text field variants
-        const hasText = q.text || q.question || q.scenario || q.questionText || q.item;
+        const hasText = q.text || q.question || q.scenario || q.questionText || q.item || q.title;
         
-        // Check for different options field variants
-        const hasOptions = q.options || q.choices || q.responses || 
-                          (q.optionA && q.optionB) || // CAIR format
-                          q.answers || q.scale;
+        // Check for different options field variants - handle all known formats
+        let hasOptions = false;
+        
+        if (q.options || q.choices || q.responses) {
+          hasOptions = true; // Standard array formats
+        } else if (q.optionA && q.optionB) {
+          hasOptions = true; // CAIR forced choice format
+        } else if (q.responses && typeof q.responses === 'object') {
+          hasOptions = true; // GenZ format with response objects
+        } else if (q.answers || q.scale) {
+          hasOptions = true; // Other formats
+        } else if (q.type === 'scenario' || q.type === 'basic') {
+          hasOptions = true; // Scenario-based questions
+        } else if (q.dimension) {
+          hasOptions = true; // Likert scale questions (EQ, Digital Wellness)
+        } else if (q.description || q.workplace_behaviors) {
+          hasOptions = true; // Value/interest items (Career Launch, Faith Values)
+        }
         
         return { index, hasText, hasOptions, valid: hasText && hasOptions };
       });
