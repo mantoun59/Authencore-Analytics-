@@ -74,12 +74,12 @@ const AdminPage = () => {
                         <p className="text-sm text-muted-foreground mb-4">
                           Direct access portal for candidates to take assessments with guided interface
                         </p>
-                        <a 
-                          href="/candidate-testing" 
+                        <Link 
+                          to="/candidate-testing" 
                           className="inline-flex items-center text-primary hover:text-primary-glow font-medium"
                         >
                           Access Portal →
-                        </a>
+                        </Link>
                       </div>
                       
                       <div className="p-6 bg-secondary/5 rounded-lg border hover:bg-secondary/10 transition-colors">
@@ -87,12 +87,12 @@ const AdminPage = () => {
                         <p className="text-sm text-muted-foreground mb-4">
                           Monitor and manage ongoing assessments, view real-time progress and results
                         </p>
-                        <a 
-                          href="/testing-dashboard" 
+                        <Link 
+                          to="/testing-dashboard" 
                           className="inline-flex items-center text-primary hover:text-primary-glow font-medium"
                         >
                           Open Dashboard →
-                        </a>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -117,10 +117,10 @@ const AdminPage = () => {
                   <div className="p-6 bg-card rounded-lg border">
                     <h3 className="text-lg font-semibold mb-4">Analytics Dashboard</h3>
                     <div className="grid grid-cols-1 gap-4">
-                      <a href="/admin-analytics" className="p-4 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors">
+                      <Link to="/admin-analytics" className="p-4 bg-primary/10 rounded-lg hover:bg-primary/20 transition-colors">
                         <h4 className="font-medium">Comprehensive Analytics</h4>
                         <p className="text-sm text-muted-foreground">View detailed analytics and reports across all assessments</p>
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

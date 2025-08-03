@@ -49,8 +49,8 @@ const EmployerLogin = lazy(() => import("@/pages/EmployerLogin"));
 const EmployerDashboard = lazy(() => import("@/pages/EmployerDashboard"));
 const SoloAssessment = lazy(() => import("@/pages/SoloAssessment"));
 
-// Lazy load - Admin features (heavy components)
-const AdminPage = lazy(() => import("@/pages/Admin"));
+// Direct import - Admin features to prevent dynamic import errors
+import AdminPage from "@/pages/Admin";
 const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
 const MarketingMaterials = lazy(() => import("@/pages/MarketingMaterials"));
 const PublicMarketingMaterials = lazy(() => import("@/pages/PublicMarketingMaterials"));
@@ -285,12 +285,10 @@ const RouteConfig = () => {
         </Suspense>
       } />
       
-      {/* Protected Admin Routes - Lazy Loaded with Protection */}
+      {/* Protected Admin Routes - Direct import to prevent dynamic import errors */}
       <Route path="/admin" element={
         <ProtectedAdminRoute>
-          <Suspense fallback={<LoadingFallback message="Loading Admin Panel..." />}>
-            <AdminPage />
-          </Suspense>
+          <AdminPage />
         </ProtectedAdminRoute>
       } />
       <Route path="/admin-analytics" element={
