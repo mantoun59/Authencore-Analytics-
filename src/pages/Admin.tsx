@@ -8,6 +8,7 @@ import SEOOptimizer from "@/components/SEOOptimizer";
 import MarketingPromotion from "@/components/MarketingPromotion";
 import { EnhancedAIControls } from "@/components/EnhancedAIControls";
 import AdminTestingTools from "@/components/AdminTestingTools";
+import AssessmentTester from "@/components/AssessmentTester";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,8 +26,9 @@ const AdminPage = () => {
               </p>
             </div>
 
-            <Tabs defaultValue="partners" className="w-full">
-              <TabsList className="grid w-full grid-cols-8">
+            <Tabs defaultValue="assessment-testing" className="w-full">
+              <TabsList className="grid w-full grid-cols-9">
+                <TabsTrigger value="assessment-testing">Assessment Testing</TabsTrigger>
                 <TabsTrigger value="partners">Partners</TabsTrigger>
                 <TabsTrigger value="testing">Testing</TabsTrigger>
                 <TabsTrigger value="ai-engine">AI Engine</TabsTrigger>
@@ -37,6 +39,20 @@ const AdminPage = () => {
                 <TabsTrigger value="images">Images</TabsTrigger>
               </TabsList>
               
+              <TabsContent value="assessment-testing" className="mt-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Comprehensive Assessment Testing</CardTitle>
+                    <CardDescription>
+                      Test all assessments systematically for routes, components, questions, scoring, reports, payments, and logos
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <AssessmentTester />
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
               <TabsContent value="partners" className="mt-6">
                 <PartnerManagement />
               </TabsContent>
