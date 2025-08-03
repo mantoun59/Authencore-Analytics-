@@ -400,7 +400,7 @@ export default function CAIRAssessment() {
         }
       }
 
-      // Generate HTML report with logo
+      // Generate CAIR-specific branded report with logo
       await generateHtmlReport({
         assessmentType: 'cair-personality',
         userInfo: {
@@ -414,16 +414,20 @@ export default function CAIRAssessment() {
           name: personalityDimensions[key as keyof typeof personalityDimensions]?.name || key,
           score: value.percentile
         })),
-        includeLogo: true, // Ensure logo is included
-        organizationName: userProfile.company || 'AuthenCore Analytics'
+        includeLogo: true,
+        organizationName: 'AuthenCore Analytics',
+        customBranding: {
+          primaryColor: '#2563eb',
+          secondaryColor: '#1e293b'
+        }
       });
       
       toast({
-        title: "Report Generated",
-        description: "Professional PDF report downloaded successfully with company branding!",
+        title: "CAIR Report Generated",
+        description: "Professional CAIR Personality Assessment report downloaded!",
       });
 
-      // If we have a saved assessment ID, try to generate AI report
+      // Generate AI report if we have a saved assessment ID
       if (savedAssessmentId && user) {
         try {
           const { data: aiReport, error: aiError } = await supabase.functions.invoke('generate-ai-report', {
