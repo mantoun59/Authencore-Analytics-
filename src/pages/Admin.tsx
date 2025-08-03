@@ -7,6 +7,7 @@ import PurchaseAnalyticsDashboard from "@/components/PurchaseAnalyticsDashboard"
 import SEOOptimizer from "@/components/SEOOptimizer";
 import MarketingPromotion from "@/components/MarketingPromotion";
 import { EnhancedAIControls } from "@/components/EnhancedAIControls";
+import AdminTestingTools from "@/components/AdminTestingTools";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -42,6 +43,10 @@ const AdminPage = () => {
               
               <TabsContent value="testing" className="mt-6">
                 <div className="space-y-6">
+                  {/* Admin Testing Tools */}
+                  <AdminTestingTools />
+                  
+                  {/* Original Testing Portal */}
                   <div className="p-6 bg-card rounded-lg border">
                     <h3 className="text-lg font-semibold mb-4">Testing Portal Management</h3>
                     <p className="text-muted-foreground mb-6">
