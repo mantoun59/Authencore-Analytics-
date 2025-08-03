@@ -48,15 +48,18 @@ export const PaymentButton: React.FC<PaymentButtonProps> = ({
 export const QuickPurchaseButton: React.FC<{ assessmentType: string }> = ({ assessmentType }) => {
   const getAssessmentInfo = (type: string) => {
     switch (type) {
-      case 'career-launch': return { name: 'CareerLaunch', price: '$9.99' };
-      case 'cair-personality': return { name: 'CAIR+ Personality', price: '$29.99' };
-      case 'stress-resilience': return { name: 'Burnout Prevention Index', price: '$39.99' };
-      case 'cultural-intelligence': return { name: 'Cultural Intelligence', price: '$19.99' };
+      case 'bundle': return { name: 'Complete Bundle', price: '$79.99' };
+      case 'career-launch': return { name: 'CareerLaunch', price: '$24.99' };
+      case 'cair-personality': return { name: 'CAIR+ Personality', price: '$24.99' };
+      case 'stress-resilience': return { name: 'Burnout Prevention Index', price: '$24.99' };
+      case 'cultural-intelligence': return { name: 'Cultural Intelligence', price: '$24.99' };
       case 'communication-styles': return { name: 'Communication Styles', price: '$24.99' };
       case 'emotional-intelligence': return { name: 'Emotional Intelligence', price: '$24.99' };
-      case 'faith-values': return { name: 'Faith & Values', price: '$19.99' };
-      case 'genz-assessment': return { name: 'Gen Z Workplace', price: '$9.99' };
-      default: return { name: 'Assessment', price: 'View Pricing' };
+      case 'faith-values': return { name: 'Faith & Values', price: '$24.99' };
+      case 'genz-assessment': return { name: 'Gen Z Workplace', price: '$24.99' };
+      case 'leadership': return { name: 'Leadership Assessment', price: '$24.99' };
+      case 'digital-wellness': return { name: 'Digital Wellness', price: '$24.99' };
+      default: return { name: 'Assessment', price: '$24.99' };
     }
   };
 

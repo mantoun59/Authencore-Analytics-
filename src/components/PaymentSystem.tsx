@@ -7,25 +7,15 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { ContactSalesForm } from './ContactSalesForm';
 import { 
   CreditCard, 
   Shield, 
   Clock, 
-  Users, 
   Star,
-  CheckCircle
+  CheckCircle,
+  Building2
 } from 'lucide-react';
-
-interface PaymentPlan {
-  id: string;
-  name: string;
-  description: string;
-  plan_type: string;
-  price: number;
-  currency: string;
-  billing_interval: string;
-  assessment_access: any;
-}
 
 interface PaymentSystemProps {
   assessmentType?: string;
@@ -44,17 +34,19 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
   showGuestCheckout = true
 }) => {
   const { toast } = useToast();
-  const [paymentPlans, setPaymentPlans] = useState<PaymentPlan[]>([]);
-  const [selectedPlan, setSelectedPlan] = useState<PaymentPlan | null>(null);
+  const [selectedOption, setSelectedOption] = useState<'individual' | 'bundle' | 'enterprise'>('individual');
   const [loading, setLoading] = useState(false);
   const [isGuest, setIsGuest] = useState(false);
   const [guestInfo, setGuestInfo] = useState<GuestInfo>({ email: '', name: '' });
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [quantity, setQuantity] = useState(1);
+  const [showContactForm, setShowContactForm] = useState(false);
 
   useEffect(() => {
-    fetchPaymentPlans();
     getCurrentUser();
+    // Auto-select bundle if no specific assessment type
+    if (!assessmentType) {
+      setSelectedOption('bundle');
+    }
   }, [assessmentType]);
 
   const getCurrentUser = async () => {
@@ -62,51 +54,60 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
     setCurrentUser(user);
   };
 
-  const fetchPaymentPlans = async () => {
-    try {
-      let query = supabase
-        .from('payment_plans')
-        .select('*')
-        .eq('is_active', true);
-
-      if (assessmentType) {
-        // Filter for specific assessment or include bulk/subscription plans
-        query = query.or(`assessment_access.cs.["${assessmentType}"],assessment_access.cs.["all"]`);
-      }
-
-      const { data, error } = await query.order('price', { ascending: true });
-
-      if (error) throw error;
-      setPaymentPlans(data || []);
-
-      // Auto-select individual plan if specific assessment type
-      if (assessmentType && data) {
-        const individualPlan = data.find(plan => 
-          plan.plan_type === 'individual' && 
-          Array.isArray(plan.assessment_access) && 
-          plan.assessment_access.includes(assessmentType)
-        );
-        if (individualPlan) {
-          setSelectedPlan(individualPlan);
-        }
-      }
-    } catch (error: any) {
-      console.error('Error fetching payment plans:', error);
-      toast({
-        title: "Error",
-        description: "Failed to load payment plans",
-        variant: "destructive",
-      });
+  const paymentOptions = [
+    {
+      id: 'individual' as const,
+      name: 'Individual Assessment',
+      price: 24.99,
+      description: 'Single assessment of your choice',
+      features: [
+        'Choose any assessment type',
+        'Comprehensive detailed report',
+        'Instant results',
+        'PDF download',
+        'Email support'
+      ],
+      icon: CreditCard,
+      badge: 'One-time'
+    },
+    {
+      id: 'bundle' as const,
+      name: 'Complete Bundle',
+      price: 79.99,
+      description: 'All assessments included - best value!',
+      features: [
+        'All 10+ assessment types',
+        'Career, Personality, Leadership',
+        'Communication & Cultural Intelligence',
+        'Stress, Digital Wellness & more',
+        'Comprehensive reports for all',
+        'Priority support'
+      ],
+      icon: Star,
+      badge: 'Most Popular',
+      popular: true
+    },
+    {
+      id: 'enterprise' as const,
+      name: 'Enterprise & Partners',
+      price: null,
+      description: 'Custom solutions for organizations',
+      features: [
+        'Volume pricing',
+        'Custom branding',
+        'API integration',
+        'Dedicated support',
+        'Advanced analytics',
+        'Training & onboarding'
+      ],
+      icon: Building2,
+      badge: 'Custom Pricing'
     }
-  };
+  ];
 
-  const handleCreateOrder = async () => {
-    if (!selectedPlan) {
-      toast({
-        title: "No Plan Selected",
-        description: "Please select a payment plan",
-        variant: "destructive",
-      });
+  const handleProceedToPayment = async () => {
+    if (selectedOption === 'enterprise') {
+      setShowContactForm(true);
       return;
     }
 
@@ -121,34 +122,32 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
 
     setLoading(true);
     try {
+      const selectedPlan = paymentOptions.find(option => option.id === selectedOption);
+      
+      // Create payment order via edge function
       const { data, error } = await supabase.functions.invoke('create-payment-order', {
         body: {
-          planId: selectedPlan.id,
-          assessmentType,
+          planType: selectedOption,
+          assessmentType: selectedOption === 'individual' ? assessmentType : 'bundle',
+          amount: selectedPlan?.price ? Math.round(selectedPlan.price * 100) : 0, // Convert to cents
           guestInfo: isGuest ? guestInfo : undefined,
-          quantity,
         }
       });
 
       if (error) throw error;
 
-      // Here you would integrate with your payment processor
-      // For now, we'll simulate a successful payment
-      toast({
-        title: "Order Created",
-        description: `Order created successfully. Total: ${data.currency} ${data.totalAmount}`,
-        variant: "default",
-      });
-
-      // Integrate with your payment processor here
-      // Example: redirect to payment form or open payment modal
-      await handlePaymentProcessing(data);
+      // Redirect to Stripe Checkout
+      if (data?.url) {
+        window.location.href = data.url;
+      } else {
+        throw new Error('No payment URL received');
+      }
 
     } catch (error: any) {
-      console.error('Error creating order:', error);
+      console.error('Error creating payment:', error);
       toast({
-        title: "Order Failed",
-        description: error.message || "Failed to create order",
+        title: "Payment Error",
+        description: error.message || "Failed to create payment. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -156,66 +155,25 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
     }
   };
 
-  const handlePaymentProcessing = async (orderData: any) => {
-    // This is where you'd integrate with your payment processor
-    // For now, we'll simulate the payment process
-    
-    toast({
-      title: "Payment Processing",
-      description: "Redirecting to payment form...",
-      variant: "default",
-    });
-
-    // Simulate payment completion (remove this in production)
-    setTimeout(async () => {
-      try {
-        const { error } = await supabase.functions.invoke('update-payment-status', {
-          body: {
-            orderId: orderData.orderId,
-            paymentStatus: 'completed',
-            paymentReference: 'sim_' + Math.random().toString(36).substr(2, 9),
-          }
-        });
-
-        if (error) throw error;
-
-        toast({
-          title: "Payment Successful",
-          description: "Your payment has been processed successfully!",
-          variant: "default",
-        });
-
-        onPaymentSuccess?.(orderData.orderId);
-      } catch (error: any) {
-        toast({
-          title: "Payment Error",
-          description: error.message || "Payment processing failed",
-          variant: "destructive",
-        });
-      }
-    }, 2000);
-  };
-
-  const getPlanIcon = (planType: string) => {
-    switch (planType) {
-      case 'individual': return <CreditCard className="w-5 h-5" />;
-      case 'subscription': return <Star className="w-5 h-5" />;
-      case 'bulk': return <Users className="w-5 h-5" />;
-      default: return <CreditCard className="w-5 h-5" />;
-    }
-  };
-
-  const getPlanBadge = (plan: PaymentPlan) => {
-    if (plan.plan_type === 'subscription') return <Badge variant="secondary">Subscription</Badge>;
-    if (plan.plan_type === 'bulk') return <Badge variant="outline">Bulk</Badge>;
-    if (plan.billing_interval === 'one-time') return <Badge variant="default">One-time</Badge>;
-    return null;
-  };
+  if (showContactForm) {
+    return (
+      <div className="max-w-4xl mx-auto p-6 space-y-6">
+        <Button 
+          variant="outline" 
+          onClick={() => setShowContactForm(false)}
+          className="mb-6"
+        >
+          ← Back to Payment Options
+        </Button>
+        <ContactSalesForm />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <div className="text-center space-y-2">
-        <h2 className="text-3xl font-bold">Choose Your Plan</h2>
+        <h2 className="text-3xl font-bold">Choose Your Option</h2>
         <p className="text-muted-foreground">
           Select the perfect plan for your assessment needs
         </p>
@@ -278,110 +236,111 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
         </Card>
       )}
 
-      {/* Payment Plans */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {paymentPlans.map((plan) => (
-          <Card 
-            key={plan.id} 
-            className={`cursor-pointer transition-all ${
-              selectedPlan?.id === plan.id 
-                ? 'ring-2 ring-primary shadow-lg' 
-                : 'hover:shadow-md'
-            }`}
-            onClick={() => setSelectedPlan(plan)}
-          >
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {getPlanIcon(plan.plan_type)}
-                  <CardTitle className="text-lg">{plan.name}</CardTitle>
+      {/* Payment Options */}
+      <div className="grid md:grid-cols-3 gap-6">
+        {paymentOptions.map((option) => {
+          const IconComponent = option.icon;
+          return (
+            <Card 
+              key={option.id} 
+              className={`cursor-pointer transition-all ${
+                selectedOption === option.id 
+                  ? 'ring-2 ring-primary shadow-lg' 
+                  : 'hover:shadow-md'
+              } ${option.popular ? 'border-primary' : ''}`}
+              onClick={() => setSelectedOption(option.id)}
+            >
+              {option.popular && (
+                <div className="bg-primary text-primary-foreground text-center py-2 text-sm font-medium rounded-t-lg">
+                  Most Popular
                 </div>
-                {getPlanBadge(plan)}
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm text-muted-foreground">
-                {plan.description}
-              </p>
-              <div className="text-center">
-                <div className="text-3xl font-bold">
-                  {plan.currency} {plan.price}
-                </div>
-                {plan.billing_interval !== 'one-time' && (
-                  <div className="text-sm text-muted-foreground">
-                    per {plan.billing_interval}
+              )}
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <IconComponent className="w-5 h-5 text-primary" />
+                    <CardTitle className="text-lg">{option.name}</CardTitle>
                   </div>
-                )}
-              </div>
-              <div className="space-y-2">
-                <p className="text-sm font-medium">Includes:</p>
-                <ul className="text-sm text-muted-foreground space-y-1">
-                  {Array.isArray(plan.assessment_access) && plan.assessment_access.includes('all') ? (
-                    <li>• All assessments</li>
-                  ) : (
-                    Array.isArray(plan.assessment_access) && plan.assessment_access.map((access: string, index: number) => (
-                      <li key={index}>• {access}</li>
-                    ))
+                  <Badge variant={option.popular ? "default" : "secondary"}>
+                    {option.badge}
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
+                  {option.description}
+                </p>
+                <div className="text-center">
+                  <div className="text-3xl font-bold">
+                    {option.price ? `$${option.price}` : 'Custom'}
+                  </div>
+                  {option.price && (
+                    <div className="text-sm text-muted-foreground">
+                      one-time payment
+                    </div>
                   )}
-                </ul>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Includes:</p>
+                  <ul className="text-sm text-muted-foreground space-y-1">
+                    {option.features.map((feature, index) => (
+                      <li key={index}>• {feature}</li>
+                    ))}
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })}
       </div>
 
-      {/* Quantity Selector for Bulk Plans */}
-      {selectedPlan?.plan_type === 'bulk' && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Quantity</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="flex items-center gap-4">
-              <Label htmlFor="quantity">Number of assessments:</Label>
-              <Input
-                id="quantity"
-                type="number"
-                min="1"
-                max="1000"
-                value={quantity}
-                onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                className="w-24"
-              />
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
       {/* Order Summary */}
-      {selectedPlan && (
+      {selectedOption !== 'enterprise' && (
         <Card>
           <CardHeader>
             <CardTitle>Order Summary</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex justify-between">
-              <span>{selectedPlan.name}</span>
-              <span>{selectedPlan.currency} {selectedPlan.price}</span>
+              <span>{paymentOptions.find(p => p.id === selectedOption)?.name}</span>
+              <span>${paymentOptions.find(p => p.id === selectedOption)?.price}</span>
             </div>
-            {quantity > 1 && (
-              <div className="flex justify-between">
-                <span>Quantity</span>
-                <span>{quantity}</span>
-              </div>
-            )}
             <Separator />
             <div className="flex justify-between font-bold">
               <span>Total</span>
-              <span>{selectedPlan.currency} {(selectedPlan.price * quantity).toFixed(2)}</span>
+              <span>${paymentOptions.find(p => p.id === selectedOption)?.price}</span>
             </div>
             <Button
-              onClick={handleCreateOrder}
+              onClick={handleProceedToPayment}
               disabled={loading}
               className="w-full"
               size="lg"
             >
               {loading ? 'Processing...' : 'Proceed to Payment'}
+            </Button>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Enterprise Contact */}
+      {selectedOption === 'enterprise' && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Enterprise & Partner Solutions</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <p className="text-muted-foreground">
+              Get custom pricing and solutions tailored to your organization's needs.
+              Our team will work with you to create the perfect assessment solution.
+            </p>
+            <Button
+              onClick={handleProceedToPayment}
+              disabled={loading}
+              className="w-full"
+              size="lg"
+            >
+              <Building2 className="w-4 h-4 mr-2" />
+              Contact Sales Team
             </Button>
           </CardContent>
         </Card>
