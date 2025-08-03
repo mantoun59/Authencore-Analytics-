@@ -391,10 +391,16 @@ const IntelligentAssessmentValidator: React.FC = () => {
         };
       }
 
-      // Validate question structure
+      // Validate question structure - handle different question formats
       const validationResults = questions.map((q, index) => {
-        const hasText = q.text || q.question || q.scenario;
-        const hasOptions = q.options || q.choices || q.responses;
+        // Check for different text field variants
+        const hasText = q.text || q.question || q.scenario || q.questionText || q.item;
+        
+        // Check for different options field variants
+        const hasOptions = q.options || q.choices || q.responses || 
+                          (q.optionA && q.optionB) || // CAIR format
+                          q.answers || q.scale;
+        
         return { index, hasText, hasOptions, valid: hasText && hasOptions };
       });
 
