@@ -58,7 +58,7 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
     {
       id: 'individual' as const,
       name: 'Individual Assessment',
-      price: 24.99,
+      price: 9.99,
       description: 'Single assessment of your choice',
       features: [
         'Choose any assessment type',
@@ -72,11 +72,11 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
     },
     {
       id: 'bundle' as const,
-      name: 'Complete Bundle',
+      name: 'Bundle (10 Assessments)',
       price: 79.99,
       description: 'All assessments included - best value!',
       features: [
-        'All 10+ assessment types',
+        'All 10 assessment types',
         'Career, Personality, Leadership',
         'Communication & Cultural Intelligence',
         'Stress, Digital Wellness & more',
@@ -89,7 +89,7 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
     },
     {
       id: 'enterprise' as const,
-      name: 'Enterprise & Partners',
+      name: 'Enterprise/Employer Bundle',
       price: null,
       description: 'Custom solutions for organizations',
       features: [
@@ -101,7 +101,7 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
         'Training & onboarding'
       ],
       icon: Building2,
-      badge: 'Custom Pricing'
+      badge: 'Contact Us'
     }
   ];
 
