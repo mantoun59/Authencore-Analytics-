@@ -54,7 +54,7 @@ serve(async (req) => {
 
     logStep("Order updated successfully", { orderId, paymentStatus });
 
-    // If payment is completed, activate guest tokens and send confirmation email
+    // If payment is completed, activate guest tokens and generate invoice
     if (paymentStatus === 'completed') {
       // Activate guest access tokens
       if (order.is_guest_order) {
@@ -82,10 +82,20 @@ serve(async (req) => {
         }
       });
 
-      // Here you could trigger email notifications
-      // await supabaseClient.functions.invoke('send-payment-confirmation', {
-      //   body: { orderId, customerEmail: order.guest_email || order.user_id }
-      // });
+      // Generate invoice and send receipt
+      try {
+        const { error: invoiceError } = await supabaseClient.functions.invoke('generate-invoice', {
+          body: { orderId }
+        });
+        
+        if (invoiceError) {
+          logStep("Warning: Failed to generate invoice", { error: invoiceError });
+        } else {
+          logStep("Invoice generated and receipt sent");
+        }
+      } catch (invoiceError) {
+        logStep("Warning: Invoice generation failed", { error: invoiceError });
+      }
     }
 
     return new Response(JSON.stringify({ 
