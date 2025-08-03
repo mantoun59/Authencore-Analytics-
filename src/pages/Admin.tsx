@@ -5,8 +5,12 @@ import { PartnerManagement } from "@/components/PartnerManagement";
 import AdminGuideGenerator from "@/components/AdminGuideGenerator";
 import PurchaseAnalyticsDashboard from "@/components/PurchaseAnalyticsDashboard";
 import SEOOptimizer from "@/components/SEOOptimizer";
+import MarketingPromotion from "@/components/MarketingPromotion";
 import { EnhancedAIControls } from "@/components/EnhancedAIControls";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 const AdminPage = () => {
   return (
     <div className="min-h-screen bg-background">
@@ -114,7 +118,44 @@ const AdminPage = () => {
               </TabsContent>
               
               <TabsContent value="seo-marketing" className="mt-6">
-                <SEOOptimizer />
+                <div className="space-y-6">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>SEO & Marketing Integration Hub</CardTitle>
+                      <CardDescription>
+                        Optimize your search presence and create professional marketing materials
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                        <Button asChild variant="outline">
+                          <Link to="/marketing-materials">
+                            📄 Marketing Materials
+                          </Link>
+                        </Button>
+                        <Button asChild variant="outline">
+                          <Link to="/sample-reports">
+                            📊 Sample Reports
+                          </Link>
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                  
+                  <SEOOptimizer />
+                  
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Marketing Materials</CardTitle>
+                      <CardDescription>
+                        Professional brochures and marketing content
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <MarketingPromotion />
+                    </CardContent>
+                  </Card>
+                </div>
               </TabsContent>
               
               <TabsContent value="setup-guide" className="mt-6">
