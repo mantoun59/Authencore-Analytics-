@@ -92,15 +92,18 @@ const AssessmentTester: React.FC = () => {
       // Test 3: Questions load (check if question data exists)
       const questionFiles = {
         'career-launch': 'careerLaunchQuestionsNew',
-        'cair-personality': 'cairQuestionsFixed',
+        'cair-personality': 'cairQuestionsFixed', 
         'stress-resilience': 'stressResilienceQuestions',
         'cultural-intelligence': 'culturalScenarios',
         'communication-styles': 'communicationStylesQuestions',
+        'communication-assessment': 'communicationStylesQuestions',
         'emotional-intelligence': 'emotionalIntelligenceQuestions',
         'faith-values': 'complete90FaithValuesQuestions',
         'genz-assessment': 'genZScenariosFixed',
         'digital-wellness': 'digitalWellnessData',
-        'leadership': 'leadershipQuestions'
+        'leadership': 'leadershipQuestions',
+        'leadership-assessment': 'leadershipQuestions',
+        'authentic-leadership': 'leadershipQuestions'
       };
 
       const questionFile = questionFiles[assessmentId as keyof typeof questionFiles];
@@ -113,14 +116,17 @@ const AssessmentTester: React.FC = () => {
       const scoringHooks = {
         'career-launch': 'useCareerLaunchScoring',
         'cair-personality': 'useCairPlusScoring',
-        'stress-resilience': 'useStressResilienceScoring',
+        'stress-resilience': 'useStressResilienceScoring', 
         'cultural-intelligence': 'useCQScoring',
         'communication-styles': 'useCommunicationStylesScoring',
+        'communication-assessment': 'useCommunicationStylesScoring',
         'emotional-intelligence': 'useEmotionalIntelligenceScoring',
         'faith-values': 'useFaithValuesScoring',
         'genz-assessment': 'useGenZScoring',
         'digital-wellness': 'useDigitalWellnessScoring',
-        'leadership': 'useLeadershipScoring'
+        'leadership': 'useLeadershipScoring',
+        'leadership-assessment': 'useLeadershipScoring',
+        'authentic-leadership': 'useLeadershipScoring'
       };
 
       const scoringHook = scoringHooks[assessmentId as keyof typeof scoringHooks];
