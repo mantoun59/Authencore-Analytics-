@@ -346,15 +346,20 @@ export default function CAIRAssessment() {
     const validity = calculateValidityMetrics();
     
     try {
-      const reportData = {
-        assessmentType: 'cair_plus',
+      // First save assessment results to database
+      const user = (await supabase.auth.getUser()).data.user;
+      
+      const assessmentResults = {
+        assessmentType: 'cair-personality',
         results: {
           candidate: userProfile,
           assessmentDate: new Date().toLocaleDateString(),
           scores,
           validity,
           totalQuestions: questions.length,
-          completionTime: Math.round((Date.now() - assessmentStartTime) / 60000)
+          completionTime: Math.round((Date.now() - assessmentStartTime) / 60000),
+          dimensions: scores,
+          responses: responses
         },
         userData: {
           name: userProfile.name,
@@ -365,38 +370,92 @@ export default function CAIRAssessment() {
         }
       };
 
-      try {
-        await generateHtmlReport({
-          assessmentType: 'cair-personality',
-          userInfo: {
-            name: userProfile.name,
-            email: userProfile.email,
-            position: userProfile.position,
-            company: userProfile.company
-          },
-          overallScore: Math.round(Object.values(scores).reduce((sum, s) => sum + s.percentile, 0) / Object.keys(scores).length),
-          dimensions: Object.entries(scores).map(([key, value]) => ({
-            name: personalityDimensions[key as keyof typeof personalityDimensions]?.name || key,
-            score: value.percentile
-          }))
-        });
-        
-        toast({
-          title: "Report Generated",
-          description: "PDF report downloaded successfully!",
-        });
-      } catch (error) {
-        console.error('PDF generation error:', error);
-        toast({
-          title: "Report Generation Error",
-          description: "Failed to generate report. Please try again.",
-          variant: "destructive",
-        });
+      let savedAssessmentId = null;
+
+      if (user) {
+        // Save to database for authenticated users
+        const { data: savedResult, error: saveError } = await supabase
+          .from('assessment_results')
+          .insert({
+            user_id: user.id,
+            assessment_type: 'cair-personality',
+            results: assessmentResults.results as any
+          })
+          .select()
+          .single();
+
+        if (saveError) {
+          console.error('Error saving assessment results:', saveError);
+          toast({
+            title: "Save Error",
+            description: "Could not save results, but generating report...",
+            variant: "destructive",
+          });
+        } else {
+          savedAssessmentId = savedResult.id;
+          toast({
+            title: "Results Saved",
+            description: "Assessment results saved successfully!",
+          });
+        }
       }
+
+      // Generate HTML report with logo
+      await generateHtmlReport({
+        assessmentType: 'cair-personality',
+        userInfo: {
+          name: userProfile.name,
+          email: userProfile.email,
+          position: userProfile.position,
+          company: userProfile.company
+        },
+        overallScore: Math.round(Object.values(scores).reduce((sum, s) => sum + s.percentile, 0) / Object.keys(scores).length),
+        dimensions: Object.entries(scores).map(([key, value]) => ({
+          name: personalityDimensions[key as keyof typeof personalityDimensions]?.name || key,
+          score: value.percentile
+        })),
+        includeLogo: true, // Ensure logo is included
+        organizationName: userProfile.company || 'AuthenCore Analytics'
+      });
+      
+      toast({
+        title: "Report Generated",
+        description: "Professional PDF report downloaded successfully with company branding!",
+      });
+
+      // If we have a saved assessment ID, try to generate AI report
+      if (savedAssessmentId && user) {
+        try {
+          const { data: aiReport, error: aiError } = await supabase.functions.invoke('generate-ai-report', {
+            body: {
+              assessmentResultId: savedAssessmentId,
+              reportType: 'candidate',
+              candidateInfo: {
+                name: userProfile.name,
+                email: userProfile.email,
+                position: userProfile.position,
+                company: userProfile.company
+              }
+            }
+          });
+
+          if (aiError) {
+            console.error('AI report generation error:', aiError);
+          } else {
+            toast({
+              title: "AI Analysis Complete",
+              description: "Enhanced AI-powered insights generated!",
+            });
+          }
+        } catch (aiError) {
+          console.error('AI report error:', aiError);
+        }
+      }
+
     } catch (error) {
       console.error('Error in report generation:', error);
       toast({
-        title: "Report Generation Error",
+        title: "Report Generation Error", 
         description: "Failed to generate report. Please try again.",
         variant: "destructive",
       });

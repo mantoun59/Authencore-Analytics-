@@ -1,860 +1,415 @@
-import finalLogo from '../assets/final-logo.png';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import logoImage from '@/assets/final-logo.png';
 
-export interface HtmlReportData {
+export interface ReportData {
   assessmentType: string;
-  reportType?: 'standard' | 'advisor' | 'employer';
   userInfo: {
     name: string;
     email: string;
-    assessmentDate?: string;
-    questionsAnswered?: number;
-    timeSpent?: string;
-    reliabilityScore?: number;
-    reportId?: string;
-    [key: string]: any;
+    position?: string;
+    company?: string;
   };
-  overallScore?: number;
-  dimensions?: Array<{ name: string; score: number; description?: string; level?: string }> | Record<string, number>;
-  strengths?: string[];
-  developmentAreas?: string[];
-  recommendations?: string[];
-  managementRecommendations?: string[];
-  careerMatches?: Array<{ career?: { title: string; description?: string }; title?: string; match?: number; matchPercentage?: number; description?: string }>;
-  profile?: string;
-  riskFlags?: string[];
-  validityLevel?: string;
-  riasecResults?: Record<string, number>;
-  aptitudeResults?: Record<string, number>;
-  contextualEffectiveness?: Record<string, { score: number; description: string }>;
-  workingStyles?: Record<string, string>;
-  employerInsights?: Record<string, string>;
-  riskAssessment?: Record<string, string>;
-  distortionAnalysis?: Record<string, string>;
-  [key: string]: any;
+  overallScore: number;
+  dimensions: Array<{
+    name: string;
+    score: number;
+  }>;
+  includeLogo?: boolean;
+  organizationName?: string;
+  customBranding?: {
+    logoUrl?: string;
+    primaryColor?: string;
+    secondaryColor?: string;
+  };
 }
 
-// Generate HTML report that can be displayed or printed
-export const generateHtmlReport = async (data: HtmlReportData): Promise<void> => {
-  console.log('Generating HTML report for:', data.userInfo?.name);
-  
+const assessmentTitles: Record<string, string> = {
+  'cair-personality': 'CAIR Personality Assessment',
+  'career-launch': 'Career Launch Assessment',
+  'communication-styles': 'Communication Styles Assessment',
+  'emotional-intelligence': 'Emotional Intelligence Assessment',
+  'leadership': 'Leadership Assessment',
+  'faith-values': 'Faith & Values Integration',
+  'burnout-prevention': 'Burnout Prevention Assessment',
+  'genz-workplace': 'Gen Z Workplace Assessment',
+  'digital-wellness': 'Digital Wellness Assessment'
+};
+
+const reportTitles: Record<string, string> = {
+  'cair-personality': 'CAIR Personality Assessment Report',
+  'career-launch': 'Career Launch Assessment Report',
+  'communication-styles': 'Communication Styles Assessment Report',
+  'emotional-intelligence': 'Emotional Intelligence Assessment Report',
+  'leadership': 'Leadership Assessment Report',
+  'faith-values': 'Faith & Values Integration Report',
+  'burnout-prevention': 'Burnout Prevention Assessment Report',
+  'genz-workplace': 'Gen Z Workplace Assessment Report',
+  'digital-wellness': 'Digital Wellness Assessment Report'
+};
+
+async function getLogoBase64(): Promise<string> {
   try {
-    if (!data || !data.userInfo?.name || !data.userInfo?.email) {
-      throw new Error('Missing required user information');
-    }
-    
-    // Create HTML report content
-    const htmlContent = createHtmlReportContent(data);
-    
-    // Try to open in new window
-    const reportWindow = window.open('', '_blank', 'width=900,height=700,scrollbars=yes,resizable=yes');
-    
-    if (!reportWindow) {
-      // Fallback: download as HTML file
-      console.warn('Popup blocked, downloading as file instead');
-      downloadHtmlFile(htmlContent, data);
-      return;
-    }
-    
-    reportWindow.document.write(htmlContent);
-    reportWindow.document.close();
-    
-    // Auto-focus the window
-    reportWindow.onload = () => {
-      reportWindow.focus();
-    };
-    
-    console.log('HTML report generated successfully');
-    
+    const response = await fetch(logoImage);
+    const blob = await response.blob();
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        resolve(base64);
+      };
+      reader.readAsDataURL(blob);
+    });
   } catch (error) {
-    console.error('Report generation failed:', error);
-    alert(`Report generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-    throw error;
+    console.error('Error loading logo:', error);
+    return '';
   }
-};
+}
 
-// Download HTML content as a file
-const downloadHtmlFile = (htmlContent: string, data: HtmlReportData) => {
-  const blob = new Blob([htmlContent], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `${data.userInfo.name.replace(/\s+/g, '_')}_${data.assessmentType.replace(/\s+/g, '_')}_Report.html`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-  alert('Report downloaded as HTML file. You can open it in your browser to view and print.');
-};
+function getScoreInterpretation(score: number): string {
+  if (score >= 85) return 'Excellent performance with exceptional capabilities';
+  if (score >= 70) return 'Strong performance with notable strengths';
+  if (score >= 60) return 'Good performance with balanced capabilities';
+  if (score >= 40) return 'Developing performance with growth opportunities';
+  return 'Emerging capabilities with significant development potential';
+}
 
-// Create the complete HTML content for the report
-const createHtmlReportContent = (data: HtmlReportData): string => {
-  const reportTitle = getReportTitle(data.assessmentType);
-  
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${reportTitle} - ${data.userInfo.name}</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      line-height: 1.6;
-      color: #333;
-      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-      animation: fadeIn 0.5s ease-out;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes slideDown {
-      from { 
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to { 
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes scaleIn {
-      from { 
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to { 
-        opacity: 1;
-        transform: scale(1);
-      }
-    }
-    
-    .report-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-      animation: scaleIn 0.6s ease-out;
-    }
-    
-    .report-header {
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ec4899);
-      color: white;
-      padding: 40px 30px;
-      margin: -20px -20px 30px -20px;
-      border-radius: 16px 16px 0 0;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      animation: slideDown 0.7s ease-out;
-    }
-    
-    .report-header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
-      background-size: 30px 30px;
-      animation: shimmer 3s linear infinite;
-    }
-    
-    @keyframes shimmer {
-      0% { transform: translate(-50%, -50%) rotate(0deg); }
-      100% { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    
-    .logo {
-      width: 100px;
-      height: auto;
-      margin: 0 auto 25px;
-      background: white;
-      border-radius: 12px;
-      padding: 12px;
-      filter: none;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      z-index: 1;
-      display: block;
-    }
-    
-    .logo:hover {
-      transform: scale(1.1) rotate(5deg);
-    }
-    
-    .report-title {
-      font-size: 2.5rem;
-      font-weight: 800;
-      margin-bottom: 12px;
-      text-shadow: 0 4px 8px rgba(0,0,0,0.2);
-      position: relative;
-      z-index: 1;
-      background: linear-gradient(45deg, #ffffff, #f1f5f9);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .report-subtitle {
-      font-size: 1.1rem;
-      opacity: 0.95;
-      font-weight: 400;
-      position: relative;
-      z-index: 1;
-      letter-spacing: 0.5px;
-    }
-    
-    .profile-section {
-      background: #f8fafc;
-      border: 2px solid #008080;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    
-    .profile-header {
-      background: #008080;
-      color: white;
-      padding: 10px 15px;
-      margin: -20px -20px 15px -20px;
-      border-radius: 6px 6px 0 0;
-      font-weight: bold;
-    }
-    
-    .profile-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-    }
-    
-    .score-section {
-      background: #e0f2fe;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-      text-align: center;
-    }
-    
-    .overall-score {
-      font-size: 48px;
-      font-weight: bold;
-      color: #008080;
-      margin: 10px 0;
-    }
-    
-    .score-label {
-      font-size: 16px;
-      color: #64748b;
-    }
-    
-    .dimensions-section {
-      margin: 30px 0;
-    }
-    
-    .section-title {
-      font-size: 24px;
-      font-weight: bold;
-      color: #1e293b;
-      margin: 30px 0 20px 0;
-      padding-bottom: 10px;
-      border-bottom: 3px solid #008080;
-    }
-    
-    .dimension-item {
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 15px;
-      margin: 10px 0;
-    }
-    
-    .dimension-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    
-    .dimension-name {
-      font-weight: bold;
-      font-size: 16px;
-    }
-    
-    .dimension-score {
-      font-size: 18px;
-      font-weight: bold;
-      color: #008080;
-    }
-    
-    .progress-bar {
-      background: #e2e8f0;
-      height: 12px;
-      border-radius: 6px;
-      overflow: hidden;
-      margin: 10px 0;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: #008080;
-      border-radius: 6px;
-    }
-    
-    .recommendations-section {
-      background: #f0fdf4;
-      border: 1px solid #22c55e;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    
-    .recommendation-item {
-      background: white;
-      padding: 15px;
-      margin: 10px 0;
-      border-radius: 6px;
-      border-left: 4px solid #22c55e;
-    }
-    
-    .career-matches {
-      margin: 30px 0;
-    }
-    
-    .career-item {
-      background: white;
-      border: 1px solid #e2e8f0;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 15px 0;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-    
-    .career-title {
-      font-size: 18px;
-      font-weight: bold;
-      color: #1e293b;
-      margin-bottom: 5px;
-    }
-    
-    .career-match {
-      font-size: 16px;
-      font-weight: bold;
-      color: #22c55e;
-      margin-bottom: 10px;
-    }
-    
-    .contextual-section {
-      background: #fef3c7;
-      border: 1px solid #f59e0b;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    
-    .context-item {
-      background: white;
-      border-radius: 6px;
-      padding: 15px;
-      margin: 10px 0;
-      border-left: 4px solid #f59e0b;
-    }
-    
-    .context-score {
-      font-weight: bold;
-      color: #f59e0b;
-      font-size: 18px;
-    }
-    
-    .working-styles-section {
-      background: #f3e8ff;
-      border: 1px solid #8b5cf6;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    
-    .style-item {
-      background: white;
-      border-radius: 6px;
-      padding: 15px;
-      margin: 10px 0;
-      border-left: 4px solid #8b5cf6;
-    }
-    
-    .strengths-development-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      margin: 20px 0;
-    }
-    
-    .strengths-section {
-      background: #dcfce7;
-      border: 1px solid #16a34a;
-      border-radius: 8px;
-      padding: 20px;
-    }
-    
-    .development-section {
-      background: #fef2f2;
-      border: 1px solid #ef4444;
-      border-radius: 8px;
-      padding: 20px;
-    }
-    
-    .list-item {
-      background: white;
-      padding: 10px 15px;
-      margin: 8px 0;
-      border-radius: 6px;
-      border-left: 4px solid currentColor;
-    }
-    
-    .dimension-description {
-      font-size: 14px;
-      color: #64748b;
-      margin-top: 8px;
-      line-height: 1.4;
-    }
-    
-    .dimension-level {
-      background: #008080;
-      color: white;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-    
-    .profile-description {
-      background: #e0f2fe;
-      border-left: 4px solid #008080;
-      padding: 20px;
-      margin: 20px 0;
-      border-radius: 0 8px 8px 0;
-      font-style: italic;
-      line-height: 1.6;
-    }
-    
-    .employer-insights-section {
-      background: #f0f9ff;
-      border: 1px solid #0ea5e9;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    
-    .insight-item {
-      background: white;
-      border-radius: 6px;
-      padding: 15px;
-      margin: 10px 0;
-      border-left: 4px solid #0ea5e9;
-    }
-    
-    .risk-assessment-section {
-      background: #fef2f2;
-      border: 1px solid #f87171;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    
-    .risk-item {
-      background: white;
-      border-radius: 6px;
-      padding: 15px;
-      margin: 10px 0;
-      border-left: 4px solid #f87171;
-    }
-    
-    .distortion-analysis-section {
-      background: #fffbeb;
-      border: 1px solid #f59e0b;
-      border-radius: 8px;
-      padding: 20px;
-      margin: 20px 0;
-    }
-    
-    .distortion-item {
-      background: white;
-      border-radius: 6px;
-      padding: 15px;
-      margin: 10px 0;
-      border-left: 4px solid #f59e0b;
-    }
-    
-    .print-button {
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      color: white;
-      padding: 14px 28px;
-      border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      margin: 20px 0;
-      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .print-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-    }
-    
-    .print-button:active {
-      transform: translateY(0);
-    }
-    
-    .footer {
-      margin-top: 50px;
-      padding-top: 20px;
-      border-top: 1px solid #e5e7eb;
-      text-align: center;
-      color: #64748b;
-      font-size: 12px;
-    }
-    
-    @media print {
-      .print-button { display: none; }
-      body { margin: 0; }
-      .report-container { max-width: none; margin: 0; padding: 15px; }
-    }
-  </style>
-</head>
-<body>
-  <div class="report-container">
-    <div class="report-header">
-      <img src="${finalLogo}" alt="AuthenCore Analytics" class="logo" />
-      <div class="report-title">${reportTitle}</div>
-      <div class="report-subtitle">${getReportSubtitle(data.assessmentType)}</div>
-    </div>
-    
-    <button class="print-button" onclick="window.print()">🖨️ Print Report</button>
-    
-    <div class="profile-section">
-      <div class="profile-header">👤 Participant Information</div>
-      <div class="profile-grid">
-        <div><strong>Name:</strong> ${data.userInfo.name}</div>
-        <div><strong>Email:</strong> ${data.userInfo.email}</div>
-        <div><strong>Assessment Date:</strong> ${formatDate(data.userInfo.assessmentDate)}</div>
-        <div><strong>Report ID:</strong> ${data.userInfo.reportId || generateReportId()}</div>
-        ${data.userInfo.questionsAnswered ? `<div><strong>Questions Answered:</strong> ${data.userInfo.questionsAnswered}</div>` : ''}
-        ${data.userInfo.timeSpent ? `<div><strong>Time Spent:</strong> ${data.userInfo.timeSpent}</div>` : ''}
-      </div>
-    </div>
-    
-    ${data.overallScore !== undefined ? `
-    <div class="score-section">
-      <div class="overall-score">${data.overallScore}</div>
-      <div class="score-label">Overall Assessment Score</div>
-    </div>
-    ` : ''}
-    
-    ${data.profile ? `
-    <div class="profile-description">
-      <h2 class="section-title">${getProfileSectionTitle(data.assessmentType)}</h2>
-      <p>${data.profile}</p>
-    </div>
-    ` : ''}
-    
-    ${generateDimensionsSection(data)}
-    
-    ${generateStrengthsAndDevelopmentSection(data)}
-    
-    ${generateContextualEffectivenessSection(data)}
-    
-    ${generateWorkingStylesSection(data)}
-    
-    ${generateEmployerInsightsSection(data)}
-    
-    ${generateRiskAssessmentSection(data)}
-    
-    ${generateDistortionAnalysisSection(data)}
-    
-    ${generateRecommendationsSection(data)}
-    
-    ${generateCareerMatchesSection(data)}
-    
-    <div class="footer">
-      <p>This report was generated on ${new Date().toLocaleDateString()} using advanced psychometric analysis.</p>
-      <p>© ${new Date().getFullYear()} AuthenCore Analytics - Confidential Assessment Report</p>
-    </div>
-  </div>
-</body>
-</html>
-  `;
-};
-
-// Helper functions
-const getReportTitle = (assessmentType: string): string => {
-  // If it's already a full title, return it directly
-  if (assessmentType.includes('Assessment') || assessmentType.includes('Index')) {
-    return assessmentType;
-  }
-  
+function getAssessmentDimensionsTitle(assessmentType: string): string {
   const titles: Record<string, string> = {
-    'career-launch': 'Career Launch Assessment',
-    'communication-styles': 'Communication Styles Assessment',
-    'emotional-intelligence': 'Emotional Intelligence Assessment',
-    'leadership': 'Leadership Assessment',
-    'faith-values': 'Faith & Values Alignment Index (FVAI)',
-    'cair': 'CAIR Personality Assessment',
-    'gen-z': 'Gen Z Workplace Assessment',
-    'digital-wellness': 'Digital Wellness Assessment',
-    'stress-resilience': 'Stress Resilience Assessment',
-    'burnout-prevention': 'Burnout Prevention Assessment',
-    'cultural-intelligence': 'Cultural Intelligence Assessment'
+    'cair-personality': 'Personality Dimensions',
+    'career-launch': 'Career Readiness Dimensions',
+    'communication-styles': 'Communication Dimensions',
+    'emotional-intelligence': 'Emotional Intelligence Dimensions',
+    'leadership': 'Leadership Dimensions',
+    'faith-values': 'Values Alignment Dimensions',
+    'burnout-prevention': 'Resilience & Prevention Dimensions',
+    'genz-workplace': 'Workplace Preference Dimensions',
+    'digital-wellness': 'Digital Wellness Dimensions'
   };
-  return titles[assessmentType] || 'Professional Assessment';
-};
+  return titles[assessmentType] || 'Assessment Dimensions';
+}
 
-const getReportSubtitle = (assessmentType: string): string => {
-  const subtitles: Record<string, string> = {
-    'communication': 'Communication Styles Assessment Report',
-    'emotional-intelligence': 'Emotional Intelligence Assessment Report', 
-    'leadership': 'Leadership Assessment Report',
-    'faith-values': 'Faith & Values Alignment Report',
-    'cair': 'CAIR Personality Assessment Report',
-    'gen-z': 'Gen Z Workplace Assessment Report',
-    'digital-wellness': 'Digital Wellness Assessment Report',
-    'stress-resilience': 'Stress Resilience Assessment Report',
-    'burnout-prevention': 'Burnout Prevention Assessment Report',
-    'cultural-intelligence': 'Cultural Intelligence Assessment Report',
-    'career-launch': 'Career Launch Assessment Report'
-  };
-  return subtitles[assessmentType] || 'Professional Assessment Report';
-};
-
-const getProfileSectionTitle = (assessmentType: string): string => {
-  const profileTitles: Record<string, string> = {
-    'communication': '🎯 Communication Profile',
-    'emotional-intelligence': '🧠 Emotional Intelligence Profile',
-    'leadership': '👥 Leadership Profile', 
-    'faith-values': '🙏 Values Alignment Profile',
-    'cair': '🎭 Personality Profile',
-    'gen-z': '🚀 Gen Z Profile',
-    'digital-wellness': '📱 Digital Wellness Profile',
-    'stress-resilience': '💪 Resilience Profile',
-    'burnout-prevention': '🛡️ Burnout Prevention Profile',
-    'cultural-intelligence': '🌍 Cultural Intelligence Profile',
-    'career-launch': '🎯 Career Readiness Profile'
-  };
-  return profileTitles[assessmentType] || '🎯 Assessment Profile';
-};
-
-const formatDate = (dateString?: string): string => {
-  if (!dateString) return new Date().toLocaleDateString();
-  return new Date(dateString).toLocaleDateString();
-};
-
-const generateReportId = (): string => {
-  return `RPT-${Date.now()}-${Math.random().toString(36).substr(2, 6).toUpperCase()}`;
-};
-
-const generateDimensionsSection = (data: HtmlReportData): string => {
-  if (!data.dimensions) return '';
+export async function generateHtmlReport(data: ReportData): Promise<void> {
+  const logoBase64 = data.includeLogo !== false ? await getLogoBase64() : '';
+  const organizationName = data.organizationName || 'AuthenCore Analytics';
+  const currentDate = new Date().toLocaleDateString();
+  const primaryColor = data.customBranding?.primaryColor || '#2563eb';
+  const secondaryColor = data.customBranding?.secondaryColor || '#1e293b';
   
-  let dimensions: Array<{ name: string; score: number; description?: string; level?: string }> = [];
-  
-  if (Array.isArray(data.dimensions)) {
-    dimensions = data.dimensions;
-  } else if (typeof data.dimensions === 'object') {
-    dimensions = Object.entries(data.dimensions).map(([key, value]) => ({
-      name: key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
-      score: Number(value) || 0
-    }));
-  }
-  
-  if (dimensions.length === 0) return '';
-  
-  return `
-    <div class="dimensions-section">
-      <h2 class="section-title">📊 Assessment Dimensions</h2>
-      ${dimensions.map(dim => `
-        <div class="dimension-item">
-          <div class="dimension-header">
-            <span class="dimension-name">${dim.name}</span>
-            <div>
-              ${dim.level ? `<span class="dimension-level">${dim.level}</span>` : ''}
-              <span class="dimension-score">${Math.round(dim.score)}</span>
-            </div>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: ${Math.min(dim.score, 100)}%"></div>
-          </div>
-          ${dim.description ? `<div class="dimension-description">${dim.description}</div>` : ''}
-        </div>
-      `).join('')}
-    </div>
-  `;
-};
-
-const generateStrengthsAndDevelopmentSection = (data: HtmlReportData): string => {
-  if ((!data.strengths || data.strengths.length === 0) && (!data.developmentAreas || data.developmentAreas.length === 0)) return '';
-  
-  return `
-    <div class="strengths-development-grid">
-      ${data.strengths && data.strengths.length > 0 ? `
-        <div class="strengths-section">
-          <h3 class="section-title">✅ Key Strengths</h3>
-          ${data.strengths.map(strength => `
-            <div class="list-item" style="border-left-color: #16a34a;">
-              ${strength}
-            </div>
-          `).join('')}
-        </div>
-      ` : ''}
-      
-      ${data.developmentAreas && data.developmentAreas.length > 0 ? `
-        <div class="development-section">
-          <h3 class="section-title">🎯 Development Areas</h3>
-          ${data.developmentAreas.map(area => `
-            <div class="list-item" style="border-left-color: #ef4444;">
-              ${area}
-            </div>
-          `).join('')}
-        </div>
-      ` : ''}
-    </div>
-  `;
-};
-
-const generateContextualEffectivenessSection = (data: HtmlReportData): string => {
-  if (!data.contextualEffectiveness || Object.keys(data.contextualEffectiveness).length === 0) return '';
-  
-  return `
-    <div class="contextual-section">
-      <h2 class="section-title">📈 Contextual Effectiveness</h2>
-      ${Object.entries(data.contextualEffectiveness).map(([context, details]) => `
-        <div class="context-item">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <strong>${context}</strong>
-            <span class="context-score">${details.score}/100</span>
-          </div>
-          <div class="progress-bar">
-            <div class="progress-fill" style="width: ${Math.min(details.score, 100)}%; background: #f59e0b;"></div>
-          </div>
-          <div style="font-size: 14px; color: #64748b; margin-top: 8px;">
-            ${details.description}
-          </div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-};
-
-const generateWorkingStylesSection = (data: HtmlReportData): string => {
-  if (!data.workingStyles || Object.keys(data.workingStyles).length === 0) return '';
-  
-  return `
-    <div class="working-styles-section">
-      <h2 class="section-title">💼 Working Styles</h2>
-      ${Object.entries(data.workingStyles).map(([style, description]) => `
-        <div class="style-item">
-          <strong>${style}:</strong> ${description}
-        </div>
-      `).join('')}
-    </div>
-  `;
-};
-
-const generateRecommendationsSection = (data: HtmlReportData): string => {
-  if (!data.recommendations || data.recommendations.length === 0) return '';
-  
-  return `
-    <div class="recommendations-section">
-      <h2 class="section-title">💡 Development Recommendations</h2>
-      ${data.recommendations.map((rec, index) => `
-        <div class="recommendation-item">
-          <strong>${index + 1}.</strong> ${rec}
-        </div>
-      `).join('')}
-    </div>
-  `;
-};
-
-const generateCareerMatchesSection = (data: HtmlReportData): string => {
-  if (!data.careerMatches || data.careerMatches.length === 0) return '';
-  
-  return `
-    <div class="career-matches">
-      <h2 class="section-title">🎯 Career Recommendations</h2>
-      ${data.careerMatches.slice(0, 10).map((career, index) => {
-        const title = career.career?.title || career.title || 'Unknown Career';
-        const match = career.matchPercentage || career.match || 0;
-        const description = career.career?.description || career.description || '';
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${assessmentTitles[data.assessmentType] || 'Assessment Report'}</title>
+      <style>
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
         
-        return `
-          <div class="career-item">
-            <div class="career-title">#${index + 1} ${title}</div>
-            <div class="career-match">${Math.round(match)}% Match</div>
-            ${description ? `<p>${description}</p>` : ''}
+        body {
+          font-family: 'Arial', sans-serif;
+          line-height: 1.6;
+          color: #333;
+          background: #ffffff;
+        }
+        
+        .report-container {
+          max-width: 800px;
+          margin: 0 auto;
+          padding: 40px;
+          background: white;
+        }
+        
+        .header {
+          text-align: center;
+          margin-bottom: 40px;
+          padding-bottom: 30px;
+          border-bottom: 3px solid ${primaryColor};
+        }
+        
+        .logo {
+          max-width: 200px;
+          height: auto;
+          margin-bottom: 20px;
+        }
+        
+        .company-name {
+          color: ${primaryColor};
+          font-size: 28px;
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
+        
+        .company-tagline {
+          color: ${secondaryColor};
+          font-size: 16px;
+          font-style: italic;
+        }
+        
+        .report-title {
+          color: ${secondaryColor};
+          font-size: 32px;
+          font-weight: bold;
+          margin: 30px 0 20px 0;
+        }
+        
+        .candidate-info {
+          background: linear-gradient(135deg, ${primaryColor}15, ${primaryColor}25);
+          padding: 25px;
+          border-radius: 10px;
+          margin-bottom: 30px;
+          border-left: 5px solid ${primaryColor};
+        }
+        
+        .candidate-info h3 {
+          color: ${secondaryColor};
+          margin-bottom: 15px;
+          font-size: 20px;
+        }
+        
+        .info-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 15px;
+        }
+        
+        .info-item {
+          display: flex;
+          flex-direction: column;
+        }
+        
+        .info-label {
+          font-weight: bold;
+          color: ${secondaryColor};
+          margin-bottom: 5px;
+        }
+        
+        .info-value {
+          color: #555;
+        }
+        
+        .overall-score {
+          text-align: center;
+          margin: 40px 0;
+          padding: 30px;
+          background: linear-gradient(135deg, ${primaryColor}, ${primaryColor}dd);
+          color: white;
+          border-radius: 15px;
+          box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+        }
+        
+        .overall-score h2 {
+          font-size: 24px;
+          margin-bottom: 15px;
+        }
+        
+        .score-circle {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          background: white;
+          color: ${primaryColor};
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 36px;
+          font-weight: bold;
+          margin: 20px auto;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .dimensions-section {
+          margin: 40px 0;
+        }
+        
+        .dimensions-section h2 {
+          color: ${secondaryColor};
+          font-size: 24px;
+          margin-bottom: 25px;
+          text-align: center;
+        }
+        
+        .dimension-item {
+          background: #f8fafc;
+          padding: 20px;
+          margin-bottom: 15px;
+          border-radius: 10px;
+          border-left: 5px solid ${primaryColor};
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        
+        .dimension-name {
+          font-weight: bold;
+          color: ${secondaryColor};
+          font-size: 18px;
+        }
+        
+        .dimension-score {
+          font-size: 24px;
+          font-weight: bold;
+          color: ${primaryColor};
+        }
+        
+        .footer {
+          text-align: center;
+          margin-top: 50px;
+          padding-top: 30px;
+          border-top: 2px solid #e5e7eb;
+          color: #666;
+        }
+        
+        .footer-logo {
+          max-width: 100px;
+          height: auto;
+          margin-bottom: 15px;
+          opacity: 0.7;
+        }
+        
+        .disclaimer {
+          background: #f9fafb;
+          padding: 20px;
+          border-radius: 8px;
+          margin: 30px 0;
+          font-size: 14px;
+          color: #666;
+          border: 1px solid #e5e7eb;
+        }
+        
+        @media print {
+          .report-container {
+            padding: 20px;
+          }
+          
+          body {
+            print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <div class="report-container">
+        <div class="header">
+          ${logoBase64 ? `<img src="data:image/png;base64,${logoBase64}" alt="Logo" class="logo" />` : ''}
+          <div class="company-name">${organizationName}</div>
+          <div class="company-tagline">Professional Assessment Platform</div>
+          <div class="report-title">${reportTitles[data.assessmentType] || 'Assessment Report'}</div>
+        </div>
+        
+        <div class="candidate-info">
+          <h3>Candidate Information</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Name:</span>
+              <span class="info-value">${data.userInfo.name}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email:</span>
+              <span class="info-value">${data.userInfo.email}</span>
+            </div>
+            ${data.userInfo.position ? `
+            <div class="info-item">
+              <span class="info-label">Position:</span>
+              <span class="info-value">${data.userInfo.position}</span>
+            </div>` : ''}
+            ${data.userInfo.company ? `
+            <div class="info-item">
+              <span class="info-label">Company:</span>
+              <span class="info-value">${data.userInfo.company}</span>
+            </div>` : ''}
+            <div class="info-item">
+              <span class="info-label">Assessment Date:</span>
+              <span class="info-value">${currentDate}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Report Type:</span>
+              <span class="info-value">${assessmentTitles[data.assessmentType] || 'Professional Assessment'}</span>
+            </div>
           </div>
-        `;
-      }).join('')}
-    </div>
-  `;
-};
-
-const generateEmployerInsightsSection = (data: HtmlReportData): string => {
-  if (!data.employerInsights || Object.keys(data.employerInsights).length === 0) return '';
-  
-  return `
-    <div class="employer-insights-section">
-      <h2 class="section-title">👔 Employer Insights</h2>
-      ${Object.entries(data.employerInsights).map(([insight, value]) => `
-        <div class="insight-item">
-          <strong>${insight}:</strong> ${value}
         </div>
-      `).join('')}
-    </div>
-  `;
-};
-
-const generateRiskAssessmentSection = (data: HtmlReportData): string => {
-  if (!data.riskAssessment || Object.keys(data.riskAssessment).length === 0) return '';
-  
-  return `
-    <div class="risk-assessment-section">
-      <h2 class="section-title">⚠️ Risk Assessment</h2>
-      ${Object.entries(data.riskAssessment).map(([risk, assessment]) => `
-        <div class="risk-item">
-          <strong>${risk}:</strong> ${assessment}
+        
+        <div class="overall-score">
+          <h2>Overall Assessment Score</h2>
+          <div class="score-circle">${data.overallScore}%</div>
+          <p>${getScoreInterpretation(data.overallScore)}</p>
         </div>
-      `).join('')}
-    </div>
-  `;
-};
-
-const generateDistortionAnalysisSection = (data: HtmlReportData): string => {
-  if (!data.distortionAnalysis || Object.keys(data.distortionAnalysis).length === 0) return '';
-  
-  return `
-    <div class="distortion-analysis-section">
-      <h2 class="section-title">🔍 Response Validity & Distortion Analysis</h2>
-      ${Object.entries(data.distortionAnalysis).map(([indicator, analysis]) => `
-        <div class="distortion-item">
-          <strong>${indicator}:</strong> ${analysis}
+        
+        <div class="dimensions-section">
+          <h2>${getAssessmentDimensionsTitle(data.assessmentType)}</h2>
+          ${data.dimensions.map(dimension => `
+            <div class="dimension-item">
+              <span class="dimension-name">${dimension.name}</span>
+              <span class="dimension-score">${dimension.score}%</span>
+            </div>
+          `).join('')}
         </div>
-      `).join('')}
-    </div>
+        
+        <div class="disclaimer">
+          <strong>Professional Assessment Disclaimer:</strong><br>
+          This assessment provides insights based on responses to standardized questions. Results should be considered as one factor among many in professional evaluation. For comprehensive assessment, consider additional evaluation methods and professional consultation.
+        </div>
+        
+        <div class="footer">
+          ${logoBase64 ? `<img src="data:image/png;base64,${logoBase64}" alt="Logo" class="footer-logo" />` : ''}
+          <p>Generated by ${organizationName}</p>
+          <p>Professional Assessment Platform | www.authencore.org</p>
+          <p>Report Date: ${currentDate}</p>
+        </div>
+      </div>
+    </body>
+    </html>
   `;
-};
+
+  // Create a temporary element to render the HTML
+  const tempElement = document.createElement('div');
+  tempElement.innerHTML = htmlContent;
+  tempElement.style.position = 'absolute';
+  tempElement.style.left = '-9999px';
+  tempElement.style.top = '-9999px';
+  tempElement.style.width = '800px';
+  document.body.appendChild(tempElement);
+
+  try {
+    // Convert to canvas and then to PDF
+    const canvas = await html2canvas(tempElement, {
+      scale: 2,
+      useCORS: true,
+      allowTaint: true,
+      backgroundColor: '#ffffff'
+    });
+
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgWidth = 210;
+    const pageHeight = 295;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    let heightLeft = imgHeight;
+
+    let position = 0;
+
+    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+
+    while (heightLeft >= 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+    }
+
+    // Generate filename
+    const timestamp = new Date().toISOString().split('T')[0];
+    const filename = `${data.assessmentType}-report-${timestamp}.pdf`;
+
+    pdf.save(filename);
+  } finally {
+    // Clean up
+    document.body.removeChild(tempElement);
+  }
+}
