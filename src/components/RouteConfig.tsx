@@ -53,6 +53,7 @@ const SoloAssessment = lazy(() => import("@/pages/SoloAssessment"));
 const AdminPage = lazy(() => import("@/pages/Admin"));
 const AdminAnalytics = lazy(() => import("@/pages/AdminAnalytics"));
 const MarketingMaterials = lazy(() => import("@/pages/MarketingMaterials"));
+const PublicMarketingMaterials = lazy(() => import("@/pages/PublicMarketingMaterials"));
 
 // Lazy load - Testing & Analytics
 const CandidateTesting = lazy(() => import("@/pages/CandidateTesting"));
@@ -277,6 +278,13 @@ const RouteConfig = () => {
       } />
       <Route path="/sample-reports" element={<SampleReports />} />
       
+      {/* Public Marketing Materials - Accessible to all users */}
+      <Route path="/marketing-materials" element={
+        <Suspense fallback={<LoadingFallback message="Loading Marketing Materials..." />}>
+          <PublicMarketingMaterials />
+        </Suspense>
+      } />
+      
       {/* Protected Admin Routes - Lazy Loaded with Protection */}
       <Route path="/admin" element={
         <ProtectedAdminRoute>
@@ -292,9 +300,9 @@ const RouteConfig = () => {
           </Suspense>
         </ProtectedAdminRoute>
       } />
-      <Route path="/marketing-materials" element={
+      <Route path="/admin-marketing-materials" element={
         <ProtectedAdminRoute>
-          <Suspense fallback={<LoadingFallback message="Loading Marketing Materials..." />}>
+          <Suspense fallback={<LoadingFallback message="Loading Admin Marketing Materials..." />}>
             <MarketingMaterials />
           </Suspense>
         </ProtectedAdminRoute>

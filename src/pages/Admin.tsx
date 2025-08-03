@@ -129,8 +129,8 @@ const AdminPage = () => {
                     <CardContent>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                         <Button asChild variant="outline">
-                          <Link to="/marketing-materials">
-                            📄 Marketing Materials
+                          <Link to="/admin-marketing-materials">
+                            📄 Admin Marketing Materials
                           </Link>
                         </Button>
                         <Button asChild variant="outline">
