@@ -92,22 +92,25 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
               <div className="space-y-4">
                 
                 {/* Data Collection */}
-                <Card className="border-muted">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Checkbox
-                        id="dataCollection"
-                        checked={consentItems.dataCollection}
-                        onCheckedChange={(checked) => handleConsentChange('dataCollection', checked as boolean)}
-                      />
+                <Card className="border-muted hover:border-primary/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 mt-1">
+                        <Checkbox
+                          id="dataCollection"
+                          checked={consentItems.dataCollection}
+                          onCheckedChange={(checked) => handleConsentChange('dataCollection', checked as boolean)}
+                          className="h-5 w-5"
+                        />
+                      </div>
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Database className="w-4 h-4 text-primary" />
-                          <label htmlFor="dataCollection" className="font-semibold cursor-pointer">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Database className="w-5 h-5 text-primary" />
+                          <label htmlFor="dataCollection" className="font-semibold cursor-pointer text-lg">
                             Data Collection & Storage
                           </label>
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           I consent to the collection, storage, and processing of my assessment responses, demographic information, 
                           and metadata for the purpose of generating my psychological assessment report. Data is stored securely 
                           using enterprise-grade encryption and access controls.
@@ -118,22 +121,25 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                 </Card>
 
                 {/* Data Processing */}
-                <Card className="border-muted">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Checkbox
-                        id="dataProcessing"
-                        checked={consentItems.dataProcessing}
-                        onCheckedChange={(checked) => handleConsentChange('dataProcessing', checked as boolean)}
-                      />
+                <Card className="border-muted hover:border-primary/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 mt-1">
+                        <Checkbox
+                          id="dataProcessing"
+                          checked={consentItems.dataProcessing}
+                          onCheckedChange={(checked) => handleConsentChange('dataProcessing', checked as boolean)}
+                          className="h-5 w-5"
+                        />
+                      </div>
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Globe className="w-4 h-4 text-primary" />
-                          <label htmlFor="dataProcessing" className="font-semibold cursor-pointer">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Globe className="w-5 h-5 text-primary" />
+                          <label htmlFor="dataProcessing" className="font-semibold cursor-pointer text-lg">
                             AI-Powered Analysis & Processing
                           </label>
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           I consent to the use of artificial intelligence and machine learning algorithms to analyze my responses 
                           and generate insights. This includes natural language processing, statistical analysis, and comparison 
                           with normative databases for accurate assessment results.
@@ -144,22 +150,25 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                 </Card>
 
                 {/* Data Sharing */}
-                <Card className="border-muted">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Checkbox
-                        id="dataSharing"
-                        checked={consentItems.dataSharing}
-                        onCheckedChange={(checked) => handleConsentChange('dataSharing', checked as boolean)}
-                      />
+                <Card className="border-muted hover:border-primary/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 mt-1">
+                        <Checkbox
+                          id="dataSharing"
+                          checked={consentItems.dataSharing}
+                          onCheckedChange={(checked) => handleConsentChange('dataSharing', checked as boolean)}
+                          className="h-5 w-5"
+                        />
+                      </div>
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Users className="w-4 h-4 text-primary" />
-                          <label htmlFor="dataSharing" className="font-semibold cursor-pointer">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Users className="w-5 h-5 text-primary" />
+                          <label htmlFor="dataSharing" className="font-semibold cursor-pointer text-lg">
                             Authorized Report Sharing
                           </label>
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           {userType === 'applicant' && (
                             <>I understand that my assessment results may be shared with authorized personnel (HR, hiring managers, 
                             supervisors) as part of employment processes, performance reviews, or development programs.</>
@@ -179,22 +188,25 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                 </Card>
 
                 {/* International Transfer */}
-                <Card className="border-muted">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Checkbox
-                        id="internationalTransfer"
-                        checked={consentItems.internationalTransfer}
-                        onCheckedChange={(checked) => handleConsentChange('internationalTransfer', checked as boolean)}
-                      />
+                <Card className="border-muted hover:border-primary/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 mt-1">
+                        <Checkbox
+                          id="internationalTransfer"
+                          checked={consentItems.internationalTransfer}
+                          onCheckedChange={(checked) => handleConsentChange('internationalTransfer', checked as boolean)}
+                          className="h-5 w-5"
+                        />
+                      </div>
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Globe className="w-4 h-4 text-primary" />
-                          <label htmlFor="internationalTransfer" className="font-semibold cursor-pointer">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Globe className="w-5 h-5 text-primary" />
+                          <label htmlFor="internationalTransfer" className="font-semibold cursor-pointer text-lg">
                             International Data Transfer
                           </label>
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           I consent to the transfer of my data to secure servers and processing facilities located globally, 
                           including but not limited to the United States, European Union, and other jurisdictions with adequate 
                           data protection safeguards. All transfers comply with applicable international data protection frameworks.
@@ -205,22 +217,25 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                 </Card>
 
                 {/* Report Generation */}
-                <Card className="border-muted">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Checkbox
-                        id="reportGeneration"
-                        checked={consentItems.reportGeneration}
-                        onCheckedChange={(checked) => handleConsentChange('reportGeneration', checked as boolean)}
-                      />
+                <Card className="border-muted hover:border-primary/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 mt-1">
+                        <Checkbox
+                          id="reportGeneration"
+                          checked={consentItems.reportGeneration}
+                          onCheckedChange={(checked) => handleConsentChange('reportGeneration', checked as boolean)}
+                          className="h-5 w-5"
+                        />
+                      </div>
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <FileText className="w-4 h-4 text-primary" />
-                          <label htmlFor="reportGeneration" className="font-semibold cursor-pointer">
+                        <div className="flex items-center gap-2 mb-3">
+                          <FileText className="w-5 h-5 text-primary" />
+                          <label htmlFor="reportGeneration" className="font-semibold cursor-pointer text-lg">
                             Report Generation & Distribution
                           </label>
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           I consent to the generation of detailed assessment reports in PDF format, which may include personal 
                           insights, recommendations, and graphical representations of my results. These reports may be downloaded, 
                           printed, or shared electronically with authorized parties.
@@ -231,22 +246,25 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                 </Card>
 
                 {/* Legal Terms */}
-                <Card className="border-muted">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
-                      <Checkbox
-                        id="legalTerms"
-                        checked={consentItems.legalTerms}
-                        onCheckedChange={(checked) => handleConsentChange('legalTerms', checked as boolean)}
-                      />
+                <Card className="border-muted hover:border-primary/30 transition-colors">
+                  <CardContent className="p-6">
+                    <div className="flex items-start gap-4">
+                      <div className="flex-shrink-0 mt-1">
+                        <Checkbox
+                          id="legalTerms"
+                          checked={consentItems.legalTerms}
+                          onCheckedChange={(checked) => handleConsentChange('legalTerms', checked as boolean)}
+                          className="h-5 w-5"
+                        />
+                      </div>
                       <div className="flex-1">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Shield className="w-4 h-4 text-primary" />
-                          <label htmlFor="legalTerms" className="font-semibold cursor-pointer">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Shield className="w-5 h-5 text-primary" />
+                          <label htmlFor="legalTerms" className="font-semibold cursor-pointer text-lg">
                             Legal Terms & Liability
                           </label>
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground leading-relaxed">
                           I acknowledge that this assessment is for educational and development purposes only and should not be 
                           used for clinical diagnosis. I understand my data protection rights including access, rectification, 
                           erasure, and portability. I agree to the Terms of Service and Privacy Policy, and understand that 
