@@ -38,6 +38,7 @@ const LeadershipAssessment = lazy(() => import("@/pages/LeadershipAssessment"));
 // Lazy load - Information pages
 const AboutPage = lazy(() => import("@/pages/About"));
 const FAQ = lazy(() => import("@/pages/FAQ"));
+const Support = lazy(() => import("@/pages/Support"));
 const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 const CompliancePage = lazy(() => import("@/pages/CompliancePage"));
 const Security = lazy(() => import("@/pages/Security"));
@@ -102,6 +103,11 @@ const RouteConfig = () => {
       <Route path="/faq" element={
         <Suspense fallback={<LoadingFallback message="Loading FAQ..." />}>
           <FAQ />
+        </Suspense>
+      } />
+      <Route path="/support" element={
+        <Suspense fallback={<LoadingFallback message="Loading Support Center..." />}>
+          <Support />
         </Suspense>
       } />
       <Route path="/privacy" element={
