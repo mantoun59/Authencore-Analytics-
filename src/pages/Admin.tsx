@@ -10,6 +10,7 @@ import { EnhancedAIControls } from "@/components/EnhancedAIControls";
 import AdminTestingTools from "@/components/AdminTestingTools";
 import AssessmentTester from "@/components/AssessmentTester";
 import IntelligentAssessmentValidator from "@/components/IntelligentAssessmentValidator";
+import { ProfessionalStandardsComplianceDashboard } from "@/components/ProfessionalStandardsComplianceDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,8 +28,9 @@ const AdminPage = () => {
               </p>
             </div>
 
-            <Tabs defaultValue="intelligent-testing" className="w-full">
-              <TabsList className="grid w-full grid-cols-10">
+            <Tabs defaultValue="professional-standards" className="w-full">
+              <TabsList className="grid w-full grid-cols-11">
+                <TabsTrigger value="professional-standards">Standards</TabsTrigger>
                 <TabsTrigger value="intelligent-testing">AI Testing</TabsTrigger>
                 <TabsTrigger value="assessment-testing">Quick Testing</TabsTrigger>
                 <TabsTrigger value="partners">Partners</TabsTrigger>
@@ -40,6 +42,10 @@ const AdminPage = () => {
                 <TabsTrigger value="setup-guide">Setup Guide</TabsTrigger>
                 <TabsTrigger value="images">Images</TabsTrigger>
               </TabsList>
+
+              <TabsContent value="professional-standards" className="mt-6">
+                <ProfessionalStandardsComplianceDashboard />
+              </TabsContent>
               
               <TabsContent value="intelligent-testing" className="mt-6">
                 <Card>
