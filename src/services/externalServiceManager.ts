@@ -52,7 +52,7 @@ export class ExternalServiceManager {
     if (opts.enableCache) {
       const cached = this.getFromCache<T>(serviceName);
       if (cached) {
-        console.log(`Cache hit for ${serviceName}`);
+        // Cache hit for service
         return cached;
       }
     }
@@ -62,7 +62,7 @@ export class ExternalServiceManager {
 
     for (let attempt = 1; attempt <= opts.maxRetries; attempt++) {
       try {
-        console.log(`Attempting ${serviceName} call (${attempt}/${opts.maxRetries})`);
+        // Attempt service call
         
         // Add timeout wrapper
         const result = await this.withTimeout(serviceCall(), opts.timeoutMs);
@@ -94,7 +94,7 @@ export class ExternalServiceManager {
 
     // All retries failed - try fallback
     if (opts.fallbackResponse !== undefined) {
-      console.log(`Using fallback response for ${serviceName}`);
+      // Using fallback response
       this.updateServiceHealth(serviceName, 'down', performance.now() - startTime);
       return opts.fallbackResponse;
     }

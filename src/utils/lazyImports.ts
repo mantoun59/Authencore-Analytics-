@@ -18,7 +18,7 @@ export const createLazyComponent = <T extends ComponentType<any>>(
       
       // Track successful component load in dev mode
       if (import.meta.env.DEV && componentName) {
-        console.log(`✅ Loaded component: ${componentName}`);
+        // Component loaded successfully
       }
       
       return component;

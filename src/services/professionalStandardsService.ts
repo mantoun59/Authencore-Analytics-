@@ -544,7 +544,7 @@ export class ProfessionalStandardsService {
    */
   async storeProfessionalStandardsReport(report: ProfessionalStandardsReport): Promise<{ success: boolean; error?: string }> {
     try {
-      console.log('Professional standards report stored:', report);
+      // Professional standards report stored
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };

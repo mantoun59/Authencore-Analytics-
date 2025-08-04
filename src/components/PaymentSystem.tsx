@@ -144,7 +144,7 @@ export const PaymentSystem: React.FC<PaymentSystemProps> = ({
       }
 
     } catch (error: any) {
-      console.error('Error creating payment:', error);
+      // Error creating payment
       toast({
         title: "Payment Error",
         description: error.message || "Failed to create payment. Please try again.",

@@ -133,7 +133,7 @@ class AssessmentQualityService {
       ];
 
       const processingTime = Date.now() - startTime;
-      console.log(`Quality assessment for ${assessmentType} completed in ${processingTime}ms`);
+      // Quality assessment completed
 
       return {
         assessmentType,

@@ -412,7 +412,7 @@ const IntelligentAssessmentValidator: React.FC = () => {
       const questionData = await moduleLoader();
       
       // Add debugging information
-      console.log(`[Validator] Assessment: ${assessment.id}, Module loaded:`, Object.keys(questionData));
+      // Assessment module loading and validation
       
       // Extract questions with comprehensive property checking
       let questions: any[] = [];

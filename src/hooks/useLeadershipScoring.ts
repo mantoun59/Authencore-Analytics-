@@ -61,13 +61,9 @@ export const useLeadershipScoring = () => {
     
     // Validate responses
     if (!responses || responses.length === 0) {
-      console.error('No responses provided');
       setIsCalculating(false);
       throw new Error('No responses provided for scoring');
     }
-
-    console.log('Calculating scores for responses:', responses);
-    console.log('Total responses received:', responses.length);
     
     // Initialize scores
     const scores: Record<string, DimensionScore> = {};
@@ -85,7 +81,6 @@ export const useLeadershipScoring = () => {
 
     // Calculate how many questions per dimension we actually have
     const questionsPerDimension = Math.floor(responses.length / dimensions.length);
-    console.log('Questions per dimension:', questionsPerDimension);
 
     // Calculate raw scores for each dimension
     responses.forEach((response, index) => {
@@ -100,8 +95,6 @@ export const useLeadershipScoring = () => {
       }
     });
 
-    console.log('Raw scores calculated:', scores);
-
     // Convert to percentages and determine levels
     dimensions.forEach(dimension => {
       const maxScore = questionsPerDimension * 5; // Dynamic calculation based on actual questions
@@ -110,10 +103,6 @@ export const useLeadershipScoring = () => {
       // Ensure we don't divide by zero
       const percentage = maxScore > 0 ? Math.round((rawScore / maxScore) * 100) : 0;
       scores[dimension].percentage = Math.max(0, Math.min(100, percentage));
-      
-      console.log(`${dimension}: raw=${rawScore}, max=${maxScore}, percentage=${percentage}`);
-      
-      // Determine level based on score and experience
       scores[dimension].level = determineLevel(percentage, userInfo.experience);
       scores[dimension].interpretation = getInterpretation(dimension, percentage);
       
@@ -125,8 +114,6 @@ export const useLeadershipScoring = () => {
     const totalRaw = Object.values(scores).reduce((sum, score) => sum + score.raw, 0);
     const totalMax = responses.length * 5; // Dynamic calculation based on actual responses
     const overallScore = totalMax > 0 ? Math.round((totalRaw / totalMax) * 100) : 0;
-    
-    console.log('Overall calculation:', { totalRaw, totalMax, overallScore });
     
     // Generate leadership profile
     const leadershipProfile = generateLeadershipProfile(scores);

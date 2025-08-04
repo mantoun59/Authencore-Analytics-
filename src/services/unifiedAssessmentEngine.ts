@@ -150,7 +150,7 @@ export class UnifiedAssessmentEngine {
     const saveResult = await this.saveAssessmentResults(data);
     if (saveResult.success) {
       assessmentId = saveResult.assessmentId;
-      console.log('Assessment saved with ID:', assessmentId);
+      // Assessment saved successfully
     } else {
       errors.push(`Database save failed: ${saveResult.error}`);
     }
@@ -159,7 +159,7 @@ export class UnifiedAssessmentEngine {
     const reportResult = await this.generateAssessmentReport(data);
     if (reportResult.success) {
       reportGenerated = true;
-      console.log('Standard report generated successfully');
+      // Standard report generated
     } else {
       errors.push(`Report generation failed: ${reportResult.error}`);
     }
@@ -169,7 +169,7 @@ export class UnifiedAssessmentEngine {
       const aiResult = await this.generateAIReport(assessmentId, 'candidate', data.userProfile);
       if (aiResult.success) {
         aiReportGenerated = true;
-        console.log('AI report generated successfully');
+        // AI report generated
       } else {
         errors.push(`AI report failed: ${aiResult.error}`);
       }

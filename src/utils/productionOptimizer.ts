@@ -115,11 +115,11 @@ export class ProductionOptimizer {
         try {
           const registration = await navigator.serviceWorker.register('/sw.js');
           if (import.meta.env.DEV) {
-            console.log('SW registered: ', registration);
+            // SW registered successfully
           }
         } catch (error) {
           if (import.meta.env.DEV) {
-            console.log('SW registration failed: ', error);
+            // SW registration failed
           }
         }
       });
@@ -204,7 +204,7 @@ export const trackPerformance = (name: string, fn: () => void) => {
     const start = performance.now();
     fn();
     const end = performance.now();
-    console.log(`Performance: ${name} took ${end - start}ms`);
+    // Performance measurement completed
   } else {
     fn();
   }
