@@ -15,6 +15,7 @@ import { Shield, AlertTriangle, CheckCircle, TrendingUp, Users, FileText } from 
 import { biasDetectionService } from '@/services/biasDetectionService';
 import { normativeService } from '@/services/normativeDatabaseService';
 import type { BiasAnalysisResult } from '@/services/biasDetectionService';
+import { productionLogger } from '@/utils/productionConfig';
 
 interface DashboardData {
   overallFairnessScore: number;

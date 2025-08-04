@@ -7,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { AlertTriangle, CheckCircle, BarChart3, Briefcase } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { productionLogger } from '@/utils/productionConfig';
 import { 
   Rocket, Target, Lightbulb, Trophy, Star, Download, Zap, Brain, Users, 
   CheckCircle2, TrendingUp, FileText, Award, HelpCircle, Eye, User

@@ -18,6 +18,7 @@ interface CareerLaunchAssessmentProps {
     email: string;
   };
 }
+import { productionLogger } from '@/utils/productionConfig';
 
 export default function CareerLaunchAssessment({ onComplete, userProfile }: CareerLaunchAssessmentProps) {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);

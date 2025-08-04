@@ -14,6 +14,7 @@ import EnhancedCommunicationStylesVisualizer from "./CommunicationStylesEnhanced
 import TeamCompatibilityAnalyzer from "./TeamCompatibilityAnalyzer";
 import { EnhancedCommunicationReportGenerator } from "@/services/enhancedCommunicationReportGenerator";
 import { useToast } from "@/hooks/use-toast";
+import { productionLogger } from '@/utils/productionConfig';
 
 interface CommunicationStylesAssessmentProps {
   onComplete?: (results: any) => void;
