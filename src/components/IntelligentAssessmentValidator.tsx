@@ -122,11 +122,16 @@ const IntelligentAssessmentValidator: React.FC = () => {
   };
 
   const runComprehensiveValidation = async (assessmentId: string) => {
+    console.log(`[Validator] Starting comprehensive validation for: ${assessmentId}`);
     setCurrentTest(assessmentId);
     
     const assessment = assessmentsData.find(a => a.id === assessmentId);
-    if (!assessment) return;
+    if (!assessment) {
+      console.error(`[Validator] Assessment not found: ${assessmentId}`);
+      return;
+    }
 
+    console.log(`[Validator] Found assessment:`, assessment);
     updateValidationStatus(assessmentId, 'testing');
 
     const validation: AssessmentValidation = {
@@ -172,34 +177,61 @@ const IntelligentAssessmentValidator: React.FC = () => {
     };
 
     // Calculate overall score and generate insights
-    validation.overallScore = calculateOverallScore(validation.categories);
+    const overallScore = calculateOverallScore(validation.categories);
+    console.log(`[Validator] Calculated overall score for ${assessmentId}:`, overallScore);
+    console.log(`[Validator] Category scores breakdown:`, Object.entries(validation.categories).map(([category, tests]) => ({
+      category,
+      tests: tests.length,
+      avgScore: tests.length > 0 ? Math.round(tests.reduce((sum, test) => sum + test.score, 0) / tests.length) : 0
+    })));
+    
+    validation.overallScore = overallScore;
     validation.recommendations = await generateRecommendations(validation);
     validation.criticalIssues = identifyCriticalIssues(validation.categories);
     validation.status = validation.overallScore >= 80 ? 'passed' : 
                       validation.overallScore >= 60 ? 'warning' : 'failed';
+
+    console.log(`[Validator] Final validation status for ${assessmentId}:`, {
+      overallScore: validation.overallScore,
+      status: validation.status,
+      recommendations: validation.recommendations.length,
+      criticalIssues: validation.criticalIssues.length
+    });
 
     updateValidation(assessmentId, validation);
     setCurrentTest(null);
   };
 
   const runTechnicalTests = async (assessment: any): Promise<TestResult[]> => {
+    console.log(`[Validator] Running technical tests for: ${assessment.id}`);
     const tests: TestResult[] = [];
     
     // Test 1: Component Rendering
-    tests.push(await testComponentRendering(assessment));
+    const componentTest = await testComponentRendering(assessment);
+    console.log(`[Validator] Component Rendering test result:`, componentTest);
+    tests.push(componentTest);
     
     // Test 2: Question Data Integrity
-    tests.push(await testQuestionDataIntegrity(assessment));
+    const dataIntegrityTest = await testQuestionDataIntegrity(assessment);
+    console.log(`[Validator] Question Data Integrity test result:`, dataIntegrityTest);
+    tests.push(dataIntegrityTest);
     
     // Test 3: Scoring Algorithm Validation
-    tests.push(await testScoringAlgorithm(assessment));
+    const scoringTest = await testScoringAlgorithm(assessment);
+    console.log(`[Validator] Scoring Algorithm test result:`, scoringTest);
+    tests.push(scoringTest);
     
     // Test 4: Database Schema Compatibility
-    tests.push(await testDatabaseCompatibility(assessment));
+    const databaseTest = await testDatabaseCompatibility(assessment);
+    console.log(`[Validator] Database Compatibility test result:`, databaseTest);
+    tests.push(databaseTest);
     
     // Test 5: API Integration
-    tests.push(await testAPIIntegration(assessment));
+    const apiTest = await testAPIIntegration(assessment);
+    console.log(`[Validator] API Integration test result:`, apiTest);
+    tests.push(apiTest);
 
+    console.log(`[Validator] All technical tests completed for ${assessment.id}:`, tests.map(t => `${t.test}: ${t.score}%`));
     return tests;
   };
 
@@ -448,10 +480,10 @@ const IntelligentAssessmentValidator: React.FC = () => {
           break;
           
         case 'faith-values':
-          if (data.faithValuesScenarios && Array.isArray(data.faithValuesScenarios)) {
-            questions = data.faithValuesScenarios;
+          if (data.faithValuesData && data.faithValuesData.scenarios && Array.isArray(data.faithValuesData.scenarios)) {
+            questions = data.faithValuesData.scenarios;
             dataType = 'faith-scenarios';
-            extractedFrom = 'faithValuesScenarios';
+            extractedFrom = 'faithValuesData.scenarios';
           } else if (data.scenarios && Array.isArray(data.scenarios)) {
             questions = data.scenarios;
             dataType = 'faith-scenarios';
