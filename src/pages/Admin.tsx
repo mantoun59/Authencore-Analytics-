@@ -10,7 +10,7 @@ import { EnhancedAIControls } from "@/components/EnhancedAIControls";
 import AdminTestingTools from "@/components/AdminTestingTools";
 import AssessmentTester from "@/components/AssessmentTester";
 import IntelligentAssessmentValidator from "@/components/IntelligentAssessmentValidator";
-import { ProfessionalStandardsComplianceDashboard } from "@/components/ProfessionalStandardsComplianceDashboard";
+import AssessmentQualityDashboard from "@/components/AssessmentQualityDashboard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ const AdminPage = () => {
               </TabsList>
 
               <TabsContent value="professional-standards" className="mt-6">
-                <ProfessionalStandardsComplianceDashboard />
+                <AssessmentQualityDashboard />
               </TabsContent>
               
               <TabsContent value="intelligent-testing" className="mt-6">
