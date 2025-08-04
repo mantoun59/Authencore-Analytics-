@@ -189,6 +189,60 @@ const Support = () => {
                     Yes! You can retake any exploration after 30 days. Professional development is an ongoing journey, and your preferences and insights may evolve over time. We recommend retaking explorations annually or when experiencing significant career transitions.
                   </p>
                 </div>
+                
+                <div className="faq-item">
+                  <h4 className="font-semibold text-foreground mb-2">How should I use my development insights?</h4>
+                  <p className="text-muted-foreground mb-3">Your insights are most valuable when used as discussion starters and reflection tools:</p>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>Share with mentors or career coaches for deeper exploration</li>
+                    <li>Use in professional development planning conversations</li>
+                    <li>Discuss with team members to improve collaboration</li>
+                    <li>Apply recommendations in your current role</li>
+                    <li>Consider insights when exploring new opportunities</li>
+                  </ul>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* For Organizations */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-xl">💼 For Organizations & Teams</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                <div className="faq-item">
+                  <h4 className="font-semibold text-foreground mb-2">How can organizations use this platform appropriately?</h4>
+                  <p className="text-muted-foreground mb-3">Organizations can use our platform to support:</p>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>Employee professional development initiatives</li>
+                    <li>Team building and communication training</li>
+                    <li>Career development planning conversations</li>
+                    <li>Leadership development programs</li>
+                    <li>Professional growth discussion facilitation</li>
+                  </ul>
+                  <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 mt-3">
+                    <p className="text-destructive font-semibold mb-2">Not appropriate for:</p>
+                    <p className="text-foreground">Hiring decisions, performance evaluations, or personnel selection.</p>
+                  </div>
+                </div>
+                
+                <div className="faq-item">
+                  <h4 className="font-semibold text-foreground mb-2">Can managers see individual employee results?</h4>
+                  <p className="text-muted-foreground">
+                    Individual development insights remain private unless employees choose to share them. Organizations can access aggregated insights about team development patterns and preferences, but not individual detailed results. This ensures privacy while supporting team development initiatives.
+                  </p>
+                </div>
+                
+                <div className="faq-item">
+                  <h4 className="font-semibold text-foreground mb-2">How do we set up team development programs?</h4>
+                  <p className="text-muted-foreground mb-3">Contact our organizational support team to:</p>
+                  <ul className="space-y-2 text-muted-foreground">
+                    <li>Set up bulk access for your team</li>
+                    <li>Configure appropriate development areas for your goals</li>
+                    <li>Receive facilitation guides for team discussions</li>
+                    <li>Access aggregated insights and team development resources</li>
+                  </ul>
+                </div>
               </CardContent>
             </Card>
 
