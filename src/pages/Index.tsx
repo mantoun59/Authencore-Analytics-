@@ -2,7 +2,9 @@ import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import PsychometricsInfo from "@/components/PsychometricsInfo";
-import HowItWorks from "@/components/HowItWorks";
+import HowItWorksNew from "@/components/HowItWorksNew";
+import DevelopmentAreas from "@/components/DevelopmentAreas";
+import AIInsights from "@/components/AIInsights";
 import Gallery from "@/components/Gallery";
 import Features from "@/components/Features";
 import CTA from "@/components/CTA";
@@ -18,8 +20,10 @@ const Index = () => {
       <Header />
       <Hero />
       <WhyChooseUs />
+      <HowItWorksNew />
+      <DevelopmentAreas />
+      <AIInsights />
       <PsychometricsInfo />
-      <HowItWorks />
       <Gallery />
       <Features />
       <CTA />
