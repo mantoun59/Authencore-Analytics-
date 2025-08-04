@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useTranslation } from "react-i18next";
 import LogoDisplay from "@/components/LogoDisplay";
-import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -57,7 +56,6 @@ const Header = () => {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center space-x-3">
-              <LanguageSwitcher />
               {loading ? (
                 <div className="w-32 h-8 bg-muted animate-pulse rounded"></div>
               ) : user ? (
@@ -122,9 +120,6 @@ const Header = () => {
                   )
                 ))}
                 <div className="flex flex-col space-y-3 pt-4">
-                  <div className="px-3">
-                    <LanguageSwitcher />
-                  </div>
                   {user ? (
                     <>
                       <Link 
