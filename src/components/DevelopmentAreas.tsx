@@ -95,21 +95,7 @@ const DevelopmentAreas = () => {
       ],
       route: '/digital-wellness'
     },
-    {
-      id: 'faith-values',
-      icon: Lightbulb,
-      title: '⚖️ Values & Purpose Exploration',
-      duration: '25-30 minutes',
-      questions: 90,
-      description: 'Explore your personal values and how they align with your professional goals and workplace preferences.',
-      features: [
-        'Personal values exploration',
-        'Work-life integration insights',
-        'Purpose-driven career alignment',
-        'Value-based decision making'
-      ],
-      route: '/faith-values'
-    },
+    // Faith & Values assessment removed
     {
       id: 'stress-resilience',
       icon: Shield,

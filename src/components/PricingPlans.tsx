@@ -45,7 +45,7 @@ const PricingPlans = () => {
         "Cultural Intelligence Assessment", 
         "Leadership Potential Analysis",
         "Stress & Resilience Profile",
-        "Faith & Values Alignment",
+        
         "Gen Z Workplace Assessment",
         "Digital Wellness Assessment",
         "Priority email support"

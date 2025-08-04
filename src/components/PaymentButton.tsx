@@ -55,7 +55,7 @@ export const QuickPurchaseButton: React.FC<{ assessmentType: string }> = ({ asse
       case 'cultural-intelligence': return { name: 'Cultural Intelligence', price: '$24.99' };
       case 'communication-styles': return { name: 'Communication Styles', price: '$24.99' };
       case 'emotional-intelligence': return { name: 'Emotional Intelligence', price: '$24.99' };
-      case 'faith-values': return { name: 'Faith & Values', price: '$24.99' };
+      case 'faith-values': return { name: 'Assessment Not Available', price: 'N/A' };
       case 'genz-assessment': return { name: 'Gen Z Workplace', price: '$24.99' };
       case 'leadership': return { name: 'Leadership Assessment', price: '$24.99' };
       case 'digital-wellness': return { name: 'Digital Wellness', price: '$24.99' };
