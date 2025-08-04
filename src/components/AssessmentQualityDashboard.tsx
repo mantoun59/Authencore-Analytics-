@@ -30,6 +30,7 @@ import { biasDetectionService } from '@/services/biasDetectionService';
 import { assessmentValidationService } from '@/services/assessmentValidationService';
 import { uncertaintyIntegrationService } from '@/services/uncertaintyIntegrationService';
 import AssessmentDisclaimers from './AssessmentDisclaimers';
+import { productionLogger } from '@/utils/productionConfig';
 
 interface ComplianceMetrics {
   overallCompliance: number;
@@ -111,7 +112,7 @@ export const AssessmentQualityDashboard: React.FC = () => {
             recommendations: validation.recommendations
           });
         } catch (error) {
-          console.error(`Error validating ${assessmentType}:`, error);
+          productionLogger.error(`Error validating ${assessmentType}:`, error);
           reports.push({
             assessmentType,
             qualityScore: 0,
@@ -143,7 +144,7 @@ export const AssessmentQualityDashboard: React.FC = () => {
       });
       
     } catch (error) {
-      console.error('Error loading quality data:', error);
+      productionLogger.error('Error loading quality data:', error);
     } finally {
       setLoading(false);
     }
@@ -163,7 +164,7 @@ export const AssessmentQualityDashboard: React.FC = () => {
         alert('Validation complete. All assessments meet basic compliance standards.');
       }
     } catch (error) {
-      console.error('Validation failed:', error);
+      productionLogger.error('Validation failed:', error);
       alert('Validation failed. Please check console for details.');
     } finally {
       setValidating(false);

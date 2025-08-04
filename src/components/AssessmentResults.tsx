@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 // HTML report generation instead of PDF
 import { Button } from "@/components/ui/button";
+import { productionLogger } from '@/utils/productionConfig';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
@@ -128,8 +129,10 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     }
 
     try {
-      console.log('Results data:', results);
-      console.log('Dimensions data:', results.dimensions);
+      if (import.meta.env.DEV) {
+        console.log('Results data:', results);
+        console.log('Dimensions data:', results.dimensions);
+      }
       
       // Generate HTML report instead of PDF
       const htmlContent = `
@@ -161,7 +164,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
 
       toast.success('HTML report opened successfully!');
     } catch (error) {
-      console.error('HTML generation error:', error);
+      productionLogger.error('HTML generation error:', error);
       toast.error('Failed to generate HTML report');
     }
   };

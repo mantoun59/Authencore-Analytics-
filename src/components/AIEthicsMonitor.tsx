@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { aiContentValidationService } from '@/services/aiContentValidationService';
 import { toast } from 'sonner';
+import { productionLogger } from '@/utils/productionConfig';
 
 interface AIContentAudit {
   reportId: string;
@@ -118,7 +119,7 @@ export const AIEthicsMonitor: React.FC = () => {
       });
 
     } catch (error) {
-      console.error('Error loading AI ethics data:', error);
+      productionLogger.error('Error loading AI ethics data:', error);
       toast.error('Failed to load AI ethics monitoring data');
     } finally {
       setIsLoading(false);

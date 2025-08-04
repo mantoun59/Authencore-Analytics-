@@ -13,6 +13,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { CheckCircle, AlertTriangle, Clock, Users, Brain, Shield } from 'lucide-react';
 import { psychometricValidationService } from '@/services/psychometricValidationService';
 import { supabase } from '@/integrations/supabase/client';
+import { productionLogger } from '@/utils/productionConfig';
 
 interface ValidationStatus {
   assessmentType: string;
@@ -90,7 +91,7 @@ export const AssessmentValidationDashboard: React.FC = () => {
 
       setValidationStatuses(statuses);
     } catch (error) {
-      console.error('Error loading validation statuses:', error);
+      productionLogger.error('Error loading validation statuses:', error);
     } finally {
       setLoading(false);
     }
@@ -127,7 +128,7 @@ export const AssessmentValidationDashboard: React.FC = () => {
         responseArrays
       );
 
-      console.log('Reliability Analysis Results:', reliabilityAnalysis);
+      if (import.meta.env.DEV) console.log('Reliability Analysis Results:', reliabilityAnalysis);
 
       // Generate validation report
       const validationReport = await psychometricValidationService.generateValidationReport(assessmentType);
@@ -140,7 +141,7 @@ export const AssessmentValidationDashboard: React.FC = () => {
       // Reload statuses
       loadValidationStatuses();
     } catch (error) {
-      console.error('Error initiating validation study:', error);
+      productionLogger.error('Error initiating validation study:', error);
       alert('Error initiating validation study. Please check console for details.');
     }
   };

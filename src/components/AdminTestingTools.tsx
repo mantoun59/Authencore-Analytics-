@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Copy, TestTube, Play } from 'lucide-react';
+import { productionLogger } from '@/utils/productionConfig';
 
 const AdminTestingTools: React.FC = () => {
   const [loading, setLoading] = useState(false);
@@ -57,7 +58,7 @@ const AdminTestingTools: React.FC = () => {
         description: "Test access token created successfully!",
       });
     } catch (error: any) {
-      console.error('Error generating test token:', error);
+      productionLogger.error('Error generating test token:', error);
       toast({
         title: "Error",
         description: error.message || "Failed to generate test token",
