@@ -117,70 +117,69 @@ const Hero = () => {
               </div>
             </div>
 
-            {/* Features Overview Section */}
-            <div className="absolute -bottom-96 left-0 right-0">
-              <section className="features-overview py-16 bg-background">
-                <div className="container mx-auto px-4">
-                  <h2 className="text-3xl font-bold text-center text-foreground mb-4">Explore Your Professional Development Areas</h2>
-                  <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
-                    Structured self-discovery experiences designed to help you understand your workplace preferences, communication tendencies, and career interests.
-                  </p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <Target className="w-8 h-8 text-primary mb-4" />
-                      <h3 className="text-xl font-semibold text-foreground mb-3">Career Interest Exploration</h3>
-                      <p className="text-muted-foreground">
-                        Discover career paths that align with your interests, values, and workplace preferences through comprehensive career exploration tools.
-                      </p>
-                    </div>
-                    
-                    <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <MessageSquare className="w-8 h-8 text-primary mb-4" />
-                      <h3 className="text-xl font-semibold text-foreground mb-3">Communication Style Discovery</h3>
-                      <p className="text-muted-foreground">
-                        Explore your communication preferences and learn how to adapt your style for better workplace collaboration and professional relationships.
-                      </p>
-                    </div>
-                    
-                    <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <Users className="w-8 h-8 text-primary mb-4" />
-                      <h3 className="text-xl font-semibold text-foreground mb-3">Leadership Approach Insights</h3>
-                      <p className="text-muted-foreground">
-                        Understand your natural leadership tendencies and explore different leadership approaches for various workplace situations.
-                      </p>
-                    </div>
-                    
-                    <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <Globe className="w-8 h-8 text-primary mb-4" />
-                      <h3 className="text-xl font-semibold text-foreground mb-3">Cultural Awareness Development</h3>
-                      <p className="text-muted-foreground">
-                        Build cultural intelligence through exploration of cross-cultural workplace dynamics and global collaboration strategies.
-                      </p>
-                    </div>
-                    
-                    <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <Smartphone className="w-8 h-8 text-primary mb-4" />
-                      <h3 className="text-xl font-semibold text-foreground mb-3">Digital Wellness Awareness</h3>
-                      <p className="text-muted-foreground">
-                        Examine your technology usage patterns and discover strategies for maintaining healthy digital boundaries in the modern workplace.
-                      </p>
-                    </div>
-                    
-                    <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <Heart className="w-8 h-8 text-primary mb-4" />
-                      <h3 className="text-xl font-semibold text-foreground mb-3">Workplace Preference Mapping</h3>
-                      <p className="text-muted-foreground">
-                        Explore what motivates you at work and understand your preferences for different work environments and team dynamics.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </div>
           </div>
         </div>
       </div>
+      
+      {/* Features Overview Section - moved outside absolute positioning */}
+      <section className="features-overview py-16 bg-background border-t border-border">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center text-foreground mb-4">Explore Your Professional Development Areas</h2>
+          <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">
+            Structured self-discovery experiences designed to help you understand your workplace preferences, communication tendencies, and career interests.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+              <Target className="w-8 h-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-3">Career Interest Exploration</h3>
+              <p className="text-muted-foreground">
+                Discover career paths that align with your interests, values, and workplace preferences through comprehensive career exploration tools.
+              </p>
+            </div>
+            
+            <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+              <MessageSquare className="w-8 h-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-3">Communication Style Discovery</h3>
+              <p className="text-muted-foreground">
+                Explore your communication preferences and learn how to adapt your style for better workplace collaboration and professional relationships.
+              </p>
+            </div>
+            
+            <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+              <Users className="w-8 h-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-3">Leadership Approach Insights</h3>
+              <p className="text-muted-foreground">
+                Understand your natural leadership tendencies and explore different leadership approaches for various workplace situations.
+              </p>
+            </div>
+            
+            <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+              <Globe className="w-8 h-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-3">Cultural Awareness Development</h3>
+              <p className="text-muted-foreground">
+                Build cultural intelligence through exploration of cross-cultural workplace dynamics and global collaboration strategies.
+              </p>
+            </div>
+            
+            <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+              <Smartphone className="w-8 h-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-3">Digital Wellness Awareness</h3>
+              <p className="text-muted-foreground">
+                Examine your technology usage patterns and discover strategies for maintaining healthy digital boundaries in the modern workplace.
+              </p>
+            </div>
+            
+            <div className="bg-card border border-border rounded-lg p-6 shadow-sm hover:shadow-md transition-shadow">
+              <Heart className="w-8 h-8 text-primary mb-4" />
+              <h3 className="text-xl font-semibold text-foreground mb-3">Workplace Preference Mapping</h3>
+              <p className="text-muted-foreground">
+                Explore what motivates you at work and understand your preferences for different work environments and team dynamics.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </section>
   );
 };
