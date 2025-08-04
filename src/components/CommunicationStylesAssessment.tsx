@@ -84,7 +84,7 @@ const CommunicationStylesAssessment: React.FC<CommunicationStylesAssessmentProps
         description: "Your communication styles profile has been generated.",
       });
     } catch (error) {
-      console.error('Error completing assessment:', error);
+      productionLogger.error('Error completing assessment:', error);
       toast({
         title: "Error",
         description: "There was an error processing your assessment. Please try again.",
@@ -111,7 +111,7 @@ const CommunicationStylesAssessment: React.FC<CommunicationStylesAssessmentProps
         description: "Your communication styles report has been opened in a new window.",
       });
     } catch (error) {
-      console.error('Error generating candidate report:', error);
+      productionLogger.error('Error generating candidate report:', error);
       toast({
         title: "Error",
         description: "Failed to generate candidate report. Please try again.",
@@ -138,7 +138,7 @@ const CommunicationStylesAssessment: React.FC<CommunicationStylesAssessmentProps
         description: "The employer communication report has been opened in a new window.",
       });
     } catch (error) {
-      console.error('Error generating employer report:', error);
+      productionLogger.error('Error generating employer report:', error);
       toast({
         title: "Error",
         description: "Failed to generate employer report. Please try again.",

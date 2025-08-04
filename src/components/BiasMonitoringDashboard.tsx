@@ -69,7 +69,7 @@ export const BiasMonitoringDashboard: React.FC = () => {
         normativeDataCoverage
       });
     } catch (error) {
-      console.error('Error loading dashboard data:', error);
+      productionLogger.error('Error loading dashboard data:', error);
     } finally {
       setLoading(false);
     }
@@ -81,7 +81,7 @@ export const BiasMonitoringDashboard: React.FC = () => {
       await biasDetectionService.analyzeAssessmentBias(selectedAssessment, analysisTimeframe);
       await loadDashboardData();
     } catch (error) {
-      console.error('Error running bias analysis:', error);
+      productionLogger.error('Error running bias analysis:', error);
     } finally {
       setLoading(false);
     }

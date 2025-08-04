@@ -119,7 +119,7 @@ export const CareerLaunchReportEnhanced: React.FC<CareerLaunchReportEnhancedProp
         description: `${type === 'advisor' ? 'Advisor' : 'Standard'} HTML report opened successfully.`,
       });
     } catch (error) {
-      console.error('Error generating report:', error);
+      productionLogger.error('Error generating report:', error);
       toast({
         title: "Error",
         description: "Failed to generate report. Please try again.",

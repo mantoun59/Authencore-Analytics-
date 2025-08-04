@@ -183,7 +183,7 @@ export default function CareerLaunchAssessment({ onComplete, userProfile }: Care
 
       onComplete(results);
     } catch (error) {
-      console.error('Error saving assessment results:', error);
+      productionLogger.error('Error saving assessment results:', error);
       toast({
         title: "Error",
         description: "Failed to save results. Please try again.",
