@@ -59,6 +59,16 @@ export const useLeadershipScoring = () => {
   const calculateScores = async (responses: number[], userInfo: UserInfo): Promise<LeadershipResults> => {
     setIsCalculating(true);
     
+    // Validate responses
+    if (!responses || responses.length === 0) {
+      console.error('No responses provided');
+      setIsCalculating(false);
+      throw new Error('No responses provided for scoring');
+    }
+
+    console.log('Calculating scores for responses:', responses);
+    console.log('Total responses received:', responses.length);
+    
     // Initialize scores
     const scores: Record<string, DimensionScore> = {};
     
@@ -73,18 +83,35 @@ export const useLeadershipScoring = () => {
       };
     });
 
+    // Calculate how many questions per dimension we actually have
+    const questionsPerDimension = Math.floor(responses.length / dimensions.length);
+    console.log('Questions per dimension:', questionsPerDimension);
+
     // Calculate raw scores for each dimension
     responses.forEach((response, index) => {
-      const dimensionIndex = Math.floor(index / 10);
-      const dimension = dimensions[dimensionIndex];
-      scores[dimension].raw += response;
+      // Ensure response is a valid number between 1-5
+      const validResponse = Math.max(1, Math.min(5, Number(response) || 1));
+      const dimensionIndex = Math.floor(index / questionsPerDimension);
+      
+      // Safety check to prevent index out of bounds
+      if (dimensionIndex < dimensions.length) {
+        const dimension = dimensions[dimensionIndex];
+        scores[dimension].raw += validResponse;
+      }
     });
+
+    console.log('Raw scores calculated:', scores);
 
     // Convert to percentages and determine levels
     dimensions.forEach(dimension => {
-      const maxScore = 50; // 10 questions × 5 max points
-      const percentage = (scores[dimension].raw / maxScore) * 100;
-      scores[dimension].percentage = Math.round(percentage);
+      const maxScore = questionsPerDimension * 5; // Dynamic calculation based on actual questions
+      const rawScore = scores[dimension].raw;
+      
+      // Ensure we don't divide by zero
+      const percentage = maxScore > 0 ? Math.round((rawScore / maxScore) * 100) : 0;
+      scores[dimension].percentage = Math.max(0, Math.min(100, percentage));
+      
+      console.log(`${dimension}: raw=${rawScore}, max=${maxScore}, percentage=${percentage}`);
       
       // Determine level based on score and experience
       scores[dimension].level = determineLevel(percentage, userInfo.experience);
@@ -96,8 +123,10 @@ export const useLeadershipScoring = () => {
 
     // Calculate overall leadership effectiveness score
     const totalRaw = Object.values(scores).reduce((sum, score) => sum + score.raw, 0);
-    const totalMax = 300; // 60 questions × 5 max points
-    const overallScore = Math.round((totalRaw / totalMax) * 100);
+    const totalMax = responses.length * 5; // Dynamic calculation based on actual responses
+    const overallScore = totalMax > 0 ? Math.round((totalRaw / totalMax) * 100) : 0;
+    
+    console.log('Overall calculation:', { totalRaw, totalMax, overallScore });
     
     // Generate leadership profile
     const leadershipProfile = generateLeadershipProfile(scores);
@@ -173,14 +202,16 @@ export const useLeadershipScoring = () => {
     responses: number[], 
     dimensions: string[]
   ) => {
-    const dimensionStart = dimensions.indexOf(dimension) * 10;
-    const dimensionResponses = responses.slice(dimensionStart, dimensionStart + 10);
+    const questionsPerDimension = Math.floor(responses.length / dimensions.length);
+    const dimensionStart = dimensions.indexOf(dimension) * questionsPerDimension;
+    const dimensionResponses = responses.slice(dimensionStart, dimensionStart + questionsPerDimension);
     
     // Identify strongest and weakest areas within dimension
     dimensionResponses.forEach((response, index) => {
-      if (response >= 4) {
+      const validResponse = Math.max(1, Math.min(5, Number(response) || 1));
+      if (validResponse >= 4) {
         scores[dimension].strengths.push(index);
-      } else if (response <= 2) {
+      } else if (validResponse <= 2) {
         scores[dimension].developmentAreas.push(index);
       }
     });
