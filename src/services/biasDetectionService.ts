@@ -1,5 +1,6 @@
 import { toast } from "sonner";
 
+// Enhanced bias detection service for assessment quality
 export interface BiasAnalysisResult {
   overallBiasScore: number; // 0-100, lower is better
   genderBias: number;
@@ -9,6 +10,26 @@ export interface BiasAnalysisResult {
   flaggedPhrases: string[];
   corrections: string[];
   confidence: 'low' | 'moderate' | 'high';
+  assessmentType?: string;
+  biasSeverity?: 'low' | 'medium' | 'high';
+  biasIndicators?: {
+    adverseImpactRatio: number;
+    equalOpportunity: number;
+    demographicParity: number;
+  };
+  sampleSize?: number;
+  complianceStatus?: {
+    eeo: boolean;
+    ada: boolean;
+  };
+  recommendedActions?: string[];
+  fairnessMetrics?: {
+    adverseImpactRatio: number;
+    equalOpportunity: number;
+    demographicParity: number;
+    groupFairnessScores?: Record<string, number>;
+  };
+  flaggedDimensions?: string[];
 }
 
 export interface BiasCorrection {
@@ -368,35 +389,65 @@ class BiasDetectionService {
     return false;
   }
 
-  async analyzeAssessmentBias(assessmentType: string): Promise<BiasAnalysisResult & {
-    assessmentType: string;
-    biasSeverity: 'low' | 'medium' | 'high';
-    biasIndicators: string[];
-    sampleSize: number;
-    complianceStatus: 'compliant' | 'warning' | 'non-compliant';
-    recommendedActions: string[];
-  }> {
+  async analyzeAssessmentBias(assessmentType: string, additionalData?: any): Promise<BiasAnalysisResult> {
     const mockAnalysis = await this.analyzeBias(`Assessment analysis for ${assessmentType}`);
     return {
       ...mockAnalysis,
       assessmentType,
       biasSeverity: mockAnalysis.overallBiasScore > 60 ? 'high' : mockAnalysis.overallBiasScore > 30 ? 'medium' : 'low',
-      biasIndicators: mockAnalysis.flaggedPhrases,
+      biasIndicators: {
+        adverseImpactRatio: 85,
+        equalOpportunity: 92,
+        demographicParity: 88
+      },
       sampleSize: 100,
-      complianceStatus: mockAnalysis.overallBiasScore > 60 ? 'non-compliant' : mockAnalysis.overallBiasScore > 30 ? 'warning' : 'compliant',
-      recommendedActions: mockAnalysis.corrections
+      complianceStatus: {
+        eeo: mockAnalysis.overallBiasScore < 50,
+        ada: mockAnalysis.overallBiasScore < 30
+      },
+      recommendedActions: mockAnalysis.corrections,
+      fairnessMetrics: {
+        adverseImpactRatio: 85,
+        equalOpportunity: 92,
+        demographicParity: 88,
+        groupFairnessScores: {
+          'gender': 88,
+          'age': 92,
+          'ethnicity': 85
+        }
+      },
+      flaggedDimensions: mockAnalysis.overallBiasScore > 30 ? ['cultural-assumptions', 'gender-stereotypes'] : []
     };
   }
 
-  async getBiasMonitoringData(): Promise<any[]> {
-    return [
-      { assessmentType: 'career-launch', biasScore: 25, status: 'compliant' },
-      { assessmentType: 'communication', biasScore: 15, status: 'compliant' },
-      { assessmentType: 'workplace-wellness', biasScore: 35, status: 'warning' }
-    ];
+  async getBiasMonitoringData(filterTypes?: string[] | string): Promise<{
+    overallFairnessScore: number;
+    assessmentFairness: Record<string, number>;
+    complianceAlerts: any[];
+    biasMetrics: any[];
+  }> {
+    return {
+      overallFairnessScore: 78,
+      assessmentFairness: {
+        'career-launch': 82,
+        'communication': 89,
+        'workplace-wellness': 75,
+        'stress-resilience': 85,
+        'communication-styles': 78
+      },
+      complianceAlerts: [
+        { severity: 'medium', message: 'Cultural bias detected in career-launch questions', assessmentType: 'career-launch' },
+        { severity: 'low', message: 'Minor gender stereotype risk in leadership assessment', assessmentType: 'leadership' }
+      ],
+      biasMetrics: [
+        { type: 'gender', score: 15, trend: 'improving' },
+        { type: 'cultural', score: 28, trend: 'stable' },
+        { type: 'age', score: 12, trend: 'improving' }
+      ]
+    };
   }
 
-  async performRealTimeBiasCheck(text: string): Promise<boolean> {
+  async performRealTimeBiasCheck(text: string, context?: any, options?: any): Promise<boolean> {
     const analysis = await this.analyzeBias(text);
     return analysis.overallBiasScore < 30;
   }
