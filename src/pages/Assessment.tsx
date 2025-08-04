@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ConsentAgreement from "@/components/ConsentAgreement";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
+import AssessmentDisclaimers from "@/components/AssessmentDisclaimers";
 
 // Helper function to transform badge names to translation keys
 const getBadgeTranslationKey = (badge: string): string => {
@@ -200,6 +201,8 @@ const Assessment = () => {
             structured self-reflection and professional development exercises.
           </p>
           
+          {/* Professional Standards Notice */}
+          <AssessmentDisclaimers assessmentType="general" showFull={false} />
           <ComplianceDisclaimer type="site-wide" className="mb-8" />
         </div>
       </section>
