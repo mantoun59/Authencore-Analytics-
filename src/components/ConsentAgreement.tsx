@@ -60,7 +60,7 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
               <Shield className="w-8 h-8 text-primary" />
             </div>
             <CardTitle className="text-3xl font-bold text-primary mb-2">
-              Assessment Consent Agreement
+              Professional Development Exploration Agreement
             </CardTitle>
             <div className="flex flex-wrap justify-center gap-2 mb-4">
               <Badge variant="outline">{assessmentType}</Badge>
@@ -68,7 +68,7 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
               <Badge variant="outline">International Compliance</Badge>
             </div>
             <p className="text-muted-foreground text-lg">
-              Please review and accept the following terms to proceed with your assessment
+              Please review and accept the following terms to proceed with your professional development exploration
             </p>
           </CardHeader>
 
@@ -78,9 +78,10 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
               <div className="flex items-start gap-3">
                 <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
                 <div>
-                  <h3 className="font-semibold text-amber-800 dark:text-amber-200">Important Legal Notice</h3>
+                  <h3 className="font-semibold text-amber-800 dark:text-amber-200">Important Notice - Development Platform</h3>
                   <p className="text-sm text-amber-700 dark:text-amber-300 mt-1">
-                    This assessment is governed by international data protection laws including GDPR, CCPA, and other applicable regulations.
+                    This platform is designed for educational and professional development purposes only. 
+                    It is not intended for clinical diagnosis, employment selection, or definitive life decisions. 
                     Your consent is required for legal compliance and to ensure your data protection rights.
                   </p>
                 </div>
@@ -111,8 +112,8 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                           </label>
                         </div>
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                          I consent to the collection, storage, and processing of my assessment responses, demographic information, 
-                          and metadata for the purpose of generating my psychological assessment report. Data is stored securely 
+                          I consent to the collection, storage, and processing of my development exploration responses, demographic information, 
+                          and metadata for the purpose of generating my professional development insights report. Data is stored securely 
                           using enterprise-grade encryption and access controls.
                         </p>
                       </div>
@@ -141,8 +142,8 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                         </div>
                         <p className="text-sm text-muted-foreground leading-relaxed">
                           I consent to the use of artificial intelligence and machine learning algorithms to analyze my responses 
-                          and generate insights. This includes natural language processing, statistical analysis, and comparison 
-                          with normative databases for accurate assessment results.
+                          and generate development insights. This includes pattern analysis and educational content generation 
+                          for professional development purposes only.
                         </p>
                       </div>
                     </div>
@@ -170,16 +171,16 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                         </div>
                         <p className="text-sm text-muted-foreground leading-relaxed">
                           {userType === 'applicant' && (
-                            <>I understand that my assessment results may be shared with authorized personnel (HR, hiring managers, 
-                            supervisors) as part of employment processes, performance reviews, or development programs.</>
+                            <>I understand that my development insights may be shared with authorized personnel for 
+                            professional development planning, team building, and growth program purposes. Not for employment selection.</>
                           )}
                           {userType === 'employer' && (
-                            <>I consent to sharing candidate assessment results with authorized organizational stakeholders 
-                            for hiring, development, and organizational planning purposes.</>
+                            <>I consent to sharing team development insights with authorized organizational stakeholders 
+                            for development planning and team building purposes only.</>
                           )}
                           {userType === 'partner' && (
-                            <>I consent to sharing aggregate and individual assessment data with partner organizations 
-                            for consulting, development, and organizational improvement purposes.</>
+                            <>I consent to sharing development insights with partner organizations 
+                            for professional development consulting and organizational improvement purposes.</>
                           )}
                         </p>
                       </div>
@@ -236,9 +237,9 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                           </label>
                         </div>
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                          I consent to the generation of detailed assessment reports in PDF format, which may include personal 
-                          insights, recommendations, and graphical representations of my results. These reports may be downloaded, 
-                          printed, or shared electronically with authorized parties.
+                          I consent to the generation of detailed development insight reports in PDF format, which may include 
+                          professional development suggestions, learning recommendations, and visual representations of patterns. 
+                          These reports may be downloaded, printed, or shared electronically with authorized parties for development purposes.
                         </p>
                       </div>
                     </div>
@@ -265,10 +266,10 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                           </label>
                         </div>
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                          I acknowledge that this assessment is for educational and development purposes only and should not be 
-                          used for clinical diagnosis. I understand my data protection rights including access, rectification, 
-                          erasure, and portability. I agree to the Terms of Service and Privacy Policy, and understand that 
-                          AuthenCore Analytics limits liability as outlined in the terms.
+                          I acknowledge that this platform is for educational and professional development purposes only and should not be 
+                          used for clinical diagnosis, employment selection, or definitive life decisions. I understand my data protection 
+                          rights including access, rectification, erasure, and portability. I agree to the Terms of Service and Privacy Policy, 
+                          and understand that AuthenCore Analytics limits liability as outlined in the terms.
                         </p>
                       </div>
                     </div>
@@ -298,7 +299,7 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
                 className="flex-1"
                 size="lg"
               >
-                Accept & Continue Assessment
+                Accept & Continue Exploration
               </Button>
               <Button 
                 variant="outline"
@@ -311,7 +312,7 @@ export const ConsentAgreement: React.FC<ConsentAgreementProps> = ({
             </div>
 
             <p className="text-xs text-center text-muted-foreground">
-              By clicking "Accept & Continue Assessment", you provide your informed consent for the processing 
+              By clicking "Accept & Continue Exploration", you provide your informed consent for the processing 
               of your personal data as described above. This consent is recorded with timestamp and technical metadata 
               for legal compliance purposes.
             </p>

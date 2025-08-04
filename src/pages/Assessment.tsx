@@ -8,6 +8,7 @@ import { Clock, Brain, Heart, Users, Zap, Target, CheckCircle2, ArrowRight, Rock
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import ConsentAgreement from "@/components/ConsentAgreement";
+import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 
 // Helper function to transform badge names to translation keys
 const getBadgeTranslationKey = (badge: string): string => {
@@ -189,14 +190,17 @@ const Assessment = () => {
           </div>
           
           <Badge className="mb-6 bg-primary/10 text-primary hover:bg-primary/20">
-            🎯 {t("assessments.title")}
+            🔍 Professional Development Modules
           </Badge>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text text-transparent">
-            {t("assessments.title")} {t("landing.assessmentsTitle")}
+            Professional Development Explorations
           </h1>
           <p className="text-xl text-muted-foreground mb-8 max-w-3xl mx-auto">
-            {t("landing.assessmentsSubtitle")}
+            Discover your workplace preferences, communication patterns, and career interests through 
+            structured self-reflection and professional development exercises.
           </p>
+          
+          <ComplianceDisclaimer type="site-wide" className="mb-8" />
         </div>
       </section>
 

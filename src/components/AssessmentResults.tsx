@@ -33,6 +33,7 @@ import { EnhancedAIEngine } from "@/services/enhancedAIEngine";
 import InteractiveResultsVisualization from "@/components/InteractiveResultsVisualization";
 import ProgressTracker from "@/components/ProgressTracker";
 import LegalNotices from "@/components/LegalNotices";
+import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 import { toast } from "sonner";
 import { UnifiedAssessmentService } from "@/services/unifiedAssessmentService";
 import { ConsolidatedReportService } from "@/services/consolidatedReportService";
@@ -719,62 +720,62 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
     // Production analytics tracking
     switch (assessmentType) {
       case 'faith-values':
-        return 'Your Faith & Values Profile';
+        return 'Your Faith & Values Development Insights';
       case 'leadership':
-        return 'Your Leadership Profile';
+        return 'Your Leadership Development Insights';
       case 'career':
       case 'career-launch':
-        return 'Your Career Launch Profile';
+        return 'Your Career Exploration Insights';
       case 'cair':
       case 'cairplus':
       case 'cair-personality':
-        return 'Your CAIR+ Personality Profile';
+        return 'Your Professional Development Insights';
       case 'communication':
-        return 'Your Communication Profile';
+        return 'Your Communication Pattern Insights';
       case 'emotional':
-        return 'Your Emotional Intelligence Profile';
+        return 'Your Emotional Intelligence Insights';
       case 'cultural':
-        return 'Your Cultural Intelligence Profile';
+        return 'Your Cultural Intelligence Insights';
       case 'digital':
-        return 'Your Digital Wellness Profile';
+        return 'Your Digital Wellness Insights';
       case 'genz':
-        return 'Your Gen Z Workplace Profile';
+        return 'Your Workplace Preference Insights';
       case 'burnout':
       case 'burnout-prevention':
-        return 'Your Burnout Prevention Profile';
+        return 'Your Burnout Prevention Insights';
       default:
-        return 'Your Resilience Profile';
+        return 'Your Professional Development Insights';
     }
   };
 
   const getAssessmentDescription = () => {
     switch (assessmentType) {
       case 'faith-values':
-        return 'Based on your responses across faith values scenarios and workplace situations, here\'s your comprehensive values alignment assessment.';
+        return 'Based on your responses, here are your faith and values exploration insights for professional development and self-reflection.';
       case 'leadership':
-        return 'Based on your leadership scenarios and decision-making patterns, here\'s your comprehensive authentic leadership assessment.';
+        return 'Based on your responses, here are your leadership pattern insights to support your professional development journey.';
       case 'career':
       case 'career-launch':
-        return 'Based on your career interests, aptitudes, and values, here\'s your comprehensive career readiness assessment.';
+        return 'Based on your responses, here are your career exploration insights to help guide your professional development.';
       case 'cair':
       case 'cairplus':
       case 'cair-personality':
-        return 'Based on your personality responses, here\'s your comprehensive CAIR+ personality assessment analyzing Conscientiousness, Agreeableness, Innovation, and Resilience.';
+        return 'Based on your responses, here are your professional development insights exploring work style patterns and preferences.';
       case 'communication':
-        return 'Based on your communication scenarios and preferences, here\'s your comprehensive communication styles assessment.';
+        return 'Based on your responses, here are your communication pattern insights for professional development.';
       case 'emotional':
-        return 'Based on your emotional intelligence scenarios, here\'s your comprehensive EQ assessment.';
+        return 'Based on your responses, here are your emotional intelligence development insights.';
       case 'cultural':
-        return 'Based on your cross-cultural scenarios, here\'s your comprehensive cultural intelligence assessment.';
+        return 'Based on your responses, here are your cultural intelligence development insights.';
       case 'digital':
-        return 'Based on your digital habits and wellness patterns, here\'s your comprehensive digital wellness assessment.';
+        return 'Based on your responses, here are your digital wellness insights for professional development.';
       case 'genz':
-        return 'Based on your workplace preferences and generational characteristics, here\'s your comprehensive Gen Z workplace assessment.';
+        return 'Based on your responses, here are your workplace preference insights for professional development.';
       case 'burnout':
       case 'burnout-prevention':
-        return 'Based on your stress patterns and coping mechanisms, here\'s your comprehensive burnout prevention assessment focusing on risk identification and prevention strategies.';
+        return 'Based on your responses, here are your workplace wellness insights to support stress awareness and prevention.';
       default:
-        return 'Based on your responses across multiple scenarios and stress conditions, here\'s your comprehensive resilience assessment.';
+        return 'Based on your responses, here are your professional development insights for continued growth and learning.';
     }
   };
 
@@ -810,29 +811,29 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
   const getOverallScoreLabel = () => {
     switch (assessmentType) {
       case 'faith-values':
-        return 'Overall Values Alignment Score';
+        return 'Values Exploration Pattern Score';
       case 'leadership':
-        return 'Overall Leadership Score';
+        return 'Leadership Pattern Score';
       case 'career':
       case 'career-launch':
-        return 'Overall Career Readiness Score';
+        return 'Career Interest Pattern Score';
       case 'cair':
-        return 'Overall Personality Score';
+        return 'Professional Development Pattern Score';
       case 'communication':
-        return 'Overall Communication Score';
+        return 'Communication Pattern Score';
       case 'emotional':
-        return 'Overall EQ Score';
+        return 'Emotional Intelligence Pattern Score';
       case 'cultural':
-        return 'Overall CQ Score';
+        return 'Cultural Intelligence Pattern Score';
       case 'digital':
-        return 'Overall Digital Wellness Score';
+        return 'Digital Wellness Pattern Score';
       case 'genz':
-        return 'Overall Workplace Readiness Score';
+        return 'Workplace Preference Pattern Score';
       case 'burnout':
       case 'burnout-prevention':
-        return 'Overall Burnout Risk Score';
+        return 'Wellness Awareness Pattern Score';
       default:
-        return 'Overall Resilience Score';
+        return 'Development Pattern Score';
     }
   };
 
@@ -871,9 +872,10 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         <div className="max-w-6xl mx-auto">
           {/* Results Header */}
           <div className="text-center mb-12">
+            <ComplianceDisclaimer type="post-assessment" assessmentType={assessmentType} className="mb-6" />
             <Badge className="mb-4 bg-green-100 text-green-700 hover:bg-green-200">
               <CheckCircle2 className="h-4 w-4 mr-2" />
-              Assessment Complete
+              Development Insights Complete
             </Badge>
             <h1 className="text-4xl font-bold mb-4">
               {getAssessmentTitle()}
@@ -1207,31 +1209,31 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
               className="bg-gradient-primary hover:shadow-glow"
             >
               <Download className="h-4 w-4 mr-2" />
-              Download Full Report
+              Download Development Insights Report
             </Button>
             
             {candidateInfo && (
               <>
-                <Button 
-                  size="lg" 
-                  onClick={() => generateAIReport('candidate')}
-                  disabled={isGeneratingAI}
-                  className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
-                >
-                  <Sparkles className="h-4 w-4 mr-2" />
-                  {isGeneratingAI ? 'Generating...' : 'Generate AI Report'}
-                </Button>
+                  <Button 
+                    size="lg" 
+                    onClick={() => generateAIReport('candidate')}
+                    disabled={isGeneratingAI}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+                  >
+                    <Sparkles className="h-4 w-4 mr-2" />
+                    {isGeneratingAI ? 'Generating...' : 'Generate Development Insights'}
+                  </Button>
                 
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  onClick={() => generateAIReport('employer')}
-                  disabled={isGeneratingAI}
-                  className="border-orange-500 text-orange-600 hover:bg-orange-50"
-                >
-                  <Building className="h-4 w-4 mr-2" />
-                  {isGeneratingAI ? 'Generating...' : 'Employer Report'}
-                </Button>
+                  <Button 
+                    size="lg" 
+                    variant="outline"
+                    onClick={() => generateAIReport('employer')}
+                    disabled={isGeneratingAI}
+                    className="border-orange-500 text-orange-600 hover:bg-orange-50"
+                  >
+                    <Building className="h-4 w-4 mr-2" />
+                    {isGeneratingAI ? 'Generating...' : 'Team Development Report'}
+                  </Button>
               </>
             )}
             
@@ -1241,7 +1243,7 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
             </Button>
             <Button size="lg" variant="outline">
               <RefreshCw className="h-4 w-4 mr-2" />
-              Retake Assessment
+              Retake Exploration
             </Button>
           </div>
         </div>

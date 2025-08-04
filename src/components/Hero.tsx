@@ -34,25 +34,26 @@ const Hero = () => {
 
             {/* Main heading */}
             <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
-              {t("hero.title")}
+              Professional Development & Career Exploration Platform
             </h1>
             
             {/* Subtitle */}
             <p className="text-lg text-muted-foreground leading-relaxed max-w-lg">
-              {t("hero.subtitle")}
+              Explore workplace dynamics, communication patterns, and career interests through 
+              interactive experiences designed to promote self-reflection and professional growth.
             </p>
 
             {/* Action buttons */}
             <div className="flex flex-col sm:flex-row gap-4">
               <Link to="/assessment">
                 <Button size="lg" className="bg-primary hover:bg-primary/90 group">
-                  {t("hero.getStarted")}
+                  Begin Exploration
                   <TrendingUp className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link to="/about">
                 <Button variant="outline" size="lg">
-                  {t("hero.learnMore")}
+                  Learn More
                 </Button>
               </Link>
             </div>
@@ -60,11 +61,11 @@ const Hero = () => {
             {/* Trust indicators */}
             <div className="flex items-center space-x-2 text-sm text-muted-foreground pt-4">
               <Shield className="w-4 h-4" />
-              <span>{t("features.secure.title")}</span>
+              <span>Secure & Private</span>
               <span>•</span>
-              <span>{t("landing.feature1Title")}</span>
+              <span>Educational Purpose</span>
               <span>•</span>
-              <span>{t("features.comprehensive.title")}</span>
+              <span>Development Focused</span>
             </div>
           </div>
 
@@ -84,15 +85,15 @@ const Hero = () => {
                 <div className="grid grid-cols-3 gap-4 text-center">
                   <div>
                     <div className="text-2xl font-bold text-primary mb-1">10</div>
-                    <div className="text-xs text-muted-foreground">{t("assessments.title")}</div>
+                    <div className="text-xs text-muted-foreground">Development Modules</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-primary mb-1">{t("landing.feature1Title")}</div>
-                    <div className="text-xs text-muted-foreground">{t("features.aiPowered.description")}</div>
+                    <div className="text-2xl font-bold text-primary mb-1">AI-Enhanced</div>
+                    <div className="text-xs text-muted-foreground">Learning Insights</div>
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-primary mb-1">{t("features.secure.title")}</div>
-                    <div className="text-xs text-muted-foreground">{t("features.secure.description")}</div>
+                    <div className="text-2xl font-bold text-primary mb-1">Private</div>
+                    <div className="text-xs text-muted-foreground">& Secure Platform</div>
                   </div>
                 </div>
               </div>

@@ -8,11 +8,13 @@ import Features from "@/components/Features";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
+import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
 
 const Index = () => {
   
   return (
     <div className="min-h-screen bg-background">
+      <ComplianceDisclaimer type="site-wide" />
       <Header />
       <Hero />
       <WhyChooseUs />
