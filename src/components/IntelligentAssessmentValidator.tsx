@@ -354,15 +354,14 @@ const IntelligentAssessmentValidator: React.FC = () => {
       const questionModules = {
         'career-launch': () => import('@/data/careerLaunchQuestions'),
         'cair-personality': () => import('@/data/cairQuestions'),
-        'burnout-prevention': () => import('@/data/burnoutPreventionQuestions'),
-        'stress-resilience': () => import('@/data/stressResilienceQuestions'),
-        'leadership-assessment': () => import('@/data/leadershipQuestions'),
+        'stress-resilience': () => import('@/data/burnoutPreventionQuestions'), // Burnout Prevention Index
+        'cultural-intelligence': () => import('@/data/culturalScenarios'),
+        'communication-styles': () => import('@/data/communicationStylesQuestions'),
         'emotional-intelligence': () => import('@/data/emotionalIntelligenceQuestions'),
         'faith-values': () => import('@/data/faithValuesQuestions'),
         'genz-assessment': () => import('@/data/genZScenarios'),
-        'cultural-intelligence': () => import('@/data/culturalScenarios'),
-        'communication-styles': () => import('@/data/communicationStylesQuestions'),
-        'digital-wellness': () => import('@/data/digitalWellnessData')
+        'digital-wellness': () => import('@/data/digitalWellnessData'),
+        'leadership-assessment': () => import('@/data/leadershipQuestions')
       };
 
       const moduleLoader = questionModules[assessment.id as keyof typeof questionModules];
@@ -379,6 +378,9 @@ const IntelligentAssessmentValidator: React.FC = () => {
       }
 
       const questionData = await moduleLoader();
+      
+      // Add debugging information
+      console.log(`[Validator] Assessment: ${assessment.id}, Module loaded:`, Object.keys(questionData));
       
       // Extract questions with comprehensive property checking
       let questions: any[] = [];
