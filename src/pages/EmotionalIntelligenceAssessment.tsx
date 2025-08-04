@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -11,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Heart, Clock, Users, Brain, CheckCircle2, ArrowLeft, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import LogoDisplay from '@/components/LogoDisplay';
 import { useEmotionalIntelligenceScoring } from '@/hooks/useEmotionalIntelligenceScoring';
 import { emotionalIntelligenceQuestions } from '@/data/emotionalIntelligenceQuestions';
 import { supabase } from '@/integrations/supabase/client';
@@ -29,7 +29,6 @@ type AssessmentPhase = 'welcome' | 'registration' | 'instructions' | 'assessment
 export default function EmotionalIntelligenceAssessment() {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { t } = useTranslation();
   const { calculateScores, isCalculating } = useEmotionalIntelligenceScoring();
   
   const [phase, setPhase] = useState<AssessmentPhase>('welcome');
@@ -142,6 +141,9 @@ export default function EmotionalIntelligenceAssessment() {
           <div className="max-w-4xl mx-auto">
             <Card className="border-rose-200 shadow-xl">
               <CardHeader className="text-center space-y-4">
+                <div className="flex justify-center mb-4">
+                  <LogoDisplay size="md" showTagline={false} />
+                </div>
                 <div className="mx-auto w-20 h-20 bg-gradient-to-br from-rose-500 to-pink-500 rounded-full flex items-center justify-center">
                   <Heart className="w-10 h-10 text-white" />
                 </div>

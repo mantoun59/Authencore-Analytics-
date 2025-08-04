@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -15,8 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
-type Language = 'en' | 'fr' | 'es';
+import LogoDisplay from '@/components/LogoDisplay';
 
 interface UserInfo {
   fullName: string;
@@ -30,8 +29,7 @@ interface UserInfo {
 }
 
 const LeadershipAssessment = () => {
-  const [currentStep, setCurrentStep] = useState<'language' | 'form' | 'instructions' | 'assessment' | 'results'>('language');
-  const [language, setLanguage] = useState<Language>('en');
+  const [currentStep, setCurrentStep] = useState<'form' | 'instructions' | 'assessment' | 'results'>('form');
   const [userInfo, setUserInfo] = useState<UserInfo>({
     fullName: '',
     age: 0,
@@ -50,8 +48,7 @@ const LeadershipAssessment = () => {
   const { toast } = useToast();
 
   const handleRetake = () => {
-    setCurrentStep('language');
-    setLanguage('en');
+    setCurrentStep('form');
     setUserInfo({
       fullName: '',
       age: 0,
@@ -68,15 +65,22 @@ const LeadershipAssessment = () => {
     setElapsedTime(0);
   };
 
-  const t = leadershipTranslations[language];
-  const allQuestions = dimensionOrder.flatMap(dimension => 
-    leadershipQuestions[dimension as keyof typeof leadershipQuestions]
-  );
+  // Use English questions (no language selection needed)
+  const questions = leadershipQuestions.strategicThinking.concat(
+    leadershipQuestions.emotionalIntelligence,
+    leadershipQuestions.communicationInfluence,
+    leadershipQuestions.teamDevelopment,
+    leadershipQuestions.decisionMaking,
+    leadershipQuestions.changeManagement
+  ).map(q => q.en);
+  
+  const allQuestions = questions;
 
-  const currentDimension = dimensionOrder[Math.floor(currentQuestion / 10)];
-  const currentDimensionIndex = Math.floor(currentQuestion / 10);
+  const currentDimension = Math.floor(currentQuestion / 10);
   const questionInDimension = (currentQuestion % 10) + 1;
-
+  const dimensionNames = ['strategicThinking', 'emotionalIntelligence', 'communicationInfluence', 'teamDevelopment', 'decisionMaking', 'changeManagement'];
+  const currentDimensionName = dimensionNames[currentDimension];
+  
   const dimensionIcons = {
     strategicThinking: Target,
     emotionalIntelligence: Brain,
@@ -84,6 +88,57 @@ const LeadershipAssessment = () => {
     teamDevelopment: Users,
     decisionMaking: TrendingUp,
     changeManagement: ArrowRight
+  };
+
+  // English translations
+  const t = {
+    fullName: "Full Name",
+    age: "Age", 
+    email: "Email",
+    gender: "Gender",
+    male: "Male",
+    female: "Female", 
+    other: "Other",
+    preferNotToSay: "Prefer not to say",
+    organization: "Organization",
+    position: "Current Position",
+    experience: "Years of Leadership Experience",
+    teamSize: "Current Team Size",
+    startAssessment: "Start Assessment",
+    instructionsTitle: "Assessment Instructions",
+    instructionsText1: "This assessment evaluates your leadership effectiveness across 6 key dimensions.",
+    instructionsText2: "Please answer each question honestly based on your actual behavior, not ideal behavior.",
+    instructionsText3: "The assessment takes approximately 15-20 minutes to complete.",
+    instruction1: "Read each statement carefully",
+    instruction2: "Select the response that best reflects your typical behavior", 
+    instruction3: "There are no right or wrong answers",
+    instruction4: "Your responses are confidential",
+    beginButton: "Begin Assessment",
+    never: "Never",
+    rarely: "Rarely", 
+    sometimes: "Sometimes",
+    often: "Often",
+    always: "Always",
+    previous: "Previous",
+    next: "Next",
+    submit: "Submit",
+    resultsTitle: "Your Leadership Assessment Results",
+    overallScore: "Overall Leadership Effectiveness Score",
+    downloadPDF: "Download PDF Report",
+    viewReport: "View Detailed Report",
+    request360: "Request 360° Feedback", 
+    retake: "Retake Assessment",
+    leadershipProfile: "Your Leadership Profile",
+    strategicThinking: "Strategic Thinking",
+    emotionalIntelligence: "Emotional Intelligence",
+    communicationInfluence: "Communication & Influence",
+    teamDevelopment: "Team Development",
+    decisionMaking: "Decision Making",
+    changeManagement: "Change Management",
+    exceptional: "Exceptional Leader",
+    strong: "Strong Leader",
+    developing: "Developing Leader",
+    emerging: "Emerging Leader"
   };
 
   useEffect(() => {
@@ -99,11 +154,6 @@ const LeadershipAssessment = () => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const handleLanguageSelect = (lang: Language) => {
-    setLanguage(lang);
-    setCurrentStep('form');
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -245,7 +295,6 @@ const LeadershipAssessment = () => {
   };
 
   const progress = ((currentQuestion + 1) / allQuestions.length) * 100;
-  const CurrentDimensionIcon = dimensionIcons[currentDimension as keyof typeof dimensionIcons];
 
   return (
     <div className="min-h-screen bg-background">
@@ -253,39 +302,18 @@ const LeadershipAssessment = () => {
       
       <div className="pt-20 pb-16">
         <div className="container mx-auto px-4 max-w-4xl">
-          
-          {/* Language Selection */}
-          {currentStep === 'language' && (
-            <Card className="text-center">
-              <CardHeader>
-                <CardTitle className="text-3xl font-bold">Authentic Leadership Assessment</CardTitle>
-                <CardDescription className="text-lg">
-                  Comprehensive Leadership Effectiveness Evaluation
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <h3 className="text-xl mb-6">Select Language / Choisir la langue / Seleccionar idioma</h3>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Button size="lg" onClick={() => handleLanguageSelect('en')}>
-                    🇬🇧 English
-                  </Button>
-                  <Button size="lg" onClick={() => handleLanguageSelect('fr')}>
-                    🇫🇷 Français
-                  </Button>
-                  <Button size="lg" onClick={() => handleLanguageSelect('es')}>
-                    🇪🇸 Español
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          )}
 
           {/* Applicant Information Form */}
           {currentStep === 'form' && (
             <Card>
-              <CardHeader>
-                <CardTitle>{t.startAssessment}</CardTitle>
-                <CardDescription>Please provide your information to begin the assessment</CardDescription>
+              <CardHeader className="text-center">
+                <div className="flex justify-center mb-4">
+                  <LogoDisplay size="md" showTagline={false} />
+                </div>
+                <CardTitle className="text-3xl font-bold">Authentic Leadership Assessment</CardTitle>
+                <CardDescription className="text-lg">
+                  Comprehensive Leadership Effectiveness Evaluation
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <form onSubmit={handleFormSubmit} className="space-y-6">
@@ -436,9 +464,11 @@ const LeadershipAssessment = () => {
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <CurrentDimensionIcon className="h-6 w-6 text-primary" />
+                    <div className="h-6 w-6 text-primary">
+                      {React.createElement(dimensionIcons[currentDimensionName as keyof typeof dimensionIcons])}
+                    </div>
                     <div>
-                      <CardTitle className="text-lg">{t[currentDimension as keyof typeof t]}</CardTitle>
+                      <CardTitle className="text-lg">{t[currentDimensionName as keyof typeof t]}</CardTitle>
                       <CardDescription>
                         Question {questionInDimension} of 10 in this dimension
                       </CardDescription>
@@ -461,7 +491,7 @@ const LeadershipAssessment = () => {
                 
                 <div className="space-y-4">
                   <h3 className="text-lg font-medium">
-                    {allQuestions[currentQuestion]?.[language]}
+                    {allQuestions[currentQuestion]}
                   </h3>
                   
                   <RadioGroup
