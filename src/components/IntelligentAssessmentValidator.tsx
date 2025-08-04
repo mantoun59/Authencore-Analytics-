@@ -350,15 +350,16 @@ const IntelligentAssessmentValidator: React.FC = () => {
     const startTime = performance.now();
     
     try {
-      // Dynamic import of question data
+      // Dynamic import of question data with correct mappings
       const questionModules = {
-        'career-launch': () => import('@/data/careerLaunchQuestionsNew'),
-        'cair-personality': () => import('@/data/cairQuestionsFixed'),
+        'career-launch': () => import('@/data/careerLaunchQuestions'),
+        'cair-personality': () => import('@/data/cairQuestions'),
+        'burnout-prevention': () => import('@/data/burnoutPreventionQuestions'),
         'stress-resilience': () => import('@/data/stressResilienceQuestions'),
         'leadership-assessment': () => import('@/data/leadershipQuestions'),
         'emotional-intelligence': () => import('@/data/emotionalIntelligenceQuestions'),
-        'faith-values': () => import('@/data/complete90FaithValuesQuestions'),
-        'genz-assessment': () => import('@/data/genZScenariosFixed'),
+        'faith-values': () => import('@/data/faithValuesQuestions'),
+        'genz-assessment': () => import('@/data/genZScenarios'),
         'cultural-intelligence': () => import('@/data/culturalScenarios'),
         'communication-styles': () => import('@/data/communicationStylesQuestions'),
         'digital-wellness': () => import('@/data/digitalWellnessData')
@@ -372,57 +373,110 @@ const IntelligentAssessmentValidator: React.FC = () => {
           test: 'Question Data Integrity',
           status: 'failed',
           score: 0,
-          details: ['No question data module found'],
+          details: ['No question data module found for assessment: ' + assessment.id],
           executionTime: performance.now() - startTime
         };
       }
 
       const questionData = await moduleLoader();
       
-      // Extract questions based on specific property names for each assessment
+      // Extract questions with comprehensive property checking
       let questions: any[] = [];
       let dataType = 'unknown';
+      let extractedFrom = '';
       
-      const data = questionData as any; // Type assertion for dynamic properties
+      const data = questionData as any;
       
-      if (data.careerInterests) {
+      // Check for CareerLaunch format
+      if (data.careerInterests && Array.isArray(data.careerInterests)) {
         questions = data.careerInterests;
         dataType = 'career-interests';
-      } else if (data.personalityQuestions) {
+        extractedFrom = 'careerInterests';
+      } 
+      // Check for aptitude tests
+      else if (data.aptitudeTests && Array.isArray(data.aptitudeTests)) {
+        questions = data.aptitudeTests;
+        dataType = 'aptitude-tests';
+        extractedFrom = 'aptitudeTests';
+      }
+      // Check for CAIR personality questions
+      else if (data.personalityQuestions && Array.isArray(data.personalityQuestions)) {
         questions = data.personalityQuestions;
         dataType = 'personality-questions';
-      } else if (data.burnoutPreventionQuestions) {
+        extractedFrom = 'personalityQuestions';
+      }
+      // Check for Burnout Prevention
+      else if (data.burnoutPreventionQuestions && Array.isArray(data.burnoutPreventionQuestions)) {
         questions = data.burnoutPreventionQuestions;
         dataType = 'burnout-questions';
-      } else if (data.communicationStylesQuestions) {
+        extractedFrom = 'burnoutPreventionQuestions';
+      }
+      // Check for Communication Styles
+      else if (data.communicationStylesQuestions && Array.isArray(data.communicationStylesQuestions)) {
         questions = data.communicationStylesQuestions;
         dataType = 'communication-questions';
-      } else if (data.emotionalIntelligenceQuestions) {
+        extractedFrom = 'communicationStylesQuestions';
+      }
+      // Check for Emotional Intelligence
+      else if (data.emotionalIntelligenceQuestions && Array.isArray(data.emotionalIntelligenceQuestions)) {
         questions = data.emotionalIntelligenceQuestions;
         dataType = 'ei-questions';
-      } else if (data.genZScenarios) {
+        extractedFrom = 'emotionalIntelligenceQuestions';
+      }
+      // Check for GenZ scenarios
+      else if (data.genZScenarios && Array.isArray(data.genZScenarios)) {
         questions = data.genZScenarios;
         dataType = 'genz-scenarios';
-      } else if (data.digitalWellnessQuestions) {
+        extractedFrom = 'genZScenarios';
+      }
+      // Check for Digital Wellness
+      else if (data.digitalWellnessQuestions && Array.isArray(data.digitalWellnessQuestions)) {
         questions = data.digitalWellnessQuestions;
         dataType = 'digital-wellness-questions';
-      } else if (data.leadershipQuestions) {
+        extractedFrom = 'digitalWellnessQuestions';
+      }
+      // Check for Leadership
+      else if (data.leadershipQuestions && Array.isArray(data.leadershipQuestions)) {
         questions = data.leadershipQuestions;
         dataType = 'leadership-questions';
-      } else if (data.stressResilienceQuestions) {
+        extractedFrom = 'leadershipQuestions';
+      }
+      // Check for Stress Resilience
+      else if (data.stressResilienceQuestions && Array.isArray(data.stressResilienceQuestions)) {
         questions = data.stressResilienceQuestions;
         dataType = 'stress-questions';
-      } else if (data.faithValuesScenarios || data.scenarios) {
-        questions = data.faithValuesScenarios || data.scenarios;
+        extractedFrom = 'stressResilienceQuestions';
+      }
+      // Check for Faith Values scenarios
+      else if (data.faithValuesScenarios && Array.isArray(data.faithValuesScenarios)) {
+        questions = data.faithValuesScenarios;
         dataType = 'faith-scenarios';
-      } else if (data.culturalScenarios) {
+        extractedFrom = 'faithValuesScenarios';
+      }
+      // Check for Faith Values questions (alternative)
+      else if (data.scenarios && Array.isArray(data.scenarios)) {
+        questions = data.scenarios;
+        dataType = 'faith-scenarios';
+        extractedFrom = 'scenarios';
+      }
+      // Check for Cultural scenarios
+      else if (data.culturalScenarios && Array.isArray(data.culturalScenarios)) {
         questions = data.culturalScenarios;
         dataType = 'cultural-scenarios';
-      } else {
-        // Fallback to first array found
-        const firstArray = Object.values(data).find(val => Array.isArray(val)) as any[];
-        questions = firstArray || [];
-        dataType = 'generic';
+        extractedFrom = 'culturalScenarios';
+      }
+      else {
+        // Fallback: find any array in the data
+        const allProperties = Object.keys(data);
+        const arrayProperty = allProperties.find(prop => Array.isArray(data[prop]));
+        
+        if (arrayProperty) {
+          questions = data[arrayProperty];
+          dataType = 'generic';
+          extractedFrom = arrayProperty;
+        } else {
+          questions = [];
+        }
       }
       
       if (!Array.isArray(questions) || questions.length === 0) {
@@ -431,31 +485,49 @@ const IntelligentAssessmentValidator: React.FC = () => {
           test: 'Question Data Integrity',
           status: 'failed',
           score: 25,
-          details: ['Question data exists but is malformed or empty'],
+          details: [
+            'Question data exists but is malformed or empty',
+            `Available properties: ${Object.keys(data).join(', ')}`,
+            `Assessment ID: ${assessment.id}`
+          ],
           executionTime: performance.now() - startTime
         };
       }
 
-      // Validate question structure based on data type
+      // Enhanced validation based on data type
       const validationResults = questions.map((q, index) => {
         let hasText = false;
         let hasOptions = false;
+        let validationNotes: string[] = [];
         
         switch (dataType) {
           case 'career-interests':
             hasText = !!(q.title || q.description);
             hasOptions = !!(q.category || q.tags || q.interest_type);
+            if (!hasText) validationNotes.push('Missing title/description');
+            if (!hasOptions) validationNotes.push('Missing category/tags/interest_type');
+            break;
+            
+          case 'aptitude-tests':
+            hasText = !!(q.question || q.title);
+            hasOptions = !!(q.options && Array.isArray(q.options) && q.options.length > 0);
+            if (!hasText) validationNotes.push('Missing question/title');
+            if (!hasOptions) validationNotes.push('Missing or empty options array');
             break;
             
           case 'personality-questions':
             hasText = !!(q.questionText);
             hasOptions = !!(q.optionA && q.optionB);
+            if (!hasText) validationNotes.push('Missing questionText');
+            if (!hasOptions) validationNotes.push('Missing optionA or optionB');
             break;
             
           case 'burnout-questions':
           case 'communication-questions':
-            hasText = !!(q.question);
+            hasText = !!(q.question || q.text);
             hasOptions = !!(q.options && Array.isArray(q.options) && q.options.length > 0);
+            if (!hasText) validationNotes.push('Missing question/text');
+            if (!hasOptions) validationNotes.push('Missing or empty options array');
             break;
             
           case 'ei-questions':
@@ -463,31 +535,46 @@ const IntelligentAssessmentValidator: React.FC = () => {
           case 'leadership-questions':
           case 'stress-questions':
             hasText = !!(q.question || q.text);
-            hasOptions = !!(q.dimension); // These use Likert scales
+            hasOptions = !!(q.dimension || q.scale || q.options);
+            if (!hasText) validationNotes.push('Missing question/text');
+            if (!hasOptions) validationNotes.push('Missing dimension/scale/options');
             break;
             
           case 'genz-scenarios':
             hasText = !!(q.text || q.scenario);
             hasOptions = !!(q.responses && typeof q.responses === 'object' && Object.keys(q.responses).length > 0);
+            if (!hasText) validationNotes.push('Missing text/scenario');
+            if (!hasOptions) validationNotes.push('Missing or empty responses object');
             break;
             
           case 'faith-scenarios':
           case 'cultural-scenarios':
             hasText = !!(q.scenario || q.text);
             hasOptions = !!(q.options && Array.isArray(q.options) && q.options.length > 0);
+            if (!hasText) validationNotes.push('Missing scenario/text');
+            if (!hasOptions) validationNotes.push('Missing or empty options array');
             break;
             
           default:
-            // Generic validation
+            // Generic validation - be more permissive
             hasText = !!(q.text || q.question || q.scenario || q.questionText || q.title);
-            hasOptions = !!(q.options || q.choices || q.responses || (q.optionA && q.optionB) || q.dimension);
+            hasOptions = !!(q.options || q.choices || q.responses || (q.optionA && q.optionB) || q.dimension || q.scale);
+            if (!hasText) validationNotes.push('Missing text field');
+            if (!hasOptions) validationNotes.push('Missing options/choices');
         }
         
-        return { index, hasText, hasOptions, valid: hasText && hasOptions };
+        return { 
+          index, 
+          hasText, 
+          hasOptions, 
+          valid: hasText && hasOptions,
+          notes: validationNotes
+        };
       });
 
       const validQuestions = validationResults.filter(r => r.valid).length;
       const score = Math.round((validQuestions / questions.length) * 100);
+      const invalidQuestions = validationResults.filter(r => !r.valid);
 
       const executionTime = performance.now() - startTime;
 
@@ -499,10 +586,12 @@ const IntelligentAssessmentValidator: React.FC = () => {
         details: [
           `${questions.length} questions found`,
           `${validQuestions} questions properly formatted`,
-          `${questions.length - validQuestions} questions need attention`
+          `${questions.length - validQuestions} questions need attention`,
+          `Data extracted from: ${extractedFrom}`,
+          `Data type: ${dataType}`
         ],
         executionTime,
-        aiInsights: await getAIInsight(`Question data quality: ${score}% valid questions`)
+        aiInsights: await getAIInsight(`Question data quality: ${score}% valid questions from ${dataType}`)
       };
     } catch (error) {
       return {
