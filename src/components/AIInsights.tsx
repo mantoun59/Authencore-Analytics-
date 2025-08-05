@@ -3,7 +3,7 @@ import { Brain, Target, TrendingUp } from 'lucide-react';
 
 const AIInsights = () => {
   return (
-    <section className="py-16 bg-background">
+    <section className="py-20 bg-background mt-8">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center text-foreground mb-4">AI-Enhanced Development Insights</h2>
         <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">

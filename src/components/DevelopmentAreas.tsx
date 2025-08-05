@@ -144,7 +144,7 @@ const DevelopmentAreas = () => {
   ];
 
   return (
-    <section className="py-16 bg-muted/30">
+    <section className="py-20 bg-muted/30 mt-8">
       <div className="container mx-auto px-4">
         <h2 className="text-3xl font-bold text-center text-foreground mb-4">Professional Development Exploration Areas</h2>
         <p className="text-lg text-muted-foreground text-center mb-12 max-w-3xl mx-auto">

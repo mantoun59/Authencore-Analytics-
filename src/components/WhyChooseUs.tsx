@@ -27,7 +27,7 @@ const WhyChooseUs = () => {
   ];
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-24 bg-background mt-8">
       <div className="container mx-auto px-4">
         {/* Platform Notice Banner */}
         <div className="bg-blue-50 dark:bg-blue-950/20 border-l-4 border-blue-400 p-4 mb-16 rounded-r-lg">
