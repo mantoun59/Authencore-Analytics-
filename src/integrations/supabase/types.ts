@@ -7,7 +7,7 @@ export type Json =
   | Json[]
 
 export type Database = {
-  // Allows to automatically instanciate createClient with right options
+  // Allows to automatically instantiate createClient with right options
   // instead of createClient<Database, { PostgrestVersion: 'XX' }>(URL, KEY)
   __InternalSupabase: {
     PostgrestVersion: "12.2.3 (519615d)"
@@ -2097,21 +2097,21 @@ export type Database = {
       authenticate_employer: {
         Args: { p_email: string; p_password: string }
         Returns: {
-          employer_id: string
-          name: string
           email: string
+          employer_id: string
           is_active: boolean
+          name: string
         }[]
       }
       authenticate_partner: {
-        Args: { p_username: string; p_password: string }
+        Args: { p_password: string; p_username: string }
         Returns: {
-          partner_id: string
-          username: string
-          organization_name: string
           access_expires_at: string
           is_active: boolean
           is_expired: boolean
+          organization_name: string
+          partner_id: string
+          username: string
         }[]
       }
       check_assessment_access: {
@@ -2119,17 +2119,17 @@ export type Database = {
         Returns: boolean
       }
       check_guest_access: {
-        Args: { p_token: string; p_assessment_type: string }
+        Args: { p_assessment_type: string; p_token: string }
         Returns: boolean
       }
       check_partner_assessment_access: {
-        Args: { p_partner_id: string; p_assessment_type: string }
+        Args: { p_assessment_type: string; p_partner_id: string }
         Returns: boolean
       }
       check_rate_limit: {
         Args: {
-          p_identifier: string
           p_endpoint: string
+          p_identifier: string
           p_limit?: number
           p_window_minutes?: number
         }
@@ -2149,10 +2149,10 @@ export type Database = {
       }
       detect_suspicious_activity: {
         Args: {
-          p_user_id: string
+          p_action: string
           p_ip_address: unknown
           p_user_agent: string
-          p_action: string
+          p_user_id: string
         }
         Returns: boolean
       }
@@ -2163,44 +2163,44 @@ export type Database = {
       get_deletion_request_status: {
         Args: Record<PropertyKey, never>
         Returns: {
-          request_id: string
-          status: string
-          requested_at: string
           processed_at: string
+          request_id: string
+          requested_at: string
+          status: string
         }[]
       }
       get_normative_percentiles: {
         Args: {
           p_assessment_type: string
+          p_demographics?: Json
           p_dimension: string
           p_score: number
-          p_demographics?: Json
         }
         Returns: Json
       }
       get_security_compliance_status: {
         Args: Record<PropertyKey, never>
         Returns: {
-          total_improvements: number
+          compliance_score: number
           implemented: number
           pending: number
           requires_config: number
-          compliance_score: number
+          total_improvements: number
         }[]
       }
       get_security_status: {
         Args: Record<PropertyKey, never>
         Returns: {
-          table_name: string
-          rls_enabled: boolean
-          policy_count: number
           last_updated: string
+          policy_count: number
+          rls_enabled: boolean
+          table_name: string
         }[]
       }
       has_role: {
         Args: {
-          _user_id: string
           _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
         }
         Returns: boolean
       }
@@ -2210,21 +2210,21 @@ export type Database = {
       }
       log_analytics_event: {
         Args: {
-          p_event_type: string
-          p_entity_type?: string
           p_entity_id?: string
+          p_entity_type?: string
+          p_event_type: string
           p_metadata?: Json
         }
         Returns: undefined
       }
       log_partner_activity: {
         Args: {
-          p_partner_id: string
           p_action: string
           p_assessment_type?: string
           p_ip_address?: string
-          p_user_agent?: string
           p_metadata?: Json
+          p_partner_id: string
+          p_user_agent?: string
         }
         Returns: undefined
       }
@@ -2238,17 +2238,17 @@ export type Database = {
       }
       log_security_event: {
         Args: {
-          p_user_id: string
-          p_event_type: string
           p_event_details?: Json
+          p_event_type: string
           p_ip_address?: unknown
-          p_user_agent?: string
           p_severity?: string
+          p_user_agent?: string
+          p_user_id: string
         }
         Returns: string
       }
       policy_exists: {
-        Args: { table_name: string; policy_name: string }
+        Args: { policy_name: string; table_name: string }
         Returns: boolean
       }
       request_admin_password_reset: {
@@ -2260,11 +2260,11 @@ export type Database = {
         Returns: string
       }
       trigger_purchase_report: {
-        Args: { p_period: string; p_admin_email?: string }
+        Args: { p_admin_email?: string; p_period: string }
         Returns: Json
       }
       use_guest_token: {
-        Args: { p_token: string; p_assessment_type: string }
+        Args: { p_assessment_type: string; p_token: string }
         Returns: boolean
       }
     }
