@@ -41,7 +41,7 @@ export const DemoModeToggle = () => {
 
   if (isDemoMode) {
     return (
-      <div className="fixed top-4 right-4 z-50">
+      <div className="fixed top-4 right-4 z-[9999]">
         <Card className="bg-orange-50 border-orange-200 dark:bg-orange-950 dark:border-orange-800">
           <CardContent className="p-4">
             <div className="flex items-center justify-between space-x-4">
@@ -142,12 +142,12 @@ export const DemoModeToggle = () => {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-[9999]">
       <Button
         onClick={handleToggleDemoMode}
         variant="outline"
         size="lg"
-        className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-300"
+        className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-300 shadow-lg"
       >
         <TestTube className="h-4 w-4 mr-2" />
         Enable Demo Mode
