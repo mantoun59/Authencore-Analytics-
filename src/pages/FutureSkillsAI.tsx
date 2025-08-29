@@ -15,8 +15,8 @@ const FutureSkillsAI: React.FC = () => {
     <>
       <SEOHead 
         title="Future Skills AI Intelligence Platform | AuthenCore"
-        description="Predict your future skills needs and career pathways using advanced AI intelligence for up to 3 years ahead. Get personalized recommendations based on your assessment results."
-        keywords="future skills, AI prediction, career pathways, skills forecasting, professional development, AI intelligence"
+        description="Revolutionary real-time skills intelligence platform with live market data from global sources. Multi-AI consensus predictions, automated insights from recruitment companies, governments, NGOs, and economic institutions worldwide."
+        keywords="future skills, AI prediction, career pathways, skills forecasting, professional development, AI intelligence, real-time market data, multi-AI consensus, global skills intelligence, live dashboard"
       />
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
         <FutureSkillsEnhanced />
