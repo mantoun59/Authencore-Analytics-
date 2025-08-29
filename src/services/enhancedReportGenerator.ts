@@ -95,14 +95,7 @@ export class EnhancedReportGenerator {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${title} - ${reportSubtitle}</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.min.js" integrity="sha512-7U4rRB8aGAHGVad3u2jiC7GA5/1YhQcQjxKeaVms/bT66i3LVBMRcBI9KwABNWnxOSwulkuSXxZLGuyfvo7V1A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script>
-    // Immediate fallback if Chart.js doesn't load
-    window.chartJSLoaded = false;
-    if (typeof Chart !== 'undefined') {
-      window.chartJSLoaded = true;
-    }
-  </script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
   <style>${this.getProfessionalStyles()}</style>
 </head>
 <body>
@@ -122,74 +115,137 @@ export class EnhancedReportGenerator {
   </div>
   
   <script>
-    // Immediate chart creation - don't wait for anything
-    console.log('Starting immediate chart creation...');
-    
-    // Get chart data
-    const chartData = {
+    // Single, unified chart initialization system
+    window.CHART_DATA = {
       labels: ${JSON.stringify(this.extractDimensions(config.results).map(d => d.name))},
       scores: ${JSON.stringify(this.extractDimensions(config.results).map(d => d.score))}
     };
-    
-    console.log('Chart data:', chartData);
-    
-    // Create charts immediately when DOM is ready
-    function createChartsNow() {
-      console.log('Creating charts now...');
+
+    // Global chart creation function 
+    window.initializeCharts = function() {
+      console.log('🎯 Initializing charts with data:', window.CHART_DATA);
       
       const radarCanvas = document.getElementById('radarChart');
       const barCanvas = document.getElementById('barChart');
-      
-      console.log('Canvas elements found:', { radar: !!radarCanvas, bar: !!barCanvas });
+      const radarLoading = document.getElementById('radarLoading');
+      const barLoading = document.getElementById('barLoading');
       
       if (!radarCanvas || !barCanvas) {
-        console.error('Canvas elements not found!');
+        console.error('❌ Chart canvases not found');
         return;
       }
-      
-      // Set proper canvas size
+
+      // Set explicit dimensions
       radarCanvas.width = 400;
       radarCanvas.height = 300;
-      barCanvas.width = 400;
+      barCanvas.width = 400; 
       barCanvas.height = 300;
-      
-      // Try Chart.js first, then fallback
-      if (typeof Chart !== 'undefined') {
-        console.log('Using Chart.js for charts');
-        createChartJSCharts(radarCanvas, barCanvas, chartData);
+
+      // Try Chart.js, fallback to canvas
+      if (typeof Chart !== 'undefined' && Chart.register) {
+        console.log('✅ Using Chart.js');
+        createChartJSCharts();
       } else {
-        console.log('Chart.js not available, using canvas fallback');
-        createCanvasCharts(radarCanvas, barCanvas, chartData);
+        console.log('🔄 Using Canvas fallback');
+        createCanvasCharts();
       }
-    }
-    
-    function createChartJSCharts(radarCanvas, barCanvas, data) {
+      
+      // Hide loading indicators
+      if (radarLoading) radarLoading.style.display = 'none';
+      if (barLoading) barLoading.style.display = 'none';
+    };
+
+    function createChartJSCharts() {
       try {
+        const data = window.CHART_DATA;
+        
+        // Clear any existing Chart.js instances
+        if (Chart.getChart) {
+          Chart.getChart('radarChart')?.destroy();
+          Chart.getChart('barChart')?.destroy();
+        }
+        
         // Radar Chart
-        new Chart(radarCanvas.getContext('2d'), {
+        new Chart(document.getElementById('radarChart'), {
           type: 'radar',
           data: {
             labels: data.labels,
             datasets: [{
-              label: 'Your Scores',
+              label: 'Assessment Scores',
               data: data.scores,
-              backgroundColor: 'rgba(59, 130, 246, 0.2)',
-              borderColor: 'rgba(59, 130, 246, 1)',
+              backgroundColor: 'rgba(59, 130, 246, 0.15)',
+              borderColor: '#3b82f6',
               borderWidth: 2,
-              pointBackgroundColor: 'rgba(59, 130, 246, 1)',
-              pointBorderColor: '#fff',
+              pointBackgroundColor: '#3b82f6',
+              pointBorderColor: '#ffffff',
               pointBorderWidth: 2,
               pointRadius: 4
             }]
           },
           options: {
             responsive: false,
+            maintainAspectRatio: false,
             scales: {
               r: {
                 beginAtZero: true,
                 min: 0,
                 max: 100,
-                ticks: { stepSize: 20 }
+                ticks: { 
+                  stepSize: 20,
+                  color: '#6b7280',
+                  backdropColor: 'transparent'
+                },
+                grid: { color: '#e5e7eb' },
+                angleLines: { color: '#e5e7eb' },
+                pointLabels: { 
+                  color: '#374151',
+                  font: { size: 11 }
+                }
+              }
+            },
+            plugins: {
+              legend: { display: false }
+            }
+          }
+        });
+
+        // Bar Chart
+        new Chart(document.getElementById('barChart'), {
+          type: 'bar',
+          data: {
+            labels: data.labels,
+            datasets: [{
+              data: data.scores,
+              backgroundColor: data.scores.map(score => 
+                score >= 85 ? '#10b981' :
+                score >= 70 ? '#3b82f6' : 
+                score >= 60 ? '#f59e0b' : '#ef4444'
+              ),
+              borderColor: data.scores.map(score => 
+                score >= 85 ? '#059669' :
+                score >= 70 ? '#2563eb' :
+                score >= 60 ? '#d97706' : '#dc2626'
+              ),
+              borderWidth: 1
+            }]
+          },
+          options: {
+            responsive: false,
+            maintainAspectRatio: false,
+            scales: {
+              y: { 
+                beginAtZero: true, 
+                max: 100,
+                ticks: { color: '#6b7280' },
+                grid: { color: '#f3f4f6' }
+              },
+              x: { 
+                ticks: { 
+                  color: '#374151',
+                  maxRotation: 45,
+                  font: { size: 10 }
+                },
+                grid: { display: false }
               }
             },
             plugins: {
@@ -198,53 +254,28 @@ export class EnhancedReportGenerator {
           }
         });
         
-        // Bar Chart  
-        new Chart(barCanvas.getContext('2d'), {
-          type: 'bar',
-          data: {
-            labels: data.labels,
-            datasets: [{
-              label: 'Scores',
-              data: data.scores,
-              backgroundColor: data.scores.map(score => 
-                score >= 85 ? '#059669' :
-                score >= 70 ? '#3b82f6' :
-                score >= 60 ? '#d97706' : '#dc2626'
-              )
-            }]
-          },
-          options: {
-            responsive: false,
-            scales: {
-              y: { beginAtZero: true, max: 100 }
-            },
-            plugins: {
-              legend: { display: false }
-            }
-          }
-        });
-        
-        console.log('✅ Chart.js charts created successfully');
+        console.log('✅ Chart.js charts rendered successfully');
       } catch (error) {
-        console.error('Chart.js failed:', error);
-        createCanvasCharts(radarCanvas, barCanvas, data);
+        console.error('❌ Chart.js failed:', error);
+        createCanvasCharts();
       }
     }
-    
-    function createCanvasCharts(radarCanvas, barCanvas, data) {
-      console.log('Creating canvas fallback charts...');
+
+    function createCanvasCharts() {
+      console.log('🎨 Creating canvas fallback charts');
+      const data = window.CHART_DATA;
       
       // Radar Chart
+      const radarCanvas = document.getElementById('radarChart');
       const radarCtx = radarCanvas.getContext('2d');
-      const centerX = 200;
-      const centerY = 150;
-      const radius = 100;
+      const centerX = 200, centerY = 150, radius = 80;
       
-      // Clear and set background
+      // Clear canvas
+      radarCtx.clearRect(0, 0, 400, 300);
       radarCtx.fillStyle = '#ffffff';
       radarCtx.fillRect(0, 0, 400, 300);
       
-      // Draw grid circles
+      // Draw radar grid
       radarCtx.strokeStyle = '#e5e7eb';
       radarCtx.lineWidth = 1;
       for (let i = 1; i <= 5; i++) {
@@ -255,13 +286,12 @@ export class EnhancedReportGenerator {
       
       // Draw axes and labels
       const angleStep = (2 * Math.PI) / data.labels.length;
-      for (let i = 0; i < data.labels.length; i++) {
+      data.labels.forEach((label, i) => {
         const angle = i * angleStep - Math.PI / 2;
         const x = centerX + Math.cos(angle) * radius;
         const y = centerY + Math.sin(angle) * radius;
         
-        // Axis line
-        radarCtx.strokeStyle = '#e5e7eb';
+        // Axis
         radarCtx.beginPath();
         radarCtx.moveTo(centerX, centerY);
         radarCtx.lineTo(x, y);
@@ -271,86 +301,85 @@ export class EnhancedReportGenerator {
         radarCtx.fillStyle = '#374151';
         radarCtx.font = '10px Arial';
         radarCtx.textAlign = 'center';
-        const labelX = centerX + Math.cos(angle) * (radius + 15);
-        const labelY = centerY + Math.sin(angle) * (radius + 15);
-        radarCtx.fillText(data.labels[i], labelX, labelY);
-      }
+        const labelX = centerX + Math.cos(angle) * (radius + 20);
+        const labelY = centerY + Math.sin(angle) * (radius + 20);
+        radarCtx.fillText(label, labelX, labelY);
+      });
       
-      // Draw data
+      // Draw data polygon
       radarCtx.strokeStyle = '#3b82f6';
-      radarCtx.fillStyle = 'rgba(59, 130, 246, 0.2)';
+      radarCtx.fillStyle = 'rgba(59, 130, 246, 0.15)';
       radarCtx.lineWidth = 2;
       radarCtx.beginPath();
       
-      for (let i = 0; i < data.scores.length; i++) {
+      data.scores.forEach((score, i) => {
         const angle = i * angleStep - Math.PI / 2;
-        const distance = (data.scores[i] / 100) * radius;
+        const distance = (score / 100) * radius;
         const x = centerX + Math.cos(angle) * distance;
         const y = centerY + Math.sin(angle) * distance;
         
         if (i === 0) radarCtx.moveTo(x, y);
         else radarCtx.lineTo(x, y);
-      }
+      });
       radarCtx.closePath();
       radarCtx.fill();
       radarCtx.stroke();
       
       // Bar Chart
+      const barCanvas = document.getElementById('barChart');
       const barCtx = barCanvas.getContext('2d');
-      const chartWidth = 320;
-      const chartHeight = 200;
+      const chartWidth = 320, chartHeight = 200;
       const barWidth = chartWidth / data.labels.length * 0.7;
-      const barSpacing = chartWidth / data.labels.length * 0.3;
       
-      // Clear and set background
+      // Clear canvas
+      barCtx.clearRect(0, 0, 400, 300);
       barCtx.fillStyle = '#ffffff';
       barCtx.fillRect(0, 0, 400, 300);
       
       // Draw bars
-      for (let i = 0; i < data.scores.length; i++) {
-        const barHeight = (data.scores[i] / 100) * chartHeight;
-        const x = 40 + (i * (barWidth + barSpacing));
+      data.scores.forEach((score, i) => {
+        const barHeight = (score / 100) * chartHeight;
+        const x = 40 + (i * (chartWidth / data.labels.length));
         const y = 250 - barHeight;
         
         // Bar color
-        const score = data.scores[i];
-        barCtx.fillStyle = score >= 85 ? '#059669' :
+        barCtx.fillStyle = score >= 85 ? '#10b981' :
                           score >= 70 ? '#3b82f6' :
-                          score >= 60 ? '#d97706' : '#dc2626';
+                          score >= 60 ? '#f59e0b' : '#ef4444';
         
         barCtx.fillRect(x, y, barWidth, barHeight);
         
         // Score text
         barCtx.fillStyle = '#374151';
-        barCtx.font = '12px Arial';
+        barCtx.font = 'bold 11px Arial';
         barCtx.textAlign = 'center';
-        barCtx.fillText(data.scores[i] + '%', x + barWidth/2, y - 5);
+        barCtx.fillText(score + '%', x + barWidth/2, y - 8);
         
         // Label
-        barCtx.font = '10px Arial';
+        barCtx.font = '9px Arial';
         barCtx.save();
-        barCtx.translate(x + barWidth/2, 265);
-        barCtx.rotate(-Math.PI/6);
+        barCtx.translate(x + barWidth/2, 270);
+        barCtx.rotate(-Math.PI/8);
         barCtx.fillText(data.labels[i], 0, 0);
         barCtx.restore();
-      }
+      });
       
-      console.log('✅ Canvas charts created successfully');
+      console.log('✅ Canvas charts rendered successfully');
     }
-    
-    // Execute immediately
+
+    // Initialize when ready
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', createChartsNow);
+      document.addEventListener('DOMContentLoaded', window.initializeCharts);
     } else {
-      createChartsNow();
+      // Try immediate, then delayed
+      window.initializeCharts();
+      setTimeout(window.initializeCharts, 500);
     }
     
-    // Small delay for print
-    setTimeout(() => {
-      if (window.location.search.includes('print=true')) {
-        window.print();
-      }
-    }, 1000);
+    // Handle print
+    window.addEventListener('beforeprint', function() {
+      setTimeout(window.initializeCharts, 100);
+    });
   </script>
 </body>
 </html>`;
@@ -971,19 +1000,35 @@ export class EnhancedReportGenerator {
         <div class="chart-grid">
           <div class="chart-container">
             <h3 style="margin-bottom: 20px; color: #1e293b; font-weight: 600;">
-              📊 Competency Radar Chart
+              📊 Competency Radar Analysis
             </h3>
-            <div style="position: relative; height: 300px; width: 100%;">
-              <canvas id="radarChart" width="400" height="300" style="width: 100%; height: 100%; border: 1px solid #e5e7eb; border-radius: 8px;"></canvas>
+            <div style="position: relative; height: 300px; width: 100%; display: flex; align-items: center; justify-content: center; background: #f8fafc; border-radius: 8px; border: 1px solid #e5e7eb;">
+              <canvas 
+                id="radarChart" 
+                width="400" 
+                height="300" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px;"
+              ></canvas>
+              <div id="radarLoading" style="position: absolute; color: #6b7280; font-size: 14px;">
+                ⏳ Loading radar chart...
+              </div>
             </div>
           </div>
           
           <div class="chart-container">
             <h3 style="margin-bottom: 20px; color: #1e293b; font-weight: 600;">
-              📈 Score Distribution
+              📈 Performance Distribution
             </h3>
-            <div style="position: relative; height: 300px; width: 100%;">
-              <canvas id="barChart" width="400" height="300" style="width: 100%; height: 100%; border: 1px solid #e5e7eb; border-radius: 8px;"></canvas>
+            <div style="position: relative; height: 300px; width: 100%; display: flex; align-items: center; justify-content: center; background: #f8fafc; border-radius: 8px; border: 1px solid #e5e7eb;">
+              <canvas 
+                id="barChart" 
+                width="400" 
+                height="300" 
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px;"
+              ></canvas>
+              <div id="barLoading" style="position: absolute; color: #6b7280; font-size: 14px;">
+                ⏳ Loading bar chart...
+              </div>
             </div>
           </div>
         </div>
