@@ -1,35 +1,35 @@
 import Header from "@/components/Header";
-import Hero from "@/components/Hero";
-import WhyChooseUs from "@/components/WhyChooseUs";
-import PsychometricsInfo from "@/components/PsychometricsInfo";
-import HowItWorksNew from "@/components/HowItWorksNew";
-import DevelopmentAreas from "@/components/DevelopmentAreas";
-import AIInsights from "@/components/AIInsights";
-import Gallery from "@/components/Gallery";
-import Features from "@/components/Features";
+import AuthenCoreHero from "@/components/AuthenCoreHero";
+import PlatformOverview from "@/components/PlatformOverview";
+import TargetAudiences from "@/components/TargetAudiences";
+import ComprehensiveFeatures from "@/components/ComprehensiveFeatures";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
+import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
   
   return (
-    <div className="min-h-screen bg-background">
-      <ComplianceDisclaimer type="site-wide" />
-      <Header />
-      <Hero />
-      <WhyChooseUs />
-      <HowItWorksNew />
-      <DevelopmentAreas />
-      <AIInsights />
-      <PsychometricsInfo />
-      <Gallery />
-      <Features />
-      <CTA />
-      <Footer />
-      <CookieBanner />
-    </div>
+    <>
+      <SEOHead 
+        title="AuthenCore Analytics | Professional Development & Future Skills AI Intelligence Platform"
+        description="Comprehensive analytics platform combining self-development insights with AI-powered skills prediction for HR managers, individuals, and government organizations. Real-time market intelligence and predictive career analytics."
+        keywords="professional development, future skills AI, career analytics, HR intelligence, workforce analytics, skills prediction, talent development, AI-powered insights, career pathways, professional growth"
+      />
+      <div className="min-h-screen bg-background">
+        <ComplianceDisclaimer type="site-wide" />
+        <Header />
+        <AuthenCoreHero />
+        <PlatformOverview />
+        <TargetAudiences />
+        <ComprehensiveFeatures />
+        <CTA />
+        <Footer />
+        <CookieBanner />
+      </div>
+    </>
   );
 };
 

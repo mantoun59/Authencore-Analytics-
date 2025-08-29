@@ -10,6 +10,7 @@ import { DemoModeToggle } from "@/components/DemoModeToggle";
 
 // Immediate load - Critical pages and description pages
 import Index from "@/pages/Index";
+import DevelopmentModules from "@/pages/DevelopmentModules";
 import About from "@/pages/About";
 import Auth from "@/pages/Auth";
 import Profile from "@/pages/Profile";
@@ -107,6 +108,7 @@ const RouteConfig = () => {
             <Routes>
               {/* Critical Routes - Immediate Load */}
               <Route path="/" element={<Index />} />
+              <Route path="/development" element={<DevelopmentModules />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
               
