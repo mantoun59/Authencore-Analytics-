@@ -328,6 +328,48 @@ export type Database = {
         }
         Relationships: []
       }
+      assessment_skills_mapping: {
+        Row: {
+          assessment_dimension: string
+          assessment_type: string
+          created_at: string
+          created_by: string | null
+          id: string
+          mapped_skills: string[]
+          mapping_confidence: number
+          prediction_relevance: number
+          skill_weights: Json
+          updated_at: string
+          validated_by: string | null
+        }
+        Insert: {
+          assessment_dimension: string
+          assessment_type: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          mapped_skills?: string[]
+          mapping_confidence?: number
+          prediction_relevance?: number
+          skill_weights?: Json
+          updated_at?: string
+          validated_by?: string | null
+        }
+        Update: {
+          assessment_dimension?: string
+          assessment_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          mapped_skills?: string[]
+          mapping_confidence?: number
+          prediction_relevance?: number
+          skill_weights?: Json
+          updated_at?: string
+          validated_by?: string | null
+        }
+        Relationships: []
+      }
       assessment_validation_status: {
         Row: {
           assessment_type: string
@@ -434,6 +476,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      career_pathway_predictions: {
+        Row: {
+          confidence_scores: Json
+          created_at: string
+          id: string
+          industry_trends: Json
+          market_opportunities: Json
+          personalization_factors: Json | null
+          predicted_pathways: Json
+          risk_factors: Json
+          skills_progression: Json
+          timeline_predictions: Json
+          updated_at: string
+          user_current_role: string
+          user_id: string
+        }
+        Insert: {
+          confidence_scores?: Json
+          created_at?: string
+          id?: string
+          industry_trends?: Json
+          market_opportunities?: Json
+          personalization_factors?: Json | null
+          predicted_pathways?: Json
+          risk_factors?: Json
+          skills_progression?: Json
+          timeline_predictions?: Json
+          updated_at?: string
+          user_current_role: string
+          user_id: string
+        }
+        Update: {
+          confidence_scores?: Json
+          created_at?: string
+          id?: string
+          industry_trends?: Json
+          market_opportunities?: Json
+          personalization_factors?: Json | null
+          predicted_pathways?: Json
+          risk_factors?: Json
+          skills_progression?: Json
+          timeline_predictions?: Json
+          updated_at?: string
+          user_current_role?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       chatbot_analytics: {
         Row: {
@@ -1003,6 +1093,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      industry_skills_trends: {
+        Row: {
+          confidence_level: number
+          created_at: string
+          data_collection_date: string
+          data_sources: Json | null
+          declining_skills: Json
+          emerging_technologies: Json
+          forecast_horizon: number
+          geographic_variations: Json | null
+          id: string
+          industry_name: string
+          job_market_data: Json
+          salary_trends: Json
+          skill_demand_forecast: Json
+          trending_skills: Json
+          updated_at: string
+        }
+        Insert: {
+          confidence_level?: number
+          created_at?: string
+          data_collection_date?: string
+          data_sources?: Json | null
+          declining_skills?: Json
+          emerging_technologies?: Json
+          forecast_horizon?: number
+          geographic_variations?: Json | null
+          id?: string
+          industry_name: string
+          job_market_data?: Json
+          salary_trends?: Json
+          skill_demand_forecast?: Json
+          trending_skills?: Json
+          updated_at?: string
+        }
+        Update: {
+          confidence_level?: number
+          created_at?: string
+          data_collection_date?: string
+          data_sources?: Json | null
+          declining_skills?: Json
+          emerging_technologies?: Json
+          forecast_horizon?: number
+          geographic_variations?: Json | null
+          id?: string
+          industry_name?: string
+          job_market_data?: Json
+          salary_trends?: Json
+          skill_demand_forecast?: Json
+          trending_skills?: Json
+          updated_at?: string
+        }
+        Relationships: []
       }
       leadership_behavior_results: {
         Row: {
@@ -1778,6 +1922,60 @@ export type Database = {
         }
         Relationships: []
       }
+      skills_taxonomy: {
+        Row: {
+          created_at: string
+          current_demand_score: number
+          data_sources: Json | null
+          description: string | null
+          emergence_timeline: string
+          future_demand_score: number
+          growth_trajectory: number
+          id: string
+          industry_relevance: Json
+          last_updated: string
+          obsolescence_risk: number
+          related_skills: string[]
+          skill_category: string
+          skill_name: string
+          skill_type: string
+        }
+        Insert: {
+          created_at?: string
+          current_demand_score?: number
+          data_sources?: Json | null
+          description?: string | null
+          emergence_timeline?: string
+          future_demand_score?: number
+          growth_trajectory?: number
+          id?: string
+          industry_relevance?: Json
+          last_updated?: string
+          obsolescence_risk?: number
+          related_skills?: string[]
+          skill_category: string
+          skill_name: string
+          skill_type?: string
+        }
+        Update: {
+          created_at?: string
+          current_demand_score?: number
+          data_sources?: Json | null
+          description?: string | null
+          emergence_timeline?: string
+          future_demand_score?: number
+          growth_trajectory?: number
+          id?: string
+          industry_relevance?: Json
+          last_updated?: string
+          obsolescence_risk?: number
+          related_skills?: string[]
+          skill_category?: string
+          skill_name?: string
+          skill_type?: string
+        }
+        Relationships: []
+      }
       solo_candidates: {
         Row: {
           access_token: string
@@ -1957,6 +2155,60 @@ export type Database = {
           last_accessed?: string
           session_token?: string
           user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_skills_predictions: {
+        Row: {
+          assessment_result_id: string | null
+          confidence_level: number
+          created_at: string
+          expires_at: string
+          future_readiness_score: number
+          generated_at: string
+          id: string
+          industry_context: string | null
+          predicted_skills: Json
+          prediction_metadata: Json | null
+          prediction_timeframe: number
+          recommended_learning_path: Json
+          role_context: string | null
+          skills_gap_analysis: Json
+          user_id: string
+        }
+        Insert: {
+          assessment_result_id?: string | null
+          confidence_level?: number
+          created_at?: string
+          expires_at?: string
+          future_readiness_score?: number
+          generated_at?: string
+          id?: string
+          industry_context?: string | null
+          predicted_skills?: Json
+          prediction_metadata?: Json | null
+          prediction_timeframe?: number
+          recommended_learning_path?: Json
+          role_context?: string | null
+          skills_gap_analysis?: Json
+          user_id: string
+        }
+        Update: {
+          assessment_result_id?: string | null
+          confidence_level?: number
+          created_at?: string
+          expires_at?: string
+          future_readiness_score?: number
+          generated_at?: string
+          id?: string
+          industry_context?: string | null
+          predicted_skills?: Json
+          prediction_metadata?: Json | null
+          prediction_timeframe?: number
+          recommended_learning_path?: Json
+          role_context?: string | null
+          skills_gap_analysis?: Json
           user_id?: string
         }
         Relationships: []
