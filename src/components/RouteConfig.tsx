@@ -3,6 +3,9 @@ import { lazy, Suspense } from "react";
 import ProtectedAdminRoute from "@/components/ProtectedAdminRoute";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
+import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
+import Header from "@/components/Header";
 
 // Immediate load - Critical pages and description pages
 import Index from "@/pages/Index";
@@ -93,232 +96,242 @@ const LoadingFallback = ({ message = "Loading..." }: { message?: string }) => (
 
 const RouteConfig = () => {
   return (
-    <Routes>
-      {/* Critical Routes - Immediate Load */}
-      <Route path="/" element={<Index />} />
-      <Route path="/auth" element={<Auth />} />
-      <Route path="/profile" element={<Profile />} />
-      
-      {/* Public Information Pages - Lazy Loaded */}
-      <Route path="/about" element={<About />} />
-      <Route path="/faq" element={
-        <Suspense fallback={<LoadingFallback message="Loading FAQ..." />}>
-          <FAQ />
-        </Suspense>
-      } />
-      <Route path="/support" element={
-        <Suspense fallback={<LoadingFallback message="Loading Support Center..." />}>
-          <Support />
-        </Suspense>
-      } />
-      <Route path="/privacy" element={
-        <Suspense fallback={<LoadingFallback message="Loading Privacy Policy..." />}>
-          <PrivacyPolicy />
-        </Suspense>
-      } />
-      <Route path="/compliance" element={
-        <Suspense fallback={<LoadingFallback message="Loading Compliance Information..." />}>
-          <CompliancePage />
-        </Suspense>
-      } />
-      <Route path="/security" element={
-        <Suspense fallback={<LoadingFallback message="Loading Security Information..." />}>
-          <Security />
-        </Suspense>
-      } />
-      
-      {/* Assessment Overview - Immediate Load */}
-      <Route path="/assessment" element={<Assessment />} />
-      <Route path="/assessments" element={<Assessment />} />
-      
-      {/* Assessment Pages - Lazy Loaded with Custom Messages */}
-      <Route path="/career-launch" element={
-        <Suspense fallback={<LoadingFallback message="Preparing Career Launch Assessment..." />}>
-          <CareerLaunch />
-        </Suspense>
-      } />
-      <Route path="/cair-assessment" element={
-        <Suspense fallback={<LoadingFallback message="Loading CAIR Assessment..." />}>
-          <CAIRAssessment />
-        </Suspense>
-      } />
-      <Route path="/cair" element={
-        <Suspense fallback={<LoadingFallback message="Loading CAIR Assessment..." />}>
-          <CAIRAssessment />
-        </Suspense>
-      } />
-      <Route path="/stress-resilience" element={
-        <Suspense fallback={<LoadingFallback message="Loading Stress & Resilience Assessment..." />}>
-          <StressResilience />
-        </Suspense>
-      } />
-      <Route path="/cultural-intelligence" element={
-        <Suspense fallback={<LoadingFallback message="Loading Cultural Intelligence Assessment..." />}>
-          <CulturalIntelligenceAssessment />
-        </Suspense>
-      } />
-      <Route path="/communication-assessment" element={
-        <Suspense fallback={<LoadingFallback message="Loading Communication Assessment..." />}>
-          <CommunicationAssessment />
-        </Suspense>
-      } />
-      <Route path="/communication" element={
-        <Suspense fallback={<LoadingFallback message="Loading Communication Assessment..." />}>
-          <CommunicationAssessment />
-        </Suspense>
-      } />
-      <Route path="/emotional-intelligence" element={
-        <Suspense fallback={<LoadingFallback message="Loading Emotional Intelligence Assessment..." />}>
-          <EmotionalIntelligenceAssessment />
-        </Suspense>
-      } />
-      {/* Faith & Values route removed */}
-      <Route path="/genz-assessment" element={
-        <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
-          <GenZWorkplaceAssessment />
-        </Suspense>
-      } />
-      <Route path="/genz" element={
-        <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
-          <GenZWorkplaceAssessment />
-        </Suspense>
-      } />
-      <Route path="/genz-workplace" element={
-        <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
-          <GenZWorkplaceAssessment />
-        </Suspense>
-      } />
-      <Route path="/digital-wellness" element={
-        <Suspense fallback={<LoadingFallback message="Loading Digital Wellness Assessment..." />}>
-          <DigitalWellnessAssessment />
-        </Suspense>
-      } />
-      <Route path="/leadership-assessment" element={
-        <Suspense fallback={<LoadingFallback message="Loading Leadership Assessment..." />}>
-          <LeadershipAssessment />
-        </Suspense>
-      } />
-      <Route path="/leadership" element={
-        <Suspense fallback={<LoadingFallback message="Loading Leadership Assessment..." />}>
-          <LeadershipAssessment />
-        </Suspense>
-      } />
-      
-      {/* Assessment Description Pages - Immediate Load (prevents chunk errors) */}
-      <Route path="/authentic-leadership-info" element={<AuthenticLeadershipDescription />} />
-      <Route path="/burnout-prevention-info" element={<BurnoutPreventionDescription />} />
-      <Route path="/cair-cultural-info" element={<CAIRCulturalDescription />} />
-      <Route path="/cultural-intelligence-info" element={<CulturalIntelligenceDescription />} />
-      <Route path="/cair-personality-info" element={<CAIRPersonalityDescription />} />
-      <Route path="/career-launch-info" element={<CareerLaunchDescription />} />
-      <Route path="/communication-style-info" element={<CommunicationStyleDescription />} />
-      <Route path="/digital-wellness-info" element={<DigitalWellnessDescription />} />
-      <Route path="/emotional-intelligence-info" element={<EmotionalIntelligenceDescription />} />
-      {/* Faith & Values info route removed */}
-      <Route path="/genz-workplace-info" element={<GenZWorkplaceDescription />} />
-      
-      {/* Partner Routes - Lazy Loaded */}
-      <Route path="/partner-login" element={
-        <Suspense fallback={<LoadingFallback message="Loading Partner Portal..." />}>
-          <PartnerLogin />
-        </Suspense>
-      } />
-      <Route path="/partner-dashboard" element={
-        <Suspense fallback={<LoadingFallback message="Loading Partner Dashboard..." />}>
-          <PartnerDashboard />
-        </Suspense>
-      } />
-      <Route path="/partner-analytics" element={
-        <Suspense fallback={<LoadingFallback message="Loading Analytics..." />}>
-          <PartnerAnalytics />
-        </Suspense>
-      } />
-      
-      {/* Employer Routes - Lazy Loaded */}
-      <Route path="/employer-login" element={
-        <Suspense fallback={<LoadingFallback message="Loading Employer Portal..." />}>
-          <EmployerLogin />
-        </Suspense>
-      } />
-      <Route path="/employer-dashboard" element={
-        <Suspense fallback={<LoadingFallback message="Loading Dashboard..." />}>
-          <EmployerDashboard />
-        </Suspense>
-      } />
-      <Route path="/employer-analytics" element={
-        <Suspense fallback={<LoadingFallback message="Loading Analytics..." />}>
-          <EmployerAnalytics />
-        </Suspense>
-      } />
-      
-      {/* Testing & Assessment Routes - Lazy Loaded */}
-      <Route path="/solo-assessment/:token" element={
-        <Suspense fallback={<LoadingFallback message="Preparing Assessment..." />}>
-          <SoloAssessment />
-        </Suspense>
-      } />
-      <Route path="/candidate-testing" element={
-        <Suspense fallback={<LoadingFallback message="Loading Testing Interface..." />}>
-          <CandidateTesting />
-        </Suspense>
-      } />
-      <Route path="/testing-dashboard" element={
-        <Suspense fallback={<LoadingFallback message="Loading Dashboard..." />}>
-          <TestingDashboard />
-        </Suspense>
-      } />
-      
-      {/* Payment & Sample Routes - Lazy Loaded */}
-      <Route path="/payment" element={
-        <Suspense fallback={<LoadingFallback message="Loading Payment Options..." />}>
-          <Payment />
-        </Suspense>
-      } />
-      <Route path="/sample-career-launch-report" element={
-        <Suspense fallback={<LoadingFallback message="Generating Sample Report..." />}>
-          <SampleCareerLaunchReport />
-        </Suspense>
-      } />
-      <Route path="/sample-reports" element={<SampleReports />} />
-      
-      {/* Future Skills AI Platform */}
-      <Route path="/future-skills-ai" element={
-        <Suspense fallback={<LoadingFallback message="Loading Future Skills AI Platform..." />}>
-          <FutureSkillsAI />
-        </Suspense>
-      } />
-      
-      {/* Public Marketing Materials - Accessible to all users */}
-      <Route path="/marketing-materials" element={
-        <Suspense fallback={<LoadingFallback message="Loading Marketing Materials..." />}>
-          <PublicMarketingMaterials />
-        </Suspense>
-      } />
-      
-      {/* Protected Admin Routes - Direct import to prevent dynamic import errors */}
-      <Route path="/admin" element={
-        <ProtectedAdminRoute>
-          <AdminPage />
-        </ProtectedAdminRoute>
-      } />
-      <Route path="/admin-analytics" element={
-        <ProtectedAdminRoute>
-          <Suspense fallback={<LoadingFallback message="Loading Analytics Dashboard..." />}>
-            <AdminAnalytics />
-          </Suspense>
-        </ProtectedAdminRoute>
-      } />
-      <Route path="/admin-marketing-materials" element={
-        <ProtectedAdminRoute>
-          <Suspense fallback={<LoadingFallback message="Loading Admin Marketing Materials..." />}>
-            <MarketingMaterials />
-          </Suspense>
-        </ProtectedAdminRoute>
-      } />
-      
-      {/* Catch-all 404 Route - MUST BE LAST */}
-      <Route path="*" element={<NotFound />} />
-    </Routes>
+    <SidebarProvider>
+      <div className="min-h-screen flex w-full">
+        <AppSidebar />
+        <SidebarInset className="flex-1">
+          <Header />
+          <main className="flex-1">
+            <Routes>
+              {/* Critical Routes - Immediate Load */}
+              <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
+              
+              {/* Public Information Pages - Lazy Loaded */}
+              <Route path="/about" element={<About />} />
+              <Route path="/faq" element={
+                <Suspense fallback={<LoadingFallback message="Loading FAQ..." />}>
+                  <FAQ />
+                </Suspense>
+              } />
+              <Route path="/support" element={
+                <Suspense fallback={<LoadingFallback message="Loading Support Center..." />}>
+                  <Support />
+                </Suspense>
+              } />
+              <Route path="/privacy" element={
+                <Suspense fallback={<LoadingFallback message="Loading Privacy Policy..." />}>
+                  <PrivacyPolicy />
+                </Suspense>
+              } />
+              <Route path="/compliance" element={
+                <Suspense fallback={<LoadingFallback message="Loading Compliance Information..." />}>
+                  <CompliancePage />
+                </Suspense>
+              } />
+              <Route path="/security" element={
+                <Suspense fallback={<LoadingFallback message="Loading Security Information..." />}>
+                  <Security />
+                </Suspense>
+              } />
+              
+              {/* Assessment Overview - Immediate Load */}
+              <Route path="/assessment" element={<Assessment />} />
+              <Route path="/assessments" element={<Assessment />} />
+              
+              {/* Assessment Pages - Lazy Loaded with Custom Messages */}
+              <Route path="/career-launch" element={
+                <Suspense fallback={<LoadingFallback message="Preparing Career Launch Assessment..." />}>
+                  <CareerLaunch />
+                </Suspense>
+              } />
+              <Route path="/cair-assessment" element={
+                <Suspense fallback={<LoadingFallback message="Loading CAIR Assessment..." />}>
+                  <CAIRAssessment />
+                </Suspense>
+              } />
+              <Route path="/cair" element={
+                <Suspense fallback={<LoadingFallback message="Loading CAIR Assessment..." />}>
+                  <CAIRAssessment />
+                </Suspense>
+              } />
+              <Route path="/stress-resilience" element={
+                <Suspense fallback={<LoadingFallback message="Loading Stress & Resilience Assessment..." />}>
+                  <StressResilience />
+                </Suspense>
+              } />
+              <Route path="/cultural-intelligence" element={
+                <Suspense fallback={<LoadingFallback message="Loading Cultural Intelligence Assessment..." />}>
+                  <CulturalIntelligenceAssessment />
+                </Suspense>
+              } />
+              <Route path="/communication-assessment" element={
+                <Suspense fallback={<LoadingFallback message="Loading Communication Assessment..." />}>
+                  <CommunicationAssessment />
+                </Suspense>
+              } />
+              <Route path="/communication" element={
+                <Suspense fallback={<LoadingFallback message="Loading Communication Assessment..." />}>
+                  <CommunicationAssessment />
+                </Suspense>
+              } />
+              <Route path="/emotional-intelligence" element={
+                <Suspense fallback={<LoadingFallback message="Loading Emotional Intelligence Assessment..." />}>
+                  <EmotionalIntelligenceAssessment />
+                </Suspense>
+              } />
+              {/* Faith & Values route removed */}
+              <Route path="/genz-assessment" element={
+                <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
+                  <GenZWorkplaceAssessment />
+                </Suspense>
+              } />
+              <Route path="/genz" element={
+                <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
+                  <GenZWorkplaceAssessment />
+                </Suspense>
+              } />
+              <Route path="/genz-workplace" element={
+                <Suspense fallback={<LoadingFallback message="Loading Gen Z Workplace Assessment..." />}>
+                  <GenZWorkplaceAssessment />
+                </Suspense>
+              } />
+              <Route path="/digital-wellness" element={
+                <Suspense fallback={<LoadingFallback message="Loading Digital Wellness Assessment..." />}>
+                  <DigitalWellnessAssessment />
+                </Suspense>
+              } />
+              <Route path="/leadership-assessment" element={
+                <Suspense fallback={<LoadingFallback message="Loading Leadership Assessment..." />}>
+                  <LeadershipAssessment />
+                </Suspense>
+              } />
+              <Route path="/leadership" element={
+                <Suspense fallback={<LoadingFallback message="Loading Leadership Assessment..." />}>
+                  <LeadershipAssessment />
+                </Suspense>
+              } />
+              
+              {/* Assessment Description Pages - Immediate Load (prevents chunk errors) */}
+              <Route path="/authentic-leadership-info" element={<AuthenticLeadershipDescription />} />
+              <Route path="/burnout-prevention-info" element={<BurnoutPreventionDescription />} />
+              <Route path="/cair-cultural-info" element={<CAIRCulturalDescription />} />
+              <Route path="/cultural-intelligence-info" element={<CulturalIntelligenceDescription />} />
+              <Route path="/cair-personality-info" element={<CAIRPersonalityDescription />} />
+              <Route path="/career-launch-info" element={<CareerLaunchDescription />} />
+              <Route path="/communication-style-info" element={<CommunicationStyleDescription />} />
+              <Route path="/digital-wellness-info" element={<DigitalWellnessDescription />} />
+              <Route path="/emotional-intelligence-info" element={<EmotionalIntelligenceDescription />} />
+              {/* Faith & Values info route removed */}
+              <Route path="/genz-workplace-info" element={<GenZWorkplaceDescription />} />
+              
+              {/* Partner Routes - Lazy Loaded */}
+              <Route path="/partner-login" element={
+                <Suspense fallback={<LoadingFallback message="Loading Partner Portal..." />}>
+                  <PartnerLogin />
+                </Suspense>
+              } />
+              <Route path="/partner-dashboard" element={
+                <Suspense fallback={<LoadingFallback message="Loading Partner Dashboard..." />}>
+                  <PartnerDashboard />
+                </Suspense>
+              } />
+              <Route path="/partner-analytics" element={
+                <Suspense fallback={<LoadingFallback message="Loading Analytics..." />}>
+                  <PartnerAnalytics />
+                </Suspense>
+              } />
+              
+              {/* Employer Routes - Lazy Loaded */}
+              <Route path="/employer-login" element={
+                <Suspense fallback={<LoadingFallback message="Loading Employer Portal..." />}>
+                  <EmployerLogin />
+                </Suspense>
+              } />
+              <Route path="/employer-dashboard" element={
+                <Suspense fallback={<LoadingFallback message="Loading Dashboard..." />}>
+                  <EmployerDashboard />
+                </Suspense>
+              } />
+              <Route path="/employer-analytics" element={
+                <Suspense fallback={<LoadingFallback message="Loading Analytics..." />}>
+                  <EmployerAnalytics />
+                </Suspense>
+              } />
+              
+              {/* Testing & Assessment Routes - Lazy Loaded */}
+              <Route path="/solo-assessment/:token" element={
+                <Suspense fallback={<LoadingFallback message="Preparing Assessment..." />}>
+                  <SoloAssessment />
+                </Suspense>
+              } />
+              <Route path="/candidate-testing" element={
+                <Suspense fallback={<LoadingFallback message="Loading Testing Interface..." />}>
+                  <CandidateTesting />
+                </Suspense>
+              } />
+              <Route path="/testing-dashboard" element={
+                <Suspense fallback={<LoadingFallback message="Loading Dashboard..." />}>
+                  <TestingDashboard />
+                </Suspense>
+              } />
+              
+              {/* Payment & Sample Routes - Lazy Loaded */}
+              <Route path="/payment" element={
+                <Suspense fallback={<LoadingFallback message="Loading Payment Options..." />}>
+                  <Payment />
+                </Suspense>
+              } />
+              <Route path="/sample-career-launch-report" element={
+                <Suspense fallback={<LoadingFallback message="Generating Sample Report..." />}>
+                  <SampleCareerLaunchReport />
+                </Suspense>
+              } />
+              <Route path="/sample-reports" element={<SampleReports />} />
+              
+              {/* Future Skills AI Platform */}
+              <Route path="/future-skills-ai" element={
+                <Suspense fallback={<LoadingFallback message="Loading Future Skills AI Platform..." />}>
+                  <FutureSkillsAI />
+                </Suspense>
+              } />
+              
+              {/* Public Marketing Materials - Accessible to all users */}
+              <Route path="/marketing-materials" element={
+                <Suspense fallback={<LoadingFallback message="Loading Marketing Materials..." />}>
+                  <PublicMarketingMaterials />
+                </Suspense>
+              } />
+              
+              {/* Protected Admin Routes - Direct import to prevent dynamic import errors */}
+              <Route path="/admin" element={
+                <ProtectedAdminRoute>
+                  <AdminPage />
+                </ProtectedAdminRoute>
+              } />
+              <Route path="/admin-analytics" element={
+                <ProtectedAdminRoute>
+                  <Suspense fallback={<LoadingFallback message="Loading Analytics Dashboard..." />}>
+                    <AdminAnalytics />
+                  </Suspense>
+                </ProtectedAdminRoute>
+              } />
+              <Route path="/admin-marketing-materials" element={
+                <ProtectedAdminRoute>
+                  <Suspense fallback={<LoadingFallback message="Loading Admin Marketing Materials..." />}>
+                    <MarketingMaterials />
+                  </Suspense>
+                </ProtectedAdminRoute>
+              } />
+              
+              {/* Catch-all 404 Route - MUST BE LAST */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   );
 };
 
