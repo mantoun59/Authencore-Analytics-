@@ -36,7 +36,7 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
           size === 'md' ? 'text-base' : 
           'text-sm'
         }`}>
-          {t("hero.logoTagline")}
+          Professional Development & Future Skills Intelligence
         </p>
       )}
     </div>
