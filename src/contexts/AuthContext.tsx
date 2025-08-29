@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { User, Session } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
+import { useDemoMode } from '@/contexts/DemoContext';
 import { RateLimiter, SecurityMonitor, SecureStorage } from '@/utils/enhancedSecurity';
 
 interface AuthError {
@@ -33,8 +34,65 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
+  const { isDemoMode, demoUser } = useDemoMode();
 
   useEffect(() => {
+    // Handle demo mode
+    if (isDemoMode && demoUser) {
+      // Create a mock user object for demo mode
+      const mockUser = {
+        id: demoUser.id,
+        email: demoUser.email,
+        aud: 'authenticated',
+        created_at: new Date().toISOString(),
+        user_metadata: { name: demoUser.name },
+        app_metadata: { role: demoUser.role },
+        updated_at: new Date().toISOString(),
+        email_confirmed_at: new Date().toISOString(),
+        last_sign_in_at: new Date().toISOString(),
+        role: 'authenticated',
+        phone: null,
+        confirmation_sent_at: null,
+        confirmed_at: new Date().toISOString(),
+        recovery_sent_at: null,
+        email_change_sent_at: null,
+        new_email: null,
+        invited_at: null,
+        action_link: null,
+        email_change: null,
+        email_change_confirm_status: 0,
+        banned_until: null,
+        new_phone: null,
+        phone_change: null,
+        phone_change_sent_at: null,
+        phone_change_token: null,
+        phone_confirmed_at: null,
+        identities: [],
+        factors: [],
+      } as User;
+      
+      setUser(mockUser);
+      setSession({ 
+        user: mockUser, 
+        access_token: 'demo-token',
+        refresh_token: 'demo-refresh',
+        expires_in: 3600,
+        expires_at: Date.now() + 3600000,
+        token_type: 'bearer'
+      } as Session);
+      setLoading(false);
+      return;
+    }
+    
+    if (isDemoMode && !demoUser) {
+      setUser(null);
+      setSession(null);
+      setLoading(false);
+      return;
+    }
+
+    // Normal auth flow for production mode
+    if (!isDemoMode) {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
@@ -51,26 +109,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
     });
 
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const signUp = async (email: string, password: string, fullName?: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          full_name: fullName || email
-        }
-      }
-    });
-    return { error };
-  };
+      return () => subscription.unsubscribe();
+    }
+  }, [isDemoMode, demoUser]);
 
   const signIn = async (email: string, password: string) => {
+    if (isDemoMode) {
+      return { error: null }; // Demo mode doesn't need real auth
+    }
+    
     // Enhanced security: Rate limiting and bot detection
     const rateLimitKey = `login_${email}`;
     if (RateLimiter.isRateLimited(rateLimitKey, 5, 15 * 60 * 1000)) {
@@ -95,7 +142,32 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { error };
   };
 
+  const signUp = async (email: string, password: string, fullName?: string) => {
+    if (isDemoMode) {
+      return { error: null }; // Demo mode doesn't need real auth
+    }
+    
+    const redirectUrl = `${window.location.origin}/`;
+    
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: redirectUrl,
+        data: {
+          full_name: fullName || email
+        }
+      }
+    });
+    return { error };
+  };
+
   const signOut = async () => {
+    if (isDemoMode) {
+      // In demo mode, just clear the demo user
+      return { error: null };
+    }
+    
     const { error } = await supabase.auth.signOut();
     return { error };
   };

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { useDemoMode } from '@/contexts/DemoContext';
 import { encryptSession, decryptSession, validateSessionIntegrity, isSessionExpired } from '@/utils/sessionSecurity';
 
 interface PartnerData {
@@ -11,8 +12,16 @@ interface PartnerData {
   permissions: string[];
 }
 
+// For compatibility with existing Partner interface
+interface Partner extends PartnerData {
+  name?: string;
+  email?: string;
+  tier?: string;
+  isActive?: boolean;
+}
+
 interface PartnerContextType {
-  partner: PartnerData | null;
+  partner: Partner | null;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
@@ -32,11 +41,30 @@ export const usePartner = () => {
 };
 
 export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [partner, setPartner] = useState<PartnerData | null>(null);
+  const [partner, setPartner] = useState<Partner | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isDemoMode, demoPartner, demoUser } = useDemoMode();
 
-  // Check for existing session on mount
   useEffect(() => {
+    // Handle demo mode
+    if (isDemoMode && demoPartner && demoUser?.role === 'partner') {
+      setPartner({
+        ...demoPartner,
+        access_expires_at: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year from now
+        permissions: ['all_assessments', 'analytics', 'reports']
+      });
+      setIsAuthenticated(true);
+      return;
+    }
+    
+    if (isDemoMode) {
+      setPartner(null);
+      setIsAuthenticated(false);
+      return;
+    }
+
+    // Check for existing session on mount in production mode
+    if (!isDemoMode) {
     const storedPartner = localStorage.getItem('partner_session');
     if (storedPartner) {
       try {
@@ -57,9 +85,20 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
         localStorage.removeItem('partner_session');
       }
     }
-  }, []);
+    }
+  }, [isDemoMode, demoPartner, demoUser]);
 
   const login = async (username: string, password: string) => {
+    if (isDemoMode) {
+      // Demo mode login
+      if (username === 'demo' || username === 'demo_partner') {
+        setIsAuthenticated(true);
+        return { success: true };
+      }
+      return { success: false, error: 'Demo mode: use "demo" or "demo_partner" as username' };
+    }
+
+    // Production login
     try {
       // Authenticate partner
       const { data: authData, error: authError } = await supabase.rpc('authenticate_partner', {
@@ -126,6 +165,12 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const logout = () => {
+    if (isDemoMode) {
+      setPartner(null);
+      setIsAuthenticated(false);
+      return;
+    }
+    
     localStorage.removeItem('partner_session');
     setPartner(null);
     setIsAuthenticated(false);
@@ -134,17 +179,26 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const checkAssessmentAccess = (assessmentType: string) => {
     if (!partner || !isAuthenticated) return false;
     
+    if (isDemoMode) {
+      return true; // Demo mode has access to everything
+    }
+    
     // Check if access has expired using the security utility
     if (isSessionExpired(partner.access_expires_at)) {
       logout();
       return false;
     }
 
-    return partner.permissions.includes(assessmentType);
+    return partner.permissions.includes(assessmentType) || partner.permissions.includes('all_assessments');
   };
 
   const logActivity = async (action: string, assessmentType?: string) => {
     if (!partner) return;
+    
+    if (isDemoMode) {
+      console.log(`Demo mode activity: ${action}${assessmentType ? ` for ${assessmentType}` : ''}`);
+      return;
+    }
 
     try {
       await supabase.rpc('log_partner_activity', {
@@ -163,6 +217,10 @@ export const PartnerProvider: React.FC<{ children: React.ReactNode }> = ({ child
   };
 
   const resetPassword = async (username: string) => {
+    if (isDemoMode) {
+      return { success: true, error: 'Demo mode: Password reset simulation complete' };
+    }
+    
     try {
       // Log the password reset request for security
       await supabase.rpc('log_security_event', {

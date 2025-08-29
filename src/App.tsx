@@ -8,6 +8,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { PartnerProvider } from "@/contexts/PartnerContext";
 import { LogoProvider } from "@/contexts/LogoContext";
 import { EmployerProvider } from "@/contexts/EmployerContext";
+import { DemoProvider } from "@/contexts/DemoContext";
 import RouteConfig from "@/components/RouteConfig";
 import ScrollToTop from "@/components/ScrollToTop";
 import AIChat from "@/components/AIChat";
@@ -50,10 +51,11 @@ const App = () => {
     <ErrorBoundary level="critical">
       <QueryClientProvider client={queryClient}>
         <TooltipProvider>
-          <LogoProvider>
-            <AuthProvider>
-              <PartnerProvider>
-                <EmployerProvider>
+          <DemoProvider>
+            <LogoProvider>
+              <AuthProvider>
+                <PartnerProvider>
+                  <EmployerProvider>
                   <Toaster />
                   <Sonner />
                   <BrowserRouter>
@@ -62,10 +64,11 @@ const App = () => {
                     <AIChat />
                     <CookieBanner />
                   </BrowserRouter>
-                </EmployerProvider>
-              </PartnerProvider>
-            </AuthProvider>
-          </LogoProvider>
+                  </EmployerProvider>
+                </PartnerProvider>
+              </AuthProvider>
+            </LogoProvider>
+          </DemoProvider>
         </TooltipProvider>
       </QueryClientProvider>
     </ErrorBoundary>

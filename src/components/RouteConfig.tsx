@@ -6,6 +6,7 @@ import { Loader2 } from "lucide-react";
 import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import Header from "@/components/Header";
+import { DemoModeToggle } from "@/components/DemoModeToggle";
 
 // Immediate load - Critical pages and description pages
 import Index from "@/pages/Index";
@@ -101,6 +102,7 @@ const RouteConfig = () => {
         <AppSidebar />
         <SidebarInset className="flex-1">
           <Header />
+          <DemoModeToggle />
           <main className="flex-1">
             <Routes>
               {/* Critical Routes - Immediate Load */}
