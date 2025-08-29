@@ -1,6 +1,6 @@
 import React, { createContext, useContext } from 'react';
-// Using public path for logo since assets folder doesn't exist
-const finalLogo = '/final-logo.png';
+// Using the new uploaded AuthenCore logo
+const finalLogo = '/lovable-uploads/7f0e0fb5-29cb-4d53-947f-67d5d6acb23a.png';
 
 export interface LogoOption {
   id: string;
