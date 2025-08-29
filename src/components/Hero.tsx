@@ -94,6 +94,9 @@ const Hero = () => {
                 src={businessTeamImage}
                 alt="Professional team collaborating with business analytics and assessment data in modern office"
                 className="w-full h-auto object-cover"
+                loading="eager"
+                fetchPriority="high"
+                decoding="sync"
               />
             </div>
             
