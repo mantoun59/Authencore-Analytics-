@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
+import { validateEmployerCredentials } from '@/utils/secureAuth';
 
 interface EmployerAccessDialogProps {
   isOpen: boolean;
@@ -20,9 +21,10 @@ export const EmployerAccessDialog = ({ isOpen, onClose, onSuccess }: EmployerAcc
     e.preventDefault();
     setIsLoading(true);
 
-    // In a real implementation, this would validate against a secure backend
-    // For demo purposes, we'll use a simple check
-    if (password === 'EMPLOYER2024') {
+    // SECURITY WARNING: This is a demo implementation only
+    // In production, always validate credentials against a secure backend
+    // Never hardcode passwords or use predictable demo credentials
+    if (await validateEmployerCredentials(password)) {
       onSuccess();
       onClose();
       toast({

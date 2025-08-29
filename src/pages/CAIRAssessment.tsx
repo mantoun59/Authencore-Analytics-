@@ -11,6 +11,7 @@ import { Shield, Brain, Users, Lightbulb, Heart, Download, Share2, Eye, Clock, C
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import AssessmentResults from "@/components/AssessmentResults";
+import { validateEmployerCredentials } from '@/utils/secureAuth';
 
 interface UserProfile {
   name: string;
@@ -574,9 +575,10 @@ export default function CAIRAssessment() {
     }
   };
 
-  const handleEmployerAccess = () => {
-    // In a real implementation, this would validate against a secure backend
-    if (employerPassword === 'EMPLOYER2024') {
+  const handleEmployerAccess = async () => {
+    // SECURITY WARNING: This is a demo implementation only
+    // In production, always validate credentials against a secure backend
+    if (await validateEmployerCredentials(employerPassword)) {
       setShowEmployerView(true);
       toast({
         title: "Access Granted",

@@ -1,22 +1,21 @@
-// Simple encryption/decryption utility for session data
-const ENCRYPTION_KEY = 'authencore_session_key_2024'; // In production, use a proper key management system
+// Secure session encryption/decryption utility using AES-GCM
+import { SecureStorage } from '@/utils/enhancedSecurity';
 
-export const encryptSession = (data: any): string => {
+export const encryptSession = async (data: any): Promise<string> => {
   try {
     const jsonString = JSON.stringify(data);
-    const encrypted = btoa(jsonString); // Base64 encoding (simple obfuscation)
-    return encrypted;
+    return await SecureStorage.encrypt(jsonString);
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {
       console.error('Error encrypting session:', error);
     }
-    return '';
+    throw new Error('Session encryption failed');
   }
 };
 
-export const decryptSession = (encryptedData: string): any => {
+export const decryptSession = async (encryptedData: string): Promise<any> => {
   try {
-    const decrypted = atob(encryptedData); // Base64 decoding
+    const decrypted = await SecureStorage.decrypt(encryptedData);
     return JSON.parse(decrypted);
   } catch (error) {
     if (process.env.NODE_ENV === 'development') {

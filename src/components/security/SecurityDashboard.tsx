@@ -1,258 +1,300 @@
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { 
-  Shield, 
-  Activity, 
-  Monitor, 
-  AlertTriangle, 
-  Clock,
-  MapPin,
-  Smartphone
-} from 'lucide-react';
+import { AlertTriangle, Shield, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useAdminAuth } from '@/hooks/useAdminAuth';
 import { useSecurity } from '@/hooks/useSecurity';
-import { format } from 'date-fns';
-import MFASetup from './MFASetup';
+import { toast } from '@/hooks/use-toast';
 
 const SecurityDashboard = () => {
-  const {
-    securityEvents,
-    activeSessions,
-    isLoading,
-    getSecurityEvents,
-    getActiveSessions,
-    terminateSession
-  } = useSecurity();
+  const { user } = useAuth();
+  const { isAdmin, loading: adminLoading } = useAdminAuth();
+  const { securityEvents, activeSessions, isLoading } = useSecurity();
+  const [securityScore, setSecurityScore] = useState(0);
+  const [vulnerabilities, setVulnerabilities] = useState<any[]>([]);
+  const [isScanning, setIsScanning] = useState(false);
 
   useEffect(() => {
-    getSecurityEvents();
-    getActiveSessions();
-  }, [getSecurityEvents, getActiveSessions]);
+    if (isAdmin && !adminLoading) {
+      performSecurityScan();
+    }
+  }, [isAdmin, adminLoading]);
 
-  const getSeverityColor = (severity: string) => {
-    switch (severity) {
-      case 'critical': return 'destructive';
-      case 'warning': return 'secondary';
-      default: return 'outline';
+  const performSecurityScan = async () => {
+    setIsScanning(true);
+    try {
+      // Calculate security score based on various factors
+      let score = 100;
+      const issues: any[] = [];
+
+      // Check for recent security events
+      const recentEvents = securityEvents?.filter(event => 
+        new Date(event.created_at) > new Date(Date.now() - 24 * 60 * 60 * 1000)
+      ) || [];
+
+      const failedLogins = recentEvents.filter(event => 
+        event.event_type.includes('failed') || event.event_type.includes('suspicious')
+      );
+
+      if (failedLogins.length > 10) {
+        score -= 20;
+        issues.push({
+          type: 'high',
+          title: 'High Failed Login Attempts',
+          description: `${failedLogins.length} failed login attempts in the last 24 hours`,
+          recommendation: 'Implement stricter rate limiting and consider IP blocking'
+        });
+      }
+
+      // Check for active sessions
+      const sessionCount = activeSessions?.length || 0;
+      if (sessionCount > 50) {
+        score -= 10;
+        issues.push({
+          type: 'medium',
+          title: 'High Active Session Count',
+          description: `${sessionCount} active sessions detected`,
+          recommendation: 'Monitor for unusual session patterns'
+        });
+      }
+
+      // Check for recent admin access
+      const adminEvents = recentEvents.filter(event => 
+        event.event_type.includes('admin')
+      );
+
+      if (adminEvents.length === 0) {
+        issues.push({
+          type: 'info',
+          title: 'No Recent Admin Activity',
+          description: 'No admin security events logged recently',
+          recommendation: 'Regular admin monitoring is recommended'
+        });
+      }
+
+      setSecurityScore(Math.max(0, score));
+      setVulnerabilities(issues);
+
+      toast({
+        title: "Security Scan Complete",
+        description: `Security score: ${Math.max(0, score)}/100`,
+      });
+    } catch (error) {
+      console.error('Security scan failed:', error);
+      toast({
+        title: "Security Scan Failed",
+        description: "Unable to complete security assessment",
+        variant: "destructive"
+      });
+    } finally {
+      setIsScanning(false);
     }
   };
 
-  const getEventIcon = (eventType: string) => {
-    switch (eventType) {
-      case 'login': return '🔐';
-      case 'logout': return '🚪';
-      case 'mfa_enabled': return '🛡️';
-      case 'mfa_disabled': return '⚠️';
-      case 'suspicious_activity_detected': return '🚨';
-      case 'password_changed': return '🔑';
-      case 'session_terminated': return '❌';
-      default: return '📝';
+  const getScoreColor = (score: number) => {
+    if (score >= 90) return 'text-green-600';
+    if (score >= 70) return 'text-yellow-600';
+    return 'text-red-600';
+  };
+
+  const getScoreBadgeVariant = (score: number) => {
+    if (score >= 90) return 'default';
+    if (score >= 70) return 'secondary';
+    return 'destructive';
+  };
+
+  const getSeverityIcon = (type: string) => {
+    switch (type) {
+      case 'high':
+        return <XCircle className="h-4 w-4 text-red-500" />;
+      case 'medium':
+        return <AlertTriangle className="h-4 w-4 text-yellow-500" />;
+      case 'low':
+        return <CheckCircle className="h-4 w-4 text-blue-500" />;
+      default:
+        return <CheckCircle className="h-4 w-4 text-green-500" />;
     }
   };
+
+  if (!isAdmin) {
+    return (
+      <div className="container mx-auto p-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Shield className="h-5 w-5" />
+              Access Denied
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p>You need administrator privileges to access the security dashboard.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (isLoading || adminLoading) {
+    return (
+      <div className="container mx-auto p-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-center">
+              <RefreshCw className="h-6 w-6 animate-spin mr-2" />
+              Loading security dashboard...
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center gap-2 mb-6">
-        <Shield className="h-6 w-6" />
-        <h1 className="text-2xl font-bold">Security Center</h1>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Security Dashboard</h1>
+          <p className="text-muted-foreground">Monitor and manage application security</p>
+        </div>
+        <Button 
+          onClick={performSecurityScan} 
+          disabled={isScanning}
+          variant="outline"
+        >
+          {isScanning ? (
+            <>
+              <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
+              Scanning...
+            </>
+          ) : (
+            <>
+              <Shield className="h-4 w-4 mr-2" />
+              Run Security Scan
+            </>
+          )}
+        </Button>
       </div>
 
-      <Tabs defaultValue="overview" className="w-full">
-        <TabsList>
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="mfa">Multi-Factor Auth</TabsTrigger>
-          <TabsTrigger value="events">Security Events</TabsTrigger>
-          <TabsTrigger value="sessions">Active Sessions</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Security Events</CardTitle>
-                <Activity className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{securityEvents.length}</div>
-                <p className="text-xs text-muted-foreground">Last 24 hours</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
-                <Monitor className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{activeSessions.length}</div>
-                <p className="text-xs text-muted-foreground">Currently active</p>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Threat Level</CardTitle>
-                <AlertTriangle className="h-4 w-4 text-muted-foreground" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">Low</div>
-                <p className="text-xs text-muted-foreground">No suspicious activity</p>
-              </CardContent>
-            </Card>
+      {/* Security Score */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Shield className="h-5 w-5" />
+            Overall Security Score
+          </CardTitle>
+          <CardDescription>
+            Current security posture assessment
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="flex items-center gap-4">
+            <div className={`text-4xl font-bold ${getScoreColor(securityScore)}`}>
+              {securityScore}/100
+            </div>
+            <Badge variant={getScoreBadgeVariant(securityScore)}>
+              {securityScore >= 90 ? 'Excellent' : 
+               securityScore >= 70 ? 'Good' : 'Needs Attention'}
+            </Badge>
           </div>
+        </CardContent>
+      </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle>Recent Security Activity</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {securityEvents.slice(0, 5).map((event) => (
-                <div key={event.id} className="flex items-center justify-between py-2 border-b last:border-0">
-                  <div className="flex items-center gap-3">
-                    <span className="text-lg">{getEventIcon(event.event_type)}</span>
-                    <div>
-                      <p className="font-medium capitalize">{event.event_type.replace('_', ' ')}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {format(new Date(event.created_at), 'MMM d, yyyy HH:mm')}
-                      </p>
-                    </div>
+      {/* Security Issues */}
+      {vulnerabilities.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Security Issues</CardTitle>
+            <CardDescription>
+              Identified vulnerabilities and recommendations
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {vulnerabilities.map((issue, index) => (
+                <div key={index} className="flex items-start gap-3 p-4 rounded-lg border">
+                  {getSeverityIcon(issue.type)}
+                  <div className="flex-1">
+                    <h4 className="font-medium">{issue.title}</h4>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {issue.description}
+                    </p>
+                    <p className="text-sm text-blue-600 mt-2">
+                      <strong>Recommendation:</strong> {issue.recommendation}
+                    </p>
                   </div>
-                  <Badge variant={getSeverityColor(event.severity) as any}>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Recent Security Events */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recent Security Events</CardTitle>
+          <CardDescription>
+            Latest security-related activities
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {securityEvents && securityEvents.length > 0 ? (
+            <div className="space-y-2">
+              {securityEvents.slice(0, 10).map((event) => (
+                <div key={event.id} className="flex items-center justify-between p-3 rounded border">
+                  <div>
+                    <span className="font-medium">{event.event_type}</span>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(event.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                  <Badge variant={event.severity === 'critical' ? 'destructive' : 'secondary'}>
                     {event.severity}
                   </Badge>
                 </div>
               ))}
-            </CardContent>
-          </Card>
-        </TabsContent>
+            </div>
+          ) : (
+            <p className="text-muted-foreground">No recent security events found.</p>
+          )}
+        </CardContent>
+      </Card>
 
-        <TabsContent value="mfa">
-          <MFASetup />
-        </TabsContent>
-
-        <TabsContent value="events" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Security Event Log</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <div className="animate-pulse">Loading events...</div>
-              ) : securityEvents.length === 0 ? (
-                <p className="text-muted-foreground">No security events recorded.</p>
-              ) : (
-                <div className="space-y-4">
-                  {securityEvents.map((event) => (
-                    <div key={event.id} className="border rounded-lg p-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex items-start gap-3">
-                          <span className="text-lg">{getEventIcon(event.event_type)}</span>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <h3 className="font-medium capitalize">
-                                {event.event_type.replace('_', ' ')}
-                              </h3>
-                              <Badge variant={getSeverityColor(event.severity) as any}>
-                                {event.severity}
-                              </Badge>
-                            </div>
-                            <div className="text-sm text-muted-foreground space-y-1">
-                              <div className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {format(new Date(event.created_at), 'MMM d, yyyy HH:mm:ss')}
-                              </div>
-                              {event.ip_address && (
-                                <div className="flex items-center gap-1">
-                                  <MapPin className="h-3 w-3" />
-                                  {event.ip_address}
-                                </div>
-                              )}
-                              {event.user_agent && (
-                                <div className="flex items-center gap-1">
-                                  <Smartphone className="h-3 w-3" />
-                                  {event.user_agent.substring(0, 50)}...
-                                </div>
-                              )}
-                            </div>
-                            {event.event_details && (
-                              <pre className="text-xs mt-2 p-2 bg-muted rounded">
-                                {JSON.stringify(event.event_details, null, 2)}
-                              </pre>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+      {/* Active Sessions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Active User Sessions</CardTitle>
+          <CardDescription>
+            Currently active user sessions
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {activeSessions && activeSessions.length > 0 ? (
+            <div className="space-y-2">
+              <p className="text-sm text-muted-foreground mb-4">
+                Total active sessions: {activeSessions.length}
+              </p>
+              {activeSessions.slice(0, 5).map((session) => (
+                <div key={session.id} className="flex items-center justify-between p-3 rounded border">
+                  <div>
+                    <span className="font-medium">User Session</span>
+                    <p className="text-sm text-muted-foreground">
+                      Created: {new Date(session.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                  <Badge variant="outline">
+                    Active
+                  </Badge>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="sessions" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Active Sessions</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <div className="animate-pulse">Loading sessions...</div>
-              ) : activeSessions.length === 0 ? (
-                <p className="text-muted-foreground">No active sessions found.</p>
-              ) : (
-                <div className="space-y-4">
-                  {activeSessions.map((session) => (
-                    <div key={session.id} className="border rounded-lg p-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Monitor className="h-4 w-4" />
-                            <span className="font-medium">Session</span>
-                            <Badge variant="outline">Active</Badge>
-                          </div>
-                          <div className="text-sm text-muted-foreground space-y-1">
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              Created: {format(new Date(session.created_at), 'MMM d, yyyy HH:mm')}
-                            </div>
-                            <div className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              Last accessed: {format(new Date(session.last_accessed), 'MMM d, yyyy HH:mm')}
-                            </div>
-                            {session.ip_address && (
-                              <div className="flex items-center gap-1">
-                                <MapPin className="h-3 w-3" />
-                                {session.ip_address}
-                              </div>
-                            )}
-                            {session.user_agent && (
-                              <div className="flex items-center gap-1">
-                                <Smartphone className="h-3 w-3" />
-                                {session.user_agent.substring(0, 80)}...
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <Button
-                          variant="destructive"
-                          size="sm"
-                          onClick={() => terminateSession(session.id)}
-                        >
-                          Terminate
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+              ))}
+            </div>
+          ) : (
+            <p className="text-muted-foreground">No active sessions found.</p>
+          )}
+        </CardContent>
+      </Card>
     </div>
   );
 };
