@@ -118,4 +118,3 @@ export async function generateHtmlReport(data: ReportData): Promise<void> {
   // Use enhanced report generator instead
   await enhancedReportGenerator.generateReport(enhancedConfig);
 }
-}
