@@ -20,8 +20,6 @@ const Index = () => {
       />
       <div className="min-h-screen bg-background">
         <ComplianceDisclaimer type="site-wide" />
-        <Header />
-        <AuthenCoreHero />
         <PlatformOverview />
         <TargetAudiences />
         <PlatformDescriptions />
