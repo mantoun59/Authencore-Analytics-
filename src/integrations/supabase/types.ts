@@ -3092,6 +3092,10 @@ export type Database = {
         }
         Returns: undefined
       }
+      log_failed_access: {
+        Args: { attempted_action: string; table_name: string }
+        Returns: undefined
+      }
       log_partner_activity: {
         Args: {
           p_action: string
