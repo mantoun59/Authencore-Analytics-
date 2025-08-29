@@ -38,6 +38,57 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_consensus_predictions: {
+        Row: {
+          ai_engine_results: Json
+          confidence_interval: Json
+          consensus_score: number
+          id: string
+          industry: string
+          market_sentiment: string | null
+          opportunity_factors: string[] | null
+          prediction_horizon: string
+          prediction_timestamp: string | null
+          region: string
+          risk_factors: string[] | null
+          skill_name: string
+          validation_score: number | null
+          variance_score: number
+        }
+        Insert: {
+          ai_engine_results: Json
+          confidence_interval: Json
+          consensus_score: number
+          id?: string
+          industry: string
+          market_sentiment?: string | null
+          opportunity_factors?: string[] | null
+          prediction_horizon: string
+          prediction_timestamp?: string | null
+          region: string
+          risk_factors?: string[] | null
+          skill_name: string
+          validation_score?: number | null
+          variance_score: number
+        }
+        Update: {
+          ai_engine_results?: Json
+          confidence_interval?: Json
+          consensus_score?: number
+          id?: string
+          industry?: string
+          market_sentiment?: string | null
+          opportunity_factors?: string[] | null
+          prediction_horizon?: string
+          prediction_timestamp?: string | null
+          region?: string
+          risk_factors?: string[] | null
+          skill_name?: string
+          validation_score?: number | null
+          variance_score?: number
+        }
+        Relationships: []
+      }
       ai_content_validation: {
         Row: {
           bias_flags: string[] | null
@@ -83,6 +134,54 @@ export type Database = {
           updated_at?: string
           validated_at?: string
           validation_score?: number
+        }
+        Relationships: []
+      }
+      ai_engines: {
+        Row: {
+          accuracy_score: number | null
+          api_endpoint: string | null
+          capabilities: string[] | null
+          cost_per_request: number | null
+          created_at: string | null
+          engine_name: string
+          engine_type: string
+          id: string
+          is_active: boolean | null
+          model_version: string
+          rate_limit: number | null
+          region_availability: string[] | null
+          specialization: string[] | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          api_endpoint?: string | null
+          capabilities?: string[] | null
+          cost_per_request?: number | null
+          created_at?: string | null
+          engine_name: string
+          engine_type: string
+          id?: string
+          is_active?: boolean | null
+          model_version: string
+          rate_limit?: number | null
+          region_availability?: string[] | null
+          specialization?: string[] | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          api_endpoint?: string | null
+          capabilities?: string[] | null
+          cost_per_request?: number | null
+          created_at?: string | null
+          engine_name?: string
+          engine_type?: string
+          id?: string
+          is_active?: boolean | null
+          model_version?: string
+          rate_limit?: number | null
+          region_availability?: string[] | null
+          specialization?: string[] | null
         }
         Relationships: []
       }
@@ -720,6 +819,98 @@ export type Database = {
         }
         Relationships: []
       }
+      data_sources: {
+        Row: {
+          api_endpoint: string | null
+          created_at: string | null
+          data_quality_score: number | null
+          id: string
+          industry_focus: string[] | null
+          is_active: boolean | null
+          last_updated: string | null
+          metadata: Json | null
+          refresh_frequency: number | null
+          region: string | null
+          source_name: string
+          source_type: string
+        }
+        Insert: {
+          api_endpoint?: string | null
+          created_at?: string | null
+          data_quality_score?: number | null
+          id?: string
+          industry_focus?: string[] | null
+          is_active?: boolean | null
+          last_updated?: string | null
+          metadata?: Json | null
+          refresh_frequency?: number | null
+          region?: string | null
+          source_name: string
+          source_type: string
+        }
+        Update: {
+          api_endpoint?: string | null
+          created_at?: string | null
+          data_quality_score?: number | null
+          id?: string
+          industry_focus?: string[] | null
+          is_active?: boolean | null
+          last_updated?: string | null
+          metadata?: Json | null
+          refresh_frequency?: number | null
+          region?: string | null
+          source_name?: string
+          source_type?: string
+        }
+        Relationships: []
+      }
+      economic_indicators: {
+        Row: {
+          confidence_level: number | null
+          data_source_id: string | null
+          data_timestamp: string | null
+          forecast_horizon: string | null
+          id: string
+          indicator_type: string
+          metadata: Json | null
+          region: string
+          unit: string
+          value: number
+        }
+        Insert: {
+          confidence_level?: number | null
+          data_source_id?: string | null
+          data_timestamp?: string | null
+          forecast_horizon?: string | null
+          id?: string
+          indicator_type: string
+          metadata?: Json | null
+          region: string
+          unit: string
+          value: number
+        }
+        Update: {
+          confidence_level?: number | null
+          data_source_id?: string | null
+          data_timestamp?: string | null
+          forecast_horizon?: string | null
+          id?: string
+          indicator_type?: string
+          metadata?: Json | null
+          region?: string
+          unit?: string
+          value?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "economic_indicators_data_source_id_fkey"
+            columns: ["data_source_id"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       employer_accounts: {
         Row: {
           contact_person: string | null
@@ -1316,6 +1507,51 @@ export type Database = {
           updated_at?: string
           user_id?: string
           visionary_leadership?: number
+        }
+        Relationships: []
+      }
+      market_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          industry: string | null
+          is_read: boolean | null
+          message: string
+          region: string | null
+          severity: string
+          skill_name: string | null
+          triggered_by: Json
+          user_id: string | null
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          industry?: string | null
+          is_read?: boolean | null
+          message: string
+          region?: string | null
+          severity: string
+          skill_name?: string | null
+          triggered_by: Json
+          user_id?: string | null
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          industry?: string | null
+          is_read?: boolean | null
+          message?: string
+          region?: string | null
+          severity?: string
+          skill_name?: string | null
+          triggered_by?: Json
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -2193,6 +2429,65 @@ export type Database = {
             columns: ["skill_id"]
             isOneToOne: false
             referencedRelation: "future_skills_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      skills_market_data: {
+        Row: {
+          automation_risk_score: number | null
+          avg_salary_usd: number | null
+          confidence_score: number | null
+          data_source_id: string | null
+          data_timestamp: string | null
+          demand_volume: number | null
+          growth_rate_percentage: number | null
+          id: string
+          industry: string
+          job_postings_count: number | null
+          raw_data: Json | null
+          region: string
+          skill_name: string
+          supply_volume: number | null
+        }
+        Insert: {
+          automation_risk_score?: number | null
+          avg_salary_usd?: number | null
+          confidence_score?: number | null
+          data_source_id?: string | null
+          data_timestamp?: string | null
+          demand_volume?: number | null
+          growth_rate_percentage?: number | null
+          id?: string
+          industry: string
+          job_postings_count?: number | null
+          raw_data?: Json | null
+          region: string
+          skill_name: string
+          supply_volume?: number | null
+        }
+        Update: {
+          automation_risk_score?: number | null
+          avg_salary_usd?: number | null
+          confidence_score?: number | null
+          data_source_id?: string | null
+          data_timestamp?: string | null
+          demand_volume?: number | null
+          growth_rate_percentage?: number | null
+          id?: string
+          industry?: string
+          job_postings_count?: number | null
+          raw_data?: Json | null
+          region?: string
+          skill_name?: string
+          supply_volume?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skills_market_data_data_source_id_fkey"
+            columns: ["data_source_id"]
+            isOneToOne: false
+            referencedRelation: "data_sources"
             referencedColumns: ["id"]
           },
         ]
