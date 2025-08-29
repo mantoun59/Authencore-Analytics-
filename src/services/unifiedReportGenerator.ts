@@ -3,6 +3,7 @@
 
 import { UnifiedAssessmentResults, UnifiedReportConfig } from '@/types/unifiedAssessment.types';
 import { toast } from 'sonner';
+import { enhancedReportGenerator, EnhancedReportConfig } from './enhancedReportGenerator';
 
 export class UnifiedReportGenerator {
   private static instance: UnifiedReportGenerator;
@@ -16,12 +17,31 @@ export class UnifiedReportGenerator {
 
   async generateReport(config: UnifiedReportConfig): Promise<void> {
     try {
-      const htmlContent = await this.buildReportHTML(config);
-      this.displayReport(htmlContent, config);
-      toast.success(`${config.reportType} report generated successfully!`);
+      // Convert to enhanced report config
+      const enhancedConfig: EnhancedReportConfig = {
+        candidateInfo: {
+          name: config.results.candidateInfo?.name || 'Unknown',
+          email: config.results.candidateInfo?.email || 'unknown@example.com',
+          position: config.results.candidateInfo?.position,
+          company: 'AuthenCore Analytics',
+          completionDate: config.results.candidateInfo?.completionDate || new Date().toLocaleDateString(),
+          assessmentId: `ASS-${Date.now()}`,
+          timeSpent: 15,
+          questionsAnswered: 100
+        },
+        assessmentType: config.assessmentType,
+        results: config.results,
+        reportType: config.reportType === 'employer' ? 'employer' : 'candidate',
+        includeCharts: true,
+        includeDevelopmentPlan: true,
+        includeAIInsights: true
+      };
+
+      // Use enhanced report generator
+      await enhancedReportGenerator.generateReport(enhancedConfig);
     } catch (error) {
       console.error('Report generation error:', error);
-      toast.error('Failed to generate report');
+      toast.error('Failed to generate enhanced report');
       throw error;
     }
   }
