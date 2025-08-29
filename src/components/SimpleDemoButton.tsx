@@ -1,13 +1,31 @@
 import { TestTube } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useDemoMode } from '@/contexts/DemoContext';
+import { useToast } from '@/hooks/use-toast';
 
 // Simple demo button for testing
 export const SimpleDemoButton = () => {
-  console.log('SimpleDemoButton rendering'); // Debug log
+  const { isDemoMode, toggleDemoMode } = useDemoMode();
+  const { toast } = useToast();
+  
+  console.log('SimpleDemoButton rendering:', { isDemoMode }); // Debug log
   
   const handleClick = () => {
-    alert('Demo mode button clicked!');
-    console.log('Demo button clicked');
+    toggleDemoMode();
+    
+    if (!isDemoMode) {
+      toast({
+        title: "Demo Mode Enabled",
+        description: "You can now explore the platform with sample data.",
+      });
+    } else {
+      toast({
+        title: "Demo Mode Disabled", 
+        description: "Switched back to production mode.",
+      });
+    }
+    
+    console.log('Demo button clicked, new state will be:', !isDemoMode);
   };
 
   return (
@@ -31,7 +49,7 @@ export const SimpleDemoButton = () => {
         }}
       >
         <TestTube style={{ marginRight: '8px', width: '16px', height: '16px' }} />
-        DEMO MODE
+        {isDemoMode ? 'DISABLE DEMO' : 'ENABLE DEMO'}
       </Button>
     </div>
   );
