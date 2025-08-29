@@ -818,6 +818,63 @@ export type Database = {
           },
         ]
       }
+      future_skills_catalog: {
+        Row: {
+          automation_risk: number | null
+          category: string
+          confidence_score: number | null
+          created_at: string
+          demand_score: number | null
+          description: string | null
+          growth_rate: number | null
+          id: string
+          learning_difficulty: number | null
+          metadata: Json | null
+          salary_premium: number | null
+          skill_name: string
+          subcategory: string | null
+          supply_score: number | null
+          tech_adoption_score: number | null
+          updated_at: string
+        }
+        Insert: {
+          automation_risk?: number | null
+          category: string
+          confidence_score?: number | null
+          created_at?: string
+          demand_score?: number | null
+          description?: string | null
+          growth_rate?: number | null
+          id?: string
+          learning_difficulty?: number | null
+          metadata?: Json | null
+          salary_premium?: number | null
+          skill_name: string
+          subcategory?: string | null
+          supply_score?: number | null
+          tech_adoption_score?: number | null
+          updated_at?: string
+        }
+        Update: {
+          automation_risk?: number | null
+          category?: string
+          confidence_score?: number | null
+          created_at?: string
+          demand_score?: number | null
+          description?: string | null
+          growth_rate?: number | null
+          id?: string
+          learning_difficulty?: number | null
+          metadata?: Json | null
+          salary_premium?: number | null
+          skill_name?: string
+          subcategory?: string | null
+          supply_score?: number | null
+          tech_adoption_score?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       generated_reports: {
         Row: {
           assessment_result_id: string
@@ -1148,6 +1205,63 @@ export type Database = {
         }
         Relationships: []
       }
+      industry_trends_forecast: {
+        Row: {
+          automation_risk: number | null
+          avg_salary: number | null
+          confidence_intervals: Json | null
+          created_at: string
+          forecast_generated_at: string
+          forecast_period: string
+          gdp_growth: number | null
+          growth_rate: number | null
+          id: string
+          industry_name: string
+          innovation_index: number | null
+          job_postings_volume: number | null
+          ml_model_version: string | null
+          region: string
+          unemployment_rate: number | null
+          updated_at: string
+        }
+        Insert: {
+          automation_risk?: number | null
+          avg_salary?: number | null
+          confidence_intervals?: Json | null
+          created_at?: string
+          forecast_generated_at?: string
+          forecast_period: string
+          gdp_growth?: number | null
+          growth_rate?: number | null
+          id?: string
+          industry_name: string
+          innovation_index?: number | null
+          job_postings_volume?: number | null
+          ml_model_version?: string | null
+          region: string
+          unemployment_rate?: number | null
+          updated_at?: string
+        }
+        Update: {
+          automation_risk?: number | null
+          avg_salary?: number | null
+          confidence_intervals?: Json | null
+          created_at?: string
+          forecast_generated_at?: string
+          forecast_period?: string
+          gdp_growth?: number | null
+          growth_rate?: number | null
+          id?: string
+          industry_name?: string
+          innovation_index?: number | null
+          job_postings_volume?: number | null
+          ml_model_version?: string | null
+          region?: string
+          unemployment_rate?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       leadership_behavior_results: {
         Row: {
           affiliative_leadership: number
@@ -1202,6 +1316,102 @@ export type Database = {
           updated_at?: string
           user_id?: string
           visionary_leadership?: number
+        }
+        Relationships: []
+      }
+      ml_feature_store: {
+        Row: {
+          collected_at: string
+          created_at: string
+          data_source: string | null
+          entity_id: string | null
+          feature_category: string
+          feature_metadata: Json | null
+          feature_name: string
+          feature_value: number
+          id: string
+          transformation_applied: string | null
+        }
+        Insert: {
+          collected_at?: string
+          created_at?: string
+          data_source?: string | null
+          entity_id?: string | null
+          feature_category: string
+          feature_metadata?: Json | null
+          feature_name: string
+          feature_value: number
+          id?: string
+          transformation_applied?: string | null
+        }
+        Update: {
+          collected_at?: string
+          created_at?: string
+          data_source?: string | null
+          entity_id?: string | null
+          feature_category?: string
+          feature_metadata?: Json | null
+          feature_name?: string
+          feature_value?: number
+          id?: string
+          transformation_applied?: string | null
+        }
+        Relationships: []
+      }
+      ml_model_experiments: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          data_version: string | null
+          experiment_id: string
+          feature_importance: Json | null
+          hyperparameters: Json
+          id: string
+          model_type: string
+          model_version: string
+          started_at: string
+          status: string
+          training_duration_seconds: number | null
+          training_metrics: Json
+          updated_at: string
+          validation_metrics: Json
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          data_version?: string | null
+          experiment_id: string
+          feature_importance?: Json | null
+          hyperparameters?: Json
+          id?: string
+          model_type: string
+          model_version: string
+          started_at?: string
+          status?: string
+          training_duration_seconds?: number | null
+          training_metrics?: Json
+          updated_at?: string
+          validation_metrics?: Json
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          data_version?: string | null
+          experiment_id?: string
+          feature_importance?: Json | null
+          hyperparameters?: Json
+          id?: string
+          model_type?: string
+          model_version?: string
+          started_at?: string
+          status?: string
+          training_duration_seconds?: number | null
+          training_metrics?: Json
+          updated_at?: string
+          validation_metrics?: Json
         }
         Relationships: []
       }
@@ -1922,6 +2132,71 @@ export type Database = {
         }
         Relationships: []
       }
+      skills_demand_forecast: {
+        Row: {
+          confidence_level: number | null
+          confidence_lower: number
+          confidence_upper: number
+          created_at: string
+          features_used: Json | null
+          forecast_horizon: number
+          forecast_metadata: Json | null
+          generated_by_model: string
+          id: string
+          industry: string | null
+          model_ensemble_results: Json | null
+          model_version: string | null
+          predicted_demand: number
+          region: string
+          skill_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          confidence_level?: number | null
+          confidence_lower: number
+          confidence_upper: number
+          created_at?: string
+          features_used?: Json | null
+          forecast_horizon: number
+          forecast_metadata?: Json | null
+          generated_by_model: string
+          id?: string
+          industry?: string | null
+          model_ensemble_results?: Json | null
+          model_version?: string | null
+          predicted_demand: number
+          region: string
+          skill_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          confidence_level?: number | null
+          confidence_lower?: number
+          confidence_upper?: number
+          created_at?: string
+          features_used?: Json | null
+          forecast_horizon?: number
+          forecast_metadata?: Json | null
+          generated_by_model?: string
+          id?: string
+          industry?: string | null
+          model_ensemble_results?: Json | null
+          model_version?: string | null
+          predicted_demand?: number
+          region?: string
+          skill_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "skills_demand_forecast_skill_id_fkey"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "future_skills_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       skills_taxonomy: {
         Row: {
           created_at: string
@@ -2158,6 +2433,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_skill_development: {
+        Row: {
+          created_at: string
+          current_level: number | null
+          estimated_completion_date: string | null
+          id: string
+          learning_path: Json | null
+          priority_score: number | null
+          progress_percentage: number | null
+          recommended_resources: Json | null
+          skill_id: string | null
+          target_level: number | null
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          current_level?: number | null
+          estimated_completion_date?: string | null
+          id?: string
+          learning_path?: Json | null
+          priority_score?: number | null
+          progress_percentage?: number | null
+          recommended_resources?: Json | null
+          skill_id?: string | null
+          target_level?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          current_level?: number | null
+          estimated_completion_date?: string | null
+          id?: string
+          learning_path?: Json | null
+          priority_score?: number | null
+          progress_percentage?: number | null
+          recommended_resources?: Json | null
+          skill_id?: string | null
+          target_level?: number | null
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_skill_development_skill_id_fkey"
+            columns: ["skill_id"]
+            isOneToOne: false
+            referencedRelation: "future_skills_catalog"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_skills_predictions: {
         Row: {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
-import FutureSkillsAIEngine from '@/components/FutureSkillsAIEngine';
+import FutureSkillsEnhanced from '@/components/FutureSkillsEnhanced';
 import SEOHead from '@/components/SEOHead';
 
 const FutureSkillsAI: React.FC = () => {
@@ -19,7 +19,7 @@ const FutureSkillsAI: React.FC = () => {
         keywords="future skills, AI prediction, career pathways, skills forecasting, professional development, AI intelligence"
       />
       <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-        <FutureSkillsAIEngine />
+        <FutureSkillsEnhanced />
       </div>
     </>
   );
