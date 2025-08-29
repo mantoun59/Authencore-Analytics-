@@ -1940,7 +1940,6 @@ const SampleReports = () => {
 
 
       case 'genz':
-        console.log('✅ Matched genz case');
       case 'genz-assessment':
       case 'genz-workplace':
         console.log('✅ Matched genz case');
@@ -2011,34 +2010,6 @@ const SampleReports = () => {
           ]
         };
       
-      case 'genz':
-        return {
-          ...baseReport,
-          executiveSummary: {
-            overallScore: 84,
-            readinessLevel: 'High Workplace Readiness',
-            topStrengths: ['Digital Fluency', 'Social Awareness', 'Adaptability'],
-            keyDevelopmentAreas: ['Traditional Communication', 'Hierarchy Navigation', 'Long-term Focus'],
-            recommendedNextSteps: [
-              'Develop formal communication skills',
-              'Seek mentorship from experienced professionals',
-              'Practice patience with traditional processes'
-            ]
-          },
-          dimensionScores: {
-            digital_native: { score: 95, level: 'Excellent', interpretation: 'Exceptional digital skills and technology adoption' },
-            social_consciousness: { score: 89, level: 'Very Good', interpretation: 'Strong awareness of social and environmental issues' },
-            work_life_balance: { score: 82, level: 'Very Good', interpretation: 'Healthy boundaries and life integration' },
-            collaboration: { score: 78, level: 'Good', interpretation: 'Effective team player with modern collaboration style' },
-            career_agility: { score: 85, level: 'Very Good', interpretation: 'Flexible and open to career pivots' },
-            traditional_structures: { score: 68, level: 'Moderate', interpretation: 'Developing comfort with hierarchical environments' }
-          },
-          careerRecommendations: [
-            'Startup and tech company roles',
-            'Social impact positions',
-            'Remote and flexible work environments'
-          ]
-        };
       
       case 'burnout':
       case 'burnout-prevention':
