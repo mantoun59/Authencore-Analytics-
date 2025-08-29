@@ -65,6 +65,7 @@ const PartnerAnalytics = lazy(() => import("@/pages/PartnerAnalytics"));
 // Lazy load - Reports & Materials
 const SampleCareerLaunchReport = lazy(() => import("@/pages/SampleCareerLaunchReport"));
 const Payment = lazy(() => import("@/pages/Payment"));
+const FutureSkillsAI = lazy(() => import("@/pages/FutureSkillsAI"));
 
 // Regular import for SampleReports to fix dynamic import error
 import SampleReports from "@/pages/SampleReports";
@@ -279,6 +280,13 @@ const RouteConfig = () => {
         </Suspense>
       } />
       <Route path="/sample-reports" element={<SampleReports />} />
+      
+      {/* Future Skills AI Platform */}
+      <Route path="/future-skills-ai" element={
+        <Suspense fallback={<LoadingFallback message="Loading Future Skills AI Platform..." />}>
+          <FutureSkillsAI />
+        </Suspense>
+      } />
       
       {/* Public Marketing Materials - Accessible to all users */}
       <Route path="/marketing-materials" element={
