@@ -1,5 +1,6 @@
 import React, { createContext, useContext } from 'react';
-import finalLogo from '../assets/authencore-logo-transparent.png';
+// Using public path for logo since assets folder doesn't exist
+const finalLogo = '/final-logo.png';
 
 export interface LogoOption {
   id: string;
