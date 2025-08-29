@@ -665,8 +665,40 @@ const AssessmentResults = ({ data, assessmentType = 'general', candidateInfo }: 
         return;
       }
 
+      // First save assessment result to get real ID  
+      const userData = (data as any)?.user;
+      const resultData = {
+        user_id: userData?.id || '00000000-0000-0000-0000-000000000000',
+        assessment_type: assessmentType,
+        results: JSON.parse(JSON.stringify({
+          dimensions: getDimensionScores(),
+          overallScore: getOverallScore(),
+          responses: (data as any).responses || {}
+        }))
+      };
+
+      let assessmentResultId = 'mock-assessment-id';
+      
+      // Try to save real assessment result if user is authenticated
+      if (userData?.id) {
+        try {
+          const { supabase } = await import('@/integrations/supabase/client');
+          const { data: savedResult, error } = await supabase
+            .from('assessment_results')
+            .insert(resultData)
+            .select('id')
+            .single();
+          
+          if (!error && savedResult) {
+            assessmentResultId = savedResult.id;
+          }
+        } catch (error) {
+          console.warn('Could not save assessment result, using mock ID:', error);
+        }
+      }
+
       const request: AIReportRequest = {
-        assessmentResultId: 'mock-assessment-id', // Use mock ID for sample reports
+        assessmentResultId,
         reportType,
         candidateInfo: {
           name: candidateInfo.name,

@@ -36,7 +36,13 @@ serve(async (req) => {
     // Parse request body
     const { assessmentResultId, reportType, candidateInfo }: AIReportRequest = await req.json();
     
-    console.log('Request details:', { assessmentResultId, reportType, candidateInfo: candidateInfo.name });
+    console.log('Request details:', { assessmentResultId, reportType, candidateInfo: candidateInfo?.name || 'Unknown' });
+
+    // Validate input
+    if (!assessmentResultId || assessmentResultId === 'undefined') {
+      console.error('Invalid or missing assessmentResultId:', assessmentResultId);
+      throw new Error('Valid assessment result ID is required');
+    }
 
     // Fetch assessment data from database
     const { data: assessment, error: assessmentError } = await supabase
