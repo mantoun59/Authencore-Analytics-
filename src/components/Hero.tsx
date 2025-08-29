@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Brain, TrendingUp, Shield, Users, BarChart3, Award, Info, Target, MessageSquare, Globe, Heart, Smartphone } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import businessTeamImage from "@/assets/business-team-analytics.jpg";
+import businessTeamImage from "@/assets/business-team-analytics-optimized.webp";
 import professionalAssessmentImage from "@/assets/professional-assessment.jpg";
 import LogoDisplay from "@/components/LogoDisplay";
 

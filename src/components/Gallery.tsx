@@ -1,5 +1,5 @@
 import { memo } from "react";
-import businessTeamImage from "@/assets/business-team-analytics.jpg";
+import businessTeamImage from "@/assets/business-team-analytics-optimized.webp";
 import analyticsWorkspaceImage from "@/assets/analytics-workspace.jpg";
 import businessPresentationImage from "@/assets/business-presentation.jpg";
 import professionalAssessmentImage from "@/assets/professional-assessment.jpg";

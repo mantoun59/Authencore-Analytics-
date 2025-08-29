@@ -1,6 +1,6 @@
 import { MousePointer, FileText, BarChart3 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import businessAnalytics from "@/assets/business-analytics.jpg";
+import businessAnalytics from "@/assets/business-analytics-optimized.webp";
 
 const HowItWorks = () => {
   const { t } = useTranslation();

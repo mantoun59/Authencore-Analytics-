@@ -1,5 +1,5 @@
 import React, { createContext, useContext } from 'react';
-import finalLogo from '../assets/final-logo.png';
+import finalLogo from '../assets/final-logo-optimized.webp';
 
 export interface LogoOption {
   id: string;

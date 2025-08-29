@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import professionalMeeting from "@/assets/professional-meeting.jpg";
+import professionalMeeting from "@/assets/professional-meeting-optimized.webp";
 
 const WhyChooseUs = () => {
   const { t } = useTranslation();
