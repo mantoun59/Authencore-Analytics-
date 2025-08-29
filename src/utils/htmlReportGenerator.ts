@@ -91,30 +91,35 @@ function getAssessmentDimensionsTitle(assessmentType: string): string {
 }
 
 export async function generateHtmlReport(data: ReportData): Promise<void> {
-  // Convert legacy format to enhanced report config
-  const enhancedConfig: EnhancedReportConfig = {
-    candidateInfo: {
-      name: data.userInfo.name,
-      email: data.userInfo.email,
-      position: data.userInfo.position,
-      company: data.userInfo.company,
-      completionDate: new Date().toLocaleDateString(),
-      assessmentId: `${data.assessmentType.toUpperCase()}-${Date.now()}`,
-      timeSpent: 0,
-      questionsAnswered: 0
-    },
-    assessmentType: data.assessmentType,
-    results: {
-      overallScore: data.overallScore,
-      dimensions: data.dimensions,
-      candidateInfo: data.userInfo
-    },
-    reportType: 'candidate',
-    includeCharts: true,
-    includeDevelopmentPlan: true,
-    includeAIInsights: true
-  };
+  try {
+    // Convert legacy format to enhanced report config
+    const enhancedConfig: EnhancedReportConfig = {
+      candidateInfo: {
+        name: data.userInfo.name,
+        email: data.userInfo.email,
+        position: data.userInfo.position,
+        company: data.userInfo.company,
+        completionDate: new Date().toLocaleDateString(),
+        assessmentId: `${data.assessmentType.toUpperCase()}-${Date.now()}`,
+        timeSpent: 0,
+        questionsAnswered: 0
+      },
+      assessmentType: data.assessmentType,
+      results: {
+        overallScore: data.overallScore,
+        dimensions: data.dimensions,
+        candidateInfo: data.userInfo
+      },
+      reportType: 'candidate',
+      includeCharts: true,
+      includeDevelopmentPlan: true,
+      includeAIInsights: true
+    };
 
-  // Use enhanced report generator instead
-  await enhancedReportGenerator.generateReport(enhancedConfig);
+    // Use enhanced report generator instead
+    await enhancedReportGenerator.generateReport(enhancedConfig);
+  } catch (error) {
+    console.error('Error generating enhanced report:', error);
+    throw error;
+  }
 }
