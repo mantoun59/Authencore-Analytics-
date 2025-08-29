@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Eye, EyeOff, Lock, Mail, User } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { DemoModeToggle } from '@/components/DemoModeToggle';
+import { SimpleDemoButton } from '@/components/SimpleDemoButton';
 
 const Auth = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -264,7 +264,7 @@ const Auth = () => {
         </div>
       </div>
       <Footer />
-      <DemoModeToggle />
+      <SimpleDemoButton />
     </div>
   );
 };

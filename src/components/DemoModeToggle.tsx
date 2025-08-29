@@ -14,10 +14,13 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 
+// Simple demo mode toggle component
 export const DemoModeToggle = () => {
   const { isDemoMode, toggleDemoMode, demoUser, setDemoUser } = useDemoMode();
   const { toast } = useToast();
   const [isOpen, setIsOpen] = useState(false);
+
+  console.log('DemoModeToggle rendering:', { isDemoMode, demoUser }); // Debug log
 
   const handleToggleDemoMode = () => {
     toggleDemoMode();
@@ -141,16 +144,34 @@ export const DemoModeToggle = () => {
     );
   }
 
+  // Always show the demo toggle button for easy access
+  console.log('Rendering demo toggle button'); // Debug log
+  
   return (
-    <div className="fixed bottom-4 right-4 z-[9999]">
+    <div 
+      className="fixed bottom-4 right-4 z-[9999]" 
+      style={{ 
+        position: 'fixed', 
+        bottom: '1rem', 
+        right: '1rem', 
+        zIndex: 9999,
+        pointerEvents: 'auto'
+      }}
+    >
       <Button
         onClick={handleToggleDemoMode}
         variant="outline"
         size="lg"
         className="bg-blue-50 border-blue-200 text-blue-700 hover:bg-blue-100 dark:bg-blue-950 dark:border-blue-800 dark:text-blue-300 shadow-lg"
+        style={{ 
+          backgroundColor: '#dbeafe', 
+          borderColor: '#bfdbfe', 
+          color: '#1d4ed8',
+          boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+        }}
       >
         <TestTube className="h-4 w-4 mr-2" />
-        Enable Demo Mode
+        {isDemoMode ? 'Disable Demo' : 'Enable Demo Mode'}
       </Button>
     </div>
   );
