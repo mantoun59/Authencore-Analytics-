@@ -3,7 +3,6 @@ import { Button } from '@/components/ui/button';
 import { useDemoMode } from '@/contexts/DemoContext';
 import { useToast } from '@/hooks/use-toast';
 
-// Simple demo button for testing
 export const SimpleDemoButton = () => {
   const { isDemoMode, toggleDemoMode } = useDemoMode();
   const { toast } = useToast();
@@ -11,21 +10,30 @@ export const SimpleDemoButton = () => {
   console.log('SimpleDemoButton rendering:', { isDemoMode }); // Debug log
   
   const handleClick = () => {
-    toggleDemoMode();
-    
-    if (!isDemoMode) {
-      toast({
-        title: "Demo Mode Enabled",
-        description: "You can now explore the platform with sample data.",
-      });
-    } else {
-      toast({
-        title: "Demo Mode Disabled", 
-        description: "Switched back to production mode.",
-      });
+    try {
+      console.log('Button clicked - current demo mode:', isDemoMode);
+      
+      // Toggle demo mode
+      console.log('Calling toggleDemoMode...');
+      toggleDemoMode();
+      console.log('Demo mode toggled successfully');
+      
+      // Try toast after successful toggle
+      try {
+        console.log('Attempting to show toast...');
+        const toastResult = toast({
+          title: !isDemoMode ? "Demo Mode Enabled" : "Demo Mode Disabled",
+          description: !isDemoMode ? "You can now explore the platform with sample data." : "Switched back to production mode.",
+        });
+        console.log('Toast result:', toastResult);
+      } catch (toastError) {
+        console.error('Toast error:', toastError);
+        alert(`Demo mode ${!isDemoMode ? 'enabled' : 'disabled'} (toast failed)`);
+      }
+    } catch (error) {
+      console.error('Button click error:', error);
+      alert(`Error: ${error.message}`);
     }
-    
-    console.log('Demo button clicked, new state will be:', !isDemoMode);
   };
 
   return (
