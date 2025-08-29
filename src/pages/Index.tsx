@@ -6,8 +6,6 @@ import PlatformDescriptions from "@/components/PlatformDescriptions";
 import ComprehensiveFeatures from "@/components/ComprehensiveFeatures";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
-import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
-import LogoDisplay from "@/components/LogoDisplay";
 import SEOHead from "@/components/SEOHead";
 
 const Index = () => {
@@ -20,15 +18,6 @@ const Index = () => {
         keywords="professional development, future skills AI, career analytics, HR intelligence, workforce analytics, skills prediction, talent development, AI-powered insights, career pathways, professional growth"
       />
       <div className="min-h-screen bg-background">
-        <ComplianceDisclaimer type="site-wide" />
-        
-        {/* Logo Section */}
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex justify-center">
-            <LogoDisplay size="lg" showTagline={true} className="text-center" />
-          </div>
-        </div>
-        
         <PlatformOverview />
         <TargetAudiences />
         <PlatformDescriptions />
