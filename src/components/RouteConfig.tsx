@@ -47,6 +47,8 @@ const Support = lazy(() => import("@/pages/Support"));
 const PrivacyPolicy = lazy(() => import("@/pages/PrivacyPolicy"));
 const CompliancePage = lazy(() => import("@/pages/CompliancePage"));
 const Security = lazy(() => import("@/pages/Security"));
+const TermsOfUse = lazy(() => import("@/pages/TermsOfUse"));
+const Copyright = lazy(() => import("@/pages/Copyright"));
 
 // Lazy load - Partner/Employer features
 const PartnerLogin = lazy(() => import("@/pages/PartnerLogin"));
@@ -137,6 +139,16 @@ const RouteConfig = () => {
               <Route path="/security" element={
                 <Suspense fallback={<LoadingFallback message="Loading Security Information..." />}>
                   <Security />
+                </Suspense>
+              } />
+              <Route path="/terms" element={
+                <Suspense fallback={<LoadingFallback message="Loading Terms of Use..." />}>
+                  <TermsOfUse />
+                </Suspense>
+              } />
+              <Route path="/copyright" element={
+                <Suspense fallback={<LoadingFallback message="Loading Copyright Information..." />}>
+                  <Copyright />
                 </Suspense>
               } />
               
