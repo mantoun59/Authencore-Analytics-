@@ -36,7 +36,7 @@ const LogoDisplay: React.FC<LogoDisplayProps> = ({
           size === 'md' ? 'text-base' : 
           'text-sm'
         }`}>
-          Professional Development & Future Skills Intelligence
+          Smart Career Analytics
         </p>
       )}
     </div>
