@@ -115,8 +115,32 @@ export class EnhancedReportGenerator {
   </div>
   
   <script>
-    ${this.getChartScripts(config)}
-    window.print();
+    // Wait for Chart.js to load and DOM to be ready
+    function initializeCharts() {
+      ${this.getChartScripts(config)}
+    }
+    
+    // Initialize charts when everything is ready
+    if (typeof Chart !== 'undefined') {
+      // Chart.js is already loaded
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initializeCharts);
+      } else {
+        initializeCharts();
+      }
+    } else {
+      // Wait for Chart.js to load
+      window.addEventListener('load', () => {
+        setTimeout(initializeCharts, 100);
+      });
+    }
+    
+    // Only print after charts are rendered
+    setTimeout(() => {
+      if (window.location.search.includes('print=true')) {
+        window.print();
+      }
+    }, 1000);
   </script>
 </body>
 </html>`;
@@ -736,13 +760,21 @@ export class EnhancedReportGenerator {
         
         <div class="chart-grid">
           <div class="chart-container">
-            <h3 style="margin-bottom: 20px; color: #1e293b; font-weight: 600;">Competency Radar</h3>
-            <canvas id="radarChart" width="400" height="300"></canvas>
+            <h3 style="margin-bottom: 20px; color: #1e293b; font-weight: 600;">
+              📊 Competency Radar Chart
+            </h3>
+            <div style="position: relative; height: 300px;">
+              <canvas id="radarChart" style="width: 100%; height: 100%;"></canvas>
+            </div>
           </div>
           
           <div class="chart-container">
-            <h3 style="margin-bottom: 20px; color: #1e293b; font-weight: 600;">Score Distribution</h3>
-            <canvas id="barChart" width="400" height="300"></canvas>
+            <h3 style="margin-bottom: 20px; color: #1e293b; font-weight: 600;">
+              📈 Score Distribution
+            </h3>
+            <div style="position: relative; height: 300px;">
+              <canvas id="barChart" style="width: 100%; height: 100%;"></canvas>
+            </div>
           </div>
         </div>
       </div>
@@ -996,79 +1028,178 @@ export class EnhancedReportGenerator {
     const scores = dimensions.map(d => d.score);
     
     return `
+      console.log('Initializing charts with data:', { labels: ${JSON.stringify(labels)}, scores: ${JSON.stringify(scores)} });
+      
+      // Ensure Chart.js is available
+      if (typeof Chart === 'undefined') {
+        console.error('Chart.js is not loaded');
+        return;
+      }
+      
       // Radar Chart
-      if (document.getElementById('radarChart')) {
-        const radarCtx = document.getElementById('radarChart').getContext('2d');
-        new Chart(radarCtx, {
-          type: 'radar',
-          data: {
-            labels: ${JSON.stringify(labels)},
-            datasets: [{
-              label: 'Your Scores',
-              data: ${JSON.stringify(scores)},
-              backgroundColor: 'rgba(59, 130, 246, 0.2)',
-              borderColor: 'rgba(59, 130, 246, 1)',
-              borderWidth: 2,
-              pointBackgroundColor: 'rgba(59, 130, 246, 1)',
-              pointBorderColor: '#fff',
-              pointBorderWidth: 2
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { display: false }
+      const radarCanvas = document.getElementById('radarChart');
+      if (radarCanvas) {
+        try {
+          const radarCtx = radarCanvas.getContext('2d');
+          new Chart(radarCtx, {
+            type: 'radar',
+            data: {
+              labels: ${JSON.stringify(labels)},
+              datasets: [{
+                label: 'Your Scores',
+                data: ${JSON.stringify(scores)},
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: 'rgba(59, 130, 246, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: 6
+              }]
             },
-            scales: {
-              r: {
-                beginAtZero: true,
-                max: 100,
-                grid: { color: '#e5e7eb' },
-                angleLines: { color: '#e5e7eb' },
-                pointLabels: { color: '#374151', font: { size: 12 } }
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { 
+                  display: true,
+                  position: 'bottom',
+                  labels: {
+                    color: '#374151',
+                    font: { size: 12 }
+                  }
+                }
+              },
+              scales: {
+                r: {
+                  beginAtZero: true,
+                  min: 0,
+                  max: 100,
+                  grid: { 
+                    color: '#e5e7eb',
+                    lineWidth: 1
+                  },
+                  angleLines: { 
+                    color: '#e5e7eb',
+                    lineWidth: 1 
+                  },
+                  pointLabels: { 
+                    color: '#374151', 
+                    font: { size: 11, weight: '500' }
+                  },
+                  ticks: {
+                    display: true,
+                    color: '#9ca3af',
+                    font: { size: 10 },
+                    stepSize: 20,
+                    showLabelBackdrop: false
+                  }
+                }
+              },
+              animation: {
+                duration: 1000,
+                easing: 'easeOutQuart'
               }
             }
-          }
-        });
+          });
+          console.log('Radar chart created successfully');
+        } catch (error) {
+          console.error('Error creating radar chart:', error);
+        }
+      } else {
+        console.error('Radar chart canvas not found');
       }
       
       // Bar Chart
-      if (document.getElementById('barChart')) {
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        new Chart(barCtx, {
-          type: 'bar',
-          data: {
-            labels: ${JSON.stringify(labels)},
-            datasets: [{
-              label: 'Performance Score',
-              data: ${JSON.stringify(scores)},
-              backgroundColor: scores.map(score => 
-                score >= 85 ? '#059669' :
-                score >= 70 ? '#3b82f6' :
-                score >= 60 ? '#d97706' : '#dc2626'
-              ),
-              borderRadius: 4
-            }]
-          },
-          options: {
-            responsive: true,
-            plugins: {
-              legend: { display: false }
+      const barCanvas = document.getElementById('barChart');
+      if (barCanvas) {
+        try {
+          const barCtx = barCanvas.getContext('2d');
+          new Chart(barCtx, {
+            type: 'bar',
+            data: {
+              labels: ${JSON.stringify(labels)},
+              datasets: [{
+                label: 'Performance Score',
+                data: ${JSON.stringify(scores)},
+                backgroundColor: ${JSON.stringify(scores)}.map(score => 
+                  score >= 85 ? '#059669' :
+                  score >= 70 ? '#3b82f6' :
+                  score >= 60 ? '#d97706' : '#dc2626'
+                ),
+                borderColor: ${JSON.stringify(scores)}.map(score => 
+                  score >= 85 ? '#047857' :
+                  score >= 70 ? '#2563eb' :
+                  score >= 60 ? '#b45309' : '#b91c1c'
+                ),
+                borderWidth: 1,
+                borderRadius: 6,
+                borderSkipped: false
+              }]
             },
-            scales: {
-              y: {
-                beginAtZero: true,
-                max: 100,
-                grid: { color: '#f1f5f9' },
-                ticks: { color: '#64748b' }
+            options: {
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: { 
+                  display: true,
+                  position: 'bottom',
+                  labels: {
+                    color: '#374151',
+                    font: { size: 12 }
+                  }
+                },
+                tooltip: {
+                  backgroundColor: '#1f2937',
+                  titleColor: '#f9fafb',
+                  bodyColor: '#f9fafb',
+                  borderColor: '#374151',
+                  borderWidth: 1,
+                  callbacks: {
+                    label: function(context) {
+                      return context.dataset.label + ': ' + context.parsed.y + '%';
+                    }
+                  }
+                }
               },
-              x: {
-                grid: { display: false },
-                ticks: { color: '#64748b', maxRotation: 45 }
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  min: 0,
+                  max: 100,
+                  grid: { 
+                    color: '#f1f5f9',
+                    lineWidth: 1
+                  },
+                  ticks: { 
+                    color: '#64748b',
+                    font: { size: 11 },
+                    callback: function(value) {
+                      return value + '%';
+                    }
+                  }
+                },
+                x: {
+                  grid: { display: false },
+                  ticks: { 
+                    color: '#64748b',
+                    font: { size: 11 },
+                    maxRotation: 45
+                  }
+                }
+              },
+              animation: {
+                duration: 1200,
+                easing: 'easeOutQuart'
               }
             }
-          }
-        });
+          });
+          console.log('Bar chart created successfully');
+        } catch (error) {
+          console.error('Error creating bar chart:', error);
+        }
+      } else {
+        console.error('Bar chart canvas not found');
       }
     `;
   }
