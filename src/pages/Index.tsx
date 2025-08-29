@@ -2,8 +2,8 @@ import Header from "@/components/Header";
 import AuthenCoreHero from "@/components/AuthenCoreHero";
 import PlatformOverview from "@/components/PlatformOverview";
 import TargetAudiences from "@/components/TargetAudiences";
+import PlatformDescriptions from "@/components/PlatformDescriptions";
 import ComprehensiveFeatures from "@/components/ComprehensiveFeatures";
-import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import CookieBanner from "@/components/CookieBanner";
 import ComplianceDisclaimer from "@/components/ComplianceDisclaimer";
@@ -24,8 +24,8 @@ const Index = () => {
         <AuthenCoreHero />
         <PlatformOverview />
         <TargetAudiences />
+        <PlatformDescriptions />
         <ComprehensiveFeatures />
-        <CTA />
         <Footer />
         <CookieBanner />
       </div>
