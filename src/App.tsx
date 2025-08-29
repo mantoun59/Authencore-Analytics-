@@ -4,6 +4,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter } from "react-router-dom";
+import { HelmetProvider } from "react-helmet-async";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { PartnerProvider } from "@/contexts/PartnerContext";
 import { LogoProvider } from "@/contexts/LogoContext";
@@ -48,30 +49,32 @@ const App = () => {
   }, []);
 
   return (
-    <ErrorBoundary level="critical">
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          <DemoProvider>
-            <LogoProvider>
-              <AuthProvider>
-                <PartnerProvider>
-                  <EmployerProvider>
-                  <Toaster />
-                  <Sonner />
-                  <BrowserRouter>
-                    <ScrollToTop />
-                    <RouteConfig />
-                    <AIChat />
-                    <CookieBanner />
-                  </BrowserRouter>
-                  </EmployerProvider>
-                </PartnerProvider>
-              </AuthProvider>
-            </LogoProvider>
-          </DemoProvider>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+    <HelmetProvider>
+      <ErrorBoundary level="critical">
+        <QueryClientProvider client={queryClient}>
+          <TooltipProvider>
+            <DemoProvider>
+              <LogoProvider>
+                <AuthProvider>
+                  <PartnerProvider>
+                    <EmployerProvider>
+                    <Toaster />
+                    <Sonner />
+                    <BrowserRouter>
+                      <ScrollToTop />
+                      <RouteConfig />
+                      <AIChat />
+                      <CookieBanner />
+                    </BrowserRouter>
+                    </EmployerProvider>
+                  </PartnerProvider>
+                </AuthProvider>
+              </LogoProvider>
+            </DemoProvider>
+          </TooltipProvider>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </HelmetProvider>
   );
 };
 
